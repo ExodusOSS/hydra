@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "WalletStakingView"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "is_active": {
+          "type": "boolean"
+        },
+        "asset_name": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        },
+        "staked_amount": {
+          "type": "number"
+        },
+        "staked_amount_usd": {
+          "type": "number"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

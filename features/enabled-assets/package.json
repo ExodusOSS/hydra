@@ -1,0 +1,61 @@
+{
+  "name": "@exodus/enabled-assets",
+  "version": "10.8.2",
+  "description": "This Exodus SDK feature provides a way to enable/disable assets, as well as auto-enable them under certain conditions, e.g. when the asset is involved in a purchase/sale/exchange.",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/enabled-assets",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aenabled-assets"
+  },
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "api",
+    "atoms",
+    "module",
+    "plugin",
+    "redux",
+    "report",
+    "index.d.ts",
+    "CHANGELOG.md",
+    "README.md",
+    "!**/__tests__/**"
+  ],
+  "scripts": {
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest"
+  },
+  "dependencies": {
+    "@exodus/asset-legacy-token-name-mapping": "^1.0.0",
+    "@exodus/atoms": "^9.0.0",
+    "@exodus/basic-utils": "^3.0.1",
+    "lodash": "^4.17.21",
+    "make-concurrent": "^5.3.0",
+    "reselect": "^3.0.1"
+  },
+  "devDependencies": {
+    "@exodus/assets": "^11.0.0",
+    "@exodus/assets-base": "^10.0.0",
+    "@exodus/assets-feature": "workspace:^",
+    "@exodus/available-assets": "workspace:^",
+    "@exodus/combined-assets-meta": "^3.0.0",
+    "@exodus/currency": "workspace:^",
+    "@exodus/dependency-injection": "workspace:^",
+    "@exodus/dependency-preprocessors": "workspace:^",
+    "@exodus/models": "workspace:^",
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "@exodus/storage-memory": "workspace:^",
+    "@types/events": "^3.0.0",
+    "events": "^3.3.0",
+    "redux": "^4.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

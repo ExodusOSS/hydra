@@ -1,0 +1,54 @@
+{
+  "name": "@exodus/feature-flags",
+  "version": "6.0.4",
+  "description": "Module for monitoring/controlling the currently available features based on remoteConfig, device geolocation, etc",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/feature-flags",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afeature-flags"
+  },
+  "main": "index.js",
+  "files": [
+    "api",
+    "atoms",
+    "module",
+    "plugin",
+    "redux",
+    "shared",
+    "index.d.ts",
+    "CHANGELOG.md",
+    "README.md",
+    "!**/__tests__/**",
+    "!**/*.test.js"
+  ],
+  "scripts": {
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest --esbuild"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^8.1.1",
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/feature-control": "^2.2.0",
+    "@exodus/module": "^1.2.0",
+    "@exodus/remote-config-atoms": "^1.0.1",
+    "@exodus/typeforce": "^1.18.0",
+    "lodash": "^4.17.21",
+    "reselect": "^3.0.1",
+    "semver": ">5 <7"
+  },
+  "devDependencies": {
+    "@exodus/dependency-injection": "workspace:^",
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "@exodus/remote-config": "workspace:^",
+    "@exodus/storage-memory": "workspace:^",
+    "events": "^3.3.0",
+    "redux": "^4.2.1",
+    "semver": "6.3.1"
+  }
+}

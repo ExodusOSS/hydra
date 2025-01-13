@@ -1,0 +1,28 @@
+{
+  "name": "@exodus/bufferize",
+  "version": "1.0.0",
+  "author": "Exodus Movement Inc",
+  "description": "Traverses an object and creates a buffer from every UInt8Array",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-core.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-core/tree/master/packages/bufferize",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-core/issues?q=is%3Aissue+is%3Aopen+label%3Abufferize"
+  },
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "CHANGELOG.md"
+  ],
+  "dependencies": {
+    "traverse": "^0.3.9"
+  },
+  "scripts": {
+    "test": "run -T jest",
+    "lint": "run -T eslint . --ignore-path ../../.gitignore",
+    "lint:fix": "yarn lint --fix"
+  }
+}

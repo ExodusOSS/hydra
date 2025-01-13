@@ -1,0 +1,54 @@
+{
+  "name": "@exodus/i18n",
+  "version": "5.0.0",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/i18n",
+  "description": "Tooling, CLI and React components for cross-platform internationalization",
+  "license": "UNLICENSED",
+  "author": "Exodus Movement, Inc.",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Ai18n"
+  },
+  "main": "index.js",
+  "files": [
+    "cli",
+    "client",
+    "formatters",
+    "icu",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/generator": "^7.0.0",
+    "@babel/traverse": "^7.0.0",
+    "@babel/types": "^7.0.0",
+    "react": "^16.0.0"
+  },
+  "dependencies": {
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/i18n-babel-webpack": "^1.0.0",
+    "@exodus/pofile": "^3.0.1",
+    "cli-table": "^0.3.1",
+    "eventemitter3": "^5.0.1",
+    "events": "^3.3.0",
+    "glob": "^7.1.1",
+    "lodash": "^4.17.21",
+    "process": "^0.11.10"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.9",
+    "memfs": "^4.2.1",
+    "react": "^16.8.3"
+  },
+  "scripts": {
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest"
+  },
+  "bin": "cli/index.js"
+}

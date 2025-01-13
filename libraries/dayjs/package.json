@@ -1,0 +1,17 @@
+{
+  "name": "@exodus/dayjs",
+  "version": "1.1.0",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/dayjs",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Adayjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "dayjs": "1.10.4"
+  }
+}

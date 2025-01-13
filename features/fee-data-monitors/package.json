@@ -1,0 +1,47 @@
+{
+  "name": "@exodus/fee-data-monitors",
+  "version": "5.0.2",
+  "description": "Fee monitor scheduler",
+  "author": "Exodus Movement, Inc.",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/fee-data-monitors",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afee-data-monitors"
+  },
+  "scripts": {
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest"
+  },
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "api",
+    "atoms",
+    "monitor",
+    "plugin",
+    "redux",
+    "index.d.ts",
+    "CHANGELOG.md",
+    "README.md",
+    "!**/__tests__/**"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^9.0.0",
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/redux-dependency-injection": "^4.0.0",
+    "lodash": "^4.17.21",
+    "make-concurrent": "^5.4.0",
+    "p-defer": "^4.0.0",
+    "reselect": "^3.0.1"
+  },
+  "devDependencies": {
+    "@exodus/asset-lib": "^5.2.1",
+    "@exodus/assets-feature": "workspace:^",
+    "redux": "^4.0.0"
+  }
+}

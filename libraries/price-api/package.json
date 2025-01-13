@@ -1,0 +1,48 @@
+{
+  "name": "@exodus/price-api",
+  "version": "3.3.4",
+  "main": "lib/index.js",
+  "repository": "git@github.com:ExodusMovement/price-api.git",
+  "author": "ExodusMovement",
+  "license": "ISC",
+  "scripts": {
+    "unit": "NODE_ENV=test tape -r @babel/register src/__tests__/*.test.js | tap-spec",
+    "build": "yarn build:clean && yarn run --production babel src -d lib/ && pkgfiles",
+    "build:clean": "rm -rf ./lib",
+    "lint": "eslint ./src",
+    "lint:staged": "lint-staged",
+    "flow": "flow",
+    "test": "yarn lint && yarn flow && yarn unit",
+    "format": "prettier --write '**/*.js'",
+    "prepublish": "yarn build"
+  },
+  "keywords": [
+    "utils"
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-transform-modules-commonjs": "7.9.0",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/register": "7.9.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.7.0",
+    "eslint-config-prettier": "^3.1.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "flow-bin": "0.122.0",
+    "lint-staged": "^7.3.0",
+    "pkgfiles": "^2.3.2",
+    "prettier": "^1.14.3",
+    "tap-spec": "5.0.0",
+    "tape": "4.11.0"
+  },
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "dayjs": "1.8.12",
+    "delay": "~1.3.1",
+    "ms": "2.1.2"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "XopayVerificationEditDetailsSave"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "name_modified": {
+          "type": "boolean"
+        },
+        "dob_modified": {
+          "type": "boolean"
+        },
+        "address_modified": {
+          "type": "boolean"
+        },
+        "ssn_modified": {
+          "type": "boolean"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

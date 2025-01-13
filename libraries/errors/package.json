@@ -1,0 +1,40 @@
+{
+  "name": "@exodus/errors",
+  "type": "module",
+  "version": "1.1.0",
+  "description": "Utilities for error handling in client code, such as sanitization",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/errors",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aerrors"
+  },
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./sanitize": "./lib/sanitize.js"
+  },
+  "files": [
+    "lib",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "run -T tsc --build tsconfig.build.json",
+    "prepublishOnly": "yarn run -T build --scope @exodus/errors",
+    "clean": "run -T tsc --build --clean",
+    "lint": "run -T eslint . --ignore-path ../../.gitignore",
+    "lint:fix": "yarn lint --fix",
+    "test": "yarn run test:v8 && yarn run test:hermes",
+    "test:v8": "run -T exodus-test --esbuild --jest src/__tests__/v8/*.test.ts",
+    "test:hermes": "run -T exodus-test --engine hermes:bundle --esbuild --jest src/__tests__/hermes/*.test.ts"
+  },
+  "devDependencies": {
+    "@exodus/errors-fixture": "workspace:^",
+    "hermes-engine-cli": "^0.12.0"
+  }
+}

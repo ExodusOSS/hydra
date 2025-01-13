@@ -1,0 +1,39 @@
+{
+  "name": "@exodus/profile",
+  "version": "2.0.2",
+  "description": "Stores and sync user profile data, such as name and avatar",
+  "author": "Exodus Movement, Inc.",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/profile",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aprofile"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "main": "index.js",
+  "files": [
+    "api",
+    "atoms",
+    "plugin",
+    "redux",
+    "README.md",
+    "CHANGELOG.md",
+    "constants.js",
+    "!**/__tests__/**"
+  ],
+  "scripts": {
+    "lint": "run -T eslint . --ignore-path ../../.gitignore",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest --esbuild"
+  },
+  "devDependencies": {
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "redux": "^4.2.1"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^8.0.0",
+    "@exodus/fusion-atoms": "^1.2.1"
+  }
+}

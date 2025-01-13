@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "ExchangeNoGas"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": ["is_zero_balance", "coin_or_token", "is_all", "user_amount_from_usd"],
+      "properties": {
+        "is_zero_balance": {
+          "type": "boolean"
+        },
+        "coin_or_token": {
+          "type": "string",
+          "enum": ["coin", "token"]
+        },
+        "is_all": {
+          "type": "boolean"
+        },
+        "user_amount_from_usd": {
+          "type": "number"
+        },
+        "asset_name": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

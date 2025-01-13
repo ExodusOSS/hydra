@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "NotificationReceive"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "notification_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "group": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "push_or_in_app": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "cta": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "title": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "exodus_activation_time": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "exodus_activation_time_user": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "user_time": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

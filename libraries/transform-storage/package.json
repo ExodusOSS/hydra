@@ -1,0 +1,39 @@
+{
+  "name": "@exodus/transform-storage",
+  "version": "1.1.1",
+  "description": "Storage enhancer for storage-spec interface for transforming reads and writes",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/transform-storage",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Atransform-storage"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc --build tsconfig.build.json",
+    "clean": "tsc --build --clean",
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T jest",
+    "prepublishOnly": "yarn run -T build --scope @exodus/transform-storage"
+  },
+  "dependencies": {
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/storage-interface": "^1.0.0",
+    "minimalistic-assert": "^1.0.1"
+  },
+  "devDependencies": {
+    "@exodus/storage-memory": "workspace:^",
+    "@exodus/storage-spec": "^3.1.0",
+    "@types/minimalistic-assert": "^1.0.1"
+  }
+}

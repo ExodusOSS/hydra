@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "ModalDelistingAssetsView"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "asset_names": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "any-string"
+          }
+        },
+        "amounts": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "amounts_usd": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

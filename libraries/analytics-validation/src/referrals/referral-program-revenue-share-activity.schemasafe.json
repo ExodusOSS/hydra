@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "ReferralProgramRevenueShareActivity"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "is_referral": {
+          "type": "boolean"
+        },
+        "reason_not_payable": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "rev_share_variant": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "revenue_share_activity": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "revenue_share_amount_usd": {
+          "type": "number"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

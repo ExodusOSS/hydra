@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "LedgerAccountConnect"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "network": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "total_amount": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "total_amount_usd": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "number_of_collectibles": {
+          "type": "number"
+        },
+        "success": {
+          "type": "boolean"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

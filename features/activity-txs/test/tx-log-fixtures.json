@@ -1,0 +1,126 @@
+{
+  "shitCoin": [
+    {
+      "txId": "tx-1",
+      "error": null,
+      "date": "2019-07-18T12:25:52.000Z",
+      "confirmations": 1,
+      "meta": {},
+      "token": null,
+      "dropped": false,
+      "coinAmount": "0.00184082 LOL",
+      "coinName": "shitCoin",
+      "feeAmount": "0.00014238 LOL",
+      "feeCoinName": "shitCoin",
+      "addresses": [
+        {
+          "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+          "meta": {
+            "path": "m/0/0"
+          }
+        }
+      ],
+      "currencies": {
+        "shitCoin": {
+          "LOL": 8,
+          "KEK": 2,
+          "OMG": 0
+        }
+      }
+    }
+  ],
+  "bitcoin": [
+    {
+      "txId": "tx-1",
+      "error": null,
+      "date": "2019-07-18T12:25:52.000Z",
+      "confirmations": 1,
+      "meta": {},
+      "token": null,
+      "dropped": false,
+      "coinAmount": "0.00184082 BTC",
+      "coinName": "bitcoin",
+      "feeAmount": "0.00014238 BTC",
+      "feeCoinName": "bitcoin",
+      "addresses": [
+        {
+          "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+          "meta": {
+            "path": "m/0/0"
+          }
+        }
+      ],
+      "currencies": {
+        "bitcoin": {
+          "BTC": 8,
+          "bits": 2,
+          "satoshis": 0
+        }
+      }
+    },
+    {
+      "txId": "tx-2-dropped",
+      "error": null,
+      "date": "2019-07-18T12:48:15.000Z",
+      "confirmations": 0,
+      "meta": {},
+      "token": null,
+      "dropped": true,
+      "coinAmount": "-0.00174821 BTC",
+      "coinName": "bitcoin",
+      "feeAmount": "0.00009261 BTC",
+      "feeCoinName": "bitcoin",
+      "to": "1JXm4NRQLFY1PjvHaDHzbQrcQGge4zSKrS",
+      "currencies": {
+        "bitcoin": {
+          "BTC": 8,
+          "bits": 2,
+          "satoshis": 0
+        }
+      }
+    },
+    {
+      "txId": "tx-3-to-expand",
+      "error": null,
+      "date": "2023-07-18T12:48:15.000Z",
+      "confirmations": 0,
+      "meta": {},
+      "token": null,
+      "dropped": false,
+      "coinAmount": "-0.1 BTC",
+      "coinName": "bitcoin",
+      "feeAmount": "0.5 BTC",
+      "feeCoinName": "bitcoin",
+      "to": "1JXm4NRQLFY1PjvHaDHzbQrcQGge4zSKrS",
+      "currencies": {
+        "bitcoin": {
+          "BTC": 8,
+          "bits": 2,
+          "satoshis": 0
+        }
+      },
+      "data": {
+        "sent": [
+          {
+            "address": "btc-address-1",
+            "amount": {
+              "value": "0.06",
+              "unit": "BTC",
+              "unitType": "BTC",
+              "type": "NumberUnit"
+            }
+          },
+          {
+            "address": "btc-address-2",
+            "amount": {
+              "value": "0.04",
+              "unit": "BTC",
+              "unitType": "BTC",
+              "type": "NumberUnit"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

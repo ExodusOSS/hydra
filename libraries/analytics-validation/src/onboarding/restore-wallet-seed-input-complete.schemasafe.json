@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "RestoreWalletSeedInputComplete"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "restore_time": {
+          "type": "number"
+        },
+        "backup_type": {
+          "type": "string",
+          "enum": ["passkeys", "seed-phrase"]
+        },
+        "restored_asset_count": {
+          "type": "number"
+        },
+        "restored_asset_1_name": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "restored_asset_1_time": {
+          "type": "number"
+        },
+        "restored_asset_2_name": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "restored_asset_2_time": {
+          "type": "number"
+        },
+        "restored_asset_3_name": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "restored_asset_3_time": {
+          "type": "number"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

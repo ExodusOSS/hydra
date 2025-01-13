@@ -1,0 +1,523 @@
+{
+  "valid": [
+    {
+      "description": "standard wallet",
+      "mnemonic": "cousin access oak tragic entire dynamic marine expand govern enjoy honey tissue",
+      "masterSeed": {
+        "type": "Buffer",
+        "data": "base64:WsaCrdFcqfsfIsp9wL8nmnFCNKDdv49AtTOSdBXrB70Epl9kEfmGs4/EsyvccA/oufTiWfyIVMmTuQxzITZfTg=="
+      },
+      "xpriv": "xprv9s21ZrQH143K38DMxVbht49DpHpUte6gyTyGuSmNM1a4C7e8o9eCh3C4GYe6sShbxWTax3Z4zKNAegrjHfsfJspwyG1MEvfSyhDEuvewdd1",
+      "xpub": "xpub661MyMwAqRbcFcHq4X8iFC5xNKeyJ6pYLgtshqAyuM734uyHLgxTEqWY7qjv3vVLT6qHxu1HGoaVH5cLTmCWE6p8RRU61ganvxUY35qfznq",
+      "bip44": {
+        "__comment": "basic bip44, p2pkh",
+        "path": "m/44'",
+        "xpriv": "xprv9ugEGMdYQnf3sg5gQFyKGuy6zoJhfHZ55oqU5Kx4airfXN8bJaWqnf7bWZC3F2rAReTUb3bWxdUrcrCSBxiUGpmDKo1FnrPHMRCCJwAVd9g",
+        "xpub": "xpub68fafsASFADM6AA9WHWKe3uqYq9C4kGvT2m4siMg94PeQATjr7q6LTS5MrH6z9na1C3YrPzGKqVFJEegbzLRWq9jhmJsLwsWbaeGtW1LoSf",
+        "coins": [
+          {
+            "coin": "bitcoin",
+            "xpriv": "xprv9xeVznK3H19UHW2YspMnHAFgANPXVZTKL13gZRHWbnP5VvJnNpuHWFaPxBp8uK2HW2GJ6pBCvAQB8yp1ijgpb32t9Gx51NS877mJ3uXSuKM",
+            "xpub": "xpub6BdrQHqw7NhmVz71yqtneJCQiQE1u2BAhDyHMoh8A7v4NidvvNDY43tsoV9TDUF1t8ANrZTbn2ytD4nmdZorDWbRPnb2KNpiRZxdaXQNgKL",
+            "accounts": [
+              {
+                "coin": "bitcoin",
+                "xpriv": "xprv9ysniBuk7BcZWMiPKvm9md3NnQi2XVV3XEQfNzsmMrZu4ksDXfiMD5ixiK4FZzS9ioPQxQfGqzEN8oA4fDKUiEML5UsfibQZi8Mr7Yxj6F5",
+                "xpub": "xpub6Cs97hSdwZAriqnrRxJA8kz7LSYWvxCttTLGBPHNvC6swZCN5D2bkt3SZc7arwtywB4SzD76vBW9YNRPad8qwa5Vxh7s6U99sjiEax3Nz75",
+                "chains": [
+                  {
+                    "__comment": "external chain",
+                    "xpriv": "xprvA15QaTskmp4uKPHVQzLjVnSVtEAxaUDsWwEWea8JQG7K5XUtVfU2UqheuM6WNFHMKtfMff9UVtPMAFBCUUkH2ayF61Zop8uiZh481aF9uGq",
+                    "xpub": "xpub6E4kyyQecBdCXsMxX1sjrvPESG1SyvwitAA7SxXuxbeHxKp33CnH2e28ked1BkPoAZeLdtrBnGLNGDqz6tFGCkWcXNvfP7Ehe1Je6jQhTyv",
+                    "addresses": [
+                      {
+                        "publicKey": "027135776e6628b3da577e6775193bc219ac054034eda1041138313bc1b4f1110d",
+                        "wif": "L4dfHaQhfzqpxounsgzve8A4k51PprX4AV8YWYs8Qssdv4LAHVUL",
+                        "address": "12sLcvm1KXK5zBmXsAcYrUsqrRcrsuvaUT"
+                      },
+                      {
+                        "publicKey": "02ee5f570f6a32d383548f29dca3eb55c64bef254df41a57cf45be6cd6d71b9aa8",
+                        "wif": "L1L5dcugEM8joNFntYwJMPERyEcSvNksaMAyCTQ4Ln1DEreJJL2u",
+                        "address": "1DtcpR1iJg5jhdH4bBSDAVU9fsLtYsUQoB"
+                      },
+                      {
+                        "publicKey": "024fe6bb81bae46ef8fe6b27f76bf9363d6e16be6a665a40d9b485d0af0b65fbcb",
+                        "wif": "KyqgZmbvSqhBkK1LTPe5fGvk7T62QdW2JsRwBS2xPs6iGxNfw4Y5",
+                        "address": "13PiiuaACsNhu5XCpc44yk9YUX7PQQ1ZGm"
+                      }
+                    ]
+                  },
+                  {
+                    "__comment": "internal chain (change)",
+                    "xpriv": "xprvA15QaTskmp4uNB8gDXH9JLYQwMm9jTkqDxVTthwhSK3FRbMyTH8McaigVmV9JAu3exH3mqGYXPvxjcaPBUmybZ2VwmKsZP5MsSo8uWT8aGv",
+                    "xpub": "xpub6E4kyyQecBdCafD9KYp9fUV9VPbe8vUgbBR4h6MJzeaEJPh7zpScAP3AM3cv6MjAiYpiWsmSszeME3gpT7YEJaf33YhAGynjGAqZWWUDC9H",
+                    "addresses": [
+                      {
+                        "publicKey": "02716fa0ef35c14ec74726cbef4de950593acbb65e5cb1d6c1f3fa0105dcc6edcd",
+                        "wif": "KwuBZySyXrKeEvqpq6kvsP2qtFc246k9bhPeTWVgFVfWmqdVNkWz",
+                        "address": "1DsmjSCFZbjMAAtoSQAMujqZz94KHxLSHv"
+                      },
+                      {
+                        "__comment": "TODO: correct WIF",
+                        "publicKey": "03bd8b065467d79d36e7ef1c990c9082a5c32bbb70281ccc9786cdaba3e5c5bf1d",
+                        "wif": "KwuBZySyXrKeEvqpq6kvsP2qtFc246k9bhPeTWVgFVfWmqdVNkWz",
+                        "address": "16R3cUgDjc8iNWRN1sNPaNoBWjtEDWnLwu"
+                      }
+                    ]
+                  },
+                  {
+                    "__comment": "exchange",
+                    "xpriv": "xprvA2kEkeSCXRsB42wVaxncVu6PbepgCWbHqCFCyvc8xq2bZUhMQoTS1dUsPRUBiZFmrHPjXNsvv8GBWqVfYgQ1VmLQbUTGWNAdLsaf4T26E8e",
+                    "xpub": "xpub6FjbA9y6MoRUGX1xgzKcs3389gfAbyK9CRAonK1kXAZaSH2VxLmgZRoMEheDd83ay7zLrrapy5Ka6xGyaRtZ4xDVfQCq1AiQmCaXnb1NRYq",
+                    "addresses": [
+                      {
+                        "publicKey": "031e1408c7f732b2141cd9e402b27d4e726da2feed2fcfab21f31ad5b23b930142",
+                        "wif": "L1mKf1goGXzRx8WwddUAjDrrFY4n2rN7ahW5e4aUydEJZ999skCq",
+                        "address": "12GeUhBYtB11EZPGPBEzUzvWRRM3EsgZuE"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "coin": "bitcoin",
+                "xpriv": "xprv9ysniBuk7BcZYgaN8QogVoExB3odiJT5vjkM1Bt3uchVj1ZB4okYV5ewg1r2En5u7qXvHu1tBaH1JZhWsoSokD1BctHyj8PNXFKAihXZtXe",
+                "xpub": "xpub6Cs97hSdwZArmAeqESLgrwBgj5e87mAwHxfwoaHfTxEUbotKcM4o2syRXGDttReRm1pKhGrjBoqCRaTEXvq59m7xr18iPqyDAmMwDKWvm7B",
+                "chains": [
+                  {
+                    "__comment": "external chain (account 1, multiple portfolios m/44'/0'/1'/0/0)",
+                    "xpriv": "xprv9zwdHJVyj9Z1dxou3KjbAdYW3Jsoy8pbP9V3YnBeU3REpsaj6tj6fqCZKtXUi9A3obch29Mff1WsfKpvkrwkwgseFVMV2WYbo2nHemVmgg1",
+                    "xpub": "xpub6Dvygp2sZX7JrStN9MGbXmVEbLiJNbYSkNQeMAbG2NxDhfuseS3MDdX3B98wAuWpXZxzvwXwVxvYtqY3yNMn4C5ip3ckx7cEhpT5tizLmUB",
+                    "addresses": [
+                      {
+                        "publicKey": "020668af2205ed6913760c98b6e5fae6863815b292e3647fa96e204d75c77c9fc9",
+                        "address": "1GppNLzPK78PeDAarvuxM7nPUVed8j1Pm7"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "coin": "bitcoin",
+                "xpriv": "xprv9ysniBuk7BcZbwwta5tKXfLX7guD6sRqeNwfHUbXQ9xVfMYa5q2ye19jqkPFD1aHhfQmLCUASisqkvtgKef4EziXuUfo7rriSY8HreYRkQX",
+                "xpub": "xpub6Cs97hSdwZArpS2Mg7RKtoHFfijhWL9h1bsG5s18xVVUY9sidNMEBoUDh3inKJubZ5LPAk9e9M8aBU7na4eDZtPgbbnwnxfQj9ZcetFB9PF",
+                "chains": [
+                  {
+                    "__comment": "external chain (account 2, multiple portfolios m/44'/0'/2'/0/0)",
+                    "xpriv": "xprvA2GzoBT6SWCYQjJTDBxRbmcdWz6dtmrqrYQJmowWfYskvPvrJ8nN3p1KcRmmyJv4zTTyUkRDrqFQs68dhH2iLvRGJNEyKVvLpLkhRHAHyNE",
+                    "xpub": "xpub6FGMCgyzGskqdDNvKDVRxuZN51w8JEahDmKuaCM8DtQjoCFzqg6cbcKoTfY4EW1dMfEcmbWBuDfHTqN4TMUfaGeQmFpf3dYNeCXipkkvfvF",
+                    "addresses": [
+                      {
+                        "publicKey": "037c5ca9771b7cb67715ca257efbe99c7d7ffc4d2f02c6b284d1b95bcbc8c8b9e9",
+                        "address": "1fgcpu6szDM7g4jQCBh7zVNo64dohRALR"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "coin": "litecoin",
+            "xpriv": "xprv9xeVznK3H19UQynhtNudNcsQyY2bagELwUuYvGvrcnW3WSwYs3H9PcHMCuQvs4F4R96nopdpHrpXpD4qC3Q1vAu5tGoCEnqPB7fRgcc2g9M",
+            "xpub": "xpub6BdrQHqw7NhmdTsAzQSdjkp9XZs5z8xCJhq9ifLUB832PFGhQabPwQbq4B14fQnmFF9AWhc4w6ZvcnmdkQMApfp8j6GWXAokMJABuNhxUjW",
+            "accounts": [
+              {
+                "coin": "litecoin",
+                "xpriv": "xprv9yVwCBRYKWcQTKWcjzdQahLpa18z3x3rVYWMm4nimqa49DQK98VEnAkK5CXJCP9MMLXt7w8Bgf3BAbur7urEGJJuEtD9Uj7JRZSrL5TP5vq",
+                "xpub": "xpub6CVHbgxS9tAhfob5r2AQwqHZ82yUTQmhrmRxZTCLLB7321jTgfoVKy4nvU9QCrgvfUxnRoDJC62PPQGJgyBWDxm6f64cwAoFApGsQPJrBJw",
+                "chains": [
+                  {
+                    "__comment": "external chain",
+                    "addresses": [
+                      {
+                        "address": "LL4ZFrCWn46WpZQTmBSHLfacGxAKZkHqvj"
+                      }
+                    ]
+                  },
+                  {
+                    "__comment": "internal chain",
+                    "addresses": [
+                      {
+                        "wif": "T5VSdn8RQGuWye4Fv5dkSzUg4qANPaP8YuvdfgC8pCy53BGtixBd",
+                        "address": "LN1AQzWeyqomuVyZ7rjwTVtsRyHc5bg8Rx"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "coin": "litecoin",
+                "xpriv": "xprv9yVwCBRYKWcQWhuaGytGqesXAACPNMYYXsm8CiWUeVMDuqiJoH94ZprmS1nTyfUdqYSVXQg69pPyxLTjNyj8yHvNdsJVxDWvVpTEyi2o27K",
+                "xpub": "xpub6CVHbgxS9tAhjBz3P1RHCnpFiC2smpGPu6gj16v6CptCne3TLpTK7dBFHH3Y71QTTVDEc7g2m7Zs5xzn59iByJb79279iwrdz7BJsTvNiZi",
+                "chains": [
+                  {
+                    "__comment": "external chain account 1 (multiple portfolios) m/44'/2'/1'",
+                    "addresses": [
+                      {
+                        "address": "LYELbGkBdvTgLeGeNbBejrFsjJDC7BE6qx"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "coin": "ethereum",
+            "xpub": "xpub6C1DE2ZznuwibN77nN9qS6J5tsJ6rwbf5zqW4MonpBN9VDSuoT6ywgd9hUJeshXMjUt15Yt5GWFKa5w3ameJntk4ZsemYBj2B5XR4Kj4tuR",
+            "accounts": [
+              {
+                "coin": "ethereum",
+                "xpub": "xpub6C1DE2ZznuwibN77nN9qS6J5tsJ6rwbf5zqW4MonpBN9VDSuoT6ywgd9hUJeshXMjUt15Yt5GWFKa5w3ameJntk4ZsemYBj2B5XR4Kj4tuR",
+                "xpriv": "xprv9y1rpX36xYPRNt2egLcq4xMMLqTcTUsoimuuFyQBFqqAcR7mFunjPtJfrBbUrTW7t8meWYyZnyi1kYkvDyxuZxtk2xwQHcn8cZG9DkDUqLz",
+                "chains": [
+                  {
+                    "__comment": "ethereum account 0. eth doesn't really have chains, but we derive from the 'external' chain",
+                    "addresses": [
+                      {
+                        "address": "0x8DC3a13761B0c72cD309FCBB89560f58926ABc99"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "coin": "ethereum",
+                "xpub": "xpub6C1DE2Zznuwic2HErMy4eCPZZbkjdYF2MPBLVZ8GgrqAtkeEPK7ePgk7VSHHrj1uJzNTT4cArjuKMjk5utPAiCALFLmjP9VSk6GxG7CPnW7",
+                "xpriv": "xprv9y1rpX36xYPRPYCmkLS4H4Sq1ZvFE5XAzAFjhAif8XJC1xK5qmoPqtRde9QZnCoRtqXfAPZeKHqzDEFFmRLsrJde6qvdztvoVj4dD3NQpJV",
+                "chains": [
+                  {
+                    "__comment": "ethereum account 1 (multiple portfolios) m/44'/60'/1'/0/0",
+                    "addresses": [
+                      {
+                        "address": "0x328bd71e9fb4250740Ab36b16Bf3e17eA75817dc"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "coin": "dash",
+            "xpub": "xpub6BdrQHqw7NhmjzZx5e7oSCMErnHSnT99P2UZJHBkM8Pe4XobWfY73uDtNdSibz35WzCDkBHsGBq7gsFbuQDsgCqrvJtz9koUYygKvnKSmnj",
+            "accounts": [
+              {
+                "coin": "dash",
+                "xpub": "xpub6C8A4JKeCQwm726Vmax6Ymo4rhSJRwRhhPAn8pXRShznA6wNApqebFD5c9WpwiEQpzvXBcW2hQj8vu2D5UJ36HgRsGdfJ9tiEQKMpbTTKws",
+                "xpriv": "xprv9y8oennkN3PTtY22fZR6BdrLJfbp2UhrLAFBLS7otNToHJcDdHXQ3StbksSha56Ag1SCNDh72tDJKLsXdmYDmECUKq4921ffRATxwNt1mjh",
+                "chains": [
+                  {
+                    "__comment": "dash external (receive) chain",
+                    "addresses": [
+                      {
+                        "address": "XfT3Nrd62JPkuzq6T5j743CZNrNkRmynoK",
+                        "wif": "XEFeFubkyE4eyFEhNhB6XJrvxFvzUjXyFFeGBFwYvtFvvKMGji2P"
+                      }
+                    ]
+                  },
+                  {
+                    "__comment": "dash internal (change) chain",
+                    "addresses": [
+                      {
+                        "address": "Xh1kUpvjx8R782AknJvsdaGunPHyzs4jPo",
+                        "wif": "XHM8iCWuv4L6UfAg87Z93XbSccLwbfMZSpRTTMpW1RLQnYcuY2kU"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "coin": "solana",
+            "xpub": "xpub6GZny8KvRwf8gWLEbqUiwm4m7KRBu9teTe5kKuWmx8gZ5A2irEYyrkju2E3bcGXuW9fiqHURsYNuFJrzXQZZ27qTLrD7BWXjZddq4YqrBHp",
+            "accounts": [
+              {
+                "coin": "solana",
+                "xpub": "xpub6GZny8KvRwf8gWLEbqUiwm4m7KRBu9teTe5kKuWmx8gZ5A2irEYyrkju2E3bcGXuW9fiqHURsYNuFJrzXQZZ27qTLrD7BWXjZddq4YqrBHp",
+                "xpriv": "xprvA3aSZco2ba6qU2FmVowiad82ZHahVhAo6RA9XX7APo9aCMhaJhEjJxRRAwCB6mojPMJKvuZmG1nKmuLZb2VgZF8WpjNA9QtBgAxnNshT1iN",
+                "chains": [
+                  {
+                    "addresses": [
+                      {
+                        "address": "EuNMWG8CzKHBWDGJhiJYZGqPKtC71CZHRpA46e3GLGq2"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "coin": "cardano",
+            "xpub": "",
+            "accounts": [
+              {
+                "coin": "cardano",
+                "xpub": "",
+                "xpriv": "",
+                "chains": [
+                  {
+                    "addresses": [
+                      {
+                        "address": "addr1q8fz598fkcvs9gqys0sh97zxk3pv8sqslhe7d65yrzxw6g7j9g2wndseq2sqfqlpwtuyddzzc0qppl0num4ggxyva53syhv2p6"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "bip49": {
+        "_comment": "Nested SegWit P2WPKH-nested-in-P2SH addresses",
+        "path": "m/49'",
+        "coins": [
+          {
+            "coin": "bitcoin",
+            "accounts": [
+              {
+                "_comment": "Serializing extended keys with version bytes 0x0488B21E (xpub) and 0x0488ADE4 (xprv)",
+                "coin": "bitcoin",
+                "xpriv": "xprv9yzz2L7ykKNotPc8m175GHmrpqBNhvX1WNr9i6kRnwR5WrNJbQZqzovvhEmUYm3ARXBpe4yZRcnZv1w7m5952211EGZoCKUdAT7m13Jv6Sm",
+                "xpub": "xpub6CzLRqesagw76sgbs2e5dRibNs1s7PErsbmkWVA3MGx4PehT8wt6YcFQYVbQrXuaGrSYdJxvZFSYURWMuLQNp6Mm7owuHikG29eeo4qRarV",
+                "chains": [
+                  {
+                    "__comment": "external account 0 m/49'/0'/0'",
+                    "addresses": [
+                      {
+                        "publicKey": "031ae5c4360d84067a26cf73364ceaaede477fc635fbf29311693d9ea0fc577450",
+                        "wif": "KzLaSZ7Yk6WhB596VzWxPCtynMxiZdaABayknoX65CGxjz8riqgB",
+                        "address": "3MDqP6oCMoPgYAQ81QLwkks4fxcQRomeZG"
+                      },
+                      {
+                        "publicKey": "037744ac372c17c71d68ee50366c1363f0f044fcbedd820f406b93022624885faf",
+                        "wif": "L4wKL28PHPH8kZVAiZezr2gVX9KtKRgyWah2Y1gdaAAMeGnhP4Jb",
+                        "address": "3PiMZVJ2ZGv5LR6GYYA599XeBosTgJk6sy"
+                      },
+                      {
+                        "publicKey": "03a7b8c642f34dcb735d4268dbf1987ae543f6c34c764a97f5bd4e2cd44d2bec20",
+                        "wif": "L3jUjwuvmezg9wXnpcvUqJE2Cq8NRufrjFDqMMpQfKMKGoQc5iN2",
+                        "address": "3CCMhoSmaaLDtgqsu2SHSuh76uAad2gzwA"
+                      }
+                    ]
+                  },
+                  {
+                    "__comment": "internal chain",
+                    "addresses": [
+                      {
+                        "publicKey": "03e557f8078c28e57b6fa9a26e55ec178028f41c6fe325737d2ff5338513330ba1",
+                        "wif": "L5b91czZ9bXLgGvUWMsiJ9ARw5NmcHP3Cf1FGWWteZ81JrxMCUEB",
+                        "address": "3Eo51WAmBWR296SWfubjQyKbhCtSWVGgw4"
+                      },
+                      {
+                        "publicKey": "030082364e7a23f95fdfb50f1449522b62e8d834f72aae2cd69550fa1135f31931",
+                        "wif": "KwXPXaKVDAurFkah2j7oRKFZgFbyW86iQsjaj5C1ZSxuqzjaBESC",
+                        "address": "3FdHXJvqCBtfZ1YoRJRdW7QfNCmydHnU7K"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "bip84": {
+        "_comment": "SegWit native P2WPKH addresses",
+        "path": "m/84'",
+        "coins": [
+          {
+            "coin": "bitcoin",
+            "accounts": [
+              {
+                "coin": "bitcoin",
+                "xpriv": "xprv9z3nXnHr3bvnFtVrHcVoASn5K3dDKCEVnqHoQ2zaAPKbcN9Nf7Tto8W4H2ygzvLKZ9cTRjxERpDybzBk5XJBjFcn4nfs3v1R8hadbuKaYkB",
+                "xpub": "xpub6D38wHpjsyV5UNaKPe2oXaios5ThiexMA4DQCRQBiiraVAUXCen9LvpY8JjEr54G9WZE467WjuRytH2JrD5CSUdQRD3qyZbzaGf15LLCyDK",
+                "chains": [
+                  {
+                    "__comment": "external account 0 m/84'/0'/0'",
+                    "addresses": [
+                      {
+                        "publicKey": "03749ac5eb789dff00f406e4be656ff8363756159ad8d707ead749f80d19f1a24b",
+                        "wif": "L2w5YmPrJ3Q3qEoiV25tK84LJ4NEvQD9d57HDddGbvicPeXVepRz",
+                        "address": "bc1qcgclnu4m5lv5k8eg2hytysvnlkjlhmyuyhtrna"
+                      },
+                      {
+                        "publicKey": "02e3118319c3318b8e70dba14613ee0c83b876db24ebdb4e724efaf81abe251a56",
+                        "wif": "KyHkgAwiUoz8FvGwZbhem2YKgQkwawvGM2BHU33JvkRAkDLRmsj4",
+                        "address": "bc1qk9jplpntz3002z60vwwde3nmg5xul6f633s48f"
+                      },
+                      {
+                        "publicKey": "0320300cabf0f209d8a17cd864368099eb5a85001616e458843c99e33b4f1c7696",
+                        "wif": "KyFrhNkLTg4cFCaEx2K49SNwHi6deudrACq22BsgtPQoUnzHeJct",
+                        "address": "bc1qeutz0u60fdv6dm4gfdgnlm0ytkrcqtta9w4yey"
+                      }
+                    ]
+                  },
+                  {
+                    "__comment": "internal chain",
+                    "addresses": [
+                      {
+                        "publicKey": "036a17e508a2215373e59b680164dc5badd4d2ba8c79a8c0bdd8943c0d41bdaa57",
+                        "wif": "KyTBAoQdqGoN9rt4worfvU8vpCK5TdzyHDvj6kPxabdbKGBb7w55",
+                        "address": "bc1qjlpydna4su75vmq9hl52hg0n4lnr242dyerll8"
+                      },
+                      {
+                        "publicKey": "02c03ea02def600839c25ec2021143e8c82904b506da8729f16984e115341b310f",
+                        "wif": "L2J9SNTiUHBNJRfw14xbtHH57UXq8sUZjeEF6BFkGBa7tWHaxyVw",
+                        "address": "bc1qdz34y5kjwj5ej0rv5528mwjl49ufkl098l2gd9"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "coin": "bitcoin",
+                "xpriv": "xprv9z3nXnHr3bvnJLbEqRG4VB9eASwrGxqWXJxmAQTJ79EgfdUM8fngTwkt87FvJ3k6o4d8rsXmc5XMsP5iAjERXFZL9Dbze8jw2oVDEA8RShv",
+                "xpub": "xpub6D38wHpjsyV5WpfhwSo4rK6NiUnLgRZMtXtMxnrufUmfYRoVgD6w1k5MyPTWmCb6RaDBCSFiNsevAGfhtA43CuWdE2Fg2pNNFYmz9ayV1jS",
+                "chains": [
+                  {
+                    "__comment": "external account 1 m/84'/0'/1'",
+                    "addresses": [
+                      {
+                        "publicKey": "03632a6a2941083596e71286328847ac3c1215504297eb90c374888307c8dab4ff",
+                        "address": "bc1qjqytlraeef0w435zs6fpe8c2k2v66qdh2zn802"
+                      },
+                      {
+                        "publicKey": "036f153440defaf54e60b0bd8708206f4055668d44e0bb78cc5072b0084aef2387",
+                        "address": "bc1qk99r87zkkgngq83syv7ha7p564skt5gaj0j8e2"
+                      },
+                      {
+                        "publicKey": "034c15337cbe7e114df66df978052d422f1bb1faf202fda607d007e13f40b17ca5",
+                        "address": "bc1q4p3nc2s0x952h0v90jv6rj5vdfr7nmlssyh9qj"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "coin": "litecoin",
+            "accounts": [
+              {
+                "coin": "litecoin",
+                "xpriv": "xprv9yS1L7YvWFLPj4VVJKjPd1iAo9Phiq24bC8ia72tCgBJqtGY4hm3LnzPFPuMRo1isyLQ96LJeDgd3YdU9wXN1tQLinyFSaACuVsoLRVAToQ",
+                "xpub": "xpub6CRMjd5pLctgwYZxQMGPz9euMBEC8HjuxR4KNVSVm1iHigbgcF5HtbJs6duZosdm3ybKgddG1WDeAqyxJihL2ZcjRTFjf9Mws7edgBrBgAC",
+                "chains": [
+                  {
+                    "__comment": "external account 0 m/84'/0'/0'",
+                    "addresses": [
+                      {
+                        "wif": "T8QyAjUqJbKAK4GmJhXrG6UcxU1wND1EqCUL2r1jKJs9tZFGYEVw",
+                        "address": "ltc1qwvttppwy90344ujte5sr59cg9p6paezsus4uks"
+                      },
+                      {
+                        "wif": "T3PTPKYjFhc81Zazfid6MnD9z3svwDBAskq4sYE6tz93KoPTgFDs",
+                        "address": "ltc1qy0969jjxmfzfsvsrl8hgnvncz7jmtxryk3qyqd"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "bip86": {
+        "_comment": "Taproot addresses - temp",
+        "path": "m/86'",
+        "coins": [
+          {
+            "coin": "bitcoin",
+            "accounts": [
+              {
+                "coin": "bitcoin",
+                "xpriv": "xprv9zWgX6DKmGDe5AVhZYfgtorgxZfdUecw52Z3hgSm4YQyxqXdNJJQ7PrDBuvRJ9zBaEHGPxqQmpByPUhf6QP9xLRQ6KuTxVvXC53LtunxZ7c",
+                "xpub": "xpub6DW2vbkDbdmwHeaAfaChFwoRWbW7t7LnSFUeW4rNcswxqdrmuqcefCAh3C4n2BqNbcjx4f7FUhC5VnSpCU8AsaqMmgw966EMLRwcFtdoruN",
+                "chains": [
+                  {
+                    "__comment": "external account 0 m/86'/0'/0'",
+                    "addresses": [
+                      {
+                        "publicKey": "0343d271bdcc7a54e85ac4ed7629ceae4c3b2bb6d62f6eee34427d568fc5f8ec96",
+                        "wif": "Kx43BHcBBQ1g5bwjUjSb9f5nb3kcU27LULR67VR8ybr84v59dwUt",
+                        "address": "bc1puqwugvnl8rkv7hggvtnl5dzahs3ckuwx2aucmadqes2l2trgam6s7r0ncn"
+                      },
+                      {
+                        "publicKey": "0310d3a715cf12dce8b3b7870960416e230c880f9530e2703aa004137997685e13",
+                        "wif": "L34JAZP6ZoayAhdu72d3g1gvguEsJF11vKkzoYz5oEHugKUTq1j2",
+                        "address": "bc1p8aw72va6v5ulqhtvfzqzz56es5c85njnlq0gdheeu8j72f7zg35qe7u53n"
+                      },
+                      {
+                        "publicKey": "03b713eaa84a4d0bdb1050caac87cb9f2e058eac1a8a51abfb0922a18eec29123e",
+                        "wif": "Kyej8hkMGyYi7SEWj8Qb4cpgpR4sb3oxc851HGbmHyVbZVw1QDQF",
+                        "address": "bc1qaz3t3q5dqsmmq2tu73arjzkchulxxcfq39h5mg"
+                      }
+                    ]
+                  },
+                  {
+                    "__comment": "internal chain",
+                    "addresses": [
+                      {
+                        "publicKey": "02df387d33b352aa85d4b4731935ced7c14f4f8b26b8804db5f3e75d0b6f77cf46",
+                        "wif": "L4U3b6avWFubYPzD26hjHBweGq5WDdfCDWZMpoYSBsXtvA17poYw",
+                        "address": "bc1qsep2a2cwfpwfhpcx0fax9y0tugfhceahcfhffx"
+                      },
+                      {
+                        "publicKey": "0207418510a5998bcb0a8c41a7846dc81ac6cb5bb6976d8f4128d0c6106baff474",
+                        "wif": "L4prY2KBWX6jxVExbX6YxZ5j9RwA9groFvwmTcTZUEhPSEy4C9jt",
+                        "address": "bc1pp5dgx3cnkuaj997nq6d0qdv4djzu994fz7pa83xk8kaxka9xnnpqd5acy8"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "coin": "bitcoin",
+                "xpriv": "xprv9z3nXnHr3bvnJLbEqRG4VB9eASwrGxqWXJxmAQTJ79EgfdUM8fngTwkt87FvJ3k6o4d8rsXmc5XMsP5iAjERXFZL9Dbze8jw2oVDEA8RShv",
+                "xpub": "xpub6D38wHpjsyV5WpfhwSo4rK6NiUnLgRZMtXtMxnrufUmfYRoVgD6w1k5MyPTWmCb6RaDBCSFiNsevAGfhtA43CuWdE2Fg2pNNFYmz9ayV1jS",
+                "chains": [
+                  {
+                    "__comment": "external account 1 m/86'/0'/1'",
+                    "addresses": [
+                      {
+                        "address": "bc1qjqytlraeef0w435zs6fpe8c2k2v66qdh2zn802"
+                      },
+                      {
+                        "address": "bc1qk99r87zkkgngq83syv7ha7p564skt5gaj0j8e2"
+                      },
+                      {
+                        "address": "bc1q4p3nc2s0x952h0v90jv6rj5vdfr7nmlssyh9qj"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "hardware": [
+    {
+      "description": "trezor",
+      "ypub": "ypub6WtTKtqJEPvsoa8Vf5hZMZXedFPro2xPwkkKAkVrQKyVpPd7VRbvMYb6DvuHrPqUddue6NvN1wJURcNJ8TiHzHJQHbDQRekH56n4Gd5odJA",
+      "addresses": [
+        {
+          "address": "35X232WkTHpxYBALkdRb3tw8iUXkr75aQW",
+          "path": "m/0/0"
+        },
+        {
+          "address": "3MG1WyZuNCUAEXbjyGTMgnhLSYgEz3Thzf",
+          "path": "m/0/1"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "DAppSignTransactionNoGas"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": ["is_zero_balance", "connection_protocol"],
+      "properties": {
+        "is_zero_balance": {
+          "type": "boolean"
+        },
+        "connection_protocol": {
+          "type": "string",
+          "enum": ["WalletConnect"]
+        },
+        "network": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

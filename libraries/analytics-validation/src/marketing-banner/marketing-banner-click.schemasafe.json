@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "MarketingBannerClick"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": ["banner_id", "banner_type"],
+      "properties": {
+        "banner_id": {
+          "type": "number"
+        },
+        "banner_type": {
+          "type": "string",
+          "enum": ["marketing", "criticalAnnouncement"]
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

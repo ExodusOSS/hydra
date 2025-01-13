@@ -1,0 +1,36 @@
+This patch enables a minimal view for the LogBox in React Native
+
+diff --git a/src/node_modules/react-native/Libraries/LogBox/UI/LogBoxNotification.js b/src/node_modules/react-native/Libraries/LogBox/UI/LogBoxNotification.js
+--- /src/node_modules/react-native/Libraries/LogBox/UI/LogBoxNotification.js	2023-12-13 12:17:54
++++ /src/node_modules/react-native/Libraries/LogBox/UI/LogBoxNotification.js	2023-12-13 12:17:59
+@@ -30,7 +30,7 @@
+ |}>;
+
+ function LogBoxLogNotification(props: Props): React.Node {
+-  const {totalLogCount, level, log} = props;
++  const {totalLogCount, level, log, minimal} = props;
+
+   // Eagerly symbolicate so the stack is available when pressing to inspect.
+   React.useEffect(() => {
+@@ -38,17 +38,17 @@
+   }, [log]);
+
+   return (
+-    <View style={toastStyles.container}>
++    <View style={[toastStyles.container, minimal ? {width:80} : null]}>
+       <LogBoxButton
+         onPress={props.onPressOpen}
+-        style={toastStyles.press}
++        style={[toastStyles.press, minimal ? {width:80} : null]}
+         backgroundColor={{
+           default: LogBoxStyle.getBackgroundColor(1),
+           pressed: LogBoxStyle.getBackgroundColor(0.9),
+         }}>
+-        <View style={toastStyles.content}>
++        <View style={[toastStyles.content, minimal ? {width:80} : null]}>
+           <CountBadge count={totalLogCount} level={level} />
+-          <Message message={log.message} />
++          {!minimal && <Message message={log.message} />}
+           <DismissButton onPress={props.onPressDismiss} />
+         </View>
+       </LogBoxButton>

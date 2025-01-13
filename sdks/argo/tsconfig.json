@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "skipLibCheck": true,
+    "outDir": "./lib",
+    "noEmit": true,
+    "allowJs": true,
+    "lib": ["esnext"],
+    "target": "es2022"
+  },
+  "include": ["src", "redux"]
+}

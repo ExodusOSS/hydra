@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "SolanaPayTransactionConfirmationView"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "asset": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "asset_name": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "feature": {
+          "const": "solana-pay"
+        },
+        "merchant_name": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "merchant_address": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "message": {
+          "type": "string",
+          "format": "any-string"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

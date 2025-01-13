@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./lib",
+    "allowJs": true,
+    "target": "es2022",
+    "removeComments": false
+  },
+  "include": ["./**/*.ts"]
+}

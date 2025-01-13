@@ -1,0 +1,27 @@
+{
+  "name": "@exodus/sodium-crypto",
+  "version": "3.3.1",
+  "description": "A libsodium wrapper we use in exodus",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "author": "Exodus Movement, Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asodium-crypto"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/sodium-crypto",
+  "devDependencies": {
+    "@exodus/hd-key-slip-10": "1.0.0",
+    "standard": "^12.0.1",
+    "tape": "^4.11.0"
+  },
+  "dependencies": {
+    "@exodus/libsodium-wrappers": "1.0.8"
+  }
+}

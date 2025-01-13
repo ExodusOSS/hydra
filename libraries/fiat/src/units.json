@@ -1,0 +1,162 @@
+{
+  "AED": {
+    "label": "Emirati Dirham",
+    "symbol": "د.إ"
+  },
+  "ARS": {
+    "label": "Argentine peso",
+    "symbol": "Ar"
+  },
+  "AUD": {
+    "label": "Australian Dollar",
+    "symbol": "$"
+  },
+  "BRL": {
+    "label": "Brazilian Real",
+    "symbol": "R$"
+  },
+  "CAD": {
+    "label": "Canadian Dollar",
+    "symbol": "$"
+  },
+  "CHF": {
+    "label": "Swiss Franc",
+    "symbol": "Fr"
+  },
+  "CLP": {
+    "label": "Chilean Peso",
+    "symbol": "Ch"
+  },
+  "CNY": {
+    "label": "Chinese Yuan",
+    "symbol": "¥"
+  },
+  "COP": {
+    "label": "Colombian peso",
+    "symbol": "Co"
+  },
+  "CZK": {
+    "label": "Czech Koruna",
+    "symbol": "Kč"
+  },
+  "DKK": {
+    "label": "Danish Krone",
+    "symbol": "kr"
+  },
+  "EUR": {
+    "label": "Euro",
+    "symbol": "€"
+  },
+  "GBP": {
+    "label": "British Pound",
+    "symbol": "£"
+  },
+  "GHS": {
+    "label": "Ghanaian cedi",
+    "symbol": "GH₵"
+  },
+  "HKD": {
+    "label": "Hong Kong Dollar",
+    "symbol": "$"
+  },
+  "HUF": {
+    "label": "Hungarian Forint",
+    "symbol": "Ft"
+  },
+  "IDR": {
+    "label": "Indonesian Rupiah",
+    "symbol": "Rp"
+  },
+  "ILS": {
+    "label": "Israeli New Shekel",
+    "symbol": "₪"
+  },
+  "INR": {
+    "label": "Indian Rupee",
+    "symbol": "₹"
+  },
+  "JPY": {
+    "label": "Japanese Yen",
+    "symbol": "¥"
+  },
+  "KRW": {
+    "label": "South Korean Won",
+    "symbol": "₩"
+  },
+  "MXN": {
+    "label": "Mexican Peso",
+    "symbol": "Mx"
+  },
+  "MYR": {
+    "label": "Malaysian Ringgit",
+    "symbol": "RM"
+  },
+  "NGN": {
+    "label": "Nigerian naira",
+    "symbol": "₦"
+  },
+  "NOK": {
+    "label": "Norwegian Krone",
+    "symbol": "kr"
+  },
+  "NZD": {
+    "label": "New Zealand Dollar",
+    "symbol": "$"
+  },
+  "PHP": {
+    "label": "Philippine Peso",
+    "symbol": "₱"
+  },
+  "PKR": {
+    "label": "Pakistani Rupee",
+    "symbol": "₨"
+  },
+  "PLN": {
+    "label": "Polish Złoty",
+    "symbol": "zł"
+  },
+  "RSD": {
+    "label": "Serbian Dinar",
+    "symbol": "din"
+  },
+  "RUB": {
+    "label": "Russian Ruble",
+    "symbol": "₽"
+  },
+  "SAR": {
+    "label": "Saudi Riyal",
+    "symbol": "ر.س"
+  },
+  "SEK": {
+    "label": "Swedish Krona",
+    "symbol": "kr"
+  },
+  "SGD": {
+    "label": "Singapore Dollar",
+    "symbol": "$"
+  },
+  "THB": {
+    "label": "Thai Baht",
+    "symbol": "฿"
+  },
+  "TRY": {
+    "label": "Turkish Lira",
+    "symbol": "₺"
+  },
+  "TWD": {
+    "label": "New Taiwan Dollar",
+    "symbol": "$"
+  },
+  "UAH": {
+    "label": "Ukrainian hryvnia",
+    "symbol": "₴"
+  },
+  "USD": {
+    "label": "United States Dollar",
+    "symbol": "$"
+  },
+  "ZAR": {
+    "label": "South African Rand",
+    "symbol": "R"
+  }
+}

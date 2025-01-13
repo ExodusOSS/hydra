@@ -1,0 +1,15 @@
+{
+  "12sLcvm1KXK5zBmXsAcYrUsqrRcrsuvaUT": {
+    "address": "12sLcvm1KXK5zBmXsAcYrUsqrRcrsuvaUT",
+    "path": "m/0/0",
+    "utxos": [
+      {
+        "txId": "27abd6c7481efe452f92ff5d55bb638bba9c0c1edc61703c7a7b3ecdf5b1f639",
+        "confirmations": 1865,
+        "value": "10.5 BTC",
+        "vout": 0,
+        "script": null
+      }
+    ]
+  }
+}

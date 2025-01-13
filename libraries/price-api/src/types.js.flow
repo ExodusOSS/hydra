@@ -1,0 +1,53 @@
+// @flow
+export type ApiDataItemType = {
+  time: number, // seconds
+  close: number,
+  high: number,
+  low: number,
+  open: number,
+  volumefrom: number,
+  volumeto: number,
+}
+
+export type GranularityType = 'day' | 'hour'
+export type FiatCurrencyType = string
+export type UnixTimeStamp = number
+
+export type ApiResponse = {
+  [ticker: string]: {
+    [fiatCurrency: FiatCurrencyType]: Array<ApiDataItemType>,
+  },
+}
+
+export type PriceDataItem = {
+  close: number,
+}
+
+export type ApiType = ({
+  assets: Array<string>,
+  fiatArray: Array<FiatCurrencyType>,
+  granularity: GranularityType,
+  limit: number,
+}) => Promise<ApiResponse>
+
+export type CachedDataType = Array<[UnixTimeStamp, PriceDataItem]>
+export type LegacyDataType = string // json string
+export type GetCacheFromStorageResponseType = ?CachedDataType | LegacyDataType
+
+export type GetCacheFromStorageType = (tickerSymbol: string) => Promise<GetCacheFromStorageResponseType>
+
+export type OptionsType = {
+  api: ApiType,
+  assetTickers: string | string[],
+  fiatTicker: string,
+  granularity: GranularityType,
+  requestLimit?: number,
+  getCacheFromStorage: GetCacheFromStorageType,
+  timestamp?: number, // unix milliseconds
+  getCurrentTime?: () => number,
+  ignoreInvalidSymbols: boolean,
+  ignoreCache: boolean
+}
+
+export type HistoryType = Map<UnixTimeStamp, PriceDataItem>
+export type RuntimeCacheType = Map<string, HistoryType>

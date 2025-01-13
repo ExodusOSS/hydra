@@ -1,0 +1,23 @@
+{
+  "GET https://exchange-s.exodus.io/v3/geolocation": {
+    "schemaVersion": 2,
+    "data": {
+      "status": 200,
+      "body": {
+        "ip": "1.2.3",
+        "countryCode": "US",
+        "regionCode": "GO",
+        "regionName": "Gotham Metro",
+        "timezoneName": "GMT +02:00 (US/Gotham)",
+        "isAllowed": true
+      }
+    }
+  },
+  "GET https://exchange.exodus.io/geo-location-error": {
+    "schemaVersion": 2,
+    "data": {
+      "status": 400,
+      "body": {}
+    }
+  }
+}

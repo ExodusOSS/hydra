@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "XopayTransactionConfirm"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "from_asset": {
+          "type": "string"
+        },
+        "from_asset_network": {
+          "type": "string"
+        },
+        "from_asset_amount": {
+          "type": "number",
+          "minimum": 0
+        },
+        "from_asset_amount_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "to_asset": {
+          "type": "string"
+        },
+        "to_asset_network": {
+          "type": "string"
+        },
+        "to_asset_amount": {
+          "type": "number",
+          "minimum": 0
+        },
+        "to_asset_amount_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "success": {
+          "type": "boolean"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

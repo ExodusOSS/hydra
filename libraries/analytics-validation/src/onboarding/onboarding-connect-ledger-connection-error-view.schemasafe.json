@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "OnboardingConnectLedgerConnectionErrorView"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "error_type": {
+          "anyOf": [
+            {
+              "const": "error"
+            },
+            {
+              "const": "update-firmware"
+            },
+            {
+              "const": "update-ledger-app"
+            }
+          ]
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

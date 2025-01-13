@@ -1,0 +1,43 @@
+{
+  "name": "@exodus/storage-encrypted",
+  "version": "1.4.1",
+  "description": "Storage enhancer for augmenting an Exodus storage-spec compliant storage instance with encryption",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/adapters/storage-encrypted",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Astorage-encrypted"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "run -T tsc --build tsconfig.build.json",
+    "clean": "run -T tsc --build --clean",
+    "lint": "run -T eslint --ignore-path .gitignore .",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T jest",
+    "prepublishOnly": "yarn run -T build --scope @exodus/storage-encrypted"
+  },
+  "dependencies": {
+    "@exodus/storage-interface": "^1.0.0",
+    "@exodus/transform-storage": "^1.1.0",
+    "minimalistic-assert": "^1.0.1",
+    "p-defer": "^4.0.0"
+  },
+  "devDependencies": {
+    "@exodus/key-ids": "workspace:^",
+    "@exodus/keychain": "^6.4.0",
+    "@exodus/storage-memory": "^1.1.0",
+    "@exodus/storage-spec": "^3.1.0",
+    "@types/minimalistic-assert": "^1.0.1",
+    "bip39": "^3.0.4"
+  }
+}

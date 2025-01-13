@@ -1,0 +1,29 @@
+{
+  "name": "@exodus/trezor-meta",
+  "version": "3.4.0",
+  "description": "trezor constants, firmware, and utils",
+  "main": "src/index.js",
+  "author": "Exodus Movement, Inc.",
+  "license": "MIT",
+  "files": [
+    "src/**",
+    "!src/__tests__/**",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "lint": "run -T eslint",
+    "pretest": "yarn lint",
+    "test": "run -T exodus-test --jest"
+  },
+  "dependencies": {
+    "semver": "^6.3.0"
+  },
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/trezor-meta",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Atrezor-meta"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
+  }
+}

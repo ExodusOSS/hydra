@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PerformanceViewRender"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": ["destination"],
+      "properties": {
+        "render_time": {
+          "type": "number",
+          "minimum": 0
+        },
+        "render_state": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "abort_time": {
+          "type": "number",
+          "minimum": 0
+        },
+        "destination": {
+          "type": "string",
+          "format": "any-string"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

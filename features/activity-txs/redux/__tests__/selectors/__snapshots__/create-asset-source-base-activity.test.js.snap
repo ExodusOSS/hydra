@@ -1,0 +1,581 @@
+exports[`createAssetSourceBaseActivity should add indexless orders to activity 1`] = `
+{
+  "assetName": "flare",
+  "date": 2023-09-13T11:59:24.204Z,
+  "displayAmount": {
+    "type": "NumberUnit",
+    "unit": "FLR",
+    "unitType": "FLR",
+    "value": "7598.14749525",
+  },
+  "failed": false,
+  "id": "swap.flare.eac6bec7798be8",
+  "order": {
+    "_version": 1,
+    "date": "2023-09-13T11:59:24.204Z",
+    "displaySvc": "cn",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "u": {
+          "ALGO": 6,
+          "microAlgo": 0,
+        },
+        "v": "1013.41878 ALGO",
+      },
+    },
+    "fromAsset": "algorand",
+    "fromTxId": "ISO7UZYSZAYC2PGTD4OKYJMBFA3JILLKCDSUO3LZB2Q7ECWDYTYQ",
+    "fromWalletAccount": "exodus_0",
+    "orderId": "eac6bec7798be8",
+    "potentialToTxIds": [],
+    "region": "INTL",
+    "status": "complete-verified",
+    "svc": "cn",
+    "synced": true,
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "u": {
+          "FLR": 18,
+          "Gwei": 9,
+          "Kwei": 3,
+          "Mwei": 6,
+          "finney": 15,
+          "szabo": 12,
+          "wei": 0,
+        },
+        "v": "7598.14749525 FLR",
+      },
+    },
+    "toAsset": "flare",
+    "toTxId": "0x8bbea887472df32167597c36fffc70ac508a01088194e30b877d093fe25f9725",
+    "toWalletAccount": "exodus_0",
+    "txIds": [
+      {
+        "txId": "ISO7UZYSZAYC2PGTD4OKYJMBFA3JILLKCDSUO3LZB2Q7ECWDYTYQ",
+        "txType": "depositTransaction",
+      },
+      {
+        "txId": "0x8bbea887472df32167597c36fffc70ac508a01088194e30b877d093fe25f9725",
+        "txType": "payoutTransaction",
+      },
+    ],
+  },
+  "pending": false,
+  "personalNote": undefined,
+  "received": true,
+  "sent": false,
+  "tx": undefined,
+  "txId": "0x8bbea887472df32167597c36fffc70ac508a01088194e30b877d093fe25f9725",
+  "type": "exchange",
+}
+`;
+
+exports[`createAssetSourceBaseActivity should add indexless orders to activity 2`] = `
+{
+  "assetName": "algorand",
+  "date": 2023-09-13T11:59:24.204Z,
+  "displayAmount": {
+    "type": "NumberUnit",
+    "unit": "FLR",
+    "unitType": "FLR",
+    "value": "7598.14749525",
+  },
+  "failed": false,
+  "id": "swap.algorand.eac6bec7798be8",
+  "order": {
+    "_version": 1,
+    "date": "2023-09-13T11:59:24.204Z",
+    "displaySvc": "cn",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "u": {
+          "ALGO": 6,
+          "microAlgo": 0,
+        },
+        "v": "1013.41878 ALGO",
+      },
+    },
+    "fromAsset": "algorand",
+    "fromTxId": "ISO7UZYSZAYC2PGTD4OKYJMBFA3JILLKCDSUO3LZB2Q7ECWDYTYQ",
+    "fromWalletAccount": "exodus_0",
+    "orderId": "eac6bec7798be8",
+    "potentialToTxIds": [],
+    "region": "INTL",
+    "status": "complete-verified",
+    "svc": "cn",
+    "synced": true,
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "u": {
+          "FLR": 18,
+          "Gwei": 9,
+          "Kwei": 3,
+          "Mwei": 6,
+          "finney": 15,
+          "szabo": 12,
+          "wei": 0,
+        },
+        "v": "7598.14749525 FLR",
+      },
+    },
+    "toAsset": "flare",
+    "toTxId": "0x8bbea887472df32167597c36fffc70ac508a01088194e30b877d093fe25f9725",
+    "toWalletAccount": "exodus_0",
+    "txIds": [
+      {
+        "txId": "ISO7UZYSZAYC2PGTD4OKYJMBFA3JILLKCDSUO3LZB2Q7ECWDYTYQ",
+        "txType": "depositTransaction",
+      },
+      {
+        "txId": "0x8bbea887472df32167597c36fffc70ac508a01088194e30b877d093fe25f9725",
+        "txType": "payoutTransaction",
+      },
+    ],
+  },
+  "pending": false,
+  "personalNote": undefined,
+  "received": false,
+  "sent": true,
+  "tx": {
+    "coinAmount": "1013.41878 ALGO",
+    "coinName": "algorand",
+    "confirmations": 1,
+    "currencies": {
+      "algorand": {
+        "ALGO": 6,
+        "microAlgo": 0,
+      },
+    },
+    "date": "2023-09-13T11:59:24.204Z",
+    "txId": "ISO7UZYSZAYC2PGTD4OKYJMBFA3JILLKCDSUO3LZB2Q7ECWDYTYQ",
+    "version": 1,
+  },
+  "txId": "ISO7UZYSZAYC2PGTD4OKYJMBFA3JILLKCDSUO3LZB2Q7ECWDYTYQ",
+  "type": "exchange",
+}
+`;
+
+exports[`createAssetSourceBaseActivity should add orders without txs to activity 1`] = `
+{
+  "assetName": "flare",
+  "date": 2023-09-13T11:59:24.204Z,
+  "displayAmount": {
+    "type": "NumberUnit",
+    "unit": "FLR",
+    "unitType": "FLR",
+    "value": "10000",
+  },
+  "failed": false,
+  "id": "swap.flare.eac6bec7798be8",
+  "order": {
+    "_version": 1,
+    "date": "2023-09-13T11:59:24.204Z",
+    "displaySvc": "cn",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "u": {
+          "ALGO": 6,
+          "microAlgo": 0,
+        },
+        "v": "100 ALGO",
+      },
+    },
+    "fromAsset": "algorand",
+    "fromTxId": "algorand-send-tx",
+    "fromWalletAccount": "exodus_0",
+    "orderId": "eac6bec7798be8",
+    "potentialToTxIds": [],
+    "region": "INTL",
+    "status": "in-progress",
+    "svc": "cn",
+    "synced": true,
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "u": {
+          "FLR": 18,
+          "Gwei": 9,
+          "Kwei": 3,
+          "Mwei": 6,
+          "finney": 15,
+          "szabo": 12,
+          "wei": 0,
+        },
+        "v": "10000 FLR",
+      },
+    },
+    "toAsset": "flare",
+    "toTxId": null,
+    "toWalletAccount": "exodus_0",
+  },
+  "pending": true,
+  "personalNote": undefined,
+  "received": true,
+  "sent": false,
+  "tx": undefined,
+  "txId": null,
+  "type": "exchange",
+}
+`;
+
+exports[`createAssetSourceBaseActivity should add orders without txs to activity 2`] = `
+{
+  "assetName": "flare",
+  "date": 2022-09-13T11:59:24.204Z,
+  "displayAmount": {
+    "type": "NumberUnit",
+    "unit": "FLR",
+    "unitType": "FLR",
+    "value": "10",
+  },
+  "failed": false,
+  "id": "swap.flare.order-with-tx",
+  "order": {
+    "_version": 1,
+    "date": "2022-09-13T11:59:24.204Z",
+    "displaySvc": "cn",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "u": {
+          "ALGO": 6,
+          "microAlgo": 0,
+        },
+        "v": "1 ALGO",
+      },
+    },
+    "fromAsset": "algorand",
+    "fromTxId": "tx-with-order-algorand",
+    "fromWalletAccount": "exodus_0",
+    "orderId": "order-with-tx",
+    "potentialToTxIds": [],
+    "region": "INTL",
+    "status": "complete-verified",
+    "svc": "cn",
+    "synced": true,
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "u": {
+          "FLR": 18,
+          "Gwei": 9,
+          "Kwei": 3,
+          "Mwei": 6,
+          "finney": 15,
+          "szabo": 12,
+          "wei": 0,
+        },
+        "v": "10 FLR",
+      },
+    },
+    "toAsset": "flare",
+    "toTxId": "tx-with-order-flare",
+    "toWalletAccount": "exodus_0",
+  },
+  "pending": false,
+  "personalNote": undefined,
+  "received": true,
+  "sent": false,
+  "tx": {
+    "coinAmount": "10 FLR",
+    "coinName": "flare",
+    "confirmations": 1,
+    "currencies": {
+      "flare": {
+        "FLR": 18,
+        "Gwei": 9,
+        "Kwei": 3,
+        "Mwei": 6,
+        "finney": 15,
+        "szabo": 12,
+        "wei": 0,
+      },
+    },
+    "date": "2022-09-13T11:59:24.204Z",
+    "txId": "tx-with-order-flare",
+    "version": 1,
+  },
+  "txId": "tx-with-order-flare",
+  "type": "exchange",
+}
+`;
+
+exports[`createAssetSourceBaseActivity should group txs with same order 1`] = `
+[
+  {
+    "assetName": "ethereum",
+    "date": 2019-07-22T13:54:28.000Z,
+    "displayAmount": {
+      "type": "NumberUnit",
+      "unit": "ETH",
+      "unitType": "ETH",
+      "value": "3",
+    },
+    "failed": false,
+    "id": "swap.ethereum.btc-eth-order",
+    "order": {
+      "_version": 1,
+      "date": "2019-07-22T13:54:28.000Z",
+      "fromAsset": "bitcoin",
+      "fromWalletAccount": "exodus_0",
+      "orderId": "btc-eth-order",
+      "potentialToTxIds": [],
+      "status": "",
+      "svc": "ss",
+      "toAmount": {
+        "t": "numberunit",
+        "v": {
+          "u": {
+            "ETH": 18,
+            "Gwei": 9,
+            "Kwei": 3,
+            "Mwei": 6,
+            "finney": 15,
+            "szabo": 12,
+            "wei": 0,
+          },
+          "v": "3 ETH",
+        },
+      },
+      "toAsset": "ethereum",
+      "toWalletAccount": "exodus_0",
+      "txIds": [
+        {
+          "txId": "some-receive-tx",
+        },
+        {
+          "txId": "some-receive-tx-2",
+        },
+      ],
+    },
+    "pending": true,
+    "personalNote": undefined,
+    "received": true,
+    "sent": false,
+    "tx": {
+      "coinAmount": "1 ETH",
+      "coinName": "ethereum",
+      "confirmations": 1,
+      "currencies": {
+        "ethereum": {
+          "ETH": 18,
+          "Gwei": 9,
+          "Kwei": 3,
+          "Mwei": 6,
+          "finney": 15,
+          "szabo": 12,
+          "wei": 0,
+        },
+      },
+      "date": "2019-07-22T13:54:28.000Z",
+      "dropped": false,
+      "feeAmount": "0.000189 ETH",
+      "feeCoinName": "ethereum",
+      "txId": "some-receive-tx",
+      "version": 1,
+    },
+    "txId": "some-receive-tx",
+    "type": "exchange",
+  },
+]
+`;
+
+exports[`createAssetSourceBaseActivity should return activity for asset 1`] = `
+[
+  {
+    "assetName": "ethereum",
+    "date": 2020-07-22T13:54:28.000Z,
+    "failed": false,
+    "id": "ethereum.some-receive-tx",
+    "pending": false,
+    "personalNote": undefined,
+    "received": true,
+    "sent": false,
+    "tx": {
+      "coinAmount": "1 ETH",
+      "coinName": "ethereum",
+      "confirmations": 1,
+      "currencies": {
+        "ethereum": {
+          "ETH": 18,
+          "Gwei": 9,
+          "Kwei": 3,
+          "Mwei": 6,
+          "finney": 15,
+          "szabo": 12,
+          "wei": 0,
+        },
+      },
+      "date": "2020-07-22T13:54:28.000Z",
+      "dropped": false,
+      "feeAmount": "0.000189 ETH",
+      "feeCoinName": "ethereum",
+      "txId": "some-receive-tx",
+      "version": 1,
+    },
+    "txId": "some-receive-tx",
+    "type": "rx",
+  },
+  {
+    "assetName": "ethereum",
+    "date": 2019-07-22T13:54:28.000Z,
+    "failed": false,
+    "id": "ethereum.some-receive-tx-2",
+    "pending": false,
+    "personalNote": undefined,
+    "received": true,
+    "sent": false,
+    "tx": {
+      "coinAmount": "2 ETH",
+      "coinName": "ethereum",
+      "confirmations": 1,
+      "currencies": {
+        "ethereum": {
+          "ETH": 18,
+          "Gwei": 9,
+          "Kwei": 3,
+          "Mwei": 6,
+          "finney": 15,
+          "szabo": 12,
+          "wei": 0,
+        },
+      },
+      "date": "2019-07-22T13:54:28.000Z",
+      "dropped": false,
+      "feeAmount": "0.000189 ETH",
+      "feeCoinName": "ethereum",
+      "txId": "some-receive-tx-2",
+      "version": 1,
+    },
+    "txId": "some-receive-tx-2",
+    "type": "rx",
+  },
+]
+`;
+
+exports[`createAssetSourceBaseActivity should return txs if orders are not supported 1`] = `
+[
+  {
+    "assetName": "algorand",
+    "date": 2023-09-13T11:59:24.204Z,
+    "failed": false,
+    "id": "algorand.ISO7UZYSZAYC2PGTD4OKYJMBFA3JILLKCDSUO3LZB2Q7ECWDYTYQ",
+    "pending": false,
+    "personalNote": undefined,
+    "received": true,
+    "sent": false,
+    "tx": {
+      "coinAmount": "1013.41878 ALGO",
+      "coinName": "algorand",
+      "confirmations": 1,
+      "currencies": {
+        "algorand": {
+          "ALGO": 6,
+          "microAlgo": 0,
+        },
+      },
+      "date": "2023-09-13T11:59:24.204Z",
+      "txId": "ISO7UZYSZAYC2PGTD4OKYJMBFA3JILLKCDSUO3LZB2Q7ECWDYTYQ",
+      "version": 1,
+    },
+    "txId": "ISO7UZYSZAYC2PGTD4OKYJMBFA3JILLKCDSUO3LZB2Q7ECWDYTYQ",
+    "type": "rx",
+  },
+]
+`;
+
+exports[`createAssetSourceBaseActivity should use activityIndex for id when available 1`] = `
+[
+  {
+    "assetName": "bitcoin",
+    "date": 2019-07-18T12:48:15.000Z,
+    "failed": false,
+    "id": "bitcoin.bitcoin-tx",
+    "pending": false,
+    "personalNote": undefined,
+    "received": false,
+    "sent": true,
+    "tx": {
+      "coinAmount": "-0.1 BTC",
+      "coinName": "bitcoin",
+      "confirmations": 1,
+      "currencies": {
+        "bitcoin": {
+          "BTC": 8,
+          "bits": 2,
+          "satoshis": 0,
+        },
+      },
+      "data": {
+        "activityIndex": 0,
+        "sent": [
+          {
+            "address": "btc-address-1",
+            "amount": "0.1 BTC",
+          },
+          {
+            "address": "btc-address-2",
+            "amount": "0.1 BTC",
+          },
+        ],
+      },
+      "date": "2019-07-18T12:48:15.000Z",
+      "dropped": false,
+      "feeAmount": "0.00002 BTC",
+      "feeCoinName": "bitcoin",
+      "txId": "bitcoin-tx",
+      "version": 1,
+    },
+    "txId": "bitcoin-tx",
+    "type": "tx",
+  },
+  {
+    "assetName": "bitcoin",
+    "date": 2019-07-18T12:48:15.000Z,
+    "failed": false,
+    "id": "bitcoin.bitcoin-tx_1",
+    "pending": false,
+    "personalNote": undefined,
+    "received": false,
+    "sent": true,
+    "tx": {
+      "coinAmount": "-0.1 BTC",
+      "coinName": "bitcoin",
+      "confirmations": 1,
+      "currencies": {
+        "bitcoin": {
+          "BTC": 8,
+          "bits": 2,
+          "satoshis": 0,
+        },
+      },
+      "data": {
+        "activityIndex": 1,
+        "sent": [
+          {
+            "address": "btc-address-1",
+            "amount": "0.1 BTC",
+          },
+          {
+            "address": "btc-address-2",
+            "amount": "0.1 BTC",
+          },
+        ],
+      },
+      "date": "2019-07-18T12:48:15.000Z",
+      "dropped": false,
+      "feeAmount": "0.00002 BTC",
+      "feeCoinName": "bitcoin",
+      "txId": "bitcoin-tx",
+      "version": 1,
+    },
+    "txId": "bitcoin-tx",
+    "type": "tx",
+  },
+]
+`;

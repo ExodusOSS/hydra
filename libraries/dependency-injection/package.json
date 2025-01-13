@@ -1,0 +1,38 @@
+{
+  "name": "@exodus/dependency-injection",
+  "version": "3.1.1",
+  "description": "A simple dependency injection and inversion of container",
+  "author": "Exodus Movement, Inc.",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/dependency-injection",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Adependency-injection"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "run -T tsc --build tsconfig.build.json",
+    "clean": "run -T tsc --build --clean",
+    "lint": "run -T eslint",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T tsc --build && run -T exodus-test --jest --esbuild",
+    "prepublishOnly": "yarn run -T build --scope @exodus/dependency-injection"
+  },
+  "devDependencies": {
+    "@exodus/dependency-types": "workspace:^",
+    "@exodus/logger": "workspace:^",
+    "lodash": "^4.17.21"
+  },
+  "dependencies": {
+    "minimalistic-assert": "^1.0.1"
+  }
+}

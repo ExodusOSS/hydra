@@ -1,0 +1,48 @@
+{
+  "name": "@exodus/fusion-local",
+  "version": "2.0.6",
+  "type": "module",
+  "description": "The fusion-local feature",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/fusion-local",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afusion-local"
+  },
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./module": "./module/index.js"
+  },
+  "files": [
+    "module",
+    "atoms",
+    "api",
+    "plugin",
+    "README.md",
+    "CHANGELOG.md",
+    "!**/__tests__/**",
+    "!**/*.test.js"
+  ],
+  "scripts": {
+    "lint": "yarn run -T eslint . --ignore-path ../../.gitignore",
+    "lint:fix": "yarn lint --fix",
+    "test": "yarn run -T exodus-test --jest"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^8.0.0",
+    "@exodus/await-proxy": "^1.2.1",
+    "@exodus/fusion-merge": "^2.0.0",
+    "@exodus/module": "^1.2.0",
+    "p-defer": "^4.0.0"
+  },
+  "devDependencies": {
+    "@exodus/dependency-injection": "workspace:^",
+    "@exodus/dependency-preprocessors": "workspace:^",
+    "@exodus/storage-memory": "workspace:^"
+  }
+}

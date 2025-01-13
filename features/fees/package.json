@@ -1,0 +1,40 @@
+{
+  "name": "@exodus/fees",
+  "version": "1.2.2",
+  "description": "Fees module",
+  "author": "Exodus Movement, Inc.",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/fees",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afees"
+  },
+  "scripts": {
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest --esbuild"
+  },
+  "main": "index.js",
+  "files": [
+    "api",
+    "module",
+    "index.d.ts",
+    "CHANGELOG.md",
+    "README.md",
+    "!**/__tests__/**"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "dependencies": {
+    "@exodus/currency": "^5.0.2",
+    "minimalistic-assert": "^1.0.1"
+  },
+  "devDependencies": {
+    "@exodus/assets": "^9.1.1",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/blockchain-metadata": "workspace:^",
+    "@exodus/ethereum-meta": "^1.0.30",
+    "@exodus/models": "workspace:^"
+  }
+}

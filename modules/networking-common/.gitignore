@@ -1,0 +1,14 @@
+# As long as lerna doesn't suppport specifiying the folder to publish from
+# all of our build artifacts have to end up on the top level prior to packaging, so
+# we can get a clean import structure and don't have to import like `@exodus/networking-spec/lib/...`
+# for anything that isn't re-exported. in the entrypoint. Let's ignore them here
+lib
+
+/cookie
+/form
+/http
+/url
+/index.d.ts
+/index.js
+
+coverage

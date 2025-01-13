@@ -1,0 +1,26 @@
+{
+  "name": "@exodus/synchronized-time",
+  "version": "1.0.1",
+  "description": "Maintain externally synchronized time",
+  "type": "module",
+  "main": "index.js",
+  "author": "Exodus Movement, Inc.",
+  "license": "MIT",
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/synchronized-time",
+  "files": [
+    "CHANGELOG.md",
+    "!**/__tests__/**"
+  ],
+  "scripts": {
+    "test": "run -T exodus-test --jest",
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asynchronized-time"
+  }
+}

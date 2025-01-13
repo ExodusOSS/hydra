@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "ExchangeOrderCreate"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "estimated_revenue_usd": {
+          "type": "number"
+        },
+        "exchange_pair": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "expected_user_amount_received": {
+          "type": "number"
+        },
+        "expected_user_amount_received_usd": {
+          "type": "number"
+        },
+        "expected_user_amount_sent": {
+          "type": "number"
+        },
+        "expected_user_amount_sent_usd": {
+          "type": "number"
+        },
+        "flags": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "message": {
+          "type": "boolean"
+        },
+        "provider": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "signing_method": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "slippage_amount": {
+          "type": "number"
+        },
+        "slippage_amount_usd": {
+          "type": "number"
+        },
+        "slippage_percent": {
+          "type": "number"
+        },
+        "source_app": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "spread_amount_usd": {
+          "type": "number"
+        },
+        "spread_percent": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "user_amount_received": {
+          "type": "number"
+        },
+        "user_amount_received_usd": {
+          "type": "number"
+        },
+        "user_amount_sent": {
+          "type": "number"
+        },
+        "user_amount_sent_usd": {
+          "type": "number"
+        },
+        "user_asset_received": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "user_asset_sent": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "wallet_execution_time": {
+          "type": "number"
+        },
+        "user_asset_received_network": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "user_asset_sent_network": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "exchange_rate": {
+          "type": "number"
+        },
+        "size_button_used": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "desired_exchange_rate": {
+          "type": "number"
+        },
+        "legacy_order_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "order_id": {
+          "type": "string",
+          "format": "any-string"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

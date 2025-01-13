@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "module": "ES2022",
+    "allowJs": true,
+    "lib": ["esnext"]
+  },
+  "include": ["src"]
+}

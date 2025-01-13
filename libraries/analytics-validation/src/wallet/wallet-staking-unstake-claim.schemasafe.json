@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "WalletStakingUnstakeClaim"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "asset_name": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "network": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "amount_usd": {
+          "type": "number"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

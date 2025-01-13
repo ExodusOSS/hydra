@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noUncheckedIndexedAccess": false,
+    "types": ["react-native", "jest"],
+    "outDir": "./lib",
+    "lib": ["esnext", "dom.iterable"]
+  },
+  "include": ["src", "__mocks__"]
+}

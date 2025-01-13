@@ -1,0 +1,55 @@
+{
+  "name": "@exodus/nfts",
+  "version": "9.4.1",
+  "description": "Multi-asset NFTs fetching and tracking for off-chain user metadata",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/nfts",
+  "license": "UNLICENSED",
+  "author": "Exodus Movement, Inc.",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Anfts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "scripts": {
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest --esbuild"
+  },
+  "main": "index.js",
+  "files": [
+    "api",
+    "atoms",
+    "module",
+    "plugin",
+    "client",
+    "monitor",
+    "constants",
+    "redux",
+    "utils.js",
+    "README.md",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
+  ],
+  "devDependencies": {
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "@exodus/wallet-accounts": "workspace:^",
+    "redux": "^4.2.1"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^9.0.0",
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/fetch": "^1.3.0",
+    "@exodus/models": "^12.0.1",
+    "@exodus/nfts-proxy": "^2.10.1",
+    "delay": "^5.0.0",
+    "events": "^3.3.0",
+    "lodash": "^4.17.21",
+    "make-concurrent": "^5.4.0",
+    "minimalistic-assert": "^1.0.1",
+    "ms": "^2.1.3",
+    "p-defer": "^4.0.0",
+    "reselect": "^3.0.1"
+  }
+}

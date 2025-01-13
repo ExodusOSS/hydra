@@ -1,0 +1,53 @@
+{
+  "name": "@exodus/available-assets",
+  "version": "8.6.0",
+  "description": "Tracks supported/available assets, i.e. assets that the user can potentially enable via the UI",
+  "license": "UNLICENSED",
+  "author": "Exodus Movement, Inc.",
+  "scripts": {
+    "test": "run -T exodus-test --jest",
+    "lint": "run -T eslint . -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix"
+  },
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "api",
+    "atoms",
+    "module",
+    "plugins",
+    "redux",
+    "index.d.ts",
+    "CHANGELOG.md",
+    "README.md",
+    "!**/__tests__/**"
+  ],
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/available-assets",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aavailable-assets"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^8.1.0",
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/core-selectors": "^3.0.0",
+    "@exodus/trezor-meta": "^3.3.6",
+    "lodash": "^4.17.21",
+    "make-concurrent": "^5.3.0",
+    "reselect": "^3.0.1"
+  },
+  "devDependencies": {
+    "@exodus/assets": "^11.0.0",
+    "@exodus/assets-base": "^10.0.0",
+    "@exodus/assets-feature": "workspace:^",
+    "@exodus/combined-assets-meta": "^3.0.0",
+    "@exodus/enabled-assets": "workspace:^",
+    "@exodus/models": "workspace:^",
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "jest-when": "^3.6.0",
+    "redux": "^4.2.1"
+  }
+}

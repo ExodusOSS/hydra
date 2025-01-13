@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "DAppConnectionRequest"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        },
+        {
+          "$ref": "common-properties#/definitions/web3Properties"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "approved": {
+          "type": "boolean"
+        },
+        "connection_origin": {
+          "type": "string",
+          "enum": ["banner", "default", "lucky-cat___en"]
+        },
+        "connection_protocol": {
+          "type": "string",
+          "enum": [
+            "wallet-connect",
+            "solana-adapter",
+            "Solana Mobile Wallet Adapter",
+            "dApp Browser",
+            "Wallet Connect",
+            "WalletConnect"
+          ]
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

@@ -1,0 +1,60 @@
+{
+  "name": "@exodus/asset-sources",
+  "version": "1.7.2",
+  "description": "Provides compatibility info and metadata about asset sources (asset source = walletAccount + asset)",
+  "author": "Exodus Movement, Inc.",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/asset-sources",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aasset-sources"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib",
+    "redux.js",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "run -T tsc -p tsconfig.build.json",
+    "build:watch": "concurrently 'run -T tsc -w -p tsconfig.build.json' 'run -T tsc-alias -w -p tsconfig.build.json'",
+    "clean": "run -T tsc --clean",
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest --esbuild",
+    "prepublishOnly": "yarn run -T build --scope @exodus/asset-sources",
+    "sync:mobile": "concurrently 'run -T sync:mobile @exodus/asset-sources' yarn:build:watch"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^9.0.0",
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/models": "^12.0.1",
+    "@exodus/trezor-meta": "^3.3.6",
+    "@exodus/typeforce": "^1.19.0",
+    "lodash": "^4.17.21",
+    "minimalistic-assert": "^1.0.1",
+    "reselect": "^3.0.1"
+  },
+  "devDependencies": {
+    "@exodus/argo": "workspace:^",
+    "@exodus/assets-base": "^8.2.0",
+    "@exodus/bitcoin-plugin": "^1.17.1",
+    "@exodus/cardano-lib": "^2.2.0",
+    "@exodus/cardano-meta": "^1.0.7",
+    "@exodus/dependency-types": "workspace:^",
+    "@exodus/ethereum-plugin": "^2.2.0",
+    "@exodus/hw-common": "workspace:^",
+    "@exodus/logger": "^1.1.0",
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "@exodus/solana-plugin": "^1.15.0",
+    "@types/events": "^3.0.0",
+    "@types/minimalistic-assert": "^1.0.1",
+    "events": "^3.3.0",
+    "redux": "4.0.0"
+  }
+}

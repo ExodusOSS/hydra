@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "OffRampProviderStatusChange"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "exchange_rate": {
+          "type": "number"
+        },
+        "from_amount": {
+          "type": "number"
+        },
+        "from_amount_usd": {
+          "type": "number"
+        },
+        "from_asset": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "payment_method": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "provider": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "status": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "to_amount_usd": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "to_asset": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "total_fee": {
+          "type": "number"
+        },
+        "type": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "user_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "order_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "to_amount": {
+          "type": "number"
+        },
+        "provider_fee": {
+          "type": "number"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

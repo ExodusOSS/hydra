@@ -1,0 +1,38 @@
+{
+  "name": "@exodus/logger",
+  "version": "1.2.3",
+  "type": "module",
+  "description": "A simple logger for all things hydra",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/logger",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Alogger"
+  },
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./transports/console": "./lib/transports/console.js",
+    "./transports/debug": "./lib/transports/debug.js"
+  },
+  "files": [
+    "lib",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "yarn run -T tsc --build tsconfig.build.json",
+    "prepublishOnly": "yarn run -T build --scope @exodus/logger",
+    "clean": "yarn run -T tsc --build --clean",
+    "lint": "yarn run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "yarn run -T jest"
+  },
+  "dependencies": {
+    "debug": "^4.3.5"
+  }
+}

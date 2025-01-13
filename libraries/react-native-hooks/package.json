@@ -1,0 +1,35 @@
+{
+  "name": "@exodus/react-native-hooks",
+  "type": "module",
+  "version": "2.0.1",
+  "description": "The react-native-hooks library",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/react-native-hooks",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Areact-native-hooks"
+  },
+  "main": "src/index.js",
+  "exports": "./src/index.js",
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "lint": "yarn run -T eslint . --ignore-path ../../.gitignore",
+    "lint:fix": "yarn lint --fix",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "dependencies": {
+    "@react-navigation/native": "^6.0.7"
+  },
+  "peerDependencies": {
+    "react": "^17 || ^18",
+    "react-native": "^0.71.11"
+  }
+}

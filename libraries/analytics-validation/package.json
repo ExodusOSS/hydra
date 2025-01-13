@@ -1,0 +1,46 @@
+{
+  "name": "@exodus/analytics-validation",
+  "version": "2.47.1",
+  "description": "JSON schemas for analytics events, to prevent sensitive data from being sent up to the infamous cloud",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/analytics-validation",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aanalytics-validation"
+  },
+  "main": "index.js",
+  "files": [
+    "src",
+    "!**/__tests__/**",
+    "schemasafe.config.js",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build-schemasafe.js",
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "yarn build && run -T jest",
+    "prepublishOnly": "yarn run -T build --scope @exodus/analytics-validation"
+  },
+  "devDependencies": {
+    "@exodus/schemasafe": "^1.0.0",
+    "@exodus/schemasafe-babel-plugin": "^1.1.0"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "outputs": [
+          "{projectRoot}/src/main.schemasafe.json"
+        ]
+      }
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

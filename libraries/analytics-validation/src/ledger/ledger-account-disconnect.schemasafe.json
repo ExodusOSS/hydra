@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "LedgerAccountDisconnect"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "network": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "total_amount": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "amount_usd": {
+          "type": "string",
+          "format": "any-string"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

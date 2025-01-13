@@ -1,0 +1,47 @@
+{
+  "name": "@exodus/tx-log-monitors",
+  "version": "2.4.0",
+  "description": "This Exodus SDK feature loads transaction history for all enabled assets. It also provides the option to force refresh transaction history for assets individually or en masse.",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/tx-log-monitors",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Atx-log-monitors"
+  },
+  "main": "index.js",
+  "files": [
+    "module",
+    "atoms",
+    "api",
+    "plugin",
+    "README.md",
+    "CHANGELOG.md",
+    "index.d.ts",
+    "!**/__tests__/**",
+    "!**/*.test.js"
+  ],
+  "scripts": {
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T jest"
+  },
+  "dependencies": {
+    "@exodus/asset-lib": "^5.2.1",
+    "@exodus/assets": "^11.0.0",
+    "@exodus/atoms": "^9.0.0",
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/remote-config-atoms": "^1.0.1",
+    "events": "^3.3.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@exodus/assets-base": "^8.1.12",
+    "@exodus/available-assets": "workspace:^",
+    "@exodus/combined-assets-meta": "^1.2.5",
+    "@exodus/enabled-assets": "workspace:^"
+  }
+}

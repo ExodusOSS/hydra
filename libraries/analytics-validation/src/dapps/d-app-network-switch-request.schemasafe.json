@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "DAppNetworkSwitchRequest"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        },
+        {
+          "$ref": "common-properties#/definitions/web3Properties"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "approved": {
+          "type": "boolean"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

@@ -1,0 +1,5 @@
+import isAssetNameConnectedForWalletAccountSelectorDefinition from './isAssetNameConnectedForWalletAccount.js'
+
+const hardwareWalletsSelectors = [isAssetNameConnectedForWalletAccountSelectorDefinition]
+
+export default hardwareWalletsSelectors

@@ -1,0 +1,25 @@
+{
+  "name": "@exodus/fusion-merge",
+  "version": "2.0.0",
+  "description": "The fusion-merge library",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/fusion-merge",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afusion-merge"
+  },
+  "main": "index.js",
+  "files": [
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest"
+  }
+}

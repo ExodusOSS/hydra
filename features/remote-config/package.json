@@ -1,0 +1,52 @@
+{
+  "name": "@exodus/remote-config",
+  "version": "2.7.2",
+  "description": "Module to provide unified access remote config",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/remote-config",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aremote-config"
+  },
+  "keywords": [
+    "configuration"
+  ],
+  "files": [
+    "lib",
+    "CHANGELOG.md",
+    "README.md"
+  ],
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "run -T tsc --build tsconfig.build.json",
+    "clean": "run -T tsc --build --clean",
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest --esbuild",
+    "prepublishOnly": "yarn run -T build --scope @exodus/remote-config"
+  },
+  "devDependencies": {
+    "@exodus/dependency-types": "workspace:^",
+    "@exodus/logger": "workspace:^",
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "@types/events": "^3.0.0",
+    "@types/lodash": "^4.14.182",
+    "@types/ms": "^0.7.31",
+    "events": "^3.3.0",
+    "redux": "^4.2.1"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^8.1.1",
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/module": "^1.2.0",
+    "@exodus/typeforce": "^1.18.0",
+    "delay": "^5.0.0",
+    "lodash": "npm:@exodus/lodash@^4.17.21-exodus.2",
+    "ms": "^0.7.1",
+    "reselect": "^3.0.1"
+  }
+}

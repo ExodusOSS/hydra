@@ -1,0 +1,32 @@
+{
+  "name": "@exodus/react-text-mask",
+  "type": "module",
+  "version": "5.4.3-exodus5",
+  "description": "The react-text-mask library",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/react-text-mask",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Areact-text-mask"
+  },
+  "main": "src/index.js",
+  "exports": "./src/index.js",
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "lint": "yarn run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "peerDependencies": {
+    "prop-types": "^15",
+    "react": "^17 || ^18"
+  }
+}

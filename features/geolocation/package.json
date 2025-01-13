@@ -1,0 +1,46 @@
+{
+  "name": "@exodus/geolocation",
+  "version": "4.3.0",
+  "description": "Geolocation monitor",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/geolocation",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Ageolocation"
+  },
+  "main": "index.js",
+  "files": [
+    "plugin",
+    "monitor",
+    "atoms",
+    "redux",
+    "debug",
+    "README.md",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
+  ],
+  "scripts": {
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T jest"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^9.0.0",
+    "@exodus/fetch": "^1.3.0",
+    "@exodus/simple-retry": "^1.0.1",
+    "delay": "^5.0.0",
+    "lodash": "^4.17.21",
+    "ms": "^2.1.3",
+    "p-defer": "^4.0.0",
+    "reselect": "^3.0.1"
+  },
+  "devDependencies": {
+    "@exodus/mock-fetch": "workspace:^",
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "redux": "^4.2.1"
+  }
+}

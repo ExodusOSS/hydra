@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "ExchangeConfigureAssetSearchUnavailable"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": ["to_or_from", "content"],
+      "properties": {
+        "to_or_from": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "content": {
+          "type": "string",
+          "format": "any-string",
+          "minLength": 3,
+          "maxLength": 6
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

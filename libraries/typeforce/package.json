@@ -1,0 +1,45 @@
+{
+  "name": "@exodus/typeforce",
+  "version": "1.19.1",
+  "description": "Another biased type checking solution for Javascript",
+  "keywords": [
+    "typeforce",
+    "types",
+    "typechecking",
+    "type",
+    "exceptions",
+    "force"
+  ],
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/typeforce",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Atypeforce"
+  },
+  "license": "MIT",
+  "author": "Exodus Movement, Inc.",
+  "contributors": [
+    "Daniel Cousens"
+  ],
+  "main": "index.js",
+  "files": [
+    "CHANGELOG.md",
+    "async.js",
+    "errors.js",
+    "extra.js",
+    "native.js",
+    "nothrow.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
+  },
+  "scripts": {
+    "bench": "node bench/index.js",
+    "test": "run -T exodus-test test/*.js",
+    "lint": "run -T eslint"
+  },
+  "devDependencies": {
+    "benchmark": "^1.0.0",
+    "tape": "^4.6.1",
+    "typeforce": "^1.11.1"
+  }
+}

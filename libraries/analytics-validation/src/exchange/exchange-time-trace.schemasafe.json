@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "ExchangeTimeTrace"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "insert_order": {
+          "type": "number"
+        },
+        "create_cex_order": {
+          "type": "number"
+        },
+        "get_provider_order": {
+          "type": "number"
+        },
+        "check_order_is_valid": {
+          "type": "number"
+        },
+        "get_exchange_opts": {
+          "type": "number"
+        },
+        "create_tx": {
+          "type": "number"
+        },
+        "send_tx": {
+          "type": "number"
+        },
+        "log_dex_order": {
+          "type": "number"
+        },
+        "get_dex_quote": {
+          "type": "number"
+        },
+        "get_token_account": {
+          "type": "number"
+        },
+        "get_dex_swap_tx": {
+          "type": "number"
+        },
+        "update_blockhash": {
+          "type": "number"
+        },
+        "sign_tx": {
+          "type": "number"
+        },
+        "broadcast_tx": {
+          "type": "number"
+        },
+        "get_allowance": {
+          "type": "number"
+        },
+        "approve_tokens": {
+          "type": "number"
+        },
+        "provider_name": {
+          "type": "string"
+        },
+        "prepare_exchange": {
+          "type": "number"
+        },
+        "execute_exchange": {
+          "type": "number"
+        },
+        "total_exchange": {
+          "type": "number"
+        },
+        "order_id": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

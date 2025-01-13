@@ -1,0 +1,51 @@
+{
+  "name": "@exodus/atoms",
+  "version": "9.0.0",
+  "description": "Abstraction for encapsulating a piece of data behind a simple unified interface: get, set, observe",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": "./lib/index.js",
+  "author": "Exodus Movement, Inc.",
+  "scripts": {
+    "build": "run -T tsc --build tsconfig.build.json",
+    "clean": "run -T tsc --build --clean",
+    "test": "run -T exodus-test --jest --esbuild",
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "prepublishOnly": "yarn run -T build --scope @exodus/atoms"
+  },
+  "files": [
+    "lib",
+    "CHANGELOG.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/atoms",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aatoms"
+  },
+  "dependencies": {
+    "@exodus/storage-interface": "^1.0.0",
+    "delay": "^5.0.0",
+    "eventemitter3": "^4.0.7",
+    "json-stringify-safe": "^5.0.1",
+    "lodash": "^4.17.21",
+    "make-concurrent": ">=4 <6",
+    "minimalistic-assert": "^1.0.1",
+    "p-defer": "^4.0.0",
+    "proxy-freeze": "^1.0.0"
+  },
+  "devDependencies": {
+    "@exodus/atom-tests": "workspace:^",
+    "@exodus/storage-encrypted": "workspace:^",
+    "@exodus/storage-memory": "workspace:^",
+    "@types/jest": "^29.5.11",
+    "@types/json-stringify-safe": "^5.0.3",
+    "@types/lodash": "^4.14.200",
+    "@types/minimalistic-assert": "^1.0.2",
+    "events": "^3.3.0"
+  }
+}

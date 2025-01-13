@@ -1,0 +1,46 @@
+{
+  "name": "@exodus/core-selectors",
+  "version": "3.0.0",
+  "author": "Exodus Movement, Inc.",
+  "description": "Bunch of core selectors",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "assets",
+    "orders",
+    "tx-log",
+    "utils",
+    "_test",
+    "!**/__tests__",
+    "CHANGELOG.md"
+  ],
+  "devDependencies": {
+    "@exodus/assets": "^11.0.0",
+    "@exodus/assets-base": "^9.0.0",
+    "@exodus/models": "^12.0.0"
+  },
+  "peerDependencies": {
+    "@exodus/assets": "^11.0.0",
+    "@exodus/combined-assets-meta": "^3.0.0",
+    "@exodus/models": "^12.0.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "minimalistic-assert": "^1.0.1",
+    "reselect": "^3.0.1"
+  },
+  "scripts": {
+    "test": "run -T exodus-test --jest",
+    "lint": "run -T eslint . --ignore-path ../../.gitignore",
+    "lint:fix": "yarn lint --fix"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-core/tree/master/packages/core-selectors#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-core/issues?q=is%3Aissue+is%3Aopen+label%3Acore-selectors"
+  }
+}

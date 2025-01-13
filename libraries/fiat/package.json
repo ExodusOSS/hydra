@@ -1,0 +1,22 @@
+{
+  "name": "@exodus/fiat",
+  "version": "2.3.0",
+  "description": "Units (fiats) available in Exodus products.",
+  "main": "lib/index.js",
+  "author": "Exodus Movement, Inc.",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/ExodusMovement/exodus-core#readme",
+  "files": [
+    "lib"
+  ],
+  "devDependencies": {
+    "jest": "^29.3.1"
+  },
+  "scripts": {
+    "build": "yarn build:clean && babel src --out-dir lib --config-file ../../babel.config.js",
+    "build:clean": "rm -rf lib",
+    "test": "jest",
+    "lint": "eslint . --ignore-path ../../.gitignore",
+    "lint:fix": "yarn lint --fix"
+  }
+}

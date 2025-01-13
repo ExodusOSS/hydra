@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "WalletAssetSendNoGas"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": ["is_zero_balance", "coin_or_token"],
+      "properties": {
+        "is_zero_balance": {
+          "type": "boolean"
+        },
+        "coin_or_token": {
+          "type": "string",
+          "enum": ["coin", "token"]
+        },
+        "asset_name": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

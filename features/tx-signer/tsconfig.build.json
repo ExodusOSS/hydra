@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "removeComments": false
+  },
+  "exclude": ["**/lib", "**/*.spec.ts", "**/*.test.ts"]
+}

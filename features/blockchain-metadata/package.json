@@ -1,0 +1,65 @@
+{
+  "name": "@exodus/blockchain-metadata",
+  "version": "15.7.0",
+  "author": "Exodus Movement, Inc.",
+  "description": "Manages access to and persistence of blockchain metadata, specifically transaction history and account state.",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/blockchain-metadata",
+  "license": "MIT",
+  "directories": {
+    "lib": "module",
+    "test": "__tests__"
+  },
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "api",
+    "atoms",
+    "module",
+    "plugin",
+    "redux",
+    "report",
+    "index.d.ts",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "scripts": {
+    "lint": "run -T eslint . -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest --esbuild"
+  },
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Ablockchain-metadata"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^9.0.0",
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/currency": "^5.0.2",
+    "@exodus/fusion-atoms": "^1.2.1",
+    "@exodus/models": "^12.1.1",
+    "@exodus/multi-account-redux": "^2.0.1",
+    "@exodus/redux-dependency-injection": "^4.0.0",
+    "events": "^3.3.0",
+    "lodash": "npm:@exodus/lodash@^4.17.21-exodus.2",
+    "ms": "^2.1.3",
+    "p-defer": "^4.0.0",
+    "proxy-freeze": "^1.0.0",
+    "reselect": "^3.0.1"
+  },
+  "devDependencies": {
+    "@exodus/assets": "^11.0.0",
+    "@exodus/assets-feature": "workspace:^",
+    "@exodus/bitcoin-meta": "2.0.0",
+    "@exodus/bitcoin-plugin": "^1.0.10",
+    "@exodus/dogecoin-plugin": "^1.7.0",
+    "@exodus/ethereum-meta": "^2.0.0",
+    "@exodus/storage-memory": "workspace:^",
+    "@exodus/wallet-accounts": "workspace:^",
+    "@exodus/wild-emitter": "^1.0.0",
+    "jest-when": "^3.5.2",
+    "redux": "4.0.0"
+  }
+}

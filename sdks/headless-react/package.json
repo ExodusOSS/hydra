@@ -1,0 +1,42 @@
+{
+  "name": "@exodus/headless-react",
+  "version": "3.0.0",
+  "description": "Exodus SDK bindings for React",
+  "author": "Exodus Movement, Inc.",
+  "main": "lib/index.js",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/sdks/headless-react",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aheadless-react"
+  },
+  "files": [
+    "lib",
+    "redux.js",
+    "README.md",
+    "CHANGELOG.md",
+    "!**/__tests__/**",
+    "!**/*.test.js"
+  ],
+  "scripts": {
+    "build": "run -T tsc --build tsconfig.build.json",
+    "clean": "run -T tsc --build --clean",
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "prepublishOnly": "yarn run -T build --scope @exodus/headless-react"
+  },
+  "dependencies": {
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/storage-interface": "^1.0.0",
+    "make-concurrent": "^5.4.0"
+  },
+  "peerDependencies": {
+    "react": ">=16",
+    "react-redux": ">= 7.0.0",
+    "redux": "4.x"
+  }
+}

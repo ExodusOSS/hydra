@@ -1,0 +1,32 @@
+diff --git a/node_modules/react-native/index.js b/node_modules/react-native/index.js
+index f556fa3..1260b99 100644
+--- a/node_modules/react-native/index.js
++++ b/node_modules/react-native/index.js
+@@ -441,13 +441,6 @@ module.exports = {
+     return require('deprecated-react-native-prop-types').PointPropType;
+   },
+   get ViewPropTypes(): $FlowFixMe {
+-    console.error(
+-      'ViewPropTypes will be removed from React Native, along with all ' +
+-        'other PropTypes. We recommend that you migrate away from PropTypes ' +
+-        'and switch to a type system like TypeScript. If you need to ' +
+-        'continue using ViewPropTypes, migrate to the ' +
+-        "'deprecated-react-native-prop-types' package.",
+-    );
+     return require('deprecated-react-native-prop-types').ViewPropTypes;
+   },
+ };
+@@ -746,12 +739,7 @@ if (__DEV__) {
+   Object.defineProperty(module.exports, 'AsyncStorage', {
+     configurable: true,
+     get() {
+-      invariant(
+-        false,
+-        'AsyncStorage has been removed from react-native core. ' +
+-          "It can now be installed and imported from '@react-native-async-storage/async-storage' instead of 'react-native'. " +
+-          'See https://github.com/react-native-async-storage/async-storage',
+-      );
++return require('@exodus/react-native-async-storage').default
+     },
+   });
+   /* $FlowFixMe[prop-missing] This is intentional: Flow will error when

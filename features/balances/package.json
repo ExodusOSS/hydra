@@ -1,0 +1,68 @@
+{
+  "name": "@exodus/balances",
+  "version": "13.5.3",
+  "description": "Tracks crypto balances across enabled wallet accounts.",
+  "author": "Exodus Movement, Inc.",
+  "license": "MIT",
+  "scripts": {
+    "test": "run -T exodus-test --jest",
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "format": "run -T prettier --write \"**/*.{json,md,yaml}\" --log-level warn",
+    "format:check": "run -T prettier --check \"**/*.{json,md,yaml}\" --log-level warn"
+  },
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "module",
+    "atoms",
+    "default-config.js",
+    "report",
+    "plugins",
+    "redux",
+    "README.md",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/balances",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abalances"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^9.0.0",
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/core-selectors": "^3.0.0",
+    "@exodus/currency": "^5.0.2",
+    "@exodus/models": "^12.0.1",
+    "@exodus/multi-account-redux": "^2.0.1",
+    "@exodus/redux-dependency-injection": "^4.0.3",
+    "@exodus/typeforce": "^1.18.0",
+    "lodash": "^4.17.21",
+    "make-concurrent": "^4.0.0",
+    "reselect": "^3.0.1"
+  },
+  "peerDependencies": {
+    "@exodus/blockchain-metadata": "^15.4.0"
+  },
+  "devDependencies": {
+    "@exodus/assets": "^11.0.0",
+    "@exodus/assets-base": "^10.0.0",
+    "@exodus/assets-feature": "workspace:^",
+    "@exodus/available-assets": "workspace:^",
+    "@exodus/bitcoin-meta": "^2.0.0",
+    "@exodus/blockchain-metadata": "workspace:^",
+    "@exodus/ethereum-meta": "^2.0.0",
+    "@exodus/fee-data-monitors": "workspace:^",
+    "@exodus/storage-memory": "workspace:^",
+    "@exodus/wallet-accounts": "workspace:^",
+    "events": "^3.3.0",
+    "redux": "^4.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

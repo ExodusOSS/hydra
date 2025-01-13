@@ -1,0 +1,6 @@
+# Ignore everything...
+/**/*
+
+# Except what needs to be published
+!/dist/**/*.js
+!/dist/**/*.ts

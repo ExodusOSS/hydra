@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "ConnectLedgerDisconnect"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "origin": {
+          "anyOf": [
+            {
+              "const": "onboarding"
+            },
+            {
+              "const": "wallet"
+            },
+            {
+              "const": "accounts"
+            },
+            {
+              "const": "receive-menu"
+            },
+            {
+              "const": "exchange"
+            },
+            {
+              "const": "offramp"
+            },
+            {
+              "const": "onramp"
+            },
+            {
+              "const": "web3"
+            }
+          ]
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

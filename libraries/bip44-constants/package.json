@@ -1,0 +1,42 @@
+{
+  "name": "@exodus/bip44-constants",
+  "version": "195.0.0",
+  "description": "Exodus Bitcoin BIP44 constants.",
+  "files": [
+    "base.js",
+    "index.js",
+    "by-ticker.js"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard",
+    "test": "npm run lint && node test.js",
+    "update": "node update.js > base.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ExodusMovement/bip44-constants.git"
+  },
+  "keywords": [
+    "bip44",
+    "bitcoin",
+    "litecoin",
+    "dogecoin",
+    "blackcoin",
+    "trezor"
+  ],
+  "author": "JP Richardson",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/bip44-constants/issues"
+  },
+  "homepage": "https://github.com/ExodusMovement/bip44-constants#readme",
+  "devDependencies": {
+    "cheerio": "^0.19.0",
+    "node-fetch": "^2.6.1",
+    "standard": "14.3.3"
+  }
+}

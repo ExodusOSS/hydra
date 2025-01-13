@@ -1,0 +1,22 @@
+{
+  "12GeUhBYtB11EZPGPBEzUzvWRRM3EsgZuE": {
+    "address": "12GeUhBYtB11EZPGPBEzUzvWRRM3EsgZuE",
+    "path": "m/2/0",
+    "utxos": [
+      {
+        "txId": "07abd6c7481efe452f92ff5d55bb638bba9c0c1edc61703c7a7b3ecdf5b1f630",
+        "confirmations": 1865,
+        "value": "3.5 BTC",
+        "vout": 0,
+        "script": null
+      },
+      {
+        "txId": "0bd212961be413c851207e327c04ed9bd92fc5aa0194e968da3c40c8316d3f20",
+        "confirmations": 1981,
+        "value": "4.2 BTC",
+        "vout": 1,
+        "script": null
+      }
+    ]
+  }
+}

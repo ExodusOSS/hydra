@@ -1,0 +1,17 @@
+{
+  "name": "@exodus/currency-benchmarks.number-libraries",
+  "version": "0.0.0",
+  "main": "bigint.js",
+  "engines": {
+    "node": ">=10.4.0"
+  },
+  "scripts": {
+    "start": "node bigint.js"
+  },
+  "dependencies": {
+    "big-rational": "^0.10.9",
+    "bignumber.js": "^8.1.1",
+    "bn.js": "^4.11.8",
+    "xorshift.js": "^1.0.0"
+  }
+}

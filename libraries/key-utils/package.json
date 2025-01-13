@@ -1,0 +1,35 @@
+{
+  "name": "@exodus/key-utils",
+  "version": "3.7.0",
+  "author": "Exodus Movement, Inc.",
+  "description": "Utilities to manage derivation paths and key identifier aspects.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/key-utils",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Akey-utils"
+  },
+  "type": "module",
+  "main": "src/index.js",
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "devDependencies": {
+    "bip39": "^3.1.0"
+  },
+  "scripts": {
+    "test": "run -T exodus-test --jest",
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix"
+  },
+  "dependencies": {
+    "@exodus/bip32": "^3.3.0",
+    "bip32-path": "^0.4.2",
+    "minimalistic-assert": "^1.0.1"
+  }
+}

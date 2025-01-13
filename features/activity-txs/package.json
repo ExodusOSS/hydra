@@ -1,0 +1,63 @@
+{
+  "name": "@exodus/activity-txs",
+  "version": "4.4.3",
+  "description": "The activity-txs feature",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/activity-txs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aactivity-txs"
+  },
+  "main": "index.js",
+  "files": [
+    "module",
+    "atoms",
+    "api",
+    "plugin",
+    "redux",
+    "README.md",
+    "CHANGELOG.md",
+    "!**/__tests__/**",
+    "!**/*.test.js"
+  ],
+  "scripts": {
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest --esbuild"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^9.0.0",
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/core-selectors": "^1.5.0",
+    "@exodus/models": "^12.0.1",
+    "@exodus/multi-account-redux": "^2.0.1",
+    "@exodus/typeforce": "^1.19.0",
+    "lodash": "^4.17.21",
+    "minimalistic-assert": "^1.0.1",
+    "reselect": "^3.0.1"
+  },
+  "devDependencies": {
+    "@exodus/assets": "^8.0.95",
+    "@exodus/assets-base": "^8.1.10",
+    "@exodus/assets-feature": "workspace:^",
+    "@exodus/available-assets": "workspace:^",
+    "@exodus/bitcoin-plugin": "^1.4.2",
+    "@exodus/connected-origins": "workspace:^",
+    "@exodus/fiat-ramp": "workspace:^",
+    "@exodus/logger": "workspace:^",
+    "@exodus/nfts": "workspace:^",
+    "@exodus/orders": "workspace:^",
+    "@exodus/personal-notes": "workspace:^",
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "@exodus/wallet-accounts": "workspace:^",
+    "@types/minimalistic-assert": "^1.0.1",
+    "redux": "^4.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

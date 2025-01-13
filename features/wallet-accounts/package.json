@@ -1,0 +1,61 @@
+{
+  "name": "@exodus/wallet-accounts",
+  "version": "17.1.1",
+  "description": "CRUD interface for managing wallet accounts, a.k.a. portfolios.",
+  "author": "Exodus Movement, Inc.",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/wallet-accounts",
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "api",
+    "atoms",
+    "debug",
+    "migrations",
+    "module",
+    "plugins",
+    "redux",
+    "report",
+    "index.d.ts",
+    "CHANGELOG.md",
+    "!**/*.test.js",
+    "!**/__tests__/**"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "scripts": {
+    "lint": "run -T eslint . -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest"
+  },
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Awallet-accounts"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^9.0.0",
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/core-selectors": "^3.0.0",
+    "@exodus/fusion-atoms": "^1.2.1",
+    "@exodus/models": "^12.0.1",
+    "@exodus/typeforce": "^1.19.0",
+    "lodash": "npm:@exodus/lodash@^4.17.21-exodus.2",
+    "make-concurrent": "^5.3.0",
+    "minimalistic-assert": "^1.0.1",
+    "p-defer": "^4.0.0",
+    "proxy-freeze": "^1.0.0",
+    "reselect": "^3.0.1"
+  },
+  "devDependencies": {
+    "@exodus/argo": "workspace:^",
+    "@exodus/dependency-injection": "workspace:^",
+    "@exodus/fusion-local": "workspace:^",
+    "@exodus/logger": "workspace:^",
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "@exodus/storage-memory": "workspace:^",
+    "delay": "^6.0.0",
+    "jest-when": "^3.5.2",
+    "redux": "^4.0.0"
+  }
+}

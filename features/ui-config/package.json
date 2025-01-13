@@ -1,0 +1,44 @@
+{
+  "name": "@exodus/ui-config",
+  "version": "3.12.1",
+  "description": "Helper for storing various UI-specific settings/config.",
+  "author": "Exodus Movement, Inc.",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/ui-config",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aui-config"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "api",
+    "atoms",
+    "plugin",
+    "redux",
+    "utils",
+    "index.d.ts",
+    "README.md",
+    "utils.js",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
+  ],
+  "scripts": {
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^8.1.1",
+    "@exodus/formatting": "^8.0.0",
+    "@exodus/fusion-atoms": "^1.2.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "redux": "^4.2.1"
+  }
+}

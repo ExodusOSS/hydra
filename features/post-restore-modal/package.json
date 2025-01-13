@@ -1,0 +1,40 @@
+{
+  "name": "@exodus/post-restore-modal",
+  "version": "1.1.1",
+  "description": "The post-restore-modal feature",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/post-restore-modal",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Apost-restore-modal"
+  },
+  "main": "index.js",
+  "files": [
+    "atoms",
+    "api",
+    "plugin",
+    "redux",
+    "README.md",
+    "CHANGELOG.md",
+    "!**/__tests__/**",
+    "!**/*.test.js"
+  ],
+  "scripts": {
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest --esbuild"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^8.0.0",
+    "@exodus/module": "^1.2.2"
+  },
+  "devDependencies": {
+    "@exodus/dependency-injection": "workspace:^",
+    "@exodus/dependency-preprocessors": "workspace:^",
+    "@exodus/storage-memory": "workspace:^"
+  }
+}

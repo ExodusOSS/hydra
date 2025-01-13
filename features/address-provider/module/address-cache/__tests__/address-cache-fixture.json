@@ -1,0 +1,208 @@
+{
+  "loaded": true,
+  "caches": {
+    "exodus_0": {
+      "m/44'/60'/0'/0/0": {
+        "synced": true,
+        "address": "0x3a6c678ab6f5c1e6B77D0ecDdDa81f998162E14f"
+      },
+      "m/44'/118'/0'/0/0": {
+        "synced": true,
+        "address": "cosmos17ux3h6fs0ethay4xm065wh2pkuhw8kjyd8ew9t"
+      },
+      "m/84'/0'/0'/0/0": {
+        "synced": true,
+        "address": "bc1qra6g60wnu8tdp8nfgp9te90rqf4txdflm99hk2"
+      },
+      "m/84'/0'/0'/1/0": {
+        "synced": false,
+        "address": "bc1q3eqge9yvq9hfkpnp3zslze6aw200fgyaewggcc"
+      },
+      "m/86'/0'/0'/0/0": {
+        "synced": true,
+        "address": "bc1pqtxac9c3zxf6twjqtgfhpprlzygga308ylmna8dn5tav9d38qk8smrhfxy"
+      },
+      "m/44'/0'/0'/0/1": { "synced": true, "address": "1NfEFSbyENCBfWaoexoxz6ft95g8VX2iV5" },
+      "m/44'/0'/0'/0/2": { "synced": true, "address": "19nrMqtCGTW2tYxpL54qUjeHrep28LTYqd" },
+      "m/44'/0'/0'/0/3": { "synced": true, "address": "17g1uf1NaEKJyXZDyEX2nTJjBSPEDrrRvF" },
+      "m/44'/0'/0'/0/4": { "synced": true, "address": "198SQEUurENc8wfuEf9B9vbWBFKjYkHSyr" },
+      "m/44'/0'/0'/0/5": { "synced": true, "address": "1PBHupPN628BZa2ddsXRDGSjqJxT5FvUdj" },
+      "m/44'/0'/0'/0/6": { "synced": true, "address": "15Z6tPPvQZntm6u5nJaztJor2eCqkHkbEx" },
+      "m/44'/0'/0'/0/7": { "synced": true, "address": "16qfbf5WiWD2mBCiPkma8VRN5rhBP33xDL" },
+      "m/44'/0'/0'/0/8": { "synced": false, "address": "1J6JWCmrBmmvTgQCbxq2pmkPeFUoqU5N83" },
+      "m/44'/0'/0'/0/9": { "synced": true, "address": "167H9cyRgJhFpyCGuBtSV5qXLR1QMDZKHn" },
+      "m/44'/0'/0'/1/0": { "synced": true, "address": "17CmV7HgcdEi7qjLQHYzd75rVmQEEehUXE" },
+      "m/44'/0'/0'/1/1": { "synced": true, "address": "1Fbt66nDKUttJkFkNyQf4frtjqSQzpoAKr" },
+      "m/44'/0'/0'/1/2": { "synced": true, "address": "1C6o6GMNYwE2FswDhUfE8LAJ1VEEjxUtzk" },
+      "m/44'/0'/0'/1/3": { "synced": true, "address": "1JYB9RzFvHRe6oDwsqYkM918euJo89Qkbd" },
+      "m/44'/0'/0'/1/4": { "synced": true, "address": "14daeVoWDRvkP9sH8MSNvHYPS94hDuhDed" },
+      "m/44'/0'/0'/1/5": { "synced": true, "address": "1BmPjRY42g5uxTukqeLRQxfEFCjHP4tgfm" },
+      "m/44'/0'/0'/1/6": { "synced": true, "address": "12R3wxhTF8732cnKmLnZbu9PvJrGZzXX5K" },
+      "m/44'/0'/0'/1/7": { "synced": true, "address": "13BZNp9RregA28gMsBAMD9X9tkxZUxTrzR" },
+      "m/44'/0'/0'/1/8": { "synced": true, "address": "1AwT883syjS2nqMbua6LrntAbUiv18jcvb" },
+      "m/44'/0'/0'/1/9": { "synced": true, "address": "1Pcph323KtzMDV3nKfbkP2HvyNkRHxJNFz" },
+      "m/84'/0'/0'/0/1": {
+        "synced": true,
+        "address": "bc1qv0rea4zevvfazpcqvsd2q7m6rz9lqqqrahgyh4"
+      },
+      "m/84'/0'/0'/0/2": {
+        "synced": true,
+        "address": "bc1q3wtm2hekedt944e0w62uaj5g7dq2j8vs5ll45c"
+      },
+      "m/84'/0'/0'/0/3": {
+        "synced": true,
+        "address": "bc1q2kqr7fk5eur9m6wmct5s9gzw0z9pfc9hn3um7k"
+      },
+      "m/84'/0'/0'/0/4": {
+        "synced": true,
+        "address": "bc1qqstcjsg3yqcvd2ectc2jt5uwfvqyy4hezk5v8f"
+      },
+      "m/84'/0'/0'/0/5": {
+        "synced": true,
+        "address": "bc1qr66mafyvy4zgsxelffzsfet8q4zz6uvl8e7zh9"
+      },
+      "m/84'/0'/0'/0/6": {
+        "synced": true,
+        "address": "bc1q0d3r9t7hzz85wghvsldsgy6qqa6wkar9rw8m9e"
+      },
+      "m/84'/0'/0'/0/7": {
+        "synced": true,
+        "address": "bc1qjkzgl5pg9jsnd67aksxxxund28lk0s52vthfsh"
+      },
+      "m/84'/0'/0'/0/8": {
+        "synced": true,
+        "address": "bc1qct09awuqhprvuk8xu8ygpvhuqt72s96es7cwm4"
+      },
+      "m/84'/0'/0'/0/9": {
+        "synced": true,
+        "address": "bc1qgv0x97l7cvf40du4mwn6dvyc4z2xw77zpldzcm"
+      },
+      "m/84'/0'/0'/1/1": {
+        "synced": true,
+        "address": "bc1qapuset67aqxmmjuy5uca6w4g2nytph3qrkd2ak"
+      },
+      "m/84'/0'/0'/1/2": {
+        "synced": true,
+        "address": "bc1qnfnsfwhykyke3l3swj60uuyd425hx06jpxemtf"
+      },
+      "m/84'/0'/0'/1/3": {
+        "synced": true,
+        "address": "bc1qmkyyu2vv355utjalqmmd7z98nv2arcfq4zl9uq"
+      },
+      "m/84'/0'/0'/1/4": {
+        "synced": true,
+        "address": "bc1qr9pms0mqfn5x8rpv0yl98aq05rewsmnv5hyu7a"
+      },
+      "m/84'/0'/0'/1/5": {
+        "synced": true,
+        "address": "bc1qrk7gkyvxxnn3vvakuklgrv95gcq22qtetuzc4m"
+      },
+      "m/84'/0'/0'/1/6": {
+        "synced": true,
+        "address": "bc1qy6lh5cjvf3wycsqjpwumk3wvqm6vhudhq0q45r"
+      },
+      "m/84'/0'/0'/1/7": {
+        "synced": true,
+        "address": "bc1qn6cxdptzcjeaajjgv4wtc6g5zatkup0hm0s02g"
+      },
+      "m/84'/0'/0'/1/8": {
+        "synced": true,
+        "address": "bc1qe3lxm9vvzxxjkvnc0qyv7tczgqkn3v3g429y6c"
+      },
+      "m/84'/0'/0'/1/9": {
+        "synced": true,
+        "address": "bc1q552va3a73rxk5hs6wn0apurhmdrqtzwfvapdrd"
+      },
+      "m/86'/0'/0'/0/1": {
+        "synced": true,
+        "address": "bc1pxk7j2pfwscsvkn3fl5l3lqw6f2rpz9n5nn8z3942v2868py392fs0hy4wf"
+      },
+      "m/86'/0'/0'/0/2": {
+        "synced": true,
+        "address": "bc1p0u688zkkmdvcmuhtr7j34xw9u8vzc7g5l8q5sm6g578ys5ncs66qva933q"
+      },
+      "m/86'/0'/0'/0/3": {
+        "synced": true,
+        "address": "bc1puqx96tk8n8g6lx4j8lppw66h4lfhxw4nev9xpw8nq927arr77ghqzxllx4"
+      },
+      "m/86'/0'/0'/0/4": {
+        "synced": true,
+        "address": "bc1pdae9kptjyf9ffux7veemnkjfqq4gxphkf2gzfh3s48z9dzsyfkqqzlutq8"
+      },
+      "m/86'/0'/0'/0/5": {
+        "synced": true,
+        "address": "bc1pqdqklsda7xxxz4qdsvdvg4rqvp4gmkdwwn5wcfnglley0vrc7sgqsch8hg"
+      },
+      "m/86'/0'/0'/0/6": {
+        "synced": true,
+        "address": "bc1pdryecr4nt37s9rxusxhk7pee40qf3rqjpptnmlfk3he0lc0s6jssprr2x9"
+      },
+      "m/86'/0'/0'/0/7": {
+        "synced": true,
+        "address": "bc1pep9r37f36phx5e3f52lka8z36mvz0sl848w8wxuxatledd3jhptqnn873w"
+      },
+      "m/86'/0'/0'/0/8": {
+        "synced": true,
+        "address": "bc1p4p9m4rvxuraeh2f5dlpfc7fvk8ksmwzf9wlft86gzsfsw6f7fgysxvqr68"
+      },
+      "m/86'/0'/0'/0/9": {
+        "synced": true,
+        "address": "bc1pyfx870exqjjyg0r6r5gaw4ajcf3j4d6v503mwdrjpnn9yeeyfk5qeumjg0"
+      },
+      "m/86'/0'/0'/1/0": {
+        "synced": true,
+        "address": "bc1p3daq2ld042a69u0dsxwztnwqqu8azqwe38vp3k9h4v0wmh52yf0sk83n85"
+      },
+      "m/86'/0'/0'/1/1": {
+        "synced": true,
+        "address": "bc1p975war7xtr38au893a5nytg439j4r7uvl6rtn7qc6c79kausamcqq7zfhc"
+      },
+      "m/86'/0'/0'/1/2": {
+        "synced": true,
+        "address": "bc1pen75aqw44jmcxyk6tj8s3vpanpjlcvgjwfy9kwetp4zufyne4g7q94j0lk"
+      },
+      "m/86'/0'/0'/1/3": {
+        "synced": true,
+        "address": "bc1p0pn2y8szm3z8yv024pkap0t7k4zpm5qpnxcv2czgvjc55luy53hqtwlxfu"
+      },
+      "m/86'/0'/0'/1/4": {
+        "synced": true,
+        "address": "bc1p6k6tgraqfn98agfeghsvrauyhty9w77kecj63k2zlez2mr6dhy8sycp6n2"
+      },
+      "m/86'/0'/0'/1/5": {
+        "synced": true,
+        "address": "bc1px3xu02u9j8mg880pdc3ng8qgudujrl3w603g6sswsfwgh3crq6uqemutvu"
+      },
+      "m/86'/0'/0'/1/6": {
+        "synced": true,
+        "address": "bc1p7j5xy9gscqw07a3s4p0sg2g0fpzlmnzac654d45jnsa0azza7qysypg2vm"
+      },
+      "m/86'/0'/0'/1/7": {
+        "synced": true,
+        "address": "bc1plyj7kgzzk8wtzk9apmvcrwcmmath3pflg875jul3xd0d4uyfntts8r66gj"
+      },
+      "m/86'/0'/0'/1/8": {
+        "synced": true,
+        "address": "bc1ptldu3mfaqqtea5ufr3fy3ftfs3azt998vetc56twqutu33a3dzhsvck0aa"
+      },
+      "m/86'/0'/0'/1/9": {
+        "synced": true,
+        "address": "bc1p4nj23gqvkmekj2x5crzyzt37zmpwct94vd9ygxh06al6rp4nptwse24c8m"
+      },
+      "m/44'/1729'/0'/0/0": { "synced": true, "address": "tz1WW2vcRruCAEtstVXHh3HwoNypdJYLSJXC" },
+      "m/44'/1815'/0'/0/0": {
+        "synced": true,
+        "address": "addr1qykynnu4tsg7ewx5e52xf6r94exy06qyps6j4c0s025txk3vf88e2hq3ajudfng5vn5xttjvgl5qgrp49tslq74gkddqc7usjq"
+      },
+      "osmosis/m/44'/118'/0'/0/0": {
+        "synced": true,
+        "address": "osmo17ux3h6fs0ethay4xm065wh2pkuhw8kjy9u27ne"
+      },
+      "kava/m/44'/459'/0'/0/0": {
+        "synced": true,
+        "address": "kava1fzjh88d70kjcz4whvvn98xr7lqax7txcm0tq6k"
+      }
+    }
+  },
+  "mismatches": {}
+}

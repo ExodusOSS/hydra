@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "WalletAssetSendHardwareWalletView"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "asset_name": {
+          "type": "string",
+          "maxLength": 30,
+          "$comment": "Allows tracking the asset name associated with the user's account"
+        },
+        "network": {
+          "type": "string",
+          "maxLength": 30,
+          "$comment": "Allows tracking the network associated with the user's account"
+        },
+        "amount": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "amount_usd": {
+          "type": "string",
+          "format": "any-string"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

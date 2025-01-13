@@ -1,0 +1,36 @@
+{
+  "name": "@exodus/simple-retry",
+  "version": "1.0.1",
+  "description": "Simple Retry",
+  "main": "src/index.js",
+  "type": "module",
+  "files": [
+    "src",
+    "CHANGELOG.md"
+  ],
+  "author": "Exodus Movement, Inc.",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/simple-retry",
+  "scripts": {
+    "format": "run -T prettier --write '**/*.js'",
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest",
+    "test:watch": "yarn test --watch"
+  },
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://registry.npmjs.org"
+  },
+  "dependencies": {
+    "delay": "^4.0.1",
+    "ms": "^2.1.1"
+  },
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asimple-retry"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  }
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "txId": "0x91653d00a581d4a9c7384c3477de2ad3f4310eddabedc9ef8976f50db94e95cd",
+    "date": "2017-05-08T19:46:20.000Z",
+    "confirmations": 1,
+    "coinAmount": "71.23067171 GNT",
+    "coinName": "golem"
+  },
+  {
+    "txId": "0x769a7d60903241a9c862373bd1d234a8dbc7cd5c467e1ffe3d48876d26c84f8a",
+    "date": "2017-05-08T19:47:10.857Z",
+    "confirmations": 1,
+    "coinAmount": "-71.23067171 GNT",
+    "coinName": "golem",
+    "feeAmount": "0.00198 ETH",
+    "to": "0x7444e11489864359c7820524A544f300f44886ea"
+  }
+]

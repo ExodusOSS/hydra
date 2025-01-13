@@ -1,0 +1,39 @@
+{
+  "name": "@exodus/deferring-storage",
+  "type": "module",
+  "version": "1.0.1",
+  "description": "Storage that defers access besides clearing or deleting until it is released",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/deferring-storage",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Adeferring-storage"
+  },
+  "main": "lib/index.js",
+  "exports": "./lib/index.js",
+  "files": [
+    "lib",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "run -T tsc --build tsconfig.build.json",
+    "clean": "run -T tsc --build --clean",
+    "lint": "run -T eslint --ignore-path .gitignore .",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T jest",
+    "prepublishOnly": "yarn run -T build --scope @exodus/deferring-storage"
+  },
+  "dependencies": {
+    "@exodus/storage-interface": "^1.0.0",
+    "p-defer": "^4.0.0"
+  },
+  "devDependencies": {
+    "@exodus/storage-memory": "^1.1.0",
+    "@exodus/storage-spec": "^3.1.0"
+  }
+}

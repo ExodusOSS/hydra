@@ -1,0 +1,41 @@
+{
+  "name": "@exodus/connected-origins",
+  "version": "4.1.0",
+  "license": "UNLICENSED",
+  "author": "Exodus Movement, Inc.",
+  "description": "The connected origins module maintains a list of the third-party websites that the user has authorized to interact with Exodus. It stores the authorization status and connection status, along with  metadata such as the name and icon of the website.",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/connected-origins",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aconnected-origins"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "api",
+    "module",
+    "plugin",
+    "atoms",
+    "redux",
+    "!**/__tests__/**",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "dependencies": {
+    "@exodus/atoms": "^9.0.0",
+    "lodash": "^4.17.21"
+  },
+  "scripts": {
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest"
+  },
+  "devDependencies": {
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "@exodus/storage-memory": "workspace:^",
+    "redux": "^4.2.1"
+  }
+}

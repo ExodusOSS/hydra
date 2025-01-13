@@ -1,0 +1,41 @@
+{
+  "name": "@exodus/models",
+  "version": "12.1.1",
+  "description": "Exodus models",
+  "type": "module",
+  "main": "src/index.js",
+  "author": "Exodus Movement, Inc.",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/models",
+  "files": [
+    "src",
+    "lib",
+    "!**/__tests__/**",
+    "CHANGELOG.md"
+  ],
+  "dependencies": {
+    "@exodus/currency": "^5.0.1",
+    "@exodus/serialization": "^1.0.0",
+    "bip32-path": "^0.4.2",
+    "lodash": "^4.17.11",
+    "minimalistic-assert": "^1.0.1",
+    "proxy-freeze": "^1.0.0"
+  },
+  "devDependencies": {
+    "@exodus/assets": "^11.0.0",
+    "@exodus/assets-base": "^10.0.0",
+    "bs58check": "^2.1.2"
+  },
+  "scripts": {
+    "test": "run -T exodus-test --jest",
+    "lint": "NODE_ENV=test run -T eslint .",
+    "lint:fix": "yarn lint --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Amodels"
+  }
+}

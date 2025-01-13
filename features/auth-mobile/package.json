@@ -1,0 +1,42 @@
+{
+  "name": "@exodus/auth-mobile",
+  "author": "Exodus Movement, Inc.",
+  "license": "MIT",
+  "version": "4.0.1",
+  "description": "Module to simplify dealing with mobile device authentication mechanisms",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/auth-mobile",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aauth-mobile"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "main": "index.js",
+  "files": [
+    "atoms",
+    "module",
+    "plugin",
+    "api",
+    "redux",
+    "constants.js",
+    "CHANGELOG.md",
+    "README.md"
+  ],
+  "dependencies": {
+    "@exodus/atoms": "^8.0.0",
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/react-native-keychain": "^4.0.7",
+    "@exodus/react-native-touch-id": "^4.4.1-exodus.0",
+    "lodash": "^4.17.21"
+  },
+  "scripts": {
+    "lint": "run -T eslint . --ignore-path ../../.gitignore"
+  },
+  "devDependencies": {
+    "react-native": "^0.71.11"
+  },
+  "peerDependencies": {
+    "react-native": "^0.71.11"
+  }
+}

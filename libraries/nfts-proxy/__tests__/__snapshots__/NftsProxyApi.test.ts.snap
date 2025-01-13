@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NftsProxy getNftImageUrl 1`] = `
+[
+  "https://nfts-proxy-d.exodus.io/v2/algorand/nfts/453046935/256?qoi=true",
+  "https://nfts-proxy-d.exodus.io/v2/algorand/nfts/453046935/128",
+  "https://nfts-proxy-d.exodus.io/v2/avalanche/nfts/0xe125c05e771b887c702b0d4f5c5e8f933bf4ac71/1000/128",
+  "https://nfts-proxy-d.exodus.io/v2/bnb/nfts/0xe125c05e771b887c702b0d4f5c5e8f933bf4ac71/1000/128",
+  "https://nfts-proxy-d.exodus.io/v2/cardano/nfts/aa63d7de85fb677012ab0f3effa8ea1475d569c3801420b475efaefa55474c593033343636/768?qoi=true",
+  "https://nfts-proxy-d.exodus.io/v2/polygon/nfts/0xe125c05e771b887c702b0d4f5c5e8f933bf4ac71/1000/768",
+  "https://nfts-proxy-d.exodus.io/v2/fantom/nfts/0xe125c05e771b887c702b0d4f5c5e8f933bf4ac71/1000/768",
+  "https://nfts-proxy-d.exodus.io/v2/ethereum/nfts/0xe125c05e771b887c702b0d4f5c5e8f933bf4ac71/1000/768",
+  "https://nfts-proxy-d.exodus.io/v2/tezos/nfts/KT1DeNSXrUnk9DiXw88Qr5ZTMqzqWGYD3nmX/1/256?qoi=true",
+  "https://nfts-proxy-d.exodus.io/v2/solana/nfts/HBcAuvSHF9NnE2e8oKMUzosnEKNsm3bXJMWjusn7UbRa/256?qoi=true",
+]
+`;

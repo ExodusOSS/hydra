@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "WalletStakingRestake"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "toggled_on": {
+          "type": "boolean"
+        },
+        "is_expiration": {
+          "type": "boolean"
+        },
+        "is_staking": {
+          "type": "boolean"
+        },
+        "staked_amount": {
+          "type": "string"
+        },
+        "staked_amount_usd": {
+          "type": "string"
+        },
+        "claimable_rewards_amount": {
+          "type": "string"
+        },
+        "claimable_rewards_amount_usd": {
+          "type": "string"
+        },
+        "asset_name": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

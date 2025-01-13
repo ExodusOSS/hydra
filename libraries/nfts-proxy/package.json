@@ -1,0 +1,43 @@
+{
+  "license": "MIT",
+  "version": "2.16.2",
+  "author": "Exodus Movement, Inc.",
+  "name": "@exodus/nfts-proxy",
+  "description": "Client for the NFTs proxy server (https://nfts-proxy.exodus.io)",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "scripts": {
+    "lint": "run -T eslint .",
+    "test": "run -T exodus-test --jest --esbuild",
+    "build": "rm -rf ../../.cache/nfts-proxy lib && run -T tsc --build tsconfig.build.json",
+    "prepublishOnly": "yarn run -T build --scope @exodus/nfts-proxy"
+  },
+  "dependencies": {
+    "@exodus/fetch": "^1.3.0"
+  },
+  "gitHead": "f36e3a0f8a6b6461f310b81042e572fedf13c932",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/nfts-proxy",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Anfts-proxy"
+  }
+}

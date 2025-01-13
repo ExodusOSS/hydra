@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "Web3BrowserSearchInput"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": ["input", "is_url", "matches_found"],
+      "properties": {
+        "input": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "is_url": {
+          "type": "boolean"
+        },
+        "matches_found": {
+          "type": "boolean"
+        },
+        "is_final": {
+          "type": "boolean"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

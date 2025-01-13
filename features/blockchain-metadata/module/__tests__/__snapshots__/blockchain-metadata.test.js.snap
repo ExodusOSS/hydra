@@ -1,0 +1,1061 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`blockchain metadata module batch account states should batch updates and emit once 1`] = `
+[
+  {
+    "changes": {
+      "exodus_0": {
+        "bitcoin": {
+          "t": "object",
+          "v": {
+            "_version": 1,
+            "balance": "22 BTC",
+            "cursor": "some-cursor",
+          },
+        },
+      },
+      "exodus_1": {
+        "bitcoin": {
+          "t": "object",
+          "v": {
+            "_version": 1,
+            "balance": "42 BTC",
+            "cursor": "the-cursor",
+          },
+        },
+      },
+    },
+    "value": {
+      "exodus_0": {
+        "bitcoin": {
+          "t": "object",
+          "v": {
+            "_version": 1,
+            "balance": "22 BTC",
+            "cursor": "some-cursor",
+          },
+        },
+      },
+      "exodus_1": {
+        "bitcoin": {
+          "t": "object",
+          "v": {
+            "_version": 1,
+            "balance": "42 BTC",
+            "cursor": "the-cursor",
+          },
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`blockchain metadata module batch account states should batch updates and emit once 2`] = `
+{
+  "changes": {
+    "exodus_0": {
+      "bitcoin": {
+        "t": "object",
+        "v": {
+          "_version": 1,
+          "balance": "22 BTC",
+          "cursor": "some-cursor",
+        },
+      },
+    },
+    "exodus_1": {
+      "bitcoin": {
+        "t": "object",
+        "v": {
+          "_version": 1,
+          "balance": "42 BTC",
+          "cursor": "the-cursor",
+        },
+      },
+    },
+  },
+  "value": {
+    "exodus_0": {
+      "bitcoin": {
+        "t": "object",
+        "v": {
+          "_version": 1,
+          "balance": "22 BTC",
+          "cursor": "some-cursor",
+        },
+      },
+    },
+    "exodus_1": {
+      "bitcoin": {
+        "t": "object",
+        "v": {
+          "_version": 1,
+          "balance": "42 BTC",
+          "cursor": "the-cursor",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`blockchain metadata module batch account states should dedupe on remove of the same asset source 1`] = `
+[
+  {
+    "changes": {
+      "exodus_0": {
+        "bitcoin": {
+          "t": "object",
+          "v": {
+            "_version": 1,
+            "balance": "0 BTC",
+            "cursor": "",
+          },
+        },
+      },
+    },
+    "value": {
+      "exodus_0": {
+        "bitcoin": {
+          "t": "object",
+          "v": {
+            "_version": 1,
+            "balance": "0 BTC",
+            "cursor": "",
+          },
+        },
+      },
+      "exodus_1": {
+        "bitcoin": {
+          "t": "object",
+          "v": {
+            "_version": 1,
+            "balance": "0 BTC",
+            "cursor": "",
+          },
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`blockchain metadata module batch account states should dedupe on update of the same asset source 1`] = `
+[
+  {
+    "changes": {
+      "exodus_0": {
+        "bitcoin": {
+          "t": "object",
+          "v": {
+            "_version": 1,
+            "balance": "42 BTC",
+            "cursor": "the-cursor",
+          },
+        },
+      },
+    },
+    "value": {
+      "exodus_0": {
+        "bitcoin": {
+          "t": "object",
+          "v": {
+            "_version": 1,
+            "balance": "42 BTC",
+            "cursor": "the-cursor",
+          },
+        },
+      },
+      "exodus_1": {
+        "bitcoin": {
+          "t": "object",
+          "v": {
+            "_version": 1,
+            "balance": "0 BTC",
+            "cursor": "",
+          },
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`blockchain metadata module batch txs should dedupe on remove of same asset source 1`] = `
+[
+  {
+    "changes": {
+      "exodus_0": {
+        "bitcoin": [],
+      },
+    },
+    "newlyReceivedTxLogs": {
+      "exodus_0": {
+        "bitcoin": [
+          {
+            "addresses": [
+              {
+                "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+                "meta": {
+                  "path": "m/0/0",
+                },
+              },
+            ],
+            "coinAmount": "0.00184082 BTC",
+            "coinName": "bitcoin",
+            "confirmations": 1,
+            "currencies": {
+              "bitcoin": {
+                "BTC": 8,
+                "bits": 2,
+                "satoshis": 0,
+              },
+            },
+            "date": "2019-07-18T12:25:52.000Z",
+            "dropped": false,
+            "feeAmount": "0.00014238 BTC",
+            "feeCoinName": "bitcoin",
+            "txId": "42958c344003c279d823ae73ea1a43f92a15c85df72619d5da524cb7e50794b7",
+            "version": 1,
+          },
+          {
+            "addresses": [
+              {
+                "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+                "meta": {
+                  "path": "m/0/0",
+                },
+              },
+            ],
+            "coinAmount": "0.007176 BTC",
+            "coinName": "bitcoin",
+            "confirmations": 1,
+            "currencies": {
+              "bitcoin": {
+                "BTC": 8,
+                "bits": 2,
+                "satoshis": 0,
+              },
+            },
+            "date": "2019-07-22T14:17:05.000Z",
+            "dropped": false,
+            "feeAmount": "0.00010272 BTC",
+            "feeCoinName": "bitcoin",
+            "txId": "6ffceda2ce2358d45ff72258d7c22d7a276b82a630a49d1c346f3602cdb5b6c0",
+            "version": 1,
+          },
+        ],
+      },
+    },
+    "value": {
+      "exodus_0": {
+        "bitcoin": [],
+        "ethereum": [],
+      },
+      "exodus_1": {
+        "bitcoin": [],
+        "ethereum": [],
+      },
+    },
+  },
+]
+`;
+
+exports[`blockchain metadata module clearTxs removes existing txs 1`] = `
+[
+  {
+    "changes": {
+      "exodus_0": {
+        "bitcoin": [],
+      },
+    },
+    "newlyReceivedTxLogs": undefined,
+    "value": {
+      "exodus_0": {
+        "bitcoin": [],
+      },
+    },
+  },
+]
+`;
+
+exports[`blockchain metadata module getLoadedAccountStates accountStatesAtom has merged state 1`] = `
+{
+  "changes": {
+    "exodus_0": {
+      "bitcoin": {
+        "t": "object",
+        "v": {
+          "_version": 1,
+          "balance": "2 BTC",
+          "cursor": "some-cursor",
+        },
+      },
+    },
+  },
+  "value": {
+    "exodus_0": {
+      "bitcoin": {
+        "t": "object",
+        "v": {
+          "_version": 1,
+          "balance": "2 BTC",
+          "cursor": "some-cursor",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`blockchain metadata module getLoadedAccountStates returns state set by updateAccountState 1`] = `
+{
+  "changes": {
+    "exodus_0": {
+      "bitcoin": {
+        "t": "object",
+        "v": {
+          "_version": 1,
+          "balance": "0 BTC",
+          "cursor": "some-cursor",
+        },
+      },
+    },
+  },
+  "value": {
+    "exodus_0": {
+      "bitcoin": {
+        "t": "object",
+        "v": {
+          "_version": 1,
+          "balance": "0 BTC",
+          "cursor": "some-cursor",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`blockchain metadata module getLoadedTxLogs returns txs not mutated by consequent \`updateTxs\` 1`] = `
+{
+  "changes": {
+    "exodus_0": {
+      "bitcoin": [
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.00184082 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:25:52.000Z",
+          "dropped": false,
+          "feeAmount": "0.00014238 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "42958c344003c279d823ae73ea1a43f92a15c85df72619d5da524cb7e50794b7",
+          "version": 1,
+        },
+        {
+          "coinAmount": "-0.00174821 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:48:15.000Z",
+          "dropped": false,
+          "feeAmount": "0.00009261 BTC",
+          "feeCoinName": "bitcoin",
+          "to": "1JXm4NRQLFY1PjvHaDHzbQrcQGge4zSKrS",
+          "txId": "e5c20d7c4c52d97a8a97950ab7254a159d15909ab807f92b5db7f039b2dc247f",
+          "version": 1,
+        },
+      ],
+    },
+  },
+  "newlyReceivedTxLogs": undefined,
+  "value": {
+    "exodus_0": {
+      "bitcoin": [
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.00184082 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:25:52.000Z",
+          "dropped": false,
+          "feeAmount": "0.00014238 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "42958c344003c279d823ae73ea1a43f92a15c85df72619d5da524cb7e50794b7",
+          "version": 1,
+        },
+        {
+          "coinAmount": "-0.00174821 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:48:15.000Z",
+          "dropped": false,
+          "feeAmount": "0.00009261 BTC",
+          "feeCoinName": "bitcoin",
+          "to": "1JXm4NRQLFY1PjvHaDHzbQrcQGge4zSKrS",
+          "txId": "e5c20d7c4c52d97a8a97950ab7254a159d15909ab807f92b5db7f039b2dc247f",
+          "version": 1,
+        },
+      ],
+      "ethereum": [],
+    },
+  },
+}
+`;
+
+exports[`blockchain metadata module getLoadedTxLogs returns txs set by updateTxs 1`] = `
+{
+  "changes": {
+    "exodus_0": {
+      "bitcoin": [
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.00184082 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:25:52.000Z",
+          "dropped": false,
+          "feeAmount": "0.00014238 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "42958c344003c279d823ae73ea1a43f92a15c85df72619d5da524cb7e50794b7",
+          "version": 1,
+        },
+      ],
+    },
+  },
+  "newlyReceivedTxLogs": {
+    "exodus_0": {
+      "bitcoin": [
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.00184082 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:25:52.000Z",
+          "dropped": false,
+          "feeAmount": "0.00014238 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "42958c344003c279d823ae73ea1a43f92a15c85df72619d5da524cb7e50794b7",
+          "version": 1,
+        },
+      ],
+    },
+  },
+  "value": {
+    "exodus_0": {
+      "bitcoin": [
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.00184082 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:25:52.000Z",
+          "dropped": false,
+          "feeAmount": "0.00014238 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "42958c344003c279d823ae73ea1a43f92a15c85df72619d5da524cb7e50794b7",
+          "version": 1,
+        },
+      ],
+      "ethereum": [],
+    },
+  },
+}
+`;
+
+exports[`blockchain metadata module getLoadedTxLogs txLogsAtom has merged state 1`] = `
+{
+  "changes": {
+    "exodus_0": {
+      "bitcoin": [
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.00184082 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:25:52.000Z",
+          "dropped": false,
+          "feeAmount": "0.00014238 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "42958c344003c279d823ae73ea1a43f92a15c85df72619d5da524cb7e50794b7",
+          "version": 1,
+        },
+        {
+          "coinAmount": "-0.00174821 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:48:15.000Z",
+          "dropped": false,
+          "feeAmount": "0.00009261 BTC",
+          "feeCoinName": "bitcoin",
+          "to": "1JXm4NRQLFY1PjvHaDHzbQrcQGge4zSKrS",
+          "txId": "e5c20d7c4c52d97a8a97950ab7254a159d15909ab807f92b5db7f039b2dc247f",
+          "version": 1,
+        },
+      ],
+    },
+  },
+  "newlyReceivedTxLogs": undefined,
+  "value": {
+    "exodus_0": {
+      "bitcoin": [
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.00184082 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:25:52.000Z",
+          "dropped": false,
+          "feeAmount": "0.00014238 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "42958c344003c279d823ae73ea1a43f92a15c85df72619d5da524cb7e50794b7",
+          "version": 1,
+        },
+        {
+          "coinAmount": "-0.00174821 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:48:15.000Z",
+          "dropped": false,
+          "feeAmount": "0.00009261 BTC",
+          "feeCoinName": "bitcoin",
+          "to": "1JXm4NRQLFY1PjvHaDHzbQrcQGge4zSKrS",
+          "txId": "e5c20d7c4c52d97a8a97950ab7254a159d15909ab807f92b5db7f039b2dc247f",
+          "version": 1,
+        },
+      ],
+      "ethereum": [],
+    },
+  },
+}
+`;
+
+exports[`blockchain metadata module overwriteTxs replaces existing txs 1`] = `
+[
+  {
+    "changes": {
+      "exodus_1": {
+        "bitcoin": [
+          {
+            "confirmations": -1,
+            "currencies": {
+              "bitcoin": {
+                "BTC": 8,
+                "bits": 2,
+                "satoshis": 0,
+              },
+            },
+            "date": "2023-07-07T00:00:00.000Z",
+            "txId": "the-new-tx-id",
+            "version": 1,
+          },
+        ],
+      },
+    },
+    "newlyReceivedTxLogs": undefined,
+    "value": {
+      "exodus_1": {
+        "bitcoin": [
+          {
+            "confirmations": -1,
+            "currencies": {
+              "bitcoin": {
+                "BTC": 8,
+                "bits": 2,
+                "satoshis": 0,
+              },
+            },
+            "date": "2023-07-07T00:00:00.000Z",
+            "txId": "the-new-tx-id",
+            "version": 1,
+          },
+        ],
+      },
+    },
+  },
+]
+`;
+
+exports[`blockchain metadata module overwriteTxs replaces existing txs with notifying about received txs 1`] = `
+[
+  {
+    "changes": {
+      "exodus_1": {
+        "bitcoin": [
+          {
+            "coinAmount": "1 BTC",
+            "coinName": "bitcoin",
+            "confirmations": -1,
+            "currencies": {
+              "bitcoin": {
+                "BTC": 8,
+                "bits": 2,
+                "satoshis": 0,
+              },
+            },
+            "date": "2023-07-07T00:00:00.000Z",
+            "txId": "the-new-tx-id",
+            "version": 1,
+          },
+        ],
+      },
+    },
+    "newlyReceivedTxLogs": {
+      "exodus_1": {
+        "bitcoin": [
+          {
+            "coinAmount": "1 BTC",
+            "coinName": "bitcoin",
+            "confirmations": -1,
+            "currencies": {
+              "bitcoin": {
+                "BTC": 8,
+                "bits": 2,
+                "satoshis": 0,
+              },
+            },
+            "date": "2023-07-07T00:00:00.000Z",
+            "txId": "the-new-tx-id",
+            "version": 1,
+          },
+        ],
+      },
+    },
+    "value": {
+      "exodus_1": {
+        "bitcoin": [
+          {
+            "coinAmount": "1 BTC",
+            "coinName": "bitcoin",
+            "confirmations": -1,
+            "currencies": {
+              "bitcoin": {
+                "BTC": 8,
+                "bits": 2,
+                "satoshis": 0,
+              },
+            },
+            "date": "2023-07-07T00:00:00.000Z",
+            "txId": "the-new-tx-id",
+            "version": 1,
+          },
+        ],
+      },
+    },
+  },
+]
+`;
+
+exports[`blockchain metadata module removeAccountState emits account-states-update event for asset source 1`] = `
+[
+  {
+    "changes": {
+      "exodus_0": {
+        "bitcoin": {
+          "t": "object",
+          "v": {
+            "_version": 1,
+            "balance": "0 BTC",
+            "cursor": "",
+          },
+        },
+      },
+    },
+    "value": {
+      "exodus_0": {
+        "bitcoin": {
+          "t": "object",
+          "v": {
+            "_version": 1,
+            "balance": "0 BTC",
+            "cursor": "",
+          },
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`blockchain metadata module updateTxs emits tx event for asset source 1`] = `
+{
+  "changes": {
+    "exodus_0": {
+      "bitcoin": [
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.00184082 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:25:52.000Z",
+          "dropped": false,
+          "feeAmount": "0.00014238 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "42958c344003c279d823ae73ea1a43f92a15c85df72619d5da524cb7e50794b7",
+          "version": 1,
+        },
+        {
+          "coinAmount": "-0.00174821 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:48:15.000Z",
+          "dropped": false,
+          "feeAmount": "0.00009261 BTC",
+          "feeCoinName": "bitcoin",
+          "to": "1JXm4NRQLFY1PjvHaDHzbQrcQGge4zSKrS",
+          "txId": "e5c20d7c4c52d97a8a97950ab7254a159d15909ab807f92b5db7f039b2dc247f",
+          "version": 1,
+        },
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.007176 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-22T14:17:05.000Z",
+          "dropped": false,
+          "feeAmount": "0.00010272 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "6ffceda2ce2358d45ff72258d7c22d7a276b82a630a49d1c346f3602cdb5b6c0",
+          "version": 1,
+        },
+        {
+          "coinAmount": "-0.00709368 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-23T11:15:33.000Z",
+          "dropped": false,
+          "feeAmount": "0.00008232 BTC",
+          "feeCoinName": "bitcoin",
+          "to": "3CSeY9MFcug7DV3GQxL3tBEz9oTVRuAKzm",
+          "txId": "fb3de1ee46c9136521c622559feed1b336f38df30cc65784f728bd18617dc06b",
+          "version": 1,
+        },
+      ],
+    },
+  },
+  "newlyReceivedTxLogs": {
+    "exodus_0": {
+      "bitcoin": [
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.00184082 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:25:52.000Z",
+          "dropped": false,
+          "feeAmount": "0.00014238 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "42958c344003c279d823ae73ea1a43f92a15c85df72619d5da524cb7e50794b7",
+          "version": 1,
+        },
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.007176 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-22T14:17:05.000Z",
+          "dropped": false,
+          "feeAmount": "0.00010272 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "6ffceda2ce2358d45ff72258d7c22d7a276b82a630a49d1c346f3602cdb5b6c0",
+          "version": 1,
+        },
+      ],
+    },
+  },
+  "value": {
+    "exodus_0": {
+      "bitcoin": [
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.00184082 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:25:52.000Z",
+          "dropped": false,
+          "feeAmount": "0.00014238 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "42958c344003c279d823ae73ea1a43f92a15c85df72619d5da524cb7e50794b7",
+          "version": 1,
+        },
+        {
+          "coinAmount": "-0.00174821 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:48:15.000Z",
+          "dropped": false,
+          "feeAmount": "0.00009261 BTC",
+          "feeCoinName": "bitcoin",
+          "to": "1JXm4NRQLFY1PjvHaDHzbQrcQGge4zSKrS",
+          "txId": "e5c20d7c4c52d97a8a97950ab7254a159d15909ab807f92b5db7f039b2dc247f",
+          "version": 1,
+        },
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.007176 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-22T14:17:05.000Z",
+          "dropped": false,
+          "feeAmount": "0.00010272 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "6ffceda2ce2358d45ff72258d7c22d7a276b82a630a49d1c346f3602cdb5b6c0",
+          "version": 1,
+        },
+        {
+          "coinAmount": "-0.00709368 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-23T11:15:33.000Z",
+          "dropped": false,
+          "feeAmount": "0.00008232 BTC",
+          "feeCoinName": "bitcoin",
+          "to": "3CSeY9MFcug7DV3GQxL3tBEz9oTVRuAKzm",
+          "txId": "fb3de1ee46c9136521c622559feed1b336f38df30cc65784f728bd18617dc06b",
+          "version": 1,
+        },
+      ],
+    },
+  },
+}
+`;

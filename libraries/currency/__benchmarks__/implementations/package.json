@@ -1,0 +1,14 @@
+{
+  "name": "@exodus/currency-benchmarks.implementations",
+  "version": "0.0.0",
+  "author": "Exodus Movement, Inc.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "postinstall": "node install-all.js",
+    "start": "yarn --cwd ../../../../ babel-node packages/currency/__benchmarks__/implementations/index.js"
+  },
+  "dependencies": {
+    "@exodus/currency": "*",
+    "xorshift.js": "^1.0.3"
+  }
+}

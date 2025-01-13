@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "OnboardingPageSkipped"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "page": {
+          "type": "string",
+          "enum": [
+            "Buy and Exchange",
+            "Buy and Swap",
+            "Collect NFTs",
+            "Crypto Made Simple",
+            "Earn Rewards",
+            "Get Help Anytime",
+            "Have an invite code?",
+            "Invite Code",
+            "More Than a Wallet",
+            "One home for all your NFTs",
+            "One home for\nall your NFTs",
+            "Secure Your Funds",
+            "The only Web3 wallet you'll ever need",
+            "The only Web3 wallet\nyou'll ever need",
+            "Trade crypto on the most popular networks",
+            "Trade crypto on the\nmost popular networks",
+            "Welcome to Exodus",
+            "Self-custody",
+            "Lost Device?",
+            "Secret Phrase",
+            "Recover Wallet",
+            "Keep It Safe",
+            "Get Started",
+            "Select Crypto",
+            "Check Details",
+            "You're Done!",
+            "Low Rates",
+            "Open Swap",
+            "Start Swap",
+            "It's Instant",
+            "Big Changes",
+            "New Look",
+            "Cheaper Swaps",
+            "Non-Custodial",
+            "Best Support in Crypto",
+            "We have your back with\n24/7 human support"
+          ]
+        },
+        "page_order": {
+          "type": "number"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "skipLibCheck": true,
+    "outDir": "./lib",
+    "noEmit": true,
+    "allowJs": true,
+    "strict": true,
+    "lib": ["esnext"],
+    "target": "es2022"
+  },
+  "include": ["src/index.ts", "__tests__/types.ts"]
+}

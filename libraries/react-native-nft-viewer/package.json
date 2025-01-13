@@ -1,0 +1,44 @@
+{
+  "name": "@exodus/react-native-nft-viewer",
+  "version": "0.5.0",
+  "description": "A webview for displaying an NFT in a safe container.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/react-native-nft-viewer.git"
+  },
+  "files": [
+    "android/src/main/AndroidManifest.xml",
+    "android/src/main/java/",
+    "android/build.gradle",
+    "ios/*.h",
+    "ios/*.m",
+    "ios/RNNFTViewer.xcodeproj/project.pbxproj",
+    "index.js",
+    "RNNFTViewer.podspec"
+  ],
+  "keywords": [
+    "react-native",
+    "react-native-component",
+    "react-native-nft-viewer",
+    "@exodus/react-native-nft-viewer",
+    "nft-viewer",
+    "nfts",
+    "nft",
+    "webview",
+    "android",
+    "ios"
+  ],
+  "author": "Exodus Movement, Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/react-native-nft-viewer/issues"
+  },
+  "homepage": "https://github.com/ExodusMovement/react-native-nft-viewer#readme",
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-native": ">=0.57.0"
+  }
+}

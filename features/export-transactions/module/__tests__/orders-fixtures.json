@@ -1,0 +1,205 @@
+[
+  {
+    "orderId": "RUGZKkCCC2WeMoJ2N9uCKCbqKLK2BWp1h3A8YAdYz3E4hGNVMVt7r7NegtPhGS4i3EvhRkNzXvM7UAXn9vdYsFc",
+    "status": "complete-verified",
+    "date": "2022-12-02T19:30:26.312Z",
+    "fromTxId": "RUGZKkCCC2WeMoJ2N9uCKCbqKLK2BWp1h3A8YAdYz3E4hGNVMVt7r7NegtPhGS4i3EvhRkNzXvM7UAXn9vdYsFc",
+    "toTxId": "RUGZKkCCC2WeMoJ2N9uCKCbqKLK2BWp1h3A8YAdYz3E4hGNVMVt7r7NegtPhGS4i3EvhRkNzXvM7UAXn9vdYsFc",
+    "txIds": [
+      {
+        "txId": "3haNTRyoeyDXNnKEN4Yu9TzEuWsBmGNRiHKqvwyUkgvSu6NKuX43vuksyHtBmFBDRGD1AzMXCUo6ocDadhsnESLR",
+        "txType": "setupTransaction"
+      },
+      {
+        "txId": "RUGZKkCCC2WeMoJ2N9uCKCbqKLK2BWp1h3A8YAdYz3E4hGNVMVt7r7NegtPhGS4i3EvhRkNzXvM7UAXn9vdYsFc",
+        "txType": "swapTransaction"
+      }
+    ],
+    "fromAsset": "raydium",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "1.823075 RAY",
+        "u": {
+          "RAY": 6,
+          "base": 0
+        }
+      }
+    },
+    "toAsset": "usdcoin_solana",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.331198 USDCSOL",
+        "u": {
+          "USDCSOL": 6,
+          "base": 0
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "jup-sol",
+    "synced": true,
+    "potentialToTxIds": [],
+    "_version": 1
+  },
+  {
+    "orderId": "3ZagJbqKzq5YZENUaFn939fz5VE8wBo4sXkCJ99hj9NGxK7aPwRzCpUdEvinbJVH5eyyw6aCRXXG28GJFPUjdLSK",
+    "status": "complete-verified",
+    "date": "2022-11-25T18:59:33.565Z",
+    "fromTxId": "3ZagJbqKzq5YZENUaFn939fz5VE8wBo4sXkCJ99hj9NGxK7aPwRzCpUdEvinbJVH5eyyw6aCRXXG28GJFPUjdLSK",
+    "toTxId": "3ZagJbqKzq5YZENUaFn939fz5VE8wBo4sXkCJ99hj9NGxK7aPwRzCpUdEvinbJVH5eyyw6aCRXXG28GJFPUjdLSK",
+    "txIds": [
+      {
+        "txId": "5vKaJG21c6f7eASsWKVhaR2fufJgGpuhivpj1N7QWfEYyvyh3Fg7YfHLCD7Kz1kRtGieL5uAp5KcBkkfogp7JNJL",
+        "txType": "setupTransaction"
+      },
+      {
+        "txId": "3ZagJbqKzq5YZENUaFn939fz5VE8wBo4sXkCJ99hj9NGxK7aPwRzCpUdEvinbJVH5eyyw6aCRXXG28GJFPUjdLSK",
+        "txType": "swapTransaction"
+      },
+      {
+        "txId": "2551d8rPcgMSKsDQ2BvFRnYNh3BemEXYW55ZLvVeSuSbLVjsgoTtDWR9GgZT3eTtvqAr2Z8CB92FKzPUUPKs7Vph",
+        "txType": "cleanupTransaction"
+      }
+    ],
+    "fromAsset": "solana",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.072 SOL",
+        "u": {
+          "Lamports": 0,
+          "SOL": 9
+        }
+      }
+    },
+    "toAsset": "usdcoin_solana",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "1.010956 USDCSOL",
+        "u": {
+          "USDCSOL": 6,
+          "base": 0
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "jup-sol",
+    "synced": true,
+    "potentialToTxIds": [],
+    "_version": 1
+  },
+  {
+    "orderId": "2DpWgonfZgQjRz6hfHWwTgV63FBQaF4mUy6RmtUKoLpstUMDMqRMb3pwXRJGJJPcV8cXFBCgbuiYSfsZGJGYvYLD",
+    "status": "complete-verified",
+    "date": "2022-09-05T12:48:08.470Z",
+    "fromTxId": "2DpWgonfZgQjRz6hfHWwTgV63FBQaF4mUy6RmtUKoLpstUMDMqRMb3pwXRJGJJPcV8cXFBCgbuiYSfsZGJGYvYLD",
+    "toTxId": "2DpWgonfZgQjRz6hfHWwTgV63FBQaF4mUy6RmtUKoLpstUMDMqRMb3pwXRJGJJPcV8cXFBCgbuiYSfsZGJGYvYLD",
+    "txIds": [
+      {
+        "txId": "2QszfhGwpS5pmJRH7uBdvQ83sz3BkxnPhLBQChvFYc3yPv3JMTGqB5AqBQQ7dZyW7YvaKVyV51S2AT4TPTtYWn4u",
+        "txType": "setupTransaction"
+      },
+      {
+        "txId": "2DpWgonfZgQjRz6hfHWwTgV63FBQaF4mUy6RmtUKoLpstUMDMqRMb3pwXRJGJJPcV8cXFBCgbuiYSfsZGJGYvYLD",
+        "txType": "swapTransaction"
+      }
+    ],
+    "fromAsset": "serum",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.670595 SRM",
+        "u": {
+          "SRM": 6,
+          "base": 0
+        }
+      }
+    },
+    "toAsset": "raydium",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.804457 RAY",
+        "u": {
+          "RAY": 6,
+          "base": 0
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "jup-sol",
+    "synced": true,
+    "potentialToTxIds": [],
+    "_version": 1
+  },
+  {
+    "orderId": "pi2xv6mtnnjp5izd",
+    "status": "complete-verified",
+    "date": "2023-01-17T17:19:23.119Z",
+    "fromTxId": "c047f99ad171730b94a61c979ffef92b1b93deab5a4aac0cf104e66424d38406",
+    "toTxId": "3WDD672f7ZSE1K8ECcs2mWCA85t5N1KenHxJph7k1NG8jbzhzgmQeMoE27Vm8w3yAdCHX8gpD9nRxV5xiZvY3dAF",
+    "txIds": [
+      {
+        "txId": "c047f99ad171730b94a61c979ffef92b1b93deab5a4aac0cf104e66424d38406",
+        "txType": "depositTransaction"
+      },
+      {
+        "txId": "3WDD672f7ZSE1K8ECcs2mWCA85t5N1KenHxJph7k1NG8jbzhzgmQeMoE27Vm8w3yAdCHX8gpD9nRxV5xiZvY3dAF",
+        "txType": "payoutTransaction"
+      }
+    ],
+    "fromAsset": "bitcoin",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.0026765 BTC",
+        "u": {
+          "BTC": 8,
+          "bits": 2,
+          "satoshis": 0
+        }
+      }
+    },
+    "toAsset": "solana",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "2.38880897 SOL",
+        "u": {
+          "Lamports": 0,
+          "SOL": 9
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "cic",
+    "svcOptions": {
+      "statusRequestParams": {
+        "headers": {
+          "api-key": "8a073821f10d40fe8cadfa4977787bd8"
+        },
+        "message": {
+          "id": "pi2xv6mtnnjp5izd",
+          "jsonrpc": "2.0",
+          "method": "getTransactions",
+          "params": {
+            "id": "pi2xv6mtnnjp5izd"
+          }
+        },
+        "signature": "874610cc6710204b34002b3ef2d6ffec41ac022de22e87da1385729b4de0b34ee5d5fcc78dbf06a6c5ed55d2571889502136d6d7d1836c6642128dda68c037ac"
+      }
+    },
+    "synced": true,
+    "region": "INTL",
+    "displaySvc": "cic",
+    "potentialToTxIds": [],
+    "_version": 1
+  }
+]

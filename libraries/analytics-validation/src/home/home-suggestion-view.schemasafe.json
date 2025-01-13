@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "HomeSuggestionView"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "suggestion_group": {
+          "type": "string",
+          "enum": ["backup", "buy_crypto", "exchange", "new_exodus"]
+        },
+        "suggestion_page": {
+          "type": "string",
+          "enum": [
+            "Best Support in Crypto",
+            "Big Changes",
+            "Cheaper Exchanges",
+            "Cheaper Swaps",
+            "Check Details",
+            "Get Started",
+            "It's Instant",
+            "Keep It Safe",
+            "Lost Device?",
+            "Low Rates",
+            "New Look",
+            "Non-Custodial",
+            "Open Exchange",
+            "Open Swap",
+            "Recover Wallet",
+            "Secret Phrase",
+            "Select Crypto",
+            "Self-custody",
+            "Start Exchange",
+            "Start Swap",
+            "You're Done!"
+          ]
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

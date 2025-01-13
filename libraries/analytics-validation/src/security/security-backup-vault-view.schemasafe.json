@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "SecurityBackupVaultView"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "screen_type": {
+          "type": "string",
+          "enum": [
+            "no-backup",
+            "user-consent-modal",
+            "confirm-email",
+            "creating-backup",
+            "backup-created",
+            "backup-created2",
+            "backup-error",
+            "backup-restart"
+          ]
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

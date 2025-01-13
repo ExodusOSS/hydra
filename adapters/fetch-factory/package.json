@@ -1,0 +1,29 @@
+{
+  "name": "@exodus/fetch-factory",
+  "version": "2.2.2",
+  "description": "Factory to create fetch instances with custom headers and options",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/adapters/fetch-factory",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afetch-factory"
+  },
+  "main": "src/index.js",
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest --esbuild"
+  },
+  "devDependencies": {
+    "headers-polyfill": "^4.0.1"
+  }
+}

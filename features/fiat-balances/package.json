@@ -1,0 +1,64 @@
+{
+  "name": "@exodus/fiat-balances",
+  "version": "12.5.1",
+  "description": "Track asset and portfolio fiat balances based on changes in crypto balances and the user's preferred fiat currency",
+  "author": "Exodus Movement, Inc.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "test": "run -T exodus-test --jest --esbuild",
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "format": "run -T prettier --write \"**/*.{json,md,yaml}\" --log-level warn",
+    "format:check": "run -T prettier --check \"**/*.{json,md,yaml}\" --log-level warn"
+  },
+  "main": "index.js",
+  "files": [
+    "module",
+    "redux",
+    "atoms",
+    "plugin",
+    "report",
+    "shared",
+    "README.md",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/fiat-balances",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afiat-balances"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^9.0.0",
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/currency": "^5.0.2",
+    "@exodus/fiat-currencies": "^1.1.0",
+    "@exodus/formatting": "^9.0.0",
+    "lodash": "^4.17.21",
+    "minimalistic-assert": "^1.0.1",
+    "reselect": "^3.0.1"
+  },
+  "devDependencies": {
+    "@exodus/assets": "^9.1.0",
+    "@exodus/assets-base": "^8.1.17",
+    "@exodus/assets-feature": "workspace:^",
+    "@exodus/available-assets": "workspace:^",
+    "@exodus/balances": "workspace:^",
+    "@exodus/blockchain-metadata": "workspace:^",
+    "@exodus/combined-assets-meta": "^1.3.0",
+    "@exodus/enabled-assets": "workspace:^",
+    "@exodus/favorite-assets": "workspace:^",
+    "@exodus/fee-data-monitors": "workspace:^",
+    "@exodus/models": "workspace:^",
+    "@exodus/rates-monitor": "workspace:^",
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "@exodus/solana-meta": "^1.0.4",
+    "@exodus/storage-memory": "workspace:^",
+    "@exodus/wallet-accounts": "workspace:^",
+    "events": "^3.3.0",
+    "redux": "^4.2.1"
+  }
+}

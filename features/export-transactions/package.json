@@ -1,0 +1,42 @@
+{
+  "name": "@exodus/export-transactions",
+  "version": "2.0.1",
+  "description": "Library that helps to export transactions with any associated metadata, such as orders and personal notes.",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/export-transactions",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aexport-transactions"
+  },
+  "main": "index.js",
+  "files": [
+    "api",
+    "module",
+    "README.md",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
+  ],
+  "scripts": {
+    "lint": "run -T eslint . --ignore-path ../../.gitignore",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest --esbuild"
+  },
+  "dependencies": {
+    "@exodus/module": "^1.1.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@exodus/assets": "^8.0.88",
+    "@exodus/assets-base": "^8.1.6",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "^2.0.0",
+    "@exodus/blockchain-metadata": "^15.3.5",
+    "@exodus/models": "^8.10.4",
+    "@exodus/storage-memory": "workspace:^",
+    "events": "^3.3.0"
+  }
+}

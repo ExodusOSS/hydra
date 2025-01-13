@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {}
+  },
+  "exclude": ["./**/*.spec.ts", "./**/*.test.ts", "lib", "redux/__tests__/**"]
+}

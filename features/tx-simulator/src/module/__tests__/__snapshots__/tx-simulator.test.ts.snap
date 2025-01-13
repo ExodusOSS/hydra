@@ -1,0 +1,151 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tx-simulator should simulate a solana transaction 1`] = `
+{
+  "advancedDetails": [
+    {
+      "instructions": [
+        {
+          "formattedValue": "Comp..1111",
+          "name": "Program Id",
+          "value": "ComputeBudget111111111111111111111111111111",
+        },
+        {
+          "formattedValue": "AsBcFQA=",
+          "name": "Raw Data",
+          "value": "AsBcFQA=",
+        },
+      ],
+      "title": "Unknown",
+    },
+    {
+      "instructions": [
+        {
+          "formattedValue": "Comp..1111",
+          "name": "Program Id",
+          "value": "ComputeBudget111111111111111111111111111111",
+        },
+        {
+          "formattedValue": "AwQXAQAAAAAA",
+          "name": "Raw Data",
+          "value": "AwQXAQAAAAAA",
+        },
+      ],
+      "title": "Unknown",
+    },
+    {
+      "instructions": [
+        {
+          "formattedValue": "ATok..8knL",
+          "name": "Program Id",
+          "value": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
+        },
+      ],
+      "title": "Create Token Account",
+    },
+    {
+      "instructions": [
+        {
+          "formattedValue": "8cBx..8Yws",
+          "name": "From Public Key",
+          "value": "8cBxsCL2q2jMXqHweMaHmP7v2RbB4WG5buTXmjXa8Yws",
+        },
+        {
+          "formattedValue": "BWNe..9CSR",
+          "name": "To Public Key",
+          "value": "BWNevwu92XRSD3c9DBhZrq9JFMUGcN9nm1dmKxY19CSR",
+        },
+        {
+          "formattedValue": "0.1048 SOL",
+          "name": "Amount",
+          "value": "0.1048 SOL",
+        },
+      ],
+      "title": "Transfer SOL",
+    },
+    {
+      "instructions": [
+        {
+          "formattedValue": "BWNe..9CSR",
+          "name": "Public Key",
+          "value": "BWNevwu92XRSD3c9DBhZrq9JFMUGcN9nm1dmKxY19CSR",
+        },
+      ],
+      "title": "Create Sync Native Account",
+    },
+    {
+      "instructions": [
+        {
+          "formattedValue": "JUP6..TaV4",
+          "name": "Program Id",
+          "value": "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
+        },
+        {
+          "formattedValue": "wSCb..VQ==",
+          "name": "Raw Data",
+          "value": "wSCbM0HWnIEEAQAAABwAZAABSkQ/BgAAAADXG6/dFgAAAMgAVQ==",
+        },
+      ],
+      "title": "Unknown",
+    },
+    {
+      "instructions": [
+        {
+          "formattedValue": "BWNe..9CSR",
+          "name": "Source Public Key",
+          "value": "BWNevwu92XRSD3c9DBhZrq9JFMUGcN9nm1dmKxY19CSR",
+        },
+        {
+          "formattedValue": "8cBx..8Yws",
+          "name": "Destination Public Key",
+          "value": "8cBxsCL2q2jMXqHweMaHmP7v2RbB4WG5buTXmjXa8Yws",
+        },
+        {
+          "formattedValue": "8cBx..8Yws",
+          "name": "Owner Public Key",
+          "value": "8cBxsCL2q2jMXqHweMaHmP7v2RbB4WG5buTXmjXa8Yws",
+        },
+      ],
+      "title": "Close Account",
+    },
+  ],
+  "balanceChanges": {
+    "willApprove": [],
+    "willPayFee": [
+      {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "SOL",
+          "unitType": "SOL",
+          "value": "5000",
+        },
+      },
+    ],
+    "willReceive": [
+      {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "base",
+          "unitType": "Bonk",
+          "value": "100934700000",
+        },
+      },
+    ],
+    "willSend": [
+      {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "base",
+          "unitType": "SOL",
+          "value": "104809546",
+        },
+      },
+    ],
+  },
+  "baseAssetName": "solana",
+  "displayDetails": {
+    "warnings": [],
+  },
+  "transactions": [],
+}
+`;

@@ -1,0 +1,656 @@
+[
+  {
+    "orderId": "3ii8id85002zh62npv",
+    "status": "complete-verified",
+    "date": "2022-07-21T07:45:37.223Z",
+    "fromTxId": "0x85cb626fb97e9341d72fc58714b1fe4f593e3baf6d5ab5b3aa42102fb7b3d6f9",
+    "toTxId": "QEPB3LKNV34LXSWF3D2DVDN3PPHLH3QIEOHGQKDMUJUXUTXNFE4Q",
+    "fromAsset": "ethereum",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.07630936966690594 ETH",
+        "u": {
+          "wei": 0,
+          "Kwei": 3,
+          "Mwei": 6,
+          "Gwei": 9,
+          "szabo": 12,
+          "finney": 15,
+          "ETH": 18
+        }
+      }
+    },
+    "toAsset": "algorand",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "325.795661 ALGO",
+        "u": {
+          "microAlgo": 0,
+          "ALGO": 6
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "aero",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "dyh7nu3ju7ra476eqo",
+    "status": "complete-verified",
+    "date": "2022-07-11T11:44:55.057Z",
+    "fromTxId": "58ZnXCjN6yT2HEQPLvywYBBEWRKfXcwJSkBUHYmSghDP6Hb8AAHENdqng1tbwzTg4UQW8YAVaQWfwKUhHTPyMzKQ",
+    "toTxId": "4pppRGV56n9tFQaPhVBDWT2oi81CzCr4okWAE7VoFve6B8SWTjgXdh3PV3DNBWZt1ro1cu6yRDF6X867XaMV4Zei",
+    "fromAsset": "7i5k_solana_c9e04412",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "49.035 7I5KsolanaC9E04412",
+        "u": {
+          "base": 0,
+          "7I5KsolanaC9E04412": 9
+        }
+      }
+    },
+    "toAsset": "solana",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "1.171628712 SOL",
+        "u": {
+          "Lamports": 0,
+          "SOL": 9
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "he",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "p0nqjvsnzknzab31",
+    "status": "complete-verified",
+    "date": "2022-06-30T21:42:26.992Z",
+    "fromTxId": "0.0.270776-1656625333-971000000",
+    "toTxId": "aaed0bea2cfe98394df59c4a3423d471b7c63e63258c43a72ff7b6221bd79af7",
+    "fromAsset": "hedera",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "302.4 HBAR",
+        "u": {
+          "tinybar": 0,
+          "HBAR": 8
+        }
+      }
+    },
+    "toAsset": "eosio",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "19.9923 EOS",
+        "u": {
+          "larimer": 0,
+          "EOS": 4
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "chf",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "2hp6fz74yldz3bhk",
+    "status": "complete-verified",
+    "date": "2022-06-20T17:40:27.138Z",
+    "fromTxId": "0.0.270776-1655746814-139000000",
+    "toTxId": "35f9bc3b000bb8cfeb103e53b4322d13ec4507f459ee70a92d16565963095e0f",
+    "fromAsset": "hedera",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "277.2 HBAR",
+        "u": {
+          "tinybar": 0,
+          "HBAR": 8
+        }
+      }
+    },
+    "toAsset": "eosio",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "19.8512 EOS",
+        "u": {
+          "larimer": 0,
+          "EOS": 4
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "chf",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "uhf67xchv9n2vij5",
+    "status": "failed-final",
+    "date": "2022-06-14T23:30:10.674Z",
+    "fromTxId": "21e4efb603afbdff210c36bf7a2455fd6257fe7321086e91b6820c3522ec4a0b",
+    "toTxId": "7a01b18d6c69d6c8334de445b8795c34b9955fffd3f96a45304962ce50c50aee",
+    "fromAsset": "monero",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.1596 XMR",
+        "u": {
+          "atomic": 0,
+          "XMR": 12
+        }
+      }
+    },
+    "toAsset": "eosio",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "19.3163 EOS",
+        "u": {
+          "larimer": 0,
+          "EOS": 4
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "chf",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "0uhsnpjn50phm7w6",
+    "status": "failed-final",
+    "date": "2022-06-14T16:04:14.069Z",
+    "fromTxId": "9ed9ec73a48ef92b71d6d19ece6d2d7c5e8cb87f282549d365d7f87d565fb0c0",
+    "toTxId": "5ec2d8d247b787606f19ef5346c3f25ae96398391c994d4bcb77cae5a56e2fd6",
+    "fromAsset": "monero",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.1512 XMR",
+        "u": {
+          "atomic": 0,
+          "XMR": 12
+        }
+      }
+    },
+    "toAsset": "eosio",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "19.1648 EOS",
+        "u": {
+          "larimer": 0,
+          "EOS": 4
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "chf",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "gdg47zsjclr63hik",
+    "status": "failed-final",
+    "date": "2022-06-14T15:38:46.263Z",
+    "fromTxId": "77276be6430b82bcc5183c56f23ba192c99e762927aa32e8ef17e3328f9fbe88",
+    "toTxId": "0.0.50571-1655221355-392832994",
+    "fromAsset": "monero",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.5544 XMR",
+        "u": {
+          "atomic": 0,
+          "XMR": 12
+        }
+      }
+    },
+    "toAsset": "hedera",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "990.78798 HBAR",
+        "u": {
+          "tinybar": 0,
+          "HBAR": 8
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "cic",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "OXUXNF",
+    "status": "failed-final",
+    "date": "2022-06-01T05:23:03.997Z",
+    "fromTxId": "94428dfb9067d1f19a358b38d36770322df1fdf3e25b59e598df504e5f4cdd74",
+    "toTxId": "0x326ccd16d71defb0142ae31aeea1bbcc4b10da55bca2a591f33f6fae058c229b",
+    "fromAsset": "monero",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.37485 XMR",
+        "u": {
+          "atomic": 0,
+          "XMR": 12
+        }
+      }
+    },
+    "toAsset": "ethereum",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.036920596029949239 ETH",
+        "u": {
+          "wei": 0,
+          "Kwei": 3,
+          "Mwei": 6,
+          "Gwei": 9,
+          "szabo": 12,
+          "finney": 15,
+          "ETH": 18
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "ne",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "44qyopw3fhjr7ynx",
+    "status": "complete-verified",
+    "date": "2022-05-23T08:29:17.789Z",
+    "fromTxId": "49FF368C8E26ECAB1D75A042208B5E6BE884ECE4A2FE44A90D92FA3870DC312C",
+    "toTxId": "BwoK9AD2HKetVmdg9sdfRXnewYiN2NpTYwZZrVfcaxZ7o6fyPkTcq62YUXG2hM7dXMK55qJYhmq3SWypRdr4o19",
+    "fromAsset": "cosmos",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "8.18003 ATOM",
+        "u": {
+          "uatom": 0,
+          "ATOM": 6
+        }
+      }
+    },
+    "toAsset": "solana",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "1.75927974 SOL",
+        "u": {
+          "Lamports": 0,
+          "SOL": 9
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "cic",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "i5nv7cgzpf2wa7lm5x",
+    "status": "complete-verified",
+    "date": "2022-05-13T21:02:45.162Z",
+    "fromTxId": "PC4WUUTIIFXX5TNFGLJVYOSC5UX7FO5CBD23JRVDMQZ5IDYWFVYA",
+    "toTxId": "3Fn8TQy5fcdiBqbtMPj5LgH6K6cfWy758FrWYYqGKHjmM9Yyc77HMDKdVKyMaKXXz7BhwwHmm6GL2rKPajHvDYsf",
+    "fromAsset": "algorand",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "248.554014 ALGO",
+        "u": {
+          "microAlgo": 0,
+          "ALGO": 6
+        }
+      }
+    },
+    "toAsset": "7i5k_solana_c9e04412",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "69.692349374 7I5KsolanaC9E04412",
+        "u": {
+          "base": 0,
+          "7I5KsolanaC9E04412": 9
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "aero",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "9884r9pg1x10ft6qas",
+    "status": "complete-verified",
+    "date": "2022-05-12T13:13:04.413Z",
+    "fromTxId": "d6474fabeb3bf1af8897502dc7f7fccc6d9ecbeaa5c579a3bdcf656665119820",
+    "toTxId": "QJO2NTHXYYPJJYCHULNNW5G5E3RPET5GIGSOEWVIZU4DTHKYVL3Q",
+    "fromAsset": "tronmainnet",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "1463.7 TRX",
+        "u": {
+          "sun": 0,
+          "TRX": 6
+        }
+      }
+    },
+    "toAsset": "algorand",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "249.555404 ALGO",
+        "u": {
+          "microAlgo": 0,
+          "ALGO": 6
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "aero",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "osv3hulzqbuhq0ydou",
+    "status": "complete-verified",
+    "date": "2022-05-09T11:22:50.457Z",
+    "fromTxId": "VIXVW6DHWDQZXQGLFGMLULZUEBBG25IU3JBA6WG5MC734E3GAG6Q",
+    "toTxId": "0x89bc88e959c691645ac9bb203cc292132745677a954e1002293bb1f521def9c6",
+    "fromAsset": "algorand",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "321.60888 ALGO",
+        "u": {
+          "microAlgo": 0,
+          "ALGO": 6
+        }
+      }
+    },
+    "toAsset": "ethereum",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.08640488047736844 ETH",
+        "u": {
+          "wei": 0,
+          "Kwei": 3,
+          "Mwei": 6,
+          "Gwei": 9,
+          "szabo": 12,
+          "finney": 15,
+          "ETH": 18
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "aero",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "y8ntrhisz1cbdei2",
+    "status": "complete-verified",
+    "date": "2022-05-08T15:05:12.475Z",
+    "fromTxId": "ccf5de933bf1fe9ab3654eab0a5d65647c784a4748eafe44b4ec343edf976c8b",
+    "toTxId": "0x932d27b23ee272870e4785a73d44104d531756437d5487acaf4a5d028fc624c2",
+    "fromAsset": "bitcoin",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.00793218 BTC",
+        "u": {
+          "satoshis": 0,
+          "bits": 2,
+          "BTC": 8
+        }
+      }
+    },
+    "toAsset": "ethereum",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.1055337 ETH",
+        "u": {
+          "wei": 0,
+          "Kwei": 3,
+          "Mwei": 6,
+          "Gwei": 9,
+          "szabo": 12,
+          "finney": 15,
+          "ETH": 18
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "cic",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "418139b9-5b08-3d6d-bbe3-36caf4eece10",
+    "status": "complete-verified",
+    "date": "2022-05-08T14:36:10.462Z",
+    "fromTxId": "655506c1f216198f844b4964d59514e4c2e28b6c6854d4fedd757965bffdd51f",
+    "toTxId": "ec3d0253f2f299329003ce91e875565112a1146a30dbf3f7de9b548265cac82f",
+    "fromAsset": "litecoin",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "1.31255527 LTC",
+        "u": {
+          "latoshis": 0,
+          "LTC": 8
+        }
+      }
+    },
+    "toAsset": "bitcoin",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.00344788 BTC",
+        "u": {
+          "satoshis": 0,
+          "bits": 2,
+          "BTC": 8
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "sw",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "2c025a25-4f38-3f8b-9ae8-d7de5f1d1a01",
+    "status": "complete-verified",
+    "date": "2022-05-06T16:26:30.216Z",
+    "fromTxId": "TQB6BLDA6T4UWZH7PFYGZ7XGB6F4KCI7AINEVVRU5QWYQ5HXFXPA",
+    "toTxId": "opWbrVciBWQFH9Fhux9TkciVmftcWiAUm5eXC7NHaPHVYt8nASu",
+    "fromAsset": "algorand",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "359.99574 ALGO",
+        "u": {
+          "microAlgo": 0,
+          "ALGO": 6
+        }
+      }
+    },
+    "toAsset": "tezos",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "95.220387 XTZ",
+        "u": {
+          "mutez": 0,
+          "XTZ": 6
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "sw",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "83379627-5d1b-3de7-bd8a-151907eb42c4",
+    "status": "complete-verified",
+    "date": "2022-05-06T15:40:20.597Z",
+    "fromTxId": "0xf74ad981fac7bcb9f9b699bb04cb3f3c630985f61155a939d45b190839817812",
+    "toTxId": "1d25d37912f8cfa4fdcf868065cd928dde5def6d031d584e862e839697ec4565",
+    "fromAsset": "ethereum",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.03864647 ETH",
+        "u": {
+          "wei": 0,
+          "Kwei": 3,
+          "Mwei": 6,
+          "Gwei": 9,
+          "szabo": 12,
+          "finney": 15,
+          "ETH": 18
+        }
+      }
+    },
+    "toAsset": "bitcoin",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.00279735 BTC",
+        "u": {
+          "satoshis": 0,
+          "bits": 2,
+          "BTC": 8
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "sw",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "d4fce431786310",
+    "status": "complete-verified",
+    "date": "2022-05-06T14:49:32.359Z",
+    "fromTxId": "0x7c931647823fbadc7df51454015177cf7d663c413b7324fc2fed7e0d6d69e18e",
+    "toTxId": "42cb7646aa187d4243c61f686e4e321dfe7c669c18d52baf36178b6801258878",
+    "fromAsset": "avalanchec",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "1.68265805 AVAXC",
+        "u": {
+          "wei": 0,
+          "Kwei": 3,
+          "Mwei": 6,
+          "Gwei": 9,
+          "nAVAX": 9,
+          "szabo": 12,
+          "finney": 15,
+          "AVAXC": 18
+        }
+      }
+    },
+    "toAsset": "bitcoin",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.00252857 BTC",
+        "u": {
+          "satoshis": 0,
+          "bits": 2,
+          "BTC": 8
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "cn",
+    "synced": true,
+    "_version": 1
+  },
+  {
+    "orderId": "4f6c35fb9837cf",
+    "status": "complete-verified",
+    "date": "2022-05-06T14:29:52.617Z",
+    "fromTxId": "8e25c9981f358c235b21e45dce1706386d820dbe5f6acfb72cc1539d417bbced",
+    "toTxId": "0x4eaf077aedbd34e9dabd8eac68de2e067a11bf407a1de1c954b299cce30832a0",
+    "fromAsset": "bitcoin",
+    "fromAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "0.00262679 BTC",
+        "u": {
+          "satoshis": 0,
+          "bits": 2,
+          "BTC": 8
+        }
+      }
+    },
+    "toAsset": "avalanchec",
+    "toAmount": {
+      "t": "numberunit",
+      "v": {
+        "v": "1.60591023 AVAXC",
+        "u": {
+          "wei": 0,
+          "Kwei": 3,
+          "Mwei": 6,
+          "Gwei": 9,
+          "nAVAX": 9,
+          "szabo": 12,
+          "finney": 15,
+          "AVAXC": 18
+        }
+      }
+    },
+    "fromWalletAccount": "exodus_0",
+    "toWalletAccount": "exodus_0",
+    "svc": "cn",
+    "synced": true,
+    "_version": 1
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "name": "@exodus/timer",
+  "version": "1.1.2",
+  "author": "Exodus Movement Inc",
+  "description": "Timer that allows you to schedule tasks at fixed intervals",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-core.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-core/tree/master/packages/timer",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-core/issues?q=is%3Aissue+is%3Aopen+label%3Atimer"
+  },
+  "type": "module",
+  "main": "src/index.js",
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "test": "run -T exodus-test --jest",
+    "lint": "run -T eslint . --ignore-path ../../.gitignore",
+    "lint:fix": "yarn lint --fix"
+  }
+}

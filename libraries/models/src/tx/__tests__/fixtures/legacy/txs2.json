@@ -1,0 +1,59 @@
+[
+  {
+    "txId": "4df2293c3d59fddc4908e655ecdea0031bb5b51455de30d93604bf86d6d8316d",
+    "confirmations": 1,
+    "coinAmount": {
+      "value": "-0.01133303",
+      "unit": "BTC",
+      "unitType": "currency/crypto-currency/bitcoin",
+      "type": "NumberUnit"
+    },
+    "feeAmount": {
+      "value": "0.0002034",
+      "unit": "BTC",
+      "unitType": "currency/crypto-currency/bitcoin",
+      "type": "NumberUnit"
+    },
+    "to": "1PGj1JyzTWbjoy3EQhKsM4A8m7gVvPVaw9",
+    "date": "2016-11-23T03:56:30.606Z",
+    "coinName": "bitcoin"
+  },
+  {
+    "exchange": true,
+    "txId": "bd1e58968997fadf2a8b47af1f0105067aa02153352d1df25061cf30c311aeeb",
+    "confirmations": 0,
+    "coinAmount": {
+      "value": "-0.05",
+      "unit": "BTC",
+      "unitType": "currency/crypto-currency/bitcoin",
+      "type": "NumberUnit"
+    },
+    "date": "2016-11-29T04:56:26.200Z",
+    "coinName": "bitcoin"
+  },
+  {
+    "exchange": true,
+    "txId": "e7e699ce958c603b368807f4095f4f5b409e9c2b1139109ec997e1c6da5c6769",
+    "confirmations": 0,
+    "coinAmount": {
+      "value": "0.00075027",
+      "unit": "BTC",
+      "unitType": "currency/crypto-currency/bitcoin",
+      "type": "NumberUnit"
+    },
+    "date": "2016-11-29T05:02:19.750Z",
+    "coinName": "bitcoin"
+  },
+  {
+    "txId": "90666373b49cb838b336b9c25e3d0e0c7b8fff1bcabcd173b3115bd0b24de247",
+    "confirmations": 0,
+    "coinAmount": {
+      "value": "0.001",
+      "unit": "BTC",
+      "unitType": "currency/crypto-currency/bitcoin",
+      "type": "NumberUnit"
+    },
+    "date": "2016-11-29T05:13:59.697Z",
+    "coinName": "bitcoin"
+  }
+]

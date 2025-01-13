@@ -1,0 +1,80 @@
+[
+  {
+    "txId": "4df2293c3d59fddc4908e655ecdea0031bb5b51455de30d93604bf86d6d8316d",
+    "confirmations": 1,
+    "coinAmount": "-0.01133303 BTC",
+    "feeAmount": "0.0002034 BTC",
+    "to": "1PGj1JyzTWbjoy3EQhKsM4A8m7gVvPVaw9",
+    "date": "2016-11-23T03:56:30.606Z",
+    "coinName": "bitcoin"
+  },
+  {
+    "txId": "bd1e58968997fadf2a8b47af1f0105067aa02153352d1df25061cf30c311aeeb",
+    "confirmations": 0,
+    "coinAmount": "-0.05 BTC",
+    "date": "2016-11-29T04:56:26.200Z",
+    "coinName": "bitcoin"
+  },
+  {
+    "txId": "e7e699ce958c603b368807f4095f4f5b409e9c2b1139109ec997e1c6da5c6769",
+    "confirmations": 0,
+    "coinAmount": "0.00075027 BTC",
+    "date": "2016-11-29T05:02:19.750Z",
+    "coinName": "bitcoin"
+  },
+  {
+    "txId": "90666373b49cb838b336b9c25e3d0e0c7b8fff1bcabcd173b3115bd0b24de247",
+    "confirmations": 0,
+    "coinAmount": "0.001 BTC",
+    "date": "2016-11-29T05:13:59.697Z",
+    "coinName": "bitcoin"
+  },
+  {
+    "txId": "5df2293c3d59fddc4908e655ecdea0031bb5b51455de30d93604bf86d6d8316d",
+    "confirmations": 0,
+    "coinAmount": "-0.02133303 BTC",
+    "feeAmount": "0.0004034 BTC",
+    "to": "1PGj1JyzTWbjoy3EQhKsM4A8m7gVvPVaw9",
+    "date": "2016-12-23T03:56:30.606Z",
+    "coinName": "bitcoin",
+    "addresses": [
+      {
+        "address": "1GtP6HLL9oKPwpH3acy44YCTovzLb56x6L",
+        "meta": {
+          "path": "m/0/0"
+        }
+      },
+      {
+        "address": "1AnzK5NiQ5bZsvBzRNXHgbMSEUvQhtuMCQ",
+        "meta": {
+          "__comment": "not the actual path",
+          "path": "m/0/4"
+        }
+      }
+    ]
+  },
+  {
+    "txId": "7D2E9C06BBDF2D198F1F71729800E9AC20BADFD97A875353A96A855F277A6646",
+    "confirmations": 1,
+    "coinAmount": "1 NANO",
+    "feeAmount": "0 NANO",
+    "from": ["xrb_1jf76jbbmz8swncquc918gbe4csw8mx59kuayckg96d6wwepbjnnoq1pujci"],
+    "date": "2019-07-14T09:54:20.097Z",
+    "coinName": "nano"
+  },
+  {
+    "txId": "974884baa4639c46109cc3c8e348c3fd5d5e9f6c3f12583dcb5de7445fed1f35",
+    "confirmations": 1,
+    "coinAmount": "0.000568777787 XMR",
+    "feeAmount": "0.0016049 XMR",
+    "selfSend": true,
+    "date": "2019-07-14T09:54:20.097Z",
+    "coinName": "monero",
+    "meta": {
+      "blockHeight": 1871784,
+      "isSend": true,
+      "paymentId": null,
+      "txKey": "4f25ca1cfdc2496cdb4de20984fe0171a1f04f45d5d2bb241130c3c3f573420b"
+    }
+  }
+]

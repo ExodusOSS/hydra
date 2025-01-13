@@ -1,0 +1,53 @@
+{
+  "name": "@exodus/bip322-js",
+  "version": "2.0.0",
+  "description": "A Javascript library that provides utility functions related to the BIP-322 signature scheme",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc --build tsconfig.build.json",
+    "lint": "run -T eslint",
+    "lint:fix": "run -T lint --fix",
+    "doc": "typedoc src/index.ts",
+    "prepack": "npm run build",
+    "test": "run -T exodus-test --jest --esbuild",
+    "prepublishOnly": "yarn run -T build --scope @exodus/bip322-js"
+  },
+  "keywords": [
+    "bip322",
+    "bitcoinjs",
+    "javascript",
+    "typescript",
+    "no-WASM"
+  ],
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@exodus/bitcoinerlab-secp256k1": "^1.0.5-exodus.1",
+    "@exodus/secp256k1": "^4.0.2-exodus.0",
+    "@types/node": "^20.2.5",
+    "bitcoinjs-message": "^2.2.0",
+    "typedoc": "^0.24.8",
+    "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "@exodus/bitcoinjs": "^1.4.0",
+    "@exodus/crypto": "^1.0.0-rc.14"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/bip322-js",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abip322-js"
+  }
+}

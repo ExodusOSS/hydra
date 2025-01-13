@@ -1,0 +1,48 @@
+{
+  "name": "@exodus/app-process-mobile",
+  "author": "Exodus Movement, Inc.",
+  "version": "3.5.0",
+  "license": "MIT",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/app-process-mobile",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aapp-process-mobile"
+  },
+  "description": "Abstraction to monitor a mobile application's foreground or background status. Allows to manage app behavior based on its visibility status",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "scripts": {
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "test": "run -T jest"
+  },
+  "main": "index.js",
+  "files": [
+    "atoms",
+    "module",
+    "plugin",
+    "redux",
+    "report",
+    "CHANGELOG.md",
+    "README.md",
+    "api.js",
+    "constants.js",
+    "!**/__tests__/**"
+  ],
+  "dependencies": {
+    "@exodus/atoms": "^9.0.0",
+    "@exodus/netinfo": "^1.4.2",
+    "@exodus/redux-dependency-injection": "^4.0.3",
+    "lodash": "^4.17.21",
+    "make-concurrent": "^5.4.0"
+  },
+  "devDependencies": {
+    "@exodus/logger": "workspace:^",
+    "react-native": "^0.71.11",
+    "redux": "^4.2.1"
+  },
+  "peerDependencies": {
+    "metro-react-native-babel-preset": "^0.64.0",
+    "react-native": "^0.64.0"
+  }
+}

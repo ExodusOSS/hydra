@@ -1,0 +1,41 @@
+{
+  "name": "@exodus/error-tracking",
+  "version": "1.3.0",
+  "type": "module",
+  "description": "A simple error tracking package to let any feature collect errors and create the report",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/error-tracking",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aerror-tracking"
+  },
+  "main": "index.js",
+  "exports": "./index.js",
+  "files": [
+    "index.d.ts",
+    "is-empty.js",
+    "api",
+    "atoms",
+    "module",
+    "report",
+    "CHANGELOG.md",
+    "README.md",
+    "!**/__tests__/**"
+  ],
+  "scripts": {
+    "test": "run -T jest",
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^9.0.0",
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/fetch": "^1.3.1",
+    "@exodus/sentry-client": "^3.2.0",
+    "@exodus/typeforce": "^1.19.0"
+  }
+}

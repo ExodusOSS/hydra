@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "DappWalletWatchAsset"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        },
+        {
+          "$ref": "common-properties#/definitions/web3Properties"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "options": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "address": {
+              "type": "string",
+              "format": "any-string"
+            },
+            "decimals": {
+              "type": "number"
+            },
+            "image": {
+              "type": "string",
+              "format": "any-string"
+            },
+            "symbol": {
+              "type": "string",
+              "format": "any-string"
+            }
+          },
+          "unevaluatedProperties": false
+        },
+        "type": {
+          "type": "string",
+          "format": "any-string"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

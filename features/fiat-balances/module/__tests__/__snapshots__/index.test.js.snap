@@ -1,0 +1,1464 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fiat-balances adding walletAccounts 1`] = `
+{
+  "byAsset": {
+    "solana": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "150",
+      },
+    },
+  },
+  "byAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "100",
+        },
+      },
+    },
+  },
+  "byBaseAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "100",
+        },
+      },
+    },
+  },
+  "byWalletAccount": {
+    "exodus_0": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+    "exodus_1": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "100",
+      },
+    },
+  },
+  "totals": {
+    "balance": {
+      "type": "NumberUnit",
+      "unit": "USD",
+      "unitType": "USD",
+      "value": "150",
+    },
+  },
+}
+`;
+
+exports[`fiat-balances balance updates across portfolios 1`] = `
+{
+  "byAsset": {
+    "raydium": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+    "solana": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+  },
+  "byAssetSource": {
+    "exodus_0": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byBaseAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byWalletAccount": {
+    "exodus_0": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+    "exodus_1": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+  },
+  "totals": {
+    "balance": {
+      "type": "NumberUnit",
+      "unit": "USD",
+      "unitType": "USD",
+      "value": "50",
+    },
+  },
+}
+`;
+
+exports[`fiat-balances balance updates across portfolios 2`] = `
+{
+  "byAsset": {
+    "raydium": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+    "solana": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "150",
+      },
+    },
+  },
+  "byAssetSource": {
+    "exodus_0": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "100",
+        },
+      },
+    },
+  },
+  "byBaseAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "100",
+        },
+      },
+    },
+  },
+  "byWalletAccount": {
+    "exodus_0": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+    "exodus_1": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "100",
+      },
+    },
+  },
+  "totals": {
+    "balance": {
+      "type": "NumberUnit",
+      "unit": "USD",
+      "unitType": "USD",
+      "value": "150",
+    },
+  },
+}
+`;
+
+exports[`fiat-balances balance updates on asset source accountState update 1`] = `
+{
+  "byAsset": {
+    "raydium": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+    "solana": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+  },
+  "byAssetSource": {
+    "exodus_0": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byBaseAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byWalletAccount": {
+    "exodus_0": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+    "exodus_1": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+  },
+  "totals": {
+    "balance": {
+      "type": "NumberUnit",
+      "unit": "USD",
+      "unitType": "USD",
+      "value": "50",
+    },
+  },
+}
+`;
+
+exports[`fiat-balances balance updates on asset source accountState update 2`] = `
+{
+  "byAsset": {
+    "raydium": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+    "solana": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "100",
+      },
+    },
+  },
+  "byAssetSource": {
+    "exodus_0": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "100",
+        },
+      },
+    },
+    "exodus_1": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byBaseAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "100",
+        },
+      },
+    },
+    "exodus_1": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byWalletAccount": {
+    "exodus_0": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "100",
+      },
+    },
+    "exodus_1": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+  },
+  "totals": {
+    "balance": {
+      "type": "NumberUnit",
+      "unit": "USD",
+      "unitType": "USD",
+      "value": "100",
+    },
+  },
+}
+`;
+
+exports[`fiat-balances balance updates on change in fiatCurrency 1`] = `
+{
+  "byAsset": {
+    "raydium": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "CNY",
+        "unitType": "CNY",
+        "value": "0",
+      },
+    },
+    "solana": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "CNY",
+        "unitType": "CNY",
+        "value": "500",
+      },
+    },
+  },
+  "byAssetSource": {
+    "exodus_0": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "CNY",
+          "unitType": "CNY",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "CNY",
+          "unitType": "CNY",
+          "value": "500",
+        },
+      },
+    },
+    "exodus_1": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "CNY",
+          "unitType": "CNY",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "CNY",
+          "unitType": "CNY",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byBaseAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "CNY",
+          "unitType": "CNY",
+          "value": "500",
+        },
+      },
+    },
+    "exodus_1": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "CNY",
+          "unitType": "CNY",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byWalletAccount": {
+    "exodus_0": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "CNY",
+        "unitType": "CNY",
+        "value": "500",
+      },
+    },
+    "exodus_1": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "CNY",
+        "unitType": "CNY",
+        "value": "0",
+      },
+    },
+  },
+  "totals": {
+    "balance": {
+      "type": "NumberUnit",
+      "unit": "CNY",
+      "unitType": "CNY",
+      "value": "500",
+    },
+  },
+}
+`;
+
+exports[`fiat-balances balance updates on change in rates 1`] = `
+{
+  "byAsset": {
+    "raydium": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+    "solana": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+  },
+  "byAssetSource": {
+    "exodus_0": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byBaseAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byWalletAccount": {
+    "exodus_0": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+    "exodus_1": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+  },
+  "totals": {
+    "balance": {
+      "type": "NumberUnit",
+      "unit": "USD",
+      "unitType": "USD",
+      "value": "50",
+    },
+  },
+}
+`;
+
+exports[`fiat-balances balance updates on change in rates 2`] = `
+{
+  "byAsset": {
+    "raydium": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+    "solana": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "100",
+      },
+    },
+  },
+  "byAssetSource": {
+    "exodus_0": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "100",
+        },
+      },
+    },
+    "exodus_1": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byBaseAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "100",
+        },
+      },
+    },
+    "exodus_1": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byWalletAccount": {
+    "exodus_0": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "100",
+      },
+    },
+    "exodus_1": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+  },
+  "totals": {
+    "balance": {
+      "type": "NumberUnit",
+      "unit": "USD",
+      "unitType": "USD",
+      "value": "100",
+    },
+  },
+}
+`;
+
+exports[`fiat-balances balance updates on changes to walletAccounts 1`] = `
+{
+  "byAsset": {
+    "raydium": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+    "solana": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+  },
+  "byAssetSource": {
+    "exodus_0": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byBaseAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byWalletAccount": {
+    "exodus_0": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+    "exodus_1": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+  },
+  "totals": {
+    "balance": {
+      "type": "NumberUnit",
+      "unit": "USD",
+      "unitType": "USD",
+      "value": "50",
+    },
+  },
+}
+`;
+
+exports[`fiat-balances balance updates on changes to walletAccounts 2`] = `
+{
+  "byAsset": {
+    "raydium": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+    "solana": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "150",
+      },
+    },
+  },
+  "byAssetSource": {
+    "exodus_0": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "100",
+        },
+      },
+    },
+  },
+  "byBaseAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "100",
+        },
+      },
+    },
+  },
+  "byWalletAccount": {
+    "exodus_0": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+    "exodus_1": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "100",
+      },
+    },
+  },
+  "totals": {
+    "balance": {
+      "type": "NumberUnit",
+      "unit": "USD",
+      "unitType": "USD",
+      "value": "150",
+    },
+  },
+}
+`;
+
+exports[`fiat-balances balance updates on changes to walletAccounts 3`] = `
+{
+  "byAsset": {
+    "raydium": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+    "solana": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+  },
+  "byAssetSource": {
+    "exodus_0": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+  },
+  "byBaseAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+  },
+  "byWalletAccount": {
+    "exodus_0": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+  },
+  "totals": {
+    "balance": {
+      "type": "NumberUnit",
+      "unit": "USD",
+      "unitType": "USD",
+      "value": "50",
+    },
+  },
+}
+`;
+
+exports[`fiat-balances balance updates on changes to walletAccounts 4`] = `
+{
+  "byAsset": {
+    "raydium": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+    "solana": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "150",
+      },
+    },
+  },
+  "byAssetSource": {
+    "exodus_0": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "100",
+        },
+      },
+    },
+  },
+  "byBaseAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "100",
+        },
+      },
+    },
+  },
+  "byWalletAccount": {
+    "exodus_0": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+    "exodus_1": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "100",
+      },
+    },
+  },
+  "totals": {
+    "balance": {
+      "type": "NumberUnit",
+      "unit": "USD",
+      "unitType": "USD",
+      "value": "150",
+    },
+  },
+}
+`;
+
+exports[`fiat-balances balancesAtom loaded with changes field before fiat balances loaded 1`] = `
+{
+  "byAsset": {
+    "raydium": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "10",
+      },
+    },
+    "solana": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+  },
+  "byAssetSource": {
+    "exodus_0": {
+      "raydium": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "10",
+        },
+      },
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+    "exodus_1": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byBaseAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "60",
+        },
+      },
+    },
+    "exodus_1": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "0",
+        },
+      },
+    },
+  },
+  "byWalletAccount": {
+    "exodus_0": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "60",
+      },
+    },
+    "exodus_1": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "0",
+      },
+    },
+  },
+  "totals": {
+    "balance": {
+      "type": "NumberUnit",
+      "unit": "USD",
+      "unitType": "USD",
+      "value": "60",
+    },
+  },
+}
+`;
+
+exports[`fiat-balances removing walletAccounts 1`] = `
+{
+  "byAsset": {
+    "solana": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+  },
+  "byAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+  },
+  "byBaseAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "50",
+        },
+      },
+    },
+  },
+  "byWalletAccount": {
+    "exodus_0": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "50",
+      },
+    },
+  },
+  "totals": {
+    "balance": {
+      "type": "NumberUnit",
+      "unit": "USD",
+      "unitType": "USD",
+      "value": "50",
+    },
+  },
+}
+`;
+
+exports[`fiat-balances subset of balance fields update 1`] = `
+{
+  "byAsset": {
+    "solana": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "100",
+      },
+    },
+  },
+  "byAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "100",
+        },
+      },
+    },
+  },
+  "byBaseAssetSource": {
+    "exodus_0": {
+      "solana": {
+        "balance": {
+          "type": "NumberUnit",
+          "unit": "USD",
+          "unitType": "USD",
+          "value": "100",
+        },
+      },
+    },
+  },
+  "byWalletAccount": {
+    "exodus_0": {
+      "balance": {
+        "type": "NumberUnit",
+        "unit": "USD",
+        "unitType": "USD",
+        "value": "100",
+      },
+    },
+  },
+  "totals": {
+    "balance": {
+      "type": "NumberUnit",
+      "unit": "USD",
+      "unitType": "USD",
+      "value": "100",
+    },
+  },
+}
+`;

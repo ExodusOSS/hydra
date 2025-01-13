@@ -1,0 +1,155 @@
+import { combine } from '@exodus/atoms'
+import createContainer from '@exodus/dependency-injection'
+import { WalletAccount } from '@exodus/models'
+import createInMemoryStorage from '@exodus/storage-memory'
+
+import {
+  enabledWalletAccountsAtomDefinition,
+  walletAccountsAtomDefinition,
+  walletAccountsInternalAtomDefinition,
+} from '../index.js'
+import createWalletAccountsInternalAtom from '../wallet-accounts-internal.js'
+
+describe('createWalletAccountsInternalAtom', () => {
+  let storage
+  let config
+  beforeEach(() => {
+    storage = createInMemoryStorage().namespace('walletAccounts')
+    config = Object.create({})
+  })
+
+  it('should serialize wallet accounts to storage', async () => {
+    const walletAccountsAtom = createWalletAccountsInternalAtom({
+      storage,
+      config,
+    })
+
+    const walletAccount = new WalletAccount({ ...WalletAccount.DEFAULT, label: 'Wayne Portfolio' })
+
+    await walletAccountsAtom.set({ exodus_0: walletAccount })
+
+    await expect(storage.get('walletAccounts')).resolves.toEqual({
+      exodus_0: walletAccount.toJSON(),
+    })
+  })
+
+  it('should return default wallet account if none set', async () => {
+    const walletAccountsAtom = createWalletAccountsInternalAtom({
+      storage,
+      config,
+    })
+
+    await expect(walletAccountsAtom.get()).resolves.toEqual({ exodus_0: WalletAccount.DEFAULT })
+  })
+
+  it('should return default wallet account with custom label', async () => {
+    const walletAccountsAtom = createWalletAccountsInternalAtom({
+      storage,
+      config: {
+        defaultLabel: 'Custom Portfolio',
+      },
+    })
+
+    await expect(walletAccountsAtom.get()).resolves.toEqual({
+      exodus_0: { ...WalletAccount.DEFAULT, label: 'Custom Portfolio' },
+    })
+  })
+
+  it('should return default wallet account with custom color', async () => {
+    const walletAccountsAtom = createWalletAccountsInternalAtom({
+      storage,
+      config: {
+        defaultColor: '#FFF',
+      },
+    })
+
+    await expect(walletAccountsAtom.get()).resolves.toEqual({
+      exodus_0: { ...WalletAccount.DEFAULT, color: '#FFF' },
+    })
+  })
+
+  it('should deserialize wallet accounts from storage', async () => {
+    const walletAccount = new WalletAccount({
+      ...WalletAccount.DEFAULT,
+      label: 'Wayne Portfolio',
+      index: 42,
+    })
+    await storage.set('walletAccounts', { exodus_42: walletAccount.toJSON() })
+
+    const walletAccountsAtom = createWalletAccountsInternalAtom({
+      storage,
+      config,
+    })
+
+    await expect(walletAccountsAtom.get()).resolves.toEqual({
+      exodus_42: walletAccount.toJSON(),
+    })
+  })
+
+  it('clears storage when receiving an empty object', async () => {
+    const walletAccountsAtom = createWalletAccountsInternalAtom({
+      storage,
+      config,
+    })
+
+    await walletAccountsAtom.set({})
+
+    await expect(storage.get('walletAccounts')).resolves.toEqual(undefined)
+  })
+
+  it('clears storage when receiving undefined', async () => {
+    const walletAccountsAtom = createWalletAccountsInternalAtom({
+      storage,
+      config,
+    })
+
+    await walletAccountsAtom.set(undefined)
+
+    await expect(storage.get('walletAccounts')).resolves.toEqual(undefined)
+  })
+
+  it('clears storage when receiving null', async () => {
+    const walletAccountsAtom = createWalletAccountsInternalAtom({
+      storage,
+      config,
+    })
+
+    await walletAccountsAtom.set(null)
+
+    await expect(storage.get('walletAccounts')).resolves.toEqual(undefined)
+  })
+})
+
+describe('dependency injection', () => {
+  test('dependencies are properly declared', async () => {
+    const container = createContainer({ logger: console })
+
+    container.registerMultiple([
+      {
+        id: 'storage',
+        factory: createInMemoryStorage,
+        public: true,
+      },
+      {
+        id: 'config',
+        factory: () => ({}),
+        public: true,
+      },
+      walletAccountsAtomDefinition,
+      walletAccountsInternalAtomDefinition,
+      enabledWalletAccountsAtomDefinition,
+    ])
+
+    container.resolve()
+    const { walletAccountsInternalAtom, enabledWalletAccountsAtom } = container.getAll()
+    walletAccountsInternalAtom.set({
+      [WalletAccount.DEFAULT_NAME]: new WalletAccount({
+        ...WalletAccount.DEFAULT,
+        seedId: 'seedid',
+      }),
+    })
+    await new Promise((resolve) =>
+      combine({ walletAccountsInternalAtom, enabledWalletAccountsAtom }).observe(resolve)
+    )
+  })
+})

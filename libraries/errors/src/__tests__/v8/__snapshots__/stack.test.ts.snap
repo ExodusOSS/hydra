@@ -1,0 +1,49 @@
+exports[`gets stack trace for v8 1`] = `
+{
+  "0": {
+    "async": false,
+    "column": number<>,
+    "file": filePath<>,
+    "function": "foo",
+    "line": number<>,
+    "method": null,
+    "toplevel": true,
+  },
+  "1": {
+    "async": false,
+    "column": number<>,
+    "file": filePath<>,
+    "function": null,
+    "line": number<>,
+    "method": null,
+    "toplevel": false,
+  },
+  "2": {
+    "async": false,
+    "column": number<>,
+    "file": filePath<>,
+    "function": "runInAsyncScope",
+    "line": number<>,
+    "method": "runInAsyncScope",
+    "toplevel": false,
+  },
+  "3": {
+    "async": false,
+    "column": number<>,
+    "file": filePath<>,
+    "function": "run",
+    "line": number<>,
+    "method": "run",
+    "toplevel": false,
+  },
+  "4": {
+    "async": true,
+    "column": number<>,
+    "file": filePath<>,
+    "function": "processPendingSubtests",
+    "line": number<>,
+    "method": "processPendingSubtests",
+    "toplevel": false,
+  },
+}
+`;

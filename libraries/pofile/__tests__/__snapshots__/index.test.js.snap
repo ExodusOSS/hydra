@@ -1,0 +1,234 @@
+exports[`pofile api should add comment to entry 1`] = `
+"# other comment
+#: src/Component.js:76
+msgid "Unlock"
+msgstr "Desbloquear"
+
+#: src/Component.js:63
+msgid "Enter password"
+msgstr "Contraseña"
+
+#, remote-config
+msgid "Buy Crypto"
+msgstr "Comprar Crypto"
+
+#: src/Component.js:80
+msgid "Click on \\"Submit\\" button"
+msgstr "Click en el boton \\"Submit\\""
+
+#: src/Component.js:42
+msgid "Buy {asset}"
+msgstr "Comprar {asset}"
+
+#: src/Component.js:10
+msgid "Click on <0>Submit</0>"
+msgstr "Click en <0>Submit</0>"
+
+#: src/balance/utils.js:10
+msgid "{exodus.account.active.name} balance"
+msgstr "{exodus.account.active.name} balance""
+`;
+
+exports[`pofile api should add entry on top of existing file 1`] = `
+"#: src/Component.js:76
+msgid "Unlock"
+msgstr "Desbloquear"
+
+#: src/Component.js:63
+msgid "Enter password"
+msgstr "Contraseña"
+
+#, remote-config
+msgid "Buy Crypto"
+msgstr "Comprar Crypto"
+
+#: src/Component.js:80
+msgid "Click on \\"Submit\\" button"
+msgstr "Click en el boton \\"Submit\\""
+
+#: src/Component.js:42
+msgid "Buy {asset}"
+msgstr "Comprar {asset}"
+
+#: src/Component.js:10
+msgid "Click on <0>Submit</0>"
+msgstr "Click en <0>Submit</0>"
+
+#: src/balance/utils.js:10
+msgid "{exodus.account.active.name} balance"
+msgstr "{exodus.account.active.name} balance"
+
+# Some comment
+msgid "Welcome to Exodus"
+msgstr "Bienvenido a Exodus""
+`;
+
+exports[`pofile api should add entry successfully 1`] = `
+"# Some comment
+#, remote-config
+msgid "Welcome to Exodus"
+msgstr "Bienvenido a Exodus""
+`;
+
+exports[`pofile api should add flag to entry 1`] = `
+"#, remote-config
+#: src/Component.js:76
+msgid "Unlock"
+msgstr "Desbloquear"
+
+#: src/Component.js:63
+msgid "Enter password"
+msgstr "Contraseña"
+
+#, remote-config
+msgid "Buy Crypto"
+msgstr "Comprar Crypto"
+
+#: src/Component.js:80
+msgid "Click on \\"Submit\\" button"
+msgstr "Click en el boton \\"Submit\\""
+
+#: src/Component.js:42
+msgid "Buy {asset}"
+msgstr "Comprar {asset}"
+
+#: src/Component.js:10
+msgid "Click on <0>Submit</0>"
+msgstr "Click en <0>Submit</0>"
+
+#: src/balance/utils.js:10
+msgid "{exodus.account.active.name} balance"
+msgstr "{exodus.account.active.name} balance""
+`;
+
+exports[`pofile api should add reference to entry 1`] = `
+"#: src/Component.js:76
+#: src/index.js
+msgid "Unlock"
+msgstr "Desbloquear"
+
+#: src/Component.js:63
+msgid "Enter password"
+msgstr "Contraseña"
+
+#, remote-config
+msgid "Buy Crypto"
+msgstr "Comprar Crypto"
+
+#: src/Component.js:80
+msgid "Click on \\"Submit\\" button"
+msgstr "Click en el boton \\"Submit\\""
+
+#: src/Component.js:42
+msgid "Buy {asset}"
+msgstr "Comprar {asset}"
+
+#: src/Component.js:10
+msgid "Click on <0>Submit</0>"
+msgstr "Click en <0>Submit</0>"
+
+#: src/balance/utils.js:10
+msgid "{exodus.account.active.name} balance"
+msgstr "{exodus.account.active.name} balance""
+`;
+
+exports[`pofile api should escape entry successfully 1`] = `
+"# Some comment
+#, remote-config
+msgid "Welcome to \\"Exodus\\""
+msgstr "Bienvenido a \\"Exodus\\"""
+`;
+
+exports[`pofile api should merge duplicated entry 1`] = `
+"#: src/Component.js:76
+#: src/ui/index.js
+msgid "Unlock"
+msgstr "Desbloquear"
+
+#: src/Component.js:63
+msgid "Enter password"
+msgstr "Contraseña"
+
+#, remote-config
+msgid "Buy Crypto"
+msgstr "Comprar Crypto"
+
+#: src/Component.js:80
+msgid "Click on \\"Submit\\" button"
+msgstr "Click en el boton \\"Submit\\""
+
+#: src/Component.js:42
+msgid "Buy {asset}"
+msgstr "Comprar {asset}"
+
+#: src/Component.js:10
+msgid "Click on <0>Submit</0>"
+msgstr "Click en <0>Submit</0>"
+
+#: src/balance/utils.js:10
+msgid "{exodus.account.active.name} balance"
+msgstr "{exodus.account.active.name} balance""
+`;
+
+exports[`pofile api should merge entries with different placeholder variable names 1`] = `
+"#: src/Component.js:76
+msgid "Unlock"
+msgstr "Desbloquear"
+
+#: src/Component.js:63
+msgid "Enter password"
+msgstr "Contraseña"
+
+#, remote-config
+msgid "Buy Crypto"
+msgstr "Comprar Crypto"
+
+#: src/Component.js:80
+msgid "Click on \\"Submit\\" button"
+msgstr "Click en el boton \\"Submit\\""
+
+#: src/Component.js:42
+msgid "Buy {asset}"
+msgstr "Comprar {asset}"
+
+#: src/Component.js:10
+msgid "Click on <0>Submit</0>"
+msgstr "Click en <0>Submit</0>"
+
+#: src/balance/utils.js:10
+msgid "{exodus.account.active.name} balance"
+msgstr "{exodus.account.active.name} balance"
+
+msgid "{another-var-in-another-context} balance"
+msgstr "{another-var-in-another-context} balance""
+`;
+
+exports[`pofile parse should successfully parse simple po file 1`] = `
+"#: src/Component.js:76
+msgid "Unlock"
+msgstr "Desbloquear"
+
+#: src/Component.js:63
+msgid "Enter password"
+msgstr "Contraseña"
+
+#, remote-config
+msgid "Buy Crypto"
+msgstr "Comprar Crypto"
+
+#: src/Component.js:80
+msgid "Click on \\"Submit\\" button"
+msgstr "Click en el boton \\"Submit\\""
+
+#: src/Component.js:42
+msgid "Buy {asset}"
+msgstr "Comprar {asset}"
+
+#: src/Component.js:10
+msgid "Click on <0>Submit</0>"
+msgstr "Click en <0>Submit</0>"
+
+#: src/balance/utils.js:10
+msgid "{exodus.account.active.name} balance"
+msgstr "{exodus.account.active.name} balance""
+`;

@@ -1,0 +1,38 @@
+import { commonProps, validate } from './mainschema.js'
+
+const fixtures = [
+  {
+    event: 'SettingsLanguageTap',
+    properties: {
+      ...commonProps,
+      language: 'es',
+    },
+  },
+]
+
+describe('SettingsLanguageTap', () => {
+  fixtures.forEach((event) => {
+    it('The main schema validates "SettingsLanguageTap" event', () => {
+      expect(validate(event)).toEqual(event)
+    })
+
+    it('The main schema rejects unexpected properties of "SettingsLanguageTap" event', () => {
+      expect(() => validate({ ...event, test: true })).toThrow()
+    })
+
+    it('The main schema rejects unexpected properties in "properties" of "SettingsLanguageTap" event', () => {
+      expect(() =>
+        validate({ event: event.event, properties: { ...event.properties, test: true } })
+      ).toThrow()
+    })
+
+    it('Should reject "SettingsLanguageTap" property of invalid format', () => {
+      expect(() =>
+        validate({
+          event: event.event,
+          properties: { ...event.properties, language: 3 },
+        })
+      ).toThrow()
+    })
+  })
+})

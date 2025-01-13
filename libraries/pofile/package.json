@@ -1,0 +1,34 @@
+{
+  "name": "@exodus/pofile",
+  "description": "Simple PO file parser",
+  "version": "3.1.1",
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "author": "Exodus Movement, Inc.",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./parser-eslint": "./src/parser-eslint.js"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/pofile",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Apofile"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
+  ],
+  "scripts": {
+    "test": "run -T exodus-test --jest",
+    "lint:fix": "yarn lint --fix",
+    "lint": "run -T eslint"
+  }
+}

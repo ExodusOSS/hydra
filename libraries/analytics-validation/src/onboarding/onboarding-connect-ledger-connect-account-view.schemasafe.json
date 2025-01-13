@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "OnboardingConnectLedgerConnectAccountView"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "origin": {
+          "anyOf": [
+            {
+              "const": "onboarding"
+            },
+            {
+              "const": "wallet"
+            },
+            {
+              "const": "accounts"
+            },
+            {
+              "const": "receive-menu"
+            },
+            {
+              "const": "exchange"
+            },
+            {
+              "const": "offramp"
+            },
+            {
+              "const": "onramp"
+            },
+            {
+              "const": "web3"
+            }
+          ]
+        },
+        "network": {
+          "type": "string",
+          "maxLength": 30,
+          "$comment": "Allows tracking the network associated with the user's account"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

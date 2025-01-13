@@ -1,0 +1,62 @@
+{
+  "name": "@exodus/networking-mobile",
+  "version": "1.1.12",
+  "description": "Implementation of @exodus/networking-spec for a React Native context",
+  "author": "Exodus Movement Inc",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/modules/networking-mobile",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Anetworking-mobile"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "keywords": [
+    "networking",
+    "http",
+    "formdata",
+    "cookie",
+    "fetch",
+    "url"
+  ],
+  "files": [
+    "shared",
+    "form",
+    "cookie",
+    "http",
+    "url",
+    "index.d.ts",
+    "index.js",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc --build tsconfig.build.json",
+    "clean": "tsc --build --clean",
+    "prepack": "cp -R lib/networking-mobile/src/* ./",
+    "lint": "eslint --ignore-path .gitignore .",
+    "lint:fix": "yarn lint --fix",
+    "test": "jest"
+  },
+  "prettier": "@exodus/prettier",
+  "devDependencies": {
+    "@exodus/networking-spec": "^4.0.7",
+    "@types/react-native": "0.64.0",
+    "jest": "^29.1.2",
+    "jest-environment-jsdom": "^29.2.1",
+    "metro-react-native-babel-preset": "0.64.0",
+    "react-native": "0.64.0",
+    "ts-loader": "^9.3.0",
+    "whatwg-fetch": "^3.6.2"
+  },
+  "dependencies": {
+    "@exodus/networking-common": "^0.0.2",
+    "@exodus/text-encoding-utf8": "^1.0.2",
+    "@react-native-cookies/cookies": "^6.2.1",
+    "buffer": "6.0.3"
+  }
+}

@@ -1,0 +1,27 @@
+#: src/Component.js:76
+msgid "Unlock"
+msgstr "Desbloquear"
+
+#: src/Component.js:63
+msgid "Enter password"
+msgstr "Contraseña"
+
+#, remote-config
+msgid "Buy Crypto"
+msgstr "Comprar Crypto"
+
+#: src/Component.js:80
+msgid "Click on \"Submit\" button"
+msgstr "Click en el boton \"Submit\""
+
+#: src/Component.js:42
+msgid "Buy {asset}"
+msgstr "Comprar {asset}"
+
+#: src/Component.js:10
+msgid "Click on <0>Submit</0>"
+msgstr "Click en <0>Submit</0>"
+
+#: src/balance/utils.js:10
+msgid "{exodus.account.active.name} balance"
+msgstr "{exodus.account.active.name} balance"

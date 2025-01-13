@@ -1,0 +1,10 @@
+{
+  "name": "@exodus/currency-benchmarks.implementations.bn.js-4.11.8-pre-optimizations",
+  "version": "0.1.2",
+  "description": "Currency support.",
+  "author": "Exodus Movement, Inc.",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "bn.js": "4.11.8"
+  }
+}

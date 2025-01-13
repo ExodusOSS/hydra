@@ -1,0 +1,42 @@
+{
+  "name": "@exodus/redux-dependency-injection",
+  "version": "4.1.1",
+  "type": "module",
+  "description": "Dependency-injection container for redux modules",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/redux-dependency-injection",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aredux-dependency-injection"
+  },
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --global '**/*.test.js' && yarn test:types",
+    "test:types": "run -T tsc"
+  },
+  "dependencies": {
+    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/dependency-injection": "^3.0.0",
+    "@exodus/dependency-types": "^2.0.0",
+    "@exodus/logger": "^1.2.2",
+    "@exodus/typeforce": "^1.18.0",
+    "lodash": "^4.17.11",
+    "redux": "^4.0.0",
+    "reselect": "^3.0.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

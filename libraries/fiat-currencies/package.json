@@ -1,0 +1,31 @@
+{
+  "name": "@exodus/fiat-currencies",
+  "type": "module",
+  "version": "1.2.2",
+  "exports": "./index.js",
+  "main": "index.js",
+  "author": "Exodus Movement, Inc.",
+  "description": "UnitType instances for fiat currencies",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/fiat-currencies",
+  "files": [
+    "CHANGELOG.md",
+    "units.js"
+  ],
+  "scripts": {
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afiat-currencies"
+  },
+  "dependencies": {
+    "@exodus/currency": "^5.0.2",
+    "@exodus/fiat": "^2.3.0",
+    "lodash": "^4.17.21"
+  }
+}

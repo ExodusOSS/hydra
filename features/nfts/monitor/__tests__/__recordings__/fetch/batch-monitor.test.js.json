@@ -1,0 +1,1489 @@
+[
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana", "ethereum"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana", "ethereum"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "data": [
+        {
+          "from": "solanaAddress",
+          "to": "solanaAddress2",
+          "date": 1577577810050,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "2fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhM",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "",
+          "to": "ethAddress",
+          "date": 1577577820050,
+          "contractAddress": "0x901e2c1EBF3cC48cD1c056B0b6BDcE016302a5Fa",
+          "tokenId": "1",
+          "txId": "0x8d643115ea75d57a842e3baa7ff10e1c453b1557a47ed6f6caf8cf66245843fa",
+          "nftId": "ethereum:0x901e2c1ebf3cc48cd1c056b0b6bdce016302a5fa/1",
+          "eventType": "mint",
+          "quantity": 1,
+          "network": "ethereum"
+        },
+        {
+          "from": "",
+          "to": "hwAccountEthereumAddress",
+          "date": 1577577830050,
+          "contractAddress": "0x91bDF6d90Ca91abf1179A5e29aefb426B8499aD0",
+          "tokenId": "1",
+          "txId": "0xb063798c8341e0e6406f52d43daed86529dd838590d1d5e6b6f32f11e65bb085",
+          "nftId": "ethereum:0x91bdf6d90ca91abf1179a5e29aefb426b8499ad0/1",
+          "eventType": "mint",
+          "quantity": 1,
+          "network": "ethereum"
+        },
+        {
+          "from": "hwAccountSolanaAddress",
+          "to": "solanaAddress3",
+          "date": 1577577840050,
+          "contractAddress": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "tokenId": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "txId": "8nYKSkqcSnWNyMDytH4GZAVwTTcNNJPuq8wvwn52hvZaVuAfkKMyKiHjyAvjcqziGWYxKwE1yB4oGVU6s7ryBEW",
+          "nftId": "solana:GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        }
+      ]
+    }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/nfts?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/nfts?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "data": [
+        {
+          "network": "solana",
+          "attributes": [
+            { "trait": "Edition", "value": "2" },
+            { "trait": "Notable", "value": "Maybe" }
+          ],
+          "collectionName": "Checks MC Edition",
+          "collectionSymbol": "278b9c0b27bcdde4bb663e11549a4014",
+          "image": "https://fetch-n-cache.a.exodus.io/?url=https%3A%2F%2Fcdn.simplehash.com%2Fassets%2F20c007a2b4e01a94b31f2e5badceef86c281b553eb1af8dffdbd10f4becdeb44.jpg&maxage=2678400&apikey=nftproxy_zDKMFoRw6e8xrWCmXNccium43xLz4xxt9vWNBCfHMr",
+          "rawImageUrl": "https://cdn.simplehash.com/assets/20c007a2b4e01a94b31f2e5badceef86c281b553eb1af8dffdbd10f4becdeb44.jpg",
+          "name": "Checks Solana Edition",
+          "number": null,
+          "owner": "solanaAddress",
+          "spamScore": 0,
+          "id": "solana:2hgdjvWQRiVcFb6AVDtsJSM8NadTGkKpcPRYCDpaCQHv",
+          "mintAddress": "2hgdjvWQRiVcFb6AVDtsJSM8NadTGkKpcPRYCDpaCQHv",
+          "tokenStandard": 3
+        }
+      ]
+    }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana", "ethereum"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana", "ethereum"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress&fromTimestamp=1577577900050",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress&fromTimestamp=1577577900050",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "data": [
+        {
+          "from": "solanaAddress",
+          "to": "solanaAddress2",
+          "date": 1577577900050,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "2fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhM",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "",
+          "to": "ethAddress",
+          "date": 1577577900050,
+          "contractAddress": "0x901e2c1EBF3cC48cD1c056B0b6BDcE016302a5Fa",
+          "tokenId": "1",
+          "txId": "0x8d643115ea75d57a842e3baa7ff10e1c453b1557a47ed6f6caf8cf66245843fa",
+          "nftId": "ethereum:0x901e2c1ebf3cc48cd1c056b0b6bdce016302a5fa/1",
+          "eventType": "mint",
+          "quantity": 1,
+          "network": "ethereum"
+        },
+        {
+          "from": "",
+          "to": "hwAccountEthereumAddress",
+          "date": 1577577900050,
+          "contractAddress": "0x91bDF6d90Ca91abf1179A5e29aefb426B8499aD0",
+          "tokenId": "1",
+          "txId": "0xb063798c8341e0e6406f52d43daed86529dd838590d1d5e6b6f32f11e65bb085",
+          "nftId": "ethereum:0x91bdf6d90ca91abf1179a5e29aefb426b8499ad0/1",
+          "eventType": "mint",
+          "quantity": 1,
+          "network": "ethereum"
+        },
+        {
+          "from": "hwAccountSolanaAddress",
+          "to": "solanaAddress3",
+          "date": 1577577900050,
+          "contractAddress": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "tokenId": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "txId": "8nYKSkqcSnWNyMDytH4GZAVwTTcNNJPuq8wvwn52hvZaVuAfkKMyKiHjyAvjcqziGWYxKwE1yB4oGVU6s7ryBEW",
+          "nftId": "solana:GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        }
+      ]
+    }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress&fromTimestamp=1577577900050",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress&fromTimestamp=1577577900050",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "data": [
+        {
+          "from": "solanaAddress",
+          "to": "solanaAddress2",
+          "date": 1577577900050,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "2fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhM",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "",
+          "to": "ethAddress",
+          "date": 1577577900050,
+          "contractAddress": "0x901e2c1EBF3cC48cD1c056B0b6BDcE016302a5Fa",
+          "tokenId": "1",
+          "txId": "0x8d643115ea75d57a842e3baa7ff10e1c453b1557a47ed6f6caf8cf66245843fa",
+          "nftId": "ethereum:0x901e2c1ebf3cc48cd1c056b0b6bdce016302a5fa/1",
+          "eventType": "mint",
+          "quantity": 1,
+          "network": "ethereum"
+        },
+        {
+          "from": "",
+          "to": "hwAccountEthereumAddress",
+          "date": 1577577900050,
+          "contractAddress": "0x91bDF6d90Ca91abf1179A5e29aefb426B8499aD0",
+          "tokenId": "1",
+          "txId": "0xb063798c8341e0e6406f52d43daed86529dd838590d1d5e6b6f32f11e65bb085",
+          "nftId": "ethereum:0x91bdf6d90ca91abf1179a5e29aefb426b8499ad0/1",
+          "eventType": "mint",
+          "quantity": 1,
+          "network": "ethereum"
+        },
+        {
+          "from": "hwAccountSolanaAddress",
+          "to": "solanaAddress3",
+          "date": 1577577900050,
+          "contractAddress": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "tokenId": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "txId": "8nYKSkqcSnWNyMDytH4GZAVwTTcNNJPuq8wvwn52hvZaVuAfkKMyKiHjyAvjcqziGWYxKwE1yB4oGVU6s7ryBEW",
+          "nftId": "solana:GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        }
+      ]
+    }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana", "ethereum"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress&fromTimestamp=1577578200100",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress&fromTimestamp=1577578200100",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "data": [
+        {
+          "from": "solanaAddress",
+          "to": "solanaAddress2",
+          "date": 1577577900050,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "2fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhM",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "",
+          "to": "ethAddress",
+          "date": 1577577900050,
+          "contractAddress": "0x901e2c1EBF3cC48cD1c056B0b6BDcE016302a5Fa",
+          "tokenId": "1",
+          "txId": "0x8d643115ea75d57a842e3baa7ff10e1c453b1557a47ed6f6caf8cf66245843fa",
+          "nftId": "ethereum:0x901e2c1ebf3cc48cd1c056b0b6bdce016302a5fa/1",
+          "eventType": "mint",
+          "quantity": 1,
+          "network": "ethereum"
+        },
+        {
+          "from": "",
+          "to": "hwAccountEthereumAddress",
+          "date": 1577577900050,
+          "contractAddress": "0x91bDF6d90Ca91abf1179A5e29aefb426B8499aD0",
+          "tokenId": "1",
+          "txId": "0xb063798c8341e0e6406f52d43daed86529dd838590d1d5e6b6f32f11e65bb085",
+          "nftId": "ethereum:0x91bdf6d90ca91abf1179a5e29aefb426b8499ad0/1",
+          "eventType": "mint",
+          "quantity": 1,
+          "network": "ethereum"
+        },
+        {
+          "from": "hwAccountSolanaAddress",
+          "to": "solanaAddress3",
+          "date": 1577577900050,
+          "contractAddress": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "tokenId": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "txId": "8nYKSkqcSnWNyMDytH4GZAVwTTcNNJPuq8wvwn52hvZaVuAfkKMyKiHjyAvjcqziGWYxKwE1yB4oGVU6s7ryBEW",
+          "nftId": "solana:GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "solanaAddress",
+          "to": "hwAccountSolanaAddress",
+          "date": 1577578200100,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "3fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhM",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        }
+      ]
+    }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/nfts?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/nfts?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "data": [
+        {
+          "network": "solana",
+          "attributes": [
+            { "trait": "Edition", "value": "2" },
+            { "trait": "Notable", "value": "Maybe" }
+          ],
+          "collectionName": "Checks MC Edition",
+          "collectionSymbol": "278b9c0b27bcdde4bb663e11549a4014",
+          "image": "https://fetch-n-cache.a.exodus.io/?url=https%3A%2F%2Fcdn.simplehash.com%2Fassets%2F20c007a2b4e01a94b31f2e5badceef86c281b553eb1af8dffdbd10f4becdeb44.jpg&maxage=2678400&apikey=nftproxy_zDKMFoRw6e8xrWCmXNccium43xLz4xxt9vWNBCfHMr",
+          "rawImageUrl": "https://cdn.simplehash.com/assets/20c007a2b4e01a94b31f2e5badceef86c281b553eb1af8dffdbd10f4becdeb44.jpg",
+          "name": "Checks Solana Edition",
+          "number": null,
+          "owner": "solanaAddress",
+          "spamScore": 0,
+          "id": "solana:2hgdjvWQRiVcFb6AVDtsJSM8NadTGkKpcPRYCDpaCQHv",
+          "mintAddress": "2hgdjvWQRiVcFb6AVDtsJSM8NadTGkKpcPRYCDpaCQHv",
+          "tokenStandard": 3
+        }
+      ]
+    }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana", "ethereum"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress&fromTimestamp=1577578500150",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress&fromTimestamp=1577578500150",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "nextCursor": null, "data": [] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress&fromTimestamp=1577577900000",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress&fromTimestamp=1577577900000",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "nextCursor": null, "dataVersion": 1, "data": [] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "dataVersion": 1,
+      "data": [
+        {
+          "from": "solanaAddress",
+          "to": "solanaAddress2",
+          "date": 1712838499000,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "2fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhM",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "solanaAddress2",
+          "to": "solanaAddress",
+          "date": 1712839499000,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "2fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhN",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "hwAccountSolanaAddress",
+          "to": "solanaAddress3",
+          "date": 1711454896000,
+          "contractAddress": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "tokenId": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "txId": "8nYKSkqcSnWNyMDytH4GZAVwTTcNNJPuq8wvwn52hvZaVuAfkKMyKiHjyAvjcqziGWYxKwE1yB4oGVU6s7ryBEW",
+          "nftId": "solana:GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        }
+      ]
+    }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/nfts?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/nfts?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "dataVersion": 1,
+      "data": [
+        {
+          "from": "solanaAddress",
+          "to": "solanaAddress2",
+          "date": 1712838499000,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "2fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhM",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "solanaAddress2",
+          "to": "solanaAddress",
+          "date": 1712839499000,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "2fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhN",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "hwAccountSolanaAddress",
+          "to": "solanaAddress3",
+          "date": 1711454896000,
+          "contractAddress": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "tokenId": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "txId": "8nYKSkqcSnWNyMDytH4GZAVwTTcNNJPuq8wvwn52hvZaVuAfkKMyKiHjyAvjcqziGWYxKwE1yB4oGVU6s7ryBEW",
+          "nftId": "solana:GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        }
+      ]
+    }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress&fromTimestamp=1577577900050",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress&fromTimestamp=1577577900050",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "nextCursor": null, "data": [], "dataVersion": 1 }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress&fromTimestamp=1577577900050",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress&fromTimestamp=1577577900050",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "nextCursor": null, "data": [], "dataVersion": 1 }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress&fromTimestamp=1577578200100",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress&fromTimestamp=1577578200100",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "nextCursor": null, "data": [] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "dataVersion": 1,
+      "data": [
+        {
+          "from": "solanaAddress",
+          "to": "solanaAddress2",
+          "date": 1712838499000,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "2fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhM",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "solanaAddress2",
+          "to": "solanaAddress",
+          "date": 1712839499000,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "2fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhN",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "hwAccountSolanaAddress",
+          "to": "solanaAddress3",
+          "date": 1711454896000,
+          "contractAddress": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "tokenId": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "txId": "8nYKSkqcSnWNyMDytH4GZAVwTTcNNJPuq8wvwn52hvZaVuAfkKMyKiHjyAvjcqziGWYxKwE1yB4oGVU6s7ryBEW",
+          "nftId": "solana:GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        }
+      ]
+    }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/nfts?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/nfts?networks=solana&addresses=solanaAddress%2ChwAccountSolanaAddress",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "dataVersion": 1,
+      "data": [
+        {
+          "from": "solanaAddress",
+          "to": "solanaAddress2",
+          "date": 1712838499000,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "2fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhM",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "solanaAddress2",
+          "to": "solanaAddress",
+          "date": 1712839499000,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "2fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhN",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "hwAccountSolanaAddress",
+          "to": "solanaAddress3",
+          "date": 1711454896000,
+          "contractAddress": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "tokenId": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "txId": "8nYKSkqcSnWNyMDytH4GZAVwTTcNNJPuq8wvwn52hvZaVuAfkKMyKiHjyAvjcqziGWYxKwE1yB4oGVU6s7ryBEW",
+          "nftId": "solana:GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        }
+      ]
+    }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana", "ethereum"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana", "ethereum"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "data": [
+        {
+          "from": "solanaAddress2",
+          "to": "solanaAddress",
+          "date": 1577577900050,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "2fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhM",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana",
+          "someUpdatedProperty": "oldValue"
+        },
+        {
+          "from": "solanaAddress2",
+          "to": "solanaAddress",
+          "date": 1577577900050,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "removedTxId",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "",
+          "to": "ethAddress",
+          "date": 1577577900050,
+          "contractAddress": "0x901e2c1EBF3cC48cD1c056B0b6BDcE016302a5Fa",
+          "tokenId": "1",
+          "txId": "0x8d643115ea75d57a842e3baa7ff10e1c453b1557a47ed6f6caf8cf66245843fa",
+          "nftId": "ethereum:0x901e2c1ebf3cc48cd1c056b0b6bdce016302a5fa/1",
+          "eventType": "mint",
+          "quantity": 1,
+          "network": "ethereum"
+        },
+        {
+          "from": "",
+          "to": "hwAccountEthereumAddress",
+          "date": 1577577900050,
+          "contractAddress": "0x91bDF6d90Ca91abf1179A5e29aefb426B8499aD0",
+          "tokenId": "1",
+          "txId": "0xb063798c8341e0e6406f52d43daed86529dd838590d1d5e6b6f32f11e65bb085",
+          "nftId": "ethereum:0x91bdf6d90ca91abf1179a5e29aefb426b8499ad0/1",
+          "eventType": "mint",
+          "quantity": 1,
+          "network": "ethereum"
+        },
+        {
+          "from": "hwAccountSolanaAddress",
+          "to": "solanaAddress3",
+          "date": 1577577900050,
+          "contractAddress": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "tokenId": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "txId": "8nYKSkqcSnWNyMDytH4GZAVwTTcNNJPuq8wvwn52hvZaVuAfkKMyKiHjyAvjcqziGWYxKwE1yB4oGVU6s7ryBEW",
+          "nftId": "solana:GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        }
+      ]
+    }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/nfts?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/nfts?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "data": [
+        {
+          "network": "solana",
+          "attributes": [
+            { "trait": "Edition", "value": "2" },
+            { "trait": "Notable", "value": "Maybe" }
+          ],
+          "collectionName": "Checks MC Edition",
+          "collectionSymbol": "278b9c0b27bcdde4bb663e11549a4014",
+          "image": "https://fetch-n-cache.a.exodus.io/?url=https%3A%2F%2Fcdn.simplehash.com%2Fassets%2F20c007a2b4e01a94b31f2e5badceef86c281b553eb1af8dffdbd10f4becdeb44.jpg&maxage=2678400&apikey=nftproxy_zDKMFoRw6e8xrWCmXNccium43xLz4xxt9vWNBCfHMr",
+          "rawImageUrl": "https://cdn.simplehash.com/assets/20c007a2b4e01a94b31f2e5badceef86c281b553eb1af8dffdbd10f4becdeb44.jpg",
+          "name": "Checks Solana Edition",
+          "number": null,
+          "owner": "solanaAddress",
+          "spamScore": 0,
+          "id": "solana:2hgdjvWQRiVcFb6AVDtsJSM8NadTGkKpcPRYCDpaCQHv",
+          "mintAddress": "2hgdjvWQRiVcFb6AVDtsJSM8NadTGkKpcPRYCDpaCQHv",
+          "tokenStandard": 3
+        }
+      ]
+    }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana", "ethereum"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana", "ethereum"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress&fromTimestamp=1577577900050",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress&fromTimestamp=1577577900050",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "data": [
+        {
+          "from": "solanaAddress2",
+          "to": "solanaAddress",
+          "date": 1577577900050,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "2fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhM",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana",
+          "someUpdatedProperty": "newValue"
+        },
+        {
+          "from": "",
+          "to": "ethAddress",
+          "date": 1577577900050,
+          "contractAddress": "0x901e2c1EBF3cC48cD1c056B0b6BDcE016302a5Fa",
+          "tokenId": "1",
+          "txId": "0x8d643115ea75d57a842e3baa7ff10e1c453b1557a47ed6f6caf8cf66245843fa",
+          "nftId": "ethereum:0x901e2c1ebf3cc48cd1c056b0b6bdce016302a5fa/1",
+          "eventType": "mint",
+          "quantity": 1,
+          "network": "ethereum"
+        },
+        {
+          "from": "",
+          "to": "hwAccountEthereumAddress",
+          "date": 1577577900050,
+          "contractAddress": "0x91bDF6d90Ca91abf1179A5e29aefb426B8499aD0",
+          "tokenId": "1",
+          "txId": "0xb063798c8341e0e6406f52d43daed86529dd838590d1d5e6b6f32f11e65bb085",
+          "nftId": "ethereum:0x91bdf6d90ca91abf1179a5e29aefb426b8499ad0/1",
+          "eventType": "mint",
+          "quantity": 1,
+          "network": "ethereum"
+        },
+        {
+          "from": "hwAccountSolanaAddress",
+          "to": "solanaAddress3",
+          "date": 1577577900050,
+          "contractAddress": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "tokenId": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "txId": "8nYKSkqcSnWNyMDytH4GZAVwTTcNNJPuq8wvwn52hvZaVuAfkKMyKiHjyAvjcqziGWYxKwE1yB4oGVU6s7ryBEW",
+          "nftId": "solana:GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "solanaAddress2",
+          "to": "solanaAddress",
+          "date": 1577577900070,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "1eWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhM",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        }
+      ]
+    }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress&fromTimestamp=1577577900050",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress&fromTimestamp=1577577900050",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "data": [
+        {
+          "from": "solanaAddress2",
+          "to": "solanaAddress",
+          "date": 1577577900050,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "2fWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhM",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana",
+          "someUpdatedProperty": "newValue"
+        },
+        {
+          "from": "",
+          "to": "ethAddress",
+          "date": 1577577900050,
+          "contractAddress": "0x901e2c1EBF3cC48cD1c056B0b6BDcE016302a5Fa",
+          "tokenId": "1",
+          "txId": "0x8d643115ea75d57a842e3baa7ff10e1c453b1557a47ed6f6caf8cf66245843fa",
+          "nftId": "ethereum:0x901e2c1ebf3cc48cd1c056b0b6bdce016302a5fa/1",
+          "eventType": "mint",
+          "quantity": 1,
+          "network": "ethereum"
+        },
+        {
+          "from": "",
+          "to": "hwAccountEthereumAddress",
+          "date": 1577577900050,
+          "contractAddress": "0x91bDF6d90Ca91abf1179A5e29aefb426B8499aD0",
+          "tokenId": "1",
+          "txId": "0xb063798c8341e0e6406f52d43daed86529dd838590d1d5e6b6f32f11e65bb085",
+          "nftId": "ethereum:0x91bdf6d90ca91abf1179a5e29aefb426b8499ad0/1",
+          "eventType": "mint",
+          "quantity": 1,
+          "network": "ethereum"
+        },
+        {
+          "from": "hwAccountSolanaAddress",
+          "to": "solanaAddress3",
+          "date": 1577577900050,
+          "contractAddress": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "tokenId": "GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "txId": "8nYKSkqcSnWNyMDytH4GZAVwTTcNNJPuq8wvwn52hvZaVuAfkKMyKiHjyAvjcqziGWYxKwE1yB4oGVU6s7ryBEW",
+          "nftId": "solana:GnAiUdtHEkH7rHDxeiKbwEZk8PP9EwEnd6abMqUBgESk",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        },
+        {
+          "from": "solanaAddress2",
+          "to": "solanaAddress",
+          "date": 1577577900070,
+          "contractAddress": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "tokenId": "9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "txId": "1eWHpReogcHr957aUPCkjYBFF4NM7TrTLrFHATuMHgGU9fmFqFsXuPsT44Qa4LYqwDdkwB78dayui4jGoq1uzxhM",
+          "nftId": "solana:9aMdfCMdutpJN6ZQ37z55G6TtzonKMNma57xm2ADXMEc",
+          "eventType": "transfer",
+          "quantity": 1,
+          "network": "solana"
+        }
+      ]
+    }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/nfts?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/nfts?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "data": [
+        {
+          "network": "solana",
+          "attributes": [
+            { "trait": "Edition", "value": "2" },
+            { "trait": "Notable", "value": "Maybe" }
+          ],
+          "collectionName": "Checks MC Edition",
+          "collectionSymbol": "278b9c0b27bcdde4bb663e11549a4014",
+          "image": "https://fetch-n-cache.a.exodus.io/?url=https%3A%2F%2Fcdn.simplehash.com%2Fassets%2F20c007a2b4e01a94b31f2e5badceef86c281b553eb1af8dffdbd10f4becdeb44.jpg&maxage=2678400&apikey=nftproxy_zDKMFoRw6e8xrWCmXNccium43xLz4xxt9vWNBCfHMr",
+          "rawImageUrl": "https://cdn.simplehash.com/assets/20c007a2b4e01a94b31f2e5badceef86c281b553eb1af8dffdbd10f4becdeb44.jpg",
+          "name": "Checks Solana Edition",
+          "number": null,
+          "owner": "solanaAddress",
+          "spamScore": 0,
+          "id": "solana:2hgdjvWQRiVcFb6AVDtsJSM8NadTGkKpcPRYCDpaCQHv",
+          "mintAddress": "2hgdjvWQRiVcFb6AVDtsJSM8NadTGkKpcPRYCDpaCQHv",
+          "tokenStandard": 3
+        }
+      ]
+    }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/status",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/status",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "networks": ["solana", "ethereum"] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress&fromTimestamp=1577578200100",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/transactions?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress&fromTimestamp=1577578200100",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": { "nextCursor": null, "data": [] }
+  },
+  {
+    "request": {
+      "resource": "https://nfts-proxy.exodus.io/v2/batch/nfts?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress",
+      "options": {
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://nfts-proxy.exodus.io/v2/batch/nfts?networks=solana%2Cethereum&addresses=solanaAddress%2ChwAccountSolanaAddress%2CethAddress%2ChwAccountEthereumAddress",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "nextCursor": null,
+      "data": [
+        {
+          "network": "solana",
+          "attributes": [
+            { "trait": "Edition", "value": "2" },
+            { "trait": "Notable", "value": "Maybe" }
+          ],
+          "collectionName": "Checks MC Edition",
+          "collectionSymbol": "278b9c0b27bcdde4bb663e11549a4014",
+          "image": "https://fetch-n-cache.a.exodus.io/?url=https%3A%2F%2Fcdn.simplehash.com%2Fassets%2F20c007a2b4e01a94b31f2e5badceef86c281b553eb1af8dffdbd10f4becdeb44.jpg&maxage=2678400&apikey=nftproxy_zDKMFoRw6e8xrWCmXNccium43xLz4xxt9vWNBCfHMr",
+          "rawImageUrl": "https://cdn.simplehash.com/assets/20c007a2b4e01a94b31f2e5badceef86c281b553eb1af8dffdbd10f4becdeb44.jpg",
+          "name": "Checks Solana Edition",
+          "number": null,
+          "owner": "solanaAddress",
+          "spamScore": 0,
+          "id": "solana:2hgdjvWQRiVcFb6AVDtsJSM8NadTGkKpcPRYCDpaCQHv",
+          "mintAddress": "2hgdjvWQRiVcFb6AVDtsJSM8NadTGkKpcPRYCDpaCQHv",
+          "tokenStandard": 3
+        }
+      ]
+    }
+  }
+]

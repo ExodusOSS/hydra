@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`market history monitor should fetch new asset when enabledAssetsAtom value changes 1`] = `
+Map {
+  "!marketHistory!prices-USD-bitcoin-day" => "[[1651190400000,{"close":9000}],[1651276800000,{"close":90000}]]",
+  "!marketHistory!prices-USD-bitcoin-hour" => "[[1663668000000,{"close":9000}],[1663671600000,{"close":90000}]]",
+}
+`;
+
+exports[`market history monitor should fetch new asset when enabledAssetsAtom value changes 2`] = `
+Map {
+  "!marketHistory!prices-USD-bitcoin-day" => "[[1651190400000,{"close":9000}],[1651276800000,{"close":90000}]]",
+  "!marketHistory!prices-USD-bitcoin-hour" => "[[1663668000000,{"close":9000}],[1663671600000,{"close":90000}]]",
+  "!marketHistory!prices-USD-algorand-hour" => "[[1663668000000,{"close":1.9}]]",
+  "!marketHistory!prices-USD-algorand-day" => "[[1651190400000,{"close":2}]]",
+}
+`;
+
+exports[`market history monitor should invalidate cache if clear cache version from remote config atom set 1`] = `
+Map {
+  "!marketHistory!prices-USD-ethereum-hour" => "[[123,{"close":345}]]",
+}
+`;
+
+exports[`market history monitor should invalidate cache if clear cache version from remote config atom set 2`] = `
+Map {
+  "!marketHistory!clear-market-history-cache" => """",
+  "!marketHistory!clear-market-history-cache-from-remote-config" => ""v1"",
+  "!marketHistory!prices-USD-bitcoin-day" => "[[1651190400000,{"close":9000}],[1651276800000,{"close":90000}]]",
+  "!marketHistory!prices-USD-bitcoin-hour" => "[[1663668000000,{"close":9000}],[1663671600000,{"close":90000}]]",
+}
+`;
+
+exports[`market history monitor should invalidate cache if clear cache version set 1`] = `
+Map {
+  "!marketHistory!prices-USD-ethereum-hour" => "[[123,{"close":345}]]",
+}
+`;
+
+exports[`market history monitor should invalidate cache if clear cache version set 2`] = `
+Map {
+  "!marketHistory!clear-market-history-cache" => ""v1"",
+  "!marketHistory!clear-market-history-cache-from-remote-config" => """",
+  "!marketHistory!prices-USD-bitcoin-day" => "[[1651190400000,{"close":9000}],[1651276800000,{"close":90000}]]",
+  "!marketHistory!prices-USD-bitcoin-hour" => "[[1663668000000,{"close":9000}],[1663671600000,{"close":90000}]]",
+}
+`;
+
+exports[`market history monitor should invalidate cache when remote config atom receive new value and fetch new prices 1`] = `
+Map {
+  "!marketHistory!prices-USD-ethereum-hour" => "[[123,{"close":345}]]",
+}
+`;
+
+exports[`market history monitor should invalidate cache when remote config atom receive new value and fetch new prices 2`] = `
+Map {
+  "!marketHistory!prices-USD-ethereum-hour" => "[[123,{"close":345}]]",
+  "!marketHistory!prices-USD-bitcoin-day" => "[[1651190400000,{"close":9000}],[1651276800000,{"close":90000}]]",
+  "!marketHistory!prices-USD-bitcoin-hour" => "[[1663668000000,{"close":9000}],[1663671600000,{"close":90000}]]",
+}
+`;
+
+exports[`market history monitor should invalidate cache when remote config atom receive new value and fetch new prices 3`] = `
+Map {
+  "!marketHistory!clear-market-history-cache" => """",
+  "!marketHistory!clear-market-history-cache-from-remote-config" => ""v1"",
+  "!marketHistory!prices-USD-bitcoin-hour" => "[[1663668000000,{"close":9000}],[1663671600000,{"close":90000}]]",
+  "!marketHistory!prices-USD-bitcoin-day" => "[[1651190400000,{"close":9000}],[1651276800000,{"close":90000}]]",
+}
+`;
+
+exports[`market history monitor should not invalidate cache if clear cache version from remote config atom set but same value in storage 1`] = `
+Map {
+  "!marketHistory!clear-market-history-cache-from-remote-config" => ""v1"",
+  "!marketHistory!prices-USD-ethereum-hour" => "[[123,{"close":345}]]",
+}
+`;
+
+exports[`market history monitor should not invalidate cache if clear cache version from remote config atom set but same value in storage 2`] = `
+Map {
+  "!marketHistory!clear-market-history-cache-from-remote-config" => ""v1"",
+  "!marketHistory!prices-USD-ethereum-hour" => "[[123,{"close":345}]]",
+  "!marketHistory!prices-USD-bitcoin-day" => "[[1651190400000,{"close":9000}],[1651276800000,{"close":90000}]]",
+  "!marketHistory!prices-USD-bitcoin-hour" => "[[1663668000000,{"close":9000}],[1663671600000,{"close":90000}]]",
+}
+`;
+
+exports[`market history monitor should not invalidate cache if clear cache version is the same as in storage 1`] = `
+Map {
+  "!marketHistory!prices-USD-ethereum-hour" => "[[123,{"close":345}]]",
+  "!marketHistory!clear-market-history-cache" => ""v1"",
+}
+`;
+
+exports[`market history monitor should not invalidate cache if clear cache version is the same as in storage 2`] = `
+Map {
+  "!marketHistory!prices-USD-ethereum-hour" => "[[123,{"close":345}]]",
+  "!marketHistory!clear-market-history-cache" => ""v1"",
+  "!marketHistory!prices-USD-bitcoin-day" => "[[1651190400000,{"close":9000}],[1651276800000,{"close":90000}]]",
+  "!marketHistory!prices-USD-bitcoin-hour" => "[[1663668000000,{"close":9000}],[1663671600000,{"close":90000}]]",
+}
+`;
+
+exports[`market history monitor should store prices in atom on start 1`] = `
+Map {
+  "!marketHistory!prices-USD-bitcoin-day" => "[[1651190400000,{"close":9000}],[1651276800000,{"close":90000}]]",
+  "!marketHistory!prices-USD-bitcoin-hour" => "[[1663668000000,{"close":9000}],[1663671600000,{"close":90000}]]",
+}
+`;

@@ -1,0 +1,7 @@
+declare module '@exodus/cardano-lib'
+declare module '@exodus/assets'
+declare module '@exodus/cardano-meta'
+declare module '@exodus/bitcoin-plugin'
+declare module '@exodus/solana-plugin'
+declare module '@exodus/assets-feature/module'
+declare module '@exodus/ethereum-plugin'

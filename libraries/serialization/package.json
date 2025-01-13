@@ -1,0 +1,37 @@
+{
+  "name": "@exodus/serialization",
+  "version": "1.2.0",
+  "description": "JSON serialization/deserialization for Exodus' commonly-used classes",
+  "type": "module",
+  "exports": "./src/index.js",
+  "author": "Exodus Movement, Inc.",
+  "main": "src/index.js",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/serialization",
+  "files": [
+    "src",
+    "CHANGELOG.md"
+  ],
+  "dependencies": {
+    "lodash": "^4.17.11"
+  },
+  "scripts": {
+    "test": "run -T exodus-test --jest",
+    "lint": "NODE_ENV=test run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "benchmark": "npx babel-node '__tests__/benchmark.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aserialization"
+  },
+  "devDependencies": {
+    "@exodus/currency": "workspace:^",
+    "@exodus/models": "workspace:^",
+    "benchmark": "^2.1.4",
+    "benchmark-meter": "^1.0.0"
+  }
+}

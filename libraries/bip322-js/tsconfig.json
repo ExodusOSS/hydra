@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "strict": false,
+    "rootDir": "./src",
+    "skipLibCheck": true,
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "target": "es2022",
+    "outDir": "dist",
+    "declaration": true,
+    "baseUrl": "."
+  },
+  "include": ["src", "test"]
+}

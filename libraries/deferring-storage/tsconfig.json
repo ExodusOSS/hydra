@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./lib",
+    "lib": ["esnext"],
+    "target": "ES2022",
+    "allowJs": true,
+    "noImplicitAny": false
+  },
+  "include": ["src", "__tests__"]
+}

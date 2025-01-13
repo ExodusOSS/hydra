@@ -1,0 +1,42 @@
+[
+  {
+    "type": "failed",
+    "data": {
+      "exodus_0": {
+        "ethereum": [
+          {
+            "txId": "0x35a9b9b3948cc2155f82801ee0a97b1c14952a9e6e2fef06474d8ee7e38d422e",
+            "date": "2022-06-02T19:42:48.000Z",
+            "confirmations": 1,
+            "dropped": false,
+            "coinAmount": "0.127903917190416564 ETH",
+            "coinName": "ethereum",
+            "error": "Internal error",
+            "failed": "Internal error",
+            "from": ["0x3ae3fe25a87123fdd0430859c910bac7af3ac04a"],
+            "data": { "data": "0x", "nonce": 3, "gasLimit": 21000, "methodId": "0x" }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "success",
+    "data": {
+      "exodus_0": {
+        "ethereum": [
+          {
+            "txId": "0x1a4770753057afafd1a9ca64aea5f7127871b5825feb983a3a26c7866f666420",
+            "date": "2022-06-02T19:42:48.000Z",
+            "confirmations": 1,
+            "dropped": false,
+            "coinAmount": "0.127903917190416564 ETH",
+            "coinName": "ethereum",
+            "from": ["0x3ae3fe25a87123fdd0430859c910bac7af3ac04a"],
+            "data": { "data": "0x", "nonce": 3, "gasLimit": 21000, "methodId": "0x" }
+          }
+        ]
+      }
+    }
+  }
+]

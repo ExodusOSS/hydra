@@ -1,0 +1,50 @@
+{
+  "name": "@exodus/key-viewer",
+  "version": "1.1.3",
+  "description": "Export an asset's encoded private key for software wallet accounts",
+  "author": "Exodus Movement, Inc.",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/key-viewer",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Akey-viewer"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "run -T tsc -p tsconfig.build.json",
+    "build:watch": "concurrently 'run -T tsc -w -p tsconfig.build.json' 'run -T tsc-alias -w -p tsconfig.build.json'",
+    "clean": "run -T tsc --clean",
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest --esbuild",
+    "prepublishOnly": "yarn run -T build --scope @exodus/key-viewer",
+    "sync:mobile": "concurrently 'run -T sync:mobile @exodus/key-viewer' yarn:build:watch"
+  },
+  "devDependencies": {
+    "@exodus/address-provider": "workspace:^",
+    "@exodus/asset-sources": "workspace:^",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/bitcoin-plugin": "^1.13.0",
+    "@exodus/dependency-types": "workspace:^",
+    "@exodus/key-utils": "workspace:^",
+    "@exodus/keychain": "^7.3.0",
+    "@exodus/logger": "workspace:^",
+    "@exodus/models": "workspace:^",
+    "@exodus/public-key-provider": "workspace:^",
+    "@types/minimalistic-assert": "^1.0.1",
+    "bip39": "^3.1.0"
+  },
+  "dependencies": {
+    "@exodus/asset-lib": "^5.2.1",
+    "@exodus/key-identifier": "^1.2.1",
+    "minimalistic-assert": "^1.0.1"
+  }
+}

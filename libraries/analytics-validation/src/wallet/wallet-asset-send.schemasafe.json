@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "WalletAssetSend"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "amount": {
+          "type": "string"
+        },
+        "amount_usd": {
+          "type": "string"
+        },
+        "asset_name": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        },
+        "network_fee_amount": {
+          "type": "number"
+        },
+        "network_fee_amount_usd": {
+          "type": "number"
+        },
+        "slide_position": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "change_fee_enabled": {
+          "type": "boolean"
+        },
+        "failure_reason": {
+          "type": "string"
+        },
+        "failure_hint": {
+          "type": "string"
+        },
+        "asset_balance": {
+          "type": "number",
+          "minimum": 0
+        },
+        "asset_balance_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "spendable_balance": {
+          "type": "number"
+        },
+        "is_repeated_address": {
+          "type": "boolean"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

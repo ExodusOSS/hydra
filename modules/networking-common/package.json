@@ -1,0 +1,46 @@
+{
+  "name": "@exodus/networking-common",
+  "version": "1.0.0",
+  "description": "Platform-agnostic interfaces and common utilities to be used across our networking modules",
+  "author": "Exodus Movement Inc",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/modules/networking-common",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=label%3Anetworking-common"
+  },
+  "keywords": [
+    "networking",
+    "http",
+    "formdata",
+    "cookie",
+    "fetch",
+    "url",
+    "utilities"
+  ],
+  "files": [
+    "form",
+    "cookie",
+    "http",
+    "url",
+    "index.d.ts",
+    "index.js",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc --build tsconfig.build.json",
+    "prepack": "cp -R lib/* ./",
+    "test": "jest",
+    "clean": "tsc --build --clean",
+    "lint": "eslint --ignore-path .gitignore .",
+    "lint:fix": "yarn lint --fix"
+  },
+  "devDependencies": {
+    "eslint": "^8.33.0",
+    "jest": "^29.1.2"
+  }
+}

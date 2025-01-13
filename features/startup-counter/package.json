@@ -1,0 +1,37 @@
+{
+  "name": "@exodus/startup-counter",
+  "version": "1.1.0",
+  "description": "Tracks how many times app started",
+  "author": "Exodus Movement, Inc.",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/startup-counter",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Astartup-counter"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "atoms",
+    "plugin",
+    "redux",
+    "README.md",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
+  ],
+  "scripts": {
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest"
+  },
+  "dependencies": {
+    "@exodus/atoms": "^8.0.0"
+  },
+  "devDependencies": {
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "redux": "^4.2.1"
+  }
+}

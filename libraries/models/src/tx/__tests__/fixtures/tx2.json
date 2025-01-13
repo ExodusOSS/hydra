@@ -1,0 +1,29 @@
+{
+  "txId": "8f216373b49cb838b336b9c25e3d0e0c7b8fff1bcabcd173b3115bd0b24de359",
+  "coinAmount": "0.002 BTC",
+  "date": "2016-12-03T05:13:59.697Z",
+  "coinName": "bitcoin",
+  "addresses": [
+    {
+      "address": "1DSbRkgDgEX2QaqAcqpLHh4zyqfWNeiZmk",
+      "meta": {
+        "__comment": "not the actual path",
+        "path": "m/0/0"
+      }
+    },
+    {
+      "address": "1AnzK5NiQ5bZsvBzRNXHgbMSEUvQhtuMCQ",
+      "meta": {
+        "__comment": "not the actual path",
+        "path": "m/0/4"
+      }
+    },
+    {
+      "address": "1LnLBNUgjQiEovNujzbtkiitV6U1qrCu7m",
+      "meta": {
+        "__comment": "not the actual path",
+        "path": "m/0/5"
+      }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@exodus/await-proxy",
+  "version": "1.2.2",
+  "author": "Exodus Movement, Inc.",
+  "description": "Proxies a module and delays all module calls",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/await-proxy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aawait-proxy"
+  },
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "CHANGELOG.md"
+  ],
+  "devDependencies": {
+    "delay": "^5.0.0"
+  },
+  "scripts": {
+    "test": "run -T exodus-test --jest",
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix"
+  }
+}

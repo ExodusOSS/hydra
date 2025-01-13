@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "DappEvmChainSet"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        },
+        {
+          "$ref": "common-properties#/definitions/web3Properties"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "chain_id": {
+          "type": "string",
+          "enum": [
+            "0x1",
+            "0x1e",
+            "0x1E",
+            "0x38",
+            "0x89",
+            "0xa",
+            "0xa4b1",
+            "0xa4ba",
+            "0xa86a",
+            "0xfa"
+          ]
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

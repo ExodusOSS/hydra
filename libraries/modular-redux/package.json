@@ -1,0 +1,31 @@
+{
+  "name": "@exodus/modular-redux",
+  "version": "1.1.0",
+  "description": "Exodus modular Redux enhancer",
+  "author": "Exodus Movement, Inc.",
+  "license": "UNLICENSED",
+  "main": "src/index.js",
+  "homepage": "https://github.com/ExodusMovement/modular-redux#readme",
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "assert": "1.1.1"
+  },
+  "peerDependencies": {
+    "redux": "*",
+    "redux-watch": "*"
+  },
+  "devDependencies": {
+    "@exodus/eslint-config": "^0.2.6",
+    "@exodus/eslint-plugin-react-hooks": "^2.2.0-exodus2",
+    "@exodus/prettier": "^0.2.5",
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.25.1",
+    "prettier": "^2.3.2"
+  },
+  "eslintConfig": {
+    "extends": "@exodus/eslint-config/react"
+  },
+  "prettier": "@exodus/prettier"
+}

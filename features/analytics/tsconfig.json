@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["api/index.d.ts", "index.d.ts"],
+  "compilerOptions": {
+    "removeComments": false
+  }
+}

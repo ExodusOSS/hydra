@@ -1,0 +1,37 @@
+{
+  "name": "@exodus/tx-simulator",
+  "version": "1.4.1",
+  "main": "lib/index.js",
+  "description": "Module to simulate a transaction",
+  "files": [
+    "lib"
+  ],
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "run -T tsc --build tsconfig.build.json",
+    "build:watch": "run -T tsc --build -w tsconfig.build.json",
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "clean": "run -T tsc --build --clean",
+    "test": "run -T jest",
+    "prepublishOnly": "yarn run -T build --scope @exodus/tx-simulator"
+  },
+  "dependencies": {
+    "@exodus/web3-simulation": "^1.0.0"
+  },
+  "devDependencies": {
+    "@exodus/assets-base": "^8.1.19",
+    "@exodus/dependency-types": "workspace:^",
+    "@exodus/exchange-client-providers": "workspace:^",
+    "@exodus/web3-solana-utils": "^1.61.0"
+  },
+  "author": "Exodus Movement, Inc.",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Atx-simulator"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/tx-simulator"
+}

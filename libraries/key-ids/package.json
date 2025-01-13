@@ -1,0 +1,33 @@
+{
+  "name": "@exodus/key-ids",
+  "version": "1.2.3",
+  "type": "module",
+  "description": "This package holds key identifiers for Exodus' own BIP43 purpose",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/key-ids",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Akey-ids"
+  },
+  "main": "src/index.js",
+  "files": [
+    "src",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "lint": "run -T eslint . --ignore-path ../../.gitignore",
+    "test": "run -T jest",
+    "lint:fix": "yarn lint --fix"
+  },
+  "dependencies": {
+    "@exodus/key-identifier": "^1.2.1",
+    "minimalistic-assert": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/minimalistic-assert": "^1.0.1"
+  }
+}

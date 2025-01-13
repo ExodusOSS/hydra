@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "WalletAssetView"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "asset_name": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "network": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "price_or_balance": {
+          "type": "string",
+          "enum": ["price", "balance", "crypto-balance"]
+        },
+        "asset_balance": {
+          "type": "number",
+          "minimum": 0
+        },
+        "asset_balance_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "spendable_balance": {
+          "type": "number"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

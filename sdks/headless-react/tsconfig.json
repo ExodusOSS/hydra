@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "noEmit": true,
+    "allowJs": true,
+    "jsx": "react"
+  },
+  "include": ["src", "__tests__"]
+}

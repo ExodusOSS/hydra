@@ -1,0 +1,38 @@
+This patch enables a minimal view for the LogBox in React Native
+
+diff --git a/src/node_modules/react-native/Libraries/LogBox/LogBoxNotificationContainer.js b/src/node_modules/react-native/Libraries/LogBox/LogBoxNotificationContainer.js
+--- /src/node_modules/react-native/Libraries/LogBox/LogBoxNotificationContainer.js	2023-12-13 12:17:54
++++ /src/node_modules/react-native/Libraries/LogBox/LogBoxNotificationContainer.js	2023-12-13 12:17:59
+@@ -15,6 +15,8 @@
+ import LogBoxLogNotification from './UI/LogBoxNotification';
+ import * as React from 'react';
+
++const minimal = process.env.LOG_BOX_MINI === 'true'
++
+ type Props = $ReadOnly<{|
+   logs: $ReadOnlyArray<LogBoxLog>,
+   selectedLogIndex: number,
+@@ -58,6 +60,7 @@
+       {warnings.length > 0 && (
+         <View style={styles.toast}>
+           <LogBoxLogNotification
++            minimal={minimal}
+             log={warnings[warnings.length - 1]}
+             level="warn"
+             totalLogCount={warnings.length}
+@@ -69,6 +72,7 @@
+       {errors.length > 0 && (
+         <View style={styles.toast}>
+           <LogBoxLogNotification
++            minimal={minimal}
+             log={errors[errors.length - 1]}
+             level="error"
+             totalLogCount={errors.length}
+@@ -87,6 +91,7 @@
+     left: 10,
+     right: 10,
+     position: 'absolute',
++    ...(minimal ? { width: 80 } : {}),
+   },
+   toast: {
+     borderRadius: 8,

@@ -1,0 +1,332 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Common properties used by most of the events. It explicitly omits the 'unevaluatedProperties' keyword to make it usable with 'allOf' syntax.",
+  "type": "object",
+  "required": [],
+  "definitions": {
+    "web3Properties": {
+      "description": "Common web3 events properties.",
+      "type": "object",
+      "required": [],
+      "properties": {
+        "dapp_domain": {
+          "type": "string",
+          "format": "uri-template"
+        }
+      },
+      "$comment": "It explicitly omits the 'unevaluatedProperties' keyword to make it usable with 'allOf' syntax."
+    }
+  },
+  "properties": {
+    "time": {
+      "type": "number"
+    },
+    "navigation_time": {
+      "type": "number"
+    },
+    "distinct_id": {
+      "type": "string",
+      "format": "base64",
+      "maxLength": 100,
+      "$comment": "Max length is arbitrary"
+    },
+    "app_build": {
+      "anyOf": [
+        { "const": "dev" },
+        { "const": "prod" },
+        { "const": "mobile" },
+        { "const": "nile" },
+        { "const": "production" },
+        { "const": "stage" }
+      ]
+    },
+    "app_platform": {
+      "anyOf": [{ "const": "browser" }, { "const": "mobile" }, { "const": "desktop" }]
+    },
+    "app_version": {
+      "type": "string",
+      "format": "semver-string",
+      "maxLength": 10,
+      "$comment": "Max length is arbitrary"
+    },
+    "account_source": {
+      "type": "string",
+      "maxLength": 30,
+      "$comment": "Sensible default for future cases"
+    },
+    "asset_exchanged_last_90": {
+      "type": "boolean"
+    },
+    "asset_purchased_last_90": {
+      "type": "boolean"
+    },
+    "asset_sold_last_90": {
+      "type": "boolean"
+    },
+    "asset_received_last_90": {
+      "type": "boolean"
+    },
+    "asset_sent_last_90": {
+      "type": "boolean"
+    },
+    "asset_staked_last_90": {
+      "type": "boolean"
+    },
+    "child_telemetry_identifiers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "any-string",
+        "maxLength": 50
+      }
+    },
+    "is_staking": {
+      "type": "boolean"
+    },
+    "staked_assets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "any-string"
+      }
+    },
+    "device_manufacturer": {
+      "anyOf": [{ "const": "Apple" }]
+    },
+    "device_model": {
+      "type": "string",
+      "format": "any-string"
+    },
+    "device_arch": {
+      "type": "string",
+      "format": "any-string"
+    },
+    "experiments": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "any-string"
+      }
+    },
+    "has_balance": {
+      "type": "boolean"
+    },
+    "has_nft": {
+      "type": "boolean"
+    },
+    "locale": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "locale",
+            "maxLength": 30,
+            "$comment": "Max length is arbitrary"
+          }
+        },
+        {
+          "type": "string",
+          "format": "locale",
+          "maxLength": 30,
+          "$comment": "Max length is arbitrary"
+        },
+        {
+          "enum": ["unknown_unknown", "unknown-unknown"]
+        }
+      ]
+    },
+    "mp_lib": {
+      "const": "Segment: unknown"
+    },
+    "mp_processing_time_ms": {
+      "type": "number"
+    },
+    "app_id": {
+      "type": "string",
+      "format": "any-string",
+      "maxLength": 20,
+      "$comment": "Max length is arbitrary"
+    },
+    "os_name": {
+      "anyOf": [
+        {
+          "const": "A"
+        },
+        {
+          "const": "android"
+        },
+        {
+          "const": "darwin"
+        },
+        {
+          "const": "I"
+        },
+        {
+          "const": "ios"
+        },
+        {
+          "const": "L"
+        },
+        {
+          "const": "linux"
+        },
+        {
+          "const": "M"
+        },
+        {
+          "const": "W"
+        },
+        {
+          "const": "win32"
+        },
+        {
+          "const": "win"
+        },
+        {
+          "const": "cros"
+        },
+        {
+          "const": "mac"
+        }
+      ]
+    },
+    "os_version": {
+      "type": "string",
+      "format": "any-string",
+      "maxLength": 10,
+      "$comment": "Max length is arbitrary"
+    },
+    "screen_height": {
+      "type": "number"
+    },
+    "screen_width": {
+      "type": "number"
+    },
+    "selected_language": {
+      "type": "string",
+      "format": "any-string"
+    },
+    "origin": {
+      "type": "string",
+      "format": "any-string"
+    },
+    "has_backup": {
+      "type": "boolean"
+    },
+    "country": {
+      "type": "string",
+      "format": "any-string",
+      "minLength": 2,
+      "maxLength": 4
+    },
+    "region": {
+      "type": "string",
+      "format": "any-string",
+      "minLength": 1,
+      "maxLength": 6
+    },
+    "on_vpn": {
+      "type": "boolean"
+    },
+    "wallet_age": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "device_tz_matches_ip": {
+      "type": "boolean"
+    },
+    "on_phone_call": {
+      "type": "boolean"
+    },
+    "restricted_device": {
+      "type": "boolean"
+    },
+    "restricted_os": {
+      "type": "boolean"
+    },
+    "number_of_assets": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "number_of_assets_enabled": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "number_of_assets_favorites": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "trust_score": {
+      "type": "number",
+      "minimum": 0
+    },
+    "adjusted_trust_score": {
+      "type": "number",
+      "minimum": 0
+    },
+    "risk_metrics_loading": {
+      "type": "boolean"
+    },
+    "total_balance_usd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "btc_balance": {
+      "type": "number",
+      "minimum": 0
+    },
+    "btc_balance_usd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "eth_balance": {
+      "type": "number",
+      "minimum": 0
+    },
+    "eth_balance_usd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "sol_balance": {
+      "type": "number",
+      "minimum": 0
+    },
+    "sol_balance_usd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "trx_balance": {
+      "type": "number",
+      "minimum": 0
+    },
+    "trx_balance_usd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "usdt_balance": {
+      "type": "number",
+      "minimum": 0
+    },
+    "usdt_balance_usd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "usdttrx_balance": {
+      "type": "number",
+      "minimum": 0
+    },
+    "usdttrx_balance_usd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "lightning_btc_balance": {
+      "type": "number",
+      "minimum": 0
+    },
+    "lightning_btc_balance_usd": {
+      "type": "number",
+      "minimum": 0
+    }
+  }
+}

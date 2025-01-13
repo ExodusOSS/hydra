@@ -1,0 +1,48 @@
+{
+  "name": "@exodus/wallet",
+  "version": "15.1.0",
+  "description": "Primary module for managing the 12 words phrase and signing transactions.",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/wallet",
+  "license": "UNLICENSED",
+  "author": "Exodus Movement, Inc.",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Awallet"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "scripts": {
+    "test": "run -T exodus-test --jest",
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
+    "lint:fix": "yarn lint --fix"
+  },
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "api",
+    "atoms",
+    "module",
+    "migrations",
+    "plugin",
+    "index.d.ts",
+    "CHANGELOG.md",
+    "README.md",
+    "!**/__tests__/**"
+  ],
+  "dependencies": {
+    "@exodus/atoms": "^9.0.0",
+    "@exodus/key-ids": "^1.2.3",
+    "@exodus/key-utils": "^3.2.0",
+    "bip39": "^2.6.0",
+    "make-concurrent": "^4.0.0",
+    "minimalistic-assert": "^1.0.1",
+    "randombytes": "^2.0.6"
+  },
+  "devDependencies": {
+    "@exodus/key-identifier": "^1.2.1",
+    "@exodus/keychain": "^7.3.0",
+    "@exodus/storage-memory": "workspace:^",
+    "buffer-json": "^2.0.0"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "@exodus/basic-utils",
+  "version": "3.2.0",
+  "description": "Basic lightweight lib with common utility classes and methods.",
+  "type": "module",
+  "main": "src/index.js",
+  "author": "Exodus Movement, Inc.",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/basic-utils",
+  "files": [
+    "src",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
+  ],
+  "dependencies": {
+    "@exodus/synchronized-time": "^1.0.0",
+    "minimalistic-assert": "^1.0.1"
+  },
+  "scripts": {
+    "test": "run -T exodus-test --jest",
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abasic-utils"
+  }
+}

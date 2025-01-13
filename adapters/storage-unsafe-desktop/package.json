@@ -1,0 +1,39 @@
+{
+  "name": "@exodus/storage-unsafe-desktop",
+  "version": "1.1.1",
+  "description": "storage-spec interface implementation for the Node.js environment",
+  "author": "Exodus Movement Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/adapters/storage-unsafe-desktop#readme",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Astorage-unsafe-desktop"
+  },
+  "main": "src/index.js",
+  "files": [
+    "src",
+    "CHANGELOG.md",
+    "!src/*.test.js",
+    "internal.js"
+  ],
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint . --ignore-path ../../.gitignore",
+    "lint:fix": "yarn lint --fix"
+  },
+  "devDependencies": {
+    "@exodus/storage-spec": "^3.0.0",
+    "eslint": "^8.44.0",
+    "jest": "^29.1.2",
+    "tempy": "^1.0.1"
+  },
+  "dependencies": {
+    "@exodus/storage-enhancers": "workspace:^",
+    "delay": "^5.0.0",
+    "fs-extra": "^10.0.0",
+    "make-concurrent": "^5.3.0"
+  }
+}

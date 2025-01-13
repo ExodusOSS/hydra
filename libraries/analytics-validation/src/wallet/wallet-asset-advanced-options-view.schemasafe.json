@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "WalletAssetAdvancedOptionsView"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "asset_name": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "network": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "available_balance": {
+          "type": "number"
+        },
+        "frozen_balance": {
+          "type": "number"
+        },
+        "available_energy": {
+          "type": "number"
+        },
+        "available_bandwidth": {
+          "type": "number"
+        },
+        "frozen_for_energy": {
+          "type": "number"
+        },
+        "frozen_for_bandwidth": {
+          "type": "number"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}
