@@ -2,12 +2,15 @@
 
 ## Usage
 
-Adapter to wrap a storage. It encrypts values on write, and decrypts them on read.
+Storage enhancer for the `@exodus/storage-spec` interface. It encrypts values on write, and decrypts them on read. To address cases where the encryption keys are available asynchronously, the enhancer accepts a promise that resolves to the encryption/decryption functions.
 
 ```js
+import pDefer from 'p-defer'
+import withEncryption from '@exodus/storage-encrypted'
+
 const cryptoFunctions = pDefer()
 
-const storage = createStorageEncrypted({
+const storage = withEncryption({
   storage: storage.namespace('wayne-foundation-blueprints'),
   cryptoFunctionsPromise: cryptoFunctions.promise,
 })

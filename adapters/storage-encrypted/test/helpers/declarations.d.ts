@@ -1,6 +1,6 @@
 declare module '@exodus/keychain/module/crypto/seed-id'
 declare module '@exodus/storage-memory' {
-  import { Storage } from '@exodus/storage-interface'
+  import type { Storage } from '@exodus/storage-interface'
 
   export default function createInMemoryStorage<Value>(params?: { store?: unknown }): Storage<Value>
 }
@@ -23,12 +23,14 @@ declare module '@exodus/keychain/module' {
 
   type dependencies = string[]
 
-  export default keychainDefinition = {
+  const keychainDefinition = {
     id: string,
     type: string,
     factory: createKeychain,
     dependencies,
   }
+
+  export default keychainDefinition
 
   export function createKeyIdentifierForExodus(args: { exoType: string })
 }

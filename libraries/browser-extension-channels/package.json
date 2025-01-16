@@ -1,0 +1,28 @@
+{
+  "name": "@exodus/browser-extension-channels",
+  "version": "1.1.5",
+  "description": "Create message channels that allow isolated pages and services to message eachother in the browser extension",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/browser-extension-channels",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abrowser-extension-channels"
+  },
+  "main": "index.js",
+  "files": [
+    "**/*.js",
+    "CHANGELOG.md",
+    "!**/__tests__/**",
+    "!.eslintrc.js"
+  ],
+  "scripts": {
+    "lint": "yarn run -T eslint ."
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

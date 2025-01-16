@@ -1,8 +1,8 @@
-import { Storage } from '@exodus/storage-interface'
+import type { Storage } from '@exodus/storage-interface'
 import assert from 'minimalistic-assert'
 import transformStorage from '@exodus/transform-storage'
 
-import { CryptoFunctions } from './helpers/types'
+import type { CryptoFunctions } from './helpers/types.js'
 
 type ConstructorParameters<T extends Storage> = {
   storage: T

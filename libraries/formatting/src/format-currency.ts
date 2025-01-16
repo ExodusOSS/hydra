@@ -91,7 +91,7 @@ const formatNumber = (
 
   if ((globalThis as any).Intl === (globalThis as any).IntlPolyfill) {
     // There is a bug in IntlPolyfill that can lose one decimal place during rounding - round it manually
-    // See https://github.com/ExodusMovement/exodus-mobile/blob/3daeddcd79b849f3060ac9c53819cc8b7f68dc8a/src/_local_modules/polyfills/intl.android.js#L1
+    // See https://github.com/ExodusMovement/exodus-hydra/blob/764847030e13a290668ff9df80750813a9e0fcdd/libraries/react-native-base/shims/intl.android.js#L1
     const maxSignificant = Math.min(options.maximumSignificantDigits ?? 21, 21)
     number = roundDecimalSignificantsUp(number, maxSignificant)
   }

@@ -54,6 +54,11 @@
       "maxLength": 30,
       "$comment": "Sensible default for future cases"
     },
+    "account_compatibility_mode": {
+      "type": "string",
+      "maxLength": 20,
+      "$comment": "Max length is also arbitrary, can be ledger, trezor, or nothing"
+    },
     "asset_exchanged_last_90": {
       "type": "boolean"
     },

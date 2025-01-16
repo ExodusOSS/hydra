@@ -1,13 +1,13 @@
-import runStorageSpecTestSuite from '@exodus/storage-spec'
-import createInMemoryStorage from '@exodus/storage-memory'
-import { Storage } from '@exodus/storage-interface'
+import { createKeyIdentifierForExodus } from '@exodus/key-ids'
 import keychainDefinition, { type SodiumEncryptor } from '@exodus/keychain/module'
 import { getSeedId } from '@exodus/keychain/module/crypto/seed-id'
-import { createKeyIdentifierForExodus } from '@exodus/key-ids'
+import type { Storage } from '@exodus/storage-interface'
+import createInMemoryStorage from '@exodus/storage-memory'
+import runStorageSpecTestSuite from '@exodus/storage-spec'
 import { mnemonicToSeedSync } from 'bip39'
 import pDefer from 'p-defer'
 
-import createStorageEncrypted from '../src'
+import createStorageEncrypted from '../src/index.js'
 
 const SEED = mnemonicToSeedSync(
   'menu memory fury language physical wonder dog valid smart edge decrease worth'
@@ -28,11 +28,9 @@ describe('storage-encrypted', () => {
     inMemoryStorage = createInMemoryStorage()
     storage = createStorageEncrypted({
       storage: inMemoryStorage,
-      cryptoFunctionsPromise: new Promise((resolve) => {
-        resolve({
-          encrypt: (data) => sodiumEncryptor.encryptSecretBox({ seedId, data }),
-          decrypt: (data) => sodiumEncryptor.decryptSecretBox({ seedId, data }),
-        })
+      cryptoFunctionsPromise: Promise.resolve({
+        encrypt: (data) => sodiumEncryptor.encryptSecretBox({ seedId, data }),
+        decrypt: (data) => sodiumEncryptor.decryptSecretBox({ seedId, data }),
       }),
     })
   })
@@ -41,10 +39,8 @@ describe('storage-encrypted', () => {
 
   describe('crypto function assertions', () => {
     it('should clearly state that encrypt is missing', async () => {
-      const cryptoFunctionsPromise = new Promise((resolve) => {
-        resolve({
-          decrypt: (data: unknown) => sodiumEncryptor.decryptSecretBox({ seedId, data }),
-        })
+      const cryptoFunctionsPromise = Promise.resolve({
+        decrypt: (data: unknown) => sodiumEncryptor.decryptSecretBox({ seedId, data }),
       })
 
       storage = createStorageEncrypted({
@@ -60,10 +56,8 @@ describe('storage-encrypted', () => {
     })
 
     it('should clearly state that decrypt is missing', async () => {
-      const cryptoFunctionsPromise = new Promise((resolve) => {
-        resolve({
-          encrypt: (data: unknown) => sodiumEncryptor.encryptSecretBox({ seedId, data }),
-        })
+      const cryptoFunctionsPromise = Promise.resolve({
+        encrypt: (data: unknown) => sodiumEncryptor.encryptSecretBox({ seedId, data }),
       })
 
       storage = createStorageEncrypted({

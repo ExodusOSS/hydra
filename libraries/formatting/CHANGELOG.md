@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/formatting@9.0.1...@exodus/formatting@9.0.2) (2024-11-25)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
 ## [9.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/formatting@9.0.0...@exodus/formatting@9.0.1) (2024-11-01)
 
 ### Performance Improvements

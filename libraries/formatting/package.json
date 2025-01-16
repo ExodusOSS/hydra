@@ -1,7 +1,7 @@
 {
   "name": "@exodus/formatting",
   "type": "module",
-  "version": "9.0.1",
+  "version": "9.0.2",
   "description": "Utils for formatting numbers, strings and money.",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -9,7 +9,7 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/formatting",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aformatting"
   },
@@ -39,5 +39,8 @@
   },
   "devDependencies": {
     "@types/bn.js": "^5.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

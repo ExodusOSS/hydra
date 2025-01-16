@@ -1,0 +1,48 @@
+{
+  "name": "@exodus/browser-extension-adapters",
+  "version": "1.3.2",
+  "description": "Various storage adapters using in the browser extension",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/browser-extension-adapters",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abrowser-extension-adapters"
+  },
+  "dependencies": {
+    "@exodus/basic-utils": "^2.0.0",
+    "@exodus/key-identifier": "^1.0.0",
+    "@exodus/storage-encrypted": "^1.4.2",
+    "@exodus/storage-memory": "^2.2.1",
+    "buffer-json": "^2.0.0",
+    "buffer-noise": "^1.0.1",
+    "make-concurrent": "^5.3.0",
+    "minimalistic-assert": "^1.0.1",
+    "p-defer": "^4.0.0",
+    "secure-container": "^2.0.0"
+  },
+  "files": [
+    "encrypted-storage/**/*.js",
+    "seco-storage/**/*.js",
+    "session-storage/**/*.js",
+    "unsafe-storage/**/*.js",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
+  ],
+  "scripts": {
+    "lint": "run -T eslint .",
+    "test": "run -T exodus-test --jest --esbuild"
+  },
+  "devDependencies": {
+    "@exodus/key-ids": "^1.2.3",
+    "@exodus/keychain": "^7.3.0",
+    "@exodus/storage-spec": "^3.2.0",
+    "bip39": "^3.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

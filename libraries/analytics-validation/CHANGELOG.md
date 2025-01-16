@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.49.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.48.0...@exodus/analytics-validation@2.49.0) (2025-01-09)
+
+### Features
+
+- feat: add account compatibility mode to default props (#11019)
+
+## [2.48.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.47.1...@exodus/analytics-validation@2.48.0) (2025-01-02)
+
+### Features
+
+- feat(analytics-validation): add view exit event (#10513)
+
 ## [2.47.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.47.0...@exodus/analytics-validation@2.47.1) (2024-12-11)
 
 **Note:** Version bump only for package @exodus/analytics-validation

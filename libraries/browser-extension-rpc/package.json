@@ -1,0 +1,45 @@
+{
+  "name": "@exodus/browser-extension-rpc",
+  "version": "3.0.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./background": "./background.js",
+    "./content": "./content.js",
+    "./inapp": "./inapp.js",
+    "./ui": "./ui.js"
+  },
+  "main": "src/index.js",
+  "description": "Creates the various RPC channels used in the browser extension",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/browser-extension-rpc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abrowser-extension-rpc"
+  },
+  "dependencies": {
+    "@exodus/browser-extension-channels": "^1.1.5",
+    "@exodus/json-rpc": "^1.9.0",
+    "@exodus/window-rpc-transport": "^1.0.0",
+    "eventemitter3": "^4.0.7",
+    "ms": "^0.7.1",
+    "p-defer": "^4.0.0"
+  },
+  "files": [
+    "**/*.js",
+    "!**/__tests__/**",
+    "!.eslintrc.js",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "lint": "yarn run -T eslint .",
+    "test": "run -T exodus-test"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
