@@ -1,6 +1,6 @@
 {
   "name": "@exodus/slip10",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Exodus SLIP10 modules.",
   "type": "module",
   "main": "src/index.js",
@@ -13,10 +13,8 @@
     "!**/__tests__/**"
   ],
   "dependencies": {
-    "@exodus/crypto": "^1.0.0-rc.13",
-    "bip32-path": "^0.4.2",
-    "elliptic": "^6.5.4",
-    "lodash": "^4.17.11"
+    "@exodus/crypto": "^1.0.0-rc.16",
+    "bip32-path": "^0.4.2"
   },
   "scripts": {
     "test": "run -T exodus-test --jest",

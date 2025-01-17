@@ -70,6 +70,8 @@ test('verify public key generation', async () => {
       key,
       chainCode,
     })
+
+    assert(hdpriv.publicKey instanceof Buffer, 'Public key is not a buffer')
     assert(
       publicKey === '00' + hdpriv.publicKey.toString('hex'),
       'Invalid public key returns for private key & chaincode'

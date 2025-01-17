@@ -73,8 +73,8 @@ class SeedBasedTransactionSigner implements InternalSigner {
     })
   }
 
-  async #getSigner({
-    baseAsset, // maybe we'll need this for default purpose
+  async #getSignerForWalletAccount({
+    baseAsset,
     walletAccount,
   }: {
     baseAsset: Asset
@@ -103,11 +103,24 @@ class SeedBasedTransactionSigner implements InternalSigner {
       )
     }
 
+    return this.#createSigner({ seedId, getDefaultKeyIdentifier })
+  }
+
+  async #getSignerForKeyId({ seedId, keyId }: { seedId?: string; keyId: KeyIdentifier }) {
+    return this.#createSigner({ seedId, getDefaultKeyIdentifier: () => new KeyIdentifier(keyId) })
+  }
+
+  #createSigner({
+    seedId,
+    getDefaultKeyIdentifier,
+  }: {
+    seedId?: string
+    getDefaultKeyIdentifier: () => KeyIdentifier
+  }) {
     const getPublicKey = async ({
       keyId = getDefaultKeyIdentifier(),
     }: GetPublicKeyParams = {}): Promise<Buffer> => {
-      const { publicKey } = await this.#keychain.exportKey({ seedId, keyId })
-      return publicKey
+      return this.#keychain.getPublicKey({ seedId, keyId })
     }
 
     const sign = ({
@@ -118,39 +131,22 @@ class SeedBasedTransactionSigner implements InternalSigner {
       tweak,
       extraEntropy,
     }: KeychainSignerParams): Promise<any> => {
-      const noTweak = tweak === undefined
-      const noEnc = enc === undefined
-      const noOpts = noEnc && noTweak && extraEntropy === undefined
+      assert(KeyIdentifier.validate(keyId), 'signBuffer: invalid `keyId`')
 
-      assert(data instanceof Uint8Array, `expected "data" to be a Uint8Array, got: ${typeof data}`)
-      assert(
-        !signatureType ||
-          (['ecdsa', 'schnorr', 'schnorrZ'].includes(signatureType) &&
-            keyId.keyType === 'secp256k1') ||
-          (signatureType === 'ed25519' && keyId.keyType === 'nacl'),
-        `"keyId.keyType" ${keyId.keyType} does not support "signatureType" ${signatureType}`
-      )
-
-      if (keyId.keyType === 'nacl') {
-        assert(noOpts, 'unsupported options supplied for ed25519 signature')
-        return this.#keychain.ed25519.signBuffer({ seedId, keyId, data })
+      if (!signatureType) {
+        // temporary because some assets (algorand) do not pass signatureType
+        signatureType = keyId.keyType === 'secp256k1' ? 'ecdsa' : 'ed25519'
       }
 
-      if (signatureType === 'schnorrZ') {
-        assert(noOpts, 'unsupported options supplied for schnorrZ signature')
-        return this.#keychain.secp256k1.signSchnorrZ({ seedId, keyId, data })
-      }
-
-      // only accept 32 byte buffers for ecdsa
-      assert(data.length === 32, `expected "data" to have 32 bytes, got: ${data.length}`)
-
-      if (signatureType === 'schnorr') {
-        assert(noEnc, 'unsupported options supplied for schnorr signature')
-        return this.#keychain.secp256k1.signSchnorr({ seedId, keyId, data, tweak, extraEntropy })
-      }
-
-      assert(noTweak, 'unsupported options supplied for ecdsa signature')
-      return this.#keychain.secp256k1.signBuffer({ seedId, keyId, data, enc, extraEntropy })
+      return this.#keychain.signBuffer({
+        seedId,
+        keyId,
+        data,
+        signatureType,
+        enc,
+        tweak,
+        extraEntropy,
+      })
     }
 
     return { sign, getPublicKey }
@@ -173,12 +169,22 @@ class SeedBasedTransactionSigner implements InternalSigner {
       `txMeta.accountIndex was not a valid integer`
     )
 
+    // Sometimes we need a different keyId than the default.
+    // One example is signing an EOS tx with the Ethereum key, another is ripple:
+    // https://github.com/ExodusMovement/exodus-desktop/blob/174efe1145152446e6183f55155972b3acc05ccc/src/app/_local_modules/eosio-write-api/fallback-claim.js#L54
+    // https://github.com/ExodusMovement/exodus-desktop/blob/82f1e284efed2bf1ff95798a9e8e89bc71e2ae40/src/app/ui/exodus-global/debug/ripple.js#L105
+    const keyId = unsignedTx.txMeta?.keyId
+    assert(!keyId || KeyIdentifier.validate(keyId), `txMeta.keyId must be a key identifier object`)
+
     if (baseAsset.api.features.signWithSigner) {
-      const signer = await this.#getSigner({ baseAsset, walletAccount })
+      const signer = keyId
+        ? await this.#getSignerForKeyId({ seedId: walletAccount.seedId, keyId })
+        : await this.#getSignerForWalletAccount({ walletAccount, baseAsset })
       const signTx = baseAsset.api.signTx!
       return signTx({ unsignedTx, signer })
     }
 
+    // LEGACY starts here
     const options = this.#rpcSigning
       ? { baseAssetName }
       : {
@@ -186,7 +192,7 @@ class SeedBasedTransactionSigner implements InternalSigner {
           signTxCallback: baseAsset.api.signTx,
         }
 
-    // @deprecated use signTransaction() instead
+    // @deprecated use "signWithSigner" feature instead
     return this.#keychain.signTx({
       ...options,
       seedId: walletAccount.seedId,

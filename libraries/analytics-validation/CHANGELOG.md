@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.49.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.49.0...@exodus/analytics-validation@2.49.1) (2025-01-17)
+
+### Bug Fixes
+
+- fix: add format to account_compatibility_mode (#11121)
+
 ## [2.49.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.48.0...@exodus/analytics-validation@2.49.0) (2025-01-09)
 
 ### Features

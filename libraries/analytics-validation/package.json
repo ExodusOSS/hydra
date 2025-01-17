@@ -1,6 +1,6 @@
 {
   "name": "@exodus/analytics-validation",
-  "version": "2.49.0",
+  "version": "2.49.1",
   "description": "JSON schemas for analytics events, to prevent sensitive data from being sent up to the infamous cloud",
   "author": "Exodus Movement, Inc.",
   "repository": {

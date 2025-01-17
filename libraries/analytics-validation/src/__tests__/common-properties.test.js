@@ -7,6 +7,7 @@ const fixtures = {
   app_build: ['prod'],
   app_platform: ['mobile'],
   app_version: ['23.3.28'],
+  account_compatibility_mode: ['exodus', 'ledger', 'trezor', 'phantom'],
   account_source: ['exodus'],
   asset_exchanged_last_90: [false],
   asset_purchased_last_90: [false],

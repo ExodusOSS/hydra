@@ -8,19 +8,3 @@ declare module '@exodus/key-utils'
 declare module '@exodus/assets'
 declare module '@exodus/bitcoin-plugin'
 declare module '@exodus/solana-plugin'
-
-declare module '@exodus/key-identifier' {
-  type ConstructorParams = {
-    derivationPath: string
-    keyType: string
-    derivationAlgorithm: string
-  }
-
-  export default class KeyIdentifier {
-    derivationPath: string
-    keyType: string
-    derivationAlgorithm: string
-
-    constructor(params: ConstructorParams)
-  }
-}

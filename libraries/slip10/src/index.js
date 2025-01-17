@@ -1,11 +1,5 @@
-import elliptic from 'elliptic'
-import lodash from 'lodash'
+import { edwardsToPublicSync } from '@exodus/crypto/curve25519'
 import HDKey from './hdkey.js'
-
-const { once } = lodash
-
-// lazy-load
-const getEd25519 = once(() => elliptic.eddsa('ed25519'))
 
 export default class SLIP10 {
   static fromSeed(seed) {
@@ -39,8 +33,7 @@ export default class SLIP10 {
   }
 
   get publicKey() {
-    const publicKey = getEd25519().keyFromSecret(this.privateKey).getPublic('hex')
-    return Buffer.from(publicKey, 'hex')
+    return edwardsToPublicSync({ privateKey: this.privateKey, format: 'buffer' })
   }
 
   wipePrivateData() {

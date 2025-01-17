@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-signer@2.10.0...@exodus/tx-signer@2.10.1) (2025-01-15)
+
+**Note:** Version bump only for package @exodus/tx-signer
+
+## [2.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-signer@2.9.3...@exodus/tx-signer@2.10.0) (2025-01-15)
+
+### Features
+
+- feat: allow custom keyId in transaction signing (#11002)
+
+## [2.9.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-signer@2.9.2...@exodus/tx-signer@2.9.3) (2024-12-20)
+
+### License
+
+- license: re-license under MIT license (#10599)
+
 ## [2.9.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-signer@2.9.1...@exodus/tx-signer@2.9.2) (2024-12-06)
 
 ### Bug Fixes

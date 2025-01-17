@@ -7,6 +7,7 @@ export const commonProps = {
   app_build: 'prod',
   app_platform: 'mobile',
   app_version: '23.2.2',
+  account_compatibility_mode: 'exodus',
   account_source: 'exodus',
   asset_exchanged_last_90: false,
   asset_purchased_last_90: false,

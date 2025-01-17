@@ -1,6 +1,6 @@
 {
   "name": "@exodus/tx-signer",
-  "version": "2.9.2",
+  "version": "2.10.1",
   "description": "a module to sign transactions",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/tx-signer",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Atx-signer"
   },
@@ -41,10 +41,13 @@
     "@exodus/atoms": "workspace:^",
     "@exodus/bitcoin-plugin": "^1.21.1",
     "@exodus/dependency-types": "workspace:^",
-    "@exodus/keychain": "^7.7.0",
+    "@exodus/keychain": "^7.8.0",
     "@exodus/solana-plugin": "^1.15.0",
     "bip39": "^3.1.0",
     "ts-jest": "^29.0.3"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "peerDependencies": {
     "@exodus/keychain": "^7.7.0"
