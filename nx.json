@@ -1,0 +1,56 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "npmScope": "@exodus",
+  "tasksRunnerOptions": {
+    "default": {
+      "options": {
+        "cacheDirectory": ".cache/nx",
+        "cacheableOperations": ["build", "test", "lint", "lint:fix", "test:integration"]
+      }
+    }
+  },
+  "targetDefaults": {
+    "test": {
+      "inputs": ["^production", "test"],
+      "dependsOn": ["^build", "^prepack"],
+      "outputs": ["{projectRoot}/coverage"]
+    },
+    "test:integration": {
+      "dependsOn": ["^build", "^prepack"],
+      "outputs": ["{projectRoot}/coverage"]
+    },
+    "build": {
+      "dependsOn": ["^build", "^prepack"],
+      "inputs": ["production", "^production"],
+      "outputs": ["{projectRoot}/dist", "{projectRoot}/lib", "{projectRoot}/build"]
+    },
+    "prepack": {
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "inputs": ["^production", "lint"],
+      "dependsOn": ["^build", "^prepack"]
+    }
+  },
+  "workspaceLayout": {
+    "appsDir": "modules"
+  },
+  "namedInputs": {
+    "lint": [
+      "default",
+      "{workspaceRoot}/lint/**",
+      "{workspaceRoot}/.eslintrc.js",
+      "{workspaceRoot}/.eslintignore",
+      "{workspaceRoot}/.prettierignore"
+    ],
+    "test": ["default", "{workspaceRoot}/jest.config.js", "{workspaceRoot}/jest.setup.js"],
+    "default": ["{workspaceRoot}/package.json", "{workspaceRoot}/yarn.lock", "{projectRoot}/**/*"],
+    "production": [
+      "default",
+      "!{projectRoot}/.eslintrc.js",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.(spec|test).json",
+      "!{projectRoot}/jest.(config|setup).[jt]s"
+    ]
+  }
+}

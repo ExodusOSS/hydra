@@ -1,6 +1,6 @@
 {
   "name": "@exodus/react-native-base",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Common build config, shims, and patches used across the Exodus React Native app universe.",
   "files": [
     "babel",

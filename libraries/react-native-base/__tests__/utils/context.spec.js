@@ -82,7 +82,6 @@ const createExpectedContext = ({
   relativeRootNodeModules,
   relativeProdNodeModules,
 }) => ({
-  codePushVersion: '0.73.0',
   reactNativeVersion: '0.42.0',
   reactNavigationCoreVersion: '1.2.3',
   rnGetRandomValuesVersion: '1.2.0',

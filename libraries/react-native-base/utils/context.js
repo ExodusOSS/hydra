@@ -18,10 +18,6 @@ const { version: reactNativeVersion } = require(
   path.join(prodNodeModulesDir, 'react-native/package.json')
 )
 
-const codePushVersion = requireOptional(
-  path.join(prodNodeModulesDir, 'react-native-code-push/package.json')
-)?.version
-
 const { version: reactNavigationCoreVersion } = require(
   path.join(prodNodeModulesDir, '@react-navigation/core/package.json')
 )
@@ -36,7 +32,6 @@ module.exports = {
   reactNativeVersion,
   reactNavigationCoreVersion,
   rnGetRandomValuesVersion,
-  codePushVersion,
   jestVersion,
   directories: {
     root: {

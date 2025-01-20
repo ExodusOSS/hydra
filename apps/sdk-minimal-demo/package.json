@@ -1,0 +1,55 @@
+{
+  "name": "@exodus/sdk-minimal-demo",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Minimal demo for Exodus SDK",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/apps/sdk-minimal-demo",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asdk-minimal-demo"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md",
+    "!**/__tests__/**",
+    "!**/*.test.js"
+  ],
+  "scripts": {
+    "build": "run -T tsc --build",
+    "clean": "run -T tsc --build --clean",
+    "watch": "run -T tsc --watch",
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T jest"
+  },
+  "dependencies": {
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/browser-extension-rpc": "^2.1.0",
+    "@exodus/deferring-storage": "workspace:^",
+    "@exodus/domain-serialization": "workspace:^",
+    "@exodus/ethereum-plugin": "^2.2.0",
+    "@exodus/fetch": "^1.3.1",
+    "@exodus/fusion-local": "workspace:^",
+    "@exodus/headless": "workspace:^",
+    "@exodus/logger": "workspace:^",
+    "@exodus/models": "^12.0.1",
+    "@exodus/prettier": "^1.0.0",
+    "@exodus/storage-memory": "workspace:^",
+    "@exodus/sync-time": "workspace:^",
+    "@exodus/transform-storage": "workspace:^",
+    "@exodus/wild-emitter": "^1.1.0",
+    "buffer-json": "^2.0.0",
+    "eventemitter3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@exodus/storage-interface": "workspace:^",
+    "@types/buffer-json": "^2.0.1"
+  }
+}

@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/react-native-base@2.1.0...@exodus/react-native-base@2.1.1) (2025-01-02)
+
+**Note:** Version bump only for package @exodus/react-native-base
+
 ## [2.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/react-native-base@2.0.4...@exodus/react-native-base@2.1.0) (2024-11-15)
 
 ### Features
