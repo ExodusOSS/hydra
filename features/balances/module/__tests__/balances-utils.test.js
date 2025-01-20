@@ -74,7 +74,7 @@ describe('validateBalances', () => {
     const balances = {
       total: bitcoin.currency.defaultUnit(10),
       spendable: bitcoin.currency.defaultUnit(10),
-      stakable: null,
+      stakeable: null,
     }
 
     const logger = { warn: jest.fn() }
@@ -84,7 +84,7 @@ describe('validateBalances', () => {
     expect(curatedBalances).toEqual({
       total: bitcoin.currency.defaultUnit(10),
       spendable: bitcoin.currency.defaultUnit(10),
-      stakable: null,
+      stakeable: null,
     })
 
     expect(logger.warn).not.toHaveBeenCalled()
@@ -94,7 +94,7 @@ describe('validateBalances', () => {
     const balances = {
       total: bitcoin.currency.defaultUnit(-2),
       spendable: bitcoin.currency.defaultUnit(10),
-      stakable: null,
+      stakeable: null,
     }
 
     const logger = { warn: jest.fn() }
@@ -104,7 +104,7 @@ describe('validateBalances', () => {
     expect(curatedBalances).toEqual({
       total: bitcoin.currency.defaultUnit(0),
       spendable: bitcoin.currency.defaultUnit(10),
-      stakable: null,
+      stakeable: null,
     })
 
     expect(logger.warn).toHaveBeenCalledWith(
@@ -118,7 +118,7 @@ describe('validateBalances', () => {
     const balances = {
       total: bitcoin.currency.defaultUnit(2),
       spendable: ethereum.currency.defaultUnit(10),
-      stakable: null,
+      stakeable: null,
     }
 
     const logger = { warn: jest.fn() }
@@ -128,7 +128,7 @@ describe('validateBalances', () => {
     expect(curatedBalances).toEqual({
       total: bitcoin.currency.defaultUnit(2),
       spendable: bitcoin.currency.defaultUnit(0),
-      stakable: null,
+      stakeable: null,
     })
 
     expect(logger.warn).toHaveBeenCalledWith(

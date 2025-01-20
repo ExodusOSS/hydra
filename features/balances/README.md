@@ -10,7 +10,7 @@ yarn add @exodus/balances
 
 ## Usage
 
-This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md).
+This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/development/using-the-sdk.md).
 
 ### Play with it
 
@@ -36,7 +36,7 @@ selectors.balances
 
 ### API Side
 
-See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK. Note that the balances feature currently doesn't provide a top level API and is meant to be used purely through selectors.
+See [using the sdk](../../docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK. Note that the balances feature currently doesn't provide a top level API and is meant to be used purely through selectors.
 
 If you're building a feature that requires balances, add a dependency on the `balancesAtom` as below. See also the [available balance fields](./default-config.js).
 
@@ -68,7 +68,7 @@ const myModuleDefinition = {
 
 ### UI Side
 
-See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md#events) for more details on basic UI-side setup.
+See [using the sdk](../../docs/development/using-the-sdk.md#events) for more details on basic UI-side setup.
 
 ```js
 import { selectors } from '~/ui/flux'

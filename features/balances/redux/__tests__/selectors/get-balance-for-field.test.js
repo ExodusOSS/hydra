@@ -56,7 +56,7 @@ describe('getBalanceForField', () => {
         field: 'invalid',
       })
     ).toThrow(
-      "Value 'invalid' is not one of the valid fields 'total, balance, spendable, spendableBalance, unconfirmedSent, unconfirmedReceived, unspendable, walletReserve, networkReserve, staking, staked, stakable, unstaking, unstaked, rewards, frozen'"
+      "Value 'invalid' is not one of the valid fields 'total, balance, spendable, spendableBalance, unconfirmedSent, unconfirmedReceived, unspendable, walletReserve, networkReserve, staking, staked, stakeable, unstaking, unstaked, rewards, frozen'"
     )
   })
 })

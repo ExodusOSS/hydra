@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.5.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.5.3...@exodus/balances@13.5.4) (2025-01-17)
+
+### Bug Fixes
+
+- fix: balance typo "stakeable" (#11131)
+
 ## [13.5.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.5.2...@exodus/balances@13.5.3) (2025-01-06)
 
 ### Bug Fixes

@@ -35,7 +35,7 @@ const createBalanceSelectors = [
   { id: 'createNetworkReserve', field: 'networkReserve' },
   { id: 'createStaking', field: 'staking' },
   { id: 'createStaked', field: 'staked' },
-  { id: 'createStakable', field: 'stakable' },
+  { id: 'createStakeable', field: 'stakeable' },
   { id: 'createUnstaking', field: 'unstaking' },
   { id: 'createUnstaked', field: 'unstaked' },
   { id: 'createRewards', field: 'rewards' },

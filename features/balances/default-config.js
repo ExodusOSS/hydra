@@ -8,7 +8,7 @@ const balanceFieldsConfig = [
   { name: 'networkReserve' },
   { name: 'staking' },
   { name: 'staked' },
-  { name: 'stakable' },
+  { name: 'stakeable' },
   { name: 'unstaking' },
   { name: 'unstaked' },
   { name: 'rewards' },

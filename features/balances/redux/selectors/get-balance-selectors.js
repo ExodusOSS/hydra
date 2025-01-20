@@ -31,7 +31,7 @@ const getBalanceSelectors = [
   { id: 'getNetworkReserve', field: 'networkReserve' },
   { id: 'getStaking', field: 'staking' },
   { id: 'getStaked', field: 'staked' },
-  { id: 'getStakable', field: 'stakable' },
+  { id: 'getStakeable', field: 'stakeable' },
   { id: 'getUnstaking', field: 'unstaking' },
   { id: 'getUnstaked', field: 'unstaked' },
   { id: 'getRewards', field: 'rewards' },
