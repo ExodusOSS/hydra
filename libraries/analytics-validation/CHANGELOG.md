@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.50.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.49.1...@exodus/analytics-validation@2.50.0) (2025-01-17)
+
+### Features
+
+- feat(analytics-validation): add 'stage' to PerformanceAppStartup schema (#11132)
+
 ## [2.49.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.49.0...@exodus/analytics-validation@2.49.1) (2025-01-17)
 
 ### Bug Fixes

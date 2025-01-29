@@ -1,9 +1,24 @@
-import createStorageMobile from '../src/index.android'
-import asMock from '@react-native-async-storage/async-storage/jest/async-storage-mock'
-import { Storage } from '@exodus/storage-interface'
+import { mock } from 'node:test'
+
+import type { Storage } from '@exodus/storage-interface'
 import runStorageSpecTestSuite from '@exodus/storage-spec'
-import createInMemoryFS from './helpers/filesystem'
-import { TestFilesystem } from './helpers/types'
+import asMock from '@react-native-async-storage/async-storage/jest/async-storage-mock'
+
+import createInMemoryFS from './helpers/filesystem.js'
+import type { TestFilesystem } from './helpers/types'
+
+mock.module('@exodus/react-native-fs', {
+  defaultExport: {
+    mkdir: jest.fn(),
+    exists: jest.fn(),
+    unlink: jest.fn(),
+    DocumentDirectoryPath: '/document',
+    readUtf8: jest.fn(),
+    writeUtf8: jest.fn(),
+  },
+})
+
+const { default: createStorageMobile } = await import('../src/index.android')
 
 describe('storage-mobile', () => {
   let filesystem: TestFilesystem
@@ -169,10 +184,7 @@ describe('storage-mobile', () => {
 
         const storage = getInstance()
 
-        const advanceBy = async (ms: number) => {
-          jest.advanceTimersByTime(ms)
-          await flushPromises()
-        }
+        const advanceBy = async (ms: number) => jest.advanceTimersByTimeAsync(ms)
 
         callback(
           storage,
@@ -181,10 +193,6 @@ describe('storage-mobile', () => {
           },
           advanceBy
         )
-      }
-
-      function flushPromises() {
-        return new Promise(jest.requireActual('timers').setImmediate)
       }
     })
   })

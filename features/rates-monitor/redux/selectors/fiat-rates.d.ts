@@ -1,4 +1,4 @@
-import { RatesByCurrency, RateByAssetTicker } from '../types'
+import type { RatesByCurrency, RateByAssetTicker } from '../types'
 
 export declare const fiatRatesDefinition: {
   id: 'fiatRates'

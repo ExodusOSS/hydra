@@ -4,12 +4,13 @@ import type {
 } from '@exodus/web3-ethereum-utils'
 import type { SolAggregatedTransactionSimulationResult } from '@exodus/web3-solana-utils/lib'
 import type { AssetBase } from '@exodus/exchange-client-providers/lib/services/assets/types'
+import type { AssetClientInterface } from '@exodus/web3-types'
 
 export type AssetsModule = {
   getAsset: (assetName: string) => AssetBase
 }
 
-type Config = {
+export type Config = {
   apiUrl?: string
 }
 
@@ -20,7 +21,7 @@ export type Logger = {
 export type TxSimulatorConstructor = {
   assetsModule: AssetsModule
   logger: Logger
-  assetClientInterface: unknown
+  assetClientInterface: AssetClientInterface
   config?: Config
 }
 
@@ -46,4 +47,4 @@ export type SolSimulateTransactionParams = {
   transactions: unknown[]
 }
 
-export type { TxSimulator } from './index'
+export type { TxSimulator } from './index.js'

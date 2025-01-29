@@ -1,7 +1,7 @@
 import { mapValues } from '@exodus/basic-utils'
 
-const ATOM_ID_REGEX = /Atom$/
-const ATOM_COLLECTION_ID_REGEX = /Atoms$/
+const ATOM_ID_REGEX = /Atom$/u
+const ATOM_COLLECTION_ID_REGEX = /Atoms$/u
 
 export const isAtom = (id) => ATOM_ID_REGEX.test(id)
 export const isAtomCollection = (id) => ATOM_COLLECTION_ID_REGEX.test(id)

@@ -1,5 +1,6 @@
 import createIocContainer from '@exodus/dependency-injection'
 import createInMemoryStorage from '@exodus/storage-memory'
+
 import preprocess from '../../src/index.js'
 import namespaceStorage from '../../src/preprocessors/namespace-storage.js'
 

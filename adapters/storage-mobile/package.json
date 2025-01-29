@@ -1,16 +1,17 @@
 {
   "name": "@exodus/storage-mobile",
-  "version": "1.0.5",
+  "version": "1.1.0",
+  "type": "module",
   "description": "Implementation of storage-spec interface for react-native on mobile",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/adapters/storage-mobile",
-  "license": "UNLICENSED",
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/adapters/storage-mobile",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Astorage-mobile"
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Astorage-mobile"
   },
   "main": "lib/index",
   "files": [
@@ -21,18 +22,19 @@
   "scripts": {
     "build": "run -T tsc --build tsconfig.build.json",
     "clean": "run -T tsc --build --clean",
-    "lint": "run -T eslint --ignore-path .gitignore .",
+    "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",
-    "test": "run -T jest",
+    "test": "run -T exodus-test --jest --esbuild",
     "prepublishOnly": "yarn run -T build --scope @exodus/storage-mobile"
   },
   "dependencies": {
+    "@exodus/crypto": "^1.0.0-rc.14",
+    "@exodus/react-native-fs": "^2.21.0",
     "@exodus/storage-interface": "^1.0.0",
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {
-    "@exodus/react-native-async-storage": "^1.4.0",
-    "@exodus/storage-spec": "^3.1.0",
+    "@exodus/storage-spec": "^3.2.1",
     "@react-native-async-storage/async-storage": "^1.4.0",
     "@types/minimalistic-assert": "^1.0.1"
   }

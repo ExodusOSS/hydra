@@ -1,6 +1,6 @@
 {
   "name": "@exodus/dependency-preprocessors",
-  "version": "6.3.0",
+  "version": "6.3.2",
   "description": "Dependency preprocessors to enable declarative augmenting of dependency definitions before passing them to @exodus/dependency-injection",
   "author": "Exodus Movement, Inc.",
   "type": "module",
@@ -9,7 +9,7 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/dependency-preprocessors",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Adependency-preprocessors"
   },
@@ -36,5 +36,8 @@
     "@exodus/dependency-injection": "^3.1.0",
     "@exodus/typeforce": "^1.18.0",
     "minimalistic-assert": "^1.0.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

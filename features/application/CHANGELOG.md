@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.2.2...@exodus/application@2.2.3) (2024-12-13)
+
+### Bug Fixes
+
+- fix(application): remove duplicated observer (#10850)
+
+## [2.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.2.0...@exodus/application@2.2.2) (2024-11-28)
+
+### Bug Fixes
+
+- fix: Skip local seed backup during passkey restore (#10560)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
+## [2.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.2.0...@exodus/application@2.2.1) (2024-11-25)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
 ## [2.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.1.1...@exodus/application@2.2.0) (2024-10-11)
 
 ### Features

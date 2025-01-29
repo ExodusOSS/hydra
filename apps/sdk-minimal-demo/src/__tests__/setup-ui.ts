@@ -1,6 +1,5 @@
-// this one is not actually browser-extension specific
-import { createRpcClient } from '@exodus/browser-extension-rpc'
 import createReduxIOC from '@exodus/headless/redux'
+import { createRPCClient } from '@exodus/sdk-rpc'
 
 import { createProcessRPC, Thread } from './multi-process'
 
@@ -19,7 +18,7 @@ const setupUI = () => {
     handleEvent(method, params)
   })
 
-  const sdkRPC = createRpcClient(rpc)
+  const sdkRPC = createRPCClient(rpc)
   return { selectors: selectors as any, store, sdkRPC, thread }
 }
 

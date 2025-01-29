@@ -1,4 +1,4 @@
-import { RateByAssetTicker } from '../types'
+import type { RateByAssetTicker } from '../types'
 
 type GetAssetFromTicker = (ticker: string) => any
 

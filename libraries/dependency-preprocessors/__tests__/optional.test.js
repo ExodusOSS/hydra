@@ -1,7 +1,7 @@
-import optional from '../src/preprocessors/optional.js'
 import preprocess from '../src/index.js'
 import alias from '../src/preprocessors/alias.js'
 import config from '../src/preprocessors/config.js'
+import optional from '../src/preprocessors/optional.js'
 
 describe('optional', () => {
   it('should return null if condition evaluates to false', () => {

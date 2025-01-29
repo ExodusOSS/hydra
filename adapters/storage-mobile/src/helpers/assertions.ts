@@ -23,6 +23,6 @@ export function assertValidIdentifier(identifier: string) {
 
 export function assertValidFilesystemKey(hashedKey: string | undefined) {
   assert(typeof hashedKey === 'string', 'hashString result was not of type string')
-  const safePathRegex = /^[\w-=]*$/
+  const safePathRegex = /^[\w-=]*$/ // eslint-disable-line regexp/require-unicode-regexp
   assert(safePathRegex.test(hashedKey), 'hashString result included forbidden characters')
 }

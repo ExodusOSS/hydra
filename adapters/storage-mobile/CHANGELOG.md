@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/ExodusMovement/hydra/compare/@exodus/storage-mobile@1.0.7...@exodus/storage-mobile@1.1.0) (2025-01-17)
+
+### Features
+
+- feat(storage-mobile): default android options (#11114)
+
+## [1.0.7](https://github.com/ExodusMovement/hydra/compare/@exodus/storage-mobile@1.0.6...@exodus/storage-mobile@1.0.7) (2024-11-01)
+
+Re-licensed under MIT license.
+
+## [1.0.6](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/storage-mobile@1.0.5...@exodus/storage-mobile@1.0.6) (2024-10-29)
+
+### Bug Fixes
+
+- use exodus/crypto in adapters-mobile ([#10198](https://github.com/ExodusMovement/exodus-hydra/issues/10198)) ([a2137d1](https://github.com/ExodusMovement/exodus-hydra/commit/a2137d11fe6b572c479082477154ec47184d577b))
+
 ## [1.0.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/storage-mobile@1.0.4...@exodus/storage-mobile@1.0.5) (2024-07-30)
 
 ### Bug Fixes

@@ -2,35 +2,41 @@ import { useParams } from 'wouter'
 import Section, { type Item } from './section.js'
 import lodash from 'lodash'
 
+import ExodusLogo from '../exodus-logo/index.js'
+import Searchbar from '../searchbar/searchbar.js'
+import Scrollable from './scrollable.js'
+
 const { camelCase } = lodash
 
 interface SidebarProps {
   sections: { title: string; items: Item[] }[]
+  onSearchClick: () => void
 }
 
-const Sidebar = ({ sections }: SidebarProps) => {
+const Sidebar = ({ sections, onSearchClick }: SidebarProps) => {
   const { name } = useParams()
+
   const activeFeature = name ? camelCase(name) : undefined
 
   return (
-    <div className="hidden lg:relative lg:block lg:flex-none">
-      <div className="absolute inset-y-0 right-0 w-[50vw] bg-slate-50 " />
+    <nav className="flex h-screen min-h-full w-64 flex-col gap-7 overflow-hidden border-r border-r-deep-100 bg-deep-400 p-5 pb-0 xl:w-72">
+      <ExodusLogo size={35} withShadow />
 
-      <div className="sticky top-[68px] -ml-0.5 h-[calc(100vh-4.75rem)] w-64 overflow-y-auto overflow-x-hidden py-8 pl-0.5 pr-8 xl:w-72 xl:pr-16">
-        <nav className="text-base lg:text-sm">
-          <ul role="list" className="space-y-9">
-            {sections.map((section) => (
-              <Section
-                key={section.title}
-                title={section.title}
-                items={section.items}
-                active={activeFeature}
-              />
-            ))}
-          </ul>
-        </nav>
-      </div>
-    </div>
+      <Searchbar onSearchClick={onSearchClick} />
+
+      <Scrollable>
+        <ul role="list" className="space-y-9">
+          {sections.map((section) => (
+            <Section
+              key={section.title}
+              title={section.title}
+              items={section.items}
+              active={activeFeature}
+            />
+          ))}
+        </ul>
+      </Scrollable>
+    </nav>
   )
 }
 

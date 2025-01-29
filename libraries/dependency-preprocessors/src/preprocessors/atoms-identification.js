@@ -12,9 +12,7 @@ const atomsIdentificationPreprocessor = () => {
       definition.type === 'atom'
         ? (...opts) => {
             const atom = originalFactory(...opts)
-            if (!atom.id) {
-              atom.id = id
-            }
+            atom.id = id
 
             return atom
           }

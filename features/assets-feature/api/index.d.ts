@@ -7,6 +7,8 @@ export enum TokenStatus {
   VERIFIED = 'v',
 }
 
+Object.setPrototypeOf(TokenStatus, null)
+
 declare const assetsApiDefinition: {
   id: 'assetsApi'
   type: 'api'

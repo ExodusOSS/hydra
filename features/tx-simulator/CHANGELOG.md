@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-simulator@1.4.1...@exodus/tx-simulator@1.5.0) (2025-01-17)
+
+### Features
+
+- feat: accept txSimulator config via feature factory (#10790)
+
+- feat(ecp): simulate evm txs (#10894)
+
+### Bug Fixes
+
+- fix: prefer Object.create(null) to {} (#10511)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
+## [1.4.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-simulator@1.4.1...@exodus/tx-simulator@1.4.2) (2024-11-25)
+
+### Bug Fixes
+
+- fix: prefer Object.create(null) to {} (#10511)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
 ## [1.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-simulator@1.4.0...@exodus/tx-simulator@1.4.1) (2024-09-16)
 
 ### Bug Fixes

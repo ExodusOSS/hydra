@@ -7,6 +7,7 @@ const fixtures = [
       ...commonProps,
       start_time: 123,
       destination: 'Screen',
+      stage: 'main',
     },
   },
 ]

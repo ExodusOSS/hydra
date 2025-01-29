@@ -1,3 +1,5 @@
+import type { CurrentPriceFn } from '../module/index.js'
+
 declare const pricingApiDefinition: {
   id: 'pricingApi'
   type: 'api'
@@ -15,12 +17,22 @@ declare const pricingApiDefinition: {
        * const data = await exodus.pricing.currentPrice({ assets: ['BTC', 'ETH'], fiatCurrency: 'USD', ignoreInvalidSymbols: true })
        * ```
        */
-      currentPrice(params: {
-        assets: string[]
-        fiatCurrency?: string
-        ignoreInvalidSymbols?: boolean
-      }): Promise<{ [assetTicker: string]: { [currency: string]: number } }>
-
+      /**
+       * Fetches the current prices for the provided list of assets (wrapped in modification-related result wrapper)
+       * Checks for modification at http-level with provided 'lastModified' / 'entityTag'
+       * @param {object} params - The parameters for fetching current prices.
+       * @param {string[]} params.assets - An array of asset tickers to fetch prices for.
+       * @param {string} [params.fiatCurrency] - The fiat currency to get the prices in (default is 'USD').
+       * @param {boolean} [params.ignoreInvalidSymbols] - If true, ignores invalid asset symbols.
+       * @param {string} [params.lastModified] - string representing date in rfc7231 format.
+       * @param {string} [params.entityTag] - tag of previously observed price entity.
+       * @returns {Promise<object>} An object that has either ".isModified: false" or ".isModified: true" with ".data" section that contains map of prices by asset ticker and fiat currency
+       * @example
+       * ```typescript
+       * const data = await exodus.pricing.currentPrice({ assets: ['BTC', 'ETH'], fiatCurrency: 'USD', ignoreInvalidSymbols: true, lastModified: 'Wed, 14 Jun 2017 07:00:00 GMT' })
+       * ```
+       */
+      currentPrice: CurrentPriceFn
       /**
        * Fetches the current ticker information for the provided list of assets.
        * @param {object} params - The parameters for fetching ticker information.

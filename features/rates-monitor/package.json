@@ -1,7 +1,7 @@
 {
   "name": "@exodus/rates-monitor",
-  "version": "4.4.1",
-  "license": "UNLICENSED",
+  "version": "4.7.0",
+  "license": "MIT",
   "author": "Exodus Movement, Inc.",
   "description": "Fetches asset prices in fiat on a timer",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/rates-monitor",
@@ -32,10 +32,8 @@
     "!**/__tests__/**"
   ],
   "dependencies": {
-    "@exodus/atoms": "^8.1.1",
+    "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
-    "@exodus/module": "^1.1.0",
-    "delay": "^5.0.0",
     "lodash": "npm:@exodus/lodash@^4.17.21-exodus.2",
     "minimalistic-assert": "^1.0.1",
     "ms": "^0.7.1",
@@ -51,5 +49,8 @@
     "@exodus/redux-dependency-injection": "workspace:^",
     "@exodus/solana-meta": "^1.0.2",
     "redux": "^4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

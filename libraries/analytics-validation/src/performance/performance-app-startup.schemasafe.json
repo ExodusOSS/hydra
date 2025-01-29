@@ -21,6 +21,10 @@
         "destination": {
           "type": "string",
           "format": "any-string"
+        },
+        "stage": {
+          "type": "string",
+          "format": "any-string"
         }
       },
       "unevaluatedProperties": false

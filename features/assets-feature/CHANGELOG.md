@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@6.0.3...@exodus/assets-feature@6.0.4) (2025-01-17)
+
+### Performance
+
+- perf: assets feature fusion setting (#11124)
+
+## [6.0.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@6.0.2...@exodus/assets-feature@6.0.3) (2025-01-10)
+
+### Bug Fixes
+
+- fix(assets-feature): export TokenStatus type (#11060)
+
+## [6.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@6.0.1...@exodus/assets-feature@6.0.2) (2025-01-07)
+
+**Note:** Version bump only for package @exodus/assets-feature
+
+## [6.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@6.0.0...@exodus/assets-feature@6.0.1) (2025-01-02)
+
+**Note:** Version bump only for package @exodus/assets-feature
+
 ## [6.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@5.14.0...@exodus/assets-feature@6.0.0) (2024-12-26)
 
 ### ⚠ BREAKING CHANGES

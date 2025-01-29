@@ -18,7 +18,7 @@ Are you tired of repeatedly typing the same scaffold code? This can be especiall
 ./node_modules/.bin/lerna run setup --scope vscode-snippets
 ```
 
-You can explore the complete list of available code snippets [here](https://github.com/ExodusMovement/exodus-hydra/blob/master/tools/packages/vscode-snippets/README.md).
+You can explore the complete list of available code snippets [here](https://github.com/ExodusOSS/hydra/blob/master/tools/packages/vscode-snippets/README.md).
 
 ## Linking
 

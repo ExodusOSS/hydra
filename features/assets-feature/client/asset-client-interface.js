@@ -36,12 +36,9 @@ class AssetClientInterface {
     this.#transactionSigner = transactionSigner
     this.#publicKeyProvider = publicKeyProvider
     this.#config = config
-    this.#createLogger = createLogger
+    this.#createLogger = createLogger || (() => console)
 
-    // TODO: remove conditional when clients updated
-    if (assetsModule.initialize) {
-      assetsModule.initialize({ assetClientInterface: this })
-    }
+    assetsModule.initialize({ assetClientInterface: this })
   }
 
   createLogger(namespace) {

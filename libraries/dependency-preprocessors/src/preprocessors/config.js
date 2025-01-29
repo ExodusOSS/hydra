@@ -17,7 +17,7 @@ const config = () => {
       ...definitionRest
     } = definition
 
-    const configRegex = /^config\??$/
+    const configRegex = /^config\??$/u
     if (configAlongsideDefinition) {
       if (!dependencies.some((it) => configRegex.test(it))) {
         throw new Error(`"config" specified on node but not as dependency of definition of "${id}"`)

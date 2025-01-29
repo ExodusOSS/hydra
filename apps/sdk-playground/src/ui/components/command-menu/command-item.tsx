@@ -19,9 +19,9 @@ const CommandItem = (props: Props) => {
 
   return (
     <Command.Item className="flex gap-2" onSelect={onClick}>
-      {COMMAND_ICONS[type] && <Icon className="opacity-30" name={COMMAND_ICONS[type]} />}
-      <span className="flex-1 truncate">{name}</span>
-      {feature && <span className="rounded bg-slate-300 px-2 py-1 text-xs">{feature}</span>}
+      {COMMAND_ICONS[type] && <Icon className="text-white opacity-30" name={COMMAND_ICONS[type]} />}
+      <span className="flex-1 truncate ">{name}</span>
+      {feature && <span className="rounded bg-deep-100 px-2 py-1 text-xs">{feature}</span>}
     </Command.Item>
   )
 }

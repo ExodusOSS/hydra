@@ -1,7 +1,7 @@
 import { cn } from '@/ui/utils/classnames'
 import type { ChangeEventHandler } from 'react'
 
-type Props = {
+type InputProps = {
   type: string
   value: any
   className?: string
@@ -10,10 +10,13 @@ type Props = {
   onChange?: ChangeEventHandler<HTMLInputElement>
 }
 
-const Input = ({ type, value, placeholder, required, className, onChange }: Props) => {
+const Input = ({ type, value, placeholder, required, className, onChange }: InputProps) => {
   return (
     <input
-      className={cn(className, 'rounded border px-2')}
+      className={cn(
+        'text-thin rounded border-none bg-deep-300 px-2 text-sm text-slate-300 focus:outline-none focus:ring-0',
+        className
+      )}
       type={type}
       value={value}
       placeholder={placeholder}

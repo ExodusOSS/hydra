@@ -1,7 +1,6 @@
 import { memoize } from '@exodus/basic-utils'
-// this one is not actually browser-extension specific
-import { RPC } from '@exodus/browser-extension-rpc'
 import createSerialization from '@exodus/domain-serialization'
+import { RPC } from '@exodus/sdk-rpc'
 import EventEmitter from 'eventemitter3'
 
 type Listener = (...args: any[]) => void

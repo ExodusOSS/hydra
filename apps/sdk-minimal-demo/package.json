@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "@exodus/basic-utils": "workspace:^",
-    "@exodus/browser-extension-rpc": "^2.1.0",
     "@exodus/deferring-storage": "workspace:^",
     "@exodus/domain-serialization": "workspace:^",
     "@exodus/ethereum-plugin": "^2.2.0",
@@ -41,6 +40,7 @@
     "@exodus/logger": "workspace:^",
     "@exodus/models": "^12.0.1",
     "@exodus/prettier": "^1.0.0",
+    "@exodus/sdk-rpc": "workspace:^",
     "@exodus/storage-memory": "workspace:^",
     "@exodus/sync-time": "workspace:^",
     "@exodus/transform-storage": "workspace:^",

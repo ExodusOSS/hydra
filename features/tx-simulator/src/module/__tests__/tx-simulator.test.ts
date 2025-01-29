@@ -1,8 +1,8 @@
-import { createSimulationServices } from '@exodus/web3-simulation'
 import assets from '@exodus/assets-base'
+import { createSimulationServices } from '@exodus/web3-simulation'
 import { deserializeTransaction } from '@exodus/web3-solana-utils'
 
-import txSimulatorDefinition from '../'
+import txSimulatorDefinition from '../index'
 
 jest.mock('@exodus/web3-simulation')
 
@@ -13,7 +13,9 @@ const assetsModule = {
 const createTxSimulator = () => {
   return txSimulatorDefinition.factory({
     assetsModule,
-    assetClientInterface: {},
+    assetClientInterface: {
+      getFeeConfig: () => Promise.resolve({ fee: assets.solana.currency.defaultUnit(5000) }),
+    },
     config: {
       apiUrl: 'https://simulation.a.exodus.io',
     },

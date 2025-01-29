@@ -1,6 +1,6 @@
-import { Storage } from '@exodus/storage-interface'
-import { assertValidFilesystemKey } from './assertions'
-import { Dependencies as FactoryDependencies, Filesystem, FunctionProperties } from './types'
+import type { Storage } from '@exodus/storage-interface'
+import { assertValidFilesystemKey } from './assertions.js'
+import type { Dependencies as FactoryDependencies, Filesystem, FunctionProperties } from './types'
 
 class FilesystemStorage<In, Out = In> implements Storage<In, Out> {
   private whenDirectoryCreated: Promise<void>

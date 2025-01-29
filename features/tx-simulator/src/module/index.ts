@@ -1,6 +1,5 @@
 import { createSimulationServices } from '@exodus/web3-simulation'
 
-import { DEFAULT_CONFIG } from './constants'
 import type {
   AssetsModule,
   Logger,
@@ -8,7 +7,7 @@ import type {
   SimulateResponse,
   SolSimulateTransactionParams,
   TxSimulatorConstructor,
-} from './types'
+} from './types.js'
 import type { SolAggregatedTransactionSimulationResult } from '@exodus/web3-solana-utils/lib'
 import type {
   EthAggregatedTransactionSimulationResult,
@@ -28,12 +27,17 @@ export class TxSimulator {
     params: EthSimulateTransactionParams
   ) => Promise<EthAggregatedTransactionSimulationResult>
 
-  constructor({ assetsModule, assetClientInterface, logger, config = {} }: TxSimulatorConstructor) {
+  constructor({
+    assetsModule,
+    assetClientInterface,
+    logger,
+    config = Object.create(null),
+  }: TxSimulatorConstructor) {
     this.#assetsModule = assetsModule
     this.#logger = logger
 
     const { simulateSolanaTransactions, simulateEthereumTransactions } = createSimulationServices({
-      apiBaseURL: config.apiUrl || DEFAULT_CONFIG.apiUrl,
+      apiBaseURL: config.apiUrl,
       assetClientInterface,
     })
 

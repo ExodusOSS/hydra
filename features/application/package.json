@@ -1,10 +1,10 @@
 {
   "name": "@exodus/application",
-  "version": "2.2.0",
+  "version": "2.2.3",
   "type": "module",
   "description": "Feature that manages the Exodus SDK application lifecycle.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/application",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aapplication"
   },
@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
-    "@exodus/fusion-atoms": "^1.2.1",
+    "@exodus/fusion-atoms": "^1.4.0",
     "@exodus/logger": "^1.1.0",
     "@exodus/redux-dependency-injection": "^4.0.0",
     "@exodus/storage-interface": "^1.0.0",
@@ -47,5 +47,8 @@
     "@exodus/dependency-types": "workspace:^",
     "@types/jest": "^29.5.11",
     "@types/minimalistic-assert": "^1.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

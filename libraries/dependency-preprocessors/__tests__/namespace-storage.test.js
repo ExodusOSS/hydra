@@ -1,4 +1,5 @@
 import createInMemoryStorage from '@exodus/storage-memory'
+
 import namespaceStoragePreprocessor from '../src/preprocessors/namespace-storage.js'
 
 const identity = (data) => data

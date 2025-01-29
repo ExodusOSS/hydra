@@ -67,9 +67,9 @@ export class Container<D extends Definition> {
       entry,
     })
 
-    this.#logger.debug(
-      `registered module ${id} with dependencies: ${entry.dependencies.join(', ')}`
-    )
+    const hasDependencies = dependencies.length > 0
+    const logSuffix = hasDependencies ? ` with dependencies: ${dependencies.join(', ')}` : ''
+    this.#logger.debug(`registered module ${id}${logSuffix}`)
 
     return this as Container<D | R>
   }

@@ -1,9 +1,10 @@
 import fs from 'node:fs'
-import docsPlugin from '@exodus/eslint-plugin-docs'
 import hydraPlugin from '@exodus/eslint-plugin-hydra'
 import packagePlugin from '@exodus/eslint-plugin-package'
 import tsconfigPlugin from '@exodus/eslint-plugin-tsconfig'
 import { javascriptBabelPreset, typescriptReactBabelPreset } from '@exodus/eslint-config-exodus'
+import markdownParser from '@exodus/eslint-parser-markdown'
+import docsPlugin from '@exodus/eslint-plugin-docs'
 
 const ignore = {
   ignores: ['**/lib', '**/dist', '**/tmp', '**/node_modules', 'tools/generators/**/files'],
@@ -16,13 +17,27 @@ const esmConfigs = isModule ? hydraPlugin.configs.esm : []
 const config = [
   ignore,
   javascriptBabelPreset,
-  docsPlugin.configs.recommended,
   hydraPlugin.configs.recommended,
   hydraPlugin.configs.features,
   packagePlugin.configs.recommended,
   tsconfigPlugin.configs.recommended,
   typescriptReactBabelPreset,
   esmConfigs,
+  {
+    plugins: {
+      '@exodus/docs': docsPlugin,
+    },
+    rules: {
+      '@exodus/docs/no-broken-links': 'error',
+      '@exodus/docs/mirror-links': [
+        'error',
+        { mirrors: [{ source: 'ExodusMovement/exodus-hydra', target: 'ExodusOSS/hydra' }] },
+      ],
+    },
+    files: ['**/*.md'],
+    ignores: ['**/CHANGELOG.md'],
+    languageOptions: { parser: markdownParser },
+  },
   {
     files: ['**/*.{js,ts,jsx,tsx,mjs,mts,cjs,cts}'],
     languageOptions: { globals: { fetch: 'off' } },

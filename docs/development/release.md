@@ -7,18 +7,15 @@ To version your packages, either:
 - merge a PR with eligible commit type. The following don't trigger a release: `chore`, `docs`, `test`, `ci`
 - run `yarn release` and select the package(s) you want to release
 - run `yarn release` and supply packages as a positional argument: `yarn release networking-mobile,kyc,storage-mobile`
-- run [the version workflow](https://github.com/ExodusMovement/exodus-hydra/actions/workflows/version.yaml) directly through the GH UI.
 
 All of these derive version bumps from the conventional commit history and create a release PR, labeled with `publish-on-merge`. Make sure that the checks on the release PR pass, especially when releasing packages that depend on other packages from this repository.
-
-For more options to `yarn release`, see the [CLI docs](https://github.com/ExodusMovement/lerna-release-action/tree/master/cli).
 
 ## Publish
 
 All packages that received a version bump in the previous step are automatically published to npm after merging
 the release PR. The tags listed in the PR body will be added to the merge commit.
 
-Initial versions can be published by manually executing [the publish workflow](https://github.com/ExodusMovement/exodus-hydra/actions/workflows/publish.yaml). All packages with versions not currently present in the registry will be published. If unclear how to run the publish workfow, please follow [these](https://user-images.githubusercontent.com/2863630/203893329-f0eca8d0-4f8c-4ccb-abc2-65bfd819fa61.png) instructions.
+Initial versions can be published by manually executing the publish workflow. All packages with versions not currently present in the registry will be published.
 
 ## Dependency Management
 
@@ -30,19 +27,17 @@ Either way, create a PR chain. Fixes, new features or breaking changes for A sho
 
 Example 1:
 
-1. [feat: add full key identifier to address meta](https://github.com/ExodusMovement/exodus-hydra/pull/7595) broke downstream tests in headless. As this PR doesn't introduce a feature in headless, fixes to headless tests were placed in the child PR.
-2. [test: fix headless tests](https://github.com/ExodusMovement/exodus-hydra/pull/7742) fixed headless tests.
+1. [feat: add full key identifier to address meta](https://github.com/ExodusOSS/hydra/pull/7595) broke downstream tests in headless. As this PR doesn't introduce a feature in headless, fixes to headless tests were placed in the child PR.
+2. [test: fix headless tests](https://github.com/ExodusOSS/hydra/pull/7742) fixed headless tests.
 
-The chain waas merged by applying the `action/merge-chain` label to the child PR.
+The chain was merged by applying the `action/merge-chain` label to the child PR.
 
 Example 2:
 
-1. [feat!: extract remote config atoms](https://github.com/ExodusMovement/exodus-hydra/pull/7817) broke all consumers of `@exodus/atoms` that used the `createRemoteConfigAtomFactory` export.
-2. [refactor: use @exodus/remote-config-atoms](https://github.com/ExodusMovement/exodus-hydra/pull/7820) refactored consumers of that export to use the new `@exodus/remote-config-atoms` package
+1. [feat!: extract remote config atoms](https://github.com/ExodusOSS/hydra/pull/7817) broke all consumers of `@exodus/atoms` that used the `createRemoteConfigAtomFactory` export.
+2. [refactor: use @exodus/remote-config-atoms](https://github.com/ExodusOSS/hydra/pull/7820) refactored consumers of that export to use the new `@exodus/remote-config-atoms` package
 
-The chain waas merged by applying the `action/merge-chain` label to the child PR.
-
-See more examples here: https://github.com/ExodusMovement/exodus-hydra/actions/workflows/merge-chain.yaml?query=is%3Asuccess
+The chain was merged by applying the `action/merge-chain` label to the child PR.
 
 ### Inter-package
 

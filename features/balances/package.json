@@ -1,6 +1,6 @@
 {
   "name": "@exodus/balances",
-  "version": "13.5.4",
+  "version": "13.6.0",
   "description": "Tracks crypto balances across enabled wallet accounts.",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",

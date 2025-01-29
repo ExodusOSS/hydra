@@ -41,10 +41,18 @@ const createMultiAddressModeAtom = ({ storage, fusion, logger, config }) => {
       ...rest
     } = typeof value === 'function' ? value(await computedAtom.get()) : value
 
-    // Do not write in fusion in parallel
-    await moneroFusionAtom.set(monero)
-    await bitcoinFusionAtom.set(bitcoin)
     await storageAtom.set(rest)
+
+    // Do not write in fusion in parallel
+    const moneroPreviousValue = await moneroFusionAtom.get()
+    if (moneroPreviousValue !== monero) {
+      await moneroFusionAtom.set(monero)
+    }
+
+    const bitcoinPreviousValue = await bitcoinFusionAtom.get()
+    if (bitcoinPreviousValue !== bitcoin) {
+      await bitcoinFusionAtom.set(bitcoin)
+    }
   }
 
   const reset = async () => {

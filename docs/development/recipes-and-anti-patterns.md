@@ -822,7 +822,7 @@ get = async (key) => {
 
 ### Exceptions
 
-There are exceptions when swallowing an error is valid behavior. For example [`analytics.track()`](https://github.com/ExodusMovement/exodus-hydra/blob/405ae9ce40ac077134d558916b13d0da36779e07/features/analytics/module/index.js#L201) swallows all errors internally, which might be ok because analytics is like a remote logger and you’d never want `console.log` to fail (h/t @ryanzim for the analogy)
+There are exceptions when swallowing an error is valid behavior. For example [`analytics.track()`](https://github.com/ExodusOSS/hydra/blob/8ac3c1382e3d51923de4d73c43c32f92005ae351/features/analytics/module/index.js#L200) swallows all errors internally, which might be ok because analytics is like a remote logger and you’d never want `console.log` to fail (h/t @ryanzim for the analogy)
 
 ## Segregrate Statically and Dynamically Named
 
@@ -836,12 +836,12 @@ for a confusing and hard to parse API surface.
 
 ### Bad
 
-See [UnitType](https://github.com/ExodusMovement/exodus-hydra/blob/5dbe4d0a17e598e7594e44778e64086ba2b31c0c/libraries/currency/src/unit-type.js#L45). This results in dynamic property names like `currency.BTC`, `currency.Gwei`, etc., which are unpredictable and
+See [UnitType](https://github.com/ExodusOSS/hydra/blob/8ac3c1382e3d51923de4d73c43c32f92005ae351/libraries/currency/src/unit-type.js#L45). This results in dynamic property names like `currency.BTC`, `currency.Gwei`, etc., which are unpredictable and
 potentially conflict with `currency.ZERO`, `currency.defaultUnit`, `currency.toString()`, etc.
 
 ### Better
 
-See [UnitType.units](https://github.com/ExodusMovement/exodus-hydra/blob/5dbe4d0a17e598e7594e44778e64086ba2b31c0c/libraries/currency/src/unit-type.js#L42).
+See [UnitType.units](https://github.com/ExodusOSS/hydra/blob/8ac3c1382e3d51923de4d73c43c32f92005ae351/libraries/currency/src/unit-type.js#L17).
 
 ### Good
 

@@ -1,32 +1,21 @@
-# @exodus/rates-monitor
+# @exodus/rates-monitors
+
+This feature fetches pricing data (via pricingClient) for assets.
+
+Data is fetched automatically on startup for currency defined in `currencyAtom` and assets from `availableAssetNamesAtom`. data is stored in `ratesAtom`.
+
+Pricing data contains: `price` - current price in requested currency, `priceUSD` - current USD price, `change24` - percentage change for 24 hours, `volume24` - volume in requested currency, `cap` - market cap of asset, `invalid` - boolean indicates that data is corrupted
 
 ## Usage
 
-To use the module call the factory and pass in required dependencies. Rates will automatically update on currency or asset changes.
+This feature is designed to be used together with `@exodus/headless`. See [Using the SDK](../../docs/development/using-the-sdk.md) for more details.
 
-```ts
-import createRatesMonitor from '@exodus/rates-monitor'
+### API Side
 
-const ratesMonitor = createRatesMonitor({
-  currencyAtom,
-  pricingServer,
-  getTicker,
-  ratesNeededForAssetNamesAtom,
-  fetchInterval: ms('1m'), // default
-  debounceInterval: ms('0.75s'), // default
-  ratesAtom,
-})
+`exodus.rates.refresh()` public method to re-fetch pricing data
 
-// start the monitor
-ratesMonitor.start()
+### Play with it
 
-// listen to the `rates` event
-ratesMonitor.on('rates', ({ rates, currency }) => {
-  const {
-    [currency]: { price, priceUSD, change24, volume24, cap, invalid },
-  } = rates
-})
-
-// re-emit cached rates
-ratesMonitor.sync()
-```
+1. Open the playground at https://exodus-hydra.pages.dev/features/rates-monitor
+2. Check that the data selector returns prices in USD
+3. Check that public API available `exodus.rates.refresh()`

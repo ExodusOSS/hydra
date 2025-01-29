@@ -1,12 +1,12 @@
 {
   "name": "@exodus/tx-simulator",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "main": "lib/index.js",
-  "description": "Module to simulate a transaction",
+  "description": "This Exodus SDK feature allows you to simulate the state of an account after a given transaction. It's only supported for a small subset of assets, and simulation parameters depend on the asset.",
   "files": [
     "lib"
   ],
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "run -T tsc --build tsconfig.build.json",
     "build:watch": "run -T tsc --build -w tsconfig.build.json",
@@ -23,7 +23,9 @@
     "@exodus/assets-base": "^8.1.19",
     "@exodus/dependency-types": "workspace:^",
     "@exodus/exchange-client-providers": "workspace:^",
-    "@exodus/web3-solana-utils": "^1.61.0"
+    "@exodus/web3-ethereum-utils": "^3.37.1",
+    "@exodus/web3-solana-utils": "^1.61.0",
+    "@exodus/web3-types": "^1.53.0"
   },
   "author": "Exodus Movement, Inc.",
   "bugs": {
@@ -33,5 +35,8 @@
     "type": "git",
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/tx-simulator"
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/tx-simulator",
+  "publishConfig": {
+    "access": "public"
+  }
 }

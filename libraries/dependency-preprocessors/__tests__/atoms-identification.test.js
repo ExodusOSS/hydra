@@ -1,4 +1,5 @@
 import { createInMemoryAtom } from '@exodus/atoms'
+
 import atomsIdentificationPreprocessor from '../src/preprocessors/atoms-identification.js'
 
 describe('atoms identification preprocessor unit tests', () => {
@@ -7,6 +8,20 @@ describe('atoms identification preprocessor unit tests', () => {
       id: 'testingAtom',
       type: 'atom',
       factory: () => createInMemoryAtom({ defaultValue: 0 }),
+      dependencies: [],
+    }
+    const { definition } = atomsIdentificationPreprocessor().preprocess({
+      definition: testAtomDefinition,
+    })
+    const instance = definition.factory()
+    expect(instance.id).toBe(testAtomDefinition.id)
+  })
+
+  it('should override existing id', () => {
+    const testAtomDefinition = {
+      id: 'testingAtom',
+      type: 'atom',
+      factory: () => ({ ...createInMemoryAtom({ defaultValue: 0 }), id: 'overrideMe' }),
       dependencies: [],
     }
     const { definition } = atomsIdentificationPreprocessor().preprocess({

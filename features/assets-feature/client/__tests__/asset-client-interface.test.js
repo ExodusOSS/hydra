@@ -133,6 +133,7 @@ const assetsMock = {
 const assetsModule = {
   getAssets: () => assetsMock,
   getAsset: (assetName) => assetsMock[assetName],
+  initialize: () => {},
 }
 
 const trezorAccount = new WalletAccount({

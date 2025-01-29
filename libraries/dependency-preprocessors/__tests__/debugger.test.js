@@ -1,7 +1,8 @@
-import debuggerPreprocessor from '../src/preprocessors/debugger.js'
-import createInMemoryStorage from '@exodus/storage-memory'
 import { createInMemoryAtom } from '@exodus/atoms'
+import createInMemoryStorage from '@exodus/storage-memory'
+
 import preprocess from '../src/index.js'
+import debuggerPreprocessor from '../src/preprocessors/debugger.js'
 
 const debugEnabledDeps = { config: { debug: true } }
 

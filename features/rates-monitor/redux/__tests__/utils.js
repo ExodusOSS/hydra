@@ -1,13 +1,14 @@
-import assetsRedux from '@exodus/assets-feature/redux'
-import { combineReducers, createStore } from 'redux'
-import { setupRedux } from '@exodus/redux-dependency-injection'
-import ratesReduxDefinition from '../'
-import localeRedux from '@exodus/locale/redux'
-import { asset as bitcoin } from '@exodus/bitcoin-meta'
-import { asset as ethereum, tokens as ethereumTokens } from '@exodus/ethereum-meta'
-import { tokens as solanaTokens } from '@exodus/solana-meta'
 import { connectAssets } from '@exodus/assets'
+import assetsRedux from '@exodus/assets-feature/redux'
+import { asset as bitcoin } from '@exodus/bitcoin-meta'
 import combinedAssets from '@exodus/combined-assets-meta'
+import { asset as ethereum, tokens as ethereumTokens } from '@exodus/ethereum-meta'
+import localeRedux from '@exodus/locale/redux'
+import { setupRedux } from '@exodus/redux-dependency-injection'
+import { tokens as solanaTokens } from '@exodus/solana-meta'
+import { combineReducers, createStore } from 'redux'
+
+import ratesReduxDefinition from '../'
 
 const usdcoin = ethereumTokens.find((a) => a.name === 'usdcoin')
 // eslint-disable-next-line camelcase

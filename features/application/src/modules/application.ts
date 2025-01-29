@@ -250,13 +250,13 @@ export class Application extends EventEmitter {
     }
 
     const seedId = await this.#wallet.import(wallet)
-    const importParams = { seedId, compatibilityMode }
+    const importParams = { seedId, compatibilityMode, backupType }
 
     if (forceRestart || walletExists) {
       await this.#flagsStorage.set(IMPORT_FLAG, true)
 
       await this.#storage.set('importParams', importParams)
-      await this.fire(Hook.Restart, { reason: 'import' })
+      await this.fire(Hook.Restart, { reason: 'import', backupType })
     } else {
       await this.fire(Hook.Import, importParams)
 
@@ -346,7 +346,7 @@ export class Application extends EventEmitter {
       await this.fire(Hook.Migrate)
       await this.fire(Hook.Unlock)
 
-      this.#restoreIfNeeded()
+      void this.#restoreIfNeeded()
 
       this.#logger.log('unlocked with cache')
     } catch (err) {
@@ -364,10 +364,10 @@ export class Application extends EventEmitter {
     await this.fire(Hook.Migrate)
     await this.fire(Hook.Unlock)
 
-    this.#restoreIfNeeded()
+    void this.#restoreIfNeeded()
 
     if (opts?.passphrase) {
-      this.#passphraseCache.set(opts.passphrase)
+      void this.#passphraseCache.set(opts.passphrase)
     }
 
     this.#logger.log('unlocked')

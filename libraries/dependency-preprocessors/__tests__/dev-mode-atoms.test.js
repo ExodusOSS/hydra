@@ -1,7 +1,8 @@
-import createInMemoryStorage from '@exodus/storage-memory'
 import { createStorageAtomFactory } from '@exodus/atoms'
-import devModeAtomsPreprocessor from '../src/preprocessors/dev-mode-atoms.js'
+import createInMemoryStorage from '@exodus/storage-memory'
 import delay from 'delay'
+
+import devModeAtomsPreprocessor from '../src/preprocessors/dev-mode-atoms.js'
 
 jest.useFakeTimers({ doNotFake: ['setImmediate'] })
 

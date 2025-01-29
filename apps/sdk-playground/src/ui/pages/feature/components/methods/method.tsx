@@ -12,7 +12,7 @@ const { kebabCase } = lodash
 
 const Method = ({ name, args = {}, doc, returnType, onSubmit }) => {
   const [state, setState] = useState<any[]>([])
-  const [response, setResponse] = useState<any>(null)
+  const [response, setResponse] = useState<any>()
   const [error, setError] = useState<string | null>(null)
 
   const argsRows = Object.entries(args)
@@ -31,15 +31,15 @@ const Method = ({ name, args = {}, doc, returnType, onSubmit }) => {
     }
   }
 
-  const hasResponse = response || error
+  const hasResponse = response !== undefined || error
 
   return (
     <form
       id={kebabCase(name)}
-      className="mb-8 overflow-hidden rounded-lg border"
+      className="mb-8  rounded-lg border border-deep-50"
       onSubmit={handleSubmit}
     >
-      <div className="border-b border-slate-200 bg-slate-100 px-4 py-2">
+      <div className="border-b border-deep-50 bg-deep-300 px-4 py-2">
         <Text>{name}</Text>
       </div>
 
@@ -53,8 +53,10 @@ const Method = ({ name, args = {}, doc, returnType, onSubmit }) => {
 
       {doc?.example && (
         <>
-          <div className="bg-slate-50 px-4 py-2">
-            <Text size={14}>Example</Text>
+          <div className="bg-deep-400 px-4 py-2">
+            <Text size={14} className="text-slate-500">
+              Example
+            </Text>
           </div>
 
           <div>
@@ -63,8 +65,10 @@ const Method = ({ name, args = {}, doc, returnType, onSubmit }) => {
         </>
       )}
 
-      <div className="bg-slate-50 px-4 py-2">
-        <Text size={14}>Arguments</Text>
+      <div className="bg-deep-400 px-4 py-2">
+        <Text size={14} className="text-slate-500">
+          Arguments
+        </Text>
       </div>
 
       <div className="flex flex-col p-4">
@@ -75,16 +79,17 @@ const Method = ({ name, args = {}, doc, returnType, onSubmit }) => {
                 <div className="min-w-32">
                   <Text size={13}>
                     {name}
-                    {!arg.optional && <span className="text-red-500"> *</span>}
+                    {!arg.optional && <span className="text-red-700"> *</span>}
                   </Text>
 
-                  <Text className="opacity-60" size={12}>
+                  <Text className="text-slate-500" size={12}>
                     {arg.type}
                   </Text>
                 </div>
 
                 <Argument
                   className="flex-1"
+                  name={name}
                   argument={arg}
                   state={state[i]}
                   onChange={(v: any) => setState((prev) => Object.assign([], prev, { [i]: v }))}
@@ -99,10 +104,12 @@ const Method = ({ name, args = {}, doc, returnType, onSubmit }) => {
         </Button>
       </div>
 
-      <div className="flex justify-between bg-slate-50 px-4 py-2">
-        <Text size={14}>Response</Text>
+      <div className="flex justify-between bg-deep-300 px-4 py-2">
+        <Text size={14} className="text-slate-500">
+          Response
+        </Text>
 
-        <Text className="opacity-60" size={12}>
+        <Text className="text-slate-500" size={12}>
           {returnType}
         </Text>
       </div>
@@ -111,11 +118,15 @@ const Method = ({ name, args = {}, doc, returnType, onSubmit }) => {
         <div className="p-4">
           <Text className="mb-4" size={13}>
             <span className="mr-2">Status:</span>
-            {response && <span className="mr-2 text-green-500">Success</span>}
-            {error && <span className="mr-2 text-red-500">Error</span>}
+
+            {!error && response !== undefined && (
+              <span className="mr-2 text-green-700">Success</span>
+            )}
+
+            {error && <span className="mr-2 text-red-700">Error</span>}
           </Text>
 
-          <Text className="mb-4" size={13}>
+          <Text className="mb-2" size={13}>
             {error ? (
               <>
                 <span className="mr-2">Message:</span>

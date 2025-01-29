@@ -1,6 +1,6 @@
 {
   "name": "@exodus/pricing",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Module for tracking pricing data",
   "author": "Exodus Movement, Inc.",
   "repository": {

@@ -118,7 +118,7 @@ container.register({
 
 ### Injection Style
 
-By default dependencies are injected as named options, which is the recommended pattern. However, if your use case demands dependencies to be injected as positional arguments, e.g. if your factory function is a `reselect` selector, specify `injectDependenciesAsPositionalArguments: true` either at the container level via the constructor, or at the individual node level. See [examples](https://github.com/ExodusMovement/exodus-hydra/blob/a1c3a18e1060a27dd5c29adc853b7c5b9e056ac1/libraries/dependency-injection/__tests__/index.test.js#L209-L237) in tests.
+By default dependencies are injected as named options, which is the recommended pattern. However, if your use case demands dependencies to be injected as positional arguments, e.g. if your factory function is a `reselect` selector, specify `injectDependenciesAsPositionalArguments: true` either at the container level via the constructor, or at the individual node level. See [examples](./__tests__/index.test.ts) in tests.
 
 ## Known Issues / Limitations
 
@@ -132,7 +132,7 @@ In the future we might disambiguate these, but in the short term we've opted for
 
 ## Example (headless)
 
-See [headless](https://github.com/ExodusMovement/exodus-hydra/blob/5e2d556faddc606579e05039609485e848278d27/modules/headless/src/ioc.js#L12-L44) as a real-world e2e example that initializes an IOC and makes use of
+See [headless](../../sdks/argo/src/index.js) as a real-world e2e example that initializes an IOC and makes use of
 multiple preprocessors.
 
 ## Rationale
@@ -149,7 +149,7 @@ Allow me to simulate your internal dialogue.
 - Centralize logging, error handling, permissions, etc. This lets you DRY up your code.
 - Track event/data propagation through the dependency tree.
 - Visualize/print/map out your dependency graph.
-- [Auto-inject](https://github.com/ExodusMovement/exodus-hydra/tree/9e0162c759335427a3f4fc2b1b830af3d0b96714/libraries/dependency-preprocessors) namespaced loggers, namespaced storage instances, and node-specific configuration en masse.
+- [Auto-inject](../dependency-preprocessors) namespaced loggers, namespaced storage instances, and node-specific configuration en masse.
 
 ## Misc (overachievers only)
 

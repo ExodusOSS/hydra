@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.6.0...@exodus/rates-monitor@4.7.0) (2025-01-14)
+
+### Features
+
+- feat(rates-monitor): implement real-time pricing fallback logic (#10940)
+
+## [4.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.5.0...@exodus/rates-monitor@4.6.0) (2025-01-09)
+
+### Features
+
+- feat(pricing): currentPriceWithModifyCheck to allow short-circuit if resource not changed (#10950)
+
+## [4.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.4.1...@exodus/rates-monitor@4.5.0) (2024-12-06)
+
+### Features
+
+- feat: use atoms v9 (#9651)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [4.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.4.0...@exodus/rates-monitor@4.4.1) (2024-09-09)
 
 **Note:** Version bump only for package @exodus/rates-monitor

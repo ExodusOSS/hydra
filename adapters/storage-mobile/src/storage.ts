@@ -1,7 +1,7 @@
 import type { AsyncStorageStatic } from '@react-native-async-storage/async-storage/lib/typescript/types'
-import { Storage } from '@exodus/storage-interface'
+import type { Storage } from '@exodus/storage-interface'
 import assert from 'minimalistic-assert'
-import { assertDefined, assertValidIdentifier } from './helpers/assertions'
+import { assertDefined, assertValidIdentifier } from './helpers/assertions.js'
 
 export class StorageMobile<Value> implements Storage<Value> {
   readonly #asyncStorage: AsyncStorageStatic

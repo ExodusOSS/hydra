@@ -1,4 +1,4 @@
-import { RateByAssetTicker } from '../types'
+import type { RateByAssetTicker } from '../types'
 
 export declare const getIsRateAvailableDefinition: {
   id: 'getIsRateAvailable'

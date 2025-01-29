@@ -21,7 +21,7 @@ const Pill = <E extends React.ElementType>({
     className={cn(
       className,
       'rounded-lg px-4 py-2 text-sm font-medium',
-      active ? 'bg-slate-200' : 'bg-slate-50 text-slate-500'
+      active ? 'bg-deep-300' : 'bg-deep-400 text-slate-500'
     )}
   >
     {children}

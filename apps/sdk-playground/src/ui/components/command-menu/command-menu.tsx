@@ -1,8 +1,8 @@
 import { Command } from 'cmdk'
 import { useEffect } from 'react'
-import CommandItem from './command-item.js'
-import selectors from '@/ui/flux/selectors'
+
 import { API_SPEC, NAMESPACES } from '@/ui/constants/index.js'
+import CommandItem from './command-item.js'
 
 const COMMAND_MENU = [
   {
@@ -20,17 +20,6 @@ const COMMAND_MENU = [
         id: `${namespace}.${method}`,
         type: 'method',
         name: method,
-        feature: namespace,
-      }))
-    ),
-  },
-  {
-    title: 'Selectors',
-    items: Object.entries(selectors).flatMap(([namespace, selectors]: [string, any]) =>
-      Object.keys(selectors).map((name) => ({
-        id: `${namespace}.${name}`,
-        type: 'selector',
-        name,
         feature: namespace,
       }))
     ),

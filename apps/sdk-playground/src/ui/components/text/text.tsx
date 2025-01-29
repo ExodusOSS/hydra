@@ -4,8 +4,8 @@ export interface TextProps {
   children: React.ReactNode
   className?: string
   align?: 'left' | 'center' | 'right'
-  as?: 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
-  size?: 12 | 13 | 14 | 16 | 18 | 24
+  as?: 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span'
+  size?: 12 | 13 | 14 | 16 | 18 | 20 | 24
 }
 
 const sizeStyles = {
@@ -14,6 +14,7 @@ const sizeStyles = {
   14: tw`text-sm`,
   16: tw`text-base`,
   18: tw`text-lg`,
+  20: tw`text-xl`,
   24: tw`text-2xl`,
 }
 

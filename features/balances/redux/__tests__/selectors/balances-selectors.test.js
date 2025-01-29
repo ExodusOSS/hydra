@@ -45,6 +45,7 @@ describe('balances selectors', () => {
         ...getSelectors,
         ...createSelectors,
         'getBalances',
+        'createBalances',
         'hasBalance',
         'exodus_0',
         'createFuelThreshold',

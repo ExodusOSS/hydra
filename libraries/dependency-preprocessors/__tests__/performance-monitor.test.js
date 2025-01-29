@@ -1,5 +1,6 @@
-import performanceMonitor from '../src/preprocessors/performance-monitor.js'
 import { when } from 'jest-when'
+
+import performanceMonitor from '../src/preprocessors/performance-monitor.js'
 
 describe('performanceMonitor', () => {
   let now

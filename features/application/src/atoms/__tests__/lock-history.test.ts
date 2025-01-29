@@ -1,6 +1,7 @@
+import type { Atom } from '@exodus/atoms'
+
 import createLockHistoryAtom from '../lock-history.js'
 import createdLockedAtom from '../locked.js'
-import type { Atom } from '@exodus/atoms'
 
 const delay = async () => new Promise(setImmediate)
 

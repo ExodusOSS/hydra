@@ -1,4 +1,4 @@
-import ratesApiDefinition from './api'
+import type ratesApiDefinition from './api'
 
 declare const rates: () => {
   id: 'rates'

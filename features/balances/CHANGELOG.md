@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.5.4...@exodus/balances@13.6.0) (2025-01-21)
+
+### Features
+
+- feat: createBalances selector (#11171)
+
 ## [13.5.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.5.3...@exodus/balances@13.5.4) (2025-01-17)
 
 ### Bug Fixes

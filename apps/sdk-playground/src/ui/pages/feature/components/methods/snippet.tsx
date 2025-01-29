@@ -1,6 +1,7 @@
 import Button from '@/ui/components/button'
+import Icon from '@/ui/components/icon'
 import SyntaxHighlighter from 'react-syntax-highlighter'
-import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 
 type SnippetData = {
   language: string
@@ -31,30 +32,27 @@ function copy(code: string) {
 export default function Snippet({ children }) {
   const snippet = parse(children)
 
-  if (!snippet) {
-    return null
-  }
+  if (!snippet) return null
 
   const { code, language } = snippet
+
   return (
-    <div
-      className="flex flex-col  p-4"
-      style={{ backgroundColor: docco.hljs.background as string }}
-    >
+    <div className="group relative flex flex-col  p-4">
       <Button
         type="button"
-        className="self-end bg-transparent p-0 text-xs text-primary"
+        variant="transparent"
+        className="absolute right-3 top-3 opacity-0 transition-opacity group-hover:opacity-100"
         onClick={() => copy(code)}
       >
-        Copy
+        <Icon name="copy" className="text-slate-600" size={14} />
       </Button>
 
       <SyntaxHighlighter
         language={language}
-        style={docco}
+        style={atomOneDark}
         wrapLines
         wrapLongLines
-        customStyle={{ fontSize: 16 }}
+        customStyle={{ fontSize: 13, padding: 0, background: 'transparent' }}
       >
         {code}
       </SyntaxHighlighter>

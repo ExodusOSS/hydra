@@ -1,4 +1,4 @@
-import { RatesByCurrency } from './types'
+import type { RatesByCurrency } from './types'
 
 type State = {
   loaded: boolean

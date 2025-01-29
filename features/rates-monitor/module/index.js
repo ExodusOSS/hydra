@@ -1,11 +1,7 @@
-import ExodusModule from '@exodus/module' // eslint-disable-line import/no-deprecated
-import delay from 'delay'
-import { get, isEqual, memoize } from 'lodash' // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
-import { pDebounce } from '@exodus/basic-utils'
+import { memoize, pDebounce } from '@exodus/basic-utils'
+import { get } from 'lodash'
 
-export const MODULE_ID = 'ratesMonitor'
-
-const getValue = (obj, path, opts = {}) => {
+const getValue = (obj, path, opts = Object.create(null)) => {
   const value = get(obj, path)
   if (!opts.canBeNegative && value < 0) return null
   if (value === 0 && !opts.zeroIsNotNull) return null
@@ -13,18 +9,54 @@ const getValue = (obj, path, opts = {}) => {
   return value
 }
 
-class RatesMonitor extends ExodusModule {
+function buildSlowRates({ tickers, fiatCurrency, currentPriceResponse, tickerResponse }) {
+  const slowRates = Object.create(null)
+  for (const ticker of tickers) {
+    const price = getValue(currentPriceResponse, `${ticker}.${fiatCurrency}`)
+    const priceUSD = getValue(currentPriceResponse, `${ticker}.USD`)
+    const change24 =
+      getValue(tickerResponse, `${ticker}.${fiatCurrency}.c24h`, { canBeNegative: true }) || 0
+    const volume24 = getValue(tickerResponse, `${ticker}.${fiatCurrency}.v24h`) || 0
+    const cap = getValue(tickerResponse, `${ticker}.${fiatCurrency}.mc`) || 0
+    slowRates[ticker] = {
+      price: price || 0,
+      priceUSD: priceUSD || 0,
+      change24,
+      volume24,
+      cap,
+      invalid: price === null || priceUSD === null || price === 0 || priceUSD === 0,
+    }
+  }
+
+  return slowRates
+}
+
+function arrayElementsShallowEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) return false
+  return arr1.every((value, index) => value === arr2[index])
+}
+
+class RatesMonitor {
   #pricingClient
   #currencyAtom
   #getTicker
   #availableAssetNamesAtom
   #fetchInterval
   #debounceInterval
+  #fetchRealTimePricesInterval
+  #slowRates = Object.create(null)
   #rates = Object.create(null)
+  #realTimeRatesByFiat = Object.create(null)
   #ratesAtom
-  #lastFetchId = -1
-  #started = false
   #subscriptions = []
+  #started = false
+  #slowFetchInFlight = false
+  #realTimeFetchInFlight = false
+  #slowIntervalId = null
+  #realTimeIntervalId = null
+  #lastCurrentPriceCtx = { tickers: [], fiatCurrency: '', lastModified: undefined }
+  #lastRealTimeCtxByFiat = Object.create(null)
+  #logger
 
   constructor({
     currencyAtom,
@@ -35,155 +67,229 @@ class RatesMonitor extends ExodusModule {
     ratesAtom,
     config,
   }) {
-    super({ name: MODULE_ID, logger })
-
+    this.#currencyAtom = currencyAtom
+    this.#pricingClient = pricingClient
+    this.#availableAssetNamesAtom = availableAssetNamesAtom
+    this.#logger = logger
+    this.#ratesAtom = ratesAtom
     this.#fetchInterval = config.fetchInterval
     this.#debounceInterval = config.debounceInterval
-    this.#pricingClient = pricingClient
+    this.#fetchRealTimePricesInterval = config.fetchRealTimePricesInterval
     this.#getTicker = (assetName) => assetsModule.getAsset(assetName)?.ticker
-
     this._update = pDebounce(this._updateInstant, this.#debounceInterval)
-
-    this.#currencyAtom = currencyAtom
-    this.#availableAssetNamesAtom = availableAssetNamesAtom
-    this.#ratesAtom = ratesAtom
   }
 
   #getAvailableAssetTickers = async () => {
     const assetNames = await this.#availableAssetNamesAtom.get()
-    return (
-      // TODO: is sort needed?
-      assetNames
-        //
-        .map((assetName) => this.#getTicker(assetName))
-        .sort()
-    )
+    return assetNames.map(this.#getTicker).sort()
   }
 
-  #getCurrency = async () => {
-    return this.#currencyAtom.get()
-  }
+  #getCurrency = async () => this.#currencyAtom.get()
 
-  async _fetch() {
-    const tickers = await this.#getAvailableAssetTickers()
-    const fiatCurrency = await this.#getCurrency()
-
-    const opts = {
-      assets: tickers,
-      fiatCurrency,
+  async #fetchSlowRates() {
+    if (this.#slowFetchInFlight) return false
+    this.#slowFetchInFlight = true
+    let changed = false
+    try {
+      const tickers = await this.#getAvailableAssetTickers()
+      const fiatCurrency = await this.#getCurrency()
+      const sameAsPrevious =
+        arrayElementsShallowEqual(this.#lastCurrentPriceCtx.tickers, tickers) &&
+        this.#lastCurrentPriceCtx.fiatCurrency === fiatCurrency
+      const lastModified = sameAsPrevious ? this.#lastCurrentPriceCtx.lastModified : undefined
+      const [currentPriceRes, tickerResponse] = await Promise.all([
+        this.#pricingClient.currentPrice({ assets: tickers, fiatCurrency, lastModified }),
+        this.#pricingClient.ticker({ assets: tickers, fiatCurrency }),
+      ])
+      if (currentPriceRes.isModified) {
+        this.#lastCurrentPriceCtx = {
+          tickers,
+          fiatCurrency,
+          lastModified: currentPriceRes.lastModified,
+        }
+        this.#slowRates = buildSlowRates({
+          tickers,
+          fiatCurrency,
+          currentPriceResponse: currentPriceRes.data,
+          tickerResponse,
+        })
+        changed = true
+      } else {
+        this.#logger.info('price data is not modified, skipping slow-rates update tick')
+      }
+    } catch (err) {
+      this.#logger.warn(`Failed to fetch slow rates: ${err.message}`)
+    } finally {
+      this.#slowFetchInFlight = false
     }
 
-    return Promise.all([
-      //
-      this.#pricingClient.currentPrice(opts),
-      this.#pricingClient.ticker(opts),
+    return changed
+  }
+
+  async #fetchRealTimeRates() {
+    if (this.#realTimeFetchInFlight) return false
+    this.#realTimeFetchInFlight = true
+    let changed = false
+    try {
+      const fiatCurrency = await this.#getCurrency()
+      const oldCtx = this.#lastRealTimeCtxByFiat[fiatCurrency] || {
+        lastModified: undefined,
+        entityTag: undefined,
+      }
+      const realTimeRes = await this.#pricingClient.realTimePrice({
+        fiatCurrency,
+        ignoreInvalidSymbols: true,
+        lastModified: oldCtx.lastModified,
+        entityTag: oldCtx.entityTag,
+      })
+      if (realTimeRes.isModified) {
+        this.#realTimeRatesByFiat[fiatCurrency] = { data: realTimeRes.data }
+        this.#lastRealTimeCtxByFiat[fiatCurrency] = {
+          lastModified: realTimeRes.lastModified,
+          entityTag: realTimeRes.entityTag,
+        }
+        changed = true
+      } else {
+        this.#logger.info(
+          `real-time data is not modified, skipping real-time update for ${fiatCurrency}`
+        )
+      }
+    } catch (error) {
+      this.#logger.warn(`Failed to fetch real-time pricing: ${error.message}`)
+    } finally {
+      this.#realTimeFetchInFlight = false
+    }
+
+    return changed
+  }
+
+  async update() {
+    const [slowChanged, realChanged] = await Promise.all([
+      this.#fetchSlowRates(),
+      this.#fetchRealTimeRates(),
     ])
+    if (slowChanged || realChanged) {
+      await this._update()
+    }
+  }
+
+  stop() {
+    this.#started = false
+    this.#subscriptions.forEach((unsubscribe) => unsubscribe())
+    this.#subscriptions = []
+    if (this.#slowIntervalId) {
+      clearInterval(this.#slowIntervalId)
+      this.#slowIntervalId = null
+    }
+
+    if (this.#realTimeIntervalId) {
+      clearInterval(this.#realTimeIntervalId)
+      this.#realTimeIntervalId = null
+    }
   }
 
   _updateInstant = async () => {
-    const currentFetchId = ++this.#lastFetchId
-
     const tickers = await this.#getAvailableAssetTickers()
-    const [currentPriceRes, tickerRes] = await this._fetch()
-    const currency = await this.#getCurrency()
-
-    const missing = []
-    const rates = Object.fromEntries(
+    const fiatCurrency = await this.#getCurrency()
+    const mergedRates = Object.fromEntries(
       tickers.map((ticker) => {
-        const price = getValue(currentPriceRes, `${ticker}.${currency}`)
-        const priceUSD = getValue(currentPriceRes, `${ticker}.USD`)
-
-        // If we get bad pricing metadata but valid prices we fallback to zeros for the metadata
-        const change24 =
-          getValue(tickerRes, `${ticker}.${currency}.c24h`, { canBeNegative: true }) || 0
-        const volume24 = getValue(tickerRes, `${ticker}.${currency}.v24h`) || 0
-        const cap = getValue(tickerRes, `${ticker}.${currency}.mc`) || 0
-        const invalid = price === null || priceUSD === null
-
-        if (invalid) {
-          missing.push(ticker)
+        const finalObj = {
+          ...this.#slowRates[ticker],
+        }
+        const realTimeData = this.#getRealTimeData({ fiatCurrency, ticker })
+        if (realTimeData) {
+          Object.assign(finalObj, realTimeData, { invalid: false })
         }
 
-        return [
-          ticker,
-          {
-            price: price || 0,
-            priceUSD: priceUSD || 0,
-            change24,
-            volume24,
-            cap,
-            invalid,
-          },
-        ]
+        return [ticker, finalObj]
       })
     )
 
-    // ignore rates if a new request has been initiated (we want to wait for that one)
+    const missing = tickers.filter((ticker) => mergedRates[ticker].invalid)
 
-    if (this.#lastFetchId === currentFetchId) {
-      this.#logMissing(missing)
-      const data = { ...this.#rates, [currency]: rates }
-      await this.#ratesAtom.set((current) => (isEqual(current, data) ? current : data))
+    this.#logMissing(missing)
+    const nextRates = { ...this.#rates, [fiatCurrency]: mergedRates }
+    if (nextRates[fiatCurrency] !== this.#rates[fiatCurrency]) {
+      this.#rates = nextRates
+      await this.#ratesAtom.set(this.#rates)
     }
+  }
+
+  #getRealTimeData = ({ fiatCurrency, ticker }) => {
+    const realTimeEntry = this.#realTimeRatesByFiat[fiatCurrency]
+    if (!realTimeEntry?.data?.[ticker]) return null
+
+    const price = getValue(realTimeEntry.data[ticker], fiatCurrency)
+    const priceUSD = getValue(realTimeEntry.data[ticker], 'USD')
+
+    if (!Number.isFinite(price) || !Number.isFinite(priceUSD) || price === 0 || priceUSD === 0) {
+      return null
+    }
+
+    return { price, priceUSD }
   }
 
   #logMissing = memoize(
     (tickers) => {
       if (tickers.length > 0) {
-        this._logger.warn(`Pricing data missing for: ${tickers.join(', ')}`)
+        this.#logger.warn(`Pricing data missing for: ${tickers.join(', ')}`)
       }
     },
     (tickers) => tickers.join(',')
   )
 
   async start() {
-    if (this.#started) {
-      return
-    }
-
-    this.#subscriptions.push(
-      this.#currencyAtom.observe((value) => {
-        if (Object.keys(this.#rates).length === 0) return
-        if (value && this.#started) this._update()
-      }),
-      this.#availableAssetNamesAtom.observe((value) => {
-        if (value && this.#started) this._update()
-      }),
-      this.#ratesAtom.observe((rates) => (this.#rates = rates))
-    )
-
+    if (this.#started) return
     this.#started = true
-
-    await this._updateInstant().catch((err) => this._logger.error(err))
-    while (this.#started) {
-      await delay(this.#fetchInterval)
-
-      try {
-        if (this.#started) {
-          await this._update()
-        }
-      } catch (err) {
-        this._logger.error(err)
+    this.#subscriptions.push(
+      this.#currencyAtom.observe(() => {
+        if (Object.keys(this.#rates).length === 0) return
+        this.#started && this.update()
+      }),
+      this.#availableAssetNamesAtom.observe(() => {
+        this.#started && this.update()
+      }),
+      this.#ratesAtom.observe((rates) => {
+        this.#rates = rates
+      })
+    )
+    try {
+      const [slowChanged, realChanged] = await Promise.all([
+        this.#fetchSlowRates(),
+        this.#fetchRealTimeRates(),
+      ])
+      if (slowChanged || realChanged) {
+        await this._update()
       }
+    } catch (err) {
+      this.#logger.error(err)
     }
-  }
 
-  async update() {
-    await this._update()
-  }
-
-  stop() {
-    this.#started = false
-    this.#lastFetchId = -1
-    this.#subscriptions.forEach((unsubscribe) => unsubscribe())
-    this.#subscriptions = []
+    this.#slowIntervalId = setInterval(async () => {
+      if (!this.#started) return
+      try {
+        const changed = await this.#fetchSlowRates()
+        if (changed) await this._update()
+      } catch (err) {
+        this.#logger.error(err)
+      }
+    }, this.#fetchInterval)
+    this.#realTimeIntervalId = setInterval(async () => {
+      if (!this.#started) return
+      try {
+        const changed = await this.#fetchRealTimeRates()
+        if (changed) await this._update()
+      } catch (err) {
+        this.#logger.error(err)
+      }
+    }, this.#fetchRealTimePricesInterval)
   }
 }
 
 const createRatesMonitor = (deps) => new RatesMonitor(deps)
 
 const ratesMonitorDefinition = {
-  id: MODULE_ID,
+  id: 'ratesMonitor',
   type: 'module',
   factory: createRatesMonitor,
   dependencies: [

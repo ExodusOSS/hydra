@@ -26,12 +26,11 @@ const applicationLifecyclePlugin = ({
     createAtomObserver({ port, atom: lockHistoryAtom, event: 'lockHistory' }),
     createAtomObserver({ port, atom: restoreAtom, event: 'restore' }),
     createAtomObserver({ port, atom: backedUpAtom, event: 'backedUp' }),
-    createAtomObserver({ port, atom: backedUpAtom, event: 'backedUp' }),
     createAtomObserver({ port, atom: autoLockTimerAtom, event: 'autoLockTimer' }),
   ]
 
   const onStart = ({ isRestoring }: { isRestoring: boolean }) => {
-    restoreAtom.set(isRestoring)
+    void restoreAtom.set(isRestoring)
   }
 
   const onLoad = async () => {
@@ -39,16 +38,16 @@ const applicationLifecyclePlugin = ({
   }
 
   const onImport = () => {
-    backedUpAtom.set(true)
-    restoreAtom.set(true)
+    void backedUpAtom.set(true)
+    void restoreAtom.set(true)
   }
 
   const onAddSeed = () => {
-    restoreAtom.set(true)
+    void restoreAtom.set(true)
   }
 
   const onAssetsSynced = async () => {
-    restoreAtom.set(false)
+    void restoreAtom.set(false)
   }
 
   const onStop = () => {

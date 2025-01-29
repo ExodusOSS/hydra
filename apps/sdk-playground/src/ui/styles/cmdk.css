@@ -1,27 +1,17 @@
 [cmdk-root] {
-  max-width: 640px;
-  width: 100%;
-  background: theme('colors.slate.200');
-  border-radius: 12px;
-  padding-top: 8px;
-  border: 1px solid theme('colors.slate.400');
-  position: relative;
-  outline: none;
+  @apply relative w-full max-w-[640px] rounded-xl border border-deep-100 bg-deep-400 pt-2 outline-none;
+}
+
+[cmdk-overlay] {
+  @apply absolute inset-0 z-50 bg-black/40 backdrop-blur-sm transition-all;
 }
 
 [cmdk-input] {
-  border: none;
-  width: 100%;
-  font-size: 18px;
-  padding: 8px 16px 16px 16px;
-  outline: none;
-  color: theme('colors.slate.600');
-  background: theme('colors.slate.200');
-  border-bottom: 1px solid theme('colors.slate.400');
+  @apply w-full border-b border-b-deep-50 bg-transparent p-4 pt-2 text-lg text-white outline-none;
 }
 
 [cmdk-input]::placeholder {
-  color: theme('colors.slate.400');
+  @apply text-slate-600;
 }
 
 [cmdk-item] {
@@ -34,7 +24,7 @@
   align-items: center;
   gap: 8px;
   padding: 0 8px;
-  color: theme('colors.slate.600');
+  color: theme('colors.slate.400');
   user-select: none;
   will-change: background, color;
   transition: all 150ms ease;
@@ -42,13 +32,11 @@
 }
 
 [cmdk-item][data-selected='true'] {
-  background: theme('colors.slate.300');
-  color: theme('colors.black');
+  @apply bg-deep-200 text-white;
 }
 
 [cmdk-item]:active {
-  transition-property: background;
-  background: theme('colors.slate.300');
+  @apply bg-deep-300 transition-all;
 }
 
 [cmdk-list] {
@@ -62,17 +50,11 @@
 }
 
 [cmdk-group] {
-  margin-bottom: 16px;
+  @apply mb-4;
 }
 
 [cmdk-group-heading] {
-  user-select: none;
-  font-size: 12px;
-  color: theme('colors.black');
-  padding: 0 8px;
-  display: flex;
-  align-items: center;
-  margin-bottom: 4px;
+  @apply mb-2 flex items-center px-2 text-xs text-slate-400;
 }
 
 [cmdk-dialog] {
@@ -85,11 +67,5 @@
 }
 
 [cmdk-empty] {
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 64px;
-  white-space: pre-wrap;
-  color: theme('colors.black');
+  @apply flex h-16 items-center justify-center text-sm text-slate-400;
 }

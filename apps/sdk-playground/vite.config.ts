@@ -60,4 +60,7 @@ export default defineConfig(() => ({
     port,
     strictPort,
   },
+  define: {
+    __USE_DEFAULT_SEED__: process.env.USE_DEFAULT_SEED ?? true,
+  },
 }))

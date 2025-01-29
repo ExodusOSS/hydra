@@ -12,24 +12,18 @@ interface SectionProps {
 const Section = ({ title, items, active }: SectionProps) => {
   return (
     <li>
-      <h2 className="font-display font-medium text-slate-900 ">{title}</h2>
-      <ul
-        role="list"
-        className="mt-2 space-y-2 border-l-2 border-slate-100 lg:mt-4 lg:border-slate-200"
-      >
+      <h2 className="font-display text-sm font-light text-slate-300">{title}</h2>
+
+      <ul role="list" className="ml-1 mt-4 space-y-2 border-l-2 border-deep-100">
         {items.map(({ name, href, incomplete }) => (
           <li key={name} className="relative">
             <Link href={href}>
               <div
-                className={cn(
-                  'block w-full cursor-pointer pl-3.5 before:pointer-events-none before:absolute before:-left-1 before:top-1/2 before:h-1.5 before:w-1.5 before:-translate-y-1/2 before:rounded-full',
-                  {
-                    'font-semibold text-primary before:bg-primary': active === name,
-                    'text-slate-500 before:hidden before:bg-slate-300 hover:text-slate-600 hover:before:block':
-                      active !== name,
-                    'text-slate-200': incomplete,
-                  }
-                )}
+                className={cn('block w-full cursor-pointer pl-4 text-sm', {
+                  'font-thin': active === name,
+                  'text-slate-500 hover:text-slate-400': active !== name,
+                  'text-slate-700': incomplete,
+                })}
               >
                 {name}
               </div>

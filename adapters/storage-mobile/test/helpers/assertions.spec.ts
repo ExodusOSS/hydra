@@ -1,4 +1,4 @@
-import { assertValidFilesystemKey } from '../../src/helpers/assertions'
+import { assertValidFilesystemKey } from '../../src/helpers/assertions.js'
 
 describe('assertions', () => {
   describe('assertValidFilesystemKey', () => {

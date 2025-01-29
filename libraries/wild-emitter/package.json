@@ -1,16 +1,16 @@
 {
   "name": "@exodus/wild-emitter",
-  "version": "1.1.1",
-  "author": "Exodus Movement Inc",
+  "version": "1.1.2",
+  "author": "Exodus Movement, Inc.",
   "description": "Wildcard emitter implementation",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-core.git"
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-core/tree/master/packages/wild-emitter",
-  "license": "UNLICENSED",
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/wild-emitter",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-core/issues?q=is%3Aissue+is%3Aopen+label%3Awild-emitter"
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Awild-emitter"
   },
   "type": "module",
   "main": "src/index.js",
@@ -20,8 +20,8 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "test": "run -T jest",
-    "lint": "run -T eslint . --ignore-path ../../.gitignore",
+    "test": "run -T exodus-test --jest",
+    "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix"
   }
 }

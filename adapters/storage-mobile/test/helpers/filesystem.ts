@@ -1,4 +1,4 @@
-import { TestFilesystem } from './types'
+import type { TestFilesystem } from './types'
 
 export default function createInMemoryFS(): TestFilesystem {
   const data: Record<string, string> = {}

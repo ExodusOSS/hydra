@@ -10,6 +10,7 @@ import ratesDebugDefinition from './debug'
 const defaultConfig = {
   fetchInterval: ms('1m'),
   debounceInterval: ms('0.75s'),
+  fetchRealTimePricesInterval: ms('20s'),
 }
 
 const rates = (config = {}) => {

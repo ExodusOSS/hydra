@@ -1,5 +1,5 @@
 import { composeWithDevTools as compose } from 'redux-devtools-extension/developmentOnly'
-import DevTools from '../pages/feature/components/dev-tools/index.js'
+import DevTools from '../components/dev-tools/index.js'
 import createReduxIOC from '@exodus/headless/redux'
 import createDependencies from './dependencies.js'
 

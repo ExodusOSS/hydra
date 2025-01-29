@@ -15,7 +15,10 @@ const createLegacyAddressModeAtom = ({ fusion }) => {
   const set = async (value) => {
     const { bitcoin } = typeof value === 'function' ? value(await computedAtom.get()) : value
 
-    await bitcoinFusionAtom.set(bitcoin || false)
+    const bitcoinPreviousValue = await bitcoinFusionAtom.get()
+    if (bitcoinPreviousValue !== bitcoin) {
+      await bitcoinFusionAtom.set(bitcoin || false)
+    }
   }
 
   return { ...computedAtom, set }

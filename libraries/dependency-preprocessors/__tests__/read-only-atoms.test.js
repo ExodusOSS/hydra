@@ -1,6 +1,7 @@
-import readOnlyAtoms from '../src/preprocessors/read-only-atoms.js'
 import { createInMemoryAtom } from '@exodus/atoms'
+
 import preprocess from '../src/index.js'
+import readOnlyAtoms from '../src/preprocessors/read-only-atoms.js'
 
 describe('readonlyAtoms', () => {
   const createAtomDefinition = (id, { writeableOutsideNamespace, namespace = 'other' } = {}) => {

@@ -6,6 +6,11 @@ const { merge } = lodash
 
 const IGNORE_INVALID_SYMBOLS = true
 
+const MODIFY_CHECK_HEADERS = {
+  IF_MODIFIED_SINCE: 'If-Modified-Since',
+  IF_NONE_MATCH: 'If-None-Match',
+}
+
 class ExodusPricingClient {
   #defaultFetchOptions
   #pricingServerUrlAtom
@@ -23,11 +28,18 @@ class ExodusPricingClient {
     this.#fetch = (...args) => fetch(...args)
   }
 
-  #fetchPath = async (path, options = this.#defaultFetchOptions) => {
+  #pathUrl = async (path) => {
     const baseUrl = await this.#pricingServerUrlAtom.get()
-    const url = `${baseUrl}/${path}`
-    const response = await this.#fetch(url, options)
+
+    return `${baseUrl}/${path}`
+  }
+
+  #fetchPath = async (path, options = this.#defaultFetchOptions) => {
+    const response = await this.#fetchPathResponse(path, options)
+
     if (!response.ok) {
+      const url = await this.#pathUrl(path)
+
       // Throw an error here because the calling function is expecting it.
       throw new Error(`${url} ${response.status} ${response.statusText}`)
     }
@@ -35,11 +47,20 @@ class ExodusPricingClient {
     return response.json()
   }
 
-  currentPrice = async ({
-    assets,
-    fiatCurrency = 'USD',
-    ignoreInvalidSymbols = IGNORE_INVALID_SYMBOLS,
-  }) => {
+  #fetchPathResponse = async (path, options = this.#defaultFetchOptions) => {
+    const url = await this.#pathUrl(path)
+
+    return this.#fetch(url, options)
+  }
+
+  currentPrice = async (params) => {
+    const {
+      assets,
+      lastModified,
+      entityTag,
+      fiatCurrency = 'USD',
+      ignoreInvalidSymbols = IGNORE_INVALID_SYMBOLS,
+    } = params
     const parameters = new URLSearchParams({
       from: assets,
       // USD is required in other parts of the application and must be included in all queries
@@ -49,7 +70,57 @@ class ExodusPricingClient {
       parameters.set('ignoreInvalidSymbols', ignoreInvalidSymbols)
     }
 
-    return this.#fetchPath(`current-price?${parameters}`)
+    const currentPricePath = `current-price?${parameters}`
+
+    const modifyChecksEnabled =
+      params.hasOwnProperty('lastModified') || params.hasOwnProperty('entityTag')
+
+    if (!modifyChecksEnabled) {
+      return this.#fetchPath(currentPricePath)
+    }
+
+    const fetchOptions = {
+      ...this.#defaultFetchOptions,
+      headers: {
+        ...this.#defaultFetchOptions.headers,
+      },
+    }
+    if (lastModified) {
+      fetchOptions.headers[MODIFY_CHECK_HEADERS.IF_MODIFIED_SINCE] = lastModified
+    }
+
+    if (entityTag) {
+      fetchOptions.headers[MODIFY_CHECK_HEADERS.IF_NONE_MATCH] = entityTag
+    }
+
+    const response = await this.#fetchPathResponse(currentPricePath, fetchOptions)
+    const responseLastModified = response.headers.get('Last-Modified')
+    const responseEntityTag = response.headers.get('ETag')
+
+    if (
+      response.status === 304 ||
+      // fetch can internally convert 304 into 200, so check for modify headers on request/response
+      (response.ok && lastModified && lastModified === responseLastModified) ||
+      (response.ok && entityTag && entityTag === responseEntityTag)
+    ) {
+      return {
+        isModified: false,
+      }
+    }
+
+    if (response.ok) {
+      const data = await response.json()
+
+      return {
+        entityTag: responseEntityTag,
+        lastModified: responseLastModified,
+        isModified: true,
+        data,
+      }
+    }
+
+    const url = await this.#pathUrl(currentPricePath)
+    throw new Error(`${url} ${response.status} ${response.statusText}`)
   }
 
   ticker = async ({

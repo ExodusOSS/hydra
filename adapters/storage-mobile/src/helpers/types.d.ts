@@ -1,4 +1,4 @@
-import { AsyncStorageStatic } from '@react-native-async-storage/async-storage/lib/typescript/types'
+import type { AsyncStorageStatic } from '@react-native-async-storage/async-storage/lib/typescript/types'
 
 export type Filesystem = {
   /**
@@ -29,5 +29,6 @@ export type Dependencies = {
 }
 
 export type FunctionProperties<T> = {
-  [K in keyof T]: T[K] extends Function ? K : never // eslint-disable-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  [K in keyof T]: T[K] extends Function ? K : never
 }[keyof T][]

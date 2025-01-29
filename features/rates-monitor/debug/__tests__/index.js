@@ -1,4 +1,5 @@
 import { createInMemoryAtom } from '@exodus/atoms'
+
 import ratesDebugDefinition from '..'
 
 const USD_BTC_INITIAL_DATA = {

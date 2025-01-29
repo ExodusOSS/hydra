@@ -1,4 +1,5 @@
 import { createInMemoryAtom } from '@exodus/atoms'
+
 import ratesReportDefinition from '..'
 
 describe('ratesReport', () => {

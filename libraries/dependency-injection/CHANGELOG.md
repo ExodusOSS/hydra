@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.0](https://github.com/ExodusMovement/hydra/compare/@exodus/dependency-injection@3.1.1...@exodus/dependency-injection@3.2.0) (2025-01-24)
+
+### Features
+
+- feat: improve module registration log statement (#11218)
+
 ## [3.1.1](https://github.com/ExodusMovement/hydra/compare/@exodus/dependency-injection@3.1.0...@exodus/dependency-injection@3.1.1) (2024-11-01)
 
 Re-licensed under MIT license.

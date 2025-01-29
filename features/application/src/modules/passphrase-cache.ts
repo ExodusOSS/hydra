@@ -78,7 +78,7 @@ export class PassphraseCache {
       }
 
       this.#logger.log('fetched expired passphrase, clearing and preventing unlock')
-      this.clear()
+      void this.clear()
     }
 
     this.#logger.log('passphrase not in cache')
@@ -94,7 +94,7 @@ export class PassphraseCache {
     if (passphrase) {
       await this.#storage.set(TTL_KEY, newTtl)
 
-      this.#scheduleClear()
+      void this.#scheduleClear()
     }
   }
 
@@ -104,7 +104,7 @@ export class PassphraseCache {
     if (passphrase) {
       await this.#storage.set(INACTIVE_AT_KEY, Date.now())
 
-      this.#scheduleClear()
+      void this.#scheduleClear()
     }
   }
 

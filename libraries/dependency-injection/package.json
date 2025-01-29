@@ -1,6 +1,6 @@
 {
   "name": "@exodus/dependency-injection",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "A simple dependency injection and inversion of container",
   "author": "Exodus Movement, Inc.",
   "type": "module",

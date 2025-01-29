@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.3.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/dependency-preprocessors@6.3.1...@exodus/dependency-preprocessors@6.3.2) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
+## [6.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/dependency-preprocessors@6.3.0...@exodus/dependency-preprocessors@6.3.1) (2024-11-23)
+
+### Bug Fixes
+
+- fix(deps-preprocessors): override atom id (#10556)
+
 ## [6.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/dependency-preprocessors@6.2.0...@exodus/dependency-preprocessors@6.3.0) (2024-10-03)
 
 ### Features
