@@ -1,14 +1,12 @@
 import typeforce from '@exodus/typeforce'
 import { createFeatureControl } from '@exodus/feature-control'
-import ExodusModule from '@exodus/module' // eslint-disable-line import/no-deprecated
 import { mapValues, pickBy } from '@exodus/basic-utils'
 import { combine, createInMemoryAtom, dedupe } from '@exodus/atoms'
 import { convertConfigToFeatureControlFormat } from '../shared/format-config'
 import * as types from './types'
+import assert from 'minimalistic-assert'
 
-const MODULE_ID = 'featureFlags'
-
-class FeatureFlags extends ExodusModule {
+class FeatureFlags {
   #features
   #featureFlagAtoms
   #remoteConfigFeatureFlagAtoms
@@ -24,10 +22,7 @@ class FeatureFlags extends ExodusModule {
     remoteConfigFeatureFlagAtoms,
     geolocationAtom,
     getBuildMetadata,
-    logger,
   }) {
-    super({ name: MODULE_ID, logger })
-
     typeforce(types.config, config, true)
     typeforce(function validateRemoteConfigFeatureFlagAtoms(atoms) {
       return Object.keys(atoms).every((key) => config.features[key]?.remoteConfig)
@@ -61,6 +56,7 @@ class FeatureFlags extends ExodusModule {
       ...featureConfig.localDefaults,
       versionSemver,
       ...(supportedOverrides.geolocation ? { geolocation } : {}),
+      __proto__: null,
     }
 
     const featureControl = createFeatureControl(opts, supportedOverrides)
@@ -77,6 +73,11 @@ class FeatureFlags extends ExodusModule {
   }
 
   #createRemoteConfigurableFeatureFlag = ({ name }) => {
+    assert(
+      Object.prototype.hasOwnProperty.call(this.#remoteConfigFeatureFlagAtoms, name),
+      `Feature flag atom ${name} not found`
+    )
+
     const remoteConfigFeatureFlagAtom = this.#remoteConfigFeatureFlagAtoms[name]
     const featureConfig = this.#features[name]
     const { supportedOverrides } = featureConfig.remoteConfig
@@ -103,7 +104,7 @@ class FeatureFlags extends ExodusModule {
 const createFeatureFlags = (opts) => new FeatureFlags(opts)
 
 const featureFlagsDefinition = {
-  id: MODULE_ID,
+  id: 'featureFlags',
   type: 'module',
   dependencies: [
     'config',
@@ -111,7 +112,6 @@ const featureFlagsDefinition = {
     'remoteConfigFeatureFlagAtoms',
     'geolocationAtom',
     'getBuildMetadata',
-    'logger',
   ],
   factory: createFeatureFlags,
   public: true,

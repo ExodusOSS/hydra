@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.0.1...@exodus/fiat-balances@13.0.2) (2025-01-20)
+
+### Bug Fixes
+
+- fix(fiat-balances): assets with balance above favorite assets on sort (#11117)
+
+## [13.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.0.0...@exodus/fiat-balances@13.0.1) (2025-01-02)
+
+### Bug Fixes
+
+- fix: memoize selector result (#10901)
+
+## [13.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@12.5.2...@exodus/fiat-balances@13.0.0) (2024-12-23)
+
+### ⚠ BREAKING CHANGES
+
+- **fiat-balances:** forward configs from feature (#10818)
+
+### Features
+
+- feat(fiat-balances)!: forward configs from feature (#10818)
+
+### Bug Fixes
+
+- fix: optimistic loaded state (#10920)
+
+## [12.5.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@12.5.1...@exodus/fiat-balances@12.5.2) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [12.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@12.5.0...@exodus/fiat-balances@12.5.1) (2024-11-29)
 
 ### Bug Fixes

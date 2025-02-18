@@ -1,11 +1,15 @@
-import { isEmpty, isEqual } from 'lodash'
-import { Atom } from '@exodus/atoms'
-
-import remoteConfigStatusAtomDefinition, { RemoteConfigStatus } from '../atoms'
-import remoteConfigDefinition, { RemoteConfig } from './index'
-import { Fetch, Freeze } from '../types'
+import type { Atom } from '@exodus/atoms'
 import type { Logger } from '@exodus/logger'
-import generateRemoteConfigUrl from './generate-remote-config-url'
+import lodash from 'lodash'
+
+import type { RemoteConfigStatus } from '../atoms/index.js'
+import remoteConfigStatusAtomDefinition from '../atoms/index.js'
+import type { Fetch, Freeze } from '../types/index.js'
+import generateRemoteConfigUrl from './generate-remote-config-url.js'
+import type { RemoteConfig } from './index.js'
+import remoteConfigDefinition from './index.js'
+
+const { isEmpty, isEqual } = lodash
 
 const createRemoteConfig = remoteConfigDefinition.factory
 
@@ -73,9 +77,9 @@ describe('createRemoteConfig', () => {
       remoteConfigStatusAtom,
     })
 
-    remoteConfig.load()
+    void remoteConfig.load()
 
-    remoteConfig.get(key).then((value) => {
+    void remoteConfig.get(key).then((value) => {
       expect(value).toEqual(expectedValue)
       done()
     })
@@ -96,7 +100,7 @@ describe('createRemoteConfig', () => {
       remoteConfigStatusAtom,
     })
 
-    remoteConfig.load()
+    void remoteConfig.load()
     await remoteConfig.getAll()
 
     const state = await remoteConfigStatusAtom.get()
@@ -118,7 +122,7 @@ describe('createRemoteConfig', () => {
       remoteConfigStatusAtom,
     })
 
-    remoteConfig.load()
+    void remoteConfig.load()
     await remoteConfig.getAll()
 
     const remoteConfigUrl = await generateRemoteConfigUrl(getBuildMetadata)
@@ -145,9 +149,9 @@ describe('createRemoteConfig', () => {
       remoteConfigStatusAtom,
     })
 
-    remoteConfig.load()
+    void remoteConfig.load()
 
-    remoteConfig.getAll().then((config) => {
+    void remoteConfig.getAll().then((config) => {
       expect(config).toEqual(sampleConfig)
       done()
     })
@@ -177,7 +181,7 @@ describe('createRemoteConfig', () => {
       remoteConfigStatusAtom,
     })
 
-    remoteConfig.load()
+    void remoteConfig.load()
 
     await new Promise((resolve) => setTimeout(resolve, 100))
     const report = await remoteConfigStatusAtom.get()
@@ -197,7 +201,7 @@ describe('createRemoteConfig', () => {
       getBuildMetadata,
       remoteConfigStatusAtom,
     })
-    remoteConfig.load()
+    void remoteConfig.load()
 
     remoteConfig.on('sync', ({ current }) => {
       if (!isEmpty(current)) {
@@ -221,7 +225,7 @@ describe('createRemoteConfig', () => {
       getBuildMetadata,
       remoteConfigStatusAtom,
     })
-    remoteConfig.load()
+    void remoteConfig.load()
 
     let syncEvents = 0
     remoteConfig.on('sync', () => {

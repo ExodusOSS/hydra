@@ -1,6 +1,6 @@
 {
   "name": "@exodus/locale",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "Module for tracking users locale data such as language and currency",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -8,10 +8,11 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/locale",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Alocale"
   },
+  "type": "module",
   "main": "index.js",
   "files": [
     "api",
@@ -24,16 +25,20 @@
     "!**/__tests__/**"
   ],
   "scripts": {
-    "lint": "run -T eslint . --ignore-path ../../.gitignore",
+    "test": "run -T exodus-test --jest",
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
-    "@exodus/atoms": "^8.0.0",
-    "@exodus/fiat-currencies": "^1.0.5",
+    "@exodus/atoms": "^9.0.0",
+    "@exodus/fiat-currencies": "^1.2.3",
     "@exodus/fusion-atoms": "^1.2.1"
   },
   "devDependencies": {
     "@exodus/redux-dependency-injection": "workspace:^",
     "redux": "4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

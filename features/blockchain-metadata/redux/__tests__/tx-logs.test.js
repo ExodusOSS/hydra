@@ -1,5 +1,6 @@
-import { WalletAccount, TxSet } from '@exodus/models'
 import { asset as bitcoin } from '@exodus/bitcoin-meta'
+import { TxSet, WalletAccount } from '@exodus/models'
+
 import reduxModule from '../tx-logs/index.js'
 import { setup } from './utils.js'
 

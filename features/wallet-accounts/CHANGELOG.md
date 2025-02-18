@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.2.1...@exodus/wallet-accounts@17.3.0) (2025-02-10)
+
+### Features
+
+- feat(wallet-accounts): redact wallet account labels in report (#11395)
+
+## [17.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.2.0...@exodus/wallet-accounts@17.2.1) (2025-02-07)
+
+### Bug Fixes
+
+- fix(pickBy): pass key to callback (#11376)
+
+## [17.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.1.3...@exodus/wallet-accounts@17.2.0) (2025-02-05)
+
+### Features
+
+- feat(headless): type debug apis (#11235)
+
+- feat(wallet-accounts): not throw an error when seedId is not defined on unlocking (#11310)
+
+## [17.1.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.1.2...@exodus/wallet-accounts@17.1.3) (2024-12-20)
+
+### License
+
+- license: re-license under MIT license (#10599)
+
+## [17.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.1.1...@exodus/wallet-accounts@17.1.2) (2024-12-06)
+
+### Bug Fixes
+
+- fix: don't wait fusion when fix mismatch in wallet account (#10624)
+
 ## [17.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.1.0...@exodus/wallet-accounts@17.1.1) (2024-11-21)
 
 ### Bug Fixes

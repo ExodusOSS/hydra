@@ -1,6 +1,7 @@
-import { combineReducers, createStore } from 'redux'
 import { setupRedux } from '@exodus/redux-dependency-injection'
-import remoteConfigReduxDefinition from '..'
+import { combineReducers, createStore } from 'redux'
+
+import remoteConfigReduxDefinition from '../index.js'
 
 export function setup({ dependencies = [] } = {}) {
   const allDependencies = [...dependencies, remoteConfigReduxDefinition]

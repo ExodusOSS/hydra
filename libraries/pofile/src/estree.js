@@ -86,7 +86,7 @@ const section = (tokens, filePath) => {
         body.push(object)
         nodes.push(...nodes)
 
-        current += 4
+        current += tokens.length
         break
 
       default:
@@ -109,6 +109,18 @@ const section = (tokens, filePath) => {
   }
 }
 
+const getNextCommentIndex = (tokens, current) => {
+  while (current < tokens.length) {
+    if (tokens[current].type === 'comment') {
+      return current
+    }
+
+    current++
+  }
+
+  return current
+}
+
 const visit = (tokens, filePath) => {
   const body = []
   const nodes = []
@@ -121,7 +133,7 @@ const visit = (tokens, filePath) => {
 
     switch (token.type) {
       case 'name':
-        current += 4
+        current = getNextCommentIndex(tokens, current)
         const { block, nodes, comments } = section(tokens.slice(previous, current), filePath)
         body.push(block)
         nodes.push(...nodes)

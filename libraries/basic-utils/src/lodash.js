@@ -18,7 +18,7 @@ export const pickBy = (obj, fn) => {
   assertFunction(fn)
   return obj == null
     ? Object.create(null)
-    : Object.fromEntries(Object.entries(obj).filter(([, value]) => fn(value)))
+    : Object.fromEntries(Object.entries(obj).filter(([key, value]) => fn(value, key)))
 }
 
 export const omit = (obj, remove) => {

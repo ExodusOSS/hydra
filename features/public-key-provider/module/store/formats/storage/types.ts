@@ -15,11 +15,23 @@ export interface AddParamsPublicKey extends AddParamsBase {
 export interface AddParamsXPUB extends AddParamsBase {
   xpub: XPUB
 }
+
 export type AddParams = {
   walletAccountName: string
   keyIdentifier: KeyIdentifier
   publicKey?: PublicKey | MoneroPublicKey
   xpub?: XPUB
+}
+
+type Key = {
+  keyIdentifier: KeyIdentifier
+  publicKey?: PublicKey | MoneroPublicKey
+  xpub?: XPUB
+}
+
+export type AddManyParams = {
+  walletAccountName: string
+  keys: Key[]
 }
 
 export interface GetParams {

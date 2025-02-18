@@ -1,7 +1,8 @@
+import delay from 'delay'
+
+import dedupe from '../../src/enhancers/dedupe.js'
 import type { Atom } from '../../src/index.js'
 import { compute, createInMemoryAtom } from '../../src/index.js'
-import dedupe from '../../src/enhancers/dedupe.js'
-import delay from 'delay'
 
 describe('dedupe enhancer (writable)', () => {
   let atom: Atom<{ name: string } | undefined>

@@ -19,7 +19,7 @@ See [@exodus/redux-dependency-injection](https://github.com/ExodusOSS/hydra/tree
 
 ## Assembly
 
-The minimal assembly code will shrink when `@exodus/headless/redux` [ships soon](https://github.com/ExodusOSS/hydra/issues/6139), but for now, you will need to do a bit of wiring:
+The minimal assembly shrinks when using `@exodus/headless/redux`. When manually wiring up redux, you need to:
 
 ```js
 import modularRedux from '@exodus/modular-redux'

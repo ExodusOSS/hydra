@@ -1,5 +1,6 @@
-import { setup } from '../utils'
 import fiat from '@exodus/fiat-currencies'
+
+import { setup } from '../utils.js'
 
 describe('currencyUnitTypeSelector', () => {
   it('should return fiat', () => {

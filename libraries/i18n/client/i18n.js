@@ -1,23 +1,22 @@
 import EventEmitter from 'eventemitter3'
-import { computeId } from '@exodus/pofile'
+import { computeId, createEntryId } from '@exodus/pofile'
 
 import formatters from '../formatters/index.js'
 import * as icu from '../icu/index.js'
-
-const castString = (value) => (Array.isArray(value) ? value.join('') : value)
+import { castString, transformLanguages } from './utils.js'
 
 class I18N extends EventEmitter {
-  constructor({ defaultCurrency, defaultLanguage, languages = {} }) {
+  constructor({ defaultCurrency, defaultLanguage, languages = Object.create(null) }) {
     super()
 
     this.language = defaultLanguage
     this.defaultLanguage = defaultLanguage
     this.currency = defaultCurrency
-    this.languages = languages
+    this.languages = transformLanguages(languages)
   }
 
   load = (languages) => {
-    this.languages = languages
+    this.languages = transformLanguages(languages)
   }
 
   setCurrency = (currency) => {
@@ -32,25 +31,16 @@ class I18N extends EventEmitter {
     this.emit('change', { locale: language })
   }
 
-  #compareComputedIds = (a, b) => computeId(a) === computeId(b)
+  getTranslation = (id, context) => {
+    const currentLocaleTranslations = this.languages.get(this.language)
+    const defaultLanguageTranslations = this.languages.get(this.defaultLanguage)
+    const translationId = computeId(createEntryId({ id, context }))
 
-  getTranslation = (id) => {
-    const currentLocaleTranslations = this.languages[this.language]
-    const defaultLanguageTranslations = this.languages[this.defaultLanguage]
+    const currentLocaleTranslation = currentLocaleTranslations?.get(translationId)
+    if (currentLocaleTranslation?.length > 0) return currentLocaleTranslation
 
-    if (currentLocaleTranslations) {
-      const currentLocaleTranslation = Object.entries(currentLocaleTranslations).find(([key]) =>
-        this.#compareComputedIds(key, id)
-      )?.[1]
-      if (currentLocaleTranslation?.length) return currentLocaleTranslation
-    }
-
-    if (defaultLanguageTranslations) {
-      const defaultLanguageTranslation = Object.entries(defaultLanguageTranslations).find(([key]) =>
-        this.#compareComputedIds(key, id)
-      )?.[1]
-      if (defaultLanguageTranslation?.length) return defaultLanguageTranslation
-    }
+    const defaultLanguageTranslation = defaultLanguageTranslations?.get(translationId)
+    if (defaultLanguageTranslation?.length > 0) return defaultLanguageTranslation
 
     return icu.parse(id)
   }
@@ -65,8 +55,8 @@ class I18N extends EventEmitter {
     return icu.interpolate(translation, values, formatters[this.language], opts)
   }
 
-  translate = (id, { values, punctuations } = {}) => {
-    const translation = this.getTranslation(id)
+  translate = (id, { context, values, punctuations } = {}) => {
+    const translation = this.getTranslation(id, context)
 
     const value = this.#interpolate(translation, values)
     const leadingPunctuations = punctuations?.leading || ''

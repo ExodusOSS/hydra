@@ -1,7 +1,7 @@
+import createAtomObserver from '../../src/factories/observer.js'
 import type { Atom } from '../../src/index.js'
 import { createInMemoryAtom } from '../../src/index.js'
 import type { Port } from '../../src/utils/types.js'
-import createAtomObserver from '../../src/factories/observer.js'
 
 describe('createAtomObserver', () => {
   const event = 'test'
@@ -59,7 +59,7 @@ describe('createAtomObserver', () => {
   it('should be silent when not observing', () => {
     const { port, atom } = setup()
 
-    atom.set({ test: false })
+    void atom.set({ test: false })
 
     expect(port.emit).not.toHaveBeenCalled()
   })
@@ -119,7 +119,7 @@ describe('createAtomObserver', () => {
     const { atom, port, observer } = setup()
 
     const startPromise = observer.start()
-    atom.set(falseData)
+    void atom.set(falseData)
     await startPromise
 
     expect(port.emit).toHaveBeenCalledTimes(1)

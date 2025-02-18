@@ -58,6 +58,11 @@ export type LifecycleHookListener = (...params: unknown[]) => MaybePromise<unkno
 
 type BackupType = 'passkeys' | 'seed-phrase'
 
+export type StartApplicationParams = {
+  /** Allows manually setting the restoring flag which will be propagated to lifecycle hooks. Use with caution, this is normally set automatically by the corresponding application methods */
+  restoring?: boolean
+}
+
 export type ImportApplicationParams = CreateWalletParams & {
   forceRestart?: boolean
   forgotPassphrase?: boolean

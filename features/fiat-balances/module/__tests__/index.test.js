@@ -46,6 +46,12 @@ const assets = {
   },
 }
 
+const defaultAvailableAssetNames = Object.keys(assets)
+const createAvailableAssetNamesAtom = () =>
+  createInMemoryAtom({
+    defaultValue: defaultAvailableAssetNames,
+  })
+
 class SolanaTestAccountState extends AccountState {
   static defaults = {
     cursor: '',
@@ -123,7 +129,7 @@ const setupModules = async ({ balanceFields, fiatBalanceFields }) => {
   balancesAtom = createBalancesAtom()
   balances = createBalances({
     assetsModule,
-    assetsAtom: createInMemoryAtom(),
+    availableAssetNamesAtom: createAvailableAssetNamesAtom(),
     enabledWalletAccountsAtom,
     blockchainMetadata,
     config: { balanceFields },

@@ -1,6 +1,6 @@
+import readOnly from '../../src/enhancers/read-only.js'
 import type { Atom } from '../../src/index.js'
 import { createInMemoryAtom } from '../../src/index.js'
-import readOnly from '../../src/enhancers/read-only.js'
 
 describe('readOnly enhancer', () => {
   const atom = createInMemoryAtom<string>({ defaultValue: 'the batman' })

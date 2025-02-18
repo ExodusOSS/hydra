@@ -1,3 +1,3 @@
-import getSelectorDefinition from './get'
+import getSelectorDefinition from './get.js'
 
 export default [getSelectorDefinition]

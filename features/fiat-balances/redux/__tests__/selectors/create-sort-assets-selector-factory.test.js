@@ -109,4 +109,43 @@ describe('createSortAssetsSelectorFactory', () => {
       'tetherusd',
     ])
   })
+
+  test('returns same instance if sorting order is the same', () => {
+    const { store, selectors, emitFiatBalances, emitBalances, emitFavoriteAssets, emitRates } =
+      setup()
+    const assetListSelector = () => assetsList
+    const createSelectorFactory = selectors.fiatBalances.createSortAssetsSelectorFactory
+    const createSelector = createSelectorFactory(assetListSelector)
+    const sortedAssetsSelector = createSelector('exodus_0')
+
+    emitBalances(balances)
+    emitFiatBalances(fiatBalances)
+    emitFavoriteAssets({ leo: true, zerox: true })
+    emitRates(rates)
+
+    const result1 = sortedAssetsSelector(store.getState())
+    emitRates({
+      ...rates,
+      USD: {
+        ...rates.USD,
+        [assets.bitcoin.ticker]: {
+          cap: rates.USD[assets.bitcoin.ticker].cap + 1,
+        },
+      },
+    })
+    const result2 = sortedAssetsSelector(store.getState())
+    expect(result1).toBe(result2)
+
+    // works as expected when new sorting order
+    emitFiatBalances({
+      byAssetSource: {
+        exodus_0: {
+          ...fiatBalances.byAssetSource.exodus_0,
+          bitcoin: { balance: createFiatNumberUnit(1000) },
+        },
+      },
+    })
+    const result3 = sortedAssetsSelector(store.getState())
+    expect(result3).not.toBe(result2)
+  })
 })

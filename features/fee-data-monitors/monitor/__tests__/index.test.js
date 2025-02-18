@@ -140,7 +140,7 @@ describe('createFeeMonitors', () => {
 
     // cancel override, revert to last monitor update (if any)
     await remoteConfig.sync({})
-    expect(await monitors.getFeeData({ assetName: 'solana' })).toEqual({ value: 4, foo: 42 })
+    expect(await monitors.getFeeData({ assetName: 'solana' })).toEqual({ value: 3, foo: 42 })
 
     // monitor updates register again
     await solanaMonitor.tick({ value: 5 })

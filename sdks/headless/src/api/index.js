@@ -1,4 +1,3 @@
-import { validateMnemonic as isMnemonicValid } from 'bip39'
 import assert from 'minimalistic-assert'
 
 import createDebug from './debug'
@@ -72,7 +71,6 @@ const createApi = ({ ioc, port, config, debug, logger }) => {
   const api = {
     ...featureApis,
     reporting: reportingApi,
-    isMnemonicValid,
     subscribe: port.subscribe.bind(port),
     unsubscribe: port.unsubscribe.bind(port),
   }

@@ -1,0 +1,36 @@
+{
+  "name": "@exodus/sdk-rpc",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": "./lib/index.js",
+  "main": "lib/index.js",
+  "description": "An RPC and client specifically tailored to allow for easy consumption of the Exodus SDK APIs across RPC",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/sdk-rpc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asdk-rpc"
+  },
+  "dependencies": {
+    "@exodus/json-rpc": "^1.12.0",
+    "eventemitter3": "^4.0.7",
+    "ms": "^0.7.1"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "lint": "yarn run -T eslint .",
+    "test": "run -T exodus-test --esbuild && EXODUS_TEST_COVERAGE=0 run -T exodus-test --esbuild --engine hermes:bundle",
+    "build": "run -T tsc --build tsconfig.build.json",
+    "clean": "run -T tsc --build --clean",
+    "prepublishOnly": "yarn run -T build --scope @exodus/sdk-rpc"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

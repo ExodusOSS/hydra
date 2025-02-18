@@ -1,4 +1,4 @@
-const test = require('tape')
+const test = require('@exodus/test/tape')
 const { createPair } = require('./util')
 
 test('custom parsing function', function (t) {
@@ -11,16 +11,16 @@ test('custom parsing function', function (t) {
       }
 
       return message
-    }
+    },
   })
   server.exposeFunction('echo', (data) => data)
 
-  client.callMethod('echo', [{ bar: 'no' }])
-    .then(result => t.same(result, { bar: 'no', foo: 'yes' }, 'extended the input'))
+  client
+    .callMethod('echo', [{ bar: 'no' }])
+    .then((result) => t.same(result, { bar: 'no', foo: 'yes' }, 'extended the input'))
 })
 
-test('custom parsing function which throws', async function(t) {
-  t.plan(2)
+test('custom parsing function which throws', async function (t) {
   const [client, server] = createPair({
     parse: (jsonString) => {
       if (jsonString.includes('FORBIDDEN')) {
@@ -28,15 +28,19 @@ test('custom parsing function which throws', async function(t) {
       }
 
       return JSON.parse(jsonString)
-    }
+    },
   })
 
   server.exposeFunction('method', () => 'some value')
 
-  await client.callMethod('method', [{ value: 'FORBIDDEN' }])
+  await client
+    .callMethod('method', [{ value: 'FORBIDDEN' }])
     .then(() => t.fail('did not throw error'))
-    .catch(err => t.is(err.message, 'You used the forbidden word. Bad dog', 'fails when using a forbidden word'))
+    .catch((err) =>
+      t.is(err.message, 'You used the forbidden word. Bad dog', 'fails when using a forbidden word')
+    )
 
-  client.callMethod('method')
+  await client
+    .callMethod('method')
     .then((val) => t.is(val, 'some value', 'method works when no forbidden word used'))
 })

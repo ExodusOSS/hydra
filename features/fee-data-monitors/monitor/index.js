@@ -32,7 +32,6 @@ class FeeMonitors {
   #logger
   #started = pDefer()
   #remoteFeeData = Object.create(null)
-  #monitorFeeData = Object.create(null)
 
   constructor({
     assetsModule,
@@ -79,7 +78,6 @@ class FeeMonitors {
     const currentFeeData = this.#fees[assetName]
     const newFeeData = currentFeeData.update({
       ...feeData,
-      ...this.#monitorFeeData[assetName],
       ...this.#remoteFeeData[assetName],
     })
     if (newFeeData === currentFeeData) return
@@ -112,7 +110,6 @@ class FeeMonitors {
 
       const updateMonitorFeeData = async (assetName, feeData) => {
         const baseAssetName = this.#assetsModule.getAsset(assetName).baseAsset.name
-        this.#monitorFeeData[baseAssetName] = feeData
         return this.updateFee({ assetName: baseAssetName, feeData })
       }
 

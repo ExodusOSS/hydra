@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-log-monitors@2.4.0...@exodus/tx-log-monitors@2.4.1) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [2.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-log-monitors@2.3.5...@exodus/tx-log-monitors@2.4.0) (2024-11-21)
 
 ### Features

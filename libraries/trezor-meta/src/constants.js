@@ -2,7 +2,7 @@ const gte = require('semver').gte
 const coins = require('./data/coins')
 
 const MINIMUM_FIRMWARE_VERSIONS = { 'Safe 5': '2.7.2', 'Safe 3': '2.6.3', T: '2.5.2', 1: '1.11.1' }
-const LATEST_FIRMWARE_VERSIONS = { 'Safe 5': '2.8.3', 'Safe 3': '2.8.0', T: '2.8.1', 1: '1.12.1' }
+const LATEST_FIRMWARE_VERSIONS = { 'Safe 5': '2.8.7', 'Safe 3': '2.8.7', T: '2.8.7', 1: '1.12.1' }
 const ASSETS_BY_MODEL = {
   'Safe 5': coins
     .filter(

@@ -1,5 +1,5 @@
-import { AccountStates } from '../../test-utils.js'
 import updateAccountStateReducer from '../../../batching/reducer/update-account-state.js'
+import { AccountStates } from '../../test-utils.js'
 
 const TestAccountState = AccountStates.bitcoin
 

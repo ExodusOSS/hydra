@@ -1,14 +1,15 @@
+import { createInMemoryAtom } from '@exodus/atoms'
+import { mapValues } from '@exodus/basic-utils'
 import { UnitType } from '@exodus/currency'
 import { asset as ethereumMeta } from '@exodus/ethereum-meta'
 import { normalizeTxsJSON } from '@exodus/models'
 import createStorage from '@exodus/storage-memory'
-import { mapValues } from '@exodus/basic-utils'
-import _fixtures from './tx-log-fixtures.cjs'
+
+import { accountStatesAtomDefinition, txLogsAtomDefinition } from '../../atoms/index.js'
 import blockchainMetadataDefinition from '../blockchain-metadata.js'
 import blockchainQueryModuleDefinition from '../blockchain-query.js'
-import { txLogsAtomDefinition, accountStatesAtomDefinition } from '../../atoms/index.js'
 import { AccountStates } from './test-utils.js'
-import { createInMemoryAtom } from '@exodus/atoms'
+import _fixtures from './tx-log-fixtures.cjs'
 
 const bitcoin = {
   name: 'bitcoin',

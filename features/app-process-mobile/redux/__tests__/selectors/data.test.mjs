@@ -1,5 +1,5 @@
-import { setup } from '../utils'
 import { APP_PROCESS_INITIAL_STATE } from '../../../constants'
+import { setup } from '../utils'
 
 describe('appProcess', () => {
   test('selector', () => {

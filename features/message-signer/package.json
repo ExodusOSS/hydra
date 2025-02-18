@@ -1,6 +1,6 @@
 {
   "name": "@exodus/message-signer",
-  "version": "1.3.4",
+  "version": "1.4.2",
   "description": "a module to sign asset-related messages",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/message-signer",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Amessage-signer"
   },
@@ -28,21 +28,23 @@
     "prepublishOnly": "yarn run -T build --scope @exodus/message-signer"
   },
   "dependencies": {
-    "@exodus/asset-lib": "^4.1.0",
+    "@exodus/asset-lib": "^5.2.1",
     "@exodus/key-identifier": "^1.2.1",
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {
-    "@exodus/address-provider": "workspace:^",
-    "@exodus/assets": "^9.1.1",
+    "@exodus/atoms": "workspace:^",
     "@exodus/dependency-types": "workspace:^",
     "@exodus/hw-common": "workspace:^",
-    "@exodus/keychain": "^6.9.1",
+    "@exodus/keychain": "^7.3.0",
     "@exodus/models": "workspace:^",
     "bip39": "^3.1.0",
     "ts-jest": "^29.0.3"
   },
   "peerDependencies": {
     "@exodus/address-provider": "^12.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

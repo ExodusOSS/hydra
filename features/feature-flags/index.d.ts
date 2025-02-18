@@ -1,4 +1,4 @@
-import featureFlagsApiDefinition from './api'
+import type featureFlagsApiDefinition from './api'
 
 declare const featureFlags: () => {
   id: 'featureFlags'

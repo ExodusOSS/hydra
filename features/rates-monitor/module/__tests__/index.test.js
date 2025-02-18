@@ -12,9 +12,10 @@ const advanceTimers = (ms) => {
 describe('RatesMonitor', () => {
   const currency = 'EUR'
 
-  const debounceInterval = 100
+  const debounceInterval = 10
   const fetchInterval = 500
   const fetchRealTimePricesInterval = 200
+  const requestDuration = 150
 
   let assets
   let ratesMonitor
@@ -22,6 +23,7 @@ describe('RatesMonitor', () => {
   let pricingClient
   let logger
   let assetNamesAtomObservers = []
+  let triggerAssetNamesAtomObservers
 
   const assetsModule = {
     getAsset: (name) => assets.find((asset) => asset.name === name),
@@ -41,6 +43,10 @@ describe('RatesMonitor', () => {
       assetNamesAtomObservers.push(callback)
       return () => {}
     },
+  }
+
+  const createDelayedResponse = (response) => async () => {
+    return new Promise((resolve) => setTimeout(() => resolve(response), requestDuration))
   }
 
   beforeEach(() => {
@@ -65,6 +71,11 @@ describe('RatesMonitor', () => {
     ]
 
     assetNamesAtomObservers = []
+    triggerAssetNamesAtomObservers = async () => {
+      for (const observer of assetNamesAtomObservers) {
+        await observer(assets.map(({ name }) => name))
+      }
+    }
 
     ratesMonitor = createRatesMonitor({
       currencyAtom,
@@ -81,6 +92,7 @@ describe('RatesMonitor', () => {
     })
 
     pricingClient.ticker.mockResolvedValue({})
+    pricingClient.currentPrice.mockResolvedValue({})
   })
 
   afterEach(() => {
@@ -106,9 +118,7 @@ describe('RatesMonitor', () => {
     })
     pricingClient.realTimePrice.mockResolvedValue({
       isModified: true,
-      data: {
-        BTC: { USD: 9999, EUR: 8888 },
-      },
+      data: [{ BTC: { EUR: 8888 } }],
     })
     const handler = jest.fn()
     ratesAtom.observe(handler)
@@ -124,7 +134,7 @@ describe('RatesMonitor', () => {
           change24: 7,
           invalid: false,
           price: 8888,
-          priceUSD: 9999,
+          priceUSD: 70,
           volume24: 42,
         },
         ETH: {
@@ -221,6 +231,185 @@ describe('RatesMonitor', () => {
     })
     expect(logger.error).not.toHaveBeenCalled()
   })
+
+  it('should fetch for added assets from observed available asset names and emit all the assets', async () => {
+    expect.assertions(4)
+
+    pricingClient.currentPrice.mockResolvedValue({
+      isModified: true,
+      data: {
+        'BTC.EUR': 1,
+        'ETH.EUR': 2,
+      },
+    })
+    pricingClient.ticker.mockResolvedValue({
+      'BTC.EUR.c24h': 3,
+      'BTC.EUR.v24h': 4,
+      'BTC.EUR.mc': 5,
+    })
+
+    pricingClient.currentPrice = jest.fn().mockRejectedValue({})
+    pricingClient.ticker = jest.fn().mockRejectedValue({})
+    const ratesAtomObserver = jest.fn()
+
+    pricingClient.currentPrice.mockImplementationOnce(
+      createDelayedResponse({
+        isModified: true,
+        data: {
+          'BTC.EUR': 1,
+          'ETH.EUR': 2,
+          'BTC.USD': 1.1,
+          'ETH.USD': 2.2,
+        },
+      })
+    )
+    pricingClient.ticker.mockImplementationOnce(
+      createDelayedResponse({
+        'BTC.EUR.c24h': 3,
+        'BTC.EUR.v24h': 4,
+        'BTC.EUR.mc': 5,
+        'ETH.EUR.c24h': 6,
+        'ETH.EUR.v24h': 7,
+        'ETH.EUR.mc': 8,
+      })
+    )
+
+    ratesAtom.observe(ratesAtomObserver)
+    ratesMonitor.start()
+
+    await advanceTimers(0)
+
+    // imitate call for initial values
+    await triggerAssetNamesAtomObservers()
+
+    // result of the initial fetch call, not of the observer initial values!
+    expect(pricingClient.currentPrice).toHaveBeenNthCalledWith(1, {
+      assets: ['BTC', 'ETH'],
+      fiatCurrency: 'EUR',
+      lastModified: undefined,
+    })
+
+    await advanceTimers(requestDuration)
+    await advanceTimers(debounceInterval)
+
+    expect(ratesAtomObserver).toHaveBeenLastCalledWith({
+      EUR: {
+        BTC: {
+          cap: 5,
+          change24: 3,
+          invalid: false,
+          price: 1,
+          priceUSD: 1.1,
+          volume24: 4,
+        },
+        ETH: {
+          cap: 8,
+          change24: 6,
+          invalid: false,
+          price: 2,
+          priceUSD: 2.2,
+          volume24: 7,
+        },
+      },
+    })
+
+    assets.push({ name: 'dogecoin', ticker: 'DOGE' })
+    await triggerAssetNamesAtomObservers()
+
+    pricingClient.currentPrice.mockImplementationOnce(
+      createDelayedResponse({
+        isModified: true,
+        data: {
+          'DOGE.EUR': 3.1,
+          'DOGE.USD': 3.2,
+        },
+      })
+    )
+    pricingClient.ticker.mockImplementationOnce(
+      createDelayedResponse({
+        'DOGE.EUR.c24h': 4.1,
+        'DOGE.EUR.v24h': 4.2,
+        'DOGE.EUR.mc': 4.3,
+      })
+    )
+
+    await advanceTimers(debounceInterval)
+    expect(pricingClient.currentPrice).toHaveBeenNthCalledWith(2, {
+      assets: ['DOGE'],
+      fiatCurrency: 'EUR',
+      lastModified: undefined,
+    })
+
+    await advanceTimers(requestDuration)
+    await advanceTimers(debounceInterval)
+
+    expect(ratesAtomObserver).toHaveBeenNthCalledWith(2, {
+      EUR: {
+        DOGE: {
+          cap: 4.3,
+          change24: 4.1,
+          invalid: false,
+          price: 3.1,
+          priceUSD: 3.2,
+          volume24: 4.2,
+        },
+        BTC: {
+          cap: 5,
+          change24: 3,
+          invalid: false,
+          price: 1,
+          priceUSD: 1.1,
+          volume24: 4,
+        },
+        ETH: {
+          cap: 8,
+          change24: 6,
+          invalid: false,
+          price: 2,
+          priceUSD: 2.2,
+          volume24: 7,
+        },
+      },
+    })
+  })
+
+  it("should fetch for added assets before next fetch interval even if there's request in progress", async () => {
+    expect.assertions(3)
+
+    const ratesAtomObserver = jest.fn()
+
+    const createDelayedResponse = (response) => async () => {
+      return new Promise((resolve) => setTimeout(() => resolve(response), requestDuration))
+    }
+
+    pricingClient.currentPrice = jest.fn().mockImplementation(createDelayedResponse())
+
+    ratesAtom.observe(ratesAtomObserver)
+    ratesMonitor.start()
+
+    await advanceTimers(0)
+
+    await triggerAssetNamesAtomObservers()
+    expect(pricingClient.currentPrice).toHaveBeenNthCalledWith(1, {
+      assets: ['BTC', 'ETH'],
+      fiatCurrency: 'EUR',
+      lastModified: undefined,
+    })
+
+    assets.push({ name: 'dogecoin', ticker: 'DOGE' })
+    await triggerAssetNamesAtomObservers()
+
+    const halfRequestDuration = requestDuration / 2
+    expect(halfRequestDuration + debounceInterval).toBeLessThan(fetchInterval) // ensure we are at the point before next interval fetch
+    await advanceTimers(halfRequestDuration) // previous request still in progress, but we want a new one for the added asset
+    await advanceTimers(debounceInterval)
+    expect(pricingClient.currentPrice).toHaveBeenNthCalledWith(2, {
+      assets: ['DOGE'],
+      fiatCurrency: 'EUR',
+      lastModified: undefined,
+    })
+  })
+
   it('should indicate invalid rate when USD price missing', async () => {
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
@@ -304,7 +493,7 @@ describe('RatesMonitor', () => {
   it('should warn about missing rates of the same assets only once', async () => {
     pricingClient.realTimePrice.mockResolvedValue({
       isModified: false,
-      data: {},
+      data: [],
     })
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
@@ -385,9 +574,7 @@ describe('RatesMonitor', () => {
     })
     pricingClient.realTimePrice.mockResolvedValue({
       isModified: true,
-      data: {
-        BTC: { USD: 999, EUR: 888 },
-      },
+      data: [{ BTC: { EUR: 888 } }],
     })
     const handler = jest.fn()
     ratesAtom.observe(handler)
@@ -402,7 +589,7 @@ describe('RatesMonitor', () => {
           change24: 0,
           invalid: false,
           price: 888,
-          priceUSD: 999,
+          priceUSD: 12,
           volume24: 0,
         },
         ETH: {
@@ -417,9 +604,7 @@ describe('RatesMonitor', () => {
     })
     pricingClient.realTimePrice.mockResolvedValue({
       isModified: true,
-      data: {
-        BTC: { USD: 1234, EUR: 1111 },
-      },
+      data: [{ BTC: { EUR: 1111 } }],
     })
     await advanceTimers(fetchRealTimePricesInterval)
     await advanceTimers(debounceInterval)
@@ -431,7 +616,7 @@ describe('RatesMonitor', () => {
           change24: 0,
           invalid: false,
           price: 1111,
-          priceUSD: 1234,
+          priceUSD: 12,
           volume24: 0,
         },
         ETH: {
@@ -448,12 +633,7 @@ describe('RatesMonitor', () => {
   it('should override top asset price with real-time data if available', async () => {
     pricingClient.realTimePrice.mockResolvedValue({
       isModified: true,
-      data: {
-        BTC: {
-          USD: 9999,
-          EUR: 8888,
-        },
-      },
+      data: [{ BTC: { EUR: 8888 } }],
     })
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
@@ -483,7 +663,7 @@ describe('RatesMonitor', () => {
           change24: 7,
           invalid: false,
           price: 8888,
-          priceUSD: 9999,
+          priceUSD: 95,
           volume24: 42,
         },
         ETH: {
@@ -497,6 +677,7 @@ describe('RatesMonitor', () => {
       },
     })
   })
+
   describe('Real-time fallback logic', () => {
     it('should override top asset price with real-time data if fresh', async () => {
       jest.useFakeTimers({ doNotFake: ['setImmediate'] })
@@ -519,12 +700,7 @@ describe('RatesMonitor', () => {
 
       pricingClient.realTimePrice.mockResolvedValue({
         isModified: true,
-        data: {
-          BTC: {
-            EUR: 9999,
-            USD: 8888,
-          },
-        },
+        data: [{ BTC: { EUR: 9999 } }],
       })
 
       const handler = jest.fn()
@@ -539,7 +715,7 @@ describe('RatesMonitor', () => {
         EUR: {
           BTC: expect.objectContaining({
             price: 9999,
-            priceUSD: 8888,
+            priceUSD: 70,
             invalid: false,
           }),
           ETH: expect.objectContaining({
@@ -567,12 +743,7 @@ describe('RatesMonitor', () => {
       })
       pricingClient.realTimePrice.mockResolvedValue({
         isModified: true,
-        data: {
-          BTC: {
-            EUR: 77,
-            USD: 70,
-          },
-        },
+        data: [{ BTC: { EUR: 77 } }],
       })
 
       const handler = jest.fn()
@@ -592,7 +763,7 @@ describe('RatesMonitor', () => {
             change24: 0,
             invalid: false,
             price: 77,
-            priceUSD: 70,
+            priceUSD: 9,
             volume24: 0,
           },
           ETH: {
@@ -619,12 +790,7 @@ describe('RatesMonitor', () => {
       })
       pricingClient.realTimePrice.mockResolvedValue({
         isModified: true,
-        data: {
-          BTC: {
-            EUR: 5000,
-            USD: 4900,
-          },
-        },
+        data: [{ BTC: { EUR: 5000 } }],
       })
 
       const handler = jest.fn()
@@ -649,7 +815,7 @@ describe('RatesMonitor', () => {
             volume24: 0,
             invalid: false,
             price: 5000,
-            priceUSD: 4900,
+            priceUSD: 9,
           },
           ETH: {
             cap: 0,
@@ -677,12 +843,7 @@ describe('RatesMonitor', () => {
       })
       pricingClient.realTimePrice.mockResolvedValue({
         isModified: true,
-        data: {
-          BTC: {
-            EUR: 500,
-            USD: 499,
-          },
-        },
+        data: [{ USDC: { EUR: 500 } }],
       })
 
       const handler = jest.fn()
@@ -692,7 +853,7 @@ describe('RatesMonitor', () => {
       await advanceTimers(fetchInterval)
       await advanceTimers(debounceInterval)
       let lastCall = handler.mock.calls[handler.mock.calls.length - 1][0]
-      expect(lastCall.EUR.BTC.price).toBe(500)
+      expect(lastCall.EUR.BTC.price).toBe(70)
       expect(lastCall.EUR.ETH.price).toBe(90)
 
       pricingClient.realTimePrice.mockResolvedValue({
@@ -706,6 +867,252 @@ describe('RatesMonitor', () => {
       expect(lastCall.EUR.BTC.price).toBe(70)
       expect(lastCall.EUR.BTC.priceUSD).toBe(60)
       expect(lastCall.EUR.BTC.invalid).toBe(false)
+    })
+  })
+
+  describe('Edge Cases with partial/missing real-time data', () => {
+    it('should fallback to slow data if real-time data is missing for multiple coins', async () => {
+      // 1) slowRates(slow fetch)
+      pricingClient.currentPrice.mockResolvedValue({
+        isModified: true,
+        data: {
+          'BTC.EUR': 100,
+          'BTC.USD': 99,
+          'ETH.EUR': 50,
+          'ETH.USD': 55,
+        },
+      })
+
+      // 2) only real-time data for BTC, ETH is missing
+      pricingClient.realTimePrice.mockResolvedValue({
+        isModified: true,
+        data: [
+          { BTC: { EUR: 120 } },
+          // ETH is missing
+        ],
+      })
+
+      const handler = jest.fn()
+      ratesAtom.observe(handler)
+
+      // 3) start monitor → first fetch
+      ratesMonitor.start()
+      await advanceTimers(0)
+      await advanceTimers(debounceInterval)
+
+      // here, slowRates + realTimeRates(BTC only) are merged
+      // ETH is missing in real-time data, so fallback to slowRates
+      expect(handler).toHaveBeenLastCalledWith({
+        EUR: {
+          BTC: {
+            cap: 0,
+            change24: 0,
+            invalid: false, // both EUR/USD exist
+            price: 120, // real-time
+            priceUSD: 99, // from slowRates
+            volume24: 0,
+          },
+          ETH: {
+            cap: 0,
+            change24: 0,
+            invalid: false, // both EUR/USD exist, so valid
+            price: 50, // fallback
+            priceUSD: 55, // fallback
+            volume24: 0,
+          },
+        },
+      })
+    })
+
+    it('should treat real-time data as partial if only unknown asset is returned', async () => {
+      // 1) slowRates
+      pricingClient.currentPrice.mockResolvedValue({
+        isModified: true,
+        data: {
+          'BTC.EUR': 500,
+          'BTC.USD': 490,
+          'ETH.EUR': 300,
+          'ETH.USD': 310,
+        },
+      })
+
+      // 2) real-time data returns only different coin (e.g. DOGE)
+      //    => BTC/ETH are missing in real-time
+      pricingClient.realTimePrice.mockResolvedValue({
+        isModified: true,
+        data: [
+          { DOGE: { EUR: 9999 } },
+          // BTC, ETH are missing
+        ],
+      })
+
+      const handler = jest.fn()
+      ratesAtom.observe(handler)
+
+      ratesMonitor.start()
+      await advanceTimers(0)
+      await advanceTimers(debounceInterval)
+
+      // real-time data has no BTC, ETH, so fallback to slowRates
+      // DOGE is not in the monitoring asset list, so ignored
+      expect(handler).toHaveBeenLastCalledWith({
+        EUR: {
+          BTC: {
+            cap: 0,
+            change24: 0,
+            invalid: false,
+            price: 500,
+            priceUSD: 490,
+            volume24: 0,
+          },
+          ETH: {
+            cap: 0,
+            change24: 0,
+            invalid: false,
+            price: 300,
+            priceUSD: 310,
+            volume24: 0,
+          },
+        },
+      })
+    })
+
+    it('should skip real-time update if array is completely empty (no assets)', async () => {
+      // slowRates
+      pricingClient.currentPrice.mockResolvedValue({
+        isModified: true,
+        data: {
+          'BTC.EUR': 10,
+          'BTC.USD': 9,
+          'ETH.EUR': 20,
+          'ETH.USD': 18,
+        },
+      })
+
+      // empty data array
+      pricingClient.realTimePrice.mockResolvedValue({
+        isModified: true,
+        data: [],
+      })
+
+      const handler = jest.fn()
+      ratesAtom.observe(handler)
+
+      ratesMonitor.start()
+      await advanceTimers(0)
+      await advanceTimers(debounceInterval)
+
+      // all real-time data is empty, so only slowRates is used
+      expect(handler).toHaveBeenLastCalledWith({
+        EUR: {
+          BTC: {
+            cap: 0,
+            change24: 0,
+            invalid: false,
+            price: 10,
+            priceUSD: 9,
+            volume24: 0,
+          },
+          ETH: {
+            cap: 0,
+            change24: 0,
+            invalid: false,
+            price: 20,
+            priceUSD: 18,
+            volume24: 0,
+          },
+        },
+      })
+    })
+
+    it('should fallback to slowRates for a subset of assets when real-time only has partial data, then update if new partial data arrives', async () => {
+      // first call: BTC and ETH are read from slowRates
+      pricingClient.currentPrice.mockResolvedValue({
+        isModified: true,
+        data: {
+          'BTC.EUR': 100,
+          'BTC.USD': 95,
+          'ETH.EUR': 50,
+          'ETH.USD': 48,
+        },
+      })
+
+      // first real-time: BTC only
+      pricingClient.realTimePrice.mockResolvedValueOnce({
+        isModified: true,
+        data: [{ BTC: { EUR: 120 } }],
+      })
+
+      const handler = jest.fn()
+      ratesAtom.observe(handler)
+
+      ratesMonitor.start()
+      await advanceTimers(0)
+      await advanceTimers(debounceInterval)
+
+      // here, BTC is real-time 120, ETH is slow 50/48
+      expect(handler).toHaveBeenLastCalledWith({
+        EUR: {
+          BTC: expect.objectContaining({ price: 120, priceUSD: 95, invalid: false }),
+          ETH: expect.objectContaining({ price: 50, priceUSD: 48, invalid: false }),
+        },
+      })
+
+      // second real-time: ETH only
+      pricingClient.realTimePrice.mockResolvedValueOnce({
+        isModified: true,
+        data: [{ ETH: { EUR: 999 } }],
+      })
+
+      // proceed timer to second fetch
+      await advanceTimers(fetchRealTimePricesInterval)
+      await advanceTimers(debounceInterval)
+
+      const lastCall = handler.mock.calls[handler.mock.calls.length - 1][0]
+      expect(lastCall.EUR.BTC.price).toBe(100) // BTC is missing in real-time, so fallback to slowRates 100
+      expect(lastCall.EUR.ETH.price).toBe(999) // new real-time 999
+    })
+
+    it('should return invalid=true when rates are missing', async () => {
+      // first call: BTC and ETH are read from slowRates
+      pricingClient.currentPrice.mockResolvedValue({
+        isModified: true,
+        data: {},
+      })
+
+      // first real-time: BTC only
+      pricingClient.realTimePrice.mockResolvedValueOnce({
+        isModified: true,
+        data: [],
+      })
+
+      const handler = jest.fn()
+      ratesAtom.observe(handler)
+
+      ratesMonitor.start()
+      await advanceTimers(0)
+      await advanceTimers(debounceInterval)
+
+      expect(handler).toHaveBeenLastCalledWith({
+        EUR: {
+          BTC: expect.objectContaining({
+            invalid: true,
+            price: 0,
+            priceUSD: 0,
+            change24: 0,
+            volume24: 0,
+            cap: 0,
+          }),
+          ETH: expect.objectContaining({
+            invalid: true,
+            price: 0,
+            priceUSD: 0,
+            change24: 0,
+            volume24: 0,
+            cap: 0,
+          }),
+        },
+      })
     })
   })
 })

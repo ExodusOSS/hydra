@@ -1,6 +1,7 @@
 import { createInMemoryAtom } from '@exodus/atoms'
-import remoteConfigReportDefinition from './index'
-import { RemoteConfigStatus } from '../atoms'
+
+import type { RemoteConfigStatus } from '../atoms/index.js'
+import remoteConfigReportDefinition from './index.js'
 
 describe('remoteConfigReport', () => {
   const data: RemoteConfigStatus = {

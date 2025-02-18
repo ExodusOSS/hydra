@@ -1,4 +1,4 @@
-import { memoize } from 'lodash' // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
+import { memoize } from '@exodus/basic-utils'
 import { createSelector } from 'reselect'
 
 const createBatchedAssetSourceActivityByIdSelector = {

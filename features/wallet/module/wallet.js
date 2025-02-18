@@ -102,11 +102,20 @@ class Wallet {
   #getGeneratedPassphrase = async () => this.walletStorage.get(GENERATED_PASSPHRASE_KEY)
   #getHasUserSetPassphrase = async () => this.walletStorage.get(HAS_USER_SET_PASSPHRASE_KEY)
 
+  #assertMultiSeedSupport = () => {
+    if (this.#maxExtraSeeds === 0) {
+      throw new Error('this is a single-seed wallet')
+    }
+  }
+
   #getExtraSeedsPassphrase = async () => {
+    this.#assertMultiSeedSupport()
+
     const { privateKey } = await this.#keychain.exportKey({
       seedId: await this.#primarySeedIdAtom.get(),
       keyId: EXODUS_KEY_IDS.EXTRA_SEEDS_ENCRYPTION,
       exportPrivate: true,
+      exportPublic: false,
     })
 
     return privateKey
@@ -149,6 +158,7 @@ class Wallet {
   }
 
   removeManySeeds = async (seedIds) => {
+    this.#assertMultiSeedSupport()
     await this.#assertWalletIsUnlocked()
 
     const primarySeedId = await this.#primarySeedIdAtom.get()
@@ -197,6 +207,8 @@ class Wallet {
   }
 
   #getExtraSeeds = async () => {
+    if (this.#maxExtraSeeds === 0) return []
+
     const passphrase = await this.#getExtraSeedsPassphrase()
     const seeds = await this.walletStorage.get(EXTRA_SEEDS_KEY, { passphrase })
     return seeds || []
@@ -291,6 +303,7 @@ class Wallet {
       const extraSeeds = await this.#getExtraSeeds()
       const seed = extraSeeds.find(({ seed }) => getSeedId(seed) === seedId)
       if (!seed) throw new Error('No seed matches seedId.')
+      if (!seed.mnemonic) throw new Error('No mnemonic found for seedId.')
 
       return seed.mnemonic
     } catch (err) {

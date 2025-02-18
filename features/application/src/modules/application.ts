@@ -16,6 +16,7 @@ import type {
   WalletGetMnemonicParams,
   UnlockWalletParams,
   AddSeedParams,
+  StartApplicationParams,
 } from '../utils/types.js'
 import type { Atom } from '@exodus/atoms'
 import type { Logger } from '@exodus/logger'
@@ -42,6 +43,10 @@ const MODULE_ID = 'application'
 
 type HookFn = () => Promise<void>
 
+type ErrorTrackingModule = {
+  track: (params: { error: Error; context: any; namespace: string }) => Promise<void>
+}
+
 const passphraseCachePlaceholder = {
   changeTtl: () => Promise.resolve(),
   clear: () => Promise.resolve(),
@@ -57,6 +62,7 @@ export type ApplicationParams = {
   backedUpAtom: Atom<boolean>
   passphraseCache: PassphraseCache
   logger: Logger
+  errorTracking: ErrorTrackingModule
 }
 
 export class Application extends EventEmitter {
@@ -70,6 +76,7 @@ export class Application extends EventEmitter {
   #resolveStart: () => void = () => Promise.resolve()
   #flagsStorage: Storage<boolean>
   #storage: Storage
+  #errorTracking: ErrorTrackingModule
 
   constructor({
     wallet,
@@ -78,6 +85,7 @@ export class Application extends EventEmitter {
     backedUpAtom,
     passphraseCache = passphraseCachePlaceholder,
     logger,
+    errorTracking,
   }: ApplicationParams) {
     super()
 
@@ -88,6 +96,7 @@ export class Application extends EventEmitter {
     this.#passphraseCache = passphraseCache
     this.#flagsStorage = unsafeStorage.namespace('flags')
     this.#storage = unsafeStorage.namespace('application')
+    this.#errorTracking = errorTracking
 
     this.#applicationStarted = new Promise((resolve) => (this.#resolveStart = resolve))
     super.setMaxListeners(Number.POSITIVE_INFINITY)
@@ -98,8 +107,12 @@ export class Application extends EventEmitter {
     return super.emit(name, ...args.map((arg: any) => (isFreezable(arg) ? proxyFreeze(arg) : arg)))
   }
 
-  start = async () => {
+  start = async ({ restoring }: StartApplicationParams = {}) => {
     const [deleteFlag, importFlag] = await this.#flagsStorage.batchGet([DELETE_FLAG, IMPORT_FLAG])
+
+    if (restoring) {
+      await this.#flagsStorage.set(RESTORE_FLAG, true)
+    }
 
     const isDeleting = !!deleteFlag
     const isImporting = !!importFlag
@@ -278,7 +291,7 @@ export class Application extends EventEmitter {
     await this.fire(Hook.RestoreSeed, { seedId, compatibilityMode })
 
     this.fire(Hook.AssetsSynced).catch((e) => {
-      console.warn('failed to execute onAssetsSynced hooks', e)
+      this.#logger.warn('failed to execute onAssetsSynced hooks', e)
     })
 
     return seedId
@@ -311,24 +324,26 @@ export class Application extends EventEmitter {
   }
 
   #restoreIfNeeded = async () => {
-    const isRestoring = await this.isRestoring()
+    try {
+      const isRestoring = await this.isRestoring()
 
-    if (isRestoring) {
-      const backupType = await this.#storage.get('backupType')
-      await this.fire(Hook.Restore, { backupType })
-      await this.#flagsStorage.delete(RESTORE_FLAG)
-      await this.fire(Hook.RestoreCompleted, { backupType })
-      await this.#storage.delete('backupType')
+      if (isRestoring) {
+        const backupType = await this.#storage.get('backupType')
+        await this.fire(Hook.Restore, { backupType })
+        await this.#flagsStorage.delete(RESTORE_FLAG)
+        await this.fire(Hook.RestoreCompleted, { backupType })
+        await this.#storage.delete('backupType')
+      }
+
+      this.fire(Hook.AssetsSynced).catch((e) => {
+        this.#logger.warn('failed to execute onAssetsSynced hooks', e)
+      })
+    } catch (e: any) {
+      this.#logger.error(e)
+      this.#errorTracking
+        .track({ error: e, namespace: 'application', context: 'restoreIfNeeded' })
+        .catch((e) => this.#logger.error(e))
     }
-
-    this.fire(Hook.AssetsSynced).catch((e) => {
-      console.warn('failed to execute onAssetsSynced hooks', e)
-    })
-  }
-
-  restore = async () => {
-    await this.#flagsStorage.set(RESTORE_FLAG, true)
-    await this.#restoreIfNeeded()
   }
 
   #autoUnlock = async () => {
@@ -347,7 +362,6 @@ export class Application extends EventEmitter {
       await this.fire(Hook.Unlock)
 
       void this.#restoreIfNeeded()
-
       this.#logger.log('unlocked with cache')
     } catch (err) {
       this.#logger.error('failed to unlock, outdated cached passphrase?', err)
@@ -388,6 +402,7 @@ export class Application extends EventEmitter {
   delete = async (opts: DeleteApplicationParams = {}) => {
     const { forgotPassphrase, restartOptions } = opts
     await this.#flagsStorage.set(DELETE_FLAG, true)
+    await this.#flagsStorage.delete(RESTORE_FLAG)
     await this.fire(Hook.Restart, { ...restartOptions, reason: 'delete', forgotPassphrase })
   }
 
@@ -426,6 +441,7 @@ const applicationModuleDefinition = {
     'backedUpAtom',
     'passphraseCache?',
     'logger',
+    'errorTracking',
   ],
   public: true,
 } as const satisfies Definition

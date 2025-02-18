@@ -1,9 +1,9 @@
 {
   "name": "@exodus/pofile",
   "description": "Simple PO file parser",
-  "version": "3.1.1",
+  "version": "3.2.3",
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "author": "Exodus Movement, Inc.",
   "main": "src/index.js",

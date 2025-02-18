@@ -1,12 +1,11 @@
+import { connectAsset } from '@exodus/assets'
 import { createInMemoryAtom } from '@exodus/atoms'
-import { normalizeTxsJSON, TxSet } from '@exodus/models'
 import { mapValues } from '@exodus/basic-utils'
 import { asset as _ethereum } from '@exodus/ethereum-meta'
-import { connectAsset } from '@exodus/assets'
-
-import fixtures from './test-watcher-fixtures.json'
+import { normalizeTxsJSON, TxSet } from '@exodus/models'
 
 import txWatcherModuleDefinition from '../tx-watcher.js'
+import fixtures from './test-watcher-fixtures.json'
 
 const ethereum = connectAsset(_ethereum)
 

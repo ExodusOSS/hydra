@@ -1,6 +1,7 @@
-import { asset as ethereumMeta } from '@exodus/ethereum-meta'
 import { createInMemoryAtom } from '@exodus/atoms'
-import { TxSet, AccountState } from '@exodus/models'
+import { asset as ethereumMeta } from '@exodus/ethereum-meta'
+import { AccountState, TxSet } from '@exodus/models'
+
 import blockchainMetadataReportDefinition from '../index.js'
 
 describe('blockchainMetadataReport', () => {

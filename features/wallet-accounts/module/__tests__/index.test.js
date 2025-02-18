@@ -2,6 +2,7 @@ import { createAtomMock } from '@exodus/atoms'
 import { WalletAccount } from '@exodus/models'
 import { SEED_SRC } from '@exodus/models/lib/wallet-account/index.js'
 import createInMemoryStorage from '@exodus/storage-memory'
+import pDefer from 'p-defer'
 
 import createWalletAccountsAtom from '../../atoms/wallet-accounts.js'
 import createWalletAccountsInternalAtom from '../../atoms/wallet-accounts-internal.js'
@@ -42,19 +43,34 @@ describe('WalletAccounts', () => {
     load = true,
     ...deps
   } = {}) => {
-    const pushToFusion = jest.fn()
-    const tail = jest.fn()
-    const awaitProcessed = jest.fn(async () => {})
+    let processOneDefer
     let channelOptions
+    const channel = jest.fn((options = {}) => {
+      channelOptions = {
+        ...options,
+        processOne: async (...args) => {
+          processOneDefer = pDefer()
+          if (options.processOne) {
+            await options.processOne(...args)
+          }
+
+          processOneDefer.resolve()
+        },
+      }
+      return {
+        awaitProcessed,
+        push: pushToFusion,
+        tail,
+      }
+    })
+    const pushToFusion = jest.fn((data) => channelOptions.processOne(data))
+    const tail = jest.fn()
+    const awaitProcessed = jest.fn(async () => {
+      await processOneDefer?.promise
+    })
+
     const fusionMock = {
-      channel: jest.fn((options) => {
-        channelOptions = options
-        return {
-          awaitProcessed,
-          push: pushToFusion,
-          tail,
-        }
-      }),
+      channel,
     }
 
     const converted = Object.fromEntries(
@@ -1067,5 +1083,34 @@ describe('WalletAccounts', () => {
     tail.mockResolvedValue(tailData)
 
     await expect(channel.tail()).resolves.toEqual(tailData)
+  })
+
+  it('should not block fixing compatibility or seedId mismatch', async () => {
+    const seedId = primarySeedId
+    const { channelOptions, walletAccountsAtom, walletAccounts } = await prepare({
+      allowedSources: [EXODUS_SRC],
+      walletAccounts: {
+        exodus_0: { ...stored.exodus_0, seedId: undefined },
+      },
+      load: false,
+    })
+
+    const whenProcessed = channelOptions.processOne({
+      data: {
+        walletAccounts: {
+          exodus_0: stored.exodus_0,
+        },
+      },
+    })
+
+    await walletAccounts.load({ seedId })
+
+    await whenProcessed
+
+    const all = await walletAccountsAtom.get()
+
+    expect(all).toEqual({
+      exodus_0: expect.objectContaining({ ...stored.exodus_0 }),
+    })
   })
 })

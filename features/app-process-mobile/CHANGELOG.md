@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.6.0...@exodus/app-process-mobile@3.6.1) (2025-01-31)
+
+### Bug Fixes
+
+- fix: extend lock if existing lock timer is expired (#11299)
+
+## [3.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.5.1...@exodus/app-process-mobile@3.6.0) (2025-01-21)
+
+### Features
+
+- feat: add extend lock timer for iOS (#11052)
+
+## [3.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.5.0...@exodus/app-process-mobile@3.5.1) (2024-12-20)
+
+### License
+
+- license: re-license under MIT license (#10599)
+
 ## [3.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.4.1...@exodus/app-process-mobile@3.5.0) (2024-10-08)
 
 ### Features

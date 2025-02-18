@@ -88,9 +88,9 @@ export class MockablePublicKeyProvider extends PublicKeyProvider {
     const walletAccountName = walletAccount.toString()
     const asset = this.#assetsModule.getAsset(assetName)
 
-    for (const [purpose, xpub] of Object.entries(details)) {
+    const keys = Object.entries(details).map(([purpose, xpub]) => {
       const keyIdentifier = asset.baseAsset.api?.getKeyIdentifier({
-        accountIndex: walletAccount.index,
+        accountIndex: walletAccount.index!,
         compatibilityMode: walletAccount.compatibilityMode,
         purpose: Number(purpose),
       })
@@ -104,8 +104,10 @@ export class MockablePublicKeyProvider extends PublicKeyProvider {
         walletAccountName
       )
 
-      await this.#publicKeyStore.add({ walletAccount, keyIdentifier, xpub })
-    }
+      return { keyIdentifier, xpub }
+    })
+
+    await this.#publicKeyStore.addMany({ walletAccount, keys })
   }
 
   #validateAccountType = (walletAccount: WalletAccount) => {
@@ -116,11 +118,9 @@ export class MockablePublicKeyProvider extends PublicKeyProvider {
 
   #processAccount = async (walletAccount: WalletAccount, account: RawXPubMockAccount) => {
     this.#validateAccountType(walletAccount)
-    return Promise.all(
-      Object.entries(account).map(([assetName, details]) => {
-        return this.#processAssetSource(walletAccount, assetName, details)
-      })
-    )
+    for (const [assetName, details] of Object.entries(account)) {
+      await this.#processAssetSource(walletAccount, assetName, details)
+    }
   }
 
   #ingestMocks = async (mockXPubs?: RawXPubMock) => {

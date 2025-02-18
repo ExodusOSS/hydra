@@ -95,14 +95,15 @@ const SCENARIOS = [
     description: 't call inside hoc via decorator',
     file: './fixtures/decorator.js',
     hocDecorators: ['withI18n'],
+    additionalModules: ['./dependencies/with-i18n.js'],
     expect: [
       {
         id: 'Prefixed with {prefix}',
-        reference: 'fixtures/decorator.js:14',
+        reference: 'fixtures/decorator.js:13',
       },
       {
         id: 'Prefixed with “{prefix}”',
-        reference: 'fixtures/decorator.js:16',
+        reference: 'fixtures/decorator.js:15',
       },
     ],
   },
@@ -110,10 +111,11 @@ const SCENARIOS = [
     description: 't call with newline and escape it inside hoc via decorator',
     file: './fixtures/decorator-newline.js',
     hocDecorators: ['withI18n'],
+    additionalModules: ['./dependencies/with-i18n.js'],
     expect: [
       {
         id: 'First line\\nSecond line',
-        reference: 'fixtures/decorator-newline.js:8',
+        reference: 'fixtures/decorator-newline.js:7',
       },
     ],
   },
@@ -140,7 +142,7 @@ describe('extractor', () => {
       extractFiles(fileNames, {
         rootDir: __dirname,
         babelrc,
-        additionalModules: ['#/localization'],
+        additionalModules: ['#/localization', './dependencies/with-i18n.js'],
         hocDecorators: ['withI18n'],
       })
     ).toEqual(entries)

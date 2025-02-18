@@ -23,10 +23,10 @@ describe('filter', () => {
       let identity: string | undefined
 
       setTimeout(() => {
-        batmansIdentity.set('Harvey Dent')
+        void batmansIdentity.set('Harvey Dent')
       }, 100)
 
-      batmansIdentity.get().then((it) => {
+      void batmansIdentity.get().then((it) => {
         identity = it
       })
 
@@ -43,12 +43,12 @@ describe('filter', () => {
       jest.spyOn(baseAtom, 'observe')
 
       setTimeout(() => {
-        batmansIdentity.set('Harvey Dent')
+        void batmansIdentity.set('Harvey Dent')
       }, 100)
 
-      batmansIdentity.get().then(handler)
-      batmansIdentity.get().then(handler)
-      batmansIdentity.get().then(handler)
+      void batmansIdentity.get().then(handler)
+      void batmansIdentity.get().then(handler)
+      void batmansIdentity.get().then(handler)
 
       await jest.advanceTimersByTimeAsync(50)
       expect(baseAtom.observe).toHaveBeenCalledTimes(1)

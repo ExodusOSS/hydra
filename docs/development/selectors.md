@@ -51,3 +51,53 @@ const getAssetTxs = memoize((assetName) =>
 To get monero txs you now call `getAssetTxs('monero')(exampleState)`. This only returns a new value when monero txs change, significantly reducing the number of re-computes/re-renders.
 
 **As a rule of thumb if you are not sure which way to go it is best to go the selector factory route.**
+
+## Naming Conventions
+
+### Vanilla selector
+
+A selector that returns a non-function value should be named `<valueName>Selector`, e.g.
+
+```js
+const totalBalanceSelector = createSelector(...deps, resultFn)
+totalBalanceSelector(store.getState()) // returns NumberUnit
+```
+
+### Selector factory
+
+A function that creates a selector should be named `create<valueName>Selector`, e.g.
+
+```js
+const createAssetBalanceSelector = memoize((assetName) => createSelector(...deps, resultFn))
+createAssetBalanceSelector('bitcoin')(store.getState()) // returns NumberUnit
+```
+
+### Deferred selector
+
+> [!WARNING]
+> This is an anti-pattern! Prefer selector factories for [performance](#performance).
+
+A selector that returns a function should be named `get<valueName>Selector`, e.g.
+
+```js
+const getAssetBalanceSelector = createSelector(...deps, (...values) =>
+  memoize((assetName) => computeBalance(...values))
+)
+
+getAssetBalanceSelector(store.getState())('bitcoin') // returns NumberUnit
+```
+
+### Deferred selector factory
+
+> [!WARNING]
+> This is an anti-pattern! Prefer selector factories for [performance](#performance).
+
+A selector that returns a deferred selector should be named `createGet<valueName>Selector`, e.g.
+
+```js
+const createGetAssetSourceBalanceSelector = memoize((walletAccount) =>
+  createSelector(...deps, (...values) => memoize((assetName) => computeBalance(...values)))
+)
+
+createGetAssetSourceBalanceSelector('walletAccount')(store.getState())('bitcoin') // returns NumberUnit
+```

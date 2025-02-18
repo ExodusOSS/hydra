@@ -5,6 +5,7 @@ const appProcessApiDefinition = {
     appProcess: {
       awaitState: appProcess.awaitState,
       awaitForeground: appProcess.awaitForeground,
+      requestLockTimerExtension: appProcess.requestLockTimerExtension,
     },
   }),
   dependencies: ['appProcess'],

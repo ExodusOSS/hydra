@@ -35,8 +35,8 @@
     "postmigrate": "node tools/scripts/postmigrate/index.js",
     "release": "lerna-release-action",
     "sync": "./tools/scripts/sync.js",
-    "sync:mobile": "DEFAULT_REPOSITORY_PATH=../exodus-mobile ./tools/scripts/sync.js",
-    "sync:browser": "DEFAULT_REPOSITORY_PATH=../exodus-browser/apps/browser ./tools/scripts/sync.js"
+    "sync:mobile": "DEFAULT_REPOSITORY_PATH=../exodus-mobile/src ./tools/scripts/sync.js",
+    "sync:browser": "DEFAULT_REPOSITORY_PATH=../exodus-browser/apps/browser/src ./tools/scripts/sync.js"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",

@@ -20,11 +20,11 @@
         },
         "payment_method": {
           "type": "string",
-          "enum": ["card"]
+          "format": "any-string"
         },
         "provider": {
           "type": "string",
-          "enum": ["moonpay", "sardine"]
+          "format": "any-string"
         }
       },
       "unevaluatedProperties": false

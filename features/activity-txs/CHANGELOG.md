@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@4.6.3...@exodus/activity-txs@4.6.4) (2025-02-12)
+
+### Performance
+
+- perf: memoize createInitialPerAssetData per asset (#11417)
+
+## [4.6.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@4.6.2...@exodus/activity-txs@4.6.3) (2025-02-03)
+
+### Bug Fixes
+
+- fix(activity-txs): safe order access (#11334)
+
+## [4.6.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@4.6.1...@exodus/activity-txs@4.6.2) (2025-01-31)
+
+### Bug Fixes
+
+- fix: invalidate order by amount for rbf tx (#11303)
+
+## [4.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@4.6.0...@exodus/activity-txs@4.6.1) (2025-01-31)
+
+### Bug Fixes
+
+- fix: nft activity item pending field (#11240)
+
+## [4.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@4.5.0...@exodus/activity-txs@4.6.0) (2025-01-28)
+
+### Features
+
+- feat: add placeholder types files (#11228)
+
+### Bug Fixes
+
+- fix: isolate getActivityTxs api call error (#11264)
+
+## [4.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@4.4.3...@exodus/activity-txs@4.5.0) (2025-01-15)
+
+### Features
+
+- feat: add account to activity (#11090)
+
 ## [4.4.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@4.4.1...@exodus/activity-txs@4.4.3) (2025-01-05)
 
 ### Bug Fixes

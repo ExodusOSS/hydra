@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [15.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.7.1...@exodus/blockchain-metadata@15.8.0) (2025-02-11)
+
+### Features
+
+- feat: handle default account state for delisted assets (#11411)
+
+## [15.7.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.7.0...@exodus/blockchain-metadata@15.7.1) (2024-12-20)
+
+### License
+
+- license: re-license under MIT license (#10599)
+
 ## [15.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.6.0...@exodus/blockchain-metadata@15.7.0) (2024-10-16)
 
 ### Features

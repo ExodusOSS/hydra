@@ -1,10 +1,11 @@
 import { connectAssetsList } from '@exodus/assets'
 import { createInMemoryAtom } from '@exodus/atoms'
 import ethereumAssets from '@exodus/ethereum-meta'
-import { WalletAccount, TxSet } from '@exodus/models'
-import createSyncEarliestTxDatePlugin from '../sync-earliest-tx-plugin.js'
-import blockchainMetadataDefinition from '../../module/index.js'
+import { TxSet, WalletAccount } from '@exodus/models'
 import createInMemoryStorage from '@exodus/storage-memory'
+
+import blockchainMetadataDefinition from '../../module/index.js'
+import createSyncEarliestTxDatePlugin from '../sync-earliest-tx-plugin.js'
 
 const assets = connectAssetsList(ethereumAssets)
 

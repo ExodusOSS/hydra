@@ -1,6 +1,6 @@
 import { useI18n } from '@exodus/i18n'
 
-const withI18n = (Component) => (props) => {
+export const withI18n = (Component) => (props) => {
   const i18n = useI18n()
 
   if (i18n === null) {
@@ -13,5 +13,3 @@ const withI18n = (Component) => (props) => {
 
   return <Component {...{ ...props, ...i18n }} />
 }
-
-export default withI18n

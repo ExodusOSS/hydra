@@ -4,7 +4,7 @@ This feature expose API to fetch asset prices and other market data.
 
 ## Usage
 
-This feature is designed to be used together with `@exodus/headless`. See [Using the SDK](../../docs/docs-website/docs/development/using-the-sdk.md) for more details.
+This feature is designed to be used together with `@exodus/headless`. See [Using the SDK](../../docs/development/using-the-sdk.md) for more details.
 By default, it uses remote config to get exodus server url, but you can override it via config:
 
 ```

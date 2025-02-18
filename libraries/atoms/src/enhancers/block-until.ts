@@ -15,7 +15,7 @@ export default function blockUntil<T>({ atom, unblock }: Params<T>) {
       let isSubscribed = true
       let unsubscribe = () => {}
 
-      unblock().then(() => {
+      void unblock().then(() => {
         if (isSubscribed) {
           unsubscribe = atom.observe(listener)
         }

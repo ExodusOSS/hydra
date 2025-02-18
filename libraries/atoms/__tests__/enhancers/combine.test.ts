@@ -1,6 +1,6 @@
-import type { Atom, Unsubscribe, ReadonlyAtom } from '../../src/index.js'
-import { createInMemoryAtom } from '../../src/index.js'
 import combine from '../../src/enhancers/combine.js'
+import type { Atom, ReadonlyAtom, Unsubscribe } from '../../src/index.js'
+import { createInMemoryAtom } from '../../src/index.js'
 
 describe('combine', () => {
   let nameAtom: Atom<string>

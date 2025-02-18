@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fee-data-monitors@5.0.3...@exodus/fee-data-monitors@5.0.4) (2025-02-06)
+
+### Bug Fixes
+
+- fix: updateFee to store data as monitorFeeData (#11362)
+
+## [5.0.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fee-data-monitors@5.0.2...@exodus/fee-data-monitors@5.0.3) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [5.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fee-data-monitors@5.0.1...@exodus/fee-data-monitors@5.0.2) (2024-11-13)
 
 ### Bug Fixes

@@ -1,16 +1,18 @@
 import ms from 'ms'
 import delay from 'delay'
-import { get, isEqual } from 'lodash'
-import ExodusModule from '@exodus/module' // eslint-disable-line import/no-deprecated
+import lodash from 'lodash'
+import EventEmitter from 'eventemitter3'
 import type { Atom } from '@exodus/atoms'
 
-import { synchronizeTime, isFreezable, unwrapErrorMessage } from './helpers'
-import { Fetch, Freeze, RemoteConfigType, GetBuildMetadata } from '../types'
-import { RemoteConfigStatus } from '../atoms'
+import { synchronizeTime, isFreezable, unwrapErrorMessage } from './helpers.js'
+import type { Fetch, Freeze, RemoteConfigType, GetBuildMetadata } from '../types/index.js'
+import type { RemoteConfigStatus } from '../atoms/index.js'
 import type { Definition } from '@exodus/dependency-types'
 import type { Logger } from '@exodus/logger'
 
-import generateRemoteConfigUrl from './generate-remote-config-url'
+import generateRemoteConfigUrl from './generate-remote-config-url.js'
+
+const { get, isEqual } = lodash
 
 type Config = {
   remoteConfigUrl?: string
@@ -27,9 +29,7 @@ type ConstructorParameters = {
   config?: Config
 }
 
-const MODULE_ID = 'remoteConfig'
-
-export class RemoteConfig extends ExodusModule implements RemoteConfigType {
+export class RemoteConfig extends EventEmitter implements RemoteConfigType {
   #started = false
   #current?: Record<string, any>
   #previous?: Record<string, any>
@@ -44,7 +44,7 @@ export class RemoteConfig extends ExodusModule implements RemoteConfigType {
   readonly #freeze: Freeze
 
   #resolveLoaded?: () => void
-  // eslint-disable-next-line unicorn/consistent-function-scoping
+
   readonly #whenLoaded = new Promise<void>((resolve) => {
     this.#resolveLoaded = resolve
   })
@@ -61,7 +61,7 @@ export class RemoteConfig extends ExodusModule implements RemoteConfigType {
     getBuildMetadata,
     remoteConfigStatusAtom,
   }: ConstructorParameters) {
-    super({ name: MODULE_ID, logger })
+    super()
 
     this.#logger = logger
     this.#fetch = (...args) => fetch(...args)
@@ -70,8 +70,6 @@ export class RemoteConfig extends ExodusModule implements RemoteConfigType {
     this.#remoteConfigUrl = config?.remoteConfigUrl
     this.#getBuildMetadata = getBuildMetadata
     this.#loadedStatusAtom = remoteConfigStatusAtom
-
-    this.setMaxListeners(Number.POSITIVE_INFINITY)
   }
 
   /**
@@ -109,18 +107,9 @@ export class RemoteConfig extends ExodusModule implements RemoteConfigType {
     this.#started = true
 
     while (this.#started) {
-      try {
-        await this.#load()
-        this.#timer = delay(fetchInterval)
-      } catch (err: unknown) {
-        const errMessage = unwrapErrorMessage(err)
-        this.#logger.error(errMessage)
-        this.#loadedStatusAtom.set((value) => ({
-          ...value,
-          error: errMessage,
-        }))
-        this.#timer = delay(errorBackoffTime)
-      }
+      const { error } = await this.update()
+
+      this.#timer = delay(error ? errorBackoffTime : fetchInterval)
 
       await this.#timer
     }
@@ -136,26 +125,37 @@ export class RemoteConfig extends ExodusModule implements RemoteConfigType {
   }
 
   #emit = (name: string, ...args: any[]) => {
-    return this.emit(name, ...args.map((arg) => (isFreezable(arg) ? this.#freeze(arg) : arg)))
+    return super.emit(name, ...args.map((arg) => (isFreezable(arg) ? this.#freeze(arg) : arg)))
   }
 
-  #load = async () => {
-    const { config, modified } = await this.#fetchConfig()
-    const changes = modified && (!this.#current || !isEqual(config, this.#current))
+  update = async () => {
+    try {
+      const { config, modified } = await this.#fetchConfig()
+      const changes = modified && (!this.#current || !isEqual(config, this.#current))
 
-    if (changes) {
-      this.#previous = this.#current
-      this.#current = this.#freeze(config)
-      this.sync()
-      this.#logger.debug('updated config with changes from remote')
+      if (changes) {
+        this.#previous = this.#current
+        this.#current = this.#freeze(config)
+        this.sync()
+        this.#logger.debug('updated config with changes from remote')
+      }
+
+      void this.#loadedStatusAtom.set({
+        remoteConfigUrl: this.#remoteConfigUrl!,
+        error: null,
+        loaded: true,
+      })
+      this.#resolveLoaded!()
+      return { success: true }
+    } catch (err) {
+      const errMessage = unwrapErrorMessage(err)
+      this.#logger.error(errMessage)
+      void this.#loadedStatusAtom.set((value) => ({
+        ...value,
+        error: errMessage,
+      }))
+      return { error: err }
     }
-
-    this.#loadedStatusAtom.set({
-      remoteConfigUrl: this.#remoteConfigUrl!,
-      error: null,
-      loaded: true,
-    })
-    this.#resolveLoaded!()
   }
 
   #fetchConfig = async () => {
@@ -230,7 +230,7 @@ const createRemoteConfig = ({
 }
 
 const remoteConfigDefinition = {
-  id: MODULE_ID,
+  id: 'remoteConfig',
   type: 'module',
   factory: createRemoteConfig,
   dependencies: [

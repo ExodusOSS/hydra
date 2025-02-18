@@ -9,6 +9,17 @@ export interface AddParams {
   xpub?: XPUB
 }
 
+type Key = {
+  keyIdentifier: KeyIdentifier
+  publicKey?: PublicKeyBuffer | MoneroPublicKeyBuffer
+  xpub?: XPUB
+}
+
+export interface AddManyParams {
+  walletAccount: WalletAccount
+  keys: Key[]
+}
+
 export interface GetParams {
   walletAccountName: string
   keyIdentifier: KeyIdentifier
@@ -25,6 +36,7 @@ export interface DeleteParams {
 
 export interface IPublicKeyStore {
   add: (params: AddParams) => Promise<void>
+  addMany: (params: AddManyParams) => Promise<void>
   get: (params: GetParams) => Promise<GetReturn>
   delete: (params: DeleteParams) => Promise<void>
   clearSoftwareWalletAccountKeys: () => Promise<void>

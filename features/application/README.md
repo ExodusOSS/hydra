@@ -40,7 +40,7 @@ started, you can create a plugin like this:
 
 ```typescript
 const plugin = () => {
-  const onStart = () => {
+  const onStart = ({ isBackedUp }) => {
     // Run some code when the application starts
   }
 
@@ -58,22 +58,21 @@ const myPluginDefinition = {
 
 ### Available hooks
 
-Each of the following hooks, might or might not receive parameters.
+Some hooks receive parameters, if so, they are documented below.
 
-- `onStart`: Triggered when the application starts.
-- `onRestart`: Triggered when the application restarts.
+- `onStart`: Triggered when the application starts. Called with `{ walletExists, hasPassphraseSet, isLocked, isBackedUp, isRestoring }`.
+- `onRestart`: Triggered when the application restarts. Called with `{ reason }` and other parameters (varies depending on the reason).
 - `onStop`: Triggered when the application stops.
-- `onLoad`: Triggered after `onStart` when the application is loaded.
+- `onLoad`: Triggered after `onStart` when the application is loaded. Called with the same parameters as `onStart`.
 - `onUnload`: Triggered when the application is unloaded, i.e.,
   the app is closed.
-- `onCreate`: Triggered when a new wallet is created.
-- `onImport`: Triggered when a wallet is imported.
+- `onCreate`: Triggered when a new wallet is created. Called with `{ walletExists, hasPassphraseSet, isLocked, isBackedUp, isRestoring, seedId }`.
+- `onImport`: Triggered when a wallet is imported. Called with `{ seedId, compatibilityMode, backupType }`.
 - `onDelete`: Triggered when a wallet is deleted.
-- `onRestore`: Triggered when a wallet (primary seed) restore process starts.
-- `onRestoreComplete`: Triggered when a wallet seed restore process completes.
-- `onAddSeed`: Triggered when a new extra seed is added to the wallet.
-- `onRestoreSeed`: Triggered when a seed restore process starts.
-  and added to the wallet.
+- `onRestore`: Triggered when a wallet (primary seed) restore process starts. Called with `{ backupType }`.
+- `onRestoreCompleted`: Triggered when a wallet seed restore process completes. Called with `{ backupType }`.
+- `onAddSeed`: Triggered when a new extra seed is added to the wallet. Called with `{ seedId, compatibilityMode }`.
+- `onRestoreSeed`: Triggered when a seed restore process starts. Called with `{ seedId, compatibilityMode }`.
 - `onAssetsSynced`: Triggered when the assets are synced.
 - `onChangePassphrase`: Triggered when the passphrase is changed.
 - `onLock`: Triggered when the application is locked.

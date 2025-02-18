@@ -15,13 +15,17 @@ export class AppProcess {
   #unsubscribes = []
   #returningFromBackgroundEvent
   #historyLimit
+  #lockExtensionDuration
+  #canRequestLockTimerExtension
 
   constructor({ appProcessAtom, appStateHistoryAtom, logger, config }) {
     this.#appProcessAtom = appProcessAtom
     this.#appStateHistoryAtom = appStateHistoryAtom
     this.#logger = logger
     this.#historyLimit = config.historyLimit
+    this.#lockExtensionDuration = config.lockExtensionDuration
     this.#returningFromBackgroundEvent = config.returningFromBackgroundEvent
+    this.#canRequestLockTimerExtension = config.canRequestLockTimerExtension
   }
 
   #recordHistory = async (current, newData) => {
@@ -53,8 +57,10 @@ export class AppProcess {
     })
   }
 
+  #lockExtensionExpired = (lockActivatesAt) => lockActivatesAt && Date.now() > lockActivatesAt
+
   #handleAppStateChange = makeConcurrent(async (newMode) => {
-    const { mode } = await this.#appProcessAtom.get()
+    const { lockActivatesAt, mode } = await this.#appProcessAtom.get()
 
     this.#logger.debug({ newMode, currentMode: mode })
     if (newMode === mode) return
@@ -67,7 +73,11 @@ export class AppProcess {
       return
     }
 
-    await this.#update({ mode: newMode, timeInBackground: 0 })
+    await this.#update({
+      mode: newMode,
+      timeInBackground: 0,
+      ...(this.#lockExtensionExpired(lockActivatesAt) ? { lockActivatesAt: null } : {}),
+    })
   })
 
   #handleConnectionChange = async (state) => {
@@ -112,6 +122,17 @@ export class AppProcess {
     }
 
     await this.#update({ mode: AppState.currentState })
+  }
+
+  requestLockTimerExtension = async () => {
+    const { lockActivatesAt } = await this.#appProcessAtom.get()
+
+    if (
+      this.#canRequestLockTimerExtension &&
+      (!lockActivatesAt || this.#lockExtensionExpired(lockActivatesAt))
+    ) {
+      await this.#update({ lockActivatesAt: Date.now() + this.#lockExtensionDuration })
+    }
   }
 
   stop = () => {

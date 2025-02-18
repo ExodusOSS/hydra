@@ -6,3 +6,5 @@ export const ORDERS_COUNT_WITH_GUARANTEED_MATCH = 8
 
 // maximum amount od EOS spent for RAM when creating a new EOS account
 export const EOS_MAX_RAM_COST = 1
+
+export const DEFAULT_ORDER_TO_AMOUNT_SLIPPAGE = 3

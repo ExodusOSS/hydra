@@ -1,6 +1,6 @@
 {
   "name": "@exodus/geolocation",
-  "version": "4.3.0",
+  "version": "4.3.1",
   "description": "Geolocation monitor",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/geolocation",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Ageolocation"
   },
@@ -42,5 +42,8 @@
     "@exodus/mock-fetch": "workspace:^",
     "@exodus/redux-dependency-injection": "workspace:^",
     "redux": "^4.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

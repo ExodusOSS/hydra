@@ -1,4 +1,4 @@
-const test = require('tape')
+const test = require('@exodus/test/tape')
 const { createPair } = require('./util')
 
 test('callMethod cannot be tricked by prototype illusion', async (t) => {
@@ -20,13 +20,16 @@ test('Pending request cache cannot be tricked by prototype illusion', async (t) 
   const [, server] = createPair()
 
   try {
-    server._transport.emit('data', JSON.stringify({
-      jsonrpc: '2.0',
-      id: 'toString',
-      result: 'Muahahaha'
-    }))
+    server._transport.emit(
+      'data',
+      JSON.stringify({
+        jsonrpc: '2.0',
+        id: 'toString',
+        result: 'Muahahaha',
+      })
+    )
     t.pass('invalid ID is ignored')
-  } catch (err) {
+  } catch {
     t.fail('error occurred because of bad ID')
   }
 

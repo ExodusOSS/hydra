@@ -36,6 +36,8 @@ import walletRpc from './features/wallet-rpc/index.js'
 import attachMigrations from './migrations/attach.js'
 import attachPlugins from './plugins/attach.js'
 import { makeChainable } from './utils/ioc.js'
+import cachedSodiumEncryptorRpc from './features/cached-sodium-encryptor-rpc'
+import cachedSodiumEncryptor from '@exodus/cached-sodium-encryptor'
 
 const withOverrides = ({ config, debug }) => {
   const xpubs = config.publicKeyProvider?.xpubs ?? Object.create(null)
@@ -98,9 +100,11 @@ const createExodus = (opts) => {
   if (walletSdk) {
     ioc.use(keychainRpc(walletSdk.keychain))
     ioc.use(walletRpc(walletSdk.wallet))
+    ioc.use(cachedSodiumEncryptorRpc(walletSdk.cachedSodiumEncryptor))
   } else {
     ioc.use(keychain(config.keychain))
     ioc.use(wallet(config.wallet))
+    ioc.use(cachedSodiumEncryptor(config.cachedSodiumEncryptor))
   }
 
   ioc.registerMultiple(createDependencies({ adapters, config }))

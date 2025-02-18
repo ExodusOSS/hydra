@@ -1,5 +1,6 @@
-import { memoize, pDebounce } from '@exodus/basic-utils'
+import { memoize, pDebounce, difference } from '@exodus/basic-utils'
 import { get } from 'lodash'
+import makeConcurrent from 'make-concurrent'
 
 const getValue = (obj, path, opts = Object.create(null)) => {
   const value = get(obj, path)
@@ -77,6 +78,9 @@ class RatesMonitor {
     this.#fetchRealTimePricesInterval = config.fetchRealTimePricesInterval
     this.#getTicker = (assetName) => assetsModule.getAsset(assetName)?.ticker
     this._update = pDebounce(this._updateInstant, this.#debounceInterval)
+    this._fetchSlowRatesConcurrent = makeConcurrent((...args) => this.#fetchSlowRates(...args), {
+      concurrency: 1,
+    })
   }
 
   #getAvailableAssetTickers = async () => {
@@ -86,12 +90,15 @@ class RatesMonitor {
 
   #getCurrency = async () => this.#currencyAtom.get()
 
-  async #fetchSlowRates() {
-    if (this.#slowFetchInFlight) return false
-    this.#slowFetchInFlight = true
+  async #fetchSlowRates({ tickers: tickers_ } = {}) {
+    if (!tickers_) {
+      if (this.#slowFetchInFlight) return false
+      this.#slowFetchInFlight = true
+    }
+
     let changed = false
     try {
-      const tickers = await this.#getAvailableAssetTickers()
+      const tickers = tickers_ || (await this.#getAvailableAssetTickers())
       const fiatCurrency = await this.#getCurrency()
       const sameAsPrevious =
         arrayElementsShallowEqual(this.#lastCurrentPriceCtx.tickers, tickers) &&
@@ -107,12 +114,15 @@ class RatesMonitor {
           fiatCurrency,
           lastModified: currentPriceRes.lastModified,
         }
-        this.#slowRates = buildSlowRates({
-          tickers,
-          fiatCurrency,
-          currentPriceResponse: currentPriceRes.data,
-          tickerResponse,
-        })
+        this.#slowRates = {
+          ...this.#slowRates,
+          ...buildSlowRates({
+            tickers,
+            fiatCurrency,
+            currentPriceResponse: currentPriceRes.data,
+            tickerResponse,
+          }),
+        }
         changed = true
       } else {
         this.#logger.info('price data is not modified, skipping slow-rates update tick')
@@ -143,7 +153,13 @@ class RatesMonitor {
         entityTag: oldCtx.entityTag,
       })
       if (realTimeRes.isModified) {
-        this.#realTimeRatesByFiat[fiatCurrency] = { data: realTimeRes.data }
+        this.#realTimeRatesByFiat[fiatCurrency] = {
+          data: realTimeRes.data.reduce((acc, next) => {
+            const ticker = Object.keys(next)[0]
+            acc[ticker] = next[ticker][fiatCurrency]
+            return acc
+          }, Object.create(null)),
+        }
         this.#lastRealTimeCtxByFiat[fiatCurrency] = {
           lastModified: realTimeRes.lastModified,
           entityTag: realTimeRes.entityTag,
@@ -193,12 +209,18 @@ class RatesMonitor {
     const fiatCurrency = await this.#getCurrency()
     const mergedRates = Object.fromEntries(
       tickers.map((ticker) => {
-        const finalObj = {
-          ...this.#slowRates[ticker],
-        }
+        const finalObj = Object.assign(Object.create(null), this.#slowRates[ticker])
         const realTimeData = this.#getRealTimeData({ fiatCurrency, ticker })
+
         if (realTimeData) {
           Object.assign(finalObj, realTimeData, { invalid: false })
+        }
+
+        if (Object.keys(finalObj).length === 0) {
+          return [
+            ticker,
+            { invalid: true, price: 0, priceUSD: 0, change24: 0, volume24: 0, cap: 0 },
+          ]
         }
 
         return [ticker, finalObj]
@@ -218,15 +240,18 @@ class RatesMonitor {
   #getRealTimeData = ({ fiatCurrency, ticker }) => {
     const realTimeEntry = this.#realTimeRatesByFiat[fiatCurrency]
     if (!realTimeEntry?.data?.[ticker]) return null
-
-    const price = getValue(realTimeEntry.data[ticker], fiatCurrency)
-    const priceUSD = getValue(realTimeEntry.data[ticker], 'USD')
-
-    if (!Number.isFinite(price) || !Number.isFinite(priceUSD) || price === 0 || priceUSD === 0) {
+    const price = getValue(realTimeEntry.data, ticker)
+    if (!Number.isFinite(price) || price === 0) {
       return null
     }
 
-    return { price, priceUSD }
+    const result = { price }
+
+    if (fiatCurrency === 'USD') {
+      result.priceUSD = price
+    }
+
+    return result
   }
 
   #logMissing = memoize(
@@ -246,8 +271,21 @@ class RatesMonitor {
         if (Object.keys(this.#rates).length === 0) return
         this.#started && this.update()
       }),
-      this.#availableAssetNamesAtom.observe(() => {
-        this.#started && this.update()
+      this.#availableAssetNamesAtom.observe((availableAssetNames) => {
+        if (!this.#started) return
+
+        if (this.prevAvailableAssetNames) {
+          const newAssetNames = difference(availableAssetNames, this.prevAvailableAssetNames)
+          const addedTickers = newAssetNames.map(this.#getTicker).sort()
+
+          if (addedTickers.length === 0) {
+            return
+          }
+
+          this._fetchSlowRatesConcurrent({ tickers: addedTickers }).then(() => this._update())
+        }
+
+        this.prevAvailableAssetNames = availableAssetNames
       }),
       this.#ratesAtom.observe((rates) => {
         this.#rates = rates

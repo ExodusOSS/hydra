@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.8.1...@exodus/rates-monitor@4.8.2) (2025-02-14)
+
+### Bug Fixes
+
+- fix(rates-monitor): use Object.keys to check non-empty obj (#11464)
+
+## [4.8.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.8.0...@exodus/rates-monitor@4.8.1) (2025-02-14)
+
+### Bug Fixes
+
+- fix: rates availableAssetNames observe improve (#11424)
+
+- fix(rates-monitor): set valid default value for storage ratesAtom (#11444)
+
+## [4.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.7.3...@exodus/rates-monitor@4.8.0) (2025-02-12)
+
+### Features
+
+- feat(rates-monitor): persistent ratesAtom (#11407)
+
+## [4.7.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.7.2...@exodus/rates-monitor@4.7.3) (2025-02-04)
+
+### Bug Fixes
+
+- fix: initialize finalObj in the RatesMonitor class to prevent prototype inheritance (#11340)
+
+## [4.7.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.7.1...@exodus/rates-monitor@4.7.2) (2025-02-02)
+
+### Bug Fixes
+
+- fix: when rates are not loaded for ticker add fallback. fix getIsRateAvailable selector to check price field defined (#11323)
+
+## [4.7.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.7.0...@exodus/rates-monitor@4.7.1) (2025-01-29)
+
+### Bug Fixes
+
+- fix: real time prices (#11271)
+
 ## [4.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.6.0...@exodus/rates-monitor@4.7.0) (2025-01-14)
 
 ### Features

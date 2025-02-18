@@ -1,5 +1,6 @@
+import type { Storage } from '@exodus/storage-interface'
+
 import createDeferringStorage, { DeferringStorage } from '../src/storage.js'
-import { Storage } from '@exodus/storage-interface'
 
 describe('DeferringStorage', () => {
   let deferringStorage: ReturnType<typeof createDeferringStorage>

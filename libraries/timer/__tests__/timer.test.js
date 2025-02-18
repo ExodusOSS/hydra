@@ -1,3 +1,5 @@
+/* eslint-disable jest/no-duplicate-hooks */
+/* eslint-disable jest/prefer-hooks-in-order */
 import Timer from '../src/timer.js'
 
 beforeEach(() => {

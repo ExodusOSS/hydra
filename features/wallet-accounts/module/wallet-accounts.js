@@ -29,6 +29,7 @@ const walletAccountsChannel = {
 }
 
 class WalletAccounts {
+  #logger
   #walletAccountsInternalAtom
   #wallet
   #activeWalletAccountAtom
@@ -42,6 +43,7 @@ class WalletAccounts {
   #loaded = pDefer()
 
   constructor({
+    logger,
     fusion,
     walletAccountsInternalAtom,
     wallet,
@@ -59,6 +61,7 @@ class WalletAccounts {
       true
     )
 
+    this.#logger = logger
     this.#walletAccountsInternalAtom = walletAccountsInternalAtom
     this.#wallet = wallet
     this.#activeWalletAccountAtom = activeWalletAccountAtom
@@ -136,11 +139,11 @@ class WalletAccounts {
       })
       this.#pendingFusionUpdates += 1
     } catch (error) {
-      console.log('err', error)
+      this.#logger.log('err', error)
     }
   }, 0)
 
-  #persistWalletAccounts = async (walletAccounts) => {
+  #persistWalletAccounts = async (walletAccounts, options = {}) => {
     if (containWalletAccounts(this.#walletAccounts, walletAccounts)) {
       return
     }
@@ -149,7 +152,11 @@ class WalletAccounts {
 
     await this.#save()
 
-    await this.#updateFusion()
+    if (options.useOptimisticWrite) {
+      this.#updateFusion()
+    } else {
+      await this.#updateFusion()
+    }
   }
 
   #save = pDebounce(async () => {
@@ -182,12 +189,20 @@ class WalletAccounts {
         (compatibilityMode && !defaultWalletAccount.compatibilityMode)
       ) {
         // if seedId exists, it's already been set by the migration
-        await this.update(WalletAccount.DEFAULT_NAME, { seedId, compatibilityMode })
+        const walletAccount = this.#update(WalletAccount.DEFAULT_NAME, {
+          seedId,
+          compatibilityMode,
+        })
+
+        await this.#persistWalletAccounts(
+          { [WalletAccount.DEFAULT_NAME]: walletAccount },
+          { useOptimisticWrite: true }
+        )
       }
     }
 
     if (!this.#walletAccounts[WalletAccount.DEFAULT_NAME].seedId) {
-      throw new Error('wallet account missing seedId')
+      this.#logger.warn('wallet account missing seedId')
     }
   }
 
@@ -511,6 +526,7 @@ const walletAccountsDefinition = {
   type: 'module',
   factory,
   dependencies: [
+    'logger',
     'fusion',
     'activeWalletAccountAtom',
     'hardwareWalletPublicKeysAtom',

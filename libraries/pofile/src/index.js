@@ -2,6 +2,7 @@ const tokenizer = require('./tokenizer')
 const parser = require('./parser')
 const POFile = require('./po-file')
 const POEntry = require('./po-entry')
+const { createEntryId, parseEntryId } = require('./utils')
 
 const parse = (input) => {
   const data = input.replace(/\r\n/gu, '\n')
@@ -15,6 +16,7 @@ const parse = (input) => {
       id: entry.msgid,
       value: entry.msgstr,
       comments: entry.comments,
+      context: entry.msgctxt,
       references: entry.references,
       flags: entry.flags,
     })
@@ -25,4 +27,10 @@ const parse = (input) => {
 
 const create = (...args) => new POFile(...args)
 
-module.exports = { parse, create, computeId: POEntry.computeId }
+module.exports = {
+  parse,
+  create,
+  createEntryId,
+  parseEntryId,
+  computeId: POEntry.computeId,
+}

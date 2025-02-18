@@ -12,12 +12,12 @@ describe('createInMemoryAtom', () => {
     it('should block get until a value is set', (done) => {
       expect.assertions(1)
 
-      identityAtom.get().then((value) => {
+      void identityAtom.get().then((value) => {
         expect(value).toEqual('Bruce Wayne')
         done()
       })
 
-      identityAtom.set('Bruce Wayne')
+      void identityAtom.set('Bruce Wayne')
     })
 
     it('should call observe only after value is set', (done) => {
@@ -26,13 +26,13 @@ describe('createInMemoryAtom', () => {
       const subscriber = jest.fn()
       identityAtom.observe(subscriber)
 
-      identityAtom.get().then(() => {
+      void identityAtom.get().then(() => {
         expect(subscriber).toHaveBeenCalledTimes(1)
         expect(subscriber).toHaveBeenCalledWith('Bruce Wayne')
         done()
       })
 
-      identityAtom.set('Bruce Wayne')
+      void identityAtom.set('Bruce Wayne')
     })
 
     it('should not call observe until any non-undefined value set', async () => {
@@ -42,11 +42,11 @@ describe('createInMemoryAtom', () => {
       identityAtom.observe(subscriber)
       await new Promise(setImmediate)
       expect(subscriber).toBeCalledTimes(0)
-      identityAtom.set(undefined)
+      void identityAtom.set(undefined)
       await new Promise(setImmediate)
       expect(subscriber).toBeCalledTimes(0)
 
-      identityAtom.set('Bruce Wayne')
+      void identityAtom.set('Bruce Wayne')
       await new Promise(setImmediate)
       expect(subscriber).toBeCalledTimes(1)
     })

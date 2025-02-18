@@ -4,6 +4,7 @@ import { createAsset as createBitcoin } from '@exodus/bitcoin-plugin'
 import KeyIdentifier from '@exodus/key-identifier'
 import { Keychain } from '@exodus/keychain/module'
 import { getSeedId } from '@exodus/keychain/module/crypto/seed-id'
+import { createNoopLogger, type Logger } from '@exodus/logger'
 import { WalletAccount } from '@exodus/models'
 import { mnemonicToSeedSync } from 'bip39'
 import { when } from 'jest-when'
@@ -12,8 +13,8 @@ import type { GetBuildMetadata, PublicKeyProvider } from '../public-key-provider
 import publicKeyProviderDefinition from '../public-key-provider.js'
 import type { IPublicKeyStore } from '../store/types.js'
 
-const bitcoin = createBitcoin({ assetClientInterface: {} })
-const logger = { warn: jest.fn(), debug: jest.fn() }
+const bitcoin = createBitcoin({ assetClientInterface: { createLogger: createNoopLogger } })
+const logger = { warn: jest.fn(), debug: jest.fn() } as unknown as Logger
 
 describe('PublicKeyProvider', () => {
   const seed = mnemonicToSeedSync(

@@ -1,6 +1,6 @@
 {
   "name": "@exodus/rates-monitor",
-  "version": "4.7.0",
+  "version": "4.8.2",
   "license": "MIT",
   "author": "Exodus Movement, Inc.",
   "description": "Fetches asset prices in fiat on a timer",
@@ -35,6 +35,7 @@
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
     "lodash": "npm:@exodus/lodash@^4.17.21-exodus.2",
+    "make-concurrent": "^5.4.0",
     "minimalistic-assert": "^1.0.1",
     "ms": "^0.7.1",
     "reselect": "^3.0.1"

@@ -432,59 +432,194 @@ describe('ExodusPricingClient', () => {
   })
 
   describe('realTimePrice', () => {
-    it('should fetch real-time price for specific asset', async () => {
-      const actual = await exodusPricingServer.realTimePrice({
-        asset: 'BTC',
-        fiatCurrency: 'USD',
-        ignoreInvalidSymbols: false,
-      })
-
-      expect(fetch).toHaveBeenCalledWith(`${baseUrl}/real-time-pricing/BTC?to=USD`, {
-        ...fetchOptions,
-        headers: {
-          ...fetchOptions.headers,
-          'Cache-Control': 'max-age=20',
-        },
-      })
-
-      expect(actual).toEqual(responseJson)
-    })
-
-    it('should fetch real-time prices for top assets', async () => {
-      const actual = await exodusPricingServer.realTimePrice({
-        fiatCurrency: 'USD',
-        ignoreInvalidSymbols: true,
-      })
-
-      expect(fetch).toHaveBeenCalledWith(
-        `${baseUrl}/real-time-pricing?to=USD&ignoreInvalidSymbols=true`,
-        {
-          ...fetchOptions,
-          headers: {
-            ...fetchOptions.headers,
-            'Cache-Control': 'max-age=20',
-          },
-        }
-      )
-
-      expect(actual).toEqual(responseJson)
-    })
-
-    it.each([
-      [{ ok: false, status: 304, statusText: 'Not Modified' }],
-      [{ ok: false, status: 500, statusText: 'Internal Server Error' }],
-    ])('should throw error when response has (%s)', async (responseOverrides) => {
-      fetch.mockResolvedValue(mockResponse(responseJson, responseOverrides))
-
-      const realTimePriceCall = () =>
-        exodusPricingServer.realTimePrice({
+    describe('normal requests (no lastModified, no entityTag)', () => {
+      it('should fetch real-time price for a specific asset', async () => {
+        const result = await exodusPricingServer.realTimePrice({
+          asset: 'BTC',
           fiatCurrency: 'USD',
           ignoreInvalidSymbols: true,
         })
 
-      await expect(realTimePriceCall).rejects.toThrow(
-        `${baseUrl}/real-time-pricing?to=USD&ignoreInvalidSymbols=true ${responseOverrides.status} ${responseOverrides.statusText}`
-      )
+        expect(fetch).toHaveBeenCalledWith(
+          `${baseUrl}/real-time-pricing/BTC?to=USD&ignoreInvalidSymbols=true`,
+          {
+            ...fetchOptions,
+            headers: {
+              ...fetchOptions.headers,
+              'Cache-Control': 'max-age=20',
+            },
+          }
+        )
+
+        expect(result).toEqual({
+          isModified: true,
+          data: responseJson,
+          entityTag: null,
+          lastModified: null,
+        })
+      })
+
+      it('should fetch real-time prices for top assets (no `asset` param)', async () => {
+        const result = await exodusPricingServer.realTimePrice({
+          fiatCurrency: 'USD',
+          ignoreInvalidSymbols: true,
+        })
+
+        expect(fetch).toHaveBeenCalledWith(
+          `${baseUrl}/real-time-pricing?to=USD&ignoreInvalidSymbols=true`,
+          {
+            ...fetchOptions,
+            headers: {
+              ...fetchOptions.headers,
+              'Cache-Control': 'max-age=20',
+            },
+          }
+        )
+
+        expect(result).toEqual({
+          isModified: true,
+          data: responseJson,
+          entityTag: null,
+          lastModified: null,
+        })
+      })
+
+      it('should throw error on non-2xx except 304 Not Modified', async () => {
+        fetch.mockResolvedValue(
+          mockResponse(responseJson, {
+            ok: false,
+            status: 500,
+            statusText: 'Internal Server Error',
+          })
+        )
+
+        await expect(
+          exodusPricingServer.realTimePrice({
+            fiatCurrency: 'USD',
+          })
+        ).rejects.toThrow(
+          `${baseUrl}/real-time-pricing?to=USD&ignoreInvalidSymbols=true 500 Internal Server Error`
+        )
+      })
+    })
+
+    describe('conditional requests (lastModified, entityTag)', () => {
+      it('should return "isModified: false" when server responds 304 Not Modified', async () => {
+        fetch.mockResolvedValue(
+          mockResponse(responseJson, {
+            ok: false,
+            status: 304,
+            statusText: 'Not Modified',
+          })
+        )
+
+        const result = await exodusPricingServer.realTimePrice({
+          fiatCurrency: 'USD',
+          ignoreInvalidSymbols: true,
+          lastModified: 'Thu, 02 Jan 2025 10:06:46 GMT',
+        })
+
+        expect(result).toEqual({ isModified: false })
+      })
+
+      it('should throw error when server responds non-2xx and not 304 (e.g. 500)', async () => {
+        fetch.mockResolvedValue(
+          mockResponse(responseJson, {
+            ok: false,
+            status: 500,
+            statusText: 'Internal Server Error',
+          })
+        )
+
+        await expect(
+          exodusPricingServer.realTimePrice({
+            asset: 'BTC',
+            lastModified: 'Thu, 02 Jan 2025 10:06:46 GMT',
+          })
+        ).rejects.toThrow(
+          `${baseUrl}/real-time-pricing/BTC?to=USD&ignoreInvalidSymbols=true 500 Internal Server Error`
+        )
+      })
+
+      it('should set "If-Modified-Since" header if "lastModified" is provided', async () => {
+        await exodusPricingServer.realTimePrice({
+          asset: 'BTC',
+          lastModified: 'Thu, 02 Jan 2025 10:06:46 GMT',
+        })
+
+        const expectedFetchOptions = {
+          ...fetchOptions,
+          headers: {
+            ...fetchOptions.headers,
+            'Cache-Control': 'max-age=20',
+            'If-Modified-Since': 'Thu, 02 Jan 2025 10:06:46 GMT',
+          },
+        }
+        expect(fetch).toHaveBeenCalledWith(
+          `${baseUrl}/real-time-pricing/BTC?to=USD&ignoreInvalidSymbols=true`,
+          expectedFetchOptions
+        )
+      })
+
+      it('should set "If-None-Match" header if "entityTag" is provided', async () => {
+        await exodusPricingServer.realTimePrice({
+          asset: 'BTC',
+          entityTag: 'xyz',
+        })
+
+        const expectedFetchOptions = {
+          ...fetchOptions,
+          headers: {
+            ...fetchOptions.headers,
+            'Cache-Control': 'max-age=20',
+            'If-None-Match': 'xyz',
+          },
+        }
+        expect(fetch).toHaveBeenCalledWith(
+          `${baseUrl}/real-time-pricing/BTC?to=USD&ignoreInvalidSymbols=true`,
+          expectedFetchOptions
+        )
+      })
+
+      it('should return "isModified: true" with new data + ETag + Last-Modified when data has changed', async () => {
+        fetch.mockResolvedValue(
+          mockResponse(responseJson, {
+            ok: true,
+            status: 200,
+            statusText: 'ok',
+            headers: {
+              get: jest.fn((header) => {
+                if (header === 'ETag') return 'abc'
+                if (header === 'Last-Modified') return 'Thu, 02 Jan 2025 10:07:46 GMT'
+                return null
+              }),
+            },
+          })
+        )
+
+        const result = await exodusPricingServer.realTimePrice({
+          asset: 'BTC',
+          lastModified: 'some-old-date',
+        })
+
+        expect(result.isModified).toBe(true)
+        expect(result.data).toEqual(responseJson)
+        expect(result.entityTag).toBe('abc')
+        expect(result.lastModified).toBe('Thu, 02 Jan 2025 10:07:46 GMT')
+      })
+    })
+
+    describe('modify checks (no explicit lastModified/entityTag)', () => {
+      it('should return "isModified: true" by default if no conditional headers are provided', async () => {
+        fetch.mockResolvedValue(mockResponse(responseJson, { ok: true, status: 200 }))
+
+        const result = await exodusPricingServer.realTimePrice({ asset: 'BTC' })
+
+        expect(result.isModified).toBe(true)
+        expect(result.data).toEqual(responseJson)
+        expect(result.entityTag).toBeNull()
+        expect(result.lastModified).toBeNull()
+      })
     })
   })
 

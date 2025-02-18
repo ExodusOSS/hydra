@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.5.0...@exodus/basic-utils@3.5.1) (2025-02-07)
+
+### Bug Fixes
+
+- fix(pickBy): pass key to callback (#11376)
+
+## [3.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.4.0...@exodus/basic-utils@3.5.0) (2025-01-30)
+
+### Features
+
+- feat: re-export makeConcurrent as restrictConcurrency (#11245)
+
+## [3.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.3.0...@exodus/basic-utils@3.4.0) (2025-01-28)
+
+### Features
+
+- feat: createEnum util to validate enum keys on access (#11246)
+
+## [3.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.2.0...@exodus/basic-utils@3.3.0) (2025-01-27)
+
+### Features
+
+- feat: allow clearing `memoize` cache (#11247)
+
 ## [3.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.1.0...@exodus/basic-utils@3.2.0) (2024-10-22)
 
 ### Features

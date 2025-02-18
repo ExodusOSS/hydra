@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/geolocation@4.3.0...@exodus/geolocation@4.3.1) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [4.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/geolocation@4.2.4...@exodus/geolocation@4.3.0) (2024-11-21)
 
 ### Features

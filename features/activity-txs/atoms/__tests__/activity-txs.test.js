@@ -1,5 +1,6 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 import { createAsset as createBitcoin } from '@exodus/bitcoin-plugin'
+import errorTracking from '@exodus/error-tracking'
 import { createNoopLogger } from '@exodus/logger'
 import { TxSet } from '@exodus/models'
 
@@ -384,5 +385,90 @@ describe('activityTxsAtom', () => {
         version: 1,
       },
     ])
+  })
+
+  test('returns empty array when getActivityTxs call fails', async () => {
+    const handler = jest.fn()
+    const txLogsAtom = createInMemoryAtom({})
+    const errorsAtom = createInMemoryAtom({ defaultValue: { errors: [] } })
+    const accountStatesAtom = createInMemoryAtom({ defaultValue: {} })
+
+    const atom = activityTxsAtomDefinition.factory({
+      errorTracking: errorTracking({ maxErrorsCount: 10 })
+        .definitions.find(({ definition }) => definition.id === 'errorTracking')
+        .definition.factory({
+          errorsAtom,
+          config: { maxErrorsCount: 10 },
+        }),
+      logger: console,
+      txLogsAtom,
+      accountStatesAtom,
+      assetsModule: {
+        getAsset: (assetName) => ({
+          ...assets[assetName],
+          api: {
+            ...assets[assetName].api,
+            getActivityTxs: () => {
+              throw new Error('bug in implementation')
+            },
+          },
+        }),
+      },
+    })
+
+    atom.observe(handler)
+    await txLogsAtom.set({
+      value: {
+        exodus_0: {
+          eosio: TxSet.fromArray([
+            {
+              txId: 'tx-1',
+              error: null,
+              date: '2019-07-18T12:25:52.000Z',
+              confirmations: 1,
+              meta: {},
+              token: null,
+              dropped: false,
+              coinAmount: '2 EOS',
+              coinName: 'eosio',
+              feeAmount: '0.1 EOS',
+              feeCoinName: 'eosio',
+              currencies: {
+                eosio: {
+                  larimer: 0,
+                  EOS: 4,
+                },
+              },
+            },
+            {
+              txId: 'tx-2',
+              error: null,
+              date: '2019-07-18T12:25:52.000Z',
+              confirmations: 1,
+              meta: {},
+              token: null,
+              dropped: false,
+              coinAmount: '0.5 EOS',
+              coinName: 'eosio',
+              feeAmount: '0.1 EOS',
+              feeCoinName: 'eosio',
+              currencies: {
+                eosio: {
+                  larimer: 0,
+                  EOS: 4,
+                },
+              },
+            },
+          ]),
+        },
+      },
+    })
+    await advance()
+    const errors = await errorsAtom.get()
+    expect(handler.mock.calls.length).toEqual(1)
+    expect(handler.mock.calls[0][0].exodus_0.eosio.map((tx) => tx.toJSON())).toEqual([])
+    expect(errors.errors[0].context).toEqual({ assetName: 'eosio' })
+    expect(errors.errors[0].error.toString()).toEqual('Error: bug in implementation')
+    expect(errors.errors[0].namespace).toEqual('activityTxs')
   })
 })

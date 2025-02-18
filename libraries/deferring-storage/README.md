@@ -12,7 +12,7 @@ const createUnlockableStorage = (storage) => {
   const deferringStorage = createDeferringStorage(storage)
   return {
     ...deferringStorage,
-    unlock: (deferringStorage) => deferringStorage.release(),
+    unlock: () => deferringStorage.release(),
   }
 }
 

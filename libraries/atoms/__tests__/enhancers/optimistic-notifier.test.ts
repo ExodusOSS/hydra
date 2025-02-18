@@ -1,6 +1,6 @@
+import optimisticNotifier from '../../src/enhancers/optimistic-notifier.js'
 import type { Atom } from '../../src/index.js'
 import { createInMemoryAtom } from '../../src/index.js'
-import optimisticNotifier from '../../src/enhancers/optimistic-notifier.js'
 
 describe('optimisticNotifier enhancer', () => {
   let identityAtom: Atom<string>
@@ -20,7 +20,7 @@ describe('optimisticNotifier enhancer', () => {
     const handler = jest.fn()
     atom.observe(handler)
 
-    atom.set('Batman')
+    void atom.set('Batman')
 
     await expect(atom.get()).resolves.toBe('Batman')
     expect(handler).toHaveBeenCalledWith('Batman')
@@ -75,7 +75,7 @@ describe('optimisticNotifier enhancer', () => {
         setTimeout(reject, 100)
       })
 
-    atom.set('Harvey Dent')
+    void atom.set('Harvey Dent')
 
     await advance(50)
     await expect(atom.get()).resolves.toBe('Harvey Dent')

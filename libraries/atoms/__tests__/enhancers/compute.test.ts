@@ -1,5 +1,5 @@
 import type { Atom } from '../../src/index.js'
-import { compute, createInMemoryAtom, combine } from '../../src/index.js'
+import { combine, compute, createInMemoryAtom } from '../../src/index.js'
 
 describe('compute', () => {
   test('returns selected value', async () => {
@@ -12,7 +12,7 @@ describe('compute', () => {
       selector: (nums) => nums.filter((num) => num % 2),
     })
 
-    intsAtom.set([0, 1, 2, 3, 4])
+    void intsAtom.set([0, 1, 2, 3, 4])
 
     const odds = await new Promise(oddIntsAtom.observe)
     expect(odds).toEqual([1, 3])
@@ -30,7 +30,7 @@ describe('compute', () => {
       selector: async (nums) => nums.filter((num) => num % 2),
     })
 
-    intsAtom.set([0, 1, 2, 3, 4])
+    void intsAtom.set([0, 1, 2, 3, 4])
 
     const odds = await new Promise(oddIntsAtom.observe)
     expect(odds).toEqual([1, 3])
@@ -93,5 +93,63 @@ describe('compute', () => {
     })
 
     await expect(computed.get()).resolves.toBe('Bruce Wayne is Batman')
+  })
+
+  describe('selector memoization', () => {
+    test('.get uses memoized value', async () => {
+      const intsAtom = createInMemoryAtom<number>()
+
+      const selector = jest
+        .fn()
+        .mockImplementation(async (value) => ([0, 1].includes(value) ? undefined : 10))
+
+      const computedAtom = compute({
+        atom: intsAtom,
+        selector,
+      })
+
+      void intsAtom.set(0)
+      const result01 = await computedAtom.get()
+      const result02 = await computedAtom.get()
+
+      expect(result01).toBe(result02)
+      expect(selector).toHaveBeenCalledTimes(1)
+
+      void intsAtom.set(5)
+      const result03 = await computedAtom.get()
+      await computedAtom.get()
+
+      expect(result03).not.toBe(result01)
+      expect(selector).toHaveBeenCalledTimes(2)
+    })
+
+    test('.observe uses memoized value', async () => {
+      const intsAtom = createInMemoryAtom<number>()
+
+      const observer = jest.fn()
+      const selector = jest
+        .fn()
+        .mockImplementation(async (value) => ([0, 1].includes(value) ? undefined : 10))
+
+      const computedAtom = compute({
+        atom: intsAtom,
+        selector,
+      })
+
+      computedAtom.observe(observer)
+
+      void intsAtom.set(0)
+      void intsAtom.set(1)
+      void intsAtom.set(1)
+
+      await new Promise(setImmediate)
+      expect(selector).toHaveBeenCalledTimes(2)
+
+      void intsAtom.set(5)
+      void intsAtom.set(5)
+
+      await new Promise(setImmediate)
+      expect(selector).toHaveBeenCalledTimes(3)
+    })
   })
 })

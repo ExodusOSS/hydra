@@ -16,7 +16,7 @@ Additionally, it offers extra Redux selectors to retrieve activity, limited by s
 
 ## Usage
 
-This feature is designed to be used together with `@exodus/headless`. See [Using the SDK](../../docs/docs-website/docs/development/using-the-sdk.md) for more details.
+This feature is designed to be used together with `@exodus/headless`. See [Using the SDK](../../docs/development/using-the-sdk.md) for more details.
 
 ### API Side
 
@@ -49,7 +49,7 @@ selectors.activityTxs.createMultiActivity({
 
 ### UI Side
 
-See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md#events) for more details on basic UI-side setup.
+See [using the sdk](../../docs/development/using-the-sdk.md#events) for more details on basic UI-side setup.
 
 ```js
 import selectors from '~/ui/flux/selectors'

@@ -1,8 +1,9 @@
-import lodash from 'lodash'
+import { asset } from '@exodus/bitcoin-meta'
 import { TxSet } from '@exodus/models'
 import { when } from 'jest-when'
+import lodash from 'lodash'
+
 import clearTxsReducer from '../../../batching/reducer/clear-txs.js'
-import { asset } from '@exodus/bitcoin-meta'
 
 const { get, has } = lodash
 

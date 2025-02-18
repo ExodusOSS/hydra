@@ -22,7 +22,7 @@ You can explore the complete list of available code snippets [here](https://gith
 
 ## Linking
 
-While developing a package in this monorepo, you may want to test it in one of the client repos, e.g. exodus-mobile. Unfortunately we can't use `npm link` because mobile's packager `metro` doesn't support symlinks (yet). However, we have a similar tool here to help you sync your changes to the client repos before you publish a new version.
+While developing a package in this monorepo, you may want to test it in a repo that consumes it. Unfortunately we can't use `npm link` because mobile's packager `metro` doesn't support symlinks (yet). However, we have a similar tool here to help you sync your changes to the client repos before you publish a new version.
 
 To link your module to a client repo, run:
 
@@ -30,19 +30,7 @@ To link your module to a client repo, run:
 yarn run -T sync module-name,other-module-name /path/to/client-repo
 ```
 
-This will start a watch process that syncs the specified modules to `src/node_modules` in that repo. If you need them synced elsewhere, specify a different path as the 2nd argument.
-
-Examples
-
-```
-# exodus-mobile
-yarn run -T sync:mobile module-name,other-module-name
-# or: yarn run -T sync:mobile module-name,other-module-name ../exodus-mobile
-
-# exodus-browser
-yarn run -T sync:browser module-name,other-module-name
-# or: yarn run -T sync module-name,other-module-name ../exodus-browser/apps/browser
-```
+This will start a watch process that syncs the specified modules to `src/node_modules` in that repo.
 
 ## Test
 

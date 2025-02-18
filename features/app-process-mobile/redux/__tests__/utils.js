@@ -1,5 +1,6 @@
 import { setupRedux } from '@exodus/redux-dependency-injection'
 import { combineReducers, createStore } from 'redux'
+
 import appProcess from '..'
 
 export function setup({ dependencies = [] } = {}) {

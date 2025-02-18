@@ -15,5 +15,11 @@ export default function memoize(func, resolver, timeout) {
     return result
   }
 
+  Object.defineProperty(memoizedFunction, 'reset', {
+    value: () => cache.clear(),
+    enumerable: false,
+    writable: false,
+  })
+
   return memoizedFunction
 }

@@ -1,5 +1,5 @@
 import pDefer from 'p-defer'
-import { Storage } from '@exodus/storage-interface'
+import type { Storage } from '@exodus/storage-interface'
 
 export class DeferringStorage<In, Out> {
   readonly #ready = pDefer()

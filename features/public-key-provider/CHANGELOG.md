@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/public-key-provider@4.0.2...@exodus/public-key-provider@4.1.0) (2025-01-15)
+
+### Features
+
+- feat: implement storing public keys in batches (#10975)
+
+### Bug Fixes
+
+- fix: race condition when mocking multiple xpubs (#11042)
+
+## [4.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/public-key-provider@4.0.1...@exodus/public-key-provider@4.0.2) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
+## [4.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/public-key-provider@4.0.0...@exodus/public-key-provider@4.0.1) (2024-12-05)
+
+**Note:** Version bump only for package @exodus/public-key-provider
+
 ## [4.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/public-key-provider@3.0.0...@exodus/public-key-provider@4.0.0) (2024-11-07)
 
 ### ⚠ BREAKING CHANGES

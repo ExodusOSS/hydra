@@ -1,6 +1,6 @@
 {
   "name": "@exodus/activity-txs",
-  "version": "4.4.3",
+  "version": "4.6.4",
   "description": "The activity-txs feature",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -14,13 +14,14 @@
   },
   "main": "index.js",
   "files": [
-    "module",
-    "atoms",
     "api",
+    "atoms",
+    "module",
     "plugin",
     "redux",
-    "README.md",
+    "index.d.ts",
     "CHANGELOG.md",
+    "README.md",
     "!**/__tests__/**",
     "!**/*.test.js"
   ],
@@ -47,6 +48,7 @@
     "@exodus/available-assets": "workspace:^",
     "@exodus/bitcoin-plugin": "^1.4.2",
     "@exodus/connected-origins": "workspace:^",
+    "@exodus/error-tracking": "workspace:^",
     "@exodus/fiat-ramp": "workspace:^",
     "@exodus/logger": "workspace:^",
     "@exodus/nfts": "workspace:^",

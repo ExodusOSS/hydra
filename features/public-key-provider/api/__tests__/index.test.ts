@@ -2,6 +2,7 @@ import assetSourcesDefinition from '@exodus/asset-sources/lib/module'
 import { createInMemoryAtom } from '@exodus/atoms'
 import { createAsset as createBitcoin } from '@exodus/bitcoin-plugin'
 import KeyIdentifier from '@exodus/key-identifier'
+import { createNoopLogger } from '@exodus/logger'
 import { WalletAccount } from '@exodus/models'
 
 import type { PublicKeyProvider } from '../../module/public-key-provider.js'
@@ -12,7 +13,7 @@ const { factory: createPublicKeyProviderApi } = publicKeyProviderApiDefinition
 
 const assets = {
   bitcoin: {
-    ...createBitcoin({ assetClientInterface: {} }),
+    ...createBitcoin({ assetClientInterface: { createLogger: createNoopLogger } }),
     get baseAsset() {
       return assets.bitcoin
     },

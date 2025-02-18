@@ -5,6 +5,7 @@ import { createAsset as createBitcoinAsset } from '@exodus/bitcoin-plugin'
 import { encodePublic as encodePublicEthereum } from '@exodus/ethereum-lib'
 import { signMessage } from '@exodus/ethereum-lib/src/sign-message'
 import { asset as ethereumMeta } from '@exodus/ethereum-meta'
+import { createNoopLogger } from '@exodus/logger'
 import { AccountState } from '@exodus/models'
 import { createFeeData, getAddressFromPublicKey as encodePublicSolana } from '@exodus/solana-lib'
 import { asset as solanaMeta } from '@exodus/solana-meta'
@@ -46,7 +47,10 @@ class DummyFeeMonitor {
 }
 
 const bitcoin = {
-  ...createBitcoinAsset({ assetClientInterface: {}, allowUnconfirmedRbfEnabledUtxos: true }),
+  ...createBitcoinAsset({
+    assetClientInterface: { createLogger: createNoopLogger },
+    allowUnconfirmedRbfEnabledUtxos: true,
+  }),
   get baseAsset() {
     return bitcoin
   },

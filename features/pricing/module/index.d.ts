@@ -26,12 +26,23 @@ type Pricing = {
 
 type CurrentPriceResult = { [assetTicker: string]: Pricing }
 
+type RealTimePriceParams = {
+  asset?: string
+  fiatCurrency?: string
+  ignoreInvalidSymbols?: boolean
+}
+
 declare class ExodusPricingClient {
   constructor()
 
   currentPrice(params: CurrentPriceParams): Promise<CurrentPriceResult>
   currentPrice(
     params: WithModifyParams<CurrentPriceParams>
+  ): Promise<WithModifyResult<CurrentPriceResult>>
+
+  realTimePrice(params: RealTimePriceParams): Promise<CurrentPriceResult>
+  realTimePrice(
+    params: WithModifyParams<RealTimePriceParams>
   ): Promise<WithModifyResult<CurrentPriceResult>>
 }
 

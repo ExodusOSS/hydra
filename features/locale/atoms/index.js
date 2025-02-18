@@ -1,5 +1,5 @@
-import createCurrencyAtom from './currency'
-import createLanguageAtom from './language'
+import createCurrencyAtom from './currency.js'
+import createLanguageAtom from './language.js'
 
 export const currencyAtomDefinition = {
   id: 'currencyAtom',

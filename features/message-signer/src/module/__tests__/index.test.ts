@@ -1,6 +1,10 @@
-import messageSignerDefinition from '../message-signer.js'
-import { UnsupportedWalletAccountSource } from '../errors.js'
+import type { Atom } from '@exodus/atoms'
+import { createInMemoryAtom } from '@exodus/atoms'
 import { WalletAccount } from '@exodus/models'
+
+import { UnsupportedWalletAccountSource } from '../errors.js'
+import type { IMessageSigner } from '../interfaces.js'
+import messageSignerDefinition from '../message-signer.js'
 
 const mockSeedBasedMessageSigner = {
   signMessage: jest.fn(),
@@ -10,43 +14,71 @@ const mockHardwareMessageSigner = {
   signMessage: jest.fn(),
 }
 
+const { factory: createMessageSigner } = messageSignerDefinition
+
 describe('MessageSigner', () => {
-  const messageSigner = messageSignerDefinition.factory({
-    seedBasedMessageSigner: mockSeedBasedMessageSigner,
-    hardwareMessageSigner: mockHardwareMessageSigner,
-  })
+  let walletAccountsAtom: Atom<{ [name: string]: WalletAccount }>
+  let messageSigner: IMessageSigner
 
   beforeEach(() => {
     jest.clearAllMocks()
+
+    walletAccountsAtom = createInMemoryAtom({ defaultValue: {} })
+    messageSigner = createMessageSigner({
+      seedBasedMessageSigner: mockSeedBasedMessageSigner,
+      hardwareMessageSigner: mockHardwareMessageSigner,
+      walletAccountsAtom,
+    })
   })
 
-  it.each([
+  describe.each([
     ['exodus', mockSeedBasedMessageSigner],
     ['seed', mockSeedBasedMessageSigner],
     ['ledger', mockHardwareMessageSigner],
     ['trezor', mockHardwareMessageSigner],
-  ])('should call the %s signer', async (source, signer) => {
+  ])('%s signer', (source, signer) => {
     const baseAssetName = ''
     const message = {
       rawMessage: Buffer.from('hello world', 'utf8'),
     }
     const accountIndex = 0
-    const walletAccount = {
+    const walletAccount = new WalletAccount({
       source,
       index: accountIndex,
-      isSoftware: ['exodus', 'seed'].includes(source),
-      isHardware: ['ledger', 'trezor'].includes(source),
-    } as WalletAccount
-
-    await messageSigner.signMessage({
-      baseAssetName,
-      message,
-      walletAccount,
+      ...(['ledger', 'trezor'].includes(source) && { id: '123' }),
+      ...(['seed'].includes(source) && { seedId: '123' }),
     })
-    expect(signer.signMessage).toHaveBeenCalledWith({
-      baseAssetName,
-      message,
-      walletAccount,
+
+    beforeEach(async () => {
+      await walletAccountsAtom.set({ [walletAccount.toString()]: walletAccount })
+    })
+
+    test('calls the signer', async () => {
+      await messageSigner.signMessage({
+        baseAssetName,
+        message,
+        walletAccount,
+      })
+
+      expect(signer.signMessage).toHaveBeenCalledWith({
+        baseAssetName,
+        message,
+        walletAccount,
+      })
+    })
+
+    test('passes wallet account instance to signer', async () => {
+      await messageSigner.signMessage({
+        baseAssetName,
+        message,
+        walletAccount: walletAccount.toString(),
+      })
+
+      expect(signer.signMessage).toHaveBeenCalledWith({
+        baseAssetName,
+        message,
+        walletAccount,
+      })
     })
   })
 
@@ -71,26 +103,32 @@ describe('MessageSigner', () => {
 })
 
 describe('MessageSigner without hardware wallets', () => {
-  const messageSigner = messageSignerDefinition.factory({
-    seedBasedMessageSigner: mockSeedBasedMessageSigner,
-  })
+  const baseAssetName = ''
+  const message = ''
+  const accountIndex = 0
+
+  let messageSigner: IMessageSigner
+  let walletAccountsAtom: Atom<{ [name: string]: WalletAccount }>
 
   beforeEach(() => {
     jest.clearAllMocks()
+
+    walletAccountsAtom = createInMemoryAtom({ defaultValue: {} })
+    messageSigner = createMessageSigner({
+      walletAccountsAtom,
+      seedBasedMessageSigner: mockSeedBasedMessageSigner,
+    })
   })
 
   it.each([['exodus', mockSeedBasedMessageSigner]])(
     'should call the %s signer',
     async (source, signer) => {
-      const baseAssetName = ''
-      const message = ''
-      const accountIndex = 0
-      const walletAccount = {
+      const walletAccount = new WalletAccount({
         source,
         index: accountIndex,
-        isSoftware: true,
-        isHardware: false,
-      } as WalletAccount
+      })
+
+      await walletAccountsAtom.set({ [walletAccount.toString()]: walletAccount })
 
       await messageSigner.signMessage({
         baseAssetName,
@@ -106,15 +144,11 @@ describe('MessageSigner without hardware wallets', () => {
   )
 
   it.each([['ledger'], ['trezor']])('should call the %s wallet', async (source) => {
-    const baseAssetName = ''
-    const message = ''
-    const accountIndex = 0
-    const walletAccount = {
+    const walletAccount = new WalletAccount({
       source,
       index: accountIndex,
-      isSoftware: false,
-      isHardware: true,
-    } as WalletAccount
+      id: '123',
+    })
 
     await expect(
       messageSigner.signMessage({

@@ -1,12 +1,12 @@
 import { mapValuesAsync } from '@exodus/basic-utils'
-import createInMemoryStorage from '@exodus/storage-memory'
 import createIOC from '@exodus/dependency-injection'
+import createInMemoryStorage from '@exodus/storage-memory'
 import { once } from 'events/'
 
 import {
-  remoteConfigFeatureFlagAtomsDefinition,
   featureFlagAtomsDefinition,
   featureFlagsAtomDefinition,
+  remoteConfigFeatureFlagAtomsDefinition,
 } from '../../atoms'
 import createRemoteConfigWithData from '../../shared/__tests__/dummy-remote-config'
 

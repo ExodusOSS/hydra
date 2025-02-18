@@ -4,77 +4,75 @@ import {
   nonDustBalanceAssetNamesAtomDefinition,
   optimisticFiatBalancesAtomDefinition,
 } from './atoms'
-import fiatBalancesPluginDefinition, { fiatBalancesAnalyticsPlugin } from './plugin'
+import { fiatBalancesPluginDefinition, fiatBalancesAnalyticsPluginDefinition } from './plugin'
 import trackNonDustAssetsNamesPluginDefinition from './plugin/track-non-dust-asset-names'
 import fiatBalancesReportDefinition from './report'
-
-const DEFAULT_BALANCE_FIELDS = ['balance']
+import { defaultConfig, defaultNonDustAssetsConfig } from './shared'
 
 /**
- * @param {object} opts
- * @param {boolean} [opts.optimistic]
- * @param {string[]} [opts.balanceFields]
- * @param {object} [opts.nonDustAssets]
- * @param {object} [opts.nonDustAssets.balanceThresholdsUsd]
- * @param {object} [opts.nonDustAssets.balanceThresholdByChainUsd]
- * @param {Array} [opts.assetsToTrackForBalances]
- * @param {import('@exodus/fiat-currencies').Unit} [opts.nonDustAssets.defaultBalanceThresholdUsd]
+ * @param {object} config
+ * @param {boolean} [config.optimistic]
+ * @param {string[]} [config.balanceFields]
+ * @param {object} [config.nonDustAssets]
+ * @param {Array} [config.assetsToTrackForBalances]
  */
-const fiatBalances = (
-  {
-    optimistic = false,
-    nonDustAssets: {
-      balanceThresholdsUsd,
-      balanceThresholdByChainUsd,
-      defaultBalanceThresholdUsd,
-    } = Object.create(null),
-    balanceFields = DEFAULT_BALANCE_FIELDS,
-    assetsToTrackForBalances = [],
-  } = Object.create(null)
-) => ({
-  id: 'fiatBalances',
-  definitions: [
-    {
-      definition: fiatBalancesDefinition,
-      config: {
-        balanceFields,
-      },
-    },
-    { definition: fiatBalancesAtomDefinition },
-    { definition: fiatBalancesPluginDefinition },
-    { definition: fiatBalancesReportDefinition },
-    {
-      definition: trackNonDustAssetsNamesPluginDefinition,
-      config: { balanceThresholdsUsd, balanceThresholdByChainUsd, defaultBalanceThresholdUsd },
-    },
-    { definition: nonDustBalanceAssetNamesAtomDefinition },
-    {
-      if: optimistic,
-      definition: optimisticFiatBalancesAtomDefinition,
-    },
-    {
-      if: optimistic,
-      definition: {
-        ...fiatBalancesDefinition,
-        id: 'optimisticFiatBalances',
-      },
-      aliases: [
-        {
-          implementationId: 'optimisticBalancesAtom',
-          interfaceId: 'balancesAtom',
+const fiatBalances = (config = Object.create(null)) => {
+  const { optimistic, nonDustAssets, balanceFields, assetsToTrackForBalances } = {
+    ...defaultConfig,
+    ...config,
+  }
+
+  return {
+    id: 'fiatBalances',
+    definitions: [
+      {
+        definition: fiatBalancesDefinition,
+        config: {
+          balanceFields,
         },
-        {
-          implementationId: 'optimisticFiatBalancesAtom',
-          interfaceId: 'fiatBalancesAtom',
+      },
+      { definition: fiatBalancesAtomDefinition },
+      { definition: fiatBalancesPluginDefinition },
+      { definition: fiatBalancesReportDefinition },
+      {
+        definition: trackNonDustAssetsNamesPluginDefinition,
+        config: {
+          ...defaultNonDustAssetsConfig,
+          ...nonDustAssets,
         },
-      ],
-    },
-    {
-      if: { registered: ['analytics'] },
-      definition: fiatBalancesAnalyticsPlugin,
-      config: { assetsToTrackForBalances },
-    },
-  ],
-})
+      },
+      { definition: nonDustBalanceAssetNamesAtomDefinition },
+      {
+        if: optimistic,
+        definition: optimisticFiatBalancesAtomDefinition,
+      },
+      {
+        if: optimistic,
+        definition: {
+          ...fiatBalancesDefinition,
+          id: 'optimisticFiatBalances',
+          config: {
+            balanceFields,
+          },
+        },
+        aliases: [
+          {
+            implementationId: 'optimisticBalancesAtom',
+            interfaceId: 'balancesAtom',
+          },
+          {
+            implementationId: 'optimisticFiatBalancesAtom',
+            interfaceId: 'fiatBalancesAtom',
+          },
+        ],
+      },
+      {
+        if: { registered: ['analytics'] },
+        definition: fiatBalancesAnalyticsPluginDefinition,
+        config: { assetsToTrackForBalances },
+      },
+    ],
+  }
+}
 
 export default fiatBalances

@@ -1,5 +1,5 @@
-import createLocaleAnalyticsPlugin from './analytics'
-import createLocalePlugin from './lifecycle'
+import createLocaleAnalyticsPlugin from './analytics.js'
+import createLocalePlugin from './lifecycle.js'
 
 export const localeLifecyclePluginDefinition = {
   id: 'localeLifecyclePlugin',

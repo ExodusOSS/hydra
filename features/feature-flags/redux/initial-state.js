@@ -1,7 +1,7 @@
 const initialState = {
   loaded: false,
   error: null,
-  data: {},
+  data: Object.create(null),
 }
 
 export default initialState

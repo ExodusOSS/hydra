@@ -1,6 +1,4 @@
 import NumberUnit, { UnitType } from '@exodus/currency'
-import { Benchmark } from 'benchmark-meter'
-import createSerializeDeserialize from '../src/index.js'
 import {
   AccountState,
   FiatOrderSet,
@@ -10,7 +8,10 @@ import {
   TxSet,
   UtxoCollection,
 } from '@exodus/models'
+import { Benchmark } from 'benchmark-meter'
 import lodash from 'lodash'
+
+import createSerializeDeserialize from '../src/index.js'
 import { SERIALIZED_EVENTS } from './fixture/events.js'
 
 const { mapValues } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils

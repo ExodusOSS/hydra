@@ -59,14 +59,15 @@ const enforceObservableRules = <T>({
 
     // note: call observe() first to give it a chance to throw if it's not supported
     // if the subscription already fired once, ignore first get
-    nonConcurrentGet().then((value) => {
+    void nonConcurrentGet().then((value) => {
       if (!subscribed) return
       if (!called) {
         valueEmittedFromGet = value
         publishSerially(postProcessValue(value))
       }
     })
-    const unsubscribe = atom.observe((value) => {
+
+    const subscriber = (value: T) => {
       if (valueEmittedFromGet !== undefined) {
         const isAlreadyEmitted = value === valueEmittedFromGet
         valueEmittedFromGet = undefined // ignore changes from observe only for first call
@@ -76,7 +77,15 @@ const enforceObservableRules = <T>({
       }
 
       return publishSerially(postProcessValue(value))
+    }
+
+    // We may have to reset the call state of storage atom observers if the storage is locked when an atom is reset.
+    // Otherwise the value from the initial get will be swallowed which would leave the observer stale in case of migrations
+    Object.defineProperty(subscriber, 'resetCallState', {
+      value: () => (called = false),
     })
+
+    const unsubscribe = atom.observe(subscriber)
 
     return () => {
       unsubscribe()

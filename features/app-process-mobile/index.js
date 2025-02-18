@@ -7,6 +7,7 @@ import appProcessReportDefinition from './report'
 const defaultConfig = {
   historyLimit: 25,
   returningFromBackgroundEvent: 'back-from-background',
+  lockExtensionDuration: 30_000,
 }
 
 const appProcess = (config = Object.create(null)) => {

@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/browser-extension-rpc@3.0.2...@exodus/browser-extension-rpc@4.0.0) (2025-01-29)
+
+### ⚠ BREAKING CHANGES
+
+- remove RPC and client (#11128)
+
+- refactor!: remove RPC and client (#11128)
+
+## [3.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/browser-extension-rpc@3.0.1...@exodus/browser-extension-rpc@3.0.2) (2025-01-17)
+
+### Bug Fixes
+
+- fix: make sure reserved methods are passed through (#11122)
+
 ## [3.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/browser-extension-rpc@3.0.0...@exodus/browser-extension-rpc@3.0.1) (2024-12-20)
 
 ### License

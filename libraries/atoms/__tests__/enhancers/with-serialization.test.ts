@@ -1,4 +1,5 @@
 import createInMemoryStorage from '@exodus/storage-memory'
+
 import type { Atom } from '../../src/index.js'
 import { createInMemoryAtom, createStorageAtomFactory, withSerialization } from '../../src/index.js'
 

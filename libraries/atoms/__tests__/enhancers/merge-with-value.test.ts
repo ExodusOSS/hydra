@@ -1,4 +1,4 @@
-import { mergeWithValue, createInMemoryAtom } from '../../src/index.js'
+import { createInMemoryAtom, mergeWithValue } from '../../src/index.js'
 
 type Value = { a?: number; b?: number; c?: number }
 

@@ -1,4 +1,4 @@
-import { RemoteConfigType, Port } from '../types'
+import type { RemoteConfigType, Port } from '../types/index.js'
 import type { Definition } from '@exodus/dependency-types'
 
 type RemoteConfigPluginDeps = {
@@ -14,7 +14,7 @@ const remoteConfigLifecyclePlugin = ({ remoteConfig, port }: RemoteConfigPluginD
   }
 
   const onStart = () => {
-    remoteConfig.load()
+    void remoteConfig.load()
   }
 
   const onStop = () => {

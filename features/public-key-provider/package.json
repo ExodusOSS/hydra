@@ -1,6 +1,6 @@
 {
   "name": "@exodus/public-key-provider",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Handles unified access to public keys from software and different hardware wallets",
   "author": "Exodus Movement, Inc.",
   "type": "module",
@@ -9,7 +9,7 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/public-key-provider",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Apublic-key-provider"
   },
@@ -32,7 +32,7 @@
     "@exodus/atoms": "^9.0.0",
     "@exodus/bip32": "^3.3.0",
     "@exodus/key-identifier": "^1.2.2",
-    "@exodus/models": "^12.0.0",
+    "@exodus/models": "^12.3.0",
     "bip32-path": "^0.4.2",
     "minimalistic-assert": "^1.0.1",
     "p-defer": "^4.0.0"
@@ -42,9 +42,13 @@
     "@exodus/bitcoin-plugin": "^1.8.0",
     "@exodus/dependency-types": "workspace:^",
     "@exodus/keychain": "^7.3.0",
+    "@exodus/logger": "workspace:^",
     "@types/jest-when": "^3.5.2",
     "@types/minimalistic-assert": "^1.0.1",
     "bip39": "^3.1.0",
     "jest-when": "^3.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

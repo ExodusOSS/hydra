@@ -1,5 +1,5 @@
-import delay from 'delay'
 import type { Storage } from '@exodus/storage-interface'
+import delay from 'delay'
 
 jest.doMock('proxy-freeze', () => (obj: any) => ({
   ...obj,

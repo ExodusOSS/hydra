@@ -1,7 +1,7 @@
 import type { Definition } from '@exodus/dependency-types'
 import type { Atom } from '@exodus/atoms'
 
-import { RemoteConfigStatus } from '../atoms'
+import type { RemoteConfigStatus } from '../atoms/index.js'
 
 const createRemoteConfigReport = ({
   remoteConfigStatusAtom,

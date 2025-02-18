@@ -13,7 +13,7 @@ describe('pofile', () => {
     test('should successfully parse simple po file', () => {
       const instance = pofile.parse(data)
 
-      expect(instance.entries).toHaveLength(7)
+      expect(instance.entries).toHaveLength(9)
       expect(instance.toString()).toMatchSnapshot()
     })
   })
@@ -71,7 +71,7 @@ describe('pofile', () => {
         comments: ['Some comment'],
       })
 
-      expect(instance.entries).toHaveLength(8)
+      expect(instance.entries).toHaveLength(10)
       expect(instance.toString()).toMatchSnapshot()
     })
 
@@ -80,7 +80,7 @@ describe('pofile', () => {
 
       instance.addEntry({ id: 'Unlock', references: ['src/ui/index.js '] })
 
-      expect(instance.entries).toHaveLength(7)
+      expect(instance.entries).toHaveLength(9)
       expect(instance.toString()).toMatchSnapshot()
     })
 
@@ -97,7 +97,7 @@ describe('pofile', () => {
         value: '{another-var-in-another-context} balance',
       })
 
-      expect(instance.entries).toHaveLength(8)
+      expect(instance.entries).toHaveLength(10)
       expect(instance.toString()).toMatchSnapshot()
     })
 

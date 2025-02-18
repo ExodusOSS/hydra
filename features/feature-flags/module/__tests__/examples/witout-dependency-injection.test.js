@@ -1,13 +1,13 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 import createInMemoryStorage from '@exodus/storage-memory'
 
-import featureFlagsModuleDefinition from '../..'
 import {
   featureFlagAtomsDefinition,
   featureFlagsAtomDefinition,
   remoteConfigFeatureFlagAtomsDefinition,
 } from '../../../atoms'
 import createRemoteConfigWithData from '../../../shared/__tests__/dummy-remote-config'
+import featureFlagsModuleDefinition from '../..'
 
 const dummyGeolocationAtom = createInMemoryAtom({
   defaultValue: { countries: 'all' },

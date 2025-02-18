@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.0](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.4.0...@exodus/trezor-meta@3.5.0) (2025-02-01)
+
+### Features
+
+- feat: bump trezor firmware (#11320)
+
 ## [3.4.0](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.3.10...@exodus/trezor-meta@3.4.0) (2024-12-02)
 
 ### Features

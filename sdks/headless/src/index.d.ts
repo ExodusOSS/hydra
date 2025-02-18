@@ -21,10 +21,21 @@ import type remoteConfig from '@exodus/remote-config'
 import type txSigner from '@exodus/tx-signer'
 import type wallet from '@exodus/wallet'
 import type walletAccounts from '@exodus/wallet-accounts'
+import type cachedSodiumEncryptor from '@exodus/cached-sodium-encryptor'
 
 type ApiDefinitions<F extends Feature> = Extract<
   F['definitions'][number]['definition'],
   { type: 'api' }
+>
+
+type ReportDefinitions<F extends Feature> = Extract<
+  F['definitions'][number]['definition'],
+  { type: 'report' }
+>
+
+type DebugDefinitions<F extends Feature> = Extract<
+  F['definitions'][number]['definition'],
+  { type: 'debug' }
 >
 
 type Values<D extends object> = D[keyof D]
@@ -33,12 +44,18 @@ type FeatureFactory = (...args: any[]) => Feature
 
 type FeatureApi<F extends FeatureFactory> = Values<InstanceById<ApiDefinitions<ReturnType<F>>>>
 
+type FeatureDebug<F extends FeatureFactory> = Values<InstanceById<DebugDefinitions<ReturnType<F>>>>
+
 type UnionToIntersection<U> = (U extends any ? (x: U) => void : never) extends (x: infer I) => void
   ? I
   : never
 
 type DefinitionsApi<D extends Definition> = UnionToIntersection<
   Values<InstanceById<Extract<D, { type: 'api' }>>>
+>
+
+type DefinitionsDebug<D extends Definition> = UnionToIntersection<
+  Values<InstanceById<Extract<D, { type: 'debug' }>>>
 >
 
 export interface ApplicationWalletApi {
@@ -66,9 +83,49 @@ export interface ApplicationWalletApi {
   restoreFromCurrentPhrase(params?: { passphrase?: string }): Promise<void>
 }
 
+export type DebugApi = {
+  debug: FeatureDebug<typeof addressProvider> & FeatureDebug<typeof walletAccounts>
+}
+
 type WalletApi = {
   wallet: Omit<FeatureApi<typeof wallet>['wallet'], keyof ApplicationWalletApi> &
     ApplicationWalletApi
+}
+
+type ReportNode<F extends FeatureFactory> = Values<InstanceById<ReportDefinitions<ReturnType<F>>>>
+
+type ReportFactory<F extends FeatureFactory> = ReportNode<F>['export']
+
+type ReportSlice<F extends FeatureFactory> = Record<
+  ReturnType<F>['id'],
+  Awaited<ReturnType<ReportFactory<F>>>
+>
+
+export type Report = ReportSlice<typeof txSigner> &
+  ReportSlice<typeof messageSigner> &
+  ReportSlice<typeof walletAccounts> &
+  ReportSlice<typeof addressProvider> &
+  ReportSlice<typeof remoteConfig> &
+  ReportSlice<typeof assets> &
+  ReportSlice<typeof availableAssets> &
+  ReportSlice<typeof blockchainMetadata> &
+  ReportSlice<typeof enabledAssets> &
+  ReportSlice<typeof locale> &
+  ReportSlice<typeof pricing> &
+  ReportSlice<typeof rates> &
+  ReportSlice<typeof featureFlags> &
+  ReportSlice<typeof fees> &
+  ReportSlice<typeof keychain> &
+  ReportSlice<typeof keyViewer> &
+  ReportSlice<typeof assetSources> &
+  ReportSlice<typeof application> &
+  ReportSlice<typeof errorTracking> &
+  ReportSlice<typeof txLogMonitors>
+
+type ReportingApi = {
+  reporting: {
+    export: () => Promise<Report>
+  }
 }
 
 export type ExodusApi = FeatureApi<typeof publicKeyProvider> &
@@ -92,7 +149,10 @@ export type ExodusApi = FeatureApi<typeof publicKeyProvider> &
   FeatureApi<typeof application> &
   FeatureApi<typeof errorTracking> &
   FeatureApi<typeof txLogMonitors> &
-  WalletApi
+  FeatureApi<typeof cachedSodiumEncryptor> &
+  WalletApi &
+  ReportingApi &
+  DebugApi
 
 type Params = {
   adapters: Record<string, any>
@@ -107,7 +167,7 @@ interface ArgoWithApiResolver<D extends Definition>
   use<F extends Feature>(
     feature: F
   ): ArgoWithApiResolver<D | F['definitions'][number]['definition']>
-  resolve(): ExodusApi & DefinitionsApi<D>
+  resolve(): ExodusApi & DefinitionsApi<D> & DefinitionsDebug<D>
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

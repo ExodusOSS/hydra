@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/atoms@9.0.0...@exodus/atoms@9.0.1) (2025-01-31)
+
+### Bug Fixes
+
+- fix: reset call state after atom reset (#11306)
+
+### Performance
+
+- perf(atoms): memoize compute enhancer selectors (#10771)
+
 ## [9.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/atoms@8.1.1...@exodus/atoms@9.0.0) (2024-09-26)
 
 ### ⚠ BREAKING CHANGES

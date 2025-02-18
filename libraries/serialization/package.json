@@ -1,12 +1,12 @@
 {
   "name": "@exodus/serialization",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "JSON serialization/deserialization for Exodus' commonly-used classes",
   "type": "module",
   "exports": "./src/index.js",
   "author": "Exodus Movement, Inc.",
   "main": "src/index.js",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/serialization",
   "files": [
     "src",
@@ -31,7 +31,9 @@
   "devDependencies": {
     "@exodus/currency": "workspace:^",
     "@exodus/models": "workspace:^",
-    "benchmark": "^2.1.4",
     "benchmark-meter": "^1.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

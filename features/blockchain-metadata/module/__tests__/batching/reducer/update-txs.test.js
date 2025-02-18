@@ -1,6 +1,6 @@
 import { omit } from '@exodus/basic-utils'
-import { Tx, TxSet } from '@exodus/models'
 import { asset } from '@exodus/bitcoin-meta'
+import { Tx, TxSet } from '@exodus/models'
 
 import updateTxsReducer from '../../../batching/reducer/update-txs.js'
 

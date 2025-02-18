@@ -8,7 +8,7 @@ import featureFlagsDefinition from './module'
 import featureFlagsApiDefinition from './api'
 import featureFlagsPluginDefinition from './plugin'
 
-const featureFlags = ({ features = {} } = {}) => {
+const featureFlags = ({ features = Object.create(null) } = Object.create(null)) => {
   return {
     id: 'featureFlags',
     definitions: [

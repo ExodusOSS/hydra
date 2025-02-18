@@ -1,4 +1,4 @@
-import { GetBuildMetadata } from '../types'
+import type { GetBuildMetadata } from '../types/index.js'
 
 export default async function generateRemoteConfigUrl(
   getBuildMetadata: GetBuildMetadata

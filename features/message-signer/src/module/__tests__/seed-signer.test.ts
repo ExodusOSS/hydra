@@ -1,9 +1,10 @@
-import seedSignerDefinition from '../seed-signer.js'
 import keychainDefinition from '@exodus/keychain/module'
-import { WalletAccount } from '@exodus/models'
 import { getSeedId } from '@exodus/keychain/module/crypto/seed-id'
+import { WalletAccount } from '@exodus/models'
 import { SEED_SRC } from '@exodus/models/lib/wallet-account'
 import { mnemonicToSeedSync } from 'bip39'
+
+import seedSignerDefinition from '../seed-signer.js'
 
 const SEED = mnemonicToSeedSync(
   'menu memory fury language physical wonder dog valid smart edge decrease worth'

@@ -52,6 +52,7 @@ exports[`createFullActivity should add nfts, fiat, connections to props 1`] = `
     },
     "txId": "received-tx",
     "type": "nft",
+    "walletAccount": "exodus_0",
   },
   {
     "assetName": "ethereum",
@@ -105,6 +106,7 @@ exports[`createFullActivity should add nfts, fiat, connections to props 1`] = `
     },
     "txId": "buy-order-tx",
     "type": "fiat",
+    "walletAccount": "exodus_0",
   },
 ]
 `;

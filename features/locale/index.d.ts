@@ -1,4 +1,4 @@
-import localeApiDefinition from './api'
+import type localeApiDefinition from './api/index.js'
 
 declare const locale: () => {
   id: 'locale'

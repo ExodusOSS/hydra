@@ -1,6 +1,6 @@
 {
   "name": "@exodus/atoms",
-  "version": "9.0.0",
+  "version": "9.0.1",
   "description": "Abstraction for encapsulating a piece of data behind a simple unified interface: get, set, observe",
   "type": "module",
   "main": "lib/index.js",
@@ -28,6 +28,7 @@
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aatoms"
   },
   "dependencies": {
+    "@exodus/basic-utils": "^3.2.0",
     "@exodus/storage-interface": "^1.0.0",
     "delay": "^5.0.0",
     "eventemitter3": "^4.0.7",
@@ -40,6 +41,7 @@
   },
   "devDependencies": {
     "@exodus/atom-tests": "workspace:^",
+    "@exodus/deferring-storage": "workspace:^",
     "@exodus/storage-encrypted": "workspace:^",
     "@exodus/storage-memory": "workspace:^",
     "@types/jest": "^29.5.11",

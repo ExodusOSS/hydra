@@ -1,10 +1,11 @@
-import { RemoteConfigType } from '../types'
+import type { RemoteConfigType } from '../types/index.js'
 import type { Definition } from '@exodus/dependency-types'
 
 const createRemoteConfigApi = ({ remoteConfig }: { remoteConfig: RemoteConfigType }) => ({
   remoteConfig: {
     get: remoteConfig.get,
     getAll: remoteConfig.getAll,
+    update: remoteConfig.update,
   },
 })
 

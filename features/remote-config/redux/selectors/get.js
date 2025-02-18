@@ -1,8 +1,9 @@
-import { memoize, get } from 'lodash' // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
+import { memoize } from '@exodus/basic-utils'
+import lodash from 'lodash'
 import { createSelector } from 'reselect'
 
 const selectorFactory = (dataSelector) =>
-  memoize((path) => createSelector(dataSelector, (data) => get(data, path)))
+  memoize((path) => createSelector(dataSelector, (data) => lodash.get(data, path)))
 
 const getSelectorDefinition = {
   id: 'get',

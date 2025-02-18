@@ -1,9 +1,10 @@
-import type { Atom } from '../../src/index.js'
-import { createInMemoryAtom } from '../../src/index.js'
-import blockUntil from '../../src/enhancers/block-until.js'
+import type { Setter } from 'libraries/atoms/src/utils/types'
 import type { DeferredPromise } from 'p-defer'
 import pDefer from 'p-defer'
-import type { Setter } from 'libraries/atoms/src/utils/types'
+
+import blockUntil from '../../src/enhancers/block-until.js'
+import type { Atom } from '../../src/index.js'
+import { createInMemoryAtom } from '../../src/index.js'
 
 describe('blockUntil', () => {
   let identityAtom: Atom<string>
@@ -102,7 +103,7 @@ describe('blockUntil', () => {
       })
 
       const identity = 'bruce wayne (but you will never find out)'
-      neverRevealIdentityAtom.set(identity)
+      void neverRevealIdentityAtom.set(identity)
 
       expect(set).toHaveBeenCalledWith(identity)
     })

@@ -74,7 +74,7 @@ const createPublicKeyProviderApi = ({
 
     return asset.api!.getKeyIdentifier({
       purpose,
-      accountIndex: walletAccount.index,
+      accountIndex: walletAccount.index!,
       chainIndex,
       addressIndex,
       compatibilityMode: walletAccount.compatibilityMode,

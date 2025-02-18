@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/filesystem@1.1.2...@exodus/filesystem@1.2.0) (2024-12-06)
+
+### Features
+
+- feat: use atoms v9 (#9651)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [1.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/filesystem@1.1.1...@exodus/filesystem@1.1.2) (2024-07-25)
 
 ### Bug Fixes

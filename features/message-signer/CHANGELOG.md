@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/message-signer@1.4.1...@exodus/message-signer@1.4.2) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
+## [1.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/message-signer@1.4.0...@exodus/message-signer@1.4.1) (2024-12-05)
+
+**Note:** Version bump only for package @exodus/message-signer
+
+## [1.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/message-signer@1.3.4...@exodus/message-signer@1.4.0) (2024-11-21)
+
+### Features
+
+- feat: support wallet account names (#9466)
+
+### Bug Fixes
+
+- fix: provide walletAccount when calling getDefaultPathIndexes (#10347)
+
 ## [1.3.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/message-signer@1.3.3...@exodus/message-signer@1.3.4) (2024-09-09)
 
 **Note:** Version bump only for package @exodus/message-signer

@@ -1,7 +1,6 @@
 import React from 'react'
-import withI18n from './dependencies/with-i18n.js'
+import { withI18n } from './dependencies/with-i18n.js'
 
-@withI18n
 class SomeComponent extends React.PureComponent {
   render = () => {
     const { t } = this.props
@@ -9,4 +8,4 @@ class SomeComponent extends React.PureComponent {
   }
 }
 
-export default SomeComponent
+export default withI18n(SomeComponent)

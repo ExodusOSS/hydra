@@ -9,7 +9,7 @@ const ratesReduxDefinition = {
   eventReducers: {
     rates: (state, rates) => ({
       ...state,
-      loaded: true,
+      loaded: state.loaded || Object.keys(rates).length > 0,
       data: { ...state.data, ...rates },
     }),
   },

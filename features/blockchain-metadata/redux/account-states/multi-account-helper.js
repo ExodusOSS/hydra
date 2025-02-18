@@ -11,6 +11,12 @@ const helper = createReduxModuleHelper({
       )
     }
 
+    // Default account state doesn’t exist for delisted assets.
+    // Return early in that case to avoid spamming the warning below.
+    if (asset.baseAsset?.api?.features?.delisted) {
+      return {}
+    }
+
     const defaultAccountState = state.defaultAccountStates[asset.name]
     if (!defaultAccountState && !asset.isCombined) {
       console.warn(`No default account state found for asset "${asset.name}"`)

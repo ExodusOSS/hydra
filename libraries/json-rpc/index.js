@@ -13,7 +13,7 @@ const isValidId = (id) => {
 class RPC {
   constructor({
     transport,
-    requestTimeout = 20000,
+    requestTimeout = 20_000,
     generateId = _generateId,
     methods = new Map(),
     parse = JSON.parse,
@@ -29,7 +29,8 @@ class RPC {
     this._methods = methods
     this.parse = parse
     this._stringify = stringify
-    if (typeof getIsDevelopmentMode !== 'function') throw new Error('getIsDevelopmentMode must be a function')
+    if (typeof getIsDevelopmentMode !== 'function')
+      throw new Error('getIsDevelopmentMode must be a function')
     this._getIsDevelopmentMode = getIsDevelopmentMode
     transport.on('data', this._processResponse)
   }
@@ -45,6 +46,7 @@ class RPC {
         new Map()
       )
     }
+
     const oldImpl = this._methods
     this._methods = methods
     return oldImpl
@@ -52,11 +54,13 @@ class RPC {
 
   exposeFunction(name, implementation) {
     if (typeof name !== 'string') {
-      throw new Error('Function name must be a string')
+      throw new TypeError('Function name must be a string')
     }
+
     if (typeof implementation !== 'function') {
-      throw new Error('Invalid function implementation')
+      throw new TypeError('Invalid function implementation')
     }
+
     this._methods.set(name, implementation)
   }
 
@@ -69,7 +73,7 @@ class RPC {
   async callMethodWithRawResponse(method, params) {
     const id = this._generateId()
     const request = this._makeRequestObject({ method, params, id })
-    return this._sendRequest({ request, getRawResponse: true})
+    return this._sendRequest({ request, getRawResponse: true })
   }
 
   async notify(method, params) {
@@ -88,7 +92,6 @@ class RPC {
         }
       }, this._requestTimeout)
       this._pendingRequest.set(id, { resolve, reject, timeoutTimer, getRawResponse })
-
       ;(async () => {
         try {
           await this._transport.write(data)
@@ -106,8 +109,8 @@ class RPC {
     try {
       response = this.parse(data)
     } catch (err) {
-      const id = typeof data == 'string' ? JSON.parse(data).id : data.id
-      if (!isValidId(id))  {
+      const id = typeof data === 'string' ? JSON.parse(data).id : data.id
+      if (!isValidId(id)) {
         throw err
       }
 
@@ -143,28 +146,29 @@ class RPC {
     const { method: methodName, params = [], id } = request
     const methodImplementation = this._methods.get(methodName)
     if (!methodImplementation) {
-      this._sendError({
-        ...errors.METHOD_NOT_FOUND,
-        methodName
-      }, id)
-    } else if (typeof methodImplementation !== 'function') {
-      this._sendError(errors.INTERNAL_ERROR, id)
-    } else {
+      this._sendError(
+        {
+          ...errors.METHOD_NOT_FOUND,
+          methodName,
+        },
+        id
+      )
+    } else if (typeof methodImplementation === 'function') {
       // JSON-RPC allows to send "named parameters", where params is an object
       // In case params is not an array we pass it as a first parameter to method
       const paramsArray = Array.isArray(params) ? params : [params]
 
       try {
-        const result = await Promise.resolve(
-          methodImplementation.apply(this._methods, paramsArray)
-        )
+        const result = await Promise.resolve(methodImplementation.apply(this._methods, paramsArray))
         this._sendSuccess({
           result,
-          id
+          id,
         })
       } catch (error) {
         this._sendError(error, id)
       }
+    } else {
+      this._sendError(errors.INTERNAL_ERROR, id)
     }
   }
 
@@ -180,38 +184,42 @@ class RPC {
     if (typeof error !== 'object') {
       data = error
     }
+
     if (error === null) {
       data = null
     }
+
     if (error instanceof Error && this._getIsDevelopmentMode()) {
       // Allow logging the stack trace & its cause
       data.cause = {
         message,
         stack,
-        cause
+        cause,
       }
     }
+
     const errorMessage = this._stringify({
       jsonrpc: '2.0',
       id,
       error: {
         code,
         message,
-        data
-      }
+        data,
+      },
     })
     this._transport.write(errorMessage)
   }
 
   _sendSuccess({ result, id }) {
-    const isNotify = typeof id == 'undefined'
+    const isNotify = id === undefined
     if (isNotify) {
       return
     }
+
     const data = this._stringify({
       jsonrpc: '2.0',
       id,
-      result
+      result,
     })
     this._transport.write(data)
   }
@@ -221,7 +229,7 @@ class RPC {
       jsonrpc: '2.0',
       method,
       params,
-      id
+      id,
     }
   }
 
@@ -243,33 +251,35 @@ class RPC {
   _makeErrorObject(errorData) {
     const code = errorData.code
     const errorFromCode = errors[code]
-    const message =
-      errorData.message || (errorFromCode && errorFromCode.message)
+    const message = errorData.message || (errorFromCode && errorFromCode.message)
 
     const error = new Error(message)
 
     error.code = code
     if (Object.hasOwnProperty.call(errorData, 'data')) {
       if (typeof errorData.data === 'object' && errorData.data !== null) {
-        const {name, cause, hint, reason, ...data} = errorData.data
+        const { name, cause, hint, reason, ...data } = errorData.data
         error.name = name
         if (cause) {
           error.cause = this._createRecursiveError(cause)
         }
+
         if (reason) {
           error.reason = reason
         }
+
         if (hint) {
           error.hint = hint
         }
+
         error.data = data
       } else {
         error.data = errorData.data
       }
     }
+
     return error
   }
 }
-
 
 module.exports = RPC

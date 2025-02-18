@@ -2,8 +2,9 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 import createContainer from '@exodus/dependency-injection'
 import createInMemoryStorage from '@exodus/storage-memory'
-import featureFlagsModuleDefinition from '../'
+
 import { featureFlagAtomsDefinition, featureFlagsAtomDefinition } from '../../atoms'
+import featureFlagsModuleDefinition from '../'
 
 const versionSemver = '1.2.3'
 const setup = ({ features }) => {

@@ -42,7 +42,7 @@ const createFiatBalancesReduxDefinition = ({
       return {
         ...state,
         loaded: true,
-        optimisticLoaded: true,
+        optimisticLoaded: optimisticActivityEnabled ? state.optimisticLoaded : true,
         data,
         optimisticData: optimisticActivityEnabled ? state.optimisticData : data,
       }

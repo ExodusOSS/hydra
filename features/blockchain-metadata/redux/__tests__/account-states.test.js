@@ -1,6 +1,7 @@
 import { Address, UtxoCollection, WalletAccount } from '@exodus/models'
+
 import reduxModule from '../account-states/index.js'
-import { setup, assets } from './utils.js'
+import { assets, setup } from './utils.js'
 
 const { id } = reduxModule
 const walletAccount0 = WalletAccount.DEFAULT

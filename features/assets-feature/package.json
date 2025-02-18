@@ -1,6 +1,6 @@
 {
   "name": "@exodus/assets-feature",
-  "version": "6.0.4",
+  "version": "6.1.0",
   "license": "MIT",
   "description": "This Exodus SDK feature provides access to instances of all blockchain asset adapters supported by the wallet, and enables you to search for and add custom tokens at runtime.",
   "type": "module",

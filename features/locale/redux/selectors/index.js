@@ -1,3 +1,3 @@
-import currencyUnitTypeSelector from './currency-unit-type'
+import currencyUnitTypeSelector from './currency-unit-type.js'
 
 export default [currencyUnitTypeSelector]

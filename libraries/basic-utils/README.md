@@ -1,8 +1,8 @@
-# Exodus Basic Utils
+# @exodus/basic-utils
 
-[![npm][npm-image]][npm-url]]
-[npm-image]: https://img.shields.io/npm/v/@exodus/basic-utils.svg?style=flat-square
-[npm-url]: https://www.npmjs.com/package/@exodus/basic-utils
+[![npm](https://img.shields.io/npm/v/@exodus/basic-utils.svg?style=flat-square)](https://www.npmjs.com/package/@exodus/basic-utils)
+
+Lightweight lodash-like utils commonly used in Exodus projects.
 
 ## Install
 

@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/feature-flags@6.1.0...@exodus/feature-flags@6.1.1) (2025-01-08)
+
+**Note:** Version bump only for package @exodus/feature-flags
+
+## [6.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/feature-flags@6.0.4...@exodus/feature-flags@6.1.0) (2024-12-06)
+
+### Features
+
+- feat: use atoms v9 (#9651)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [6.0.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/feature-flags@6.0.3...@exodus/feature-flags@6.0.4) (2024-09-09)
 
 **Note:** Version bump only for package @exodus/feature-flags

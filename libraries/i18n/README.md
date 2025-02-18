@@ -183,7 +183,7 @@ t(`Batman's health is ${health}`)
 
 ### Use eslint-plugin-i18n
 
-We provide an [ESlint plugin](https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/eslint-plugin-i18n) for the above-mentioned things. Use the linter, Luke!
+We provide an [ESlint plugin](https://github.com/ExodusOSS/hydra/tree/master/libraries/eslint-plugin-i18n) for the above-mentioned things. Use the linter, Luke!
 
 ## CLI
 
@@ -268,7 +268,6 @@ One way of using it would be via a decorator.
 ```js
 import { withI18n } from '@exodus/i18n'
 
-@withI18n
 class SomeComponent extends React.PureComponent {
   render = () => {
     const { t } = this.props
@@ -276,7 +275,7 @@ class SomeComponent extends React.PureComponent {
   }
 }
 
-export default SomeComponent
+export default withI18n(SomeComponent)
 ```
 
 If you want use a custom decorator, you need to specify this decorator in the `.i18nrc` config file. Otherwise, i18n will not be able to detect your translations properly and transform them.

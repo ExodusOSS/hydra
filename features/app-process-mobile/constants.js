@@ -10,4 +10,5 @@ export const APP_PROCESS_INITIAL_STATE = {
   timeLastBackgrounded: initialAppState === 'background' ? startTime : 0,
   timeInBackground: 0,
   startTime,
+  lockActivatesAt: undefined,
 }

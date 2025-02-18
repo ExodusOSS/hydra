@@ -1,4 +1,5 @@
 import * as atoms from '@exodus/atoms'
+
 import featureFlagsPluginDefinition from '..'
 
 jest.mock('@exodus/atoms', () => ({

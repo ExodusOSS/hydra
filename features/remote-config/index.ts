@@ -1,11 +1,11 @@
 import ms from 'ms'
 import typeforce from '@exodus/typeforce'
 
-import remoteConfigModuleDefinition from './module'
-import remoteConfigApiDefinition from './api'
-import remoteConfigPluginDefinition from './plugin'
-import remoteConfigReportDefinition from './report'
-import remoteConfigStatusAtomDefinition from './atoms'
+import remoteConfigModuleDefinition from './module/index.js'
+import remoteConfigApiDefinition from './api/index.js'
+import remoteConfigPluginDefinition from './plugin/index.js'
+import remoteConfigReportDefinition from './report/index.js'
+import remoteConfigStatusAtomDefinition from './atoms/index.js'
 
 const configSchema = {
   remoteConfigUrl: '?String',
@@ -35,6 +35,6 @@ const remoteConfig = (config = Object.create(null)) => {
   } as const
 }
 
-export * from './types'
+export * from './types/index.js'
 
 export default remoteConfig

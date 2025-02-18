@@ -1,6 +1,6 @@
 {
   "name": "@exodus/blockchain-metadata",
-  "version": "15.7.0",
+  "version": "15.8.0",
   "author": "Exodus Movement, Inc.",
   "description": "Manages access to and persistence of blockchain metadata, specifically transaction history and account state.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/blockchain-metadata",
@@ -53,13 +53,17 @@
     "@exodus/assets": "^11.0.0",
     "@exodus/assets-feature": "workspace:^",
     "@exodus/bitcoin-meta": "2.0.0",
-    "@exodus/bitcoin-plugin": "^1.0.10",
-    "@exodus/dogecoin-plugin": "^1.7.0",
+    "@exodus/bitcoin-plugin": "^1.29.1",
+    "@exodus/dogecoin-plugin": "^1.10.1",
     "@exodus/ethereum-meta": "^2.0.0",
+    "@exodus/logger": "workspace:^",
     "@exodus/storage-memory": "workspace:^",
     "@exodus/wallet-accounts": "workspace:^",
     "@exodus/wild-emitter": "^1.0.0",
     "jest-when": "^3.5.2",
     "redux": "4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

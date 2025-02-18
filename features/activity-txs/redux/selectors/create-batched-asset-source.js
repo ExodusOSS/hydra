@@ -1,7 +1,13 @@
-import { memoize, get, groupBy, merge } from 'lodash' // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
+import { get, groupBy, merge } from 'lodash'
 import { createSelector } from 'reselect'
 import { Tx } from '@exodus/models'
+import { memoize } from '@exodus/basic-utils'
 
+// TODO: Remove in the future.
+// Batch swapping transactions using personal notes is no longer needed.
+// Now, we write the `order.txsIds` array, which contains information about setup, swap transactions, and more.
+// An order can be matched using any transaction ID from this array.
+// Each transaction will match the order, but we can deduplicate them later using `order.id` to display single activity item
 const collapseBatch = ({ batch, assets }) => {
   const asset = assets[batch[0].coinName]
   const isToken = asset.baseAsset.name !== asset.name

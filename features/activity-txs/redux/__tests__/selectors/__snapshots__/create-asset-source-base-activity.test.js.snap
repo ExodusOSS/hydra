@@ -69,6 +69,7 @@ exports[`createAssetSourceBaseActivity should add indexless orders to activity 1
   "tx": undefined,
   "txId": "0x8bbea887472df32167597c36fffc70ac508a01088194e30b877d093fe25f9725",
   "type": "exchange",
+  "walletAccount": "exodus_0",
 }
 `;
 
@@ -156,6 +157,7 @@ exports[`createAssetSourceBaseActivity should add indexless orders to activity 2
   },
   "txId": "ISO7UZYSZAYC2PGTD4OKYJMBFA3JILLKCDSUO3LZB2Q7ECWDYTYQ",
   "type": "exchange",
+  "walletAccount": "exodus_0",
 }
 `;
 
@@ -220,6 +222,7 @@ exports[`createAssetSourceBaseActivity should add orders without txs to activity
   "tx": undefined,
   "txId": null,
   "type": "exchange",
+  "walletAccount": "exodus_0",
 }
 `;
 
@@ -302,6 +305,7 @@ exports[`createAssetSourceBaseActivity should add orders without txs to activity
   },
   "txId": "tx-with-order-flare",
   "type": "exchange",
+  "walletAccount": "exodus_0",
 }
 `;
 
@@ -381,6 +385,7 @@ exports[`createAssetSourceBaseActivity should group txs with same order 1`] = `
     },
     "txId": "some-receive-tx",
     "type": "exchange",
+    "walletAccount": "exodus_0",
   },
 ]
 `;
@@ -420,6 +425,7 @@ exports[`createAssetSourceBaseActivity should return activity for asset 1`] = `
     },
     "txId": "some-receive-tx",
     "type": "rx",
+    "walletAccount": "exodus_0",
   },
   {
     "assetName": "ethereum",
@@ -454,6 +460,7 @@ exports[`createAssetSourceBaseActivity should return activity for asset 1`] = `
     },
     "txId": "some-receive-tx-2",
     "type": "rx",
+    "walletAccount": "exodus_0",
   },
 ]
 `;
@@ -485,6 +492,7 @@ exports[`createAssetSourceBaseActivity should return txs if orders are not suppo
     },
     "txId": "ISO7UZYSZAYC2PGTD4OKYJMBFA3JILLKCDSUO3LZB2Q7ECWDYTYQ",
     "type": "rx",
+    "walletAccount": "exodus_0",
   },
 ]
 `;
@@ -533,6 +541,7 @@ exports[`createAssetSourceBaseActivity should use activityIndex for id when avai
     },
     "txId": "bitcoin-tx",
     "type": "tx",
+    "walletAccount": "exodus_0",
   },
   {
     "assetName": "bitcoin",
@@ -576,6 +585,7 @@ exports[`createAssetSourceBaseActivity should use activityIndex for id when avai
     },
     "txId": "bitcoin-tx",
     "type": "tx",
+    "walletAccount": "exodus_0",
   },
 ]
 `;

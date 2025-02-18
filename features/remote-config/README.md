@@ -1,53 +1,64 @@
 # @exodus/remote-config
 
-Module to provide simplified access to remote config values
+This module provides simplified access to remote config values
+
+## Install
+
+```sh
+yarn add @exodus/remote-config
+```
 
 ## Usage
 
-```ts
-import createRemoteConfig from '@exodus/remote-config'
+This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/development/using-the-sdk.md).
 
-const config = createRemoteConfig({
-  eventEmitter: new EventEmitter(),
-  freeze: proxyFreeze,
-  fetch,
-  logger: createLogger('exodus:remote-config'),
-  config: {
-    remoteConfigUrl: 'https://wayne-foundation.com/v1/exodus.json',
-    fetchInterval: ms('2m'), // optional
-    errorBackoffTime: ms('5s'), // optional
+### Play with it
+
+1. Open the playground <https://exodus-hydra.pages.dev/features/remote-config>
+2. Try out the some methods via the UI. These corresponds 1:1 with the `exodus.remoteConfig` API.
+3. Run `await exodus.remoteConfig.get('assets.algorand.blockExplorer')` in the Dev Tools Console.
+
+### API Side
+
+See [using the sdk](../../docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK and the API interface in the [type declaration](./api/index.ts).
+
+```ts
+const { addressUrl, txUrl } = await exodus.remoteConfig.get('core.wallet.sunsetAssets')
+
+const config = await exodus.remoteConfig.getAll()
+```
+
+If you're building a feature that requires values from the remote config, you can use [remote-config-atoms](../../libraries/remote-config-atoms) to subscribe to slices of the remote config. The following example demonstrates how to use remote config atoms to create an atom that subscribes to the `core.exchange.preferSameNetworkUsdThreshold` value:
+
+```ts
+import { createRemoteConfigAtomFactory } from '@exodus/atoms'
+
+// below definition can be shipped with a feature and depended on by other nodes by specifying 'sameNetworkUsdThresholdAtom' as dependency
+const sameNetworkUsdThresholdAtom = {
+  id: 'sameNetworkUsdThresholdAtom',
+  factory({ remoteConfig }) {
+    const createRemoteConfigAtom = createRemoteConfigAtomFactory({ remoteConfig })
+    const atom = createRemoteConfigAtom({
+      path: 'core.exchange.preferSameNetworkUsdThreshold',
+      defaultValue: 42,
+    })
+
+    return atom
   },
-})
-
-// to start polling, invoke `load` on the config instance. Do not await the result.
-config.load()
+  dependencies: ['remoteConfig'],
+}
 ```
 
-### Events
+### UI Side
 
-Config changes can be subscribed to by registering listeners. Use the `on` or `once` function to do so.
-The following events are available:
+See [using the sdk](../../docs/development/using-the-sdk.md#events) for more details on basic UI-side setup.
 
-| event             | description                                                                                                                                                                         | params                                                                                                                                                      |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 'sync'            | Triggered when the config is initially loaded from its definitions and on every subsequent update propagated either through a definitions onChange handler or when setting a value. | Receives an object with the properties `current` containing the current config and `previous` containing the config before the change was applied           |
-| \`update:${key}\` | (local config only) Triggered when the value for `key` was updated.                                                                                                                 | Receives an object with the properties `current` containing the current value for the key and `previous` containing the value before the change was applied |
+```js
+import { selectors } from '~/ui/flux'
 
-The following line shows how to listen for changes to the `lastSeen` key:
-
-```ts
-config.on('update:lastSeen', ({ current, previous }) => {
-  console.log(`Last seen changed to ${current.toUTCString()}. Was ${previous.toUTCString()} before`)
-})
+const MyComponent = () => {
+  const preferSameNetworkUsdThreshold = useSelector(
+    selectors.remoteConfig.get('core.exchange.preferSameNetworkUsdThreshold')
+  )
+}
 ```
-
-If you're interested in the whole config instead, consider using the following
-
-```ts
-config.on('sync', ({ current, previous }) => {
-  // do things
-})
-```
-
-Please note that both events are fired after the initial load of the config completes. The update event will
-trigger once for every key defined in the key definitions.

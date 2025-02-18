@@ -1,6 +1,5 @@
-import createRpcClient from './client.js'
+import { createRPCClient, RPC } from '@exodus/sdk-rpc'
 import PortTransport from './port-transport.js'
-import RPC from './rpc.js'
 import RPCManager from './rpc-manager.js'
 import RuntimePort from './runtime-port.js'
 
@@ -31,7 +30,7 @@ export const createUiRpc = ({
 }) => {
   const port = new RuntimePort({ name })
   const rpc = createRpc({ port, methods, serialize, deserialize, onData })
-  return createRpcClient(rpc)
+  return createRPCClient(rpc)
 }
 
 export const createBackgroundRpc = ({
@@ -66,6 +65,3 @@ export const createBackgroundRpc = ({
 
   return rpcManager
 }
-
-// eslint-disable-next-line unicorn/prefer-export-from
-export { RPC, createRpcClient }

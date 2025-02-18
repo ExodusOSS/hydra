@@ -33,7 +33,12 @@ const selectorFactory =
                 hasChanges = true
                 indexedNftTxIds.add(nft.txId)
                 resultActivity.push(
-                  formatNftTx({ ...activityItem, nft, assetName: activityItem.assetName })
+                  formatNftTx({
+                    ...activityItem,
+                    nft,
+                    asset: assets[activityItem.assetName],
+                    assetName: activityItem.assetName,
+                  })
                 )
               } else {
                 resultActivity.push(activityItem)

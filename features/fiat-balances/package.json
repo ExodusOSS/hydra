@@ -1,9 +1,9 @@
 {
   "name": "@exodus/fiat-balances",
-  "version": "12.5.1",
+  "version": "13.0.2",
   "description": "Track asset and portfolio fiat balances based on changes in crypto balances and the user's preferred fiat currency",
   "author": "Exodus Movement, Inc.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "test": "run -T exodus-test --jest --esbuild",
     "lint": "run -T eslint -c ../../eslint.config.mjs",
@@ -35,7 +35,7 @@
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
     "@exodus/currency": "^5.0.2",
-    "@exodus/fiat-currencies": "^1.1.0",
+    "@exodus/fiat-currencies": "^1.2.3",
     "@exodus/formatting": "^9.0.0",
     "lodash": "^4.17.21",
     "minimalistic-assert": "^1.0.1",
@@ -60,5 +60,8 @@
     "@exodus/wallet-accounts": "workspace:^",
     "events": "^3.3.0",
     "redux": "^4.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -1,15 +1,18 @@
 const POEntry = require('./po-entry')
+const { createEntryId } = require('./utils')
 
 class POFile {
   #entries = []
   #entryMap = new Map()
   #computedIdsEnabled = true
 
-  constructor({ entries = [], computedIdsEnabled = true } = {}) {
+  constructor({ entries = [], computedIdsEnabled = true } = Object.create(null)) {
     this.#entries = entries
     this.#computedIdsEnabled = computedIdsEnabled
 
-    entries.forEach((entry) => this.#entryMap.set(this.#transformPlaceholders(entry.id), entry))
+    entries.forEach((entry) =>
+      this.#entryMap.set(this.#transformPlaceholders(entry.id, entry.context), entry)
+    )
   }
 
   get entries() {
@@ -24,27 +27,31 @@ class POFile {
     return this.#entries.filter((e) => !e.value).length
   }
 
-  #transformPlaceholders = (x) => (this.#computedIdsEnabled ? POEntry.unifyPlaceholders(x) : x)
+  #transformPlaceholders = (id, context) => {
+    const entryId = createEntryId({ id, context })
 
-  exists = (id) => {
-    return this.#entryMap.has(this.#transformPlaceholders(id))
+    return this.#computedIdsEnabled ? POEntry.unifyPlaceholders(entryId) : entryId
   }
 
-  getEntry = (id) => {
-    return this.#entryMap.get(this.#transformPlaceholders(id))
+  exists = (id, context) => {
+    return this.#entryMap.has(this.#transformPlaceholders(id, context))
   }
 
-  #appendEntry = ({ id, ...args }) => {
-    const entry = new POEntry({ id, ...args })
+  getEntry = (id, context) => {
+    return this.#entryMap.get(this.#transformPlaceholders(id, context))
+  }
+
+  #appendEntry = ({ id, context, ...args }) => {
+    const entry = new POEntry({ id, context, ...args })
 
     this.#entries.push(entry)
-    this.#entryMap.set(this.#transformPlaceholders(id), entry)
+    this.#entryMap.set(this.#transformPlaceholders(id, context), entry)
 
     return entry
   }
 
-  #mergeEntry = ({ id, value, comments, references }) => {
-    const entry = this.#entryMap.get(this.#transformPlaceholders(id))
+  #mergeEntry = ({ id, value, comments, context, references }) => {
+    const entry = this.#entryMap.get(this.#transformPlaceholders(id, context))
 
     if (value && this.#transformPlaceholders(entry.value) !== this.#transformPlaceholders(value))
       throw new Error(`pofile: can't merge entries with different values`)
@@ -55,11 +62,11 @@ class POFile {
     return entry
   }
 
-  addEntry = ({ id, ...args }) => {
-    return this.exists(id)
+  addEntry = (entry) => {
+    return this.exists(entry.id, entry.context)
       ? // ...
-        this.#mergeEntry({ id, ...args })
-      : this.#appendEntry({ id, ...args })
+        this.#mergeEntry(entry)
+      : this.#appendEntry(entry)
   }
 
   toJSON = () => {

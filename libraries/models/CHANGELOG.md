@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.4.0...@exodus/models@12.5.0) (2025-02-04)
+
+### Features
+
+- feat(xopay): provider in fiat order model (#11295)
+
+## [12.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.3.1...@exodus/models@12.4.0) (2025-01-13)
+
+### Features
+
+- feat(orders): add delayed status to orders (#11067)
+
+## [12.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.3.0...@exodus/models@12.3.1) (2025-01-09)
+
+### Bug Fixes
+
+- fix: move EMPTY below isInstance in model sets (#11020)
+
+## [12.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.2.2...@exodus/models@12.3.0) (2024-12-06)
+
+### Features
+
+- feat: harden `instanceof` and `isInstance` (#10738)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
+## [12.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.2.1...@exodus/models@12.2.2) (2024-12-06)
+
+**Note:** Version bump only for package @exodus/models
+
+## [12.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.2.0...@exodus/models@12.2.1) (2024-12-05)
+
+### Bug Fixes
+
+- fix: optional props in `FiatOrder` and non-generic `FiatOrderSet` (#10712)
+
+## [12.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.1.1...@exodus/models@12.2.0) (2024-12-02)
+
+### Features
+
+- feat: type `@exodus/models` (#10558)
+
 ## [12.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.1.0...@exodus/models@12.1.1) (2024-10-10)
 
 ### Bug Fixes

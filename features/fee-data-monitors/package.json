@@ -1,10 +1,10 @@
 {
   "name": "@exodus/fee-data-monitors",
-  "version": "5.0.2",
+  "version": "5.0.4",
   "description": "Fee monitor scheduler",
   "author": "Exodus Movement, Inc.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/fee-data-monitors",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afee-data-monitors"
   },
@@ -43,5 +43,8 @@
     "@exodus/asset-lib": "^5.2.1",
     "@exodus/assets-feature": "workspace:^",
     "redux": "^4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

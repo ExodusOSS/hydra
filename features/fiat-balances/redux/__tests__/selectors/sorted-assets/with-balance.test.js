@@ -8,19 +8,21 @@ import { createFiatNumberUnit, setup } from '../../utils'
 const assets = connectAssets(_assets)
 
 describe('sorted assets selectors', () => {
-  const assetsList = ['ethereum', 'leo', 'exit', 'usdcoin']
+  const assetsList = ['ethereum', 'leo', 'exit', 'solana', 'usdcoin']
 
   const balances = {
     exodus_0: {
       ethereum: { total: assets.ethereum.currency.defaultUnit(10) },
       leo: { total: assets.leo.currency.defaultUnit(20) },
       exit: { total: assets.exit.currency.defaultUnit(30) },
+      solana: { total: assets.solana.currency.defaultUnit(0) },
       usdcoin: { total: assets.usdcoin.currency.defaultUnit(0) },
     },
     exodus_1: {
       ethereum: { total: assets.ethereum.currency.defaultUnit(5) },
       leo: { total: assets.leo.currency.defaultUnit(3) },
       exit: { total: assets.exit.currency.defaultUnit(2) },
+      solana: { total: assets.solana.currency.defaultUnit(0) },
       usdcoin: { total: assets.usdcoin.currency.defaultUnit(0) },
     },
   }
@@ -31,12 +33,14 @@ describe('sorted assets selectors', () => {
         ethereum: { balance: createFiatNumberUnit(100) },
         leo: { balance: createFiatNumberUnit(99) },
         exit: { balance: createFiatNumberUnit(5) },
+        solana: { balance: createFiatNumberUnit(0) },
         usdcoin: { balance: createFiatNumberUnit(0) },
       },
       exodus_1: {
         ethereum: { balance: createFiatNumberUnit(5) },
         leo: { balance: createFiatNumberUnit(8) },
         exit: { balance: createFiatNumberUnit(51) },
+        solana: { balance: createFiatNumberUnit(0) },
         usdcoin: { balance: createFiatNumberUnit(0) },
       },
     },
@@ -45,6 +49,7 @@ describe('sorted assets selectors', () => {
   let selectors
   let store
   let emitEnabledAssets
+  let emitFavoriteAssets
   let emitAssets
   let setUnverifiedToken
 
@@ -56,14 +61,14 @@ describe('sorted assets selectors', () => {
       setUnverifiedToken: _setUnverifiedToken,
       emitFiatBalances,
       emitBalances,
-      emitFavoriteAssets,
+      emitFavoriteAssets: _emitFavoriteAssets,
       emitAssets: _emitAssets,
       emitWalletAccounts,
     } = setup()
 
     emitBalances(balances)
     emitFiatBalances(fiatBalances)
-    emitFavoriteAssets({ leo: true })
+    _emitFavoriteAssets({ leo: true })
     _emitAssets(pick(assets, assetsList))
     emitWalletAccounts({
       exodus_0: WalletAccount.DEFAULT,
@@ -73,6 +78,7 @@ describe('sorted assets selectors', () => {
     store = _store
     selectors = _selectors
     emitEnabledAssets = _emitEnabledAssets
+    emitFavoriteAssets = _emitFavoriteAssets
     setUnverifiedToken = _setUnverifiedToken
     emitAssets = _emitAssets
   })
@@ -102,8 +108,55 @@ describe('sorted assets selectors', () => {
         formattedFiatValue: '$5.00',
       }),
       expect.objectContaining({
+        name: 'solana',
+        balance: assets.solana.currency.defaultUnit(0),
+        fiatValue: createFiatNumberUnit(0),
+        formattedFiatValue: '$0',
+      }),
+      expect.objectContaining({
         name: 'usdcoin',
         balance: assets.usdcoin.currency.defaultUnit(0),
+        fiatValue: createFiatNumberUnit(0),
+        formattedFiatValue: '$0',
+      }),
+    ])
+  })
+
+  test('sortedAssetsWithBalanceInActiveAccount returns assets with balance before favorite assets with 0 balance', () => {
+    emitFavoriteAssets({ leo: true, usdcoin: true })
+
+    const assetsWithBalance = selectors.fiatBalances.sortedAssetsWithBalanceInActiveAccount
+
+    const result = assetsWithBalance(store.getState())
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        name: 'leo',
+        balance: assets.leo.currency.defaultUnit(20),
+        fiatValue: createFiatNumberUnit(99),
+        formattedFiatValue: '$99.00',
+      }),
+      expect.objectContaining({
+        name: 'ethereum',
+        balance: assets.ethereum.currency.defaultUnit(10),
+        fiatValue: createFiatNumberUnit(100),
+        formattedFiatValue: '$100.00',
+      }),
+      expect.objectContaining({
+        name: 'exit',
+        balance: assets.exit.currency.defaultUnit(30),
+        fiatValue: createFiatNumberUnit(5),
+        formattedFiatValue: '$5.00',
+      }),
+      expect.objectContaining({
+        name: 'usdcoin',
+        balance: assets.usdcoin.currency.defaultUnit(0),
+        fiatValue: createFiatNumberUnit(0),
+        formattedFiatValue: '$0',
+      }),
+      expect.objectContaining({
+        name: 'solana',
+        balance: assets.solana.currency.defaultUnit(0),
         fiatValue: createFiatNumberUnit(0),
         formattedFiatValue: '$0',
       }),
@@ -133,6 +186,12 @@ describe('sorted assets selectors', () => {
         balance: assets.exit.currency.defaultUnit(32),
         fiatValue: createFiatNumberUnit(56),
         formattedFiatValue: '$56.00',
+      }),
+      expect.objectContaining({
+        name: 'solana',
+        balance: assets.solana.currency.defaultUnit(0),
+        fiatValue: createFiatNumberUnit(0),
+        formattedFiatValue: '$0',
       }),
       expect.objectContaining({
         name: 'usdcoin',

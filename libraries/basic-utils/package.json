@@ -1,7 +1,7 @@
 {
   "name": "@exodus/basic-utils",
-  "version": "3.2.0",
-  "description": "Basic lightweight lib with common utility classes and methods.",
+  "version": "3.5.1",
+  "description": "Lightweight lodash-like utils.",
   "type": "module",
   "main": "src/index.js",
   "author": "Exodus Movement, Inc.",
@@ -14,6 +14,7 @@
   ],
   "dependencies": {
     "@exodus/synchronized-time": "^1.0.0",
+    "make-concurrent": "^5.4.0",
     "minimalistic-assert": "^1.0.1"
   },
   "scripts": {

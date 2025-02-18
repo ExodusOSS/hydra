@@ -1,14 +1,14 @@
 import abTesting from '@exodus/ab-testing'
 
-import createExodus from '../src'
+import createExodus from '../src/index.js'
 
 const exodus = createExodus({ config: {}, adapters: {} }).use(abTesting()).resolve()
 
 // @ts-expect-error - wrong parameter type
-exodus.abTesting.trackEvent('event')
+void exodus.abTesting.trackEvent('event')
 
 // infers types for features registered outside headless
-exodus.abTesting.trackEvent({
+void exodus.abTesting.trackEvent({
   type: 'event',
   experimentId: 'abc',
   value: true,
@@ -17,4 +17,4 @@ exodus.abTesting.trackEvent({
 })
 
 // has types for features registered inside headless
-exodus.locale.setLanguage('de')
+void exodus.locale.setLanguage('de')

@@ -25,3 +25,12 @@ msgstr "Click en <0>Submit</0>"
 #: src/balance/utils.js:10
 msgid "{exodus.account.active.name} balance"
 msgstr "{exodus.account.active.name} balance"
+
+#: src/Component.js:100
+msgid "Stake {asset.displayTicker}"
+msgstr "Stake {asset.displayTicker}"
+msgctxt "stake.button"
+
+#: src/Component.js:1
+msgid "Stake {asset.displayTicker}"
+msgstr "{asset.displayTicker}-Staker"

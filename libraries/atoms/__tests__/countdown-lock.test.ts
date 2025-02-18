@@ -25,7 +25,7 @@ describe('countdown lock', () => {
   test('lock.promise resolves after unlock', async () => {
     const lock = createCountdownLock(['a', 'b'])
     const onUnlock = jest.fn()
-    lock.promise.then(onUnlock)
+    void lock.promise.then(onUnlock)
     lock.unlock('a')
     await new Promise(setImmediate)
     expect(onUnlock).not.toHaveBeenCalled()

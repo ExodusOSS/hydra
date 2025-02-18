@@ -54,6 +54,24 @@ declare const createMultiAddressModeSelectorDefinition: {
   dependencies: [{ selector: 'multiAddressMode' }]
 }
 
+type LegacyAddressModeDataSelector = (state: State) => { [assetName: string]: boolean }
+declare const createLegacyAddressModeSelectorDefinition: {
+  id: 'createLegacyAddressMode'
+  selectorFactory: (
+    legacyAddressModeDataSelector: LegacyAddressModeDataSelector
+  ) => (assetName: string) => (legacyAddressModeData: { [assetName: string]: boolean }) => boolean
+  dependencies: [{ selector: 'legacyAddressMode' }]
+}
+
+type TaprootAddressModeDataSelector = (state: State) => { [assetName: string]: boolean }
+declare const createTaprootAddressModeSelectorDefinition: {
+  id: 'createTaprootAddressMode'
+  selectorFactory: (
+    taprootAddressModeDataSelector: TaprootAddressModeDataSelector
+  ) => (assetName: string) => (taprootAddressModeData: { [assetName: string]: boolean }) => boolean
+  dependencies: [{ selector: 'taprootAddressMode' }]
+}
+
 type DisabledPurposesDataSelector = (state: State) => { [assetName: string]: number[] }
 declare const createDisabledPurposesSelectorDefinition: {
   id: 'createDisabledPurposes'
@@ -72,6 +90,8 @@ declare const selectorDefinitions: [
   typeof getAssetSelectorDefinition,
   typeof getAssetFromTickerSelectorDefinition,
   typeof createMultiAddressModeSelectorDefinition,
+  typeof createLegacyAddressModeSelectorDefinition,
+  typeof createTaprootAddressModeSelectorDefinition,
   typeof createDisabledPurposesSelectorDefinition,
 ]
 

@@ -15,7 +15,7 @@ And [actually, it's Schnay-blay](https://www.youtube.com/watch?v=MKUH-TZcSqE).
 
 ### Setup: the API side
 
-We're [not there yet](https://github.com/ExodusOSS/hydra/issues/7750), but we want to get to very lightweight initialization code, e.g.:
+We're not there yet but we want to get to very lightweight initialization code, e.g.:
 
 ```js
 import createExodus from '@exodus/headless'
@@ -49,7 +49,7 @@ Further reading: see the [core features](https://github.com/ExodusOSS/hydra/tree
 
 #### Configure your features
 
-Many features in the SDK are configurable. Most will soon ship with sensible defaults, towards a [zero-conf-by-default experience](https://github.com/ExodusOSS/hydra/issues/5820).
+Many features in the SDK are configurable. Most will soon ship with sensible defaults, towards a zero-conf-by-default experience.
 
 In the meantime, you'll need to supply a `config` object to headless:
 

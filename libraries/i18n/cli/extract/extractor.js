@@ -9,6 +9,7 @@ import {
   isJSXIdentifier,
   isStringLiteral,
   isTemplateLiteral,
+  isObjectExpression,
 } from '@babel/types'
 import { transformFileSync } from '@babel/core'
 import traverseCJS from '@babel/traverse'
@@ -62,6 +63,16 @@ const getNodeId = (node) => {
   throw new Error(`cant compute id of node type ${node.type}`)
 }
 
+const getContextValue = (nodes) => {
+  for (const node of nodes) {
+    const contextNode =
+      isObjectExpression(node) &&
+      node.properties.find((property) => property.key.value === 'context')
+
+    if (contextNode) return contextNode.value.value
+  }
+}
+
 const getNodeLine = (node) => {
   if (isSequenceExpression(node.callee)) {
     const expressions = node.callee.expressions
@@ -84,28 +95,34 @@ const extractFile = (fileName, options) => {
   const jsxElementVisitor = ({ node }) => {
     if (!isTJSXElement(node)) return
 
-    const idNode = node.openingElement.attributes.find((a) => a.name.name === 'id')
+    const getNodeByName = (name) => node.openingElement.attributes.find((a) => a.name.name === name)
+
+    const idNode = getNodeByName('id')
+    const contextNode = getNodeByName('context')
+
     const id = idNode.value.expression.value
+    const context = contextNode?.value.value
     const line = node.loc?.start?.line
     const colonLine = line ? `:${line}` : ''
     const reference = `${origin}${colonLine}`
 
-    result.push({ id, reference })
+    result.push({ id, reference, ...(context && { context }) })
   }
 
   const callExpressionVisitor = ({ node }) => {
     if (!isTCallExpression(node)) return
 
-    const arg = node.arguments[0]
+    const [firstArg, ...remainingArgs] = node.arguments
 
-    if (!isStringLiteral(arg) && !isTemplateLiteral(arg)) return
+    if (!isStringLiteral(firstArg) && !isTemplateLiteral(firstArg)) return
 
-    const id = getNodeId(arg)
+    const id = getNodeId(firstArg)
+    const context = getContextValue(remainingArgs)
     const line = getNodeLine(node)
     const colonLine = line ? `:${line}` : ''
     const reference = `${origin}${colonLine}`
 
-    result.push({ id, reference })
+    result.push({ id, reference, ...(context && { context }) })
   }
 
   const extractPlugin = () => ({ visitor: { JSXElement: jsxElementVisitor } })

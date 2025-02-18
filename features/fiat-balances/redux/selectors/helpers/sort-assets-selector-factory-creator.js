@@ -1,12 +1,12 @@
-import { memoize } from 'lodash' // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
+import { keyBy, memoize, orderBy } from '@exodus/basic-utils'
+import { isDustAmount } from '@exodus/formatting/lib/asset'
 import { createSelector } from 'reselect'
 import { isMultiNetworkAsset } from '../utils'
-import { keyBy, orderBy } from '@exodus/basic-utils'
-import { isDustAmount } from '@exodus/formatting/lib/asset'
 
 const SORTING_MAP = [
-  [(a) => a.sortAssetMetaData.isFavoriteAsset, 'desc'],
+  [(a) => a.sortAssetMetaData.fiatBalance && a.sortAssetMetaData.isFavoriteAsset, 'desc'],
   [(a) => a.sortAssetMetaData.fiatBalance, 'desc'],
+  [(a) => a.sortAssetMetaData.isFavoriteAsset, 'desc'],
   [(a) => a.sortAssetMetaData.isBaseAsset, 'desc'],
   [(a) => a.sortAssetMetaData.hasBalance, 'desc'],
   [(a) => a.sortAssetMetaData.isDust, 'asc'],
@@ -24,8 +24,9 @@ const sortAssetsSelectorFactoryCreator = ({
   ignoreMarketCapAssets,
   assetsListSelector,
 }) =>
-  memoize((walletAccount) =>
-    createSelector(
+  memoize((walletAccount) => {
+    let lastResult
+    return createSelector(
       assetsListSelector,
       (state) => getAccountAssetsBalanceSelector(state)(walletAccount),
       (state) => fiatBalancesByAssetSourceSelector(state)[walletAccount],
@@ -78,9 +79,22 @@ const sortAssetsSelectorFactoryCreator = ({
         })
 
         const sorted = orderBy(assetsWithMetaData, SORT_KEYS, SORT_ORDER)
-        return sorted.map((assetWithMetaData) => assetsMap[assetWithMetaData.name])
+        const namesOnly = sorted.map((assetWithMetaData) => assetWithMetaData.name)
+        const lastSortedAssetNames = lastResult ? lastResult.map((a) => a.name) : null
+        // Compare newResult with lastResult for reference equality
+        if (
+          lastSortedAssetNames &&
+          namesOnly.length === lastSortedAssetNames.length &&
+          namesOnly.every((item, i) => item === lastSortedAssetNames[i])
+        ) {
+          return lastResult
+        }
+
+        lastResult = sorted.map((assetWithMetaData) => assetsMap[assetWithMetaData.name])
+
+        return lastResult
       }
     )
-  )
+  })
 
 export default sortAssetsSelectorFactoryCreator

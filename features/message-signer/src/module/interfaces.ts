@@ -33,7 +33,7 @@ export interface HardwareSignerProvider {
 
 export interface SignMessageParams {
   baseAssetName: string
-  walletAccount: WalletAccount
+  walletAccount: WalletAccount | string
   purpose?: Purpose
   message: IUnsignedMessage
 }

@@ -28,7 +28,7 @@ const waitUntil = <T>({ atom, predicate, rejectAfter }: Params<T>): Unobservable
     }
   })
 
-  Object.defineProperty(promise, 'unobserve', {
+  void Object.defineProperty(promise, 'unobserve', {
     value: () => {
       unobserve()
       clearTimeout(timeout)

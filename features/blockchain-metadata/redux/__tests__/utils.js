@@ -1,11 +1,12 @@
-import { combineReducers, createStore } from 'redux'
-import { mapValues, pickBy } from '@exodus/basic-utils'
-import { setupRedux } from '@exodus/redux-dependency-injection'
-import walletAccountsReduxModule from '@exodus/wallet-accounts/redux/index.js'
 import assetsReduxModule from '@exodus/assets-feature/redux/index.js'
+import { mapValues, pickBy } from '@exodus/basic-utils'
 import { createAsset as createBitcoin } from '@exodus/bitcoin-plugin'
 import { createAsset as createDogecoin } from '@exodus/dogecoin-plugin'
+import { createNoopLogger } from '@exodus/logger'
 import { WalletAccount } from '@exodus/models'
+import { setupRedux } from '@exodus/redux-dependency-injection'
+import walletAccountsReduxModule from '@exodus/wallet-accounts/redux/index.js'
+import { combineReducers, createStore } from 'redux'
 
 const WALLET_ACCOUNTS_STATE = {
   [WalletAccount.DEFAULT_NAME]: WalletAccount.DEFAULT,
@@ -17,7 +18,7 @@ const WALLET_ACCOUNTS_STATE = {
 }
 
 export const assets = {
-  bitcoin: createBitcoin({ assetClientInterface: {} }),
+  bitcoin: createBitcoin({ assetClientInterface: { createLogger: createNoopLogger } }),
   dogecoin: createDogecoin(),
 }
 

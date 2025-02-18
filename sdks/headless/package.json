@@ -1,6 +1,6 @@
 {
   "name": "@exodus/headless",
-  "version": "5.0.0-rc.45",
+  "version": "5.0.0-rc.49",
   "description": "The platform-agnostic Exodus wallet SDK",
   "author": "Exodus Movement, Inc.",
   "main": "src/index.js",
@@ -9,7 +9,7 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/sdks/headless",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aheadless"
   },
@@ -35,35 +35,35 @@
     "@exodus/application": "^2.1.1",
     "@exodus/argo": "^2.2.1",
     "@exodus/asset-sources": "^1.4.1",
-    "@exodus/assets-feature": "^5.11.3",
+    "@exodus/assets-feature": "^6.0.0",
     "@exodus/atoms": "^9.0.0",
     "@exodus/available-assets": "^8.4.0",
     "@exodus/balances": "^13.3.1",
     "@exodus/blockchain-metadata": "^15.3.5",
-    "@exodus/enabled-assets": "^10.5.1",
+    "@exodus/cached-sodium-encryptor": "^1.0.0",
+    "@exodus/enabled-assets": "^10.8.1",
     "@exodus/error-tracking": "^1.3.0",
-    "@exodus/feature-flags": "^6.0.4",
-    "@exodus/fee-data-monitors": "^5.0.0",
-    "@exodus/filesystem": "^1.1.2",
-    "@exodus/geolocation": "^4.2.3",
+    "@exodus/feature-flags": "^6.1.0",
+    "@exodus/fee-data-monitors": "^5.0.3",
+    "@exodus/filesystem": "^1.2.0",
+    "@exodus/geolocation": "^4.3.1",
     "@exodus/key-ids": "^1.2.3",
-    "@exodus/key-viewer": "^1.1.2",
+    "@exodus/key-viewer": "^1.1.5",
     "@exodus/keychain": "^7.1.0",
-    "@exodus/locale": "^2.2.2",
-    "@exodus/message-signer": "^1.3.4",
-    "@exodus/pricing": "^1.3.2",
-    "@exodus/public-key-provider": "^4.0.0",
-    "@exodus/rates-monitor": "^4.4.1",
-    "@exodus/remote-config": "^2.7.2",
+    "@exodus/locale": "^2.3.0",
+    "@exodus/message-signer": "^1.4.2",
+    "@exodus/pricing": "^1.8.0",
+    "@exodus/public-key-provider": "^4.0.2",
+    "@exodus/rates-monitor": "^4.7.0",
+    "@exodus/remote-config": "^2.8.0",
     "@exodus/restore-progress-tracker": "^3.5.1",
     "@exodus/sodium-crypto": "^3.2.0",
     "@exodus/startup-counter": "^1.1.0",
-    "@exodus/tx-log-monitors": "^2.3.3",
+    "@exodus/tx-log-monitors": "^2.4.1",
     "@exodus/tx-signer": "^2.3.4",
     "@exodus/typeforce": "^1.18.1",
     "@exodus/wallet": "^15.1.0",
     "@exodus/wallet-accounts": "^17.0.1",
-    "bip39": "^2.6.0",
     "lodash": "npm:@exodus/lodash@^4.17.21-exodus.2",
     "minimalistic-assert": "^1.0.1",
     "ms": "^2.1.3"
@@ -78,7 +78,6 @@
     "@exodus/basic-utils": "^3.0.1",
     "@exodus/bip32": "^3.3.0",
     "@exodus/bitcoin-plugin": "^1.0.14",
-    "@exodus/browser-extension-rpc": "^2.1.2",
     "@exodus/connected-origins": "workspace:^",
     "@exodus/crypto-news-monitor": "workspace:^",
     "@exodus/deferring-storage": "workspace:^",
@@ -86,16 +85,17 @@
     "@exodus/domain-serialization": "workspace:^",
     "@exodus/ethereum-lib": "^5.0.0",
     "@exodus/ethereum-meta": "^1.1.0",
-    "@exodus/exodus-pricing-client": "workspace:^",
     "@exodus/fetch": "^1.2.1",
     "@exodus/fetch-factory": "workspace:^",
     "@exodus/key-identifier": "^1.2.1",
     "@exodus/kyc": "workspace:^",
+    "@exodus/logger": "workspace:^",
     "@exodus/market-history": "workspace:^",
     "@exodus/models": "workspace:^",
     "@exodus/nfts": "workspace:^",
     "@exodus/personal-notes": "workspace:^",
     "@exodus/referrals": "workspace:^",
+    "@exodus/sdk-rpc": "workspace:^",
     "@exodus/solana-lib": "^3.6.0",
     "@exodus/solana-meta": "^1.0.2",
     "@exodus/storage-encrypted": "workspace:^",
@@ -104,11 +104,30 @@
     "@exodus/ui-config": "workspace:^",
     "@exodus/wallet-sdk": "workspace:^",
     "@exodus/wild-emitter": "^1.0.0",
+    "bip39": "^2.6.0",
     "buffer-json": "^2.0.0",
     "deepmerge": "^4.2.2",
     "delay": "^5.0.0",
     "events": "^3.3.0",
     "msw": "^2.0.0",
     "p-defer": "^4.0.0"
+  },
+  "nx": {
+    "targets": {
+      "test:integration": {
+        "dependsOn": [
+          "^build",
+          {
+            "projects": [
+              "@exodus/bip322-js"
+            ],
+            "target": "build"
+          }
+        ]
+      }
+    }
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

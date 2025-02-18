@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/pricing@1.8.0...@exodus/pricing@1.8.1) (2025-01-28)
+
+### Bug Fixes
+
+- fix(pricing): add modify check support for realTimePrice endpoint (#11254)
+
 ## [1.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/pricing@1.7.0...@exodus/pricing@1.8.0) (2025-01-09)
 
 ### Features

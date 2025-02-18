@@ -1,10 +1,12 @@
 import { mapKeys, mapValues } from '@exodus/basic-utils'
 
 const localDefaultsKeyMap = {
+  __proto__: null,
   available: 'ready',
 }
 
 const supportedOverridesKeyMap = {
+  __proto__: null,
   enabled: 'enabledOverride',
 }
 

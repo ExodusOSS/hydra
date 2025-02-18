@@ -4,6 +4,7 @@ import serialization from './formats/serialization/index.js'
 
 import type {
   AddParams,
+  AddManyParams,
   DeleteParams,
   GetParams,
   GetReturn,
@@ -81,14 +82,20 @@ class PublicKeyStore implements IPublicKeyStore {
     throw new Error('Wallet account is unsupported')
   }
 
-  add = async ({ walletAccount, ...params }: AddParams) => {
-    const publicKeyStore = await this.#getData(walletAccount)
-    const xpub = params.xpub ? serialization.xpub.serialize(params.xpub) : undefined
-    const publicKey = params.publicKey
-      ? serialization.publicKey.serialize(params.publicKey)
-      : undefined
+  add = async ({ walletAccount, ...key }: AddParams) => {
+    await this.addMany({ walletAccount, keys: [key] })
+  }
 
-    publicKeyStore.add({ ...params, publicKey, xpub, walletAccountName: walletAccount.toString() })
+  addMany = async ({ walletAccount, ...params }: AddManyParams) => {
+    const publicKeyStore = await this.#getData(walletAccount)
+
+    const keys = params.keys.map((key) => {
+      const xpub = key.xpub ? serialization.xpub.serialize(key.xpub) : undefined
+      const publicKey = key.publicKey ? serialization.publicKey.serialize(key.publicKey) : undefined
+      return { ...key, xpub, publicKey }
+    })
+
+    await publicKeyStore.addMany({ walletAccountName: walletAccount.toString(), keys })
     await this.#setData(publicKeyStore, walletAccount)
   }
 

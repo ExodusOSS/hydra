@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('code', () => {
   it('should return undefined for path when not loaded', () => {

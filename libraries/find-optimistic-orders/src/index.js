@@ -1,7 +1,10 @@
-// eslint-disable-next-line @exodus/restricted-imports/prefer-basic-utils
 import lodash from 'lodash'
 import findSums from './find-nu-sums.js'
-import { ORDERS_COUNT_WITH_GUARANTEED_MATCH, EOS_MAX_RAM_COST } from './constants.js'
+import {
+  ORDERS_COUNT_WITH_GUARANTEED_MATCH,
+  EOS_MAX_RAM_COST,
+  DEFAULT_ORDER_TO_AMOUNT_SLIPPAGE,
+} from './constants.js'
 
 const { groupBy, union } = lodash
 
@@ -132,7 +135,13 @@ const matchOrdersAndTxs = ({ receivedTxs, orders, txLog }) => {
       return handleMatchedResult([matchByIdIndex], tx)
     }
 
-    const simpleMatchIndex = ordersCopy.findIndex((order) => amount.equals(order.toAmount))
+    const simpleMatchIndex = ordersCopy.findIndex(
+      ({ toAmount, slippage = DEFAULT_ORDER_TO_AMOUNT_SLIPPAGE }) => {
+        return (
+          toAmount.gt(amount.mul(1 - slippage / 100)) && toAmount.lt(amount.mul(1 + slippage / 100))
+        )
+      }
+    )
     if (simpleMatchIndex !== -1) {
       return handleMatchedResult([simpleMatchIndex], tx)
     }

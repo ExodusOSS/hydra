@@ -1,5 +1,6 @@
 import createInMemoryStorage from '@exodus/storage-memory'
 import delay from 'delay'
+
 import {
   createInMemoryAtom,
   createStorageAtomFactory,
@@ -88,7 +89,7 @@ describe('enhancers', () => {
       throw error
     })
 
-    atom.set('Harry Shames Shmotter')
+    void atom.set('Harry Shames Shmotter')
     await new Promise(setImmediate)
     expect(logger.error).toHaveBeenCalledWith('Observer threw error', error)
   })
@@ -121,7 +122,7 @@ describe('enhancers', () => {
     })
 
     atom.observe(() => delay(1000))
-    atom.set("don't wait up")
+    void atom.set("don't wait up")
     await delay(100) // do NOT change this to 99!
     expect(logger.error).toHaveBeenCalledWith(
       'Observer threw error',

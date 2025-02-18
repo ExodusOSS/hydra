@@ -1,9 +1,9 @@
 {
   "name": "@exodus/i18n",
-  "version": "5.0.0",
+  "version": "5.1.5",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/i18n",
   "description": "Tooling, CLI and React components for cross-platform internationalization",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "author": "Exodus Movement, Inc.",
   "type": "module",
   "bugs": {
@@ -31,10 +31,10 @@
   },
   "dependencies": {
     "@exodus/basic-utils": "^3.0.1",
-    "@exodus/i18n-babel-webpack": "^1.0.0",
-    "@exodus/pofile": "^3.0.1",
+    "@exodus/i18n-babel-webpack": "^1.1.2",
+    "@exodus/pofile": "^3.2.3",
     "cli-table": "^0.3.1",
-    "eventemitter3": "^5.0.1",
+    "eventemitter3": "^4.0.7",
     "events": "^3.3.0",
     "glob": "^7.1.1",
     "lodash": "^4.17.21",
@@ -50,5 +50,8 @@
     "lint:fix": "yarn lint --fix",
     "test": "run -T exodus-test --jest"
   },
-  "bin": "cli/index.js"
+  "bin": "cli/index.js",
+  "publishConfig": {
+    "access": "public"
+  }
 }

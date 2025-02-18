@@ -46,7 +46,7 @@
     "@exodus/transform-storage": "workspace:^",
     "@exodus/wild-emitter": "^1.1.0",
     "buffer-json": "^2.0.0",
-    "eventemitter3": "^5.0.1"
+    "eventemitter3": "^4.0.7"
   },
   "devDependencies": {
     "@exodus/storage-interface": "workspace:^",

@@ -1,6 +1,8 @@
 # `@exodus/models`
 
-This library contains a variety of classes/models used for various data structures.
+Containers for common business objects in the wild world of Exodus wallets. These typically provide basic functions like immutability (mutator methods return new instances), validation, serialization, and comparison.
+
+Containers for collections typically have convenience methods for accessing elements by some semantic parameters, and merging with other collections. These tend to be specific to the collected business object.
 
 ## Installation/Usage
 
@@ -8,68 +10,101 @@ This library contains a variety of classes/models used for various data structur
 yarn add @exodus/models
 ```
 
-This library exports each model as a named export:
+This library exports each model as a named export. Usage example:
 
 ```js
-import { Address, AddressSet } from '@exodus/models'
+import { WalletAccount } from '@exodus/models'
+
+const investments = new WalletAccount({
+  source: WalletAccount.EXODUS_SRC,
+  index: 0,
+  label: 'Not investment advice',
+})
+
+const updatedInvestments = investments.update({ label: 'Still not investment advice' })
+investments.equals(updatedInvestments) // false
+WalletAccount.isInstance(investments) // true
+
+investments.toJSON() // serialize for storage
+WalletAccount.fromJSON(investments.toJSON()) // deserialize from storage
+
+const safeInvestments = new WalletAccount({
+  id: '1234', // comes from device
+  source: WalletAccount.TREZOR_SRC,
+  index: 0,
+  label: 'Really not investment advice',
+})
 ```
 
-## Models
+Collection usage example:
 
-All models have a static method `.isInstance(obj)` which returns `true` if `obj` is an instance of the model. This check returns `true` even if the instance is of a duplicate, different version of the model; for this reason it should be used instead of the `instanceof` operator.
+```js
+const myPortfolios = new WalletAccountSet({ [investments]: investments })
+const myUpdatedPortfolios = myPortfolios.update({ [safeInvestments]: safeInvestments })
+myUpdatedPortfolios.toJSON() // serialize for storage
+```
 
-### [`AccountState`](./src/account-state/index.js)
+See more examples in model-specific tests.
 
-A base class from which all asset account state clases extend. Cannot be initialized directly.
+## Shared Interfaces
 
-### [`Address`](./src/address/index.js)
+All models have a static method `.isInstance(obj)` which returns `true` if `obj` is an instance of the model. This check returns `true` even if the instance is of a model from a different version of the `@exodus/models` package, and should be preferred to the `instanceof` operator.
 
-A model for blockchain addresses.
+### [`AccountState`](./src/account-state/index.ts)
 
-### [`AddressSet`](./src/address-set/index.js)
+Container for an asset's blockchain state, like balance, token balances, utxos, etc. This is a base class from which all asset-specific account state classes extend. It cannot be initialized directly.
 
-An immutable set of `Address`es with sorting functionality.
+### [`Address`](./src/address/index.ts)
 
-### [`FiatOrder`](./src/fiat-order/index.js)
+Container for a blockchain address string and associated metadata, such as the [KeyIdentifier](https://www.npmjs.com/package/@exodus/key-identifier) for that address.
 
-A model for fiat orders.
+### [`AddressSet`](./src/address-set/index.ts)
 
-### [`FiatOrderSet`](./src/fiat-order-set/index.js)
+Collection of `Address`es.
 
-An immutable set of `FiatOrder`s, with alternate get methods like `getAt`, `getByTxId`, & `getAllByTxId`, and an `.update(orders)` method for updating details of existing orders.
+### [`FiatOrder`](./src/fiat-order/index.ts)
 
-### [`Order`](./src/order/index.js)
+Container for data relating to a fiat <-> crypto purchase or sale.
 
-A model for crypto swap orders.
+### [`FiatOrderSet`](./src/fiat-order-set/index.ts)
 
-### [`OrderSet`](./src/order-set/index.js)
+Collection of `FiatOrder`s.
 
-An immutable set of `Order`s, with alternate get methods like `getAt`, `getByTxId`, & `getAllByTxId`, and an `.update(orders)` method for updating details of existing orders.
+### [`Order`](./src/order/index.ts)
 
-### [`PersonalNote`](./src/personal-note/index.js)
+Container for data relating to the exchange of one crypto asset for another.
 
-A model for personal notes.
+### [`OrderSet`](./src/order-set/index.ts)
 
-### [`PersonalNoteSet`](./src/personal-note-set/index.js)
+Collection of `Order`s.
 
-An immutable set of `PersonalNote`s. Unlike other `*Set` models, the `.add()` & `.update()` methods return the same `PersonalNoteSet` instance if there were no changes to the data.
+### [`PersonalNote`](./src/personal-note/index.ts)
 
-### [`Tx`](./src/tx/index.js)
+Container for a user's personal note for a transaction, e.g. "pizza"
 
-A model for blockchain transactions.
+### [`PersonalNoteSet`](./src/personal-note-set/index.ts)
 
-### [`TxSet`](./src/tx-set/index.js)
+A collection of `PersonalNote`s.
 
-An immutable set of `Tx`s. Cannot be constructed directly, either start with `TxSet.EMPTY` or use the static method `TxSet.fromArray()`. `txSet.equals(otherSet)` only compares transaction ids; use `txSet.deepEquals(otherSet)` for full transaction comparison.
+### [`Tx`](./src/tx/index.ts)
 
-### [`UtxoCollection`](./src/utxo-collection/index.js)
+Container for data relating to a blockchain transaction, such as the transaction id, amount, confirmations, source address(es), destination address(es), and others.
 
-An immutable colletion of UTXOs, with various methods for filtering, updating, and selecting from them.
+### [`TxSet`](./src/tx-set/index.ts)
 
-### [`WalletAccount`](./src/wallet-account/index.js)
+Collection of `Tx`s. It cannot be constructed directly, so either start with `TxSet.EMPTY` or use the static method `TxSet.fromArray()`. Note: `txSet.equals(otherSet)` only compares transaction ids; use `txSet.deepEquals(otherSet)` for full transaction comparison.
 
-An immutable model for representing wallet accounts of all sources.
+### [`UtxoCollection`](./src/utxo-collection/index.ts)
 
-### [`WalletAccountSet`](./src/wallet-account-set/index.js)
+Collection of UTXOs. There is no corresponding `UTXO` model. Use `utxoCollection.select(amount, feeEstimator)` to select utxos for a given amount you want to send.
 
-A minimal, immutable set of `WalletAccount`s.
+### [`WalletAccount`](./src/wallet-account/index.ts)
+
+Container for a [bip44 account index](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#path-levels) and user-specific portfolio metadata. Slightly counterintuitively, if you're looking at the bip44 path, in Exodus wallets each portfolio corresponds to a basket of assets, i.e. both of the following paths will correspond to a single portfolio`
+
+- `m/44'/0'/7'/0/0`: first bitcoin address of portfolio 7
+- `m/44'/60'/7'/0/0`: first ethereum address of portfolio 7
+
+### [`WalletAccountSet`](./src/wallet-account-set/index.ts)
+
+Collection of `WalletAccount`s.

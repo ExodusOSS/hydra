@@ -1,6 +1,6 @@
-import localeApiDefinition from './api'
-import { localeLifecyclePluginDefinition, localeAnalyticsPluginDefinition } from './plugin'
-import { currencyAtomDefinition, languageAtomDefinition } from './atoms'
+import localeApiDefinition from './api/index.js'
+import { localeLifecyclePluginDefinition, localeAnalyticsPluginDefinition } from './plugin/index.js'
+import { currencyAtomDefinition, languageAtomDefinition } from './atoms/index.js'
 
 const DEFAULT_LANGUAGE = 'en'
 const DEFAULT_CURRENCY = 'USD'

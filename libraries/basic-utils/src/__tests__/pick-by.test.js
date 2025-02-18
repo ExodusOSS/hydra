@@ -19,4 +19,17 @@ describe('pickBy', function () {
 
     expect(actual).toEqual({ 'a.b.c': 1 })
   })
+
+  it('should allow filtering based on key', () => {
+    const object = { a: 1, b: 2, c: 3, d: 4 }
+
+    const actual = pickBy(object, (v, k) => {
+      return ['a', 'c'].includes(k)
+    })
+
+    expect(actual).toEqual({
+      a: 1,
+      c: 3,
+    })
+  })
 })

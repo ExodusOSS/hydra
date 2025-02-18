@@ -12,6 +12,7 @@ const createUnlockEncryptedStorage = ({ keychain, wallet }) => {
       seedId: primarySeedId,
       keyId: WALLET_INFO_KEY,
       exportPrivate: true,
+      exportPublic: false,
     })
 
     await encryptedStorage.unlock({

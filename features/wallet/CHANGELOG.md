@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [15.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@15.1.1...@exodus/wallet@15.1.2) (2025-01-31)
+
+### Bug Fixes
+
+- fix: optimize keychain exports (#10604)
+
+### Performance
+
+- perf: don't calc extra seeds passphrase for single-seed wallets (#11301)
+
+## [15.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@15.1.0...@exodus/wallet@15.1.1) (2024-12-20)
+
+### Bug Fixes
+
+- fix(wallet): throws error if no seed.mnemonic (#10044)
+
+### License
+
+- license: re-license under MIT license (#10599)
+
 ## [15.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@15.0.0...@exodus/wallet@15.1.0) (2024-10-14)
 
 ### Features

@@ -17,6 +17,7 @@ describe('merge', () => {
         flags: [],
         id: "Philosopher's Stone",
         references: ['fixtures/everything.js:6'],
+        uniqueId: "Philosopher's Stone",
         value: '',
       },
       {
@@ -24,6 +25,7 @@ describe('merge', () => {
         flags: [],
         id: 'Chamber of Secrets',
         references: ['fixtures/everything.js:7'],
+        uniqueId: 'Chamber of Secrets',
         value: '',
       },
     ])
@@ -37,6 +39,7 @@ describe('merge', () => {
         id: 'Chamber of Secrets',
         references: ['fixtures/everything.js:7'],
         value: 'La Camara de los Secretos',
+        uniqueId: 'Chamber of Secrets',
       },
     ]
 
@@ -56,6 +59,7 @@ describe('merge', () => {
         id: 'Chamber of Secrets',
         references: ['fixtures/everything.js:7'],
         value: 'La Camara de los Secretos',
+        uniqueId: 'Chamber of Secrets',
       },
       {
         comments: [],
@@ -63,6 +67,7 @@ describe('merge', () => {
         id: "Philosopher's Stone",
         references: ['fixtures/everything.js:6'],
         value: '',
+        uniqueId: "Philosopher's Stone",
       },
     ])
   })
@@ -75,6 +80,7 @@ describe('merge', () => {
         id: 'Book {number}',
         references: ['fixtures/everything.js:6'],
         value: 'Libro {number}',
+        uniqueId: 'Book {number}',
       },
     ]
 
@@ -91,6 +97,7 @@ describe('merge', () => {
         id: 'Book {number}',
         references: ['fixtures/everything.js:7'],
         value: 'Libro {number}',
+        uniqueId: 'Book {number}',
       },
     ])
   })
@@ -103,6 +110,7 @@ describe('merge', () => {
         id: 'Book {number}',
         references: ['fixtures/everything.js:7'],
         value: 'Libro {number}',
+        uniqueId: 'Book {number}',
       },
     ]
 
@@ -122,6 +130,7 @@ describe('merge', () => {
         id: 'Book {number}',
         references: ['fixtures/everything.js:7', 'fixtures/hogwarts.js:42'],
         value: 'Libro {number}',
+        uniqueId: 'Book {number}',
       },
     ])
   })

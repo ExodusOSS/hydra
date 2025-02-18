@@ -1,3 +1,5 @@
+import { WalletAccount } from '@exodus/models'
+
 const createWalletAccountsReport = ({
   walletAccountsAtom,
   activeWalletAccountAtom,
@@ -10,8 +12,15 @@ const createWalletAccountsReport = ({
       activeWalletAccountAtom.get(),
       multipleWalletAccountsEnabledAtom.get(),
     ])
+    const redactedData = Object.fromEntries(
+      Object.entries(data).map(([key, walletAccount]) => [
+        key,
+        new WalletAccount({ ...walletAccount, label: '<Redacted>' }),
+      ])
+    )
+
     return {
-      data,
+      data: redactedData,
       configuredActiveWalletAccount,
       multipleWalletAccountsEnabled,
     }

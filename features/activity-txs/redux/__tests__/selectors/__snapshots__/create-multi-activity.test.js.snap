@@ -29,6 +29,7 @@ exports[`createMultiActivity should map activities, de-dup orders and sort by da
     },
     "txId": "sent-tx-2",
     "type": "tx",
+    "walletAccount": "exodus_1",
   },
   {
     "assetName": "ethereum",
@@ -63,6 +64,7 @@ exports[`createMultiActivity should map activities, de-dup orders and sort by da
     },
     "txId": "received-tx-2",
     "type": "rx",
+    "walletAccount": "exodus_1",
   },
   {
     "assetName": "ethereum",
@@ -138,6 +140,7 @@ exports[`createMultiActivity should map activities, de-dup orders and sort by da
     },
     "txId": "received-tx",
     "type": "exchange",
+    "walletAccount": "exodus_0",
   },
 ]
 `;

@@ -1,6 +1,7 @@
 export type Unsubscribe = () => void
 
 export type Listener<T> = (value: T) => Promise<void> | void
+export type ResettableListener<T> = Listener<T> & { resetCallState: () => void }
 
 export interface EventEmitter {
   on<T>(event: string, listener: Listener<T>): void

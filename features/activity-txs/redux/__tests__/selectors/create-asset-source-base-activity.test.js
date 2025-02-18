@@ -205,6 +205,138 @@ describe('createAssetSourceBaseActivity', () => {
     expect(result).toMatchSnapshot()
   })
 
+  test('should not match tx with order if has different coin amount', () => {
+    const { store, selectors, handleEvent, assets } = setup()
+
+    const txLogFixtures = {
+      bitcoin: [
+        {
+          currencies: { bitcoin: assets.bitcoin.currency },
+          txId: 'bitcoin-tx',
+          error: null,
+          date: '2019-07-18T12:48:15.000Z',
+          confirmations: 1,
+          meta: {},
+          token: null,
+          dropped: false,
+          coinAmount: '-0.1 BTC',
+          coinName: 'bitcoin',
+          feeCoinName: 'bitcoin',
+          feeAmount: '0.00002 BTC',
+          data: {
+            sentIndex: 0,
+            sent: [
+              { amount: '0.1 BTC', address: 'btc-address-1' },
+              { amount: '0.2 BTC', address: 'btc-address-2' },
+            ],
+          },
+        },
+        {
+          currencies: { bitcoin: assets.bitcoin.currency },
+          txId: 'bitcoin-tx',
+          error: null,
+          date: '2019-07-18T12:48:15.000Z',
+          confirmations: 1,
+          meta: {},
+          token: null,
+          dropped: false,
+          coinAmount: '-0.2 BTC',
+          coinName: 'bitcoin',
+          feeCoinName: 'bitcoin',
+          feeAmount: '0.00002 BTC',
+          data: {
+            sentIndex: 1,
+            sent: [
+              { amount: '0.1 BTC', address: 'btc-address-1' },
+              { amount: '0.2 BTC', address: 'btc-address-2' },
+            ],
+          },
+        },
+      ],
+    }
+
+    handleEvent('activityTxs', {
+      exodus_0: {
+        bitcoin: txLogFixtures.bitcoin.map((tx) => Tx.fromJSON(tx)),
+      },
+    })
+
+    handleEvent(
+      'orders',
+      OrderSet.fromArray([
+        {
+          orderId: 'btc-eth-order',
+          fromAsset: 'bitcoin',
+          toAsset: 'ethereum',
+          txIds: [{ txId: 'bitcoin-tx' }],
+          date: '2019-07-22T13:54:28.000Z',
+          fromWalletAccount: 'exodus_0',
+          toWalletAccount: 'exodus_0',
+          toAmount: assets.ethereum.currency.defaultUnit(3),
+          fromAmount: assets.bitcoin.currency.defaultUnit(0.1),
+        },
+      ])
+    )
+
+    const selector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'bitcoin',
+      walletAccount: 'exodus_0',
+    })
+
+    const result = selector(store.getState())
+
+    expect(result.length).toEqual(2)
+    expect(result[0].id).toEqual('bitcoin.bitcoin-tx')
+    expect(result[1].id).toEqual('swap.bitcoin.btc-eth-order')
+    expect(result[1].type).toEqual('exchange')
+  })
+
+  test('should not fail on not found order for batched tx', () => {
+    const { store, selectors, handleEvent, assets } = setup()
+
+    const txLogFixtures = {
+      bitcoin: [
+        {
+          currencies: { bitcoin: assets.bitcoin.currency },
+          txId: 'bitcoin-tx',
+          error: null,
+          date: '2019-07-18T12:48:15.000Z',
+          confirmations: 1,
+          meta: {},
+          token: null,
+          dropped: false,
+          coinAmount: '-0.1 BTC',
+          coinName: 'bitcoin',
+          feeCoinName: 'bitcoin',
+          feeAmount: '0.00002 BTC',
+          data: {
+            sentIndex: 0,
+            sent: [
+              { amount: '0.1 BTC', address: 'btc-address-1' },
+              { amount: '0.2 BTC', address: 'btc-address-2' },
+            ],
+          },
+        },
+      ],
+    }
+
+    handleEvent('activityTxs', {
+      exodus_0: {
+        bitcoin: txLogFixtures.bitcoin.map((tx) => Tx.fromJSON(tx)),
+      },
+    })
+
+    const selector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'bitcoin',
+      walletAccount: 'exodus_0',
+    })
+
+    const result = selector(store.getState())
+
+    expect(result.length).toEqual(1)
+    expect(result[0].id).toEqual('bitcoin.bitcoin-tx')
+  })
+
   test('should add indexless orders to activity', () => {
     const { store, selectors, handleEvent, assets } = setup()
     handleEvent('assets', {

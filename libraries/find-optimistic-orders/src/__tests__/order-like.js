@@ -1,12 +1,10 @@
-import assert from 'assert'
-// eslint-disable-next-line @exodus/restricted-imports/prefer-basic-utils
-import lodash from 'lodash'
-
 import { connectAssets } from '@exodus/assets'
 import assetsBase from '@exodus/assets-base'
 import { isNumberUnit } from '@exodus/currency'
+import assert from 'assert'
+import lodash from 'lodash'
 
-const { mapValues, isPlainObject, isArray, isString, compact, merge, isEqual } = lodash
+const { mapValues, isPlainObject, isArray, isString, compact, merge, isEqual } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
 const assets = connectAssets(assetsBase)
 

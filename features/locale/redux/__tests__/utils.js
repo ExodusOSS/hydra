@@ -1,7 +1,7 @@
-import { combineReducers, createStore } from 'redux'
 import { setupRedux } from '@exodus/redux-dependency-injection'
+import { combineReducers, createStore } from 'redux'
 
-import ratesReduxDefinition from '../'
+import ratesReduxDefinition from '../index.js'
 
 export function setup({ dependencies = [] } = {}) {
   const allDependencies = [...dependencies, ratesReduxDefinition]

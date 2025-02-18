@@ -26,16 +26,31 @@ describe('optimisticLoaded', () => {
     expect(selector(store.getState())).toEqual(false)
   })
 
-  mirrorTestCaseForOptimisticOnOff(
-    'becomes loaded after fiatBalance update',
-    ({ store, selectors, emitFiatBalances }) => {
-      const selector = selectors.fiatBalances.optimisticLoaded
+  it(`becomes loaded after fiatBalance update [optimisticActivityEnabled: false]`, () => {
+    const { store, selectors, emitFiatBalances } = setup({
+      optimisticActivityEnabled: false,
+    })
 
-      emitFiatBalances(FIAT_BALANCES_PAYLOAD)
+    const selector = selectors.fiatBalances.optimisticLoaded
 
-      expect(selector(store.getState())).toEqual(true)
-    }
-  )
+    emitFiatBalances(FIAT_BALANCES_PAYLOAD)
+
+    expect(selector(store.getState())).toEqual(true)
+  })
+
+  it(`becomes loaded only after optimisticBalances update [optimisticActivityEnabled: true]`, () => {
+    const { store, selectors, emitOptimisticFiatBalances, emitFiatBalances } = setup({
+      optimisticActivityEnabled: true,
+    })
+
+    const selector = selectors.fiatBalances.optimisticLoaded
+    emitFiatBalances(FIAT_BALANCES_PAYLOAD)
+    expect(selector(store.getState())).toEqual(false)
+
+    emitOptimisticFiatBalances(OPTIMISTIC_FIAT_BALANCES_PAYLOAD)
+
+    expect(selector(store.getState())).toEqual(true)
+  })
 
   mirrorTestCaseForOptimisticOnOff(
     'becomes loaded after optimisticFiatBalances update',

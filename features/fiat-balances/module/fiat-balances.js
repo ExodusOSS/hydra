@@ -8,8 +8,6 @@ import { getCreateConversion } from '../shared/get-create-conversion.js'
 // not super efficient, so we're assuming small objects, like { [walletAccount]: xyz }
 const areKeysSame = (a, b) => isEqual(Object.keys(a).sort(), Object.keys(b).sort())
 
-const MODULE_ID = 'fiatBalances'
-
 const cloneBalances = (balances) =>
   cloneDeepWith(balances, (val) => {
     if (isNumberUnit(val)) return val
@@ -260,7 +258,7 @@ class FiatBalances {
 const createFiatBalances = (...args) => new FiatBalances(...args)
 
 const fiatBalancesDefinition = {
-  id: MODULE_ID,
+  id: 'fiatBalances',
   type: 'module',
   factory: createFiatBalances,
   dependencies: [

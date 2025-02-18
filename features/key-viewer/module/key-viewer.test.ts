@@ -31,7 +31,7 @@ describe('KeyViewer', () => {
   let walletAccountsAtom: Atom<{ [name: string]: WalletAccount }>
 
   beforeEach(() => {
-    const bitcoin = createBitcoin({ assetClientInterface: {} })
+    const bitcoin = createBitcoin({ assetClientInterface: { createLogger: createNoopLogger } })
     assets = {
       bitcoin: { ...bitcoin, baseAsset: bitcoin },
     }

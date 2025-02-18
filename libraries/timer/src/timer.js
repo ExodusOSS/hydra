@@ -2,7 +2,7 @@
  * Timer that allows you to schedule tasks at fixed intervals.
  *
  * const timer = new Timer(100)
- * timer.start(() => this.hello(options))
+ * timer.start(() => this.hello(options)).catch((err) => {})
  * await timer.stop()
  *
  * It keeps track of the running timers statically. You can pause, stop or clear all the tasks.
@@ -56,10 +56,10 @@ export default class Timer {
     }
 
     this.timeLeftAfterResume = undefined
-    Timer.#running.add(this) // eslint-disable-line no-restricted-syntax
+    Timer.#running.add(this)
     this.pauseCheckpointTime = Date.now()
     if (delayedStart) {
-      this.timerId = setTimeout(() => this.tick(), this.interval)
+      this.timerId = setTimeout(() => this.tick(true), this.interval)
       return Promise.resolve()
     }
 
@@ -84,7 +84,7 @@ export default class Timer {
 
     clearTimeout(this.timerId)
     this.timeLeftAfterResume = undefined
-    Timer.#running.delete(this) // eslint-disable-line no-restricted-syntax
+    Timer.#running.delete(this)
     this.timerId = undefined
     if (this.isCallbacking) {
       // if inside callback(), wait for it to complete
@@ -140,7 +140,10 @@ export default class Timer {
 
     // Case 2: Timer should run at least every "interval", even if there is a larger maxFuzziness,
     // (example, the timer should run within interval=5s, given it was paused for 15 minutes and maxFuzziness=20s)
-    this.timerId = setTimeout(() => this.tick(), Math.min(this.timeLeftAfterResume, nextTickDelay))
+    this.timerId = setTimeout(
+      () => this.tick(true),
+      Math.min(this.timeLeftAfterResume, nextTickDelay)
+    )
 
     this.pauseCheckpointTime = now - (this.interval - this.timeLeftAfterResume)
     this.timeLeftAfterResume = undefined
@@ -150,11 +153,17 @@ export default class Timer {
    * Performs one tick executing the callback. Once the callback has finished, it schedules the next tick in the configured interval.
    * @returns {Promise<void>} that resolves when the callback has finished.
    */
-  async tick() {
+  async tick(swallowErrors = false) {
     try {
       this.isCallbacking = true
       this.pauseCheckpointTime = Date.now()
       await this.callback()
+    } catch (err) {
+      // Do not allow `tick()` to throw so that `start()` cannot fail because of an error in `callback()`.
+      // Throwing in `setTimeout()` is also not useful as it produces an uncaught error.
+      // If you need to log this error, catch it in `callback()`
+      // We still throw if `tick()` is called explicitly.
+      if (!swallowErrors) throw err
     } finally {
       for (const resolve of this.pending) resolve()
       this.pending.length = 0
@@ -165,7 +174,7 @@ export default class Timer {
         // Case 1: clearTimeout called in the idle of timer, timer is canceled, callback is not executed.
         // Case 2: clearTimeout called in the middle of callback(), can not stop following setTimeout statement
         // So we need set a check point for case 2
-        this.timerId = setTimeout(() => this.tick(), this.interval)
+        this.timerId = setTimeout(() => this.tick(true), this.interval)
       }
     }
   }
@@ -210,7 +219,7 @@ export default class Timer {
    * @returns {Promise<Awaited<void>[]>} that resolves when all the timers have started.
    */
   static async startAll() {
-    return Promise.all([...Timer.#running].map((timer) => timer.start())) // eslint-disable-line no-restricted-syntax
+    return Promise.all([...Timer.#running].map((timer) => timer.start()))
   }
 
   /**
@@ -218,27 +227,27 @@ export default class Timer {
    * @returns {Promise<Awaited<void>[]>} a promise that resolves once all timers have stopped.
    */
   static stopAll() {
-    return Promise.all([...Timer.#running].map((timer) => timer.stop())) // eslint-disable-line no-restricted-syntax
+    return Promise.all([...Timer.#running].map((timer) => timer.stop()))
   }
 
   /**
    * Pauses all the registered timers. You can resume them later on.
    */
   static pauseAll() {
-    ;[...Timer.#running].forEach((timer) => timer.pause()) // eslint-disable-line no-restricted-syntax
+    ;[...Timer.#running].forEach((timer) => timer.pause())
   }
 
   /**
    * Resumes all the registered timers that have been paused.
    */
   static resumeAll() {
-    ;[...Timer.#running].forEach((timer) => timer.resume()) // eslint-disable-line no-restricted-syntax
+    ;[...Timer.#running].forEach((timer) => timer.resume())
   }
 
   /**
    * @returns {number} the number of registered timers.
    */
   static count() {
-    return Timer.#running.size // eslint-disable-line no-restricted-syntax
+    return Timer.#running.size
   }
 }

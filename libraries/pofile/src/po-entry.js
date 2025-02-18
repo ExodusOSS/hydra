@@ -1,13 +1,17 @@
+const { createEntryId } = require('./utils')
+
 class POEntry {
   #msgid = []
   #msgstr = []
+  #msgctxt
   #comments = []
   #references = []
   #flags = []
 
-  constructor({ id, value, comments = [], references = [], flags = [] }) {
-    this.#msgid = id.replace(/\\"/gu, '"')
-    this.#msgstr = value.replace(/\\"/gu, '"')
+  constructor({ id, value, comments = [], context = '', references = [], flags = [] }) {
+    this.#msgid = id?.replace(/\\"/gu, '"')
+    this.#msgstr = value?.replace(/\\"/gu, '"')
+    this.#msgctxt = context?.replace(/\\"/gu, '"')
     this.#comments = comments
     this.#references = references
     this.#flags = flags
@@ -15,6 +19,10 @@ class POEntry {
 
   get id() {
     return this.#msgid
+  }
+
+  get uniqueId() {
+    return createEntryId({ id: this.#msgid, context: this.#msgctxt })
   }
 
   get value() {
@@ -31,6 +39,10 @@ class POEntry {
 
   get flags() {
     return this.#flags
+  }
+
+  get context() {
+    return this.#msgctxt
   }
 
   static unifyPlaceholders = (source) => {
@@ -66,6 +78,15 @@ class POEntry {
     return this
   }
 
+  addContext = (context) => {
+    if (typeof context !== 'string')
+      throw new Error(`pofile: context must be string. Got ${typeof context}`)
+
+    this.#msgctxt = context
+
+    return this
+  }
+
   addReference = (reference) => {
     if (typeof reference !== 'string')
       throw new Error(`pofile: reference must be string. Got ${typeof reference}`)
@@ -86,10 +107,12 @@ class POEntry {
   toJSON = () => {
     return {
       id: this.id,
+      uniqueId: this.uniqueId,
       value: this.value,
       comments: this.comments,
       flags: this.flags,
       references: this.references,
+      ...(this.context ? { context: this.context } : {}),
     }
   }
 
@@ -99,8 +122,16 @@ class POEntry {
     const flags = this.#flags.map((flag) => `#, ${flag}`)
     const id = this.#msgid.replace(/"/gu, '\\"')
     const message = this.#msgstr.replace(/"/gu, '\\"')
+    const context = this.#msgctxt.replace(/"/gu, '\\"')
 
-    return [...comments, ...flags, ...references, `msgid "${id}"`, `msgstr "${message}"`].join('\n')
+    return [
+      ...comments,
+      ...flags,
+      ...references,
+      `msgid "${id}"`,
+      `msgstr "${message}"`,
+      ...(context && [`msgctxt "${context}"`]),
+    ].join('\n')
   }
 }
 

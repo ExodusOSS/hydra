@@ -1,8 +1,10 @@
-import createInMemoryStorage from '@exodus/storage-memory'
-import { createStorageAtomFactory } from '../../src/index.js'
-import type { Storage } from '@exodus/storage-interface'
-import pDefer from 'p-defer'
+import createDeferringStorage from '@exodus/deferring-storage'
 import _createEncryptedStorage from '@exodus/storage-encrypted/lib/storage'
+import type { Storage } from '@exodus/storage-interface'
+import createInMemoryStorage from '@exodus/storage-memory'
+import pDefer from 'p-defer'
+
+import { createStorageAtomFactory } from '../../src/index.js'
 
 function createEncryptedStorage(storage: Storage<string, string>) {
   const deferred = pDefer()
@@ -28,6 +30,36 @@ describe('createStorageAtomFactory', () => {
   beforeEach(() => {
     storage = createInMemoryStorage()
     createStorageAtom = createStorageAtomFactory({ storage })
+  })
+
+  it('should reset dangling observer after clearing', async () => {
+    const deferringStorage = createDeferringStorage(storage)
+    const createAtom = createStorageAtomFactory({ storage: deferringStorage as never })
+    const atom = createAtom({ key: 'identity', defaultValue: 'Bruce Wayne' })
+
+    const handler = jest.fn()
+    const whenCalledWithHarvey = pDefer()
+
+    atom.observe((value) => {
+      handler(value)
+
+      if (value === 'Harvey Dent') {
+        whenCalledWithHarvey.resolve()
+      }
+    })
+
+    expect(handler).not.toHaveBeenCalled()
+    await atom.reset()
+    expect(handler).toHaveBeenCalledWith('Bruce Wayne')
+
+    // simulating storage migration
+    await storage.set('identity', 'Harvey Dent')
+
+    deferringStorage.release()
+
+    await whenCalledWithHarvey.promise
+    expect(handler).toHaveBeenCalledTimes(2)
+    expect(handler).toHaveBeenLastCalledWith('Harvey Dent')
   })
 
   describe('maintain concurrency', () => {
@@ -70,7 +102,7 @@ describe('createStorageAtomFactory', () => {
       const valueFromGetReceivedPromise = pDefer()
       let valueFromGet
 
-      atom.get().then((value) => {
+      void atom.get().then((value) => {
         valueFromGet = value
         valueFromGetReceivedPromise.resolve()
       })

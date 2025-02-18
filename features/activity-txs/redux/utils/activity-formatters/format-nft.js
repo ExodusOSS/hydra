@@ -1,5 +1,6 @@
 import { getSharedProps } from './get-shared-props'
 import { TX_TYPES } from '../../constants/tx-types'
+import { isPending } from './format-tx-activity'
 
 export const formatUnindexedNftTx = ({ assetName, nftTx }) => {
   return {
@@ -18,7 +19,7 @@ export const formatUnindexedNftTx = ({ assetName, nftTx }) => {
   }
 }
 
-export const formatNftTx = ({ tx, nft, assetName, ...rest }) => {
+export const formatNftTx = ({ tx, nft, assetName, asset, ...rest }) => {
   return {
     ...rest,
     ...getSharedProps({
@@ -27,7 +28,7 @@ export const formatNftTx = ({ tx, nft, assetName, ...rest }) => {
       assetName,
       type: TX_TYPES.NFT,
       id: `nft.${assetName}.${tx.txId}`,
-      pending: false,
+      pending: isPending(tx, asset),
       failed: !!tx.failed,
       sent: nft.sent || false,
       received: !nft.sent,

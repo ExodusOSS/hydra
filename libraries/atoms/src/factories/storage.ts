@@ -1,6 +1,6 @@
 import createSimpleObserver from '../simple-observer.js'
 import enforceObservableRules from '../enforce-rules.js'
-import type { Atom } from '../utils/types.js'
+import type { Atom, ResettableListener } from '../utils/types.js'
 import type { Storage } from '@exodus/storage-interface'
 
 type FactoryParams<T> = {
@@ -17,7 +17,7 @@ const createStorageAtomFactory = <T>({ storage }: FactoryParams<T>) => {
   function createStorageAtom<D extends T>(opts: Params<D>): Atom<T | D>
   function createStorageAtom<D extends T>({ key, defaultValue }: Params<D>): Atom<T | D> {
     let version = 0
-    const { notify, observe } = createSimpleObserver<T | undefined>({ enable: true })
+    const { notify, observe, listeners } = createSimpleObserver<T | undefined>({ enable: true })
 
     let canUseCached = false
     let cached: T | undefined
@@ -41,6 +41,10 @@ const createStorageAtomFactory = <T>({ storage }: FactoryParams<T>) => {
 
       await pendingWrite
       await notify(value)
+
+      if (!canUseCached && listeners.length > 0) {
+        listeners.forEach((listener) => (listener as ResettableListener<T>).resetCallState())
+      }
     }
 
     const get = async () => {

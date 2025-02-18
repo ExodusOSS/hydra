@@ -1,12 +1,12 @@
+import atomTests from '@exodus/atom-tests'
+import type { Storage } from '@exodus/storage-interface'
 import createInMemoryStorage from '@exodus/storage-memory'
 import delay from 'delay'
 import EventEmitter from 'eventemitter3'
-import atomTests from '@exodus/atom-tests'
-import type { Storage } from '@exodus/storage-interface'
 
+import createKeystoreAtom from '../src/factories/keystore.js'
 import type { Atom } from '../src/index.js'
 import { createAtomMock, createStorageAtomFactory, fromEventEmitter } from '../src/index.js'
-import createKeystoreAtom from '../src/factories/keystore.js'
 import type { Keystore } from '../src/utils/types.js'
 
 const path = 'a.b.c'
@@ -158,7 +158,7 @@ describe('storage atom', () => {
       jestFn2(result)
     })
     await atom.set(2)
-    atom.set(3)
+    void atom.set(3)
 
     unsubscribe()
     await atom.set(4)
@@ -171,7 +171,7 @@ describe('storage atom', () => {
     const storage = createInMemoryStorage()
     const atom = createStorageAtomFactory({ storage })({ key: path })
     const resolver = jest.fn()
-    atom.set(1).then(() => resolver(1))
+    void atom.set(1).then(() => resolver(1))
     const getPromise = atom.get().then((value) => resolver(`get:${value}`))
     const secondSetPromise = atom.set(2).then(() => resolver(2))
 
@@ -185,7 +185,7 @@ describe('storage atom', () => {
     const storage = createInMemoryStorage()
     const atom = createStorageAtomFactory({ storage })({ key: path })
     const resolver = jest.fn()
-    atom.set(1).then(() => resolver(1))
+    void atom.set(1).then(() => resolver(1))
     const secondSetPromise = atom.set(2).then(() => resolver(2))
     const getPromise = atom.get().then((value) => resolver(`get:${value}`))
 

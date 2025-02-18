@@ -1,8 +1,9 @@
-import EventEmitter from 'events/events.js'
-import WildEmitter from '@exodus/wild-emitter'
 import { createInMemoryAtom } from '@exodus/atoms'
-import createBlockchainMetadataPlugin from '../lifecycle.js'
 import { AccountState, TxSet, WalletAccount } from '@exodus/models'
+import WildEmitter from '@exodus/wild-emitter'
+import EventEmitter from 'events/events.js'
+
+import createBlockchainMetadataPlugin from '../lifecycle.js'
 
 describe('blockchainMetadataPlugin', () => {
   let txLogsAtom

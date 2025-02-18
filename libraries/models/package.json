@@ -1,21 +1,20 @@
 {
   "name": "@exodus/models",
-  "version": "12.1.1",
-  "description": "Exodus models",
+  "version": "12.5.0",
+  "description": "Containers for common business objects in the wild world of Exodus wallets",
   "type": "module",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "author": "Exodus Movement, Inc.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/models",
   "files": [
-    "src",
     "lib",
     "!**/__tests__/**",
     "CHANGELOG.md"
   ],
   "dependencies": {
     "@exodus/currency": "^5.0.1",
-    "@exodus/serialization": "^1.0.0",
+    "@exodus/serialization": "^1.2.1",
     "bip32-path": "^0.4.2",
     "lodash": "^4.17.11",
     "minimalistic-assert": "^1.0.1",
@@ -27,8 +26,11 @@
     "bs58check": "^2.1.2"
   },
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "NODE_ENV=test run -T eslint .",
+    "test": "run -T exodus-test --jest --esbuild",
+    "build": "yarn run -T tsc --build tsconfig.build.json",
+    "clean": "yarn run -T tsc --build --clean",
+    "prepublishOnly": "yarn run -T build --scope @exodus/models",
+    "lint": "run -T tsc --noEmit && run -T eslint .",
     "lint:fix": "yarn lint --fix"
   },
   "repository": {
@@ -37,5 +39,8 @@
   },
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Amodels"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

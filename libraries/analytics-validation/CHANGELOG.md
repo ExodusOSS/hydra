@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.50.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.50.0...@exodus/analytics-validation@2.50.1) (2025-01-22)
+
+### Bug Fixes
+
+- fix(analytics-validation): update `offRampContinueTap` schema to accept any string values (#11174)
+
 ## [2.50.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.49.1...@exodus/analytics-validation@2.50.0) (2025-01-17)
 
 ### Features

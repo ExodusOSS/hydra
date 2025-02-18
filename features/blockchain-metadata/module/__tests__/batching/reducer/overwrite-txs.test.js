@@ -1,8 +1,9 @@
-import lodash from 'lodash'
-import overwriteTxsReducer from '../../../batching/reducer/overwrite-txs.js'
+import { asset } from '@exodus/bitcoin-meta'
 import { TxSet } from '@exodus/models'
 import { when } from 'jest-when'
-import { asset } from '@exodus/bitcoin-meta'
+import lodash from 'lodash'
+
+import overwriteTxsReducer from '../../../batching/reducer/overwrite-txs.js'
 
 const { get, has } = lodash
 

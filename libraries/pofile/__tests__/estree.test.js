@@ -13,7 +13,7 @@ describe('estree', () => {
     expect(program.body).toBeInstanceOf(Array)
     expect(program.loc).toEqual({
       start: { line: 1, column: 0 },
-      end: { line: 27, column: 45 },
+      end: { line: 36, column: 37 },
       source: filePath,
     })
   })

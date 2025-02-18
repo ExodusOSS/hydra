@@ -1,16 +1,15 @@
+import { createInMemoryAtom } from '@exodus/atoms'
+import { mapValues } from '@exodus/basic-utils'
 import { UnitType } from '@exodus/currency'
 import { asset as ethereumMeta } from '@exodus/ethereum-meta'
-import { TxSet, WalletAccount, normalizeTxsJSON } from '@exodus/models'
+import { normalizeTxsJSON, TxSet, WalletAccount } from '@exodus/models'
 import createStorage from '@exodus/storage-memory'
-import { mapValues } from '@exodus/basic-utils'
 
-import _fixtures from './tx-log-fixtures.cjs'
-
-import definition from '../index.js'
-import { txLogsAtomDefinition, accountStatesAtomDefinition } from '../../atoms/index.js'
+import { accountStatesAtomDefinition, txLogsAtomDefinition } from '../../atoms/index.js'
 import ErrorType from '../error.js'
+import definition from '../index.js'
 import { AccountStates } from './test-utils.js'
-import { createInMemoryAtom } from '@exodus/atoms'
+import _fixtures from './tx-log-fixtures.cjs'
 
 const { factory: createBlockchainMetadata } = definition
 const getLastCallArgs = (jestFn) => [...jestFn.mock.calls].pop()

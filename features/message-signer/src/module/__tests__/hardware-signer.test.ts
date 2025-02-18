@@ -1,6 +1,7 @@
-import hardwareSignerDefinition from '../hardware-signer.js'
 import { WalletAccount } from '@exodus/models'
 import { LEDGER_SRC } from '@exodus/models/lib/wallet-account'
+
+import hardwareSignerDefinition from '../hardware-signer.js'
 
 const assets = {
   ethereum: {

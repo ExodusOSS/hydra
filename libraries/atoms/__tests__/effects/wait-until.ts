@@ -1,5 +1,5 @@
-import { createInMemoryAtom } from '../../src/index.js'
 import waitUntil from '../../src/effects/wait-until.js'
+import { createInMemoryAtom } from '../../src/index.js'
 import type { Atom, Unsubscribe } from '../../src/utils/types.js'
 
 describe('waitUntil effect', () => {
@@ -19,7 +19,7 @@ describe('waitUntil effect', () => {
 
   it('should wait for value to equal supplied value', async () => {
     const handler = jest.fn()
-    waitUntil({ atom: identityAtom, predicate: (v) => v === 'the joker' }).then(handler)
+    void waitUntil({ atom: identityAtom, predicate: (v) => v === 'the joker' }).then(handler)
 
     await identityAtom.set('Harry Potter')
     expect(handler).not.toHaveBeenCalled()

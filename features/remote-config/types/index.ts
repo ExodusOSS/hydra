@@ -1,4 +1,4 @@
-import ExodusModule from '@exodus/module' // eslint-disable-line import/no-deprecated
+import type EventEmitter from 'eventemitter3'
 
 export type Fetch = typeof fetch
 
@@ -17,9 +17,10 @@ export type RemoteConfigType = {
   load(): Promise<void>
   stop(): void
   sync(): void
+  update(): void
   get(key: string): Promise<string | undefined>
   getAll(): Promise<Record<string, any>>
-} & ExodusModule
+} & EventEmitter
 
 export type Port = {
   emit(event: string, value: any): void

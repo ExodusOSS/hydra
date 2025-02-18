@@ -1,23 +1,30 @@
 {
   "name": "@exodus/json-rpc",
-  "version": "1.11.2",
+  "version": "1.13.0",
   "description": "JSON-RPC simple transport agnostic client and server",
   "main": "index.js",
-  "repository": "https://github.com/ExodusMovement/json-rpc",
+  "types": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
+  },
   "author": "Exodus Movement, Inc.",
-  "license": "Proprietary",
+  "license": "MIT",
   "scripts": {
-    "test": "tape 'tests/**/*.js'",
-    "lint": "eslint *.js tests/*.js",
-    "prepublishOnly": "npm run lint && npm test"
+    "test": "run -T exodus-test 'tests/**/*.js'",
+    "lint": "run -T eslint"
   },
   "keywords": [],
   "files": [
-    "index.js",
+    "CHANGELOG.md",
+    "index.d.ts",
     "errors.js"
   ],
-  "devDependencies": {
-    "eslint": "6.8.0",
-    "tape": "4.12.1"
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/json-rpc",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Ajson-rpc"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

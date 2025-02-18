@@ -4,6 +4,7 @@ import fiatCurrencies from '@exodus/fiat-currencies'
 import { isEqual } from 'lodash'
 import assert from 'minimalistic-assert'
 
+import { defaultNonDustAssetsConfig } from '../../shared'
 import pluginDefinition from '../track-non-dust-asset-names'
 
 const rates = {
@@ -65,7 +66,7 @@ const createAssetsModule = (assets) => ({
 })
 
 describe('trackNonDisableableAssetsPlugin', () => {
-  const prepare = (opts = {}) => {
+  const prepare = ({ config, ...opts } = {}) => {
     const fiatBalancesAtom = createInMemoryAtom()
     const assetsModule = opts.assets ? createAssetsModule(opts.assets) : createAssetsModule(assets)
     const nonDustBalanceAssetNamesAtom = createInMemoryAtom({
@@ -78,7 +79,7 @@ describe('trackNonDisableableAssetsPlugin', () => {
       assetsModule,
       nonDustBalanceAssetNamesAtom,
       enabledAssetsAtom: createInMemoryAtom({ defaultValue: [] }),
-      config: {},
+      config: { ...defaultNonDustAssetsConfig, ...config },
       ...opts,
     })
 

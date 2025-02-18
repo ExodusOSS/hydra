@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.1.4...@exodus/i18n@5.1.5) (2025-02-07)
+
+### Bug Fixes
+
+- fix: updates i18n packages from audit review (#11373)
+
+## [5.1.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.1.3...@exodus/i18n@5.1.4) (2025-01-31)
+
+### Bug Fixes
+
+- fix: update i18n transform-plugin to properly transform jsx variables (#11277)
+
+## [5.1.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.1.2...@exodus/i18n@5.1.3) (2025-01-23)
+
+### Bug Fixes
+
+- fix: update context key extraction in i18n text processing (#11205)
+
+## [5.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.1.1...@exodus/i18n@5.1.2) (2025-01-22)
+
+**Note:** Downgrades eventemitter3 to ^4.0.7 [#11177](https://github.com/ExodusMovement/exodus-hydra/pull/11177)
+
+## [5.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.1.0...@exodus/i18n@5.1.1) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
+## [5.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.0.0...@exodus/i18n@5.1.0) (2024-12-05)
+
+### Features
+
+- feat(i18n): add support for translation by context (3 of 3) ([#10382](https://github.com/ExodusMovement/exodus-hydra/issues/10382))
+
 ## [5.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@4.0.1...@exodus/i18n@5.0.0) (2024-11-04)
 
 ### ⚠ BREAKING CHANGES

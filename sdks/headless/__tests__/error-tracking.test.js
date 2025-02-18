@@ -11,8 +11,8 @@ describe('error-tracking preprocessors', () => {
 
   it('error-tracking', async () => {
     // to have predictable value for Date.now
-    let i = 0
-    jest.spyOn(Date, 'now').mockImplementation(() => i++)
+    const time = new Date('2024-12-10').getTime()
+    jest.spyOn(Date, 'now').mockImplementation(() => time)
 
     const adapters = createAdapters()
 
@@ -61,13 +61,13 @@ describe('error-tracking preprocessors', () => {
           namespace: 'harry',
           context: {},
           error: 'error1',
-          time: 1,
+          time,
         },
         {
           namespace: 'voldie',
           context: {},
           error: 'error0',
-          time: 0,
+          time,
         },
       ],
     })

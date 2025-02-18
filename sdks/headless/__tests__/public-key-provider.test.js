@@ -1,6 +1,7 @@
 import { createAsset as createBitcoin } from '@exodus/bitcoin-plugin'
 import { KeyIdentifier } from '@exodus/keychain/module'
 import { getSeedId } from '@exodus/keychain/module/crypto/seed-id'
+import { createNoopLogger } from '@exodus/logger'
 import { WalletAccount } from '@exodus/models'
 import { mnemonicToSeed } from 'bip39'
 
@@ -8,7 +9,7 @@ import createAdapters from './adapters'
 import config from './config'
 import createExodus from './exodus'
 
-const bitcoin = createBitcoin({ assetClientInterface: {} })
+const bitcoin = createBitcoin({ assetClientInterface: { createLogger: createNoopLogger } })
 
 describe('public-key-provider', () => {
   /** @type {import('../src/index').ExodusApi} */

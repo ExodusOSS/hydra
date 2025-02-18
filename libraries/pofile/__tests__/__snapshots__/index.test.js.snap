@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`pofile api should add comment to entry 1`] = `
 "# other comment
 #: src/Component.js:76
@@ -26,7 +28,16 @@ msgstr "Click en <0>Submit</0>"
 
 #: src/balance/utils.js:10
 msgid "{exodus.account.active.name} balance"
-msgstr "{exodus.account.active.name} balance""
+msgstr "{exodus.account.active.name} balance"
+
+#: src/Component.js:100
+msgid "Stake {asset.displayTicker}"
+msgstr "Stake {asset.displayTicker}"
+msgctxt "stake.button"
+
+#: src/Component.js:1
+msgid "Stake {asset.displayTicker}"
+msgstr "{asset.displayTicker}-Staker""
 `;
 
 exports[`pofile api should add entry on top of existing file 1`] = `
@@ -57,6 +68,15 @@ msgstr "Click en <0>Submit</0>"
 #: src/balance/utils.js:10
 msgid "{exodus.account.active.name} balance"
 msgstr "{exodus.account.active.name} balance"
+
+#: src/Component.js:100
+msgid "Stake {asset.displayTicker}"
+msgstr "Stake {asset.displayTicker}"
+msgctxt "stake.button"
+
+#: src/Component.js:1
+msgid "Stake {asset.displayTicker}"
+msgstr "{asset.displayTicker}-Staker"
 
 # Some comment
 msgid "Welcome to Exodus"
@@ -98,7 +118,16 @@ msgstr "Click en <0>Submit</0>"
 
 #: src/balance/utils.js:10
 msgid "{exodus.account.active.name} balance"
-msgstr "{exodus.account.active.name} balance""
+msgstr "{exodus.account.active.name} balance"
+
+#: src/Component.js:100
+msgid "Stake {asset.displayTicker}"
+msgstr "Stake {asset.displayTicker}"
+msgctxt "stake.button"
+
+#: src/Component.js:1
+msgid "Stake {asset.displayTicker}"
+msgstr "{asset.displayTicker}-Staker""
 `;
 
 exports[`pofile api should add reference to entry 1`] = `
@@ -129,7 +158,16 @@ msgstr "Click en <0>Submit</0>"
 
 #: src/balance/utils.js:10
 msgid "{exodus.account.active.name} balance"
-msgstr "{exodus.account.active.name} balance""
+msgstr "{exodus.account.active.name} balance"
+
+#: src/Component.js:100
+msgid "Stake {asset.displayTicker}"
+msgstr "Stake {asset.displayTicker}"
+msgctxt "stake.button"
+
+#: src/Component.js:1
+msgid "Stake {asset.displayTicker}"
+msgstr "{asset.displayTicker}-Staker""
 `;
 
 exports[`pofile api should escape entry successfully 1`] = `
@@ -167,7 +205,16 @@ msgstr "Click en <0>Submit</0>"
 
 #: src/balance/utils.js:10
 msgid "{exodus.account.active.name} balance"
-msgstr "{exodus.account.active.name} balance""
+msgstr "{exodus.account.active.name} balance"
+
+#: src/Component.js:100
+msgid "Stake {asset.displayTicker}"
+msgstr "Stake {asset.displayTicker}"
+msgctxt "stake.button"
+
+#: src/Component.js:1
+msgid "Stake {asset.displayTicker}"
+msgstr "{asset.displayTicker}-Staker""
 `;
 
 exports[`pofile api should merge entries with different placeholder variable names 1`] = `
@@ -198,6 +245,15 @@ msgstr "Click en <0>Submit</0>"
 #: src/balance/utils.js:10
 msgid "{exodus.account.active.name} balance"
 msgstr "{exodus.account.active.name} balance"
+
+#: src/Component.js:100
+msgid "Stake {asset.displayTicker}"
+msgstr "Stake {asset.displayTicker}"
+msgctxt "stake.button"
+
+#: src/Component.js:1
+msgid "Stake {asset.displayTicker}"
+msgstr "{asset.displayTicker}-Staker"
 
 msgid "{another-var-in-another-context} balance"
 msgstr "{another-var-in-another-context} balance""
@@ -230,5 +286,14 @@ msgstr "Click en <0>Submit</0>"
 
 #: src/balance/utils.js:10
 msgid "{exodus.account.active.name} balance"
-msgstr "{exodus.account.active.name} balance""
+msgstr "{exodus.account.active.name} balance"
+
+#: src/Component.js:100
+msgid "Stake {asset.displayTicker}"
+msgstr "Stake {asset.displayTicker}"
+msgctxt "stake.button"
+
+#: src/Component.js:1
+msgid "Stake {asset.displayTicker}"
+msgstr "{asset.displayTicker}-Staker""
 `;

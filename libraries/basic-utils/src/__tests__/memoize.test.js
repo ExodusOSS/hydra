@@ -27,6 +27,20 @@ describe('memoize', () => {
     expect(calls).toBe(2)
   })
 
+  it('should allow clearing cache', async () => {
+    let count = 0
+    const fn = jest.fn(() => ++count)
+    const memoizedFn = memoize(fn)
+
+    const first = memoizedFn()
+    memoizedFn.reset()
+    const second = memoizedFn()
+
+    expect(first).toBe(1)
+    expect(second).toBe(2)
+    expect(fn).toHaveBeenCalledTimes(2)
+  })
+
   it('should memoize function as lodash does', async () => {
     const memoizedFunction = memoize(fn, ({ param }) => param)
 

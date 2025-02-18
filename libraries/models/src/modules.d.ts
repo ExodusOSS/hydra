@@ -1,0 +1,5 @@
+declare module '@exodus/assets'
+declare module '@exodus/assets-base'
+declare module '@exodus/serialization'
+declare module 'bip32-path'
+declare module 'proxy-freeze'

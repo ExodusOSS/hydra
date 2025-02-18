@@ -1,5 +1,5 @@
-import { createRpcClient, RPC } from '@exodus/browser-extension-rpc'
 import createDomainSerialization from '@exodus/domain-serialization'
+import { createRPCClient, RPC } from '@exodus/sdk-rpc'
 import { EventEmitter } from 'events/events.js'
 
 export const createRPC = (api) => {
@@ -36,5 +36,5 @@ export const createRPC = (api) => {
     serialize,
   })
 
-  return createRpcClient(client)
+  return createRPCClient(client)
 }

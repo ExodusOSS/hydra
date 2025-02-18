@@ -1,5 +1,6 @@
 import type { Storage } from '@exodus/storage-interface'
 import createInMemoryStorage from '@exodus/storage-memory'
+
 import type { Atom } from '../../src/index.js'
 
 const FRESH = 'fresh'

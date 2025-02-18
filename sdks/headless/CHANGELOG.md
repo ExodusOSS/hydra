@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0-rc.49](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.48...@exodus/headless@5.0.0-rc.49) (2025-01-29)
+
+### ⚠ BREAKING CHANGES
+
+- **headless:** remove deprecated isMnemonicValid method (#11233)
+
+### Features
+
+- feat: add cached sodium encryptor to headless (#11198)
+
+- feat(headless): add reporting ts types (#11229)
+
+- feat(headless)!: remove deprecated isMnemonicValid method (#11233)
+
+- feat(headless): type debug apis (#11235)
+
+### Bug Fixes
+
+- fix: optimize keychain operations (#11081)
+
+## [5.0.0-rc.48](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.47...@exodus/headless@5.0.0-rc.48) (2025-01-16)
+
+### Features
+
+- feat(@exodus/headless): Update @exodus/rates-monitor, @exodus/pricing dependency version (#11112)
+
+## [5.0.0-rc.47](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.46...@exodus/headless@5.0.0-rc.47) (2025-01-02)
+
+### Features
+
+- feat: bump assets-feature in sdk (#10935)
+
+## [5.0.0-rc.46](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.45...@exodus/headless@5.0.0-rc.46) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [5.0.0-rc.45](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.44...@exodus/headless@5.0.0-rc.45) (2024-11-13)
 
 **Note:** Version bump only for package @exodus/headless

@@ -26,4 +26,12 @@ const createFiatBalancesAnalyticsPlugin = ({
   return { onStart, onStop }
 }
 
-export default createFiatBalancesAnalyticsPlugin
+const fiatBalancesAnalyticsPluginDefinition = {
+  id: 'fiatBalancesAnalyticsPlugin',
+  type: 'plugin',
+  factory: createFiatBalancesAnalyticsPlugin,
+  dependencies: ['analytics', 'fiatBalancesAtom', 'config?'],
+  public: true,
+}
+
+export default fiatBalancesAnalyticsPluginDefinition

@@ -8,12 +8,23 @@ const EMPTY = Object.freeze([])
 const groupTxsWithSameOrder = ({ txs, orderSet, isIndexless }) => {
   if (!orderSet) return txs.map((tx) => ({ tx, type: 'tx' }))
 
-  const getOrder = (tx) => orderSet.getByTxId(tx.txId)
+  const getOrder = (tx) => {
+    const foundOrder = orderSet.getByTxId(tx.txId)
+    const isBatchedTx = tx.coinName === 'bitcoin' && tx.data.sent?.[tx.data.sentIndex]
+    const isValidTx =
+      isBatchedTx && foundOrder?.fromAmount
+        ? tx.coinAmount.abs().equals(foundOrder.fromAmount)
+        : true
+
+    return isValidTx ? foundOrder : undefined
+  }
+
   const exchangeByOrderId = new Map()
   const result = []
 
   for (const tx of txs) {
     const order = getOrder(tx)
+
     if (isIndexless && order) {
       // Orders are the source of truth for indexless swaps.
       // Skip this tx and add it later as exchanged.
@@ -83,7 +94,7 @@ const createAssetSourceBaseActivitySelectorDefinition = {
                   personalNote,
                 })
 
-                activityResult.push(formattedTx)
+                activityResult.push({ ...formattedTx, walletAccount })
               }
             }
 
@@ -101,9 +112,10 @@ const createAssetSourceBaseActivitySelectorDefinition = {
                 // Prevent dups by checking if this order already exists.
                 if (orderIdsFromActivity.has(order.orderId)) return
 
-                const formattedItem = formatUnindexedOrder({ assetName, assets, order })
-
-                activityResult.push(formattedItem)
+                activityResult.push({
+                  ...formatUnindexedOrder({ assetName, assets, order }),
+                  walletAccount,
+                })
               })
             }
 

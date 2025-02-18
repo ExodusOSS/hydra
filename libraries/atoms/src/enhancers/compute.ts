@@ -1,3 +1,4 @@
+import { safeMemoize } from '../utils/memoize.js'
 import type { Atom, Listener, ReadonlyAtom } from '../utils/types.js'
 
 type Params<T, V> = {
@@ -6,9 +7,11 @@ type Params<T, V> = {
 }
 
 const compute = <T, V>({ atom, selector }: Params<T, V>): ReadonlyAtom<V> => {
+  const memoizedSelector = safeMemoize((value: T) => selector(value))
+
   const get = async () => {
     const values = await atom.get()
-    return selector(values)
+    return memoizedSelector(values)
   }
 
   const set = async () => {
@@ -19,7 +22,7 @@ const compute = <T, V>({ atom, selector }: Params<T, V>): ReadonlyAtom<V> => {
     let prev: V
     let called: boolean
     return atom.observe(async (values) => {
-      const selected = await selector(values)
+      const selected = await memoizedSelector(values)
       if (called && prev === selected) return
       called = true
       prev = selected

@@ -1,6 +1,7 @@
-import { AccountStates } from '../../test-utils.js'
-import removeAccountStateReducer from '../../../batching/reducer/remove-account-state.js'
 import lodash from 'lodash'
+
+import removeAccountStateReducer from '../../../batching/reducer/remove-account-state.js'
+import { AccountStates } from '../../test-utils.js'
 
 const { has } = lodash
 

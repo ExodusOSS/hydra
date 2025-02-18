@@ -1,5 +1,5 @@
 import { createInMemoryAtom } from '@exodus/atoms'
-import createExodusPricingClient from '@exodus/exodus-pricing-client'
+import pricingClientDefinition from '@exodus/pricing/module/index.js'
 import delay from 'delay'
 
 import _createExodus from '../src'
@@ -33,7 +33,7 @@ const createExodus = ({ adapters = createAdapters(), config = defaultConfig, deb
       id: 'pricingClient',
       override: true,
       factory: (args) => {
-        const client = createExodusPricingClient(args)
+        const client = pricingClientDefinition.factory(args)
 
         const simulateRequest = (res) => async () => {
           await delay(10) // simulate some latency.

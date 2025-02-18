@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.3.0...@exodus/application@2.4.0) (2025-02-13)
+
+### Features
+
+- feat: catch error from restoreIfNeeded (#11433)
+
+## [2.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.2.4...@exodus/application@2.3.0) (2025-02-12)
+
+### Features
+
+- feat: allow override the restore flag on start (#11423)
+
+## [2.2.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.2.3...@exodus/application@2.2.4) (2025-01-31)
+
+### Bug Fixes
+
+- fix: restore edge case (#11296)
+
 ## [2.2.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.2.2...@exodus/application@2.2.3) (2024-12-13)
 
 ### Bug Fixes

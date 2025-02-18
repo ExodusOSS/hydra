@@ -1,4 +1,4 @@
-import randomBytes from 'randombytes'
+import { randomBytes } from '@exodus/crypto/randomBytes'
 import bip39 from 'bip39'
 import assert from 'minimalistic-assert'
 
@@ -14,7 +14,7 @@ export class NamedError extends Error {
 export const assertMnemonic = (input, validMnemonicLengths) => {
   assert(typeof input === 'string', 'The secret phrase provided is not a string')
 
-  if (!validMnemonicLengths.includes(input.split(/\s+/g).length)) {
+  if (!validMnemonicLengths.includes(input.split(/\s+/gu).length)) {
     throw new NamedError({ name: 'UnexpectedWordCount' })
   }
 

@@ -17,6 +17,7 @@ const createSimpleObserver = <T>({ enable = true } = {}) => {
   }
 
   return {
+    listeners,
     observe,
     notify,
   }

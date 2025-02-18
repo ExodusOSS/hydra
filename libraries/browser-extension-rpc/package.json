@@ -1,6 +1,6 @@
 {
   "name": "@exodus/browser-extension-rpc",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "type": "module",
   "exports": {
     ".": "./src/index.js",
@@ -24,9 +24,9 @@
   "dependencies": {
     "@exodus/browser-extension-channels": "^1.1.5",
     "@exodus/json-rpc": "^1.9.0",
+    "@exodus/sdk-rpc": "^1.0.0",
     "@exodus/window-rpc-transport": "^1.0.0",
     "eventemitter3": "^4.0.7",
-    "ms": "^0.7.1",
     "p-defer": "^4.0.0"
   },
   "files": [
@@ -36,8 +36,7 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "lint": "yarn run -T eslint .",
-    "test": "run -T exodus-test"
+    "lint": "yarn run -T eslint ."
   },
   "publishConfig": {
     "access": "public"

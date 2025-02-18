@@ -3,25 +3,23 @@ import fiatCurrencies from '@exodus/fiat-currencies'
 
 const { USD } = fiatCurrencies
 
-const DEFAULT_BALANCES_THRESHOLD_USD = USD.defaultUnit(0.5)
-
 const createTrackNonDustAssetNamesPlugin = ({
   assetsModule,
   fiatBalancesAtom,
   fiatRateConverter,
   nonDustBalanceAssetNamesAtom,
-  config: {
-    balanceThresholdsUsd = {},
-    balanceThresholdByChainUsd = {},
-    defaultBalanceThresholdUsd = DEFAULT_BALANCES_THRESHOLD_USD,
-  },
+  config: { balanceThresholdsUsd, balanceThresholdByChainUsd, defaultBalanceThresholdUsd },
 }) => {
   const handleFiatBalancesChanged = async ({ balances }) => {
     const { byAssetSource } = balances
     if (!byAssetSource) return
 
     const balancesByAssetSource = flattenToPaths(byAssetSource).map(
-      ([walletAccount, assetName, balanceField, balance]) => ({ walletAccount, assetName, balance })
+      ([walletAccount, assetName, _balanceField, balance]) => ({
+        walletAccount,
+        assetName,
+        balance,
+      })
     )
 
     const aboveThreshold = await filterAsync(

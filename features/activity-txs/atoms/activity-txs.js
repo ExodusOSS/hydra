@@ -1,7 +1,7 @@
 import { combine, compute } from '@exodus/atoms'
 import { createSelector } from 'reselect'
-import { memoize } from 'lodash' // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
 import { createDeepEqualOutputSelector } from '@exodus/core-selectors/utils/deep-equal'
+import { memoize } from '@exodus/basic-utils'
 
 const createAssetSourceActivityTxsSelector = memoize(
   ({ assetName, walletAccount }) =>
@@ -85,7 +85,13 @@ const areActivitiesEqual = (obj1 = {}, obj2 = {}) => {
   return true
 }
 
-const createActivityTxsAtom = ({ txLogsAtom, accountStatesAtom, assetsModule }) => {
+const createActivityTxsAtom = ({
+  txLogsAtom,
+  accountStatesAtom,
+  assetsModule,
+  logger,
+  errorTracking,
+}) => {
   const inputAtom = combine({
     txLogs: txLogsAtom,
     accountStates: accountStatesAtom,
@@ -132,13 +138,19 @@ const createActivityTxsAtom = ({ txLogsAtom, accountStatesAtom, assetsModule }) 
                 walletAccount,
               })
 
-              const activityTxs = await getActivityForAssetSource({
-                asset,
-                txs,
-                activityOptions,
-              })
+              try {
+                const activityTxs = await getActivityForAssetSource({
+                  asset,
+                  txs,
+                  activityOptions,
+                })
 
-              return [assetName, activityTxs]
+                return [assetName, activityTxs]
+              } catch (e) {
+                errorTracking.track({ error: e, namespace: 'activityTxs', context: { assetName } })
+                logger.warn(`failed to get activity txs for asset: ${assetName}`, e)
+                return [assetName, []]
+              }
             }
 
             const txs = createAssetSourceTxsSelector({ assetName, walletAccount })({
@@ -174,7 +186,7 @@ const activityTxsAtomDefinition = {
   id: 'activityTxsAtom',
   type: 'atom',
   factory: createActivityTxsAtom,
-  dependencies: ['txLogsAtom', 'accountStatesAtom', 'assetsModule'],
+  dependencies: ['txLogsAtom', 'accountStatesAtom', 'assetsModule', 'logger', 'errorTracking'],
   public: true,
 }
 

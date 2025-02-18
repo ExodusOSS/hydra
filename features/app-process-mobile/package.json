@@ -1,7 +1,7 @@
 {
   "name": "@exodus/app-process-mobile",
   "author": "Exodus Movement, Inc.",
-  "version": "3.5.0",
+  "version": "3.6.1",
   "license": "MIT",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/app-process-mobile",
   "bugs": {
@@ -44,5 +44,8 @@
   "peerDependencies": {
     "metro-react-native-babel-preset": "^0.64.0",
     "react-native": "^0.64.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

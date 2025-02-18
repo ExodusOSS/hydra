@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/find-optimistic-orders@3.0.0...@exodus/find-optimistic-orders@3.1.0) (2025-02-13)
+
+### Features
+
+- feat(find-optimistic-orders): use slippage in order to match order (#11449)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
+## [3.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/find-optimistic-orders@3.0.0...@exodus/find-optimistic-orders@3.0.1) (2024-11-25)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
 ## 3.0.0 (2024-09-11)
 
 ### ⚠ BREAKING CHANGES

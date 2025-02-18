@@ -9,6 +9,7 @@ const resultFunction = (loading, rates, assets) =>
       const ticker = asset.ticker
       const rate = rates?.[ticker]
       if (!rate) return false
+      if (!rate.price) return false
       return rates?.[ticker]?.invalid !== true
     }
 

@@ -59,6 +59,7 @@ const assetsModule = {
 
 const publicKeyStore = {
   add: jest.fn().mockImplementation(async () => {}),
+  addMany: jest.fn().mockImplementation(async () => {}),
   delete: jest.fn().mockImplementation(async () => {}),
   clearSoftwareWalletAccountKeys: jest.fn().mockImplementation(async () => {}),
 }
@@ -104,56 +105,64 @@ describe('MockablePublicKeyProvider', () => {
       instance = new MockablePublicKeyProvider({ ...deps, config: { xpubs } })
       await instance.onReady
 
-      expect(publicKeyStore.add).toHaveBeenCalledTimes(4)
-      expect(publicKeyStore.add).toHaveBeenNthCalledWith(
+      expect(publicKeyStore.addMany).toHaveBeenCalledTimes(3)
+      expect(publicKeyStore.addMany).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({
-          xpub: 'xpub01',
-          keyIdentifier: new KeyIdentifier({
-            assetName: 'bitcoin',
-            keyType: 'secp256k1',
-            derivationAlgorithm: 'BIP32',
-            derivationPath: "m/44'/0'/0'",
-          }),
+          keys: [
+            {
+              xpub: 'xpub01',
+              keyIdentifier: new KeyIdentifier({
+                assetName: 'bitcoin',
+                keyType: 'secp256k1',
+                derivationAlgorithm: 'BIP32',
+                derivationPath: "m/44'/0'/0'",
+              }),
+            },
+            {
+              xpub: 'xpub02',
+              keyIdentifier: new KeyIdentifier({
+                assetName: 'bitcoin',
+                keyType: 'secp256k1',
+                derivationAlgorithm: 'BIP32',
+                derivationPath: "m/84'/0'/0'",
+              }),
+            },
+          ],
         })
       )
 
-      expect(publicKeyStore.add).toHaveBeenNthCalledWith(
+      expect(publicKeyStore.addMany).toHaveBeenNthCalledWith(
         2,
         expect.objectContaining({
-          xpub: 'xpub03',
-          keyIdentifier: new KeyIdentifier({
-            assetName: 'litecoin',
-            keyType: 'secp256k1',
-            derivationAlgorithm: 'BIP32',
-            derivationPath: "m/49'/2'/0'",
-          }),
+          keys: [
+            {
+              xpub: 'xpub03',
+              keyIdentifier: new KeyIdentifier({
+                assetName: 'litecoin',
+                keyType: 'secp256k1',
+                derivationAlgorithm: 'BIP32',
+                derivationPath: "m/49'/2'/0'",
+              }),
+            },
+          ],
         })
       )
 
-      expect(publicKeyStore.add).toHaveBeenNthCalledWith(
+      expect(publicKeyStore.addMany).toHaveBeenNthCalledWith(
         3,
         expect.objectContaining({
-          xpub: 'xpub02',
-          keyIdentifier: new KeyIdentifier({
-            assetName: 'bitcoin',
-            keyType: 'secp256k1',
-            derivationAlgorithm: 'BIP32',
-            derivationPath: "m/84'/0'/0'",
-          }),
-        })
-      )
-
-      expect(publicKeyStore.add).toHaveBeenNthCalledWith(
-        4,
-        expect.objectContaining({
-          xpub: 'xpub04',
-          keyIdentifier: new KeyIdentifier({
-            assetName: 'bitcoin',
-            keyType: 'secp256k1',
-            derivationAlgorithm: 'BIP32',
-            derivationPath: "m/44'/0'/1'",
-          }),
+          keys: [
+            {
+              xpub: 'xpub04',
+              keyIdentifier: new KeyIdentifier({
+                assetName: 'bitcoin',
+                keyType: 'secp256k1',
+                derivationAlgorithm: 'BIP32',
+                derivationPath: "m/44'/0'/1'",
+              }),
+            },
+          ],
         })
       )
     })

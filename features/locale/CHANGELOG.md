@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/locale@2.2.2...@exodus/locale@2.3.0) (2024-12-06)
+
+### Features
+
+- feat(locale): convert to ESM and add tests (#8739)
+
+- feat: use atoms v9 (#9651)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [2.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/locale@2.2.1...@exodus/locale@2.2.2) (2024-07-25)
 
 ### Bug Fixes

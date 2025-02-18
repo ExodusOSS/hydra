@@ -9,6 +9,7 @@ import type {
   GetParams,
   GetReturn,
   IStorageFormatBuilder,
+  AddManyParams,
 } from './types.js'
 import type { MoneroPublicKey, PublicKey, XPUB } from '../serialization/index.js'
 
@@ -44,20 +45,26 @@ export class StorageFormatLegacyBuilder implements IStorageFormatBuilder {
     return Object.keys(this.#data)
   }
 
-  add = ({ walletAccountName, keyIdentifier, publicKey, xpub }: AddParams) => {
+  addMany = async ({ walletAccountName, keys }: AddManyParams) => {
     assert(typeof walletAccountName === 'string', 'walletAccountName must be string')
-    keyIdentifier = new KeyIdentifier(keyIdentifier)
-    assert(publicKey || xpub, 'publicKey or xpub must be defined')
+    const publicKeys = this.#data[walletAccountName] ?? Object.create(null)
 
-    const publicKeys = this.#data[walletAccountName] || Object.create(null)
+    keys.forEach((key) => {
+      const keyIdentifier = new KeyIdentifier(key.keyIdentifier)
 
-    publicKeys[keyIdentifier.derivationPath] = {
-      ...(publicKey ? { publicKey } : {}),
-      ...(xpub ? { xpub } : {}),
-      chain: [0, 0, 0],
-    }
+      assert(key.publicKey || key.xpub, 'publicKey or xpub must be defined')
+      publicKeys[keyIdentifier.derivationPath] = {
+        ...(key.publicKey ? { publicKey: key.publicKey } : {}),
+        ...(key.xpub ? { xpub: key.xpub } : {}),
+        chain: [0, 0, 0],
+      }
+    })
 
     this.#data[walletAccountName] = publicKeys
+  }
+
+  add = ({ walletAccountName, ...key }: AddParams) => {
+    return this.addMany({ walletAccountName, keys: [key] })
   }
 
   #findPublicKeyEntry = ({ walletAccountName, keyIdentifier }: GetParams) => {

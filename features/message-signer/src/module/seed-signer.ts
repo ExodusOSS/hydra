@@ -49,13 +49,17 @@ class SeedBasedMessageSigner implements InternalSigner {
     })
     const defaultPurpose: number = purposes[0]!
 
-    const defaultPathIndexes = getDefaultPathIndexes({ asset: baseAsset, compatibilityMode })
+    const defaultPathIndexes = getDefaultPathIndexes({
+      asset: baseAsset,
+      walletAccount,
+      compatibilityMode,
+    })
 
     const { chainIndex, addressIndex } = defaultPathIndexes
 
     const keyId = baseAsset.api.getKeyIdentifier({
       purpose: purpose ?? defaultPurpose,
-      accountIndex: walletAccount.index,
+      accountIndex: walletAccount.index!,
       addressIndex,
       chainIndex,
       compatibilityMode: walletAccount.compatibilityMode,
