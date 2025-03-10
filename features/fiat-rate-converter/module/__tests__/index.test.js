@@ -1,5 +1,6 @@
 import { createAtomMock } from '@exodus/atoms'
 import { UnitType } from '@exodus/currency'
+
 import createFiatRateConverterDefinition from '../index.js'
 
 const cryptoAmount = '5.290'

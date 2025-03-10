@@ -50,6 +50,15 @@
             "maxLength": 30
           }
         },
+        "has_balance_assets": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "any-string",
+            "minLength": 2,
+            "maxLength": 30
+          }
+        },
         "is_referrer": {
           "type": "boolean"
         },
@@ -57,6 +66,12 @@
           "type": "boolean"
         },
         "wallet_created_at": {
+          "type": "string"
+        },
+        "web3_browser_last_viewed_at": {
+          "type": "string"
+        },
+        "telemetry_id": {
           "type": "string"
         }
       },

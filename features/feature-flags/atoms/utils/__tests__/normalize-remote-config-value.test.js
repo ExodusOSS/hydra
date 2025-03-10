@@ -1,4 +1,4 @@
-import normalizeRemoteConfigValue from '../normalize-remote-config-value'
+import normalizeRemoteConfigValue from '../normalize-remote-config-value.js'
 
 describe('normalizeRemoteConfigValue', () => {
   const scenarios = [

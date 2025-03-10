@@ -4,10 +4,11 @@ const createRestoreProgressApi = ({ restoreProgressTracker }) => ({
   },
 })
 
-// eslint-disable-next-line @exodus/export-default/named
-export default {
+const restoreProgressApiDefinition = {
   id: 'restoreProgressTrackerApi',
   type: 'api',
   factory: createRestoreProgressApi,
   dependencies: ['restoreProgressTracker'],
 }
+
+export default restoreProgressApiDefinition

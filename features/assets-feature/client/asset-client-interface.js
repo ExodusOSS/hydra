@@ -5,57 +5,61 @@ import assert from 'minimalistic-assert'
 const { isEmpty } = lodash
 
 class AssetClientInterface {
+  #addressProvider
+  #assetsModule
   #availableAssetNamesAtom
-  #walletAccountsAtom
-  #enabledWalletAccountsAtom
-  #transactionSigner
-  #publicKeyProvider
+  #blockchainMetadata
   #config
   #createLogger
+  #enabledWalletAccountsAtom
+  #feeMonitors
+  #publicKeyProvider
+  #transactionSigner
+  #walletAccountsAtom
 
   constructor({
-    blockchainMetadata,
-    createLogger,
-    walletAccountsAtom,
-    enabledWalletAccountsAtom,
+    addressProvider,
     assetsModule,
     availableAssetNamesAtom,
-    addressProvider,
-    feeMonitors,
-    transactionSigner,
-    publicKeyProvider,
+    blockchainMetadata,
+    createLogger,
     config,
+    enabledWalletAccountsAtom,
+    feeMonitors,
+    publicKeyProvider,
+    transactionSigner,
+    walletAccountsAtom,
   }) {
-    this.blockchainMetadata = blockchainMetadata
-    this.#walletAccountsAtom = walletAccountsAtom
-    this.#enabledWalletAccountsAtom = enabledWalletAccountsAtom
-    this.assetsModule = assetsModule
-    this.addressProvider = addressProvider
-    this.feeMonitors = feeMonitors
+    this.#addressProvider = addressProvider
+    this.#assetsModule = assetsModule
     this.#availableAssetNamesAtom = availableAssetNamesAtom
-    this.#transactionSigner = transactionSigner
-    this.#publicKeyProvider = publicKeyProvider
+    this.#blockchainMetadata = blockchainMetadata
     this.#config = config
     this.#createLogger = createLogger || (() => console)
+    this.#enabledWalletAccountsAtom = enabledWalletAccountsAtom
+    this.#feeMonitors = feeMonitors
+    this.#publicKeyProvider = publicKeyProvider
+    this.#transactionSigner = transactionSigner
+    this.#walletAccountsAtom = walletAccountsAtom
 
     assetsModule.initialize({ assetClientInterface: this })
   }
 
-  createLogger(namespace) {
+  createLogger = (namespace) => {
     return this.#createLogger(namespace)
   }
 
   // txHistory interface
 
   getTxHistory = async ({ assetName, walletAccount }) => {
-    return this.blockchainMetadata.getTxLog({ assetName, walletAccount })
+    return this.#blockchainMetadata.getTxLog({ assetName, walletAccount })
   }
 
-  async getTxLog({ assetName, walletAccount }) {
-    return this.blockchainMetadata.getTxLog({ assetName, walletAccount })
+  getTxLog = async ({ assetName, walletAccount }) => {
+    return this.#blockchainMetadata.getTxLog({ assetName, walletAccount })
   }
 
-  async updateTxLogAndNotify(params) {
+  updateTxLogAndNotify = async (params) => {
     return this.updateTxLogAndNotifyBatch(params).commit()
   }
 
@@ -64,7 +68,7 @@ class AssetClientInterface {
     walletAccount,
     txs,
     refresh = false,
-    batch = this.blockchainMetadata.batch(),
+    batch = this.#blockchainMetadata.batch(),
   }) => {
     return refresh
       ? batch.overwriteTxs({ assetName, walletAccount, txs })
@@ -79,18 +83,18 @@ class AssetClientInterface {
     assetName,
     walletAccount,
     txs,
-    batch = this.blockchainMetadata.batch(),
+    batch = this.#blockchainMetadata.batch(),
   }) => {
     return batch.removeTxs({ assetName, walletAccount, txs })
   }
 
   // accountState interface
 
-  async getAccountState({ assetName, walletAccount }) {
-    return this.blockchainMetadata.getAccountState({ assetName, walletAccount })
+  getAccountState = async ({ assetName, walletAccount }) => {
+    return this.#blockchainMetadata.getAccountState({ assetName, walletAccount })
   }
 
-  async updateAccountState({ assetName, walletAccount, ...params }) {
+  updateAccountState = async ({ assetName, walletAccount, ...params }) => {
     let { accountState } = params
     if (!accountState) {
       accountState = await this.getAccountState({ assetName, walletAccount })
@@ -109,7 +113,7 @@ class AssetClientInterface {
     walletAccount,
     newData,
     accountState,
-    batch = this.blockchainMetadata.batch(),
+    batch = this.#blockchainMetadata.batch(),
   }) => {
     // merge mem to keep the previous accountMem behavior
     if (!isEmpty(newData?.mem) && (!accountState || accountState.mem)) {
@@ -125,9 +129,9 @@ class AssetClientInterface {
 
   // walletAccounts interface
 
-  async getWalletAccounts({ assetName }) {
+  getWalletAccounts = async ({ assetName }) => {
     // In the future, the list of wallets may be different based on the provided assets
-    const asset = this.assetsModule.getAsset(assetName)
+    const asset = this.#assetsModule.getAsset(assetName)
     assert(asset, `${assetName} is not supported`)
     const enabledWalletAccounts = await this.#enabledWalletAccountsAtom.get()
     return filterAsync(Object.keys(enabledWalletAccounts), async (walletAccount) => {
@@ -143,19 +147,19 @@ class AssetClientInterface {
 
   // assets interface
 
-  async getAssetsForNetwork({ baseAssetName }) {
+  getAssetsForNetwork = async ({ baseAssetName }) => {
     const availableAssetNames = new Set(await this.#availableAssetNamesAtom.get())
     return pickBy(
-      this.assetsModule.getAssets(),
+      this.#assetsModule.getAssets(),
       (asset) => asset.baseAsset.name === baseAssetName && availableAssetNames.has(asset.name)
     )
   }
 
   // configParams interface
 
-  async getAssetConfig({ assetName, walletAccount }) {
+  getAssetConfig = async ({ assetName, walletAccount }) => {
     const walletAccountInstance = await this.#getWalletAccount(walletAccount)
-    const asset = this.assetsModule.getAsset(assetName)
+    const asset = this.#assetsModule.getAsset(assetName)
     assert(asset, `assetName ${assetName} is not supported`)
     assert(walletAccountInstance, `walletAccountInstance ${walletAccount} is not available`)
 
@@ -181,29 +185,29 @@ class AssetClientInterface {
     return out
   }
 
-  async getConfirmationsNumber({ assetName }) {
-    const baseAsset = this.assetsModule.getAsset(assetName).baseAsset
+  getConfirmationsNumber = async ({ assetName }) => {
+    const baseAsset = this.#assetsModule.getAsset(assetName).baseAsset
     return baseAsset.api?.getConfirmationsNumber ? baseAsset.api.getConfirmationsNumber() : 1
   }
 
-  async updateFeeConfig({ assetName, feeConfig }) {
-    await this.feeMonitors.updateFee({ assetName, feeData: feeConfig })
+  updateFeeConfig = async ({ assetName, feeConfig }) => {
+    await this.#feeMonitors.updateFee({ assetName, feeData: feeConfig })
   }
 
-  async getFeeData({ assetName }) {
-    const baseAssetName = this.assetsModule.getAsset(assetName).baseAsset.name
-    return this.feeMonitors.getFeeData({ assetName: baseAssetName })
+  getFeeData = async ({ assetName }) => {
+    const baseAssetName = this.#assetsModule.getAsset(assetName).baseAsset.name
+    return this.#feeMonitors.getFeeData({ assetName: baseAssetName })
   }
 
   getFeeConfig = async ({ assetName }) => {
-    return this.feeMonitors.getFeeData({ assetName })
+    return this.#feeMonitors.getFeeData({ assetName })
   }
 
   // batch interface
 
   // The interface consumer does not need to know the structure of the returned batch object, just
   // that it needs to be passed along wherever operations need to be batched.
-  createOperationsBatch = () => this.blockchainMetadata.batch()
+  createOperationsBatch = () => this.#blockchainMetadata.batch()
 
   executeOperationsBatch = async (batch) => batch.commit()
 
@@ -220,7 +224,7 @@ class AssetClientInterface {
       ;[purpose] = await this.getSupportedPurposes({ assetName, walletAccount })
     }
 
-    const asset = this.assetsModule.getAsset(assetName)
+    const asset = this.#assetsModule.getAsset(assetName)
     const walletAccountInstance = await this.#getWalletAccount(walletAccount)
     const keyIdentifier = asset.baseAsset.api.getKeyIdentifier({
       purpose,
@@ -237,7 +241,7 @@ class AssetClientInterface {
   }
 
   getExtendedPublicKey = async ({ assetName, walletAccount, purpose }) => {
-    const asset = this.assetsModule.getAsset(assetName)
+    const asset = this.#assetsModule.getAsset(assetName)
     const [walletAccountInstance, purposes] = await Promise.all([
       this.#getWalletAccount(walletAccount),
       purpose === undefined
@@ -262,7 +266,7 @@ class AssetClientInterface {
   }
 
   getAddress = async (opts) => {
-    return this.addressProvider.getAddress({
+    return this.#addressProvider.getAddress({
       ...opts,
       walletAccount: await this.#getWalletAccount(opts.walletAccount),
     })
@@ -274,14 +278,14 @@ class AssetClientInterface {
   }
 
   getReceiveAddressObject = async (opts) => {
-    return this.addressProvider.getReceiveAddress({
+    return this.#addressProvider.getReceiveAddress({
       ...opts,
       walletAccount: await this.#getWalletAccount(opts.walletAccount),
     })
   }
 
   getReceiveAddresses = async (opts) => {
-    const addresses = await this.addressProvider.getReceiveAddresses({
+    const addresses = await this.#addressProvider.getReceiveAddresses({
       ...opts,
       walletAccount: await this.#getWalletAccount(opts.walletAccount),
     })
@@ -290,7 +294,7 @@ class AssetClientInterface {
   }
 
   getChangeAddresses = async (opts) => {
-    const addresses = await this.addressProvider.getChangeAddresses({
+    const addresses = await this.#addressProvider.getChangeAddresses({
       ...opts,
       walletAccount: await this.#getWalletAccount(opts.walletAccount),
     })
@@ -304,14 +308,14 @@ class AssetClientInterface {
   }
 
   getSupportedPurposes = async ({ assetName, walletAccount }) => {
-    return this.addressProvider.getSupportedPurposes({
+    return this.#addressProvider.getSupportedPurposes({
       assetName,
       walletAccount: await this.#getWalletAccount(walletAccount),
     })
   }
 
   getUnusedAddressIndexes = async ({ assetName, walletAccount, highestUnusedIndexes }) => {
-    return this.addressProvider.getUnusedAddressIndexes({
+    return this.#addressProvider.getUnusedAddressIndexes({
       assetName,
       walletAccount: await this.#getWalletAccount(walletAccount),
       highestUnusedIndexes,
@@ -323,7 +327,7 @@ class AssetClientInterface {
   }
 
   getNextChangeAddress = async ({ assetName, walletAccount }) => {
-    return this.addressProvider.getUnusedAddress({
+    return this.#addressProvider.getUnusedAddress({
       assetName,
       walletAccount: await this.#getWalletAccount(walletAccount),
       chainIndex: 1,
@@ -333,7 +337,7 @@ class AssetClientInterface {
   // wallet interface
 
   signTransaction = async ({ assetName, unsignedTx, walletAccount: walletAccountName }) => {
-    const baseAssetName = this.assetsModule.getAsset(assetName).baseAsset.name
+    const baseAssetName = this.#assetsModule.getAsset(assetName).baseAsset.name
     const walletAccount = await this.#getWalletAccount(walletAccountName)
     return this.#transactionSigner.signTransaction({ baseAssetName, unsignedTx, walletAccount })
   }

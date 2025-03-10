@@ -150,6 +150,10 @@ class OrderSet {
     return [...this].map((item) => item.toJSON())
   }
 
+  toRedactedJSON() {
+    return [...this].map((item) => item.toRedactedJSON())
+  }
+
   filter(predicate: (item: Order) => boolean) {
     return OrderSet.fromArray([...this].filter(predicate))
   }

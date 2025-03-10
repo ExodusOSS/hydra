@@ -20,6 +20,7 @@ declare const walletAccountsApiDefinition: {
       create(data: WalletAccountsData): Promise<void>
       update(name: string, data: UpdateableData): Promise<void>
       disable(name: string): Promise<void>
+      disableMany(names: string[]): Promise<void>
       removeMany(names: string[]): Promise<void>
       enable(name: string): Promise<void>
       getEnabled(): Promise<{ [name: string]: WalletAccount }>

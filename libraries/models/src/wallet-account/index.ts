@@ -2,7 +2,7 @@ import proxyFreeze from 'proxy-freeze'
 import lodash from 'lodash'
 import assert from 'minimalistic-assert'
 import { ModelIdSymbol } from '../constants.js'
-import { createIsInstance } from '../utils.js'
+import { createIsInstance, omitUndefined } from '../utils.js'
 
 const { isEqual, isNil, merge } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
@@ -212,6 +212,20 @@ export default class WalletAccount {
       isMultisig: this.isMultisig,
       ...(this.id != null && { id: this.id }),
     }
+  }
+
+  toRedactedJSON() {
+    return omitUndefined({
+      source: this.source,
+      index: this.index,
+      model: this.model,
+      lastConnected: this.lastConnected,
+      is2FA: this.is2FA,
+      enabled: this.enabled,
+      compatibilityMode: this.compatibilityMode,
+      seedId: this.seedId,
+      isMultisig: this.isMultisig,
+    })
   }
 
   equals(otherWalletAccount: WalletAccount) {

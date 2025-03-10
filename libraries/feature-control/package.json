@@ -1,0 +1,39 @@
+{
+  "name": "@exodus/feature-control",
+  "version": "2.2.3",
+  "type": "module",
+  "description": "This library abstracts and simplifies handling and use of feature flags and other feature controls.",
+  "main": "index.js",
+  "author": "Exodus Movement, Inc.",
+  "license": "MIT",
+  "scripts": {
+    "lint": "run -T eslint",
+    "test": "run -T exodus-test --jest"
+  },
+  "files": [
+    "src",
+    "CHANGELOG.md",
+    "!**/__tests__"
+  ],
+  "eslintIgnore": [
+    "lib/",
+    "**/node_modules/",
+    "**/<node_internals>"
+  ],
+  "dependencies": {
+    "assert": "^1.1.1",
+    "reselect": "^3.0.1",
+    "semver": "^6.3.0"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/feature-control",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afeature-control"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

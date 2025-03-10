@@ -1,6 +1,6 @@
 {
   "name": "@exodus/fiat-balances",
-  "version": "13.0.2",
+  "version": "13.2.0",
   "description": "Track asset and portfolio fiat balances based on changes in crypto balances and the user's preferred fiat currency",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
@@ -13,14 +13,15 @@
   },
   "main": "index.js",
   "files": [
-    "module",
-    "redux",
     "atoms",
+    "module",
     "plugin",
+    "redux",
     "report",
     "shared",
-    "README.md",
+    "index.d.ts",
     "CHANGELOG.md",
+    "README.md",
     "!**/__tests__/**"
   ],
   "repository": {

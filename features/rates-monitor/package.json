@@ -1,6 +1,6 @@
 {
   "name": "@exodus/rates-monitor",
-  "version": "4.8.2",
+  "version": "4.9.1",
   "license": "MIT",
   "author": "Exodus Movement, Inc.",
   "description": "Fetches asset prices in fiat on a timer",

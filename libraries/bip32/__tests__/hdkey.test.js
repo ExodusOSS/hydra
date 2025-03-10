@@ -2,7 +2,8 @@ import { randomBytes } from '@exodus/crypto/randomBytes'
 import assert from 'assert'
 import BigInteger from 'bigi'
 import ecurve from 'ecurve'
-import { HDKey, HARDENED_OFFSET } from '../src/hdkey.js'
+
+import { HARDENED_OFFSET, HDKey } from '../src/hdkey.js'
 import loadFixture from './load-fixture.cjs'
 
 const fixtures = loadFixture('hdkey')
@@ -44,7 +45,7 @@ describe('hdkey', function () {
       const hdkey = new HDKey()
       assert.throws(function () {
         hdkey.privateKey = Buffer.from([1, 2, 3, 4])
-      }, /Expected an Uint8Array of size 32/)
+      }, /invalid private key/)
     })
   })
 

@@ -1,12 +1,9 @@
 import { createSelector } from 'reselect'
-import { OrderSet } from '@exodus/models'
 import { memoizeByAssetSource } from '../utils/memoize.js'
 
 export const resultFunc = ({ orderSet, walletAccount, assetName }) =>
-  OrderSet.fromArray(
-    [...orderSet].filter(
-      ({ toWalletAccount, toAsset }) => toAsset === assetName && walletAccount === toWalletAccount
-    )
+  orderSet.filter(
+    ({ toWalletAccount, toAsset }) => toAsset === assetName && walletAccount === toWalletAccount
   )
 
 const createAssetSourceIncomingOrdersSelectorCreator = ({ ordersInProgressSelector }) =>

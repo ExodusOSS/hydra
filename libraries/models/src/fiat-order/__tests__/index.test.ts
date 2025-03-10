@@ -3,7 +3,17 @@ import lodash from 'lodash'
 
 import assets from '../../__tests__/assets.js'
 import { serialize } from '../../account-state/index.js'
-import { MOONPAY_ORDER_STATUS } from '../constants.js'
+import type { Provider, StatusByProvider } from '../constants.js'
+import {
+  MOONPAY_ORDER_STATUS,
+  ORDER_STATUS_TO_BLOCKCHAIN_STATUS,
+  ORDER_STATUS_TO_MOONPAY_STATUS,
+  ORDER_STATUS_TO_ONRAMPER_STATUS,
+  ORDER_STATUS_TO_PAYPAL_STATUS,
+  ORDER_STATUS_TO_RAMP_STATUS,
+  ORDER_STATUS_TO_SARDINE_STATUS,
+  ORDER_STATUS_TO_XOPAY_STATUS,
+} from '../constants.js'
 import FiatOrder, { adapter, fusionOrderToOrderAdapter } from '../index.js'
 
 const { isEqual } = lodash
@@ -191,5 +201,157 @@ describe('types', () => {
       // @ts-expect-error -- invalid status for moonpay, should we make this throw at runtime?
       status: 'FAILED',
     })
+  })
+})
+
+describe('toRedactedJSON()', () => {
+  test('returns expected fields for sell order', () => {
+    const order = FiatOrder.fromJSON(serializedOrder)
+    const redacted = order.toRedactedJSON()
+
+    expect(redacted).toEqual({
+      cryptoAmount: serializedOrder.fromAmount,
+      cryptoAsset: 'bitcoin',
+      date: serializedOrder.date,
+      exodusRate: order.exodusRate,
+      exodusStatus: 'in-progress',
+      fees: order.fees,
+      fiatValue: serializedOrder.fiatValue,
+      fromAmount: serializedOrder.fromAmount,
+      fromAsset: order.fromAsset,
+      isBuy: false,
+      isSell: true,
+      orderId: order.orderId,
+      orderType: order.orderType,
+      provider: order.provider,
+      providerOrderId: order.providerOrderId,
+      providerRate: order.providerRate,
+      status: order.status,
+      toAddress: order.toAddress,
+      toAmount: serializedOrder.toAmount,
+      toAsset: order.toAsset,
+      toWalletAccount: order.toWalletAccount,
+      txIds: [order.txId],
+    })
+  })
+
+  test('returns expected fields for buy order', () => {
+    const serializedBuyOrder = {
+      ...serializedOrder,
+      fromAddress: null,
+      fromAmount: 40.35,
+      fromAsset: 'EUR',
+      orderType: 'buy',
+      toAddress: 'tb1q8k9pw7yvrzurm4fs8wmmkyqwdkcvh5d7xmujj2',
+      toAmount: serialize(assets.bitcoin.currency.parse('0.0015 BTC')),
+      toAsset: 'bitcoin',
+    }
+
+    const order = FiatOrder.fromJSON(serializedBuyOrder)
+    const redacted = order.toRedactedJSON()
+
+    expect(redacted).toEqual({
+      cryptoAmount: serializedBuyOrder.toAmount,
+      cryptoAsset: 'bitcoin',
+      date: serializedBuyOrder.date,
+      exodusRate: order.exodusRate,
+      exodusStatus: 'in-progress',
+      fees: order.fees,
+      fiatValue: order.fiatValue,
+      fromAmount: serializedBuyOrder.fromAmount,
+      fromAsset: order.fromAsset,
+      isBuy: true,
+      isSell: false,
+      orderId: order.orderId,
+      orderType: order.orderType,
+      provider: order.provider,
+      providerOrderId: order.providerOrderId,
+      providerRate: order.providerRate,
+      status: order.status,
+      toAddress: order.toAddress,
+      toAmount: serializedBuyOrder.toAmount,
+      toAsset: order.toAsset,
+      toWalletAccount: order.toWalletAccount,
+      txIds: [order.txId],
+    })
+  })
+
+  test('omits undefined values', () => {
+    const order = FiatOrder.fromJSON({
+      ...serializedOrder,
+      providerOrderId: undefined,
+      txId: undefined,
+    })
+
+    const redacted = order.toRedactedJSON()
+
+    expect(redacted.txIds).toEqual([])
+    expect(Object.hasOwn(redacted, 'providerOrderId')).toBe(false)
+  })
+})
+
+test('throw on unknown provider', () => {
+  expect(() =>
+    FiatOrder.fromJSON({
+      ...serializedOrder,
+      provider: 'unknown' as Provider,
+      status: 'unknown',
+    })
+  ).toThrow('invalid provider')
+})
+
+describe('order status', () => {
+  const statusMappings = {
+    alchemypay: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    banxa: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    blockchain: ORDER_STATUS_TO_BLOCKCHAIN_STATUS,
+    binancep2p: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    btcdirect: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    coinify: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    dfx: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    fonbnk: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    gateconnect: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    gatefi: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    guardarian: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    koywe: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    localramp: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    moonpay: ORDER_STATUS_TO_MOONPAY_STATUS,
+    neocrypto: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    onramper: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    onrampmoney: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    paypal: ORDER_STATUS_TO_PAYPAL_STATUS,
+    ramp: ORDER_STATUS_TO_RAMP_STATUS,
+    revolut: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    sardine: ORDER_STATUS_TO_SARDINE_STATUS,
+    skrill: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    stripe: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    topper: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    transfi: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    utorg: ORDER_STATUS_TO_ONRAMPER_STATUS,
+    xopay: ORDER_STATUS_TO_XOPAY_STATUS,
+  } as Record<Provider, unknown>
+
+  test.each(Object.entries(statusMappings))('get %s order status', (provider, statusMapping) => {
+    for (const [status, providerStatuses] of Object.entries(statusMapping!)) {
+      for (const providerStatus of providerStatuses!) {
+        const order = FiatOrder.fromJSON({
+          ...serializedOrder,
+          provider: provider as Provider,
+          status: providerStatus,
+        })
+
+        expect(order.exodusStatus).toBe(status)
+      }
+    }
+  })
+
+  test('provider unknown status', () => {
+    const order = FiatOrder.fromJSON({
+      ...serializedOrder,
+      provider: 'moonpay',
+      status: 'unknown' as StatusByProvider['moonpay'],
+    })
+
+    expect(order.exodusStatus).toBe('in-progress')
   })
 })

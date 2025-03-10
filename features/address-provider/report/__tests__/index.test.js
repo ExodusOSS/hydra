@@ -1,5 +1,6 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 import { pick } from '@exodus/basic-utils'
+import { SafeError } from '@exodus/errors'
 import KeyIdentifier from '@exodus/key-identifier'
 import { Address, WalletAccount } from '@exodus/models'
 import { when } from 'jest-when'
@@ -14,6 +15,7 @@ const { factory: createAddressProvider } = addressProviderDefinition
 describe('addressProviderReport', () => {
   let assetsModule
   let enabledWalletAccountsAtom
+  let accountStatesAtom
   let availableAssetNamesByWalletAccountAtom
   let addressProvider
 
@@ -60,11 +62,13 @@ describe('addressProviderReport', () => {
       solana: { bip44: { address: 'sol0', chain: [0, 0] } },
       ethereum: { bip44: { address: 'eth0', chain: [0, 0] } },
       bitcoin: { bip44: { address: 'btc0', chain: [0, 1] } },
+      hedera: { bip44: { address: '0.0.1', encodedPublicKey: 'Hsomething1', chain: [0, 0] } },
     },
     exodus_1: {
       solana: { bip44: { address: 'sol1', chain: [0, 0] } },
       ethereum: { bip44: { address: 'eth1', chain: [0, 0] } },
       bitcoin: { bip44: { address: 'btc1', chain: [1, 0] } },
+      hedera: { bip44: { address: '0.0.2', encodedPublicKey: 'Hsomething2', chain: [0, 0] } },
     },
     trezor_0_123: {
       ethereum: { bip44: { address: 'eth2', chain: [0, 0] } },
@@ -73,8 +77,22 @@ describe('addressProviderReport', () => {
     },
   }
 
+  const getEncodedPublicKey = async ({
+    assetName,
+    walletAccount,
+    purpose,
+    chainIndex,
+    addressIndex,
+  }) => {
+    return addresses[walletAccount][assetName][`bip${purpose}`].encodedPublicKey
+  }
+
   const getAddress = async ({ assetName, walletAccount, purpose }) => {
-    const { address, chain = [0, 0] } = addresses[walletAccount][assetName][`bip${purpose}`]
+    const {
+      accountName,
+      address,
+      chain = [0, 0],
+    } = addresses[walletAccount][assetName][`bip${purpose}`]
 
     const dummyKeyIdentifier = new KeyIdentifier({
       derivationPath: "m/44'",
@@ -83,7 +101,7 @@ describe('addressProviderReport', () => {
     })
 
     return Address.fromJSON({
-      address,
+      address: accountName || address,
       meta: {
         keyIdentifier: dummyKeyIdentifier,
         path: `m/${chain.join('/')}`,
@@ -98,10 +116,17 @@ describe('addressProviderReport', () => {
     }
 
     enabledWalletAccountsAtom = createInMemoryAtom({ defaultValue: walletAccounts })
+    accountStatesAtom = createInMemoryAtom({
+      defaultValue: {
+        exodus_0: {},
+        exodus_1: {},
+      },
+    })
+
     availableAssetNamesByWalletAccountAtom = createInMemoryAtom({
       defaultValue: {
-        exodus_0: ['solana', 'ethereum', 'bitcoin'],
-        exodus_1: ['solana', 'ethereum', 'bitcoin'],
+        exodus_0: ['solana', 'ethereum', 'bitcoin', 'hedera', 'lightningnetwork'],
+        exodus_1: ['solana', 'ethereum', 'bitcoin', 'hedera', 'lightningnetwork'],
         ftx_0_123: ['solana', 'ethereum', 'bitcoin'],
         trezor_0_123: ['ethereum', 'bitcoin'],
       },
@@ -109,6 +134,7 @@ describe('addressProviderReport', () => {
 
     addressProvider = {
       getReceiveAddress: jest.fn().mockImplementation(getAddress),
+      getEncodedPublicKey: jest.fn().mockImplementation(getEncodedPublicKey),
       getSupportedPurposes: jest.fn().mockImplementation(async () => [44]),
     }
   })
@@ -117,6 +143,7 @@ describe('addressProviderReport', () => {
     const report = addressProviderReportDefinition.factory({
       assetsModule,
       enabledWalletAccountsAtom,
+      accountStatesAtom,
       availableAssetNamesByWalletAccountAtom,
       addressProvider,
     })
@@ -128,10 +155,11 @@ describe('addressProviderReport', () => {
     const report = addressProviderReportDefinition.factory({
       assetsModule,
       enabledWalletAccountsAtom,
+      accountStatesAtom,
       availableAssetNamesByWalletAccountAtom,
       addressProvider,
     })
-    const result = await report.export()
+    const result = await report.export({ walletExists: true })
 
     expect(result).toEqual(addresses)
   })
@@ -147,10 +175,11 @@ describe('addressProviderReport', () => {
     const report = addressProviderReportDefinition.factory({
       assetsModule,
       enabledWalletAccountsAtom,
+      accountStatesAtom,
       availableAssetNamesByWalletAccountAtom,
       addressProvider,
     })
-    const result = await report.export()
+    const result = await report.export({ walletExists: true })
 
     expect(Object.keys(result.exodus_0)).toEqual(['bitcoin', 'ethereum', 'solana'])
     expect(Object.keys(result.exodus_0.bitcoin)).toEqual(['bip44', 'bip84', 'bip86'])
@@ -163,11 +192,12 @@ describe('addressProviderReport', () => {
     const report = addressProviderReportDefinition.factory({
       assetsModule,
       enabledWalletAccountsAtom,
+      accountStatesAtom,
       availableAssetNamesByWalletAccountAtom,
       addressProvider,
     })
 
-    await expect(report.export()).rejects.toEqual(error)
+    await expect(report.export({ walletExists: true })).rejects.toEqual(error)
   })
 
   it('should expose error for an address', async () => {
@@ -179,19 +209,20 @@ describe('addressProviderReport', () => {
     const report = addressProviderReportDefinition.factory({
       assetsModule,
       enabledWalletAccountsAtom,
+      accountStatesAtom,
       availableAssetNamesByWalletAccountAtom,
       addressProvider,
     })
-    const result = await report.export()
+    const result = await report.export({ walletExists: true })
 
     expect(result).toEqual({
       exodus_0: {
         ...addresses.exodus_0,
-        solana: { bip44: { error } },
+        solana: { bip44: { error: expect.any(SafeError) } },
       },
       exodus_1: {
         ...addresses.exodus_1,
-        solana: { bip44: { error } },
+        solana: { bip44: { error: expect.any(SafeError) } },
       },
       trezor_0_123: addresses.trezor_0_123,
     })
@@ -227,13 +258,14 @@ describe('addressProviderReport', () => {
       })
       const availableAssetNamesByWalletAccountAtom = createInMemoryAtom({
         defaultValue: {
-          exodus_0: ['solana', 'ethereum', 'bitcoin'],
+          exodus_0: ['solana', 'ethereum', 'bitcoin', 'lightningnetwork'],
         },
       })
 
       report = addressProviderReportDefinition.factory({
         assetsModule,
         enabledWalletAccountsAtom,
+        accountStatesAtom,
         availableAssetNamesByWalletAccountAtom,
         addressProvider,
         publicKeyProvider,
@@ -241,7 +273,7 @@ describe('addressProviderReport', () => {
     })
 
     test('exports extended keys where possible', async () => {
-      const result = await report.export()
+      const result = await report.export({ walletExists: true })
 
       expect(result).toEqual({
         exodus_0: {

@@ -3,6 +3,7 @@ import assets from '../../__tests__/assets.js'
 import Tx from '../index.js'
 import { normalizeTxsJSON } from '../utils.js'
 import { txs3 } from './fixtures/legacy/index.js'
+import { customAssetTxJson1 } from './fixtures/tx-custom-assets.js'
 
 const txs = normalizeTxsJSON({ json: txs3, assets })
 
@@ -50,4 +51,40 @@ test('toJSON() cleans up default fields', (t) => {
   const json = tx.toJSON()
 
   t.deepEqual(json, cleanJSON)
+})
+
+test('toRedactedJSON() includes only whitelist fields', (t) => {
+  const tx = Tx.fromJSON(customAssetTxJson1)
+
+  t.deepEqual(tx.toRedactedJSON(), {
+    version: 1,
+    currencies: {
+      myfeetoken: {
+        MYFEETOKEN: 6,
+        feeies: 0,
+      },
+      mytoken: {
+        MYTOKEN: 8,
+        fernies: 0,
+      },
+    },
+    txId: '90666373b49cb838b336b9c25e3d0e0c7b8fff1bcabcd173b3115bd0b24de247',
+    date: '2016-11-29T05:13:59.697Z',
+    confirmations: 2,
+    addresses: [
+      {
+        address: '1GtP6HLL9oKPwpH3acy44YCTovzLb56x6L',
+        meta: {},
+      },
+      {
+        address: '1AnzK5NiQ5bZsvBzRNXHgbMSEUvQhtuMCQ',
+        meta: {},
+      },
+    ],
+
+    coinName: 'mytoken',
+    feeCoinName: 'myfeetoken',
+    coinAmount: '0.001 MYTOKEN',
+    feeAmount: '0.003 MYFEETOKEN',
+  })
 })

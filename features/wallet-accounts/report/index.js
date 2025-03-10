@@ -1,4 +1,4 @@
-import { WalletAccount } from '@exodus/models'
+import { mapValues } from '@exodus/basic-utils'
 
 const createWalletAccountsReport = ({
   walletAccountsAtom,
@@ -6,18 +6,17 @@ const createWalletAccountsReport = ({
   multipleWalletAccountsEnabledAtom,
 }) => ({
   namespace: 'walletAccounts',
-  export: async () => {
-    const [data, configuredActiveWalletAccount, multipleWalletAccountsEnabled] = await Promise.all([
-      walletAccountsAtom.get(),
-      activeWalletAccountAtom.get(),
-      multipleWalletAccountsEnabledAtom.get(),
-    ])
-    const redactedData = Object.fromEntries(
-      Object.entries(data).map(([key, walletAccount]) => [
-        key,
-        new WalletAccount({ ...walletAccount, label: '<Redacted>' }),
+  export: async ({ walletExists } = Object.create(null)) => {
+    if (!walletExists) return null
+
+    const [walletAccounts, configuredActiveWalletAccount, multipleWalletAccountsEnabled] =
+      await Promise.all([
+        walletAccountsAtom.get(),
+        activeWalletAccountAtom.get(),
+        multipleWalletAccountsEnabledAtom.get(),
       ])
-    )
+
+    const redactedData = mapValues(walletAccounts, (w) => w.toRedactedJSON())
 
     return {
       data: redactedData,

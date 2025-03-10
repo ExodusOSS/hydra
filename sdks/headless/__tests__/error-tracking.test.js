@@ -1,3 +1,5 @@
+import { SafeError } from '@exodus/errors'
+
 import createAdapters from './adapters'
 import config from './config'
 import createExodus from './exodus'
@@ -55,18 +57,16 @@ describe('error-tracking preprocessors', () => {
     const report = await exodus.reporting.export()
 
     expect(exodus.errors.track).toBeDefined()
-    expect(report.errorTracking).toEqual({
+    expect(report.errors).toEqual({
       errors: [
         {
           namespace: 'harry',
-          context: {},
-          error: 'error1',
+          error: expect.any(SafeError),
           time,
         },
         {
           namespace: 'voldie',
-          context: {},
-          error: 'error0',
+          error: expect.any(SafeError),
           time,
         },
       ],

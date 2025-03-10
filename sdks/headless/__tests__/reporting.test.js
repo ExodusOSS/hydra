@@ -1,3 +1,5 @@
+import { SafeError } from '@exodus/errors'
+
 import createAdapters from './adapters'
 import config from './config'
 import createExodus from './exodus'
@@ -76,7 +78,7 @@ describe('reporting', () => {
     const result = await exodus.reporting.export()
 
     expect(result.wayneCorp).toEqual(wayneCorpData)
-    expect(result.wayneFoundation).toEqual({ error: wayneFoundationError })
+    expect(result.wayneFoundation).toEqual({ error: expect.any(SafeError) })
   })
 
   it('should resolve after timeout for long-running export', async () => {
@@ -102,7 +104,7 @@ describe('reporting', () => {
     expect(result).toBeDefined()
     expect(result.wayneManor).toEqual(wayneManor)
     expect(result.wayneFoundation).toEqual({
-      error: new Error('Export took longer than the maximum export timeout of 10s'),
+      error: expect.any(SafeError),
     })
   })
 

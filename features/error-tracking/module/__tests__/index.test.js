@@ -1,6 +1,6 @@
+import errorsAtomDefinition from '../../atoms/index.js'
 import { errorTrackingDefinition } from '../error-tracking.js'
 import { remoteErrorTrackingDefinition } from '../remote-error-tracking.js'
-import errorsAtomDefinition from '../../atoms/index.js'
 
 const { factory: createErrorsAtom } = errorsAtomDefinition
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/asset-sources@1.7.2...@exodus/asset-sources@1.7.4) (2024-12-05)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
+## [1.7.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/asset-sources@1.7.2...@exodus/asset-sources@1.7.3) (2024-11-25)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
 ## [1.7.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/asset-sources@1.7.1...@exodus/asset-sources@1.7.2) (2024-11-21)
 
 ### Bug Fixes

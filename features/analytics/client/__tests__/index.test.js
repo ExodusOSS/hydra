@@ -1,4 +1,4 @@
-import clientDefinition from '..'
+import clientDefinition from '../index.js'
 
 const event = {
   event: 'TestEvent',
@@ -12,6 +12,7 @@ describe('client', () => {
     config: {
       segment: {
         apiKey: 'dummySegmentKey',
+        apiBaseUrl: 'https://api.segment.io/v1/',
       },
     },
     getBuildMetadata: async () => ({

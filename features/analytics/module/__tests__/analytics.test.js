@@ -1,7 +1,7 @@
+import { createInMemoryAtom } from '@exodus/atoms'
 import createInMemoryStorage from '@exodus/storage-memory'
 
 import analyticsDefinition from '..'
-import { createInMemoryAtom } from '@exodus/atoms'
 
 const { factory: createAnalytics } = analyticsDefinition
 

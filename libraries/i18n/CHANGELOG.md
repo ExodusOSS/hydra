@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.6](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.1.5...@exodus/i18n@5.1.6) (2025-02-21)
+
+### Performance
+
+- perf: improve loading time for po files on startup (#11560)
+
 ## [5.1.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.1.4...@exodus/i18n@5.1.5) (2025-02-07)
 
 ### Bug Fixes

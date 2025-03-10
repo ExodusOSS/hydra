@@ -22,13 +22,7 @@ export default class BIP32 {
     return new BIP32(hdkey)
   }
 
-  // TODO: used only in one test, remove, this is confusing
-  static fromJSON(jsonStrOrObj) {
-    const { xpriv } = typeof jsonStrOrObj === 'string' ? JSON.parse(jsonStrOrObj) : jsonStrOrObj
-    return HDKey.fromXPriv(xpriv)
-  }
-
-  static fromXPub(base58xpub, { skipVerification = false } = {}) {
+  static fromXPub(base58xpub, { skipVerification = false } = Object.create(null)) {
     // TODO: perform actual pub (pub/priv) check in HDKey.fromExtendedKey in next major
     const hdkey = HDKey.fromExtendedKey(base58xpub, skipVerification)
     return new BIP32(hdkey)

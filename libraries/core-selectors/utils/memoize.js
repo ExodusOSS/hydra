@@ -1,7 +1,7 @@
 import lodash from 'lodash'
 import assert from 'minimalistic-assert'
 
-const { memoize } = lodash
+const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
 const getKeyFromAssetSource = (assetSource) => {
   assert(!!assetSource, `missing assetSource`)
@@ -13,4 +13,4 @@ const getKeyFromAssetSource = (assetSource) => {
 
 export const memoizeByAssetSource = (fn) => memoize(fn, getKeyFromAssetSource)
 
-export default memoize // eslint-disable-line unicorn/prefer-export-from
+export default memoize

@@ -360,7 +360,7 @@ describe('ExodusPricingClient', () => {
       expect(fetch).toHaveBeenCalledWith(
         `${baseUrl}/historical-price?from=${encodeURIComponent(
           'ethereum,bitcoin'
-        )}&to=${encodeURIComponent('EUR,GBP')}&granularity=week&limit=100&timestamp=the+stamp`,
+        )}&to=${encodeURIComponent('EUR,GBP')}&granularity=week&limit=100&timestamp=the%20stamp`,
         historicalPriceFetchOptions
       )
 
@@ -402,7 +402,7 @@ describe('ExodusPricingClient', () => {
       })
 
       expect(fetch).toHaveBeenCalledWith(
-        `${baseUrl}/historical-price?from=ethereum&to=USD&granularity=year&limit=42&timestamp=the+stamp&ignoreInvalidSymbols=true`,
+        `${baseUrl}/historical-price?from=ethereum&to=USD&granularity=year&limit=42&timestamp=the%20stamp&ignoreInvalidSymbols=true`,
         historicalPriceFetchOptions
       )
 
@@ -426,7 +426,7 @@ describe('ExodusPricingClient', () => {
         })
 
       await expect(historicalPriceCall).rejects.toThrow(
-        `${baseUrl}/historical-price?from=ethereum&to=USD&granularity=year&limit=42&timestamp=the+stamp&ignoreInvalidSymbols=true`
+        `${baseUrl}/historical-price?from=ethereum&to=USD&granularity=year&limit=42&timestamp=the%20stamp&ignoreInvalidSymbols=true`
       )
     })
   })

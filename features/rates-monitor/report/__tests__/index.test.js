@@ -40,7 +40,7 @@ describe('ratesReport', () => {
     const { ratesAtom } = setup()
 
     const report = ratesReportDefinition.factory({ ratesAtom })
-    const result = await report.export()
+    const result = await report.export({ walletExists: true })
 
     expect(result).toEqual(Object.keys(ratesData.USD))
   })
@@ -49,7 +49,7 @@ describe('ratesReport', () => {
     const { ratesAtom } = setup({})
 
     const report = ratesReportDefinition.factory({ ratesAtom })
-    const result = await report.export()
+    const result = await report.export({ walletExists: true })
 
     expect(result).toEqual([])
   })
@@ -62,6 +62,6 @@ describe('ratesReport', () => {
 
     const report = ratesReportDefinition.factory({ ratesAtom })
 
-    await expect(report.export()).rejects.toEqual(error)
+    await expect(report.export({ walletExists: true })).rejects.toEqual(error)
   })
 })

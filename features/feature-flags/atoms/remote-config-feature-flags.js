@@ -1,7 +1,7 @@
 import { mapValues, pickBy } from '@exodus/basic-utils'
 import { compute } from '@exodus/atoms'
 import { createRemoteConfigAtomFactory } from '@exodus/remote-config-atoms'
-import normalizeRemoteConfigValue from './utils/normalize-remote-config-value'
+import normalizeRemoteConfigValue from './utils/normalize-remote-config-value.js'
 
 // eslint-disable-next-line @exodus/export-default/named
 export default {

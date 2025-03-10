@@ -2,7 +2,7 @@ import lodash from 'lodash'
 
 // Intentionally imported by path, as we do not want it to change on reselect alias change when testing selectors
 // eslint-disable-next-line import/no-unresolved
-import * as reselect from '../../../reselect'
+import * as reselect from '../../../reselect/lib/index.js'
 
 const { isEqual, throttle } = lodash
 

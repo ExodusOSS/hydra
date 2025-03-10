@@ -91,4 +91,9 @@ export default {
       bitcoin: true,
     },
   },
+  analytics: {
+    segmentConfig: {
+      apiKey: '<dummy api key>',
+    },
+  },
 }

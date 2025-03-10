@@ -111,3 +111,22 @@ test('has', (t) => {
 
   t.end()
 })
+
+test('toRedactedJSON returns array of redacted addresses', (t) => {
+  const addr1 = Address.create('some-address-1', {
+    path: 'm/0/0',
+    purpose: 44,
+    key: 'some secret key that leaked into meta',
+  })
+
+  const addr2 = Address.create('some-address-2')
+
+  const redacted = AddressSet.fromArray([addr1, addr2]).toRedactedJSON()
+
+  t.deepEqual(redacted, [
+    { address: 'some-address-1', meta: { path: 'm/0/0', purpose: 44 } },
+    { address: 'some-address-2', meta: {} },
+  ])
+
+  t.end()
+})

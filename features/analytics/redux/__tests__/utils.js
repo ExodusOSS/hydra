@@ -1,5 +1,6 @@
-import { combineReducers, createStore } from 'redux'
 import { setupRedux } from '@exodus/redux-dependency-injection'
+import { combineReducers, createStore } from 'redux'
+
 import analyticsReduxDefinition from '..'
 
 export function setup() {

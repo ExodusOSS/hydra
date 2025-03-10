@@ -16,6 +16,7 @@ import {
 import walletAccountsReportDefinition from './report/index.js'
 import allWalletAccountsEverDefinition from './debug/all-wallet-accounts-ever.js'
 import walletAccountsDebugDefinition from './debug/index.js'
+import typeforce from '@exodus/typeforce'
 
 const walletAccounts = (
   {
@@ -25,6 +26,22 @@ const walletAccounts = (
     fillIndexGapsOnCreation = false,
   } = Object.create(null)
 ) => {
+  typeforce(
+    {
+      allowedSources: typeforce.arrayOf('String'),
+      fillIndexGapsOnCreation: '?Boolean',
+      defaultLabel: '?String',
+      defaultColor: '?String',
+    },
+    {
+      defaultLabel,
+      defaultColor,
+      allowedSources,
+      fillIndexGapsOnCreation,
+    },
+    true
+  )
+
   return {
     id: 'walletAccounts',
     definitions: [

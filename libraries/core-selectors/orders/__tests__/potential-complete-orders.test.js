@@ -1,6 +1,7 @@
-import createPotentialCompleteOrdersSelector from '../potential-complete-orders.js'
 import { Order, OrderSet } from '@exodus/models'
+
 import assets from '../../_test/assets.js'
+import createPotentialCompleteOrdersSelector from '../potential-complete-orders.js'
 
 describe('createOrdersInProgressSelector', () => {
   const orders1 = [

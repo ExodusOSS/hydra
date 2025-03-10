@@ -1,10 +1,11 @@
-import analyticsExtraSeedsUserIdsAtomDefinition from '../extra-seeds-user-ids'
-import { mnemonicToSeedSync } from 'bip39'
-import { getSeedId } from '@exodus/keychain/module/crypto/seed-id'
 import { createInMemoryAtom } from '@exodus/atoms'
-import keychainDefinition from '@exodus/keychain/module'
 import { EXODUS_KEY_IDS } from '@exodus/key-ids'
+import keychainDefinition from '@exodus/keychain/module'
+import { getSeedId } from '@exodus/keychain/module/crypto/seed-id'
 import { WalletAccount } from '@exodus/models'
+import { mnemonicToSeedSync } from 'bip39'
+
+import analyticsExtraSeedsUserIdsAtomDefinition from '../extra-seeds-user-ids'
 
 const { factory: createAnalyticsExtraSeedsUserIdsAtom } = analyticsExtraSeedsUserIdsAtomDefinition
 const storage = {

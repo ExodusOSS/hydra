@@ -1,7 +1,7 @@
 {
   "name": "@exodus/analytics",
-  "version": "15.0.0",
-  "description": "Analytics-provider agnostic analytics reporter",
+  "version": "15.1.1",
+  "description": "This Exodus SDK feature enables you to generate client-side analytics.",
   "author": "Exodus Movement, Inc.",
   "main": "index.js",
   "types": "index.d.ts",
@@ -14,6 +14,7 @@
     "plugins",
     "migrations",
     "redux",
+    "report",
     "constants.js",
     "CHANGELOG.md",
     "schemasafe.config.js",
@@ -25,14 +26,16 @@
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
-    "@exodus/analytics-validation": "^2.33.0",
+    "@exodus/analytics-validation": "^2.45.2",
     "@exodus/atoms": "^9.0.0",
+    "@exodus/basic-utils": "^3.0.1",
     "@exodus/crypto": "^1.0.0-rc.2",
     "@exodus/fetch": "^1.3.0",
-    "@exodus/fusion-atoms": "^1.2.1",
+    "@exodus/fusion-atoms": "^1.4.0",
     "@exodus/key-ids": "^1.2.3",
     "@exodus/models": "^12.0.1",
     "@exodus/segment-metrics": "^4.0.1",
+    "@exodus/typeforce": "^1.19.1",
     "lodash": "^4.17.21",
     "make-concurrent": "^4.0.0",
     "p-defer": "^4.0.0"
@@ -42,15 +45,18 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/analytics",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aanalytics"
   },
   "devDependencies": {
-    "@exodus/keychain": "^6.9.1",
+    "@exodus/keychain": "^7.3.0",
     "@exodus/redux-dependency-injection": "workspace:^",
     "@exodus/storage-memory": "workspace:^",
     "bip39": "^3.1.0",
     "redux": "^4.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

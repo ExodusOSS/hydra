@@ -1,23 +1,22 @@
 import { EXODUS_KEY_IDS } from '@exodus/key-ids'
-import sodium from '@exodus/sodium-crypto'
 
-const WALLET_INFO_KEY = EXODUS_KEY_IDS.WALLET_INFO
+/**
+ * @typedef {import('@exodus/cached-sodium-encryptor/module').CachedSodiumEncryptor} CachedSodiumEncryptor
+ */
 
-const createUnlockEncryptedStorage = ({ keychain, wallet }) => {
+/**
+ * @param {object} dependencies
+ * @param {CachedSodiumEncryptor} dependencies.cachedSodiumEncryptor
+ * @param {object} dependencies.wallet
+ */
+const createUnlockEncryptedStorage = ({ cachedSodiumEncryptor, wallet }) => {
   return async (encryptedStorage) => {
-    // Fusion might write on storage even after keychain is locked, so we get keys
-    // directly instead of creating encryptor that does not preserves it anymore
-    const primarySeedId = await wallet.getPrimarySeedId()
-    const { privateKey } = await keychain.exportKey({
-      seedId: primarySeedId,
-      keyId: WALLET_INFO_KEY,
-      exportPrivate: true,
-      exportPublic: false,
-    })
+    const seedId = await wallet.getPrimarySeedId()
+    const keyId = EXODUS_KEY_IDS.WALLET_INFO
 
     await encryptedStorage.unlock({
-      encrypt: (data) => sodium.encryptSecret(data, privateKey),
-      decrypt: (data) => sodium.decryptSecret(data, privateKey),
+      encrypt: (data) => cachedSodiumEncryptor.encryptSecretBox({ data, seedId, keyId }),
+      decrypt: (data) => cachedSodiumEncryptor.decryptSecretBox({ data, seedId, keyId }),
     })
   }
 }
@@ -26,7 +25,7 @@ const unlockEncryptedStorageDefinition = {
   id: 'unlockEncryptedStorage',
   type: 'module',
   factory: createUnlockEncryptedStorage,
-  dependencies: ['keychain', 'wallet'],
+  dependencies: ['wallet', 'cachedSodiumEncryptor'],
   public: true,
 }
 

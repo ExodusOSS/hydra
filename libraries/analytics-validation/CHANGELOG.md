@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.52.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.51.3...@exodus/analytics-validation@2.52.0) (2025-02-24)
+
+### Features
+
+- feat(analytics): add context properties to WalletView event (#11566)
+
+## [2.51.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.51.2...@exodus/analytics-validation@2.51.3) (2025-02-21)
+
+### Bug Fixes
+
+- fix(analytics-validatin): NotificationAttributesTest add telemetry_id property (#11558)
+
+## [2.51.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.51.1...@exodus/analytics-validation@2.51.2) (2025-02-20)
+
+### Bug Fixes
+
+- fix: rename btc advance settings toggles for clarity (#11544)
+
+## [2.51.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.51.0...@exodus/analytics-validation@2.51.1) (2025-02-19)
+
+### Bug Fixes
+
+- fix(analytics-validatin): NotificationAttributesTest add web3_browser_last_viewed_at property (#11525)
+
+## [2.51.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.50.2...@exodus/analytics-validation@2.51.0) (2025-02-18)
+
+### Features
+
+- feat(analytics): add events for bitcoin advance settings toggles (#11494)
+
+## [2.50.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.50.1...@exodus/analytics-validation@2.50.2) (2025-02-18)
+
+### Bug Fixes
+
+- fix(analytics-validatin): NotificationAttributesTest add has_balance_assets property (#11502)
+
 ## [2.50.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.50.0...@exodus/analytics-validation@2.50.1) (2025-01-22)
 
 ### Bug Fixes

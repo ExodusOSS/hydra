@@ -16,7 +16,7 @@ const migrateableFusion = { load: jest.fn() }
 const analytics = { track: jest.fn() }
 const keychain = {
   sodium: {
-    getSodiumKeysFromSeed: jest.fn().mockResolvedValue(sodium.getSodiumKeysFromSeed(bytes)),
+    getKeysFromSeed: jest.fn().mockResolvedValue(sodium.getSodiumKeysFromSeed(bytes)),
   },
 }
 
@@ -67,8 +67,8 @@ describe('attach', () => {
 
     await application.fire('migrate')
 
-    expect(keychain.sodium.getSodiumKeysFromSeed).toHaveBeenCalledTimes(1)
-    expect(keychain.sodium.getSodiumKeysFromSeed).toHaveBeenCalledWith({
+    expect(keychain.sodium.getKeysFromSeed).toHaveBeenCalledTimes(1)
+    expect(keychain.sodium.getKeysFromSeed).toHaveBeenCalledWith({
       seedId: 'primarySeedId',
       keyId: EXODUS_KEY_IDS.FUSION,
       exportPrivate: true,

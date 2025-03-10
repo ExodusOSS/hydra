@@ -71,3 +71,22 @@ function assetsForAsset(asset: Asset) {
 export function currenciesForAsset(asset: Asset) {
   return mapValues(assetsForAsset(asset), (asset) => asset.currency)
 }
+
+export const safeFields = [
+  'txId',
+  'date',
+  'confirmations',
+  'from',
+  'to',
+  'dropped',
+  'selfSend',
+  'coinName',
+  'coinAmount',
+  'feeCoinName',
+  'feeAmount',
+  'addresses',
+  'tokens',
+  'token',
+  'currencies',
+  'version',
+]

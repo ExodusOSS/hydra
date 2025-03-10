@@ -1,19 +1,20 @@
 import lodash from 'lodash'
+
 import assets from '../../../_test/assets.js'
 import createParentCombinedNetworkAssetsSelector, {
   createCombinedNetworkChildrenAssetsSelector,
+  createCreateCombinedAssetChildrenNamesSelector,
+  createEnabledWithParentCombinedNetworkAssetNamesSelector,
+  createGetCombinedAssetFallbackSelector,
+  createGetHasAssetsOnOtherChainsSelector,
+  createGetParentCombinedAssetSelector,
+  createNetworksByAssetSelector,
   createWithoutCombinedNetworkAssetsSelector,
   createWithoutParentCombinedNetworkAssetsSelector,
   createWithParentCombinedNetworkAssetsSelector,
-  createEnabledWithParentCombinedNetworkAssetNamesSelector,
-  createNetworksByAssetSelector,
-  createGetParentCombinedAssetSelector,
-  createGetHasAssetsOnOtherChainsSelector,
-  createGetCombinedAssetFallbackSelector,
-  createCreateCombinedAssetChildrenNamesSelector,
 } from '../index.js'
 
-const { keyBy, mapValues } = lodash
+const { keyBy, mapValues } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
 describe('networks selectors', () => {
   const allAssetsSelector = () => {
@@ -288,7 +289,7 @@ describe('networks selectors', () => {
     expect(createWithParentCombinedNetworkAssetsSelector({ allAssetsSelector })).toEqual(
       createWithParentCombinedNetworkAssetsSelector({ allAssetsSelector })
     )
-    // eslint-disable-next-line sonarjs/no-identical-functions
+
     const enabledAssetsSelector = () => {
       return {
         ethereum: true,

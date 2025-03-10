@@ -163,6 +163,10 @@ export default class FiatOrderSet {
     return [...this].map((item) => item.toJSON())
   }
 
+  toRedactedJSON() {
+    return [...this].map((item) => item.toRedactedJSON())
+  }
+
   [Symbol.iterator]() {
     return this._items.values()
   }

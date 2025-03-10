@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.4.0...@exodus/application@2.5.0) (2025-02-17)
+
+### Features
+
+- feat: application report (#11471)
+
 ## [2.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.3.0...@exodus/application@2.4.0) (2025-02-13)
 
 ### Features

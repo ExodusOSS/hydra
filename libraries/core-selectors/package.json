@@ -1,9 +1,9 @@
 {
   "name": "@exodus/core-selectors",
-  "version": "3.0.0",
+  "version": "4.0.1",
   "author": "Exodus Movement, Inc.",
   "description": "Bunch of core selectors",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "type": "module",
   "main": "index.js",
   "files": [
@@ -17,8 +17,9 @@
   ],
   "devDependencies": {
     "@exodus/assets": "^11.0.0",
-    "@exodus/assets-base": "^9.0.0",
-    "@exodus/models": "^12.0.0"
+    "@exodus/assets-base": "^10.0.0",
+    "@exodus/combined-assets-meta": "^3.0.0",
+    "@exodus/models": "workspace:^"
   },
   "peerDependencies": {
     "@exodus/assets": "^11.0.0",
@@ -32,15 +33,18 @@
   },
   "scripts": {
     "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint . --ignore-path ../../.gitignore",
+    "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-core/tree/master/packages/core-selectors#readme",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/core-selectors",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-core.git"
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-core/issues?q=is%3Aissue+is%3Aopen+label%3Acore-selectors"
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Acore-selectors"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

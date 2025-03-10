@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('create', () => {
   it('should return undefined if feature does not exist', () => {

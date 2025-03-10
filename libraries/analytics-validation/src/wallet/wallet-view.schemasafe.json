@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "WalletView"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "style_mode": {
+          "type": "string",
+          "enum": ["cards", "donut"]
+        },
+        "sort_by_option": {
+          "type": "string",
+          "enum": [
+            "portfolio_value",
+            "market_cap",
+            "24h_change",
+            "24h_volume",
+            "name",
+            "with_balance"
+          ]
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/enabled-assets@10.8.3...@exodus/enabled-assets@10.9.0) (2025-02-21)
+
+### Features
+
+- feat: make enabled-assets report more readable (#11575)
+
+## [10.8.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/enabled-assets@10.8.2...@exodus/enabled-assets@10.8.3) (2025-02-21)
+
+### Bug Fixes
+
+- fix: skip exporting most reports if wallet doesn't exist (#11553)
+
 ## [10.8.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/enabled-assets@10.8.1...@exodus/enabled-assets@10.8.2) (2024-12-07)
 
 **Note:** Version bump only for package @exodus/enabled-assets

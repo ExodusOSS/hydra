@@ -15,3 +15,20 @@ export function isChangeAddress(addr: Address) {
 export function isReceiveAddress(addr: Address) {
   return addr.pathArray[0] === 0
 }
+
+type KeyIdentifierLike = {
+  derivationAlgorithm: string
+  derivationPath: string
+  keyType: KeyType
+  assetName?: string
+}
+
+const requiredKeyIdentifierProps = ['derivationAlgorithm', 'derivationPath', 'keyType']
+
+export function isKeyIdentifierLike(obj: unknown): obj is KeyIdentifierLike {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    requiredKeyIdentifierProps.every((prop) => Object.hasOwn(obj, prop))
+  )
+}

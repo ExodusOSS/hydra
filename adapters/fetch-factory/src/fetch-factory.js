@@ -5,7 +5,7 @@ import {
   GLOBAL_HOST,
 } from './constants.js'
 
-const { isValidDomain, getUrlHostname } = require('./validate-domain.js')
+import { getUrlHostname, isValidDomain } from './validate-domain.js'
 
 export class FetchFactory {
   constructor(fetchFn) {

@@ -1,15 +1,14 @@
-import ExodusModule from '@exodus/module' // eslint-disable-line import/no-deprecated
 import makeConcurrent from 'make-concurrent'
 import { pick } from '@exodus/basic-utils'
 
-class RestoreProgressTracker extends ExodusModule {
+class RestoreProgressTracker {
   #assetsModule
   #baseAssetNamesToMonitorAtom
   #availableAssetNamesAtom
   #restoringAssetsAtom
   #restoreAllStarted
-  #assetNamesToNotWait = []
-  #assetsWaitingSecondTick = {}
+  #txLogMonitors
+  #assetsWaitingSecondTick = Object.create(null)
 
   constructor({
     assetsModule,
@@ -17,15 +16,13 @@ class RestoreProgressTracker extends ExodusModule {
     baseAssetNamesToMonitorAtom,
     availableAssetNamesAtom,
     txLogMonitors,
-    logger,
     config,
   }) {
-    super({ logger })
     this.#assetsModule = assetsModule
     this.#restoringAssetsAtom = restoringAssetsAtom
     this.#baseAssetNamesToMonitorAtom = baseAssetNamesToMonitorAtom
     this.#availableAssetNamesAtom = availableAssetNamesAtom
-    this.#assetNamesToNotWait = new Set(config.assetNamesToNotWait)
+    this.#txLogMonitors = txLogMonitors
 
     config.monitorEvents.forEach((monitorEvent) =>
       txLogMonitors.on(monitorEvent, this.#concurrentRestoreAssetHandler)
@@ -43,7 +40,9 @@ class RestoreProgressTracker extends ExodusModule {
     }
   }
 
-  restoreAll = async () => {
+  restoreAll = async (shouldRestartMonitors) => {
+    this.#restoreAllStarted = false
+    this.#assetsWaitingSecondTick = Object.create(null)
     const availableAssets = await this.#getAvailableAssets()
     const availableEnabledBaseAssetNames = await this.#getAvailableEnabledBaseAssetNames()
     const availableEnabledBaseAssetNamesSet = new Set(availableEnabledBaseAssetNames)
@@ -62,7 +61,9 @@ class RestoreProgressTracker extends ExodusModule {
     }
 
     this.#restoreAllStarted = true
-    this.#checkRestoreAllFinished(restoringAssets)
+    if (shouldRestartMonitors) {
+      this.#txLogMonitors.updateAll()
+    }
   }
 
   restoreAsset = async (assetName) => {
@@ -74,17 +75,6 @@ class RestoreProgressTracker extends ExodusModule {
       [assetName]: true,
     }
     await this.#restoringAssetsAtom.set(newRestoringAssets)
-  }
-
-  #checkRestoreAllFinished = (restoringAssets) => {
-    if (!this.#restoreAllStarted) return
-
-    const restoringAssetsToWait = Object.keys(restoringAssets).filter(
-      (assetName) => !this.#assetNamesToNotWait.has(assetName)
-    )
-    if (restoringAssetsToWait.length === 0) {
-      this.emit('restored')
-    }
   }
 
   #getAvailableAssets = async () => {
@@ -115,7 +105,7 @@ class RestoreProgressTracker extends ExodusModule {
       return
     }
 
-    const restoringAssets = (await this.#restoringAssetsAtom.get()) || {}
+    const restoringAssets = (await this.#restoringAssetsAtom.get()) || Object.create(null)
 
     if (Object.keys(restoringAssets).length === 0) return
 
@@ -131,8 +121,6 @@ class RestoreProgressTracker extends ExodusModule {
     )
 
     await this.#restoringAssetsAtom.set(newRestoringAssets)
-
-    this.#checkRestoreAllFinished(newRestoringAssets)
   }
 
   clear = async () => {
@@ -142,8 +130,7 @@ class RestoreProgressTracker extends ExodusModule {
 
 const createRestoreProgressTracker = (opts) => new RestoreProgressTracker(opts)
 
-// eslint-disable-next-line @exodus/export-default/named
-export default {
+const restoreProgressTrackerDefinition = {
   id: 'restoreProgressTracker',
   type: 'module',
   factory: createRestoreProgressTracker,
@@ -153,8 +140,9 @@ export default {
     'baseAssetNamesToMonitorAtom',
     'availableAssetNamesAtom',
     'txLogMonitors',
-    'logger',
     'config',
   ],
   public: true,
 }
+
+export default restoreProgressTrackerDefinition

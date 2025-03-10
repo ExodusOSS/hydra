@@ -157,6 +157,21 @@ describe('instanceof / isInstance', () => {
           expect(isInstance(Child2, instance2)).toBe(true)
         })
       }
+
+      // This is a test for an old bug where we relied on `this.constructor`
+      // when calling `Function.prototype[Symbol.hasInstance]` instead of just `this`.
+      // Keeping this case specifically for that bug, as there’s no clear way
+      // to spy on the read-only `Symbol.hasInstance` property.
+      it('handles Function instances properly', () => {
+        const noop1 = function noop() {}
+        const noop2 = () => {}
+
+        expect(isInstance(V1, noop1)).toBeFalsy()
+        expect(isInstance(V1, noop2)).toBeFalsy()
+
+        expect(isInstance(V2, noop1)).toBeFalsy()
+        expect(isInstance(V2, noop2)).toBeFalsy()
+      })
     })
   })
 })

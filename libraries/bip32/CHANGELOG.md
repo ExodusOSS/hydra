@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/bip32@4.0.1...@exodus/bip32@4.0.2) (2025-02-19)
+
+### Bug Fixes
+
+- fix: harden bip32 library (#11418)
+
+## [4.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/bip32@4.0.0...@exodus/bip32@4.0.1) (2025-02-10)
+
+### Performance
+
+- perf: optimize bip32 to only compute public key when needed (#11372)
+
+## [4.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/bip32@3.3.1...@exodus/bip32@4.0.0) (2024-11-04)
+
+### ⚠ BREAKING CHANGES
+
+- remove confusing/unused fromJSON (#10315)
+
+### Features
+
+- remove confusing/unused fromJSON ([#10315](https://github.com/ExodusMovement/exodus-hydra/issues/10315)) ([9fb5c0b](https://github.com/ExodusMovement/exodus-hydra/commit/9fb5c0bc721ee34f24e433a840e153214ddccc92))
+
+### Bug Fixes
+
+- bip32 fromJSON method ([#10166](https://github.com/ExodusMovement/exodus-hydra/issues/10166)) ([155722a](https://github.com/ExodusMovement/exodus-hydra/commit/155722abd29758a52854c4021503068cadd3892a))
+
 ## [3.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/bip32@3.3.0...@exodus/bip32@3.3.1) (2024-10-11)
 
 ### Bug Fixes

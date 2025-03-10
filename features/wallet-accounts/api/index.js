@@ -7,6 +7,7 @@ const walletAccountsApi = ({
     create: walletAccounts.create,
     update: walletAccounts.update,
     disable: walletAccounts.disable,
+    disableMany: walletAccounts.disableMany,
     removeMany: walletAccounts.removeMany,
     enable: walletAccounts.enable,
     getEnabled: enabledWalletAccountsAtom.get,

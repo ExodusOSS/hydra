@@ -36,6 +36,15 @@
         },
         "spendable_balance": {
           "type": "number"
+        },
+        "multiple_addresses_on": {
+          "type": "boolean"
+        },
+        "legacy_address_on": {
+          "type": "boolean"
+        },
+        "taproot_address_on": {
+          "type": "boolean"
         }
       },
       "unevaluatedProperties": false

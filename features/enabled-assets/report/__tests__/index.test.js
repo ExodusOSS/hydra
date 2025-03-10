@@ -12,9 +12,9 @@ describe('enabledAssetsReport', () => {
     const enabledAndDisabledAssetsAtom = createAtomMock({
       defaultValue: {
         disabled: {
-          asset1: false,
-          asset2: false,
           asset3: true,
+          asset2: false,
+          asset1: false,
         },
       },
     })
@@ -34,13 +34,7 @@ describe('enabledAssetsReport', () => {
   })
 
   it('should create proper report', async () => {
-    const report = await reportNode.export()
-
-    const expectedReport = {
-      asset1: true,
-      asset2: true,
-    }
-
-    expect(report).toEqual(expectedReport)
+    const report = await reportNode.export({ walletExists: true })
+    expect(report).toEqual(['asset1', 'asset2'])
   })
 })

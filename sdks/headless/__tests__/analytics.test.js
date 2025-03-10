@@ -1,3 +1,4 @@
+import analytics from '@exodus/analytics'
 import {
   analyticsUserIdAtomDefinition,
   persistedAnalyticsEventsAtomDefinition,
@@ -5,7 +6,6 @@ import {
   shareActivityAtomDefinition,
 } from '@exodus/analytics/atoms'
 import analyticsModule from '@exodus/analytics/module'
-import { EXODUS_KEY_IDS } from '@exodus/key-ids'
 
 import createAdapters from './adapters'
 import _config from './config'
@@ -13,12 +13,19 @@ import createExodus from './exodus'
 
 const config = {
   ..._config,
-  // tmp: remove after analytics supports a default config at the feature level
-  analytics: {},
-  analyticsUserIdAtom: {
-    keychainIdentifier: EXODUS_KEY_IDS.TELEMETRY,
-  },
+  analyticsUserIdAtom: {},
 }
+
+const createTrackerMock = () => ({
+  track: jest.fn(),
+  identify: jest.fn(),
+  setAnonymousId: jest.fn(),
+  getAnonymousId: jest.fn(),
+  setUserId: jest.fn(),
+  setDefaultProperties: jest.fn(),
+  setDefaultPropertiesForSanitizationErrors: jest.fn(),
+  defaultProperties: {},
+})
 
 describe('analytics', () => {
   let exodus
@@ -27,16 +34,7 @@ describe('analytics', () => {
 
   beforeEach(async () => {
     adapters = createAdapters()
-
-    analyticsTracker = {
-      track: jest.fn(),
-      getAnonymousId: jest.fn(),
-      setAnonymousId: jest.fn(),
-      setDefaultProperties: jest.fn(),
-      setDefaultPropertiesForSanitizationErrors: jest.fn(),
-      defaultProperties: {},
-    }
-
+    analyticsTracker = createTrackerMock()
     const container = createExodus({ adapters, config })
 
     container.register({ definition: analyticsModule })
@@ -75,6 +73,65 @@ describe('analytics', () => {
       osName: 'android',
       deviceMode: undefined,
     })
+  })
+})
+
+describe('reporting', () => {
+  let exodus
+  let adapters
+  let analyticsTracker
+
+  beforeEach(async () => {
+    adapters = createAdapters()
+    analyticsTracker = createTrackerMock()
+
+    const container = createExodus({ adapters, config })
+    container.use(analytics(config.analytics))
+    container.register({
+      definition: {
+        id: 'validateAnalyticsEvent',
+        factory: () => () => true,
+      },
+    })
+
+    container.register({
+      definition: {
+        override: true,
+        id: 'analyticsTracker',
+        type: 'module',
+        factory: () => analyticsTracker,
+        public: true,
+      },
+    })
+
+    exodus = container.resolve()
+  })
+
+  test('report pre-wallet-exists', async () => {
+    await exodus.application.start()
+    await exodus.application.load()
+    await expect(exodus.wallet.exists()).resolves.toEqual(false)
+    await expect(exodus.reporting.export()).resolves.toEqual(
+      expect.objectContaining({
+        analytics: {
+          userId: null,
+        },
+      })
+    )
+  })
+
+  test('report post-wallet-exists', async () => {
+    await exodus.application.start()
+    await exodus.application.create()
+    await exodus.application.unlock()
+    await expect(exodus.wallet.exists()).resolves.toEqual(true)
+    await expect(exodus.reporting.export()).resolves.toEqual(
+      expect.objectContaining({
+        analytics: {
+          userId: expect.any(String),
+        },
+      })
+    )
   })
 })
 

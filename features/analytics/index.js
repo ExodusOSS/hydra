@@ -1,9 +1,10 @@
+import typeforce from '@exodus/typeforce'
 import { EXODUS_KEY_IDS } from '@exodus/key-ids'
 
-import analyticsApi from './api'
-import analyticsDefinition from './module'
-import analyticsTrackerDefinition from './client'
-import { analyticsLifecyclePluginDefinition } from './plugins'
+import analyticsApi from './api/index.js'
+import analyticsDefinition from './module/index.js'
+import analyticsTrackerDefinition from './client/index.js'
+import { analyticsLifecyclePluginDefinition } from './plugins/index.js'
 import {
   analyticsUserIdAtomDefinition,
   shareActivityAtomDefinition,
@@ -11,11 +12,25 @@ import {
   persistedAnalyticsEventsAtomDefinition,
   persistedAnalyticsTraitsAtomDefinition,
   analyticsExtraSeedsUserIdsAtomDefinition,
-} from './atoms'
+} from './atoms/index.js'
+import analyticsReportDefinition from './report/index.js'
 
 const analytics = (
-  { keyIdentifier = EXODUS_KEY_IDS.TELEMETRY, installEventReportingUrl } = Object.create(null)
+  {
+    segmentConfig: { apiKey, apiBaseUrl = 'https://api.segment.io/v1/' },
+    keyIdentifier = EXODUS_KEY_IDS.TELEMETRY,
+    installEventReportingUrl,
+  } = Object.create(null)
 ) => {
+  typeforce(
+    {
+      apiKey: 'String',
+      apiBaseUrl: 'String',
+    },
+    { apiKey, apiBaseUrl },
+    true
+  )
+
   return {
     id: 'analytics',
     definitions: [
@@ -33,7 +48,12 @@ const analytics = (
         definition: analyticsExtraSeedsUserIdsAtomDefinition,
         config: { keyIdentifier },
       },
-      { definition: analyticsTrackerDefinition },
+      {
+        definition: analyticsTrackerDefinition,
+        config: {
+          segment: { apiKey, apiBaseUrl },
+        },
+      },
       { definition: analyticsLifecyclePluginDefinition },
       {
         definition: analyticsAnonymousIdAtomDefinition,
@@ -55,6 +75,9 @@ const analytics = (
         aliases: [{ implementationId: 'unsafeStorage', interfaceId: 'storage' }],
         storage: { namespace: 'analytics' },
         config: { installEventReportingUrl },
+      },
+      {
+        definition: analyticsReportDefinition,
       },
     ],
   }

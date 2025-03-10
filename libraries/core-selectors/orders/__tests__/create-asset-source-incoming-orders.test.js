@@ -1,4 +1,5 @@
-import { Order, OrderSet, orderFromJSONLegacy } from '@exodus/models'
+import { Order, orderFromJSONLegacy, OrderSet } from '@exodus/models'
+
 import assets from '../../_test/assets.js'
 import createAssetSourceIncomingOrdersSelectorCreator from '../create-asset-source-incoming-orders.js'
 

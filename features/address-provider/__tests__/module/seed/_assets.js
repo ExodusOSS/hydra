@@ -17,7 +17,10 @@ const eosio = eosioPlugin.createAsset({ assetClientInterface })
 const ethereum = ethereumPlugin.createAsset({ assetClientInterface })
 const hedera = hederaPlugin.createAsset({ assetClientInterface })
 const solana = solanaPlugin.createAsset({ assetClientInterface })
-const serum = solana.api.createToken(tokens.find(({ name }) => name === 'serum'))
+const serum = {
+  ...solana.api.createToken(tokens.find(({ name }) => name === 'serum')),
+  name: 'serum',
+}
 
 const assets = connectAssets({ bitcoin, cardano, eosio, ethereum, hedera, serum, solana })
 

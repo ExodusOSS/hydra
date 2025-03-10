@@ -1,8 +1,6 @@
 import Tracker from '@exodus/segment-metrics'
 import validateEventDefault from '@exodus/analytics-validation'
 
-const DEFAULT_API_BASE_URL = 'https://api.segment.io/v1/'
-
 const analyticsTrackerDefinition = {
   id: 'analyticsTracker',
   // TODO: change to 'client'
@@ -10,7 +8,7 @@ const analyticsTrackerDefinition = {
   factory: ({ config, getBuildMetadata, logger, validateAnalyticsEvent = validateEventDefault }) =>
     new Tracker({
       writeKey: config.segment.apiKey,
-      apiBaseUrl: config.segment.apiBaseUrl || DEFAULT_API_BASE_URL,
+      apiBaseUrl: config.segment.apiBaseUrl,
       validateEvent: validateAnalyticsEvent,
       logger,
       getBuildMetadata,

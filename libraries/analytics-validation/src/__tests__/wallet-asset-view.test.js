@@ -11,6 +11,9 @@ const fixtures = [
       spendable_balance: 1,
       asset_balance: 100,
       asset_balance_usd: 100,
+      multiple_addresses_on: false,
+      legacy_address_on: false,
+      taproot_address_on: false,
     },
   },
 ]
@@ -48,6 +51,24 @@ describe('WalletAssetView', () => {
         validate({
           event: event.event,
           properties: { ...event.properties, price_or_balance: 10 },
+        })
+      ).toThrow()
+      expect(() =>
+        validate({
+          event: event.event,
+          properties: { ...event.properties, multiple_addresses_on: 10 },
+        })
+      ).toThrow()
+      expect(() =>
+        validate({
+          event: event.event,
+          properties: { ...event.properties, legacy_address_on: 10 },
+        })
+      ).toThrow()
+      expect(() =>
+        validate({
+          event: event.event,
+          properties: { ...event.properties, taproot_address_on: 10 },
         })
       ).toThrow()
     })

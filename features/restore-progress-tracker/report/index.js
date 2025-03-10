@@ -1,6 +1,8 @@
 const createRestoringAssetsReport = ({ restoringAssetsAtom }) => ({
   namespace: 'restoringAssets',
-  export: async () => {
+  export: async ({ walletExists } = Object.create(null)) => {
+    if (!walletExists) return null
+
     const data = await restoringAssetsAtom.get()
     return { data: Object.keys(data).sort((a, b) => a.localeCompare(b)) }
   },

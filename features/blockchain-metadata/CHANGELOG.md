@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [15.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.8.7...@exodus/blockchain-metadata@15.9.0) (2025-03-03)
+
+### Features
+
+- feat: earliestTxDate in report (#11647)
+
+## [15.8.7](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.8.6...@exodus/blockchain-metadata@15.8.7) (2025-02-28)
+
+### Bug Fixes
+
+- fix: omit accountStates for disabled assets (#11630)
+
+## [15.8.6](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.8.5...@exodus/blockchain-metadata@15.8.6) (2025-02-24)
+
+### Bug Fixes
+
+- fix: omit tx.currencies in safe report (#11595)
+
+## [15.8.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.8.4...@exodus/blockchain-metadata@15.8.5) (2025-02-21)
+
+### Bug Fixes
+
+- fix: skip exporting most reports if wallet doesn't exist (#11553)
+
+## [15.8.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.8.3...@exodus/blockchain-metadata@15.8.4) (2025-02-20)
+
+### Bug Fixes
+
+- fix: filter out empty txLogs in report (#11547)
+
+## [15.8.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.8.2...@exodus/blockchain-metadata@15.8.3) (2025-02-18)
+
+### Bug Fixes
+
+- fix: use toRedactedJSON instead of local whitelist (#11512)
+
+## [15.8.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.8.1...@exodus/blockchain-metadata@15.8.2) (2025-02-14)
+
+### Bug Fixes
+
+- fix: sanitize accountStates (#11401)
+
+## [15.8.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.8.0...@exodus/blockchain-metadata@15.8.1) (2025-02-12)
+
+### Performance
+
+- perf: memoize createInitialPerAssetData per asset (#11417)
+
 ## [15.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.7.1...@exodus/blockchain-metadata@15.8.0) (2025-02-11)
 
 ### Features

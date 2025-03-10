@@ -10,7 +10,7 @@ yarn add @exodus/error-tracking
 
 ## Usage
 
-This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md).
+This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/development/using-the-sdk.md).
 
 ### Play with it
 
@@ -20,7 +20,7 @@ This feature is designed to be used together with `@exodus/headless`. See [using
 
 ### API Side
 
-See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK and the API interface in the [type declaration](./api/index.d.ts).
+See [using the sdk](../../docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK and the API interface in the [type declaration](./api/index.d.ts).
 
 ```ts
 await exodus.errors.track({ namespace, error, context: {} })

@@ -324,6 +324,7 @@ test('importReport', async () => {
   const {
     assetsModule,
     walletAccountsAtom,
+    accountStatesAtom,
     availableAssetNamesByWalletAccountAtom,
     addressProvider,
     addressProviderMock,
@@ -334,9 +335,10 @@ test('importReport', async () => {
     enabledWalletAccountsAtom: walletAccountsAtom,
     availableAssetNamesByWalletAccountAtom,
     addressProvider,
+    accountStatesAtom,
   })
 
-  const report = await reportNode.export()
+  const report = await reportNode.export({ walletExists: true })
   const path = ['exodus_0', 'bitcoin', 'bip44', 'address']
   expect(get(report, path)).toBeDefined()
   set(report, path, mockAddress)

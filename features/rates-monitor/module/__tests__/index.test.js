@@ -105,16 +105,24 @@ describe('RatesMonitor', () => {
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
       data: {
-        'BTC.EUR': 73,
-        'BTC.USD': 70,
-        'ETH.EUR': 42,
-        'ETH.USD': 40,
+        BTC: {
+          EUR: 73,
+          USD: 70,
+        },
+        ETH: {
+          EUR: 42,
+          USD: 40,
+        },
       },
     })
     pricingClient.ticker.mockResolvedValue({
-      'BTC.EUR.c24h': 7,
-      'BTC.EUR.v24h': 42,
-      'BTC.EUR.mc': 73,
+      BTC: {
+        EUR: {
+          c24h: 7,
+          v24h: 42,
+          mc: 73,
+        },
+      },
     })
     pricingClient.realTimePrice.mockResolvedValue({
       isModified: true,
@@ -201,8 +209,12 @@ describe('RatesMonitor', () => {
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
       data: {
-        'BTC.EUR': 73,
-        'ETH.EUR': 42,
+        BTC: {
+          EUR: 73,
+        },
+        ETH: {
+          EUR: 42,
+        },
       },
       lastModified: 'etag-abc',
     })
@@ -238,14 +250,22 @@ describe('RatesMonitor', () => {
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
       data: {
-        'BTC.EUR': 1,
-        'ETH.EUR': 2,
+        BTC: {
+          EUR: 1,
+        },
+        ETH: {
+          EUR: 2,
+        },
       },
     })
     pricingClient.ticker.mockResolvedValue({
-      'BTC.EUR.c24h': 3,
-      'BTC.EUR.v24h': 4,
-      'BTC.EUR.mc': 5,
+      BTC: {
+        EUR: {
+          c24h: 3,
+          v24h: 4,
+          mc: 5,
+        },
+      },
     })
 
     pricingClient.currentPrice = jest.fn().mockRejectedValue({})
@@ -256,21 +276,33 @@ describe('RatesMonitor', () => {
       createDelayedResponse({
         isModified: true,
         data: {
-          'BTC.EUR': 1,
-          'ETH.EUR': 2,
-          'BTC.USD': 1.1,
-          'ETH.USD': 2.2,
+          BTC: {
+            EUR: 1,
+            USD: 1.1,
+          },
+          ETH: {
+            EUR: 2,
+            USD: 2.2,
+          },
         },
       })
     )
     pricingClient.ticker.mockImplementationOnce(
       createDelayedResponse({
-        'BTC.EUR.c24h': 3,
-        'BTC.EUR.v24h': 4,
-        'BTC.EUR.mc': 5,
-        'ETH.EUR.c24h': 6,
-        'ETH.EUR.v24h': 7,
-        'ETH.EUR.mc': 8,
+        BTC: {
+          EUR: {
+            c24h: 3,
+            v24h: 4,
+            mc: 5,
+          },
+        },
+        ETH: {
+          EUR: {
+            c24h: 6,
+            v24h: 7,
+            mc: 8,
+          },
+        },
       })
     )
 
@@ -320,16 +352,22 @@ describe('RatesMonitor', () => {
       createDelayedResponse({
         isModified: true,
         data: {
-          'DOGE.EUR': 3.1,
-          'DOGE.USD': 3.2,
+          DOGE: {
+            EUR: 3.1,
+            USD: 3.2,
+          },
         },
       })
     )
     pricingClient.ticker.mockImplementationOnce(
       createDelayedResponse({
-        'DOGE.EUR.c24h': 4.1,
-        'DOGE.EUR.v24h': 4.2,
-        'DOGE.EUR.mc': 4.3,
+        DOGE: {
+          EUR: {
+            c24h: 4.1,
+            v24h: 4.2,
+            mc: 4.3,
+          },
+        },
       })
     )
 
@@ -414,7 +452,9 @@ describe('RatesMonitor', () => {
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
       data: {
-        'BTC.EUR': 73,
+        BTC: {
+          EUR: 73,
+        },
       },
     })
     const handler = jest.fn()
@@ -447,7 +487,9 @@ describe('RatesMonitor', () => {
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
       data: {
-        'BTC.USD': 73,
+        BTC: {
+          USD: 73,
+        },
       },
     })
     const handler = jest.fn()
@@ -481,8 +523,10 @@ describe('RatesMonitor', () => {
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
       data: {
-        'BTC.EUR': 1,
-        'BTC.USD': 1,
+        BTC: {
+          EUR: 1,
+          USD: 1,
+        },
       },
     })
     ratesMonitor.start()
@@ -498,8 +542,10 @@ describe('RatesMonitor', () => {
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
       data: {
-        'BTC.EUR': 1,
-        'BTC.USD': 1,
+        BTC: {
+          EUR: 1,
+          USD: 1,
+        },
       },
     })
     ratesMonitor.start()
@@ -521,10 +567,14 @@ describe('RatesMonitor', () => {
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
       data: {
-        'BTC.EUR': 1,
-        'BTC.USD': 1,
-        'ETH.EUR': 1,
-        'ETH.USD': 1,
+        BTC: {
+          EUR: 1,
+          USD: 1,
+        },
+        ETH: {
+          EUR: 1,
+          USD: 1,
+        },
       },
     })
     const handler = jest.fn()
@@ -541,8 +591,10 @@ describe('RatesMonitor', () => {
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
       data: {
-        'BTC.EUR': 0,
-        'BTC.USD': 0,
+        BTC: {
+          EUR: 0,
+          USD: 0,
+        },
       },
     })
     const handler = jest.fn()
@@ -554,8 +606,10 @@ describe('RatesMonitor', () => {
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
       data: {
-        'BTC.EUR': 1,
-        'BTC.USD': 1,
+        BTC: {
+          EUR: 1,
+          USD: 1,
+        },
       },
     })
     await advanceTimers(fetchInterval - 1)
@@ -568,8 +622,10 @@ describe('RatesMonitor', () => {
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
       data: {
-        'BTC.EUR': 10,
-        'BTC.USD': 12,
+        BTC: {
+          EUR: 10,
+          USD: 12,
+        },
       },
     })
     pricingClient.realTimePrice.mockResolvedValue({
@@ -638,16 +694,24 @@ describe('RatesMonitor', () => {
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
       data: {
-        'BTC.USD': 95,
-        'BTC.EUR': 90,
-        'ETH.USD': 44,
-        'ETH.EUR': 40,
+        BTC: {
+          USD: 95,
+          EUR: 90,
+        },
+        ETH: {
+          USD: 44,
+          EUR: 40,
+        },
       },
     })
     pricingClient.ticker.mockResolvedValue({
-      'BTC.EUR.c24h': 7,
-      'BTC.EUR.v24h': 42,
-      'BTC.EUR.mc': 73,
+      BTC: {
+        EUR: {
+          c24h: 7,
+          v24h: 42,
+          mc: 73,
+        },
+      },
     })
     const handler = jest.fn()
     ratesAtom.observe(handler)
@@ -685,17 +749,25 @@ describe('RatesMonitor', () => {
       pricingClient.currentPrice.mockResolvedValue({
         isModified: true,
         data: {
-          'BTC.EUR': 73,
-          'BTC.USD': 70,
-          'ETH.EUR': 42,
-          'ETH.USD': 40,
+          BTC: {
+            EUR: 73,
+            USD: 70,
+          },
+          ETH: {
+            EUR: 42,
+            USD: 40,
+          },
         },
       })
 
       pricingClient.ticker.mockResolvedValue({
-        'BTC.EUR.c24h': 7,
-        'BTC.EUR.v24h': 42,
-        'BTC.EUR.mc': 73,
+        BTC: {
+          EUR: {
+            c24h: 7,
+            v24h: 42,
+            mc: 73,
+          },
+        },
       })
 
       pricingClient.realTimePrice.mockResolvedValue({
@@ -735,10 +807,14 @@ describe('RatesMonitor', () => {
       pricingClient.currentPrice.mockResolvedValue({
         isModified: true,
         data: {
-          'BTC.EUR': 10,
-          'BTC.USD': 9,
-          'ETH.EUR': 100,
-          'ETH.USD': 110,
+          BTC: {
+            EUR: 10,
+            USD: 9,
+          },
+          ETH: {
+            EUR: 100,
+            USD: 110,
+          },
         },
       })
       pricingClient.realTimePrice.mockResolvedValue({
@@ -784,8 +860,10 @@ describe('RatesMonitor', () => {
       pricingClient.currentPrice.mockResolvedValue({
         isModified: true,
         data: {
-          'BTC.EUR': 10,
-          'BTC.USD': 9,
+          BTC: {
+            EUR: 10,
+            USD: 9,
+          },
         },
       })
       pricingClient.realTimePrice.mockResolvedValue({
@@ -835,10 +913,14 @@ describe('RatesMonitor', () => {
       pricingClient.currentPrice.mockResolvedValue({
         isModified: true,
         data: {
-          'BTC.EUR': 70,
-          'BTC.USD': 60,
-          'ETH.EUR': 90,
-          'ETH.USD': 100,
+          BTC: {
+            EUR: 70,
+            USD: 60,
+          },
+          ETH: {
+            EUR: 90,
+            USD: 100,
+          },
         },
       })
       pricingClient.realTimePrice.mockResolvedValue({
@@ -876,10 +958,14 @@ describe('RatesMonitor', () => {
       pricingClient.currentPrice.mockResolvedValue({
         isModified: true,
         data: {
-          'BTC.EUR': 100,
-          'BTC.USD': 99,
-          'ETH.EUR': 50,
-          'ETH.USD': 55,
+          BTC: {
+            EUR: 100,
+            USD: 99,
+          },
+          ETH: {
+            EUR: 50,
+            USD: 55,
+          },
         },
       })
 
@@ -929,10 +1015,14 @@ describe('RatesMonitor', () => {
       pricingClient.currentPrice.mockResolvedValue({
         isModified: true,
         data: {
-          'BTC.EUR': 500,
-          'BTC.USD': 490,
-          'ETH.EUR': 300,
-          'ETH.USD': 310,
+          BTC: {
+            EUR: 500,
+            USD: 490,
+          },
+          ETH: {
+            EUR: 300,
+            USD: 310,
+          },
         },
       })
 
@@ -982,10 +1072,14 @@ describe('RatesMonitor', () => {
       pricingClient.currentPrice.mockResolvedValue({
         isModified: true,
         data: {
-          'BTC.EUR': 10,
-          'BTC.USD': 9,
-          'ETH.EUR': 20,
-          'ETH.USD': 18,
+          BTC: {
+            EUR: 10,
+            USD: 9,
+          },
+          ETH: {
+            EUR: 20,
+            USD: 18,
+          },
         },
       })
 
@@ -1030,10 +1124,14 @@ describe('RatesMonitor', () => {
       pricingClient.currentPrice.mockResolvedValue({
         isModified: true,
         data: {
-          'BTC.EUR': 100,
-          'BTC.USD': 95,
-          'ETH.EUR': 50,
-          'ETH.USD': 48,
+          BTC: {
+            EUR: 100,
+            USD: 95,
+          },
+          ETH: {
+            EUR: 50,
+            USD: 48,
+          },
         },
       })
 

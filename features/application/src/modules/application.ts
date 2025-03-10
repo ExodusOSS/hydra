@@ -419,7 +419,7 @@ export class Application extends EventEmitter {
   }
 
   isRestoring = async () => {
-    return this.#flagsStorage.get(RESTORE_FLAG)
+    return Boolean(await this.#flagsStorage.get(RESTORE_FLAG))
   }
 
   // TODO: stop emitting this on hooks?

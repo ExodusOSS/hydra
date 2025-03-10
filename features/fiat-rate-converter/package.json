@@ -1,6 +1,6 @@
 {
   "name": "@exodus/fiat-rate-converter",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "Converts crypto amounts to fiat amounts.",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/fiat-rate-converter",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afiat-rate-converter"
   },
@@ -28,11 +28,13 @@
   },
   "dependencies": {
     "@exodus/currency": "^5.0.2",
-    "@exodus/fiat-currencies": "^1.0.0",
+    "@exodus/fiat-currencies": "^1.2.3",
     "@exodus/typeforce": "^1.18.1"
   },
   "devDependencies": {
-    "@exodus/atoms": "workspace:^",
-    "@exodus/storage-memory": "workspace:^"
+    "@exodus/atoms": "workspace:^"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

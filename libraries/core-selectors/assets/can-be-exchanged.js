@@ -1,7 +1,7 @@
 import lodash from 'lodash'
 import { createSelector } from 'reselect'
 
-const { memoize } = lodash
+const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
 const createMultiNetworkSelector = memoize(
   ({ combinedAssetNames, walletAccount, createAssetCanBeExchangedSelector }) => {

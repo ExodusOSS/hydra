@@ -2,29 +2,52 @@ import { createAtomObserver } from '@exodus/atoms'
 import pDefer from 'p-defer'
 
 const createRestoreAssetsPlugin = ({
-  restoreProgressTracker,
   port,
+  restoreProgressTracker,
   restoringAssetsAtom,
-  txLogMonitors,
+  config,
+  errorTracking,
 }) => {
-  let restoreDefer = pDefer()
-  let restoreSeedDefer
+  let restoreDefer
+
+  const assetNamesToNotWait = new Set(config.assetNamesToNotWait)
 
   // This is intended to block the thread for onRestore listeners until the restore process has finished
-  const onRestore = async () => restoreDefer.promise
-
-  const restoreAllThenResolve = (deferred) => {
-    restoreProgressTracker.on('restored', () => {
-      return deferred.resolve()
-    })
-    restoreProgressTracker.restoreAll()
+  const onRestore = async () => {
+    if (restoreDefer) {
+      await restoreDefer.promise
+    } else {
+      throw new Error(
+        'unexpected. are you calling onRestore hook before application onStart or onImport hooks?'
+      )
+    }
   }
 
-  let startedTracking = false
-  const startTrackingRestore = () => {
-    if (startedTracking) return
-    startedTracking = true
-    restoreAllThenResolve(restoreDefer)
+  const waitAllAssetsRestored = () =>
+    new Promise(async (resolve) => {
+      // Monitor restoring assets until there's no more to wait
+      const unobserve = restoringAssetsAtom.observe((restoringAssets) => {
+        const restoringAssetsToWait = Object.keys(restoringAssets).filter(
+          (assetName) => !assetNamesToNotWait.has(assetName)
+        )
+
+        if (restoringAssetsToWait.length > 0) return
+
+        resolve()
+        unobserve()
+      })
+    })
+
+  const startTrackingRestore = async () => {
+    if (restoreDefer) {
+      return // restore tracking in progress
+    }
+
+    restoreDefer = pDefer()
+    // on startup monitors runs automatically
+    await restoreProgressTracker.restoreAll(false)
+    await waitAllAssetsRestored()
+    restoreDefer.resolve()
   }
 
   const restoringAssetsAtomObserver = createAtomObserver({
@@ -36,9 +59,10 @@ const createRestoreAssetsPlugin = ({
 
   const onStart = ({ isRestoring }) => {
     if (isRestoring) {
-      startTrackingRestore()
-    } else {
-      restoreDefer.resolve()
+      startTrackingRestore().catch((e) => {
+        errorTracking.track({ error: e, namespace: 'restoreAssetsPlugin' })
+        restoreDefer?.reject(e)
+      })
     }
   }
 
@@ -47,18 +71,15 @@ const createRestoreAssetsPlugin = ({
   }
 
   const onImport = () => {
-    restoreDefer = pDefer()
-    startTrackingRestore()
+    startTrackingRestore().catch((e) => {
+      errorTracking.track({ error: e, namespace: 'restoreAssetsPlugin' })
+      restoreDefer?.reject(e)
+    })
   }
 
   const onRestoreSeed = async () => {
-    restoreSeedDefer = pDefer()
-
-    restoreAllThenResolve(restoreSeedDefer)
-    txLogMonitors.updateAll()
-
-    // Blocks the execution for onRestoreSeed listeners until the restore process has finished
-    return restoreSeedDefer.promise
+    await restoreProgressTracker.restoreAll(true)
+    await waitAllAssetsRestored()
   }
 
   const onClear = async () => {
@@ -84,7 +105,13 @@ const restoreAssetsPluginDefinition = {
   id: 'restoreAssetsPlugin',
   factory: createRestoreAssetsPlugin,
   type: 'plugin',
-  dependencies: ['restoreProgressTracker', 'port', 'restoringAssetsAtom', 'txLogMonitors'],
+  dependencies: [
+    'port',
+    'restoreProgressTracker',
+    'restoringAssetsAtom',
+    'config',
+    'errorTracking',
+  ],
   public: true,
 }
 

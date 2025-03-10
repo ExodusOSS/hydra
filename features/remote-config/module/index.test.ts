@@ -108,6 +108,7 @@ describe('createRemoteConfig', () => {
       remoteConfigUrl,
       error: null,
       loaded: true,
+      gitHash: null,
     })
   })
 
@@ -131,6 +132,7 @@ describe('createRemoteConfig', () => {
       remoteConfigUrl,
       error: null,
       loaded: true,
+      gitHash: null,
     })
   })
 

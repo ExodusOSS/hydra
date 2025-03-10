@@ -1,7 +1,8 @@
 import BipPath from 'bip32-path'
 import * as util from './util.js'
 import { ModelIdSymbol } from '../constants.js'
-import { createIsInstance } from '../utils.js'
+import { createIsInstance, omitUndefined } from '../utils.js'
+import { isKeyIdentifierLike } from './util.js'
 
 type AddressMeta = {
   path: string
@@ -50,6 +51,33 @@ export default class Address {
     return {
       address: this.address,
       meta: this.meta,
+    }
+  }
+
+  toRedactedJSON() {
+    const redactedMeta: Partial<AddressMeta> = {
+      path: this.meta.path,
+      purpose: this.meta.purpose,
+    }
+
+    if (typeof this.meta.walletAccount === 'string') {
+      redactedMeta.walletAccount = this.meta.walletAccount
+    }
+
+    if (isKeyIdentifierLike(this.meta.keyIdentifier)) {
+      const { derivationAlgorithm, keyType, derivationPath, assetName } = this.meta.keyIdentifier
+
+      redactedMeta.keyIdentifier = omitUndefined({
+        derivationAlgorithm,
+        keyType,
+        derivationPath,
+        assetName,
+      })
+    }
+
+    return {
+      address: this.address,
+      meta: omitUndefined(redactedMeta),
     }
   }
 

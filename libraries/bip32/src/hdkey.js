@@ -27,10 +27,12 @@ export class HDKey {
   }
 
   get fingerprint() {
+    this.#ensurePublicKeyIsDerived()
     return this.#fingerprint
   }
 
   get identifier() {
+    this.#ensurePublicKeyIsDerived()
     return this.#identifier
   }
 
@@ -39,20 +41,32 @@ export class HDKey {
   }
 
   set privateKey(privateKey) {
-    this.#publicKey = secp256k1.privateKeyToPublicKey({ privateKey, format: 'buffer' }) // checks validity
+    assert(secp256k1.privateKeyIsValid({ privateKey }), 'invalid private key') // checks validity
     this.#privateKey = privateKey
-    this.#identifier = hashSync('hash160', this.publicKey)
-    this.#fingerprint = this.#identifier.slice(0, 4).readUInt32BE(0)
   }
 
-  #setPublicKey(publicKey) {
+  /**
+   * @param {Buffer|Uint8Array} publicKey - the public key to set
+   * @param {boolean} [unsafeWipePrivateData] - Consult AppSec before overriding it.
+   */
+  #setPublicKey(publicKey, unsafeWipePrivateData = true) {
     this.#publicKey = Buffer.from(publicKey)
     this.#identifier = hashSync('hash160', this.publicKey)
     this.#fingerprint = this.#identifier.slice(0, 4).readUInt32BE(0)
-    this.#privateKey = null
+    if (unsafeWipePrivateData) this.#wipePrivateData()
+  }
+
+  #ensurePublicKeyIsDerived() {
+    if (!this.#publicKey && this.#privateKey) {
+      this.#setPublicKey(
+        secp256k1.privateKeyToPublicKey({ privateKey: this.#privateKey, format: 'buffer' }),
+        false
+      )
+    }
   }
 
   get publicKey() {
+    this.#ensurePublicKeyIsDerived()
     return this.#publicKey
   }
 
@@ -87,7 +101,7 @@ export class HDKey {
     let hdkey = this // eslint-disable-line unicorn/no-this-assignment
     entries.forEach(function (c, i) {
       if (i === 0) {
-        assert(/^[Mm]/.test(c), 'Path must start with "m" or "M"')
+        assert(/^[Mm]/u.test(c), 'Path must start with "m" or "M"')
         return
       }
 
@@ -172,6 +186,12 @@ export class HDKey {
   }
 
   wipePrivateData() {
+    // Ensure all public fields are computed - before wiping private data
+    this.#ensurePublicKeyIsDerived()
+    return this.#wipePrivateData()
+  }
+
+  #wipePrivateData() {
     if (this.#privateKey) randomBytes(this.#privateKey.length).copy(this.#privateKey)
     this.#privateKey = null
     return this

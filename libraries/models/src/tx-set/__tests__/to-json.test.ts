@@ -18,3 +18,13 @@ test('toJSON() should convert TxSet to JSON represenation', (t) => {
 
   t.end()
 })
+
+test('toRedactedJSON() should convert TxSet to JSON represenation', (t) => {
+  assert.deepStrictEqual(
+    TxSet.fromArray(txs).toRedactedJSON(),
+    txs.map(Tx.fromJSON).map((tx) => tx.toRedactedJSON()),
+    'json is the same'
+  )
+
+  t.end()
+})

@@ -1,14 +1,14 @@
 import { mapValuesAsync } from '@exodus/basic-utils'
 import createIOC from '@exodus/dependency-injection'
 import createInMemoryStorage from '@exodus/storage-memory'
-import { once } from 'events/'
+import { once } from 'events/events.js'
 
 import {
   featureFlagAtomsDefinition,
   featureFlagsAtomDefinition,
   remoteConfigFeatureFlagAtomsDefinition,
-} from '../../atoms'
-import createRemoteConfigWithData from '../../shared/__tests__/dummy-remote-config'
+} from '../../atoms/index.js'
+import createRemoteConfigWithData from '../../shared/__tests__/dummy-remote-config.js'
 
 jest.useFakeTimers()
 

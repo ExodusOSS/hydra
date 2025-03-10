@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/remote-config@2.9.3...@exodus/remote-config@2.10.0) (2025-02-26)
+
+### Features
+
+- feat: report git hash (#11614)
+
+## [2.9.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/remote-config@2.9.2...@exodus/remote-config@2.9.3) (2025-02-21)
+
+### Bug Fixes
+
+- fix: skip exporting most reports if wallet doesn't exist (#11553)
+
 ## [2.9.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/remote-config@2.9.1...@exodus/remote-config@2.9.2) (2025-02-17)
 
 **Note:** Version bump only for package @exodus/remote-config

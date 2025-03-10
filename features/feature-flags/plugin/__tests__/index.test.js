@@ -1,11 +1,17 @@
+import { mock } from 'node:test'
+
 import * as atoms from '@exodus/atoms'
 
-import featureFlagsPluginDefinition from '..'
+const createAtomObserver = jest.fn()
 
-jest.mock('@exodus/atoms', () => ({
-  ...jest.requireActual('@exodus/atoms'),
-  createAtomObserver: jest.fn(),
-}))
+mock.module('@exodus/atoms', {
+  namedExports: {
+    ...atoms,
+    createAtomObserver,
+  },
+})
+
+const { default: featureFlagsPluginDefinition } = await import('../index.js')
 
 describe('featureFlagsLifecyclePlugin', () => {
   let port
@@ -20,7 +26,7 @@ describe('featureFlagsLifecyclePlugin', () => {
       unregister: jest.fn(),
       start: jest.fn(),
     }
-    atoms.createAtomObserver.mockReturnValue(featureFlagsAtomObserver)
+    createAtomObserver.mockReturnValue(featureFlagsAtomObserver)
 
     port = { emit: jest.fn() }
     featureFlagsAtom = atoms.combine({
@@ -39,7 +45,7 @@ describe('featureFlagsLifecyclePlugin', () => {
   })
 
   it('should create atom observers and register them but not start yet', () => {
-    expect(atoms.createAtomObserver).toHaveBeenCalledWith({
+    expect(createAtomObserver).toHaveBeenCalledWith({
       port,
       atom: featureFlagsAtom,
       event: 'featureFlags',

@@ -1,7 +1,8 @@
-import * as atoms from '@exodus/atoms'
 import assetBase from '@exodus/assets-base'
-import pluginDefinition from '..'
+import * as atoms from '@exodus/atoms'
 import EventEmitter from 'events/'
+
+import pluginDefinition from '..'
 
 jest.mock('@exodus/atoms', () => ({
   ...jest.requireActual('@exodus/atoms'),
@@ -52,6 +53,10 @@ describe('restoreAssetsPlugin', () => {
       restoringAssetsAtom,
       assetsModule,
       txLogMonitors,
+      config: { assetNamesToNotWait: ['monero'] },
+      errorTracking: {
+        track: jest.fn(),
+      },
     })
 
     return {
@@ -78,62 +83,154 @@ describe('restoreAssetsPlugin', () => {
   test('plugin returns needed functions', () => {
     const { plugin } = setup()
 
-    expect(typeof plugin.onRestore === 'function').toEqual(true)
-    expect(typeof plugin.onImport === 'function').toEqual(true)
-    expect(typeof plugin.onClear === 'function').toEqual(true)
-    expect(typeof plugin.onStart === 'function').toEqual(true)
-    expect(typeof plugin.onRestoreSeed === 'function').toEqual(true)
+    expect(typeof plugin.onRestore).toEqual('function')
+    expect(typeof plugin.onImport).toEqual('function')
+    expect(typeof plugin.onClear).toEqual('function')
+    expect(typeof plugin.onStart).toEqual('function')
+    expect(typeof plugin.onRestoreSeed).toEqual('function')
   })
 
   test('plugin resolves onRestore after restore progress module finishes onImport', async () => {
-    const { plugin, restoreProgressTracker } = setup()
+    const { plugin, restoringAssetsAtom } = setup()
+    await restoringAssetsAtom.set({ ethereum: true })
 
     await plugin.onImport()
     const waitingRestorePromise = plugin.onRestore()
     const handler = jest.fn()
     waitingRestorePromise.then(handler)
+
     await advance()
     expect(handler).toHaveBeenCalledTimes(0)
-    restoreProgressTracker.emit('restored')
+
+    await restoringAssetsAtom.set({})
+
+    await advance()
+    expect(handler).toHaveBeenCalledTimes(1)
+  })
+
+  test('plugin resolves onRestore after restore progress module finishes onImport and app started in non-restoring state', async () => {
+    const { plugin, restoringAssetsAtom } = setup()
+    await plugin.onStart({ isRestoring: false })
+    await restoringAssetsAtom.set({ ethereum: true })
+    await plugin.onImport()
+    const waitingRestorePromise = plugin.onRestore()
+    const handler = jest.fn()
+    waitingRestorePromise.then(handler)
+
+    await advance()
+    expect(handler).toHaveBeenCalledTimes(0)
+
+    await restoringAssetsAtom.set({})
+
     await advance()
     expect(handler).toHaveBeenCalledTimes(1)
   })
 
   test('plugin resolves onRestore after restore progress module finished onStart', async () => {
-    const { plugin, restoreProgressTracker } = setup()
+    const { plugin, restoringAssetsAtom } = setup()
+    await restoringAssetsAtom.set({ ethereum: true })
 
     await plugin.onStart({ isRestoring: true })
     const waitingRestorePromise = plugin.onRestore()
     const handler = jest.fn()
     waitingRestorePromise.then(handler)
+
     await advance()
     expect(handler).toHaveBeenCalledTimes(0)
-    restoreProgressTracker.emit('restored')
+
+    await restoringAssetsAtom.set({})
+
     await advance()
     expect(handler).toHaveBeenCalledTimes(1)
   })
 
-  test('ticks monitors for base assets', async () => {
-    const { plugin, txLogMonitors } = setup()
+  test('plugin resolves onRestore when app starts restoring', async () => {
+    const { plugin, restoringAssetsAtom } = setup()
+    await restoringAssetsAtom.set({ ethereum: true })
+
+    await plugin.onImport()
+    const waitingRestorePromise = plugin.onRestore()
+    const handler = jest.fn()
+    waitingRestorePromise.then(handler)
+
+    await advance()
+    expect(handler).toHaveBeenCalledTimes(0)
+    await plugin.onStart({ isRestoring: true })
+
+    await advance()
+    expect(handler).toHaveBeenCalledTimes(0)
+
+    await restoringAssetsAtom.set({})
+
+    await advance()
+    expect(handler).toHaveBeenCalledTimes(1)
+  })
+
+  test('plugin resolves onRestore when app starts restoring and import hook called later ', async () => {
+    const { plugin, restoringAssetsAtom } = setup()
+    await restoringAssetsAtom.set({ ethereum: true })
+    await plugin.onStart({ isRestoring: true })
+
+    const waitingRestorePromise = plugin.onRestore()
+    const handler = jest.fn()
+    waitingRestorePromise.then(handler)
+
+    await advance()
+    expect(handler).toHaveBeenCalledTimes(0)
+
+    await plugin.onImport()
+    await advance()
+    expect(handler).toHaveBeenCalledTimes(0)
+
+    await restoringAssetsAtom.set({})
+
+    await advance()
+    expect(handler).toHaveBeenCalledTimes(1)
+  })
+
+  test('should ignore monero during restoreAll process', async () => {
+    const { plugin, restoringAssetsAtom } = setup()
+    plugin.onStart({ isRestoring: true })
+
+    await restoringAssetsAtom.set({ ethereum: true, monero: true })
+
+    const waitingRestorePromise = plugin.onRestore()
+
+    const handler = jest.fn()
+    waitingRestorePromise.then(handler)
+
+    await advance()
+    expect(handler).toHaveBeenCalledTimes(0)
+
+    await restoringAssetsAtom.set({ monero: true })
+
+    await advance()
+    expect(handler).toHaveBeenCalledTimes(1)
+  })
+
+  test('should tick monitors for base assets', async () => {
+    const { plugin, restoreProgressTracker } = setup()
     plugin.onRestoreSeed()
 
-    expect(txLogMonitors.updateAll).toHaveBeenCalledTimes(1)
-    expect(txLogMonitors.updateAll).toHaveBeenNthCalledWith(1)
+    expect(restoreProgressTracker.restoreAll).toHaveBeenCalledTimes(1)
+    expect(restoreProgressTracker.restoreAll).toHaveBeenCalledWith(true)
   })
 
   test('defers seed-stored execution until all assets are synchronized', async () => {
-    const { plugin, restoreProgressTracker } = setup()
+    const { plugin, restoringAssetsAtom } = setup()
+
+    await restoringAssetsAtom.set({ ethereum: true })
+
     const waitingRestorePromise = plugin.onRestoreSeed()
 
     const handler = jest.fn()
     waitingRestorePromise.then(handler)
 
-    plugin.onRestoreSeed()
-
     await advance()
     expect(handler).toHaveBeenCalledTimes(0)
 
-    restoreProgressTracker.emit('restored')
+    await restoringAssetsAtom.set({})
+
     await advance()
     expect(handler).toHaveBeenCalledTimes(1)
   })

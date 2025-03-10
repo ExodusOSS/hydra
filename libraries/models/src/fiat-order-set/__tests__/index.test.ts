@@ -164,3 +164,82 @@ describe('lodash isEqual', () => {
     expect(isEqual(set1, set2)).toBe(false)
   })
 })
+
+describe('toRedactedJSON()', () => {
+  test('returns redacted data for orders', () => {
+    const order = FiatOrder.fromJSON(serializedOrder)
+    const orderSet = FiatOrderSet.fromArray([order])
+    const redactedData = orderSet.toRedactedJSON()
+    const redactedOrder = redactedData[0]!
+
+    expect(redactedData).toHaveLength(1)
+    expect(redactedOrder).toEqual({
+      cryptoAmount: serializedOrder.fromAmount,
+      cryptoAsset: 'bitcoin',
+      date: serializedOrder.date,
+      exodusRate: order.exodusRate,
+      exodusStatus: 'complete',
+      fees: order.fees,
+      fiatValue: serializedOrder.fiatValue,
+      fromAmount: serializedOrder.fromAmount,
+      fromAsset: order.fromAsset,
+      isBuy: false,
+      isSell: true,
+      orderId: order.orderId,
+      orderType: order.orderType,
+      provider: order.provider,
+      providerOrderId: order.providerOrderId,
+      providerRate: order.providerRate,
+      status: order.status,
+      toAddress: order.toAddress,
+      toAmount: serializedOrder.toAmount,
+      toAsset: order.toAsset,
+      toWalletAccount: order.toWalletAccount,
+      txIds: [order.txId],
+    })
+  })
+
+  test('redacts data from multiple orders', () => {
+    const order1 = FiatOrder.fromJSON(serializedOrder)
+    const order2 = FiatOrder.fromJSON({
+      ...serializedOrder,
+      orderId: 'different-order-id',
+      fromAddress: 'different-address',
+      fromWalletAccount: 'different-account',
+    })
+
+    const orderSet = FiatOrderSet.fromArray([order1, order2])
+    const redactedData = orderSet.toRedactedJSON()
+
+    expect(redactedData).toHaveLength(2)
+
+    for (const order of redactedData) {
+      const fiatOrder = orderSet.get(order.orderId)
+
+      expect(order).toEqual({
+        cryptoAmount: serializedOrder.fromAmount,
+        cryptoAsset: 'bitcoin',
+        date: serializedOrder.date,
+        exodusRate: order.exodusRate,
+        exodusStatus: 'complete',
+        fees: order.fees,
+        fiatValue: serializedOrder.fiatValue,
+        fromAmount: serializedOrder.fromAmount,
+        fromAsset: order.fromAsset,
+        isBuy: false,
+        isSell: true,
+        orderId: order.orderId,
+        orderType: order.orderType,
+        provider: order.provider,
+        providerOrderId: order.providerOrderId,
+        providerRate: order.providerRate,
+        status: order.status,
+        toAddress: order.toAddress,
+        toAmount: serializedOrder.toAmount,
+        toAsset: order.toAsset,
+        toWalletAccount: order.toWalletAccount,
+        txIds: [fiatOrder!.txId],
+      })
+    }
+  })
+})

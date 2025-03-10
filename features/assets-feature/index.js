@@ -9,6 +9,7 @@ import assetModuleDefinition from './module/index.js'
 import customTokensMonitorDefinition from './monitor/index.js'
 import assetPreferencesDefinition from './module/asset-preferences.js'
 import assetsAtomDefinition from './atoms/assets.js'
+import assetsReportDefinition from './report/index.js'
 import { defaultConfig } from './constants.js'
 
 const assets = (config = Object.create(null)) => {
@@ -53,6 +54,7 @@ const assets = (config = Object.create(null)) => {
       },
       { definition: assetPreferencesDefinition },
       { if: { registered: ['customTokensStorage'] }, definition: customTokensMonitorDefinition },
+      { definition: assetsReportDefinition },
     ],
   }
 }

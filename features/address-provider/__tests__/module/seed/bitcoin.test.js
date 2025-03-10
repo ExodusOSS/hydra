@@ -234,6 +234,18 @@ const addressProviderTester = (mock) => {
     })
   })
 
+  test('getEncodedPublicKey() returns address', async () => {
+    await expect(
+      addressProvider.getEncodedPublicKey({
+        assetName,
+        walletAccount: multisigWalletAccount,
+        purpose: 44,
+        chainIndex: 1,
+        addressIndex: 55,
+      })
+    ).resolves.toEqual('15HfUQcQzyMXmonEzq3c5Gu25zNZicaKC1')
+  })
+
   test('getUnusedAddress() should return the next unused address on the receive chains (BITCOIN ONLY ATM)', async () => {
     /*
     what's happening here is we leverage the fact that each TX we receive logs the addresses in the wallet.
@@ -687,21 +699,52 @@ const multisigAddressProviderTester = () => {
     multisigAtom = createInMemoryAtom()
     ;({ addressProvider, publicKeyProvider } = setup({
       txLogs: createTestTxLog(),
+      assets: {
+        ...assets,
+        bitcoinByPublicKey: {
+          ...bitcoin,
+          baseAssetName: 'bitcoinByPublicKey',
+          api: {
+            ...bitcoin.api,
+            features: {
+              ...bitcoin.api.features,
+              multipleAddresses: false,
+            },
+          },
+        },
+      },
       multisigAtom,
     }))
 
-    const keyIdentifierFactory = createGetKeyIdentifier({
+    const bitcoinKeyIdentifierFactory = createGetKeyIdentifier({
       bip44: bip44Constants.BTC,
       allowedPurposes: [86],
     })
 
-    const xpubs = await Promise.all(
-      [0, 1, 2].map((i) =>
-        publicKeyProvider.getExtendedPublicKey({
-          keyIdentifier: Object.freeze(keyIdentifierFactory({ purpose: 86, accountIndex: i })),
+    const assetPublicKeys = await Promise.all(
+      [0, 1, 2].map(async (i) => {
+        const xpub = await publicKeyProvider.getExtendedPublicKey({
+          keyIdentifier: Object.freeze(
+            bitcoinKeyIdentifierFactory({ purpose: 86, accountIndex: i })
+          ),
           walletAccount: multisigWalletAccount.toString(),
         })
-      )
+        const publicKey = await publicKeyProvider.getPublicKey({
+          keyIdentifier: Object.freeze(
+            bitcoinKeyIdentifierFactory({
+              purpose: 86,
+              accountIndex: i,
+              addressIndex: 0,
+              chainIndex: 0,
+            })
+          ),
+          walletAccount: multisigWalletAccount.toString(),
+        })
+        return {
+          bitcoin: xpub,
+          bitcoinByPublicKey: publicKey.toString('hex'),
+        }
+      })
     )
 
     multisigAtom.set({
@@ -712,18 +755,18 @@ const multisigAddressProviderTester = () => {
         cosigners: [
           {
             nick: 'cosigner1',
-            xpub: xpubs[0],
+            assetPublicKeys: assetPublicKeys[0],
           },
           {
             nick: 'cosigner2',
-            xpub: xpubs[1],
+            assetPublicKeys: assetPublicKeys[1],
           },
           {
             nick: 'cosigner3',
-            xpub: xpubs[2],
+            assetPublicKeys: assetPublicKeys[2],
           },
         ],
-        internalXpub: xpubs[0],
+        internalXpub: assetPublicKeys[0].bitcoin,
       },
     })
   })
@@ -731,6 +774,25 @@ const multisigAddressProviderTester = () => {
   test('getAddress() returns address for multisig', async () => {
     const address = await addressProvider.getAddress({
       assetName,
+      walletAccount: multisigWalletAccount,
+      purpose: 86,
+      chainIndex: 0,
+      addressIndex: 0,
+    })
+
+    expect(address.toJSON()).toMatchObject({
+      address: 'bc1pmg86fr9eu48aqr3pxu4aw8aff6t3q77yw6mks0c5lca4k0s9ys7qgx786t',
+      meta: {
+        path: 'm/0/0',
+        purpose: 86,
+        walletAccount: multisigWalletAccount.toString(),
+        keyIdentifier: expect.any(KeyIdentifier),
+      },
+    })
+  })
+  test('getAddress() returns address for multisig using public key', async () => {
+    const address = await addressProvider.getAddress({
+      assetName: 'bitcoinByPublicKey',
       walletAccount: multisigWalletAccount,
       purpose: 86,
       chainIndex: 0,

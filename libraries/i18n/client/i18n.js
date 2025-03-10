@@ -3,7 +3,7 @@ import { computeId, createEntryId } from '@exodus/pofile'
 
 import formatters from '../formatters/index.js'
 import * as icu from '../icu/index.js'
-import { castString, transformLanguages } from './utils.js'
+import { castString } from './utils.js'
 
 class I18N extends EventEmitter {
   constructor({ defaultCurrency, defaultLanguage, languages = Object.create(null) }) {
@@ -12,11 +12,11 @@ class I18N extends EventEmitter {
     this.language = defaultLanguage
     this.defaultLanguage = defaultLanguage
     this.currency = defaultCurrency
-    this.languages = transformLanguages(languages)
+    this.languages = languages
   }
 
   load = (languages) => {
-    this.languages = transformLanguages(languages)
+    this.languages = languages
   }
 
   setCurrency = (currency) => {
@@ -32,14 +32,14 @@ class I18N extends EventEmitter {
   }
 
   getTranslation = (id, context) => {
-    const currentLocaleTranslations = this.languages.get(this.language)
-    const defaultLanguageTranslations = this.languages.get(this.defaultLanguage)
+    const currentLocaleTranslations = this.languages[this.language]
+    const defaultLanguageTranslations = this.languages[this.defaultLanguage]
     const translationId = computeId(createEntryId({ id, context }))
 
-    const currentLocaleTranslation = currentLocaleTranslations?.get(translationId)
+    const currentLocaleTranslation = currentLocaleTranslations?.[translationId]
     if (currentLocaleTranslation?.length > 0) return currentLocaleTranslation
 
-    const defaultLanguageTranslation = defaultLanguageTranslations?.get(translationId)
+    const defaultLanguageTranslation = defaultLanguageTranslations?.[translationId]
     if (defaultLanguageTranslation?.length > 0) return defaultLanguageTranslation
 
     return icu.parse(id)

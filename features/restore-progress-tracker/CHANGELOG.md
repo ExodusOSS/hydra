@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/restore-progress-tracker@3.7.0...@exodus/restore-progress-tracker@3.7.1) (2025-02-21)
+
+### Bug Fixes
+
+- fix: restore promise usage (#11297)
+
+## [3.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/restore-progress-tracker@3.5.1...@exodus/restore-progress-tracker@3.7.0) (2025-02-21)
+
+### Features
+
+- feat(restore-progress-tracker): add ts types (#11225)
+
+- feat: use atoms v9 (#9651)
+
+### Bug Fixes
+
+- fix: prefer Object.create(null) to {} (#10511)
+
+- fix: skip exporting most reports if wallet doesn't exist (#11553)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
+## [3.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/restore-progress-tracker@3.5.1...@exodus/restore-progress-tracker@3.6.0) (2024-11-25)
+
+### Features
+
+- feat: use atoms v9 (#9651)
+
+### Bug Fixes
+
+- fix: prefer Object.create(null) to {} (#10511)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
 ## [3.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/restore-progress-tracker@3.5.0...@exodus/restore-progress-tracker@3.5.1) (2024-09-09)
 
 **Note:** Version bump only for package @exodus/restore-progress-tracker

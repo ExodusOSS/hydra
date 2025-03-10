@@ -3,7 +3,7 @@ import { createInMemoryAtom } from '@exodus/atoms'
 import { createAsset as createBitcoinAsset } from '@exodus/bitcoin-plugin'
 import { createGetKeyIdentifier, getSupportedPurposes } from '@exodus/cardano-lib'
 import { asset as cardanoMeta } from '@exodus/cardano-meta'
-import ethereumPluginCJS from '@exodus/ethereum-plugin'
+import ethereumPlugin from '@exodus/ethereum-plugin'
 import { createNoopLogger } from '@exodus/logger'
 import { WalletAccount } from '@exodus/models'
 import solanaPlugin from '@exodus/solana-plugin'
@@ -13,10 +13,6 @@ import type assetSourcesApiDefinition from '../api/index.js'
 import type { availableAssetNamesByWalletAccountAtomDefinition } from '../atoms/available-asset-names-by-wallet-account.js'
 import assetSourcesFeature from '../index.js'
 import type { AssetSources } from '../module/asset-sources.js'
-
-// HACK: atm we are native ESM, that module CJS with .default export
-// This can be simplified when those are converted to ESM
-const ethereumPlugin = ethereumPluginCJS.default || ethereumPluginCJS
 
 const cardano = {
   ...cardanoMeta,
@@ -32,20 +28,20 @@ const cardano = {
 
 const assets = {
   bitcoin: {
-    ...createBitcoinAsset({ assetClientInterface: {} }),
+    ...createBitcoinAsset({ assetClientInterface: { createLogger: createNoopLogger } }),
     get baseAsset() {
       return assets.bitcoin
     },
   },
   cardano,
   ethereum: {
-    ...ethereumPlugin.createAsset({ assetClientInterface: {} }),
+    ...ethereumPlugin.createAsset({ assetClientInterface: { createLogger: createNoopLogger } }),
     get baseAsset() {
       return assets.ethereum
     },
   },
   solana: {
-    ...solanaPlugin.createAsset({ assetClientInterface: {} }),
+    ...solanaPlugin.createAsset({ assetClientInterface: { createLogger: createNoopLogger } }),
     get baseAsset() {
       return assets.solana
     },

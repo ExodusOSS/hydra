@@ -1,6 +1,7 @@
 import applicationApiDefinition from './api/index.js'
 import applicationModuleDefinition from './modules/index.js'
 import passphraseCacheDefinition from './modules/passphrase-cache.js'
+import applicationReportDefinition from './report/index.js'
 import { lifecyclePluginDefinition } from './plugins/index.js'
 
 import {
@@ -52,6 +53,7 @@ const application = (
         aliases: [{ interfaceId: 'storage', implementationId: 'sessionStorage' }],
         config: { maxTtl: passphraseCacheMaxTtl },
       },
+      { definition: applicationReportDefinition },
     ],
   }
 }

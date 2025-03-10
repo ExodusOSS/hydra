@@ -1,10 +1,12 @@
 const createEnabledAssetsReport = ({ enabledAssetsAtom }) => ({
   namespace: 'enabledAssets',
-  export: async () => {
+  export: async ({ walletExists } = Object.create(null)) => {
+    if (!walletExists) return null
+
     const data = await enabledAssetsAtom.get()
-    return {
-      ...data,
-    }
+    return Object.keys(data)
+      .filter((assetName) => data[assetName])
+      .sort()
   },
 })
 

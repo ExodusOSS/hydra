@@ -6,7 +6,7 @@ const rootConfig = require('../../jest.config')
 
 const { collectCoverage, coverageReporters, reporters } = rootConfig
 
-const untranspiledModulePatterns = ['p-defer', '@exodus/atoms']
+const untranspiledModulePatterns = ['p-defer', '@exodus/atoms', '@exodus/basic-utils']
 
 /** @type {import('@jest/types').Config.InitialOptions} */
 module.exports = {

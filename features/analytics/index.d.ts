@@ -1,6 +1,12 @@
+import type KeyIdentifier from '@exodus/key-identifier'
 import type analyticsApiDefinition from './api/index.js'
 
 export type AnalyticsApiConfig = {
+  segmentConfig: {
+    apiKey: string
+    apiBaseUrl?: string
+  }
+  keyIdentifier?: KeyIdentifier
   installEventReportingUrl?: string
 }
 

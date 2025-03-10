@@ -4,7 +4,7 @@ const createRestoringAssetsAtom = ({ storage }) => {
   const atomFactory = createStorageAtomFactory({ storage })
   return atomFactory({
     key: 'data',
-    defaultValue: {},
+    defaultValue: Object.create(null),
     isSoleWriter: true,
   })
 }

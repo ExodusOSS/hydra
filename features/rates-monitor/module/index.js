@@ -1,9 +1,7 @@
 import { memoize, pDebounce, difference } from '@exodus/basic-utils'
-import { get } from 'lodash'
 import makeConcurrent from 'make-concurrent'
 
-const getValue = (obj, path, opts = Object.create(null)) => {
-  const value = get(obj, path)
+const normalizeValue = (value, opts = Object.create(null)) => {
   if (!opts.canBeNegative && value < 0) return null
   if (value === 0 && !opts.zeroIsNotNull) return null
   if (!Number.isFinite(value)) return null
@@ -13,12 +11,12 @@ const getValue = (obj, path, opts = Object.create(null)) => {
 function buildSlowRates({ tickers, fiatCurrency, currentPriceResponse, tickerResponse }) {
   const slowRates = Object.create(null)
   for (const ticker of tickers) {
-    const price = getValue(currentPriceResponse, `${ticker}.${fiatCurrency}`)
-    const priceUSD = getValue(currentPriceResponse, `${ticker}.USD`)
+    const price = normalizeValue(currentPriceResponse?.[ticker]?.[fiatCurrency])
+    const priceUSD = normalizeValue(currentPriceResponse?.[ticker]?.USD)
     const change24 =
-      getValue(tickerResponse, `${ticker}.${fiatCurrency}.c24h`, { canBeNegative: true }) || 0
-    const volume24 = getValue(tickerResponse, `${ticker}.${fiatCurrency}.v24h`) || 0
-    const cap = getValue(tickerResponse, `${ticker}.${fiatCurrency}.mc`) || 0
+      normalizeValue(tickerResponse?.[ticker]?.[fiatCurrency]?.c24h, { canBeNegative: true }) || 0
+    const volume24 = normalizeValue(tickerResponse?.[ticker]?.[fiatCurrency]?.v24h) || 0
+    const cap = normalizeValue(tickerResponse?.[ticker]?.[fiatCurrency]?.mc) || 0
     slowRates[ticker] = {
       price: price || 0,
       priceUSD: priceUSD || 0,
@@ -240,7 +238,7 @@ class RatesMonitor {
   #getRealTimeData = ({ fiatCurrency, ticker }) => {
     const realTimeEntry = this.#realTimeRatesByFiat[fiatCurrency]
     if (!realTimeEntry?.data?.[ticker]) return null
-    const price = getValue(realTimeEntry.data, ticker)
+    const price = normalizeValue(realTimeEntry.data?.[ticker])
     if (!Number.isFinite(price) || price === 0) {
       return null
     }

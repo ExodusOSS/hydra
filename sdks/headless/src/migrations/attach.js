@@ -50,11 +50,12 @@ const attachMigrations = ({ migrations = [], application, modules, adapters, con
     await unlockEncryptedStorage(migrateableStorage)
 
     const seedId = await wallet.getPrimarySeedId()
-    const keys = await keychain.sodium.getSodiumKeysFromSeed({
+    const keys = await keychain.sodium.getKeysFromSeed({
       seedId,
       keyId: EXODUS_KEY_IDS.FUSION,
       exportPrivate: true,
     })
+
     await migrateableFusion.load({ keys })
 
     const migrationNames = migrations.map((migration) => migration.name)

@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('getUnavailableReason', () => {
   it('should return undefined if feature is not disabled', () => {

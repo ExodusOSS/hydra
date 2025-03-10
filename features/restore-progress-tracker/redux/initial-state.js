@@ -1,6 +1,6 @@
 const initialState = {
   loaded: false,
-  data: {},
+  data: Object.create(null),
 }
 
 export default initialState

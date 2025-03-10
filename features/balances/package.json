@@ -1,6 +1,6 @@
 {
   "name": "@exodus/balances",
-  "version": "13.6.0",
+  "version": "13.7.0",
   "description": "Tracks crypto balances across enabled wallet accounts.",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
@@ -37,6 +37,7 @@
     "@exodus/basic-utils": "^3.0.1",
     "@exodus/core-selectors": "^3.0.0",
     "@exodus/currency": "^5.0.2",
+    "@exodus/errors": "^2.0.1",
     "@exodus/models": "^12.0.1",
     "@exodus/multi-account-redux": "^2.0.1",
     "@exodus/redux-dependency-injection": "^4.0.3",

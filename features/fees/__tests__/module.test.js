@@ -7,7 +7,7 @@ import {
 import ethereum from '@exodus/ethereum-meta'
 import { WalletAccount } from '@exodus/models'
 
-import feesModuleDefinition from '../module'
+import feesModuleDefinition from '../module/index.js'
 
 const createFees = feesModuleDefinition.factory
 

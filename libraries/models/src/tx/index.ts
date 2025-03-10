@@ -4,12 +4,12 @@ import lodash from 'lodash'
 import type NumberUnit from '@exodus/currency'
 import { isNumberUnit, UnitType } from '@exodus/currency'
 import AddressSet from '../address-set/index.js'
-import { unitTypeToJSON } from './utils.js'
+import { safeFields, unitTypeToJSON } from './utils.js'
 import { ModelIdSymbol } from '../constants.js'
 import type Address from '../address/index.js'
 import { createIsInstance, omitUndefined } from '../utils.js'
 
-const { isEqual, isEmpty, isString, merge, omit, mapValues } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { isEqual, isEmpty, isString, merge, omit, mapValues, pick } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
 const FACTORY_SYMBOL = Symbol('Tx')
 
@@ -208,6 +208,10 @@ export default class Tx {
     if (obj.tokens!.length === 0) delete obj.tokens
 
     return omitUndefined(obj)
+  }
+
+  toRedactedJSON() {
+    return pick(this.toJSON(), safeFields)
   }
 
   toString() {

@@ -1,6 +1,6 @@
 {
   "name": "@exodus/restore-progress-tracker",
-  "version": "3.5.1",
+  "version": "3.7.1",
   "description": "Tracks progress of restoring a wallet's full transaction history across assets",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -8,20 +8,21 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/restore-progress-tracker",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Arestore-progress-tracker"
   },
   "main": "index.js",
   "files": [
+    "api",
     "atoms",
     "module",
     "plugin",
-    "report",
-    "api.js",
     "redux",
-    "README.md",
+    "report",
+    "index.d.ts",
     "CHANGELOG.md",
+    "README.md",
     "!**/__tests__/**",
     "!**/*.test.js"
   ],
@@ -31,9 +32,8 @@
     "test": "run -T exodus-test --jest --esbuild"
   },
   "dependencies": {
-    "@exodus/atoms": "^8.1.1",
+    "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
-    "@exodus/module": "^1.2.0",
     "make-concurrent": "^5.4.0",
     "p-defer": "^4.0.0"
   },
@@ -44,5 +44,8 @@
     "@exodus/dependency-preprocessors": "workspace:^",
     "@exodus/storage-memory": "workspace:^",
     "events": "^3.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

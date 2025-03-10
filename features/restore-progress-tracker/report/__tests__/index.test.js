@@ -15,7 +15,7 @@ describe('restoringAssetsReport', () => {
     await restoringAssetsAtom.set(data)
     const reportNode = restoringAssetsReportDefinition.factory({ restoringAssetsAtom })
 
-    const report = await reportNode.export()
+    const report = await reportNode.export({ walletExists: true })
 
     expect(reportNode.namespace).toBe('restoringAssets')
     expect(report.data).toEqual(['bitcoin', 'ethereum'])

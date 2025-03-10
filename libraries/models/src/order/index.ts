@@ -74,6 +74,7 @@ export type OrderProps = {
   message?: string
   synced?: boolean
   region?: string
+  slippage?: number
 }
 
 type SerializeNumberUnit = {
@@ -118,6 +119,7 @@ export default class Order implements OrderProps {
   message?: string
   synced?: boolean
   region?: string
+  slippage?: number
 
   constructor(props: OrderProps, initSymbol: typeof FACTORY_SYMBOL) {
     assert(initSymbol === FACTORY_SYMBOL, 'please use Order.fromJSON()')
@@ -169,6 +171,7 @@ export default class Order implements OrderProps {
 
     if (typeof props.displaySvc === 'string') this.displaySvc = props.displaySvc
 
+    this.slippage = props.slippage
     this.toTxId = props.toTxId
     this.potentialToTxIds = props.potentialToTxIds || []
 
@@ -211,6 +214,30 @@ export default class Order implements OrderProps {
     obj._version = 1
 
     return omitUndefined(obj) as SerializedOrder
+  }
+
+  toRedactedJSON() {
+    const fromAmount = this.fromAmount ? serialize(this.fromAmount) : undefined
+    const toAmount = this.toAmount ? serialize(this.toAmount) : undefined
+
+    return omitUndefined({
+      orderId: this.orderId,
+      date: this.date.toISOString(),
+      displaySvc: this.displaySvc,
+      fromAmount,
+      fromAsset: this.fromAsset,
+      fromWalletAccount: this.fromWalletAccount,
+      hasError: this.errorDetails && Object.keys(this.errorDetails).length > 0,
+      message: this.message,
+      region: this.region,
+      slippage: this.slippage,
+      status: this.status,
+      svc: this.svc,
+      synced: this.synced,
+      toAmount,
+      toAsset: this.toAsset,
+      toWalletAccount: this.toWalletAccount,
+    })
   }
 
   // @deprecated

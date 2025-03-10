@@ -1,7 +1,7 @@
 import { WalletAccount } from '@exodus/models'
 
 export const types = {
-  walletAccount: (value: WalletAccount) => value instanceof WalletAccount,
+  walletAccount: (value: WalletAccount) => WalletAccount.isInstance(value),
   assetSource: {
     assetName: 'String',
     walletAccount: 'String',

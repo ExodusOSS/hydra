@@ -11,7 +11,7 @@ const rates = (
   {
     fetchInterval = ms('1m'),
     debounceInterval = ms('0.75s'),
-    fetchRealTimePricesInterval = ms('20s'),
+    fetchRealTimePricesInterval = ms('25s'),
     persistRates = false,
   } = Object.create(null)
 ) => {

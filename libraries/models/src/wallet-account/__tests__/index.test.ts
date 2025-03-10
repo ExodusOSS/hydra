@@ -314,6 +314,16 @@ test('defaultWith returns default wallet account with updated field', () => {
   })
 })
 
+test('toRedactedJSON omits label, color, and icon', () => {
+  expect(WalletAccount.defaultWith({ seedId: 'A' }).toRedactedJSON()).toEqual({
+    source: WalletAccount.DEFAULT.source,
+    index: WalletAccount.DEFAULT.index,
+    seedId: 'A',
+    enabled: true,
+    isMultisig: false,
+  })
+})
+
 describe('compatibilityMode', () => {
   const walletAccount = new WalletAccount({
     source: SEED_SRC,

@@ -1,7 +1,7 @@
 {
   "name": "@exodus/remote-config",
   "type": "module",
-  "version": "2.9.2",
+  "version": "2.10.0",
   "description": "Module to provide unified access remote config",
   "author": "Exodus Movement, Inc.",
   "repository": {

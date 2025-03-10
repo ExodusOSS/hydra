@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@7.0.1...@exodus/assets-feature@7.0.2) (2025-02-21)
+
+### Bug Fixes
+
+- fix: skip exporting most reports if wallet doesn't exist (#11553)
+
+## [7.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@7.0.0...@exodus/assets-feature@7.0.1) (2025-02-18)
+
+### Bug Fixes
+
+- fix: 'assets' and 'assets-add' race condition (#11521)
+
+## [7.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@6.1.0...@exodus/assets-feature@7.0.0) (2025-02-17)
+
+### ⚠ BREAKING CHANGES
+
+- make ACI fields private (#11460)
+
+### Features
+
+- feat: assets-feature report (#11496)
+
+- refactor!: make ACI fields private (#11460)
+
 ## [6.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@6.0.4...@exodus/assets-feature@6.1.0) (2025-02-10)
 
 ### Features

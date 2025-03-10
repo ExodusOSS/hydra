@@ -1,6 +1,6 @@
 {
   "name": "@exodus/wallet-accounts",
-  "version": "17.3.0",
+  "version": "17.4.0",
   "description": "CRUD interface for managing wallet accounts, a.k.a. portfolios.",
   "author": "Exodus Movement, Inc.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/wallet-accounts",

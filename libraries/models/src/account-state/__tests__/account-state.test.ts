@@ -76,6 +76,22 @@ test('toJSON', () => {
   expect(result).toEqual(fixture1)
 })
 
+test('toRedactedJSON', () => {
+  const result = HelloAccountState.create({
+    trx: tronmainnet.defaultUnit(1),
+    cursor: 1,
+  }).toRedactedJSON()
+
+  expect(result).toEqual({
+    _version: 1,
+    btt: '0 BTT',
+    cursor: 1,
+    tokenBalances: {},
+    trx: '1 TRX',
+    usdt: '0 USDTTRX',
+  })
+})
+
 test('serialize', () => {
   const accountState = HelloAccountState.create({
     trx: tronmainnet.defaultUnit(1),

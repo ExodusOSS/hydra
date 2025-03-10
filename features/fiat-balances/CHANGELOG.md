@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.1.1...@exodus/fiat-balances@13.2.0) (2025-03-04)
+
+### Features
+
+- feat: add `createConversions` selector (#11655)
+
+## [13.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.1.0...@exodus/fiat-balances@13.1.1) (2025-02-21)
+
+### Bug Fixes
+
+- fix: skip exporting most reports if wallet doesn't exist (#11553)
+
+## [13.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.0.2...@exodus/fiat-balances@13.1.0) (2025-02-21)
+
+### Features
+
+- feat: add placeholder types files (#11228)
+
+### Bug Fixes
+
+- fix: don't export hardware wallet account balances (#11551)
+
 ## [13.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.0.1...@exodus/fiat-balances@13.0.2) (2025-01-20)
 
 ### Bug Fixes

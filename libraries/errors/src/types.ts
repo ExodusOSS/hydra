@@ -1,10 +1,10 @@
 export type Frame = {
-  function?: string
-  method?: string
-  file?: string
-  line?: number
-  column?: number
-  async?: boolean
-  toplevel?: boolean
-  in_app?: boolean
+  function?: string | null
+  method?: string | null
+  file?: string | null
+  line?: number | null
+  column?: number | null
+  async?: boolean | null
+  toplevel?: boolean | null
+  in_app?: boolean | null
 }

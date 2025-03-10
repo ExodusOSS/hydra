@@ -98,3 +98,15 @@ test('WalletAccounts', () => {
   expect(baseWalletAccounts.get(WalletAccount.DEFAULT)).toEqual(WalletAccount.DEFAULT)
   expect(baseWalletAccounts.get(WalletAccount.DEFAULT_NAME)).toEqual(WalletAccount.DEFAULT)
 })
+
+test('toRedactedJSON returns object of redacted wallet accounts', () => {
+  const set = new WalletAccountSet({
+    [WalletAccount.DEFAULT_NAME]: WalletAccount.DEFAULT,
+    [acct1.toString()]: acct1,
+  })
+
+  expect(set.toRedactedJSON()).toEqual({
+    [WalletAccount.DEFAULT_NAME]: WalletAccount.DEFAULT.toRedactedJSON(),
+    [acct1.toString()]: acct1.toRedactedJSON(),
+  })
+})

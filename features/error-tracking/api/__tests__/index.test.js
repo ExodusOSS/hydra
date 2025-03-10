@@ -1,7 +1,7 @@
+import errorsAtomDefinition from '../../atoms/index.js'
+import { errorTrackingDefinition } from '../../module/index.js'
 import { remoteErrorTrackingDefinition } from '../../module/remote-error-tracking.js'
 import { errorTrackingApiDefinition } from '../index.js'
-import { errorTrackingDefinition } from '../../module/index.js'
-import errorsAtomDefinition from '../../atoms/index.js'
 
 const logger = { ...console, fatal: console.log }
 const sentryConfig = {

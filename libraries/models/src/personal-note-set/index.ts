@@ -98,6 +98,10 @@ class PersonalNoteSet {
     return [...this].map((item) => item.toJSON())
   }
 
+  toRedactedJSON() {
+    return [...this].map((item) => item.toRedactedJSON())
+  }
+
   // adds and/or updates notes
   update(items: (PersonalNote | PersonalNoteJson)[]) {
     const updated = items.map((item) => {

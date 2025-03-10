@@ -1,4 +1,4 @@
-import { hosts, FetchFactory } from '../src'
+import { FetchFactory, hosts } from '../src/index.js'
 
 const fetchFn = async (url, opts = {}, ...args) => {
   const headers = {}
@@ -124,6 +124,44 @@ describe('FetchFactory', () => {
 
     const invalidDomainHeadersResult3 = await fetchFactory.create()('https://-example.com')
     expect(invalidDomainHeadersResult3).toEqual({})
+  })
+
+  test('validate headers with different URL structures', async () => {
+    const fetchFactory = new FetchFactory(fetchFn)
+    fetchFactory.setHeaders({ 'x-global-header': 'global-value' })
+    fetchFactory.setHeaders({ 'x-specific-header': 'specific-value' }, [hosts.EXODUS_HOST])
+
+    const headersResult1 = await fetchFactory.create()(
+      'https://exodus.io/some/path/to/resource?index=100&some_flag'
+    )
+    expect(headersResult1).toEqual({
+      'x-global-header': 'global-value',
+      'x-specific-header': 'specific-value',
+    })
+
+    const headersResult2 = await fetchFactory.create()('https://exodus.io/')
+    expect(headersResult2).toEqual({
+      'x-global-header': 'global-value',
+      'x-specific-header': 'specific-value',
+    })
+
+    const headersResult3 = await fetchFactory.create()('https://exodus.io?filter_stuff=10')
+    expect(headersResult3).toEqual({
+      'x-global-header': 'global-value',
+      'x-specific-header': 'specific-value',
+    })
+
+    const headersResult4 = await fetchFactory.create()('http://exodus.io')
+    expect(headersResult4).toEqual({
+      'x-global-header': 'global-value',
+      'x-specific-header': 'specific-value',
+    })
+
+    const headersResult5 = await fetchFactory.create()('http://exodus.io:1337')
+    expect(headersResult5).toEqual({
+      'x-global-header': 'global-value',
+      'x-specific-header': 'specific-value',
+    })
   })
 
   test('set global vs specific headers', async () => {

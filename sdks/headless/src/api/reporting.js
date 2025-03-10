@@ -1,3 +1,4 @@
+import { SafeError } from '@exodus/errors'
 import { zipObject } from 'lodash'
 
 import { rejectAfter } from '../utils/promises'
@@ -6,10 +7,13 @@ const createReporting = ({ ioc, config: { exportTimeout = 5000 } }) => {
   const logger = ioc.get('createLogger')('reporting')
   const nodes = ioc.getByType('report')
 
-  const { lockedAtom } = ioc.getByType('atom')
+  const { wallet, lockedAtom } = ioc.getAll()
 
   const getReports = async () => {
-    if (await lockedAtom.get()) throw new Error('Unable to export when locked')
+    const [exists, locked] = await Promise.all([wallet.exists(), lockedAtom.get()])
+    if (exists && locked) {
+      throw new Error('Unable to export when locked')
+    }
 
     const reports = Object.values(nodes)
 
@@ -20,7 +24,7 @@ const createReporting = ({ ioc, config: { exportTimeout = 5000 } }) => {
 
     const exportReport = async (report) => {
       const start = performance.now()
-      const result = await report.export()
+      const result = await report.export({ walletExists: exists })
       const duration = performance.now() - start
       logger.debug(`Exported report for ${report.namespace} in ${duration}ms`)
       return result
@@ -32,7 +36,7 @@ const createReporting = ({ ioc, config: { exportTimeout = 5000 } }) => {
 
     const namespaces = reports.map((report) => report.namespace)
     const data = resolvedReports.map((outcome) =>
-      outcome.status === 'fulfilled' ? outcome.value : { error: outcome.reason }
+      outcome.status === 'fulfilled' ? outcome.value : { error: SafeError.from(outcome.reason) }
     )
 
     return zipObject(namespaces, data)

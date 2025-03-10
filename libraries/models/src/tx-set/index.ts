@@ -127,6 +127,10 @@ class TxSet {
     return [...this].map((tx) => tx.toJSON())
   }
 
+  toRedactedJSON() {
+    return [...this].map((tx) => tx.toRedactedJSON())
+  }
+
   // TODO: consider merging txs together
   union(otherSet: TxSet) {
     const arr1 = [...this]

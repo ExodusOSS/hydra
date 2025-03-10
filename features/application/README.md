@@ -63,7 +63,7 @@ Some hooks receive parameters, if so, they are documented below.
 - `onStart`: Triggered when the application starts. Called with `{ walletExists, hasPassphraseSet, isLocked, isBackedUp, isRestoring }`.
 - `onRestart`: Triggered when the application restarts. Called with `{ reason }` and other parameters (varies depending on the reason).
 - `onStop`: Triggered when the application stops.
-- `onLoad`: Triggered after `onStart` when the application is loaded. Called with the same parameters as `onStart`.
+- `onLoad`: Do NOT use this hook. Its sole purpose is a hack to support the browser extension, where the UI might die and be recreated while the background process is long-lived. In that scenario, `onLoad` is triggered when a new UI is recreated and connects to the background process. Called with the same parameters as `onStart`.
 - `onUnload`: Triggered when the application is unloaded, i.e.,
   the app is closed.
 - `onCreate`: Triggered when a new wallet is created. Called with `{ walletExists, hasPassphraseSet, isLocked, isBackedUp, isRestoring, seedId }`.

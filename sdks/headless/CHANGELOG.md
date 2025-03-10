@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0-rc.54](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.53...@exodus/headless@5.0.0-rc.54) (2025-02-27)
+
+### Features
+
+- feat: update @exodus/errors for latest SafeError (#11608)
+
+## [5.0.0-rc.53](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.52...@exodus/headless@5.0.0-rc.53) (2025-02-21)
+
+### Features
+
+- feat(headless): update assets-feature to v7 (#11572)
+
+## [5.0.0-rc.52](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.51...@exodus/headless@5.0.0-rc.52) (2025-02-21)
+
+### Bug Fixes
+
+- fix: skip exporting most reports if wallet doesn't exist (#11553)
+
+## [5.0.0-rc.51](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.50...@exodus/headless@5.0.0-rc.51) (2025-02-17)
+
+### Features
+
+- feat: analytics report (#11454)
+
+## [5.0.0-rc.50](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.49...@exodus/headless@5.0.0-rc.50) (2025-02-17)
+
+- **headless:** bump rates-monitor ([#11467](https://github.com/ExodusMovement/exodus-hydra/issues/11467))
+
 ## [5.0.0-rc.49](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.48...@exodus/headless@5.0.0-rc.49) (2025-01-29)
 
 ### ⚠ BREAKING CHANGES

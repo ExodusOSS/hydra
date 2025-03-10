@@ -1,6 +1,10 @@
+import { SafeError } from '@exodus/errors'
+
 const createBalancesReport = ({ enabledWalletAccountsAtom, balancesAtom }) => ({
   namespace: 'balances',
-  export: async () => {
+  export: async ({ walletExists } = Object.create(null)) => {
+    if (!walletExists) return null
+
     let walletAccounts
     let balances
 
@@ -10,17 +14,12 @@ const createBalancesReport = ({ enabledWalletAccountsAtom, balancesAtom }) => ({
         balancesAtom.get(),
       ])
     } catch (error) {
-      return { error }
+      return { error: SafeError.from(error) }
     }
 
     return Object.keys(walletAccounts)
-      .filter((key) => walletAccounts[key].source !== 'ftx')
+      .filter((key) => balances[key] && walletAccounts[key].source !== 'ftx')
       .reduce((data, key) => {
-        if (!balances[key]) {
-          data[key] = { error: 'No balances' }
-          return data
-        }
-
         const reportBalances = Object.fromEntries(
           Object.entries(balances[key])
             .filter(([_, value]) => !value.balance.isZero)

@@ -88,6 +88,10 @@ export default class AddressSet {
     return [...this._data.values()]
   }
 
+  toRedactedJSON() {
+    return this.toArray().map((addr) => addr.toRedactedJSON())
+  }
+
   toAddressStrings() {
     return [...this._data.keys()]
   }

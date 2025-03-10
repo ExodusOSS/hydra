@@ -580,7 +580,7 @@ describe('hardware wallet addresses', () => {
       })
 
       expect(first).toEqual(second)
-      expect(addressCache.get).toHaveBeenCalledTimes(2)
+      expect(addressCache.get).toHaveBeenCalledTimes(1)
       expect(addressCache.set).toHaveBeenCalledTimes(1)
     })
   })

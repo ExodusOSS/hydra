@@ -1,6 +1,6 @@
 {
   "name": "@exodus/asset-sources",
-  "version": "1.7.2",
+  "version": "1.7.4",
   "description": "Provides compatibility info and metadata about asset sources (asset source = walletAccount + asset)",
   "author": "Exodus Movement, Inc.",
   "type": "module",
@@ -9,7 +9,7 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/asset-sources",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aasset-sources"
   },
@@ -33,7 +33,7 @@
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
-    "@exodus/models": "^12.0.1",
+    "@exodus/models": "^12.2.0",
     "@exodus/trezor-meta": "^3.3.6",
     "@exodus/typeforce": "^1.19.0",
     "lodash": "^4.17.21",
@@ -47,7 +47,7 @@
     "@exodus/cardano-lib": "^2.2.0",
     "@exodus/cardano-meta": "^1.0.7",
     "@exodus/dependency-types": "workspace:^",
-    "@exodus/ethereum-plugin": "^2.2.0",
+    "@exodus/ethereum-plugin": "^2.5.0",
     "@exodus/hw-common": "workspace:^",
     "@exodus/logger": "^1.1.0",
     "@exodus/redux-dependency-injection": "workspace:^",
@@ -56,5 +56,8 @@
     "@types/minimalistic-assert": "^1.0.1",
     "events": "^3.3.0",
     "redux": "4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -2,9 +2,11 @@ import lodash from 'lodash'
 import { serialize, deserialize } from './serialization.js'
 import { ModelIdSymbol } from '../constants.js'
 import type { Asset } from '../types.js'
-import { createIsInstance } from '../utils.js'
+import { createIsInstance, omitNullable } from '../utils.js'
+import { isNumberUnit } from '@exodus/currency'
+import { safeFields } from './utils.js'
 
-const { isEqual, pick, mapValues, isString } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { isEqual, pick, mapValues, isString, cloneDeepWith } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
 export * from './serialization.js'
 
@@ -165,6 +167,22 @@ export default class AccountState {
 
   toJSON(opts?: { includeMem?: boolean }) {
     return (this.constructor as any).serialize(this, opts)
+  }
+
+  toRedactedJSON() {
+    const obj = { ...this }
+
+    const cloned = cloneDeepWith(obj, (value, key) => {
+      if (value === obj) return // recurse
+      if (typeof value === 'number' || typeof value === 'boolean') return value
+
+      if (safeFields.has(key as string)) return // recurse
+      if (isNumberUnit(value)) return value.toDefaultString({ unit: true })
+
+      return null
+    })
+
+    return omitNullable(cloned)
   }
 
   // eslint-disable-next-line unicorn/no-object-as-default-parameter

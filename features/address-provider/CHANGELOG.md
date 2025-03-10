@@ -3,6 +3,60 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.8.1...@exodus/address-provider@12.9.0) (2025-02-27)
+
+### Features
+
+- feat: update @exodus/errors for latest SafeError (#11608)
+
+## [12.8.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.8.0...@exodus/address-provider@12.8.1) (2025-02-24)
+
+### Bug Fixes
+
+- fix: lightningnetwork address in report (#11593)
+
+## [12.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.7.1...@exodus/address-provider@12.8.0) (2025-02-24)
+
+### Features
+
+- feat: getEncodedPublicKey, for address-provider report (#11574)
+
+## [12.7.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.7.0...@exodus/address-provider@12.7.1) (2025-02-21)
+
+### Bug Fixes
+
+- fix: skip exporting most reports if wallet doesn't exist (#11553)
+
+## [12.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.6.4...@exodus/address-provider@12.7.0) (2025-02-19)
+
+### Features
+
+- feat(headless): type debug apis (#11235)
+
+- feat: use multisig cosigner assetPublicKeys (#11402)
+
+## [12.6.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.6.2...@exodus/address-provider@12.6.4) (2025-01-09)
+
+### Bug Fixes
+
+- fix: prefer WalletAccount.isInstance to instanceof (#10707)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
+## [12.6.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.6.2...@exodus/address-provider@12.6.3) (2024-11-25)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
+## [12.6.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.6.1...@exodus/address-provider@12.6.2) (2024-11-18)
+
+### Bug Fixes
+
+- fix: disable address caching by default for receive addresses (#10471)
+
 ## [12.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.6.0...@exodus/address-provider@12.6.1) (2024-11-10)
 
 ### Bug Fixes

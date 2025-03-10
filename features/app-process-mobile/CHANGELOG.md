@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.6.1...@exodus/app-process-mobile@3.6.2) (2025-02-21)
+
+### Bug Fixes
+
+- fix: skip exporting most reports if wallet doesn't exist (#11553)
+
 ## [3.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.6.0...@exodus/app-process-mobile@3.6.1) (2025-01-31)
 
 ### Bug Fixes

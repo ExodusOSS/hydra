@@ -1,4 +1,4 @@
-import { mapValues } from '@exodus/basic-utils'
+import { mapValues, pick, pickBy } from '@exodus/basic-utils'
 
 /**
  * sample report
@@ -10,16 +10,23 @@ import { mapValues } from '@exodus/basic-utils'
 const fiatBalancesReportDefinition = {
   type: 'report',
   id: 'fiatBalancesReport',
-  factory: ({ fiatBalancesAtom }) => ({
+  factory: ({ wallet, walletAccountsAtom, fiatBalancesAtom }) => ({
     namespace: 'fiatBalances',
-    export: async () => {
-      const result = await fiatBalancesAtom.get()
-      return mapValues(result.balances.byWalletAccount, ({ balance }) =>
+    export: async ({ walletExists } = Object.create(null)) => {
+      if (!walletExists) return Object.create(null)
+
+      const [walletAccounts, { balances }] = await Promise.all([
+        walletAccountsAtom.get(),
+        fiatBalancesAtom.get(),
+      ])
+
+      const softwareWalletAccountNames = Object.keys(pickBy(walletAccounts, (w) => w.isSoftware))
+      return mapValues(pick(balances.byWalletAccount, softwareWalletAccountNames), ({ balance }) =>
         balance.toDefaultString({ unit: true })
       )
     },
   }),
-  dependencies: ['fiatBalancesAtom'],
+  dependencies: ['wallet', 'fiatBalancesAtom', 'walletAccountsAtom'],
 }
 
 export default fiatBalancesReportDefinition

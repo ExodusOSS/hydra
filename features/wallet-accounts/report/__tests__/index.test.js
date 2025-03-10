@@ -49,19 +49,7 @@ describe('walletAccountsReport', () => {
       activeWalletAccountAtom,
       multipleWalletAccountsEnabledAtom,
     })
-    const result = await report.export()
-
-    const data = Object.fromEntries(
-      Object.entries(walletAccountsData).map(([key, walletAccount]) => [
-        key,
-        new WalletAccount({ ...walletAccount, label: '<Redacted>' }),
-      ])
-    )
-
-    expect(result).toEqual({
-      data,
-      configuredActiveWalletAccount: 'exodus_0',
-      multipleWalletAccountsEnabled: undefined,
-    })
+    const result = await report.export({ walletExists: true })
+    expect(result).toMatchSnapshot()
   })
 })

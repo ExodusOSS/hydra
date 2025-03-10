@@ -12,6 +12,15 @@ test('toJSON() / fromArray() round trip', (t) => {
 
   t.end()
 })
+test('toRedactedJSON() returns redacted notes', (t) => {
+  const redacted = PersonalNoteSet.fromArray(fixtureSetJSON).toRedactedJSON()
+  t.deepEqual(
+    redacted,
+    fixtureSetJSON.map((note) => ({ txId: note.txId }))
+  )
+
+  t.end()
+})
 
 test('fromArray() should convert undefined / null to empty set', (t) => {
   t.equal(PersonalNoteSet.fromArray([]).size, 0, 'fromArray([]) produces empty set')

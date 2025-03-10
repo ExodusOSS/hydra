@@ -1,3 +1,4 @@
+import { SafeError } from '@exodus/errors'
 import BipPath from 'bip32-path'
 import { set, pick, pickBy } from '@exodus/basic-utils'
 import KeyIdentifier from '@exodus/key-identifier'
@@ -11,18 +12,23 @@ const createAddressProviderReport = ({
   enabledWalletAccountsAtom,
   availableAssetNamesByWalletAccountAtom,
   addressProvider,
+  accountStatesAtom,
 }) => ({
   namespace: 'addressProvider',
-  export: async () => {
+  export: async ({ walletExists } = Object.create(null)) => {
+    if (!walletExists) return null
+
     const baseAssets = pickBy(
       assetsModule.getAssets(),
       (asset) => asset.baseAsset.name === asset.name && !asset.isCombined
     )
 
-    let [enabledWalletAccounts, availableAssetNamesByWalletAccount] = await Promise.all([
-      enabledWalletAccountsAtom.get(),
-      availableAssetNamesByWalletAccountAtom.get(),
-    ])
+    let [{ value: accountStates }, enabledWalletAccounts, availableAssetNamesByWalletAccount] =
+      await Promise.all([
+        accountStatesAtom.get(),
+        enabledWalletAccountsAtom.get(),
+        availableAssetNamesByWalletAccountAtom.get(),
+      ])
 
     enabledWalletAccounts = pickBy(enabledWalletAccounts, ({ isCustodial }) => !isCustodial)
     availableAssetNamesByWalletAccount = pick(
@@ -60,6 +66,7 @@ const createAddressProviderReport = ({
     }
 
     const getAssetSourceAddresses = async ({ assetName, walletAccountName }) => {
+      const asset = baseAssets[assetName]
       const walletAccount = enabledWalletAccounts[walletAccountName]
       const supportedPurposes = await addressProvider.getSupportedPurposes({
         walletAccount,
@@ -69,6 +76,17 @@ const createAddressProviderReport = ({
       return Promise.all(
         supportedPurposes.sort(lexicographicCompare).map(async (purpose) => {
           const purposeKey = `bip${purpose}`
+          const addressData = Object.create(null)
+
+          // TODO: remove when lightning becomes a regular asset
+          // eslint-disable-next-line @exodus/hydra/no-asset-conditions
+          if (assetName === 'lightningnetwork') {
+            return [
+              [walletAccountName, assetName, purposeKey],
+              { address: accountStates[walletAccountName]?.[assetName]?.address },
+            ]
+          }
+
           try {
             const address = await addressProvider.getReceiveAddress({
               purpose,
@@ -76,18 +94,30 @@ const createAddressProviderReport = ({
               walletAccount,
             })
 
+            addressData.address = address.toString()
+
+            if (asset.api.features.abstractAccounts) {
+              addressData.encodedPublicKey = await addressProvider.getEncodedPublicKey({
+                walletAccount,
+                assetName,
+                purpose,
+                chainIndex: 0,
+                addressIndex: 0,
+              })
+            }
+
             const { path } = address.meta
             const chain = path ? BipPath.fromString(path).toPathArray() : undefined
             return [
               [walletAccountName, assetName, purposeKey],
               {
-                address: address.toString(),
+                ...addressData,
                 chain,
                 ...(await getExtendedKeys({ walletAccount, assetName, address })),
               },
             ]
           } catch (error) {
-            return [[walletAccountName, assetName, purposeKey], { error }]
+            return [[walletAccountName, assetName, purposeKey], { error: SafeError.from(error) }]
           }
         })
       )
@@ -122,6 +152,7 @@ const addressProviderReportDefinition = {
     'availableAssetNamesByWalletAccountAtom',
     'addressProvider',
     'publicKeyProvider',
+    'accountStatesAtom',
   ],
   public: true,
 }

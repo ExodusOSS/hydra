@@ -144,6 +144,7 @@ export class RemoteConfig extends EventEmitter implements RemoteConfigType {
         remoteConfigUrl: this.#remoteConfigUrl!,
         error: null,
         loaded: true,
+        gitHash: this.#current?.meta?.gitHash ?? null,
       })
       this.#resolveLoaded!()
       return { success: true }

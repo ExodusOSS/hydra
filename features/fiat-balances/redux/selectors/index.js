@@ -29,6 +29,7 @@ import sortedEnabledAssetsWithTotalBalanceSelector from './sorted-assets/enabled
 import sortedEnabledAssetsWithParentCombinedWithBalanceInActiveAccountSelectorDefinition from './sorted-assets/enabled/with-parent-combined-with-balance-in-active-account'
 import conversionsSelector from './conversions.js'
 import createConversionSelector from './create-conversion.js'
+import createConversionsSelector from './create-conversions.js'
 import createAssetConversion from './create-asset-conversion'
 import createAssetConversionUsd from './create-asset-conversion-usd'
 import createSortOptimisticAssetsSelectorFactoryDefinition from './sorted-optimistic-assets/create-sort-assets-selector-factory'
@@ -72,6 +73,7 @@ export default function createSelectorDefinitions(config) {
     getFormatFiatSelector,
     conversionsSelector,
     createConversionSelector,
+    createConversionsSelector,
     createAssetConversion,
     createAssetConversionUsd,
     createSortOptimisticAssetsSelectorFactoryDefinition(config),

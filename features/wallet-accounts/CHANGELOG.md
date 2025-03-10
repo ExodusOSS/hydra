@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.3.2...@exodus/wallet-accounts@17.4.0) (2025-03-07)
+
+### Features
+
+- feat: expose `disableMany` (#11687)
+
+### Bug Fixes
+
+- fix: wallet accounts config validation (#11671)
+
+## [17.3.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.3.1...@exodus/wallet-accounts@17.3.2) (2025-02-21)
+
+### Bug Fixes
+
+- fix: use toRedactedJSON in wallet-accounts report (#11576)
+
+## [17.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.3.0...@exodus/wallet-accounts@17.3.1) (2025-02-21)
+
+### Bug Fixes
+
+- fix: prototype pollution vulnerability (#11527)
+
+- fix: skip exporting most reports if wallet doesn't exist (#11553)
+
 ## [17.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.2.1...@exodus/wallet-accounts@17.3.0) (2025-02-10)
 
 ### Features

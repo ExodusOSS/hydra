@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@1.4.1...@exodus/error-tracking@1.5.0) (2025-02-27)
+
+### Features
+
+- feat: update @exodus/errors for latest SafeError (#11608)
+
+## [1.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@1.4.0...@exodus/error-tracking@1.4.1) (2025-02-21)
+
+### Bug Fixes
+
+- fix: skip exporting most reports if wallet doesn't exist (#11553)
+
+## [1.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@1.3.1...@exodus/error-tracking@1.4.0) (2025-02-18)
+
+### Features
+
+- move report.errorTracking to report.errors ([#11431](https://github.com/ExodusMovement/exodus-hydra/issues/11431)) ([d63b4e3](https://github.com/ExodusMovement/exodus-hydra/commit/d63b4e35660ce200da53cb8b035a20a24ce15508))
+
+## [1.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@1.3.0...@exodus/error-tracking@1.3.1) (2025-01-09)
+
+### License
+
+- license: re-license under MIT license (#11022)
+
 ## [1.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@1.2.1...@exodus/error-tracking@1.3.0) (2024-10-03)
 
 ### Features

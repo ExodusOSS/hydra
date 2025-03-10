@@ -1,19 +1,20 @@
+import { connectAssets } from '@exodus/assets'
+import _assets from '@exodus/assets-base'
+import { createInMemoryAtom } from '@exodus/atoms'
 import createIocContainer from '@exodus/dependency-injection'
 import preprocess from '@exodus/dependency-preprocessors'
-// auto-inject logger when 'logger' is listed in dependencies
-import logify from '@exodus/dependency-preprocessors/src/preprocessors/logify'
-// auto-inject config from config.restoreProgressTracker when 'config' is listed in dependencies
-import config from '@exodus/dependency-preprocessors/src/preprocessors/config'
 // rename dependencies, e.g. from a global 'marketHistoryRefreshIntervalAtom' implementation id
 // to a 'refreshIntervalAtom' interface id declared in the module's dependencies
 import alias from '@exodus/dependency-preprocessors/src/preprocessors/alias'
-import { createInMemoryAtom } from '@exodus/atoms'
-import restoreProgressTrackerDefinition from '../index'
-import { restoringAssetsAtomDefinition } from '../../atoms'
-import EventEmitter from 'events/'
-import { connectAssets } from '@exodus/assets'
-import _assets from '@exodus/assets-base'
+// auto-inject config from config.restoreProgressTracker when 'config' is listed in dependencies
+import config from '@exodus/dependency-preprocessors/src/preprocessors/config'
+// auto-inject logger when 'logger' is listed in dependencies
+import logify from '@exodus/dependency-preprocessors/src/preprocessors/logify'
 import createInMemoryStorage from '@exodus/storage-memory'
+import EventEmitter from 'events/'
+
+import { restoringAssetsAtomDefinition } from '../../atoms'
+import restoreProgressTrackerDefinition from '../index'
 
 const createLogger = (namespace) => console
 
@@ -26,7 +27,6 @@ const createAssetsModule = () =>
   })
 
 const defaultConfig = {
-  assetNamesToNotWait: ['monero'],
   monitorEvents: ['after-tick-multiple-wallet-accounts', 'after-restore'],
 }
 
@@ -89,7 +89,6 @@ describe('restore-progress-tracker examples', () => {
             factory: () => ({
               restoreProgressTracker: {
                 monitorEvents: ['after-tick-multiple-wallet-accounts', 'after-restore'],
-                assetNamesToNotWait: ['monero'],
               },
             }),
             public: true,
@@ -210,11 +209,9 @@ describe('restore-progress-tracker examples', () => {
     const { module, txLogMonitors, restoringAssetsAtom } = setup()
 
     const handler = jest.fn()
-    const restoreHandler = jest.fn()
     restoringAssetsAtom.observe(handler)
 
     const initialRestore = async () => {
-      module.on('restored', restoreHandler)
       module.restoreAll()
       await new Promise(setImmediate)
       expect(handler).toHaveBeenCalledWith({
@@ -226,7 +223,6 @@ describe('restore-progress-tracker examples', () => {
       txLogMonitors.emit('after-tick-multiple-wallet-accounts', { assetName: 'ethereum' })
       await new Promise(setImmediate)
       expect(handler).toHaveBeenCalledWith({})
-      expect(restoreHandler).toHaveBeenCalledTimes(1)
       handler.mockReset()
     }
 
@@ -265,40 +261,6 @@ describe('restore-progress-tracker examples', () => {
     expect(handler).toHaveBeenCalledTimes(0)
   })
 
-  test('monero ignored during restoreAll process', async () => {
-    const {
-      module,
-      restoringAssetsAtom,
-      baseAssetNamesToMonitorAtom,
-      txLogMonitors,
-      availableAssetNamesAtom,
-    } = setup()
-    await baseAssetNamesToMonitorAtom.set(['bitcoin', 'ethereum', 'monero'])
-    await availableAssetNamesAtom.set(['bitcoin', 'ethereum', 'monero'])
-    const handler = jest.fn()
-    restoringAssetsAtom.observe(handler)
-    const restoredHandler = jest.fn()
-    module.on('restored', restoredHandler)
-    module.restoreAll()
-    await new Promise(setImmediate)
-    expect(handler).toHaveBeenCalledWith({
-      bitcoin: true,
-      ethereum: true,
-      monero: true,
-    })
-    txLogMonitors.emit('after-tick-multiple-wallet-accounts', { assetName: 'bitcoin' })
-    txLogMonitors.emit('after-tick-multiple-wallet-accounts', { assetName: 'ethereum' })
-    await new Promise(setImmediate)
-    expect(handler).toHaveBeenCalledWith({
-      monero: true,
-    })
-
-    expect(restoredHandler).toHaveBeenCalledTimes(1)
-    txLogMonitors.emit('after-restore', { assetName: 'monero' })
-    await new Promise(setImmediate)
-    expect(handler).toHaveBeenCalledWith({})
-  })
-
   test('works with custom monitorEvents', async () => {
     const { module, restoringAssetsAtom, txLogMonitors } = setup({
       monitorEvents: ['custom-restore-event'],
@@ -308,8 +270,6 @@ describe('restore-progress-tracker examples', () => {
     await new Promise(setImmediate)
     expect(handler).toHaveBeenCalledTimes(1)
     handler.mockReset()
-    const restoredHandler = jest.fn()
-    module.on('restored', restoredHandler)
     await module.restoreAll()
 
     txLogMonitors.emit('custom-restore-event', { assetName: 'bitcoin' })
@@ -317,7 +277,6 @@ describe('restore-progress-tracker examples', () => {
     await new Promise(setImmediate)
 
     await new Promise(setImmediate)
-    expect(restoredHandler).toHaveBeenCalledTimes(0)
     expect(handler).toHaveBeenCalledWith({
       ethereum: true,
     })
@@ -325,7 +284,6 @@ describe('restore-progress-tracker examples', () => {
 
     txLogMonitors.emit('custom-restore-event', { assetName: 'ethereum' })
     await new Promise(setImmediate)
-    expect(restoredHandler).toHaveBeenCalledTimes(1)
     expect(handler).toHaveBeenCalledWith({})
   })
 

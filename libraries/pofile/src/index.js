@@ -8,6 +8,11 @@ const parse = (input) => {
   const data = input.replace(/\r\n/gu, '\n')
   const sections = data.split(/\n\n/u)
 
+  // Remove the header if it exists
+  if (sections[0].includes('msgid ""')) {
+    sections.shift()
+  }
+
   const entries = sections.map((section) => {
     const tokens = tokenizer(section)
     const entry = parser(tokens)

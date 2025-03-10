@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.8.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.8.0...@exodus/models@12.8.1) (2025-03-04)
+
+### Bug Fixes
+
+- fix: `isInstance` function handling (#11640)
+
+- fix: `isInstance` function handling (#11654)
+
+## [12.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.7.0...@exodus/models@12.8.0) (2025-02-26)
+
+### Features
+
+- feat(models): onramper providers status (#11609)
+
+## [12.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.6.0...@exodus/models@12.7.0) (2025-02-18)
+
+### Features
+
+- feat(models): add `toRedactedJSON()` method to `FiatOrder` and `FiatOrderSet` (#11489)
+
+- feat(models): add amounts to order JSON (#11510)
+
+## [12.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.5.0...@exodus/models@12.6.0) (2025-02-18)
+
+### Features
+
+- feat: add `{tx,accountState}.toRedactedJSON` (#11493)
+
+- feat: add `toRedactedJSON` (#11461)
+
+- feat(exchange): store slippage in order (#11445)
+
 ## [12.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.4.0...@exodus/models@12.5.0) (2025-02-04)
 
 ### Features

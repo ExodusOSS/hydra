@@ -1,5 +1,18 @@
 import type { Frame } from './types.js'
 
+export function stackFramesToString(frames?: Frame[]): string | undefined {
+  if (frames === undefined) {
+    return
+  }
+
+  return frames
+    .map((frame) => {
+      const { function: fn, file, line, column } = frame
+      return `    at ${fn || 'unknownFn'}${file ? ` (${file}${line === null ? '' : `:${line}:${column}`})` : ''}`
+    })
+    .join('\n')
+}
+
 export default function parseStackTraceNatively(err: Error): Frame[] | undefined {
   const { prepareStackTrace } = Error
 
@@ -16,11 +29,11 @@ export default function parseStackTraceNatively(err: Error): Frame[] | undefined
       // see https://v8.dev/docs/stack-trace-api
       async: (trace as any).isAsync?.(),
       toplevel: trace.isToplevel(),
-    })) as Frame[]
+    }))
   }
 
   try {
-    // eslint-disable-next-line no-unused-expressions
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     err.stack // trigger prepareStackTrace
   } finally {
     Error.prepareStackTrace = prepareStackTrace

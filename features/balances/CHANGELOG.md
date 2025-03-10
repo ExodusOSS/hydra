@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.6.2...@exodus/balances@13.7.0) (2025-02-27)
+
+### Features
+
+- feat: update @exodus/errors for latest SafeError (#11608)
+
+## [13.6.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.6.1...@exodus/balances@13.6.2) (2025-02-21)
+
+### Bug Fixes
+
+- fix: skip exporting most reports if wallet doesn't exist (#11553)
+
+## [13.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.6.0...@exodus/balances@13.6.1) (2025-02-12)
+
+### Performance
+
+- perf: memoize createInitialPerAssetData per asset (#11417)
+
 ## [13.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.5.4...@exodus/balances@13.6.0) (2025-01-21)
 
 ### Features

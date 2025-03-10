@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fees@1.2.3...@exodus/fees@1.2.4) (2024-12-27)
+
+**Note:** Version bump only for package @exodus/fees
+
+## [1.2.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fees@1.2.2...@exodus/fees@1.2.3) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [1.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fees@1.2.1...@exodus/fees@1.2.2) (2024-12-05)
 
 ### Bug Fixes

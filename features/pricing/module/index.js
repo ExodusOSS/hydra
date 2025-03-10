@@ -15,6 +15,28 @@ const REALTIME_HEADERS = {
   'Cache-Control': 'max-age=20',
 }
 
+// on mobile platform, globally available 'URLSearchParams' is quite slow
+// this implementation (based of react-native/Library/Blob/URL) is subset of "whatwg-url"
+// covers the usage patterns we have while being faster than "whatwg-url" implementation
+function unsafeEncodeSearchParams(searchParams) {
+  const searchParamEntries = Object.entries(searchParams)
+  if (searchParamEntries.length === 0) {
+    return ''
+  }
+
+  const last = searchParamEntries.length - 1
+
+  return searchParamEntries.reduce((acc, curr, index) => {
+    return (
+      acc +
+      encodeURIComponent(curr[0]) +
+      '=' +
+      encodeURIComponent(curr[1]) +
+      (index === last ? '' : '&')
+    )
+  }, '')
+}
+
 class ExodusPricingClient {
   #defaultFetchOptions
   #pricingServerUrlAtom
@@ -96,16 +118,16 @@ class ExodusPricingClient {
       ignoreInvalidSymbols = IGNORE_INVALID_SYMBOLS,
     } = params
 
-    const parameters = new URLSearchParams({
+    const searchParams = {
+      __proto__: null,
       from: assets,
       to: fiatCurrency === 'USD' ? fiatCurrency : [fiatCurrency, 'USD'],
-    })
-
+    }
     if (ignoreInvalidSymbols) {
-      parameters.set('ignoreInvalidSymbols', ignoreInvalidSymbols)
+      searchParams.ignoreInvalidSymbols = ignoreInvalidSymbols
     }
 
-    const currentPricePath = `current-price?${parameters}`
+    const currentPricePath = `current-price?${unsafeEncodeSearchParams(searchParams)}`
 
     const modifyChecksEnabled =
       params.hasOwnProperty('lastModified') || params.hasOwnProperty('entityTag')
@@ -142,15 +164,16 @@ class ExodusPricingClient {
     fiatCurrency = 'USD',
     ignoreInvalidSymbols = IGNORE_INVALID_SYMBOLS,
   }) => {
-    const parameters = new URLSearchParams({
+    const searchParams = {
+      __proto__: null,
       from: assets,
       to: fiatCurrency,
-    })
+    }
     if (ignoreInvalidSymbols) {
-      parameters.set('ignoreInvalidSymbols', ignoreInvalidSymbols)
+      searchParams.ignoreInvalidSymbols = ignoreInvalidSymbols
     }
 
-    return this.#fetchPath(`ticker?${parameters}`)
+    return this.#fetchPath(`ticker?${unsafeEncodeSearchParams(searchParams)}`)
   }
 
   historicalPrice = async ({
@@ -161,7 +184,8 @@ class ExodusPricingClient {
     timestamp,
     ignoreInvalidSymbols,
   }) => {
-    const parameters = new URLSearchParams({
+    const searchParams = {
+      __proto__: null,
       from: assets,
       to: fiatArray,
       granularity,
@@ -169,14 +193,14 @@ class ExodusPricingClient {
       timestamp:
         timestamp ||
         dayjs.utc(SynchronizedTime.now()).subtract(1, granularity).startOf(granularity).unix(),
-    })
+    }
 
     if (ignoreInvalidSymbols) {
-      parameters.set('ignoreInvalidSymbols', ignoreInvalidSymbols)
+      searchParams.ignoreInvalidSymbols = ignoreInvalidSymbols
     }
 
     return this.#fetchPath(
-      `historical-price?${parameters}`,
+      `historical-price?${unsafeEncodeSearchParams(searchParams)}`,
       merge({}, this.#defaultFetchOptions, {
         headers: { 'Cache-Control': 'max-age=3600' },
       })
@@ -188,8 +212,11 @@ class ExodusPricingClient {
   }
 
   movers = async (limit = 10) => {
-    const parameters = new URLSearchParams({ limit })
-    return this.#fetchPath(`movers?${parameters}`)
+    const searchParams = {
+      __proto__: null,
+      limit,
+    }
+    return this.#fetchPath(`movers?${unsafeEncodeSearchParams(searchParams)}`)
   }
 
   realTimePrice = async (params = {}) => {
@@ -201,14 +228,19 @@ class ExodusPricingClient {
       ignoreInvalidSymbols = IGNORE_INVALID_SYMBOLS,
     } = params
 
-    const parameters = new URLSearchParams({ to: fiatCurrency })
+    const searchParams = {
+      __proto__: null,
+      to: fiatCurrency,
+    }
     if (ignoreInvalidSymbols) {
-      parameters.set('ignoreInvalidSymbols', ignoreInvalidSymbols)
+      searchParams.ignoreInvalidSymbols = ignoreInvalidSymbols
     }
 
+    const encodedSearchParams = unsafeEncodeSearchParams(searchParams)
+
     const path = asset
-      ? `real-time-pricing/${asset}?${parameters}`
-      : `real-time-pricing?${parameters}`
+      ? `real-time-pricing/${asset}?${encodedSearchParams}`
+      : `real-time-pricing?${encodedSearchParams}`
 
     const modifyChecksEnabled = !!(lastModified || entityTag)
 

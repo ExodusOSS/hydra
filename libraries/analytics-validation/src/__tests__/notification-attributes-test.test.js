@@ -16,6 +16,8 @@ const fixtures = [
       price_change_threshold: '10',
       topics: ['wallet_activity', 'price_change', 'product_updates', 'offers'],
       enabled_assets: ['bitcoin', 'bitcoinregtest', 'ethereum'],
+      has_balance_assets: ['bitcoin'],
+      telemetry_id: 'B9vS8cIPbxNjtMUbOr3n1HHtZ2sdYNsP+ztf9Ayq1Y=',
     },
   },
 ]

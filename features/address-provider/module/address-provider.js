@@ -89,10 +89,6 @@ export class AddressProvider {
       compatibilityMode: walletAccount.compatibilityMode,
     })
 
-    if (walletAccount.isMultisig) {
-      assert(keyIdArgs.derivationAlgorithm === 'BIP32' && keyIdArgs.keyType === 'secp256k1')
-    }
-
     const keyIdentifier = new KeyIdentifier(keyIdArgs)
     const canUseCache = !asset.api.features?.abstractAccounts
     const cached =
@@ -140,6 +136,52 @@ export class AddressProvider {
     return address
   }
 
+  getEncodedPublicKey = async (opts) => {
+    const { walletAccount, assetName, purpose, chainIndex, addressIndex } = typeforce.parse(
+      {
+        ...types.assetSource,
+        purpose: types.purpose,
+        chainIndex: types.chainIndex,
+        addressIndex: typeforce.maybe(types.addressIndex),
+      },
+      opts
+    )
+
+    const { baseAsset } = this.#getAsset(assetName)
+    const walletAccountName = walletAccount.toString()
+    const keyIdentifier = baseAsset.api.getKeyIdentifier({
+      purpose,
+      accountIndex: walletAccount.index,
+      chainIndex,
+      addressIndex,
+      compatibilityMode: walletAccount.compatibilityMode,
+    })
+
+    const publicKey = await this.#publicKeyProvider.getPublicKey({
+      walletAccount: walletAccountName,
+      keyIdentifier,
+    })
+
+    let stakingPublicKey
+    if (baseAsset.api.getStakingKeyIdentifier) {
+      const stakingKeyIdentifier = baseAsset.api.getStakingKeyIdentifier({
+        compatibilityMode: walletAccount.compatibilityMode,
+        purpose,
+        accountIndex: walletAccount.index,
+        addressIndex,
+      })
+
+      if (stakingKeyIdentifier) {
+        stakingPublicKey = await this.#publicKeyProvider.getPublicKey({
+          walletAccount: walletAccountName,
+          keyIdentifier: stakingKeyIdentifier,
+        })
+      }
+    }
+
+    return baseAsset.keys.encodePublic(publicKey, { purpose }, stakingPublicKey)
+  }
+
   #getSinglesigAddress = async ({
     walletAccount,
     asset,
@@ -160,31 +202,13 @@ export class AddressProvider {
       })
     }
 
-    const publicKey = await this.#publicKeyProvider.getPublicKey({
-      walletAccount: walletAccountName,
-      keyIdentifier,
+    const encodedPublicKey = await this.getEncodedPublicKey({
+      walletAccount,
+      assetName: asset.name,
+      purpose,
+      chainIndex,
+      addressIndex,
     })
-
-    const { baseAsset } = asset
-
-    let stakingPublicKey
-    if (baseAsset.api.getStakingKeyIdentifier) {
-      const stakingKeyIdentifier = baseAsset.api.getStakingKeyIdentifier({
-        compatibilityMode: walletAccount.compatibilityMode,
-        purpose,
-        accountIndex: walletAccount.index,
-        addressIndex,
-      })
-
-      if (stakingKeyIdentifier) {
-        stakingPublicKey = await this.#publicKeyProvider.getPublicKey({
-          walletAccount: walletAccountName,
-          keyIdentifier: stakingKeyIdentifier,
-        })
-      }
-    }
-
-    const encodedPublicKey = asset.keys.encodePublic(publicKey, { purpose }, stakingPublicKey)
 
     return new Address(encodedPublicKey, {
       path: createPath({ chainIndex, addressIndex }),
@@ -213,8 +237,12 @@ export class AddressProvider {
 
     const path = BipPath.fromPathArray([chainIndex, addressIndex]).toString()
 
-    const publicKeys = multisigData.cosigners.map(({ xpub }) => {
-      return BIP32.fromXPub(xpub).derive(path).publicKey
+    const publicKeys = multisigData.cosigners.map(({ assetPublicKeys }) => {
+      if (asset.api.features.multipleAddresses) {
+        return BIP32.fromXPub(assetPublicKeys[asset.baseAssetName]).derive(path).publicKey
+      }
+
+      return Buffer.from(assetPublicKeys[asset.baseAssetName], 'hex')
     })
 
     assert(
@@ -228,7 +256,7 @@ export class AddressProvider {
       address: encodedPublicKey,
       redeem,
       witness,
-    } = asset.encodeMultisigContract(publicKeys, {
+    } = await asset.encodeMultisigContract(publicKeys, {
       version: multisigData.version,
       threshold: multisigData.threshold,
       internalPubkey,
@@ -357,7 +385,13 @@ export class AddressProvider {
   getDefaultPurpose = ({ walletAccount, assetName }) =>
     this.#assetSources.getDefaultPurpose({ walletAccount: walletAccount.toString(), assetName })
 
-  getReceiveAddress = async ({ assetName, walletAccount, purpose, useCache, multiAddressMode }) => {
+  getReceiveAddress = async ({
+    assetName,
+    walletAccount,
+    purpose,
+    useCache = false,
+    multiAddressMode,
+  }) => {
     typeforce(
       {
         ...types.assetSource,
@@ -459,7 +493,7 @@ export class AddressProvider {
     walletAccount,
     multiAddressMode,
     purpose,
-    useCache,
+    useCache = false,
   }) => {
     typeforce(
       {
@@ -524,6 +558,7 @@ export class AddressProvider {
         walletAccount,
         purpose,
         chainIndex,
+        useCache,
       })
 
       return AddressSet.fromArray([address])

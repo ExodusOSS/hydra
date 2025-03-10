@@ -1,5 +1,5 @@
-import { mapValues, pickBy } from '@exodus/basic-utils'
 import { createAtomObserver } from '@exodus/atoms'
+import { mapValues, pickBy } from '@exodus/basic-utils'
 
 const createAssetsPlugin = ({
   port,
@@ -11,8 +11,11 @@ const createAssetsPlugin = ({
   legacyAddressModeAtom,
   taprootAddressModeAtom,
 }) => {
-  const emitAssets = async () => {
-    const { value: assets } = await assetsAtom.get()
+  const emitAssets = async (assets) => {
+    if (!assets) {
+      ;({ value: assets } = await assetsAtom.get())
+    }
+
     const payload = {
       assets,
       defaultAccountStates: mapValues(
@@ -34,8 +37,14 @@ const createAssetsPlugin = ({
   const subscribers = []
 
   const onStart = async () => {
+    let emittedInitialAssets = false
     subscribers.push(
-      assetsAtom.observe(({ added, updated, disabled }) => {
+      assetsAtom.observe(async ({ value, added, updated, disabled }) => {
+        if (!emittedInitialAssets) {
+          await emitAssets(value)
+          emittedInitialAssets = true
+        }
+
         if (added.length > 0) {
           port.emit('assets-add', added)
         }
@@ -51,14 +60,11 @@ const createAssetsPlugin = ({
     )
 
     observers.forEach((observer) => observer.register())
-
     await assetsModule.load()
-    await emitAssets()
   }
 
   const onLoad = async () => {
     observers.forEach((observer) => observer.start())
-
     await assetsModule.load()
     await emitAssets()
   }

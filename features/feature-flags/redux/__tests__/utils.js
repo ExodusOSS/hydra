@@ -1,7 +1,7 @@
 import { setupRedux } from '@exodus/redux-dependency-injection'
 import { combineReducers, createStore } from 'redux'
 
-import featureFlagsReduxDefinition from '..'
+import featureFlagsReduxDefinition from '../index.js'
 
 export function setup() {
   const allDependencies = [featureFlagsReduxDefinition]

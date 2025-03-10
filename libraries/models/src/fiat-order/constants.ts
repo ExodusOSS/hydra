@@ -21,12 +21,32 @@ export type OrderStatus = Values<typeof ORDER_STATUS>
 
 export const PROVIDERS = {
   __proto__: null,
+  alchemypay: 'alchemypay',
+  banxa: 'banxa',
+  binancep2p: 'binancep2p',
   blockchain: 'blockchain',
+  btcdirect: 'btcdirect',
+  coinify: 'coinify',
+  dfx: 'dfx',
+  fonbnk: 'fonbnk',
+  gateconnect: 'gateconnect',
+  gatefi: 'gatefi',
+  guardarian: 'guardarian',
+  koywe: 'koywe',
+  localramp: 'localramp',
   moonpay: 'moonpay',
+  neocrypto: 'neocrypto',
   onramper: 'onramper',
+  onrampmoney: 'onrampmoney',
   paypal: 'paypal',
   ramp: 'ramp',
+  revolut: 'revolut',
   sardine: 'sardine',
+  skrill: 'skrill',
+  stripe: 'stripe',
+  topper: 'topper',
+  transfi: 'transfi',
+  utorg: 'utorg',
   xopay: 'xopay',
 } as const
 
@@ -156,6 +176,26 @@ export const ONRAMPER_ORDER_STATUS = {
 } as const
 
 export type StatusByProvider = {
+  alchemypay: Values<typeof ONRAMPER_ORDER_STATUS>
+  banxa: Values<typeof ONRAMPER_ORDER_STATUS>
+  binancep2p: Values<typeof ONRAMPER_ORDER_STATUS>
+  btcdirect: Values<typeof ONRAMPER_ORDER_STATUS>
+  coinify: Values<typeof ONRAMPER_ORDER_STATUS>
+  dfx: Values<typeof ONRAMPER_ORDER_STATUS>
+  fonbnk: Values<typeof ONRAMPER_ORDER_STATUS>
+  gateconnect: Values<typeof ONRAMPER_ORDER_STATUS>
+  gatefi: Values<typeof ONRAMPER_ORDER_STATUS>
+  guardarian: Values<typeof ONRAMPER_ORDER_STATUS>
+  koywe: Values<typeof ONRAMPER_ORDER_STATUS>
+  localramp: Values<typeof ONRAMPER_ORDER_STATUS>
+  neocrypto: Values<typeof ONRAMPER_ORDER_STATUS>
+  onrampmoney: Values<typeof ONRAMPER_ORDER_STATUS>
+  revolut: Values<typeof ONRAMPER_ORDER_STATUS>
+  skrill: Values<typeof ONRAMPER_ORDER_STATUS>
+  stripe: Values<typeof ONRAMPER_ORDER_STATUS>
+  topper: Values<typeof ONRAMPER_ORDER_STATUS>
+  transfi: Values<typeof ONRAMPER_ORDER_STATUS>
+  utorg: Values<typeof ONRAMPER_ORDER_STATUS>
   blockchain: Values<typeof BLOCKCHAIN_ORDER_STATUS>
   moonpay: Values<typeof MOONPAY_ORDER_STATUS>
   onramper: Values<typeof ONRAMPER_ORDER_STATUS>
@@ -215,11 +255,31 @@ export const COMPLETE_STATUS = {
 
 export const STATUS_MAP = {
   __proto__: null,
+  [PROVIDERS.alchemypay]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.banxa]: ORDER_STATUS_TO_ONRAMPER_STATUS,
   [PROVIDERS.blockchain]: ORDER_STATUS_TO_BLOCKCHAIN_STATUS,
-  [PROVIDERS.onramper]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.binancep2p]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.btcdirect]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.coinify]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.dfx]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.fonbnk]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.gateconnect]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.gatefi]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.guardarian]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.koywe]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.localramp]: ORDER_STATUS_TO_ONRAMPER_STATUS,
   [PROVIDERS.moonpay]: ORDER_STATUS_TO_MOONPAY_STATUS,
+  [PROVIDERS.neocrypto]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.onramper]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.onrampmoney]: ORDER_STATUS_TO_ONRAMPER_STATUS,
   [PROVIDERS.paypal]: ORDER_STATUS_TO_PAYPAL_STATUS,
   [PROVIDERS.ramp]: ORDER_STATUS_TO_RAMP_STATUS,
+  [PROVIDERS.revolut]: ORDER_STATUS_TO_ONRAMPER_STATUS,
   [PROVIDERS.sardine]: ORDER_STATUS_TO_SARDINE_STATUS,
+  [PROVIDERS.skrill]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.stripe]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.topper]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.transfi]: ORDER_STATUS_TO_ONRAMPER_STATUS,
+  [PROVIDERS.utorg]: ORDER_STATUS_TO_ONRAMPER_STATUS,
   [PROVIDERS.xopay]: ORDER_STATUS_TO_XOPAY_STATUS,
 } as const

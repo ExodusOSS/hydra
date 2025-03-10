@@ -37,6 +37,7 @@ const invalidPairs = ({ from, to }) => {
 
 const pricingHandlers = [
   http.get('https://pricing-s.a.exodus.io/staking/rewards', jsonResponse([])),
+  http.get('https://pricing-s.a.exodus.io/real-time-pricing', jsonResponse([])),
   http.get('https://pricing-s.a.exodus.io/current-price', ({ request }) => {
     const { from, to } = getPairs(request)
 

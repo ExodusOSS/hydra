@@ -1,4 +1,3 @@
-import typeforce from '@exodus/typeforce'
 import { WalletAccount, WalletAccountSet } from '@exodus/models'
 import lodash from 'lodash'
 import makeConcurrent from 'make-concurrent'
@@ -52,15 +51,7 @@ class WalletAccounts {
     allWalletAccountsEver,
     config,
   }) {
-    const { allowedSources: supportedSources, fillIndexGapsOnCreation } = typeforce.parse(
-      {
-        allowedSources: typeforce.arrayOf('String'),
-        fillIndexGapsOnCreation: '?Boolean',
-      },
-      config,
-      true
-    )
-
+    const { allowedSources: supportedSources, fillIndexGapsOnCreation } = config
     this.#logger = logger
     this.#walletAccountsInternalAtom = walletAccountsInternalAtom
     this.#wallet = wallet
@@ -268,7 +259,7 @@ class WalletAccounts {
           merged[walletAccount.toString()] = walletAccount
 
           return merged
-        }, {})
+        }, Object.create(null))
 
       this.#walletAccounts = { ...this.#walletAccounts, ...updates }
       await this.#save()
@@ -424,7 +415,7 @@ class WalletAccounts {
     const updates = walletAccountNames.reduce((acc, walletAccount) => {
       acc[walletAccount] = { enabled: true }
       return acc
-    }, {})
+    }, Object.create(null))
 
     await this.updateMany(updates)
   }

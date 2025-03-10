@@ -1,6 +1,7 @@
 {
   "name": "@exodus/feature-flags",
-  "version": "6.1.1",
+  "type": "module",
+  "version": "6.1.2",
   "description": "Module for monitoring/controlling the currently available features based on remoteConfig, device geolocation, etc",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -29,12 +30,12 @@
   "scripts": {
     "lint": "run -T eslint -c ../../eslint.config.mjs",
     "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest --esbuild"
+    "test": "run -T exodus-test --jest"
   },
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
-    "@exodus/feature-control": "^2.2.0",
+    "@exodus/feature-control": "^2.2.3",
     "@exodus/remote-config-atoms": "^1.1.0",
     "@exodus/typeforce": "^1.18.0",
     "minimalistic-assert": "^1.0.1",

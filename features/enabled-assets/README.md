@@ -10,7 +10,7 @@ yarn add @exodus/enabled-assets
 
 ## Usage
 
-This feature is used inside `@exodus/headless` (see [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md))
+This feature is used inside `@exodus/headless` (see [using the sdk](../../docs/development/using-the-sdk.md))
 
 The separate usage may look like:
 
@@ -44,7 +44,7 @@ await exodus.assets.enable(['bitcoin'])
 
 ### UI Side
 
-See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md#events) for more details on basic UI-side setup.
+See [using the sdk](../../docs/development/using-the-sdk.md#events) for more details on basic UI-side setup.
 
 ```js
 import selectors from '~/ui/flux/selectors'

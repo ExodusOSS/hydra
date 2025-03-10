@@ -1,7 +1,7 @@
-import { memoize } from 'lodash' // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
-import pDefer from 'p-defer'
-import makeConcurrent from 'make-concurrent'
 import createFetchival from '@exodus/fetch/experimental/create-fetchival'
+import makeConcurrent from 'make-concurrent'
+import pDefer from 'p-defer'
+import { memoize } from '@exodus/basic-utils'
 
 class Analytics {
   #logger

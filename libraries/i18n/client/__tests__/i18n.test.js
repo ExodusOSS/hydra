@@ -53,7 +53,7 @@ describe('I18n', () => {
     expect(i18n.getTranslation(id)).toEqual(en[id])
   })
 
-  it('should use first result if multiple entries match computed id', () => {
+  it('should use result with the actual variable resolve if multiple entries match computed id', () => {
     const originalEntryId = 'Out of the way, {name}!'
     const aliasEntryId = 'Out of the way, {displayName}!'
     const tokens = {
@@ -73,6 +73,6 @@ describe('I18n', () => {
       en: tokens,
     })
 
-    expect(i18n.getTranslation(aliasEntryId)).toEqual(tokens[originalEntryId])
+    expect(i18n.getTranslation(aliasEntryId)).toEqual(tokens[aliasEntryId])
   })
 })

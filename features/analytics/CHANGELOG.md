@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [15.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.1.0...@exodus/analytics@15.1.1) (2025-02-21)
+
+### Bug Fixes
+
+- fix: skip exporting most reports if wallet doesn't exist (#11553)
+
+## [15.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.0.0...@exodus/analytics@15.1.0) (2025-02-17)
+
+### Features
+
+- feat: analytics report (#11454)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
+## [15.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.0.0...@exodus/analytics@15.0.1) (2024-11-25)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
 ## [15.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@14.4.2...@exodus/analytics@15.0.0) (2024-09-27)
 
 ### ⚠ BREAKING CHANGES

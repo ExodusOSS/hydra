@@ -1,12 +1,13 @@
-import { test, describe } from 'node:test'
 import assert from 'node:assert/strict'
+import { describe, test } from 'node:test'
 
-import sanitizeErrorMessage from '../sanitize.js'
 import { naughtyMessages } from '@exodus/errors-fixture'
 
-describe('sanitizeErrorMessage', () => {
+import sanitizeErrorMessage from '../sanitize.js'
+
+void describe('sanitizeErrorMessage', () => {
   for (const { name, input, output } of naughtyMessages) {
-    test(name, () => {
+    void test(name, () => {
       assert.equal(sanitizeErrorMessage(input), output)
     })
   }

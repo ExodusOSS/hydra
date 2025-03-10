@@ -202,7 +202,6 @@ export default class FiatOrder<P extends Provider = Provider> implements FiatOrd
 
     // old orders may have both exoduStatus 'complete' and an 'errorMessage'
     if (this.exodusStatus === 'complete' && this.errorMessage) {
-      console.log('ignoring error given error complete')
       delete this.errorMessage
     }
   }
@@ -304,7 +303,7 @@ export default class FiatOrder<P extends Provider = Provider> implements FiatOrd
   }
 
   get exodusStatus() {
-    const statuses = STATUS_MAP[this.provider as keyof typeof STATUS_MAP]!
+    const statuses = STATUS_MAP[this.provider as keyof typeof STATUS_MAP]! ?? {}
     const match = Object.entries(statuses).find(([, providerStatuses]) =>
       providerStatuses.includes(this.status)
     )
@@ -379,6 +378,37 @@ export default class FiatOrder<P extends Provider = Provider> implements FiatOrd
     }
 
     return omitUndefined(json)
+  }
+
+  toRedactedJSON() {
+    return omitUndefined({
+      cryptoAmount: isNumberUnit(this.cryptoAmount)
+        ? serialize(this.cryptoAmount)
+        : this.cryptoAmount,
+      cryptoAsset: this.cryptoAsset,
+      date: this.date.toISOString(),
+      exodusRate: this.exodusRate,
+      exodusStatus: this.exodusStatus,
+      fees: this.fees,
+      fiatValue: this.fiatValue,
+      fromAmount: isNumberUnit(this.fromAmount) ? serialize(this.fromAmount) : this.fromAmount,
+      fromAsset: this.fromAsset,
+      isBuy: this.isBuy,
+      isSell: this.isSell,
+      orderId: this.orderId,
+      orderType: this.orderType,
+      provider: this.provider,
+      providerOrderId: this.providerOrderId,
+      providerRate: this.providerRate,
+      subProvider: this.subProvider,
+      subProviderOrderId: this.subProviderOrderId,
+      status: this.status,
+      toAddress: this.toAddress,
+      toAmount: isNumberUnit(this.toAmount) ? serialize(this.toAmount) : this.toAmount,
+      toAsset: this.toAsset,
+      toWalletAccount: this.toWalletAccount,
+      txIds: this.txIds,
+    })
   }
 
   toString() {

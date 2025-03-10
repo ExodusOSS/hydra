@@ -1,7 +1,7 @@
 {
   "name": "@exodus/app-process-mobile",
   "author": "Exodus Movement, Inc.",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "license": "MIT",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/app-process-mobile",
   "bugs": {

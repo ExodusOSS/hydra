@@ -2,8 +2,8 @@ import typeforce from '@exodus/typeforce'
 import { createFeatureControl } from '@exodus/feature-control'
 import { mapValues, pickBy } from '@exodus/basic-utils'
 import { combine, createInMemoryAtom, dedupe } from '@exodus/atoms'
-import { convertConfigToFeatureControlFormat } from '../shared/format-config'
-import * as types from './types'
+import { convertConfigToFeatureControlFormat } from '../shared/format-config.js'
+import * as types from './types.js'
 import assert from 'minimalistic-assert'
 
 class FeatureFlags {

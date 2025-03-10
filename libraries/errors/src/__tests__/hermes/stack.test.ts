@@ -1,6 +1,5 @@
-import { extendedExpect } from '../setup.js'
-
 import parseStackTrace from '../../stack.js'
+import { extendedExpect } from '../setup.js'
 
 function foo() {
   return new Error('boo')

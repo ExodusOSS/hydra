@@ -1,4 +1,5 @@
 import * as atoms from '@exodus/atoms'
+
 import createPlugin from '../lifecycle'
 
 jest.mock('@exodus/atoms', () => ({

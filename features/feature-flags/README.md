@@ -100,7 +100,7 @@ const HomePage = () => {
 
 ### Usage examples without `@exodus/headless`
 
-See the [examples](https://github.com/ExodusMovement/exodus-hydra/blob/7aeaecb32ff1771fca22c482a26ed7aa945c2987/features/feature-flags/module/__tests__/examples/) folder
+See the [examples](https://github.com/ExodusOSS/hydra/tree/master/features/feature-flags/module/__tests__/examples/) folder
 
 ## Components
 

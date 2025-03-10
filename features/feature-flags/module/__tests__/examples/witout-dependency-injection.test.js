@@ -5,9 +5,9 @@ import {
   featureFlagAtomsDefinition,
   featureFlagsAtomDefinition,
   remoteConfigFeatureFlagAtomsDefinition,
-} from '../../../atoms'
-import createRemoteConfigWithData from '../../../shared/__tests__/dummy-remote-config'
-import featureFlagsModuleDefinition from '../..'
+} from '../../../atoms/index.js'
+import createRemoteConfigWithData from '../../../shared/__tests__/dummy-remote-config.js'
+import featureFlagsModuleDefinition from '../../index.js'
 
 const dummyGeolocationAtom = createInMemoryAtom({
   defaultValue: { countries: 'all' },

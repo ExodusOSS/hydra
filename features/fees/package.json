@@ -1,10 +1,11 @@
 {
   "name": "@exodus/fees",
-  "version": "1.2.2",
+  "version": "1.2.4",
   "description": "Fees module",
+  "type": "module",
   "author": "Exodus Movement, Inc.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/fees",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afees"
   },
@@ -34,7 +35,10 @@
     "@exodus/assets": "^9.1.1",
     "@exodus/atoms": "workspace:^",
     "@exodus/blockchain-metadata": "workspace:^",
-    "@exodus/ethereum-meta": "^1.0.30",
+    "@exodus/ethereum-meta": "^2.2.1",
     "@exodus/models": "workspace:^"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

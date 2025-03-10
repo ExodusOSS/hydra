@@ -23,7 +23,7 @@ describe('appProcessReport', () => {
 
     const appStateHistoryAtom = createInMemoryAtom({ defaultValue: history })
     const report = appProcessReportDefinition.factory({ appStateHistoryAtom })
-    const exported = await report.export()
+    const exported = await report.export({ walletExists: true })
 
     expect(exported).toEqual({
       history: [

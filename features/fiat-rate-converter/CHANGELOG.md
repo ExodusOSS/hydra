@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-rate-converter@4.1.1...@exodus/fiat-rate-converter@4.1.2) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [4.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-rate-converter@4.1.0...@exodus/fiat-rate-converter@4.1.1) (2024-09-11)
 
 **Note:** Version bump only for package @exodus/fiat-rate-converter

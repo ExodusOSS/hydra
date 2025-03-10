@@ -19,7 +19,7 @@ yarn add @exodus/address-provider
 
 ## Usage
 
-This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md).
+This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/development/using-the-sdk.md).
 
 ### Play with it
 
@@ -29,7 +29,7 @@ This feature is designed to be used together with `@exodus/headless`. See [using
 
 ### API Side
 
-See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK and the API interface in the [type declaration](./api/index.d.ts).
+See [using the sdk](../../docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK and the API interface in the [type declaration](./api/index.d.ts).
 
 ```ts
 const address = await exodus.addressProvider.getAddress({
@@ -52,11 +52,11 @@ const unusedReceiveAddress = await exodus.addressProvider.getReceiveAddress({
 })
 ```
 
-If you're building a feature that requires the wallet's addresses, add a dependency on the `addressProvider` module, which provides almost the same API as the external `exodus.addressProvider` [API](https://github.com/ExodusMovement/exodus-hydra/blob/533a105af69fabb690e2c0c5fd4b3a21a2500526/features/address-provider/api/index.js#L35-L43) (caveat: the module expects `WalletAccount` instances, while the API expects WalletAccount names like `'exodus_0'`).
+If you're building a feature that requires the wallet's addresses, add a dependency on the `addressProvider` module, which provides almost the same API as the external `exodus.addressProvider` [API](./api/index.js) (caveat: the module expects `WalletAccount` instances, while the API expects WalletAccount names like `'exodus_0'`).
 
 ### UI Side
 
-See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md#events) for more details on basic UI-side setup.
+See [using the sdk](../../docs/development/using-the-sdk.md#events) for more details on basic UI-side setup.
 
 ```jsx
 import exodus from '~/ui/exodus'
@@ -69,3 +69,35 @@ const MyComponent = () => {
   return loading ? <Text>Loading...</Text> : <Text>Your address: {receiveAddress}</Text>
 }
 ```
+
+### Mocking Addresses
+
+Occasionally you may want to simulate another wallet for which you don't have the seed or private keys. You can do this by mocking at the address level here or at the xpub/public key level in [public-key-provider](../public-key-provider)
+
+Mock an address by providing all the parameters that would normally be used to derive it:
+
+```js
+exodus.debug.addressProvider.mockAddress({
+  walletAccount: 'exodus_0',
+  assetName: 'ethereum',
+  address: '<address>',
+  purpose: 44,
+  chainIndex: 0,
+  addressIndex: 0,
+})
+```
+
+Mock multiple addresses by only a subset of the parameters:
+
+```js
+exodus.debug.addressProvider.mockAddress({
+  walletAccount: 'exodus_0',
+  assetName: 'bitcoin',
+  purpose: 44,
+  address: '<address>',
+})
+```
+
+This would result in mocking all change/receive chain addresses with the same address.
+
+To clear all mocked addresses, call `exodus.debug.addressProvider.clear()`.

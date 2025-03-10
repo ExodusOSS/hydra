@@ -33,6 +33,10 @@ class WalletAccountSet {
     return mapValues(this._byName, (walletAccount) => walletAccount.toJSON())
   }
 
+  toRedactedJSON() {
+    return mapValues(this._byName, (walletAccount) => walletAccount.toRedactedJSON())
+  }
+
   get(name: string | WalletAccount) {
     if (name instanceof WalletAccount) name = name.toString()
 

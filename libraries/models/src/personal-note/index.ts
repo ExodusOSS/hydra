@@ -78,6 +78,12 @@ export default class PersonalNote implements PersonalNoteProps {
     return omitUndefined(obj)
   }
 
+  toRedactedJSON() {
+    return {
+      txId: this.txId,
+    }
+  }
+
   toString() {
     return String(this.txId)
   }

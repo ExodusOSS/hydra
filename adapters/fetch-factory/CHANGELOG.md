@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.6](https://github.com/ExodusMovement/hydra/compare/@exodus/fetch-factory@2.2.5...@exodus/fetch-factory@2.2.6) (2025-03-07)
+
+### Bug Fixes
+
+- fix(fetch-factory): hostnameFromString validates extracted hostname (#11677)
+
+## [2.2.5](https://github.com/ExodusMovement/hydra/compare/@exodus/fetch-factory@2.2.4...@exodus/fetch-factory@2.2.5) (2025-02-28)
+
+### Performance
+
+- perf: avoid URL construction for hostname (#11627)
+
+## [2.2.4](https://github.com/ExodusMovement/hydra/compare/@exodus/fetch-factory@2.2.3...@exodus/fetch-factory@2.2.4) (2024-11-01)
+
+Re-licensed under MIT license.
+
+## [2.2.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fetch-factory@2.2.2...@exodus/fetch-factory@2.2.3) (2024-10-03)
+
+### Bug Fixes
+
+- use proper ESM in fetch-factory ([#9747](https://github.com/ExodusMovement/exodus-hydra/issues/9747)) ([7436c9a](https://github.com/ExodusMovement/exodus-hydra/commit/7436c9a770e022a4b9790057ee148ea4c4863a98))
+
 ## [2.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fetch-factory@2.2.1...@exodus/fetch-factory@2.2.2) (2024-09-25)
 
 ### Bug Fixes

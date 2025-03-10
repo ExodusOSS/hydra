@@ -1,6 +1,6 @@
 {
   "name": "@exodus/application",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "type": "module",
   "description": "Feature that manages the Exodus SDK application lifecycle.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/application",

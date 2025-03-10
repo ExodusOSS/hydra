@@ -1,6 +1,6 @@
-import remoteConfigStatusAtomDefinition from '@exodus/remote-config/lib/atoms'
-import remoteConfigDefinition from '@exodus/remote-config/lib/module'
-import EventEmitter from 'events/'
+import remoteConfigStatusAtomDefinition from '@exodus/remote-config/lib/atoms/index.js'
+import remoteConfigDefinition from '@exodus/remote-config/lib/module/index.js'
+import EventEmitter from 'events/events.js'
 
 const createRemoteConfig = remoteConfigDefinition.factory
 const createRemoteConfigStatusAtom = remoteConfigStatusAtomDefinition.factory

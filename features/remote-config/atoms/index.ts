@@ -5,11 +5,13 @@ export type RemoteConfigStatus = {
   error: string | null
   remoteConfigUrl: string | null
   loaded: boolean
+  gitHash: string | null
 }
 const initialState: RemoteConfigStatus = {
   remoteConfigUrl: null,
   error: null,
   loaded: false,
+  gitHash: null,
 }
 
 const remoteConfigStatusAtomDefinition = {

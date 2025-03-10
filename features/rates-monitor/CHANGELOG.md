@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.9.0...@exodus/rates-monitor@4.9.1) (2025-03-04)
+
+### Bug Fixes
+
+- fix: increase real-time pricing polling interval to 25s (#11649)
+
+## [4.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.8.4...@exodus/rates-monitor@4.9.0) (2025-02-24)
+
+### Features
+
+- feat(rates-monitor): use optional chaining to access price data (#11584)
+
+## [4.8.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.8.3...@exodus/rates-monitor@4.8.4) (2025-02-21)
+
+### Bug Fixes
+
+- fix: skip exporting most reports if wallet doesn't exist (#11553)
+
+## [4.8.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.8.2...@exodus/rates-monitor@4.8.3) (2025-02-20)
+
+**Note:** Version bump only for package @exodus/rates-monitor
+
 ## [4.8.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.8.1...@exodus/rates-monitor@4.8.2) (2025-02-14)
 
 ### Bug Fixes

@@ -143,7 +143,7 @@ export type Analytics = {
    * await exodus.analytics.setTrackActivities(true)
    * ```
    */
-  setTrackActivities: Promise<void>
+  setTrackActivities: (track: boolean) => Promise<void>
 }
 
 declare const analyticsApiDefinition: {
