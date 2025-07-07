@@ -1,6 +1,6 @@
 import { OrderSet, Tx } from '@exodus/models'
 
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('createMultiActivity', () => {
   test('should return empty array of activities in wallet', () => {

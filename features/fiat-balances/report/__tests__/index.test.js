@@ -2,8 +2,8 @@ import { createInMemoryAtom } from '@exodus/atoms'
 import fiat from '@exodus/fiat-currencies'
 import { WalletAccount } from '@exodus/models'
 
-import { fiatBalancesAtomDefinition } from '../../atoms'
-import fiatBalancesReportDefinition from '..'
+import { fiatBalancesAtomDefinition } from '../../atoms/index.js'
+import fiatBalancesReportDefinition from '../index.js'
 
 const { factory: createFiatBalancesAtom } = fiatBalancesAtomDefinition
 const { factory: createFiatBalancesReportReport } = fiatBalancesReportDefinition

@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/personal-notes@3.7.0...@exodus/personal-notes@3.8.0) (2025-04-24)
+
+### Features
+
+- feat(personal-notes): add ts types (#11223)
+
+### Bug Fixes
+
+- fix: don't wait for personal-notes channel to process (#12073)
+
+## [3.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/personal-notes@3.6.3...@exodus/personal-notes@3.7.0) (2024-12-20)
+
+### Features
+
+- feat: use atoms v9 (#9651)
+
+### Bug Fixes
+
+- fix: use proper ESM (#9286)
+
+### License
+
+- license: re-license under MIT license (#10599)
+
 ## [3.6.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/personal-notes@3.6.2...@exodus/personal-notes@3.6.3) (2024-09-09)
 
 **Note:** Version bump only for package @exodus/personal-notes

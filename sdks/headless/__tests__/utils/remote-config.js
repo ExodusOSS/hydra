@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events/'
+import EventEmitter from 'events/events.js'
 
 export function createMockRemoteConfig({ container }) {
   let current = {}
@@ -6,6 +6,7 @@ export function createMockRemoteConfig({ container }) {
   const emitter = new EventEmitter()
   const remoteConfig = Object.assign(emitter, {
     load: jest.fn(),
+    stop: jest.fn(),
     getAll: async () => current,
     sync: () => emitter.emit('sync', { current }),
   })

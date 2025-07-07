@@ -1,22 +1,22 @@
-import delay from 'delay'
-import EventEmitter from 'events/'
+import EventEmitter from 'events/events.js'
 
 import createFetchival from '@exodus/fetch/create-fetchival'
 
 import { set, partition } from '@exodus/basic-utils'
-import { WalletAccount } from '@exodus/models'
-import { chunk, cloneDeep, get, throttle } from 'lodash'
-import { DEFAULT_CONFIGS, NFTS_NETWORK_TO_ASSET_NAME, Networks } from '../constants'
-import { getNftsAddresses } from './addresses-utils'
+import lodash from 'lodash'
+import { DEFAULT_CONFIGS, NFTS_NETWORK_TO_ASSET_NAME, Networks } from '../constants/index.js'
+import { getNftsAddresses } from './addresses-utils.js'
 import {
   BATCH_FETCH_NO_TXS_INTERVAL,
   BATCH_MAX_ADDRESSES,
   BATCH_TRANSACTION_LOOKBACK_PERIOD,
   MONITOR_MINIMUM_INTERVAL,
   MONITOR_SLOW_INTERVAL,
-} from './constants'
-import { handleNftsOnImport } from './utils'
-import { areAddressesEqual } from '../utils'
+} from './constants.js'
+import { doesWalletAccountSupportNFTs, handleNftsOnImport } from './utils.js'
+import { areAddressesEqual } from '../utils.js'
+
+const { chunk, cloneDeep, get, throttle } = lodash
 
 class NftsBatchMonitor extends EventEmitter {
   #nftsTxsAtom
@@ -35,6 +35,7 @@ class NftsBatchMonitor extends EventEmitter {
   #previousTick = 0
   #handleImportOnNextFetch = false
   #throttledTick
+  #tickTimeout
 
   constructor({
     addressProvider,
@@ -61,8 +62,6 @@ class NftsBatchMonitor extends EventEmitter {
     this.#logger = logger
 
     this.#throttledTick = throttle(this.#tick, this.#minInterval)
-
-    // TODO: move config to nfts config (along with other monitor configs)
     const baseUrl = config?.baseUrl || DEFAULT_CONFIGS.production.baseUrl
     this.#fetchival = createFetchival({ fetch })(new URL(baseUrl))
   }
@@ -295,9 +294,7 @@ class NftsBatchMonitor extends EventEmitter {
   #getWalletAccounts = async () => {
     const walletAccounts = await this.#enabledWalletAccountsAtom.get()
 
-    return Object.values(walletAccounts).filter(
-      (account) => account.isSoftware || account.source === WalletAccount.LEDGER_SRC
-    )
+    return Object.values(walletAccounts).filter(doesWalletAccountSupportNFTs)
   }
 
   #getAddressesData = async ({ networks }) => {
@@ -375,12 +372,16 @@ class NftsBatchMonitor extends EventEmitter {
         await this.#throttledTick()
       }
 
-      await delay(this.#minInterval)
+      if (!this.#isStarted) break
+      await new Promise((resolve) => {
+        this.#tickTimeout = setTimeout(resolve, this.#minInterval)
+      })
     }
   }
 
   stop = async () => {
     this.#isStarted = false
+    clearTimeout(this.#tickTimeout)
   }
 
   setInterval = (ms) => {

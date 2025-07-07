@@ -1,7 +1,9 @@
 import { createLimiter } from '@exodus/asset-lib'
 import { difference, intersection } from '@exodus/basic-utils'
-import { EventEmitter } from 'events/'
-import { isEqual } from 'lodash'
+import EventEmitter from 'events/events.js'
+import lodash from 'lodash'
+
+const { isEqual } = lodash
 
 const TX_LOG_TICK_CONCURRENCY = 5
 
@@ -94,7 +96,7 @@ class Monitors extends EventEmitter {
       })
   }
 
-  update = ({ assetName, ...opts }) => {
+  update = async ({ assetName, ...opts }) => {
     const monitor = this.#monitors.get(assetName)
     if (monitor) return monitor.update(opts) // { refresh }
   }

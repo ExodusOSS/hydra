@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/nfts@9.6.0...@exodus/nfts@9.6.1) (2025-06-30)
+
+### Bug Fixes
+
+- fix(nfts): use full wallet account in forceUpdate (#13029)
+
+## [9.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/nfts@9.5.1...@exodus/nfts@9.6.0) (2025-05-14)
+
+### Features
+
+- feat: make nfts proper ESM (#12439)
+
+### Bug Fixes
+
+- fix: make two monitors in nfts stop immediately (#12438)
+
+## [9.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/nfts@9.5.0...@exodus/nfts@9.5.1) (2025-03-20)
+
+### Performance
+
+- perf(nfts): persist last fetch in storage, add config.networkIntervalMultipliers (#11679)
+
+- perf: only fetch nfts for current wallet account (#11644)
+
+## [9.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/nfts@9.4.2...@exodus/nfts@9.5.0) (2025-02-10)
+
+### Features
+
+- feat(nfts): forward `useBatchMonitor` from feature config (#10809)
+
+### Bug Fixes
+
+- fix: ensure network exists before calling getCollectionStats (#11378)
+
+- fix: properly memoize (#10783)
+
+## [9.4.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/nfts@9.4.1...@exodus/nfts@9.4.2) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [9.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/nfts@9.4.0...@exodus/nfts@9.4.1) (2024-10-29)
 
 ### Bug Fixes

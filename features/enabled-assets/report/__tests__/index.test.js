@@ -33,8 +33,17 @@ describe('enabledAssetsReport', () => {
     expect(reportNode.namespace).toEqual('enabledAssets')
   })
 
+  it('should gracefully handle when a wallet does not exist or locked', async () => {
+    expect(reportNode.getSchema().parse(await reportNode.export({ walletExists: false }))).toEqual(
+      null
+    )
+    expect(
+      reportNode.getSchema().parse(await reportNode.export({ walletExists: true, isLocked: true }))
+    ).toEqual(null)
+  })
+
   it('should create proper report', async () => {
-    const report = await reportNode.export({ walletExists: true })
+    const report = reportNode.getSchema().parse(await reportNode.export({ walletExists: true }))
     expect(report).toEqual(['asset1', 'asset2'])
   })
 })

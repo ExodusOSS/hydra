@@ -4,7 +4,7 @@ import { pick } from '@exodus/basic-utils'
 import _combinedAssets from '@exodus/combined-assets-meta'
 import { WalletAccount } from '@exodus/models'
 
-import { createFiatNumberUnit, setup } from '../../../utils'
+import { createFiatNumberUnit, setup } from '../../../utils.js'
 
 const assets = connectAssets({ ..._assets, ...assetsListToObject(_combinedAssets) })
 

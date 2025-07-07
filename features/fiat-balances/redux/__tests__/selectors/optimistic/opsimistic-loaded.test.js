@@ -1,5 +1,5 @@
-import { FIAT_BALANCES_PAYLOAD, OPTIMISTIC_FIAT_BALANCES_PAYLOAD } from '../../constants'
-import { setup } from '../../utils'
+import { FIAT_BALANCES_PAYLOAD, OPTIMISTIC_FIAT_BALANCES_PAYLOAD } from '../../constants.js'
+import { setup } from '../../utils.js'
 
 function mirrorTestCaseForOptimisticOnOff(testMessage, fn) {
   it(`${testMessage} [optimisticActivityEnabled: false]`, () => {

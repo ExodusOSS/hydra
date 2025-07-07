@@ -1,6 +1,5 @@
-import { mapValuesAsync } from '@exodus/basic-utils'
-import EventEmitter from 'events/'
-import { getNftsAddresses } from './addresses-utils'
+import EventEmitter from 'events/events.js'
+import { getNftsAddresses } from './addresses-utils.js'
 
 class NftsTransactionsNetworkMonitor extends EventEmitter {
   #addressProvider
@@ -19,16 +18,12 @@ class NftsTransactionsNetworkMonitor extends EventEmitter {
     this.#logger = logger
   }
 
-  #fetch = async ({ walletAccounts }) => {
-    mapValuesAsync(walletAccounts, async (walletAccount) => {
-      const walletAccountName = walletAccount.toString()
-
-      const txs = await this.#getTxsData({ walletAccount })
-
-      if (txs) {
-        this.#emitTxs({ walletAccountName, txs })
-      }
-    })
+  #fetch = async ({ walletAccount }) => {
+    const walletAccountName = walletAccount.toString()
+    const txs = await this.#getTxsData({ walletAccount })
+    if (txs) {
+      this.#emitTxs({ walletAccountName, txs })
+    }
   }
 
   #emitTxs = (payload) => {

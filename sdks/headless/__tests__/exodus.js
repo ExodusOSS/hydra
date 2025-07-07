@@ -1,11 +1,12 @@
 import { createInMemoryAtom } from '@exodus/atoms'
+import eventLog from '@exodus/event-log'
 import pricingClientDefinition from '@exodus/pricing/module/index.js'
 import delay from 'delay'
 
-import _createExodus from '../src'
-import createAdapters from './adapters'
-import defaultConfig from './config'
-import { APY_RATES } from './fixtures/apy-rates'
+import _createExodus from '../src/index.js'
+import createAdapters from './adapters/index.js'
+import defaultConfig from './config.js'
+import { APY_RATES } from './fixtures/apy-rates.js'
 
 const createExodus = ({ adapters = createAdapters(), config = defaultConfig, debug } = {}) => {
   const container = _createExodus({ adapters, config, debug })
@@ -70,12 +71,14 @@ const createExodus = ({ adapters = createAdapters(), config = defaultConfig, deb
     },
   })
 
+  container.use(eventLog())
+
   const resolve = () => {
     const instance = container.resolve()
 
     // HACK: Bitcoin monitor makes test fails as it's not turning off gracefuly
     // TODO: remove this once bitcoin monitor is fixed
-    const { bitcoin } = instance.assets.getAssets()
+    const { bitcoin } = container.get('assetsModule').getAssets()
     bitcoin.api.createHistoryMonitor = jest.fn(() => ({
       start: jest.fn(),
       stop: jest.fn(),

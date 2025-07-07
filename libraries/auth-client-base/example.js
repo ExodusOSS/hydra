@@ -1,4 +1,4 @@
-const { createClient } = require('@exodus/auth-client-base')
+import { createClient } from '@exodus/auth-client-base'
 
 class MyClient {
   constructor(opts) {
@@ -19,7 +19,7 @@ module.exports = MyClient
 
 // initialization
 // pass in a keypair of this shape
-const keyPair = { privateKey: 'privateKey', publicKey: 'publicKey', sign: () => {} }
+const keyPair = { publicKey: 'publicKey', sign: () => {} }
 const client = new MyClient({
   config: {
     keyPair,

@@ -27,6 +27,14 @@
         },
         "amount_usd": {
           "type": "number"
+        },
+        "fund_type": {
+          "type": "string",
+          "enum": ["buy", "receive"]
+        },
+        "payment_type": {
+          "type": "string",
+          "format": "any-string"
         }
       },
       "unevaluatedProperties": false

@@ -6,8 +6,8 @@ import remoteConfigReportDefinition from './index.js'
 describe('remoteConfigReport', () => {
   const data: RemoteConfigStatus = {
     remoteConfigUrl: 'https://fake.url/remote-config.json',
-    error: 'some error',
     loaded: false,
+    gitHash: null,
   }
 
   const remoteConfigStatusAtom = createInMemoryAtom({ defaultValue: data })
@@ -19,21 +19,20 @@ describe('remoteConfigReport', () => {
   })
 
   it('should export load status to the report', async () => {
-    const reportData = await report.export({ walletExists: true })
+    const reportData = report.getSchema().parse(await report.export())
     expect(reportData).toEqual(data)
   })
 
   it('should export load status to the report (happy case)', async () => {
     const data: RemoteConfigStatus = {
       remoteConfigUrl: 'https://fake.url/remote-config.json',
-      error: null,
       loaded: true,
       gitHash: 'c2c22',
     }
     const remoteConfigStatusAtom = createInMemoryAtom({ defaultValue: data })
     const report = remoteConfigReportDefinition.factory({ remoteConfigStatusAtom })
 
-    const reportData = await report.export({ walletExists: true })
+    const reportData = report.getSchema().parse(await report.export())
     expect(reportData).toEqual(data)
   })
 })

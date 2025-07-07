@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('configs', () => {
   it('should return default configs', () => {

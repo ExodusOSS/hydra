@@ -1,4 +1,5 @@
 import type { Atom } from '@exodus/atoms'
+import errorTracking, { type ErrorsAtom, type ErrorTrackingModule } from '@exodus/error-tracking'
 import type { Logger } from '@exodus/logger'
 import lodash from 'lodash'
 
@@ -11,6 +12,13 @@ import remoteConfigDefinition from './index.js'
 
 const { isEmpty, isEqual } = lodash
 
+const errorTrackingDefinitions = errorTracking().definitions
+const createErrorTracking = errorTrackingDefinitions.find(
+  (definition) => definition.definition.id === 'errorTracking'
+)?.definition.factory
+const createErrorAtom = errorTrackingDefinitions.find(
+  (definition) => definition.definition.id === 'errorsAtom'
+)?.definition.factory
 const createRemoteConfig = remoteConfigDefinition.factory
 
 const getBuildMetadata = () =>
@@ -25,6 +33,8 @@ const getBuildMetadata = () =>
   })
 
 describe('createRemoteConfig', () => {
+  let errorTracking: ErrorTrackingModule
+  let errorsAtom: ErrorsAtom
   let freeze: Freeze
   let logger: Logger
   let fetch: Fetch
@@ -37,6 +47,11 @@ describe('createRemoteConfig', () => {
   let remoteConfigStatusAtom: Atom<RemoteConfigStatus>
 
   beforeEach(() => {
+    errorsAtom = (createErrorAtom as any)()
+    errorTracking = (createErrorTracking as any)({
+      errorsAtom,
+      config: { maxErrorsCount: 10 },
+    })
     freeze = jest.fn((val) => val)
     logger = { debug: jest.fn(), error: jest.fn() } as never as Logger
     fetch = jest.fn()
@@ -66,6 +81,7 @@ describe('createRemoteConfig', () => {
     config = sampleConfig
 
     remoteConfig = createRemoteConfig({
+      errorTracking,
       freeze,
       logger,
       fetch,
@@ -89,6 +105,7 @@ describe('createRemoteConfig', () => {
     config = sampleConfig
 
     remoteConfig = createRemoteConfig({
+      errorTracking,
       freeze,
       logger,
       fetch,
@@ -106,7 +123,6 @@ describe('createRemoteConfig', () => {
     const state = await remoteConfigStatusAtom.get()
     expect(state).toEqual({
       remoteConfigUrl,
-      error: null,
       loaded: true,
       gitHash: null,
     })
@@ -116,6 +132,7 @@ describe('createRemoteConfig', () => {
     config = sampleConfig
 
     remoteConfig = createRemoteConfig({
+      errorTracking,
       freeze,
       logger,
       fetch,
@@ -130,7 +147,6 @@ describe('createRemoteConfig', () => {
     const state = await remoteConfigStatusAtom.get()
     expect(state).toEqual({
       remoteConfigUrl,
-      error: null,
       loaded: true,
       gitHash: null,
     })
@@ -140,6 +156,7 @@ describe('createRemoteConfig', () => {
     config = sampleConfig
 
     remoteConfig = createRemoteConfig({
+      errorTracking,
       freeze,
       logger,
       fetch,
@@ -172,6 +189,7 @@ describe('createRemoteConfig', () => {
     )
 
     remoteConfig = createRemoteConfig({
+      errorTracking,
       freeze,
       logger,
       fetch,
@@ -186,13 +204,17 @@ describe('createRemoteConfig', () => {
     void remoteConfig.load()
 
     await new Promise((resolve) => setTimeout(resolve, 100))
-    const report = await remoteConfigStatusAtom.get()
+    const errors = await errorsAtom.get()
 
-    expect(report.error).toEqual('failed')
+    const trackedError = errors.errors[0]!
+
+    expect(trackedError.namespace).toEqual('remoteConfig')
+    expect((trackedError.error as Error).message).toEqual('failed')
   })
 
   it('should emit sync event', (done) => {
     remoteConfig = createRemoteConfig({
+      errorTracking,
       freeze,
       logger,
       fetch,
@@ -217,6 +239,7 @@ describe('createRemoteConfig', () => {
 
   it('should sync only when there are changes', (done) => {
     remoteConfig = createRemoteConfig({
+      errorTracking,
       freeze,
       logger,
       fetch,

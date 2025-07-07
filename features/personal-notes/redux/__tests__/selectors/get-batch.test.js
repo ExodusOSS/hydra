@@ -1,6 +1,6 @@
 import { PersonalNote } from '@exodus/models'
 
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('getBatch', () => {
   it('should return undefined if batchId not provided', () => {

@@ -1,5 +1,16 @@
-export function formatPercentage(percentage: string | number, noPlus = false) {
+export function formatPercentage(percentage: string | number | undefined | null, noPlus = false) {
+  // Early return for undefined or null values
+  if (percentage === undefined || percentage === null) {
+    return ''
+  }
+
   percentage = Number(percentage)
+
+  // Return empty string if conversion resulted in NaN
+  if (isNaN(percentage)) {
+    return ''
+  }
+
   let str = ''
 
   // Convert to a string and remove trailing zeros

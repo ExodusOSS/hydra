@@ -66,6 +66,7 @@ const backup: EventReducer = (state) => ({
 
 const restore: EventReducer<boolean> = (state, payload) => ({
   ...state,
+  walletExists: state.walletExists || Boolean(payload),
   isRestoring: payload,
 })
 
@@ -89,6 +90,11 @@ const autoLockTimer: EventReducer<number> = (state: State, payload: number) => (
   autoLockTimer: payload,
 })
 
+const walletCreatedAt: EventReducer<string> = (state: State, payload: string) => ({
+  ...state,
+  walletCreatedAt: payload,
+})
+
 const eventReducers = {
   'pre-load': preLoad,
   load,
@@ -103,6 +109,7 @@ const eventReducers = {
   'passphrase-changed': passphraseChanged,
   lockHistory,
   autoLockTimer,
+  walletCreatedAt,
 }
 
 export default eventReducers

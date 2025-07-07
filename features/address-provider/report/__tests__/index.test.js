@@ -151,6 +151,37 @@ describe('addressProviderReport', () => {
     expect(report.namespace).toEqual('addressProvider')
   })
 
+  it('should gracefully handle when a wallet does not exist or locked', async () => {
+    const report = addressProviderReportDefinition.factory({
+      assetsModule,
+      enabledWalletAccountsAtom,
+      accountStatesAtom,
+      availableAssetNamesByWalletAccountAtom,
+      addressProvider,
+    })
+
+    expect(report.getSchema().parse(await report.export({ walletExists: false }))).toEqual(null)
+
+    expect(
+      report.getSchema().parse(await report.export({ walletExists: true, isLocked: true }))
+    ).toEqual(null)
+  })
+
+  it('should include VALID_SOURCES in the schema', async () => {
+    const report = addressProviderReportDefinition.factory({
+      assetsModule,
+      enabledWalletAccountsAtom,
+      accountStatesAtom,
+      availableAssetNamesByWalletAccountAtom,
+      addressProvider,
+    })
+
+    const schema = report.getSchema()
+    expect(schema._def.innerType._def.keyType._def.checks[0].regex.toString()).toEqual(
+      `/^(${WalletAccount.VALID_SOURCES.join('|')})/u`
+    )
+  })
+
   it('should report addresses for each enabled wallet account and asset', async () => {
     const report = addressProviderReportDefinition.factory({
       assetsModule,
@@ -159,7 +190,7 @@ describe('addressProviderReport', () => {
       availableAssetNamesByWalletAccountAtom,
       addressProvider,
     })
-    const result = await report.export({ walletExists: true })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
 
     expect(result).toEqual(addresses)
   })
@@ -179,7 +210,7 @@ describe('addressProviderReport', () => {
       availableAssetNamesByWalletAccountAtom,
       addressProvider,
     })
-    const result = await report.export({ walletExists: true })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
 
     expect(Object.keys(result.exodus_0)).toEqual(['bitcoin', 'ethereum', 'solana'])
     expect(Object.keys(result.exodus_0.bitcoin)).toEqual(['bip44', 'bip84', 'bip86'])
@@ -213,7 +244,7 @@ describe('addressProviderReport', () => {
       availableAssetNamesByWalletAccountAtom,
       addressProvider,
     })
-    const result = await report.export({ walletExists: true })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
 
     expect(result).toEqual({
       exodus_0: {
@@ -273,7 +304,7 @@ describe('addressProviderReport', () => {
     })
 
     test('exports extended keys where possible', async () => {
-      const result = await report.export({ walletExists: true })
+      const result = report.getSchema().parse(await report.export({ walletExists: true }))
 
       expect(result).toEqual({
         exodus_0: {

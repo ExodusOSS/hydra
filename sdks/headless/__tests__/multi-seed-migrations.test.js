@@ -1,16 +1,16 @@
 import { fromMasterSeed } from '@exodus/bip32'
+import { mnemonicToSeed } from '@exodus/bip39'
 import createDeferringStorage from '@exodus/deferring-storage'
 import { WalletAccount } from '@exodus/models'
-import { TREZOR_SRC } from '@exodus/models/lib/wallet-account'
+import { TREZOR_SRC } from '@exodus/models/lib/wallet-account/index.js'
 import createUnsafeStorage from '@exodus/storage-memory'
-import multiSeedWalletAccountsMigration from '@exodus/wallet-accounts/migrations/multi-seed-wallet-accounts'
-import { mnemonicToSeed } from 'bip39'
+import multiSeedWalletAccountsMigration from '@exodus/wallet-accounts/migrations/multi-seed-wallet-accounts.js'
 
-import createAdapters from './adapters'
-import createEncryptedStorage from './adapters/encrypted-storage'
-import createSeedStorage from './adapters/seed-storage'
-import config from './config'
-import createExodus from './exodus'
+import createEncryptedStorage from './adapters/encrypted-storage.js'
+import createAdapters from './adapters/index.js'
+import createSeedStorage from './adapters/seed-storage.js'
+import config from './config.js'
+import createExodus from './exodus.js'
 
 const createUnlockableStorage = (storage) => {
   const deferringStorage = createDeferringStorage(storage)
@@ -20,10 +20,10 @@ const createUnlockableStorage = (storage) => {
   }
 }
 
-describe('multi-seed wallet accounts migration', () => {
+describe('multi-seed wallet accounts migration', async () => {
   const passphrase = 'my-password-manager-generated-this'
   const mnemonic = 'menu memory fury language physical wonder dog valid smart edge decrease worth'
-  const seed = mnemonicToSeed(mnemonic)
+  const seed = await mnemonicToSeed({ mnemonic })
   const seedId = fromMasterSeed(seed).identifier.toString('hex')
 
   const setup = async ({ storedWalletAccounts, compatibilityMode, fixture, extraConfig } = {}) => {
@@ -173,6 +173,8 @@ describe('multi-seed wallet accounts migration', () => {
           seedId,
         }),
       })
+
+      await exodus.application.stop()
     })
 
     test('migrates stored wallet accounts', async () => {
@@ -193,6 +195,8 @@ describe('multi-seed wallet accounts migration', () => {
           color: fixture === 'encrypted' ? '#ff3974' : undefined,
         }),
       })
+
+      await exodus.application.stop()
     })
 
     test('does not add seed id to hardware account', async () => {
@@ -213,6 +217,8 @@ describe('multi-seed wallet accounts migration', () => {
           color: fixture === 'encrypted' ? '#7b39ff' : undefined,
         }),
       })
+
+      await exodus.application.stop()
     })
 
     test('adds compatibility mode', async () => {
@@ -242,6 +248,8 @@ describe('multi-seed wallet accounts migration', () => {
       await expect(
         adapters.unsafeStorage.namespace('flags').get('compatibilityMode')
       ).resolves.toBeUndefined()
+
+      await exodus.application.stop()
     })
 
     test('adds default label for empty state', async () => {
@@ -266,6 +274,8 @@ describe('multi-seed wallet accounts migration', () => {
       await expect(
         adapters.unsafeStorage.namespace('flags').get('compatibilityMode')
       ).resolves.toBeUndefined()
+
+      await exodus.application.stop()
     })
   })
 })

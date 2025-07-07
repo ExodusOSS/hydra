@@ -1,11 +1,16 @@
-import appendPricesWithRate from './append-prices-with-rate'
-import { memoize } from 'lodash' // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
-import { prepareTime } from './date-utils'
+import { memoize } from '@exodus/basic-utils'
+import { prepareTime } from './date-utils.js'
 
 const memoizeGetAssetPrices = (historicalPrices, rate, type, currentTime) => {
-  const allPrices = appendPricesWithRate({ historicalPrices, rate, type, currentTime })
+  if (historicalPrices instanceof Error) return () => null
 
-  return memoize((time) => allPrices?.[prepareTime(time, type)] || null)
+  const preparedCurrentTime = prepareTime(new Date(currentTime), type)
+
+  return memoize((time) => {
+    const preparedTime = prepareTime(time, type)
+    if (rate && rate.price && preparedTime === preparedCurrentTime) return rate.price
+    return historicalPrices?.[preparedTime] || null
+  })
 }
 
 export default memoizeGetAssetPrices

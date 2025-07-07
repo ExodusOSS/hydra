@@ -1,6 +1,6 @@
 import { http } from 'msw'
 
-import { jsonResponse } from './utils'
+import { jsonResponse } from './utils.js'
 
 const GENESIS = {
   status: 'success',

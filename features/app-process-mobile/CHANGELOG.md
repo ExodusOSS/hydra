@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.6.3...@exodus/app-process-mobile@3.7.0) (2025-03-19)
+
+### Features
+
+- feat: include `startTime` in Safe Report (#11836)
+
+## [3.6.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.6.2...@exodus/app-process-mobile@3.6.3) (2025-03-11)
+
+**Note:** Version bump only for package @exodus/app-process-mobile
+
 ## [3.6.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.6.1...@exodus/app-process-mobile@3.6.2) (2025-02-21)
 
 ### Bug Fixes

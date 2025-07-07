@@ -1,19 +1,19 @@
 import { SafeError } from '@exodus/errors'
 
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
 
 const passphrase = 'exceptionally-complex-secret'
 
 describe('error-tracking preprocessors', () => {
-  afterEach(() => {
-    jest.restoreAllMocks()
-  })
+  let exodus
+  let time
+  let reportNode
 
-  it('error-tracking', async () => {
+  beforeEach(async () => {
     // to have predictable value for Date.now
-    const time = new Date('2024-12-10').getTime()
+    time = new Date('2024-12-10').getTime()
     jest.spyOn(Date, 'now').mockImplementation(() => time)
 
     const adapters = createAdapters()
@@ -26,7 +26,7 @@ describe('error-tracking preprocessors', () => {
         type: 'module',
         namespace: 'voldie',
         factory: ({ errorTracking }) => {
-          errorTracking.track({ error: 'error0', context: {} })
+          errorTracking.track({ error: new Error('error0'), context: {} })
           return { v: () => 'voldie' }
         },
         dependencies: ['errorTracking'],
@@ -40,20 +40,29 @@ describe('error-tracking preprocessors', () => {
         type: 'module',
         namespace: 'harry',
         factory: ({ errorTracking }) => {
-          errorTracking.track({ error: 'error1', context: {} })
+          errorTracking.track({ error: new Error('error1'), context: {} })
           return { v: () => 'harry' }
         },
         dependencies: ['errorTracking', 'voldieModule'],
         public: true,
       },
     })
-    const exodus = container.resolve()
+    exodus = container.resolve()
 
     await exodus.application.start()
     await exodus.application.load()
     await exodus.application.create({ passphrase })
     await exodus.application.unlock({ passphrase })
 
+    reportNode = container.getByType('report').errorTrackingReport
+  })
+
+  afterEach(async () => {
+    await exodus.application.stop()
+    jest.restoreAllMocks()
+  })
+
+  it('error-tracking', async () => {
     const report = await exodus.reporting.export()
 
     expect(exodus.errors.track).toBeDefined()
@@ -70,6 +79,12 @@ describe('error-tracking preprocessors', () => {
           time,
         },
       ],
+    })
+  })
+
+  test('should successfully export report', async () => {
+    await expect(exodus.reporting.export()).resolves.toMatchObject({
+      errors: await reportNode.export(),
     })
   })
 })

@@ -1,25 +1,24 @@
-/* @flow */
 import varstruct, { Buffer as Buf } from 'varstruct'
 
-export function vsf (fields: Array): Array {
-  return fields.map(fields => ({
+export function vsf(fields) {
+  return fields.map((fields) => ({
     name: fields[0],
-    type: Array.isArray(fields[1]) ? varstruct(vsf(fields[1])) : fields[1]
+    type: Array.isArray(fields[1]) ? varstruct(vsf(fields[1])) : fields[1],
   }))
 }
 
 // zero-terminated C-string (Buffer)
-export function CStr (length: number, encoding = 'utf8') {
-  let bufferCodec = Buf(length)
+export function CStr(length, encoding = 'utf8') {
+  const bufferCodec = Buf(length)
 
-  function encode (value: string, buffer: ?Buffer, offset: ?number): Buffer {
-    let buf = Buffer.alloc(length)
+  function encode(value, buffer, offset) {
+    const buf = Buffer.alloc(length)
     buf.write(value, encoding)
     return bufferCodec.encode(buf, buffer, offset)
   }
 
-  function decode (buffer: Buffer, offset, end): string {
-    let buf = bufferCodec.decode(buffer, offset, end)
+  function decode(buffer, offset, end) {
+    const buf = bufferCodec.decode(buffer, offset, end)
     let i = 0
     for (; i < buf.length; i++) if (buf[i] === 0) break
     return buf.slice(0, i).toString(encoding)

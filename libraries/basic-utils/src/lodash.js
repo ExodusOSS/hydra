@@ -6,12 +6,35 @@ const assertArray = (val) => assert(Array.isArray(val), `expected Array, got ${t
 const assertFunction = (val) =>
   assert(typeof val === 'function', `expected Function, got ${typeof val}`)
 
+// Regex explained: https://regexr.com/58j0k
+const toPathArray = (path) => (Array.isArray(path) ? path : path.match(/([^.[\]])+/gu))
+
+// @deprecated use pickByArrayPaths if it supports your use case
 export const pick = (obj, select) => {
   assertArray(select)
-  const set = new Set(select)
-  return obj == null
-    ? Object.create(null)
-    : Object.fromEntries(Object.entries(obj).filter(([key]) => set.has(key)))
+  if (obj == null) return Object.create(null)
+
+  const result = Object.create(null)
+  for (const path of select) {
+    const pathArray = toPathArray(path)
+    const value = get(obj, pathArray)
+    if (value !== undefined) set(result, pathArray, value)
+  }
+
+  return result
+}
+
+const get = (obj, path, defaultValue) => {
+  const pathArray = toPathArray(path)
+
+  let value = obj
+  for (const segment of pathArray) {
+    if (!Object.hasOwn(value, segment)) return defaultValue
+
+    value = value[segment]
+  }
+
+  return value
 }
 
 export const pickBy = (obj, fn) => {
@@ -160,9 +183,7 @@ export const partition = (arr, callback) => {
 
 // https://youmightnotneed.com/lodash
 export const set = (obj, path, value) => {
-  // Regex explained: https://regexr.com/58j0k
-  const pathArray = Array.isArray(path) ? path : path.match(/([^.[\]])+/gu)
-
+  const pathArray = toPathArray(path)
   pathArray.reduce((acc, key, i) => {
     if (key in {}) throw new Error('prototype pollution')
     if (acc[key] === undefined) acc[key] = Object.create(null)
@@ -171,4 +192,16 @@ export const set = (obj, path, value) => {
   }, obj)
 
   return obj
+}
+
+export const isEmpty = (value) => {
+  if (value == null) return true
+  if (value[Symbol.iterator] && typeof value[Symbol.iterator] === 'function') {
+    return value[Symbol.iterator]().next().done
+  }
+
+  if (typeof value === 'object') return Object.keys(value).length === 0
+
+  // match lodash for non-object values
+  return true
 }

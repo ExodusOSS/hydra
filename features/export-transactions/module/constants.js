@@ -7,6 +7,7 @@ export const TX_EXPORT_FIELDS = [
   'outCurrency',
   'feeAmount',
   'feeCurrency',
+  'fromAddress',
   'toAddress',
   'outTxId',
   'outTxUrl',

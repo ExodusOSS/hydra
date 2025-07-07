@@ -6,10 +6,14 @@ export const remoteErrorTrackingDefinition = {
   type: 'module',
   factory: ({ config, fetch }) => {
     const fetchival = createFetchival({ fetch })
-    return createSentryClient({
+    const client = createSentryClient({
       config,
       fetchival,
     })
+
+    return {
+      track: ({ error }) => client.captureError({ error }),
+    }
   },
   dependencies: ['config', 'fetch'],
 }

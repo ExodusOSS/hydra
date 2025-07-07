@@ -1,8 +1,10 @@
-const { fetch } = require('@exodus/fetch')
-const events = require('events')
+import { fetch } from '@exodus/fetch'
+import EventEmitter from 'events' // eslint-disable-line @exodus/restricted-imports/no-node-core-events
 
 jest.setTimeout(15_000)
 
-global.fetch = fetch
+globalThis.fetch = fetch
 
-events.setMaxListeners(Number.POSITIVE_INFINITY)
+EventEmitter.setMaxListeners(Number.POSITIVE_INFINITY)
+
+global.__DEV__ = true

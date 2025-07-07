@@ -1,6 +1,8 @@
-import { Link } from 'wouter'
+import lodash from 'lodash'
 
 import Text from '@/ui/components/text'
+
+const { kebabCase } = lodash
 
 interface MenuProps {
   items: string[]
@@ -16,11 +18,11 @@ function Menu({ items }: MenuProps) {
       <ul>
         {items.map((item) => (
           <li key={item} className="mb-1 ml-2">
-            <Link to={item}>
+            <a href={`#${kebabCase(item)}`}>
               <Text size={14} className=" text-slate-500">
                 {item}
               </Text>
-            </Link>
+            </a>
           </li>
         ))}
       </ul>

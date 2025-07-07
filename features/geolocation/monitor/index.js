@@ -1,4 +1,4 @@
-import createGeolocationMonitor from './geolocation'
+import createGeolocationMonitor from './geolocation.js'
 
 const geolocationMonitorDefinition = {
   id: 'geolocationMonitor',
@@ -8,6 +8,6 @@ const geolocationMonitorDefinition = {
   public: true,
 }
 
-export { MODULE_ID } from './geolocation'
+export { MODULE_ID } from './geolocation.js'
 
 export default geolocationMonitorDefinition

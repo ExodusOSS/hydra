@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('asset-rate', () => {
   it('return memoized by assetName function that return selector with asset rate', () => {

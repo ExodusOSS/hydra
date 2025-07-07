@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/storage-icons-mobile@1.2.1...@exodus/storage-icons-mobile@1.3.0) (2025-04-01)
+
+### Features
+
+- feat: implement assetsModule.getIcon method (#11905)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
+## [1.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/storage-icons-mobile@1.2.1...@exodus/storage-icons-mobile@1.2.2) (2024-11-25)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
 ## [1.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/storage-icons-mobile@1.1.1...@exodus/storage-icons-mobile@1.2.1) (2024-09-23)
 
 **Note:** Version bump only for package @exodus/storage-icons-mobile

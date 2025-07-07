@@ -4,7 +4,7 @@ const addNamespacing = require('@exodus/storage-enhancers/namespacing')
 const { getLockFile } = require('./utils')
 
 function createStorage(opts) {
-  const storage = createStorageInternal(opts)
+  const storage = createStorageInternal({ fs, ...opts })
   return addNamespacing(storage)
 }
 

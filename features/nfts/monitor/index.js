@@ -1,12 +1,13 @@
-import EventEmitter from 'events/'
+import EventEmitter from 'events/events.js'
 import { flattenToPaths } from '@exodus/basic-utils'
 import pDefer from 'p-defer'
 import makeConcurrent from 'make-concurrent'
 
-import NftsNetworkMonitor from './NftsNetworkMonitor'
+import NftsNetworkMonitor from './NftsNetworkMonitor.js'
 import assert from 'minimalistic-assert'
-import { ASSET_NAME_TO_NFTS_NETWORK } from '../constants'
-import NftsBatchMonitor from './NftsBatchMonitor'
+import { ASSET_NAME_TO_NFTS_NETWORK } from '../constants/index.js'
+import NftsBatchMonitor from './NftsBatchMonitor.js'
+import { dedupe } from '@exodus/atoms'
 
 class NftsMonitor extends EventEmitter {
   #monitors = new Map()
@@ -16,9 +17,11 @@ class NftsMonitor extends EventEmitter {
   #addressProvider
   #baseAssetNamesToMonitorAtom
   #enabledWalletAccountsAtom
+  #activeWalletAccountAtom
   #restoringAssetsAtom
   #txLogsAtom
   #nftBatchMonitorStatusAtom
+  #nftsMonitorStatusAtom
   #assetsModule
   #nftsAtom
   #nftsTxsAtom
@@ -33,6 +36,7 @@ class NftsMonitor extends EventEmitter {
     addressProvider,
     baseAssetNamesToMonitorAtom,
     enabledWalletAccountsAtom,
+    activeWalletAccountAtom,
     restoringAssetsAtom,
     txLogsAtom,
     nftsAtom,
@@ -40,6 +44,7 @@ class NftsMonitor extends EventEmitter {
     nftsProxy,
     nftsConfigAtom,
     nftBatchMonitorStatusAtom,
+    nftsMonitorStatusAtom,
     assetsModule,
     nfts,
     config,
@@ -58,12 +63,14 @@ class NftsMonitor extends EventEmitter {
     this.#config = config
     this.#baseAssetNamesToMonitorAtom = baseAssetNamesToMonitorAtom
     this.#enabledWalletAccountsAtom = enabledWalletAccountsAtom
+    this.#activeWalletAccountAtom = activeWalletAccountAtom
     this.#restoringAssetsAtom = restoringAssetsAtom
     this.#txLogsAtom = txLogsAtom
     this.#nftBatchMonitorStatusAtom = nftBatchMonitorStatusAtom
+    this.#nftsMonitorStatusAtom = dedupe(nftsMonitorStatusAtom)
     this.#logger = logger
 
-    if (config?.useBatchMonitor) {
+    if (config.useBatchMonitor) {
       this.#batchMonitor = new NftsBatchMonitor({
         addressProvider,
         assetsModule,
@@ -94,7 +101,7 @@ class NftsMonitor extends EventEmitter {
 
     if (this.#monitors.has(assetName)) return
 
-    if (this.#config?.useBatchMonitor) {
+    if (this.#config.useBatchMonitor) {
       const nftBatchMonitorStatus = await this.#nftBatchMonitorStatusAtom.get()
 
       if (nftBatchMonitorStatus?.supportedNetworks?.includes(network)) return
@@ -105,9 +112,12 @@ class NftsMonitor extends EventEmitter {
       network,
       addressProvider: this.#addressProvider,
       enabledWalletAccountsAtom: this.#enabledWalletAccountsAtom,
+      activeWalletAccountAtom: this.#activeWalletAccountAtom,
       nftsProxy: this.#nftsProxy,
       nftsModule: this.#nftsModule,
       nftsConfigAtom: this.#nftsConfigAtom,
+      nftsMonitorStatusAtom: this.#nftsMonitorStatusAtom,
+      nftsAtom: this.#nftsAtom,
       restoringAssetsAtom: this.#restoringAssetsAtom,
       txLogsAtom: this.#txLogsAtom,
       logger: this.#logger,
@@ -121,7 +131,6 @@ class NftsMonitor extends EventEmitter {
     monitor.on('nftsTxs', this.#updateNftsTxs)
 
     // We don't await on purpose, as it blocks baseAssetNamesToMonitorAtom observe chain
-    // TODO: await for first monitor tick here and then resolve
     monitor.start()
   }
 
@@ -195,10 +204,10 @@ class NftsMonitor extends EventEmitter {
 
     this.#unobserveTxLogs = this.#txLogsAtom.observe(({ changes }) => {
       this.#batchMonitor?.refresh()
-      flattenToPaths(changes).forEach(([_walletAccount, assetName]) => {
+      flattenToPaths(changes).forEach(([walletAccountName, assetName]) => {
         const monitor = this.#monitors.get(assetName)
         if (monitor) {
-          monitor.forceUpdate()
+          monitor.forceUpdate({ walletAccountName })
         }
       })
     })
@@ -241,6 +250,7 @@ const nftsMonitorDefinition = {
     'addressProvider',
     'baseAssetNamesToMonitorAtom',
     'enabledWalletAccountsAtom',
+    'activeWalletAccountAtom',
     'nftsProxy',
     'assetsModule',
     'config',
@@ -250,6 +260,7 @@ const nftsMonitorDefinition = {
     'nftsTxsAtom',
     'nftsConfigAtom',
     'nftBatchMonitorStatusAtom',
+    'nftsMonitorStatusAtom',
     'restoringAssetsAtom?',
     'txLogsAtom',
     'logger',

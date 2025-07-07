@@ -22,10 +22,8 @@ interface FormatCurrencyOptions extends Intl.NumberFormatOptions {
   minSignificant?: number
   maxSignificant?: number
 }
-
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
 const defaultOptions = {
-  nanZero: true,
   locale: 'en-US',
   localeMatcher: 'best fit',
   useGrouping: true, // grouping separator determined by locale
@@ -38,23 +36,32 @@ const defaultOptions = {
   // maximumSignificantDigits
 }
 
+const exludeOptionsForIntlConstructor = {
+  format: undefined,
+  code: undefined,
+  symbol: undefined,
+}
+
 const formatters = new Map()
 
 const formatNumber = (
   number: string | number | null | undefined,
   opts: FormatCurrencyOptions | undefined
 ): string => {
-  let options: Record<string, any> = Object.assign({}, defaultOptions, opts)
+  const options: Record<string, any> = Object.assign(
+    Object.create(null),
+    defaultOptions,
+    opts,
+    exludeOptionsForIntlConstructor
+  )
   number = parseNum(number)
   if (isNaN(number)) {
-    if (options.nanZero === false) return 'NaN' // default is true, so we can do this without expanding the options
+    if (opts?.nanZero === false) return 'NaN' // default is true, so we can do this without expanding the options
     number = 0
   }
 
   const key = JSON.stringify(options)
   if (!formatters.has(key)) {
-    options = Object.assign(Object.create(null), defaultOptions, opts)
-
     // expand 'min' to 'minimum', 'max' to 'maximum'
     Object.keys(options).forEach(function (key) {
       if (!key.includes('minimum') && key.startsWith('min')) {

@@ -2,11 +2,13 @@ import { assetsListToObject, connectAssets } from '@exodus/assets'
 import _assets from '@exodus/assets-base'
 import { createInMemoryAtom } from '@exodus/atoms'
 import _combinedAssets from '@exodus/combined-assets-meta'
-import EventEmitter from 'events/'
-import { cloneDeep } from 'lodash'
+import EventEmitter from 'events/events.js'
+import lodash from 'lodash'
 import process from 'process'
 
-import txLogMonitorDefinition from '../module'
+import txLogMonitorDefinition from '../module/index.js'
+
+const { cloneDeep } = lodash
 
 const globalAssetRegistry = connectAssets({ ..._assets, ...assetsListToObject(_combinedAssets) })
 const createMonitors = (args) =>

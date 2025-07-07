@@ -1,14 +1,11 @@
-import ExodusModule from '@exodus/module'
-import { cleanup } from '@exodus/svg-safe'
 import { isNull, isUndefined } from 'lodash'
-
+import { validate } from '@exodus/svg-safe'
 import { unzipIcon } from './utils'
 
-class IconsStorage extends ExodusModule {
+class IconsStorage {
   #iconsStorage
 
   constructor({ storage }) {
-    super({ name: 'IconsStorage' })
     this.#iconsStorage = storage
   }
 
@@ -31,19 +28,23 @@ class IconsStorage extends ExodusModule {
   }
 
   getIcon = async (assetName) => {
-    return this.#iconsStorage.get(assetName)
+    const icon = await this.#iconsStorage.get(assetName)
+    if (icon) validate(icon)
+    return icon
   }
 
   #storeIcon = async (token) => {
     const assetName = token.name || token.assetName
     const svg = await unzipIcon(token.icon)
-    await this.#iconsStorage.set(assetName, cleanup(svg))
+    await this.#iconsStorage.set(assetName, svg)
   }
 
   #deleteIcon = async (token) => {
     const assetName = token.name || token.assetName
     await this.#iconsStorage.delete(assetName)
   }
+
+  unzipIcon = unzipIcon
 }
 
 const createIconsStorageModule = (args) => new IconsStorage({ ...args })

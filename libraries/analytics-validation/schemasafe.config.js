@@ -8,12 +8,14 @@ const getSchemas = ({ schemaDir, schemaNames }) => {
     if (schemaName === 'main.schemasafe.json') continue
     const schemaPath = path.join(schemaDir, schemaName)
 
-    if (fs.statSync(schemaPath).isDirectory()) {
+    if (fs.lstatSync(schemaPath).isDirectory()) {
       if (schemaName === '__tests__') continue
       getSchemas({ schemaDir: schemaPath, schemaNames: fs.readdirSync(schemaPath) })
     } else if (schemaName.endsWith('.json')) {
       // primitive-type.schemafe.json -> primitive-type
       const name = schemaName.slice(0, schemaName.indexOf('.'))
+      if (name in Object.prototype) continue
+
       const schemaString = fs.readFileSync(schemaPath, 'utf8')
       schemas[name] = JSON.parse(schemaString)
     }
@@ -21,7 +23,7 @@ const getSchemas = ({ schemaDir, schemaNames }) => {
 }
 
 const schemaDir = path.join(__dirname, './src')
-const schemaNames = fs.readdirSync(schemaDir)
+const schemaNames = fs.readdirSync(path.join(__dirname, './src')) // might be bundleable later, do not refactor this line
 
 getSchemas({ schemaDir, schemaNames })
 

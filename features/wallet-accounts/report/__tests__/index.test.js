@@ -43,13 +43,25 @@ describe('walletAccountsReport', () => {
     expect(report.namespace).toEqual('walletAccounts')
   })
 
+  it('should gracefully handle when a wallet does not exist or locked', async () => {
+    const report = walletAccountsReportDefinition.factory({
+      walletAccountsAtom,
+      activeWalletAccountAtom,
+      multipleWalletAccountsEnabledAtom,
+    })
+    expect(report.getSchema().parse(await report.export({ walletExists: false }))).toEqual(null)
+    expect(
+      report.getSchema().parse(await report.export({ walletExists: true, isLocked: true }))
+    ).toEqual(null)
+  })
+
   it('should report wallet accounts', async () => {
     const report = walletAccountsReportDefinition.factory({
       walletAccountsAtom,
       activeWalletAccountAtom,
       multipleWalletAccountsEnabledAtom,
     })
-    const result = await report.export({ walletExists: true })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
     expect(result).toMatchSnapshot()
   })
 })

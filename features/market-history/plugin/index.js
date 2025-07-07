@@ -5,18 +5,20 @@ const createMarketHistoryLifecyclePlugin = ({
   marketHistoryAtom,
   appProcessAtom,
   port,
+  errorTracking,
 }) => {
   let unobserve
 
   const observer = createAtomObserver({ port, atom: marketHistoryAtom, event: 'marketHistory' })
 
-  const onStart = () => {
+  const subscribeToAppProcessChanges = () => {
     if (!appProcessAtom) return
 
     let previousMode
 
     unobserve = appProcessAtom.observe(({ mode }) => {
-      const isBackFromBackground = previousMode === 'background' && mode === 'active'
+      const previousModeIsBackground = previousMode !== undefined && previousMode !== 'active'
+      const isBackFromBackground = previousModeIsBackground && mode === 'active'
       const isGoingToBackground = previousMode !== 'background' && mode === 'background'
 
       if (isBackFromBackground) {
@@ -36,22 +38,39 @@ const createMarketHistoryLifecyclePlugin = ({
   }
 
   const onUnlock = () => {
-    marketHistoryMonitor.start()
+    const nonBlockingStart = async () => {
+      try {
+        await marketHistoryMonitor.start()
+        subscribeToAppProcessChanges()
+      } catch (e) {
+        errorTracking.track({ error: e, namespace: 'marketHistory', context: 'unlock' })
+        throw e
+      }
+    }
+
+    nonBlockingStart()
   }
 
   const onStop = () => {
     observer.unregister()
     unobserve?.()
+    marketHistoryMonitor.stop()
   }
 
-  return { onStart, onUnlock, onLoad, onStop }
+  return { onUnlock, onLoad, onStop }
 }
 
 const marketHistoryLifecyclePluginDefinition = {
   id: 'marketHistoryLifecyclePlugin',
   type: 'plugin',
   factory: createMarketHistoryLifecyclePlugin,
-  dependencies: ['marketHistoryMonitor', 'marketHistoryAtom', 'appProcessAtom?', 'port'],
+  dependencies: [
+    'marketHistoryMonitor',
+    'marketHistoryAtom',
+    'appProcessAtom?',
+    'port',
+    'errorTracking',
+  ],
   public: true,
 }
 

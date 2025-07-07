@@ -56,6 +56,7 @@ const createSyncEarliestTxDatePlugin = ({ logger, earliestTxDateAtom, txLogsAtom
     onAssetsSynced,
     onStop: () => {
       if (unsubscribe) unsubscribe()
+      setEarliestTxDate.cancel()
     },
   }
 }

@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('txsData', () => {
   it('should return default txs data', () => {

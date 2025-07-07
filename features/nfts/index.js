@@ -6,16 +6,19 @@ import {
   nftsTxsAtomDefinition,
   hasNftsAtomDefinition,
   nftBatchMonitorStatusAtomDefinition,
-} from './atoms'
-import nftsModuleDefinition from './module'
-import nftsMonitorDefinition from './monitor'
-import nftsApiDefinition from './api'
-import nftsProxyDefinition from './client'
-import { nftsLifecyclePluginDefinition, nftsAnalyticsPluginDefinition } from './plugin'
-import nftCollectionStatsMonitorDefinition from './monitor/NftsCollectionStatsMonitor'
-import { DEFAULT_CONFIGS } from './constants'
+  nftsMonitorStatusAtomDefinition,
+} from './atoms/index.js'
+import nftsModuleDefinition from './module/index.js'
+import nftsMonitorDefinition from './monitor/index.js'
+import nftsApiDefinition from './api/index.js'
+import nftsProxyDefinition from './client/index.js'
+import { nftsLifecyclePluginDefinition, nftsAnalyticsPluginDefinition } from './plugin/index.js'
+import nftCollectionStatsMonitorDefinition from './monitor/NftsCollectionStatsMonitor.js'
+import { DEFAULT_CONFIGS } from './constants/index.js'
 
-const nfts = ({ fetchCollectionStats, sandbox, ...configOverrides } = Object.create(null)) => {
+const nfts = (
+  { fetchCollectionStats, sandbox, useBatchMonitor, ...configOverrides } = Object.create(null)
+) => {
   const baseConfig = sandbox ? DEFAULT_CONFIGS.sandbox : DEFAULT_CONFIGS.production
   const { baseUrl } = { ...baseConfig, ...configOverrides }
 
@@ -45,7 +48,11 @@ const nfts = ({ fetchCollectionStats, sandbox, ...configOverrides } = Object.cre
         definition: nftBatchMonitorStatusAtomDefinition,
         storage: { namespace: 'nfts' },
       },
-      { definition: nftsMonitorDefinition },
+      {
+        definition: nftsMonitorStatusAtomDefinition,
+        storage: { namespace: 'nfts' },
+      },
+      { definition: nftsMonitorDefinition, config: { useBatchMonitor } },
       {
         if: fetchCollectionStats,
         definition: nftCollectionStatsMonitorDefinition,

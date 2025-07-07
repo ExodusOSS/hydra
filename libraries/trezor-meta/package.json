@@ -1,6 +1,6 @@
 {
   "name": "@exodus/trezor-meta",
-  "version": "3.5.0",
+  "version": "3.6.1",
   "description": "trezor constants, firmware, and utils",
   "main": "src/index.js",
   "author": "Exodus Movement, Inc.",

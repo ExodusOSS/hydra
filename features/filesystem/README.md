@@ -10,11 +10,11 @@ yarn add @exodus/filesystem
 
 ## Usage
 
-This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md).
+This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/development/using-the-sdk.md).
 
 ### UI Side
 
-See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md#events) for more details on basic UI-side setup.
+See [using the sdk](../../docs/development/using-the-sdk.md#events) for more details on basic UI-side setup.
 
 ```jsx
 import { selectors } from '~/ui/flux'

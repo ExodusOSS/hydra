@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-utils@3.7.1...@exodus/key-utils@3.7.2) (2025-03-10)
+
+### Bug Fixes
+
+- fix: don't import bip32 for hardened offset (#11707)
+
+## [3.7.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-utils@3.7.0...@exodus/key-utils@3.7.1) (2025-03-05)
+
+### Bug Fixes
+
+- fix: bump bip32 (#11415)
+
 ## 3.7.0 (2024-10-03)
 
 ### Features

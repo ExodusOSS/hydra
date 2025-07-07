@@ -1,5 +1,5 @@
-import { setup } from './utils.js'
 import createReduxModuleHelper from '../src/create-definitions.js'
+import { setup } from './utils.js'
 
 describe('multi-account helper', () => {
   const createInitialPerAssetData = ({ asset }) => {

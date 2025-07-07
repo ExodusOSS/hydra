@@ -1,8 +1,9 @@
-import ExodusModule from '@exodus/module' // eslint-disable-line import/no-deprecated
 import makeConcurrent from 'make-concurrent'
-import { merge, identity } from 'lodash'
+import lodash from 'lodash'
 import { pickBy } from '@exodus/basic-utils'
 import { PersonalNote } from '@exodus/models'
+
+const { merge, identity } = lodash
 
 const personalNotesChannel = {
   type: 'personalNote',
@@ -11,15 +12,14 @@ const personalNotesChannel = {
   batchSize: 100,
 }
 
-export const MODULE_ID = 'personalNotes'
-
-class PersonalNotes extends ExodusModule {
+class PersonalNotes {
   #channel = null
   #personalNotesAtom = null
+  #logger
 
   constructor({ fusion, personalNotesAtom, logger }) {
-    super({ name: MODULE_ID, logger })
     this.#personalNotesAtom = personalNotesAtom
+    this.#logger = logger
 
     this.#channel = fusion.channel({
       ...personalNotesChannel,
@@ -39,14 +39,13 @@ class PersonalNotes extends ExodusModule {
     const personalNotesPre = await this.#personalNotesAtom.get()
     const personalNotesPost = personalNotesPre.update(personalNotesArray)
     if (personalNotesPre.equals(personalNotesPost)) {
-      this._logger.debug('skip personal notes update, they are the same as stored')
+      this.#logger.debug('skip personal notes update, they are the same as stored')
       return
     }
 
     await this.#personalNotesAtom.set(personalNotesPost)
 
     if (!fromSync) {
-      const channel = await this.#getChannel()
       for (const note of personalNotesArray) {
         const notePre = personalNotesPre.get(note.txId)
         const notePost = personalNotesPost.get(note.txId)
@@ -56,18 +55,12 @@ class PersonalNotes extends ExodusModule {
             data: notePost.toJSON(),
           }
 
-          await channel.push(item)
-          this._logger.debug('pushed personal notes to fusion', notePost.toJSON())
+          await this.#channel.push(item)
+          this.#logger.debug('pushed personal notes to fusion', notePost.toJSON())
         }
       }
     }
   })
-
-  #getChannel = async () => {
-    await this.#channel.awaitProcessed()
-
-    return this.#channel
-  }
 
   upsert = async ({
     txId,
@@ -132,11 +125,12 @@ class PersonalNotes extends ExodusModule {
 
 const createPersonalNotes = (args) => new PersonalNotes({ ...args })
 
-// eslint-disable-next-line @exodus/export-default/named
-export default {
-  id: MODULE_ID,
+const personalNotesDefinition = {
+  id: 'personalNotes',
   type: 'module',
   factory: createPersonalNotes,
   dependencies: ['fusion', 'personalNotesAtom', 'logger'],
   public: true,
 }
+
+export default personalNotesDefinition

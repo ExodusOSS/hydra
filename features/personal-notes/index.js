@@ -1,7 +1,7 @@
-import personalNotesApiDefinition from './api'
-import { personalNotesAtomDefinition } from './atoms'
-import { personalNotesPluginDefinition } from './plugins'
-import personalNotesDefinition from './module'
+import personalNotesApiDefinition from './api/index.js'
+import { personalNotesAtomDefinition } from './atoms/index.js'
+import { personalNotesPluginDefinition } from './plugins/index.js'
+import personalNotesDefinition from './module/index.js'
 
 const personalNotes = () => {
   return {

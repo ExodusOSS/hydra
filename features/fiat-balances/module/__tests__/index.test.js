@@ -1,21 +1,21 @@
 import { connectAssetsList } from '@exodus/assets'
 import { createInMemoryAtom, waitUntil } from '@exodus/atoms'
-import createBalancesAtom from '@exodus/balances/atoms/balances'
-import balancesDefinition from '@exodus/balances/module'
+import createBalancesAtom from '@exodus/balances/atoms/balances.js'
+import balancesDefinition from '@exodus/balances/module/index.js'
 import { keyBy, omit, pick } from '@exodus/basic-utils'
 import {
   accountStatesAtomDefinition,
   txLogsAtomDefinition,
-} from '@exodus/blockchain-metadata/atoms'
-import blockchainMetadataDefinition from '@exodus/blockchain-metadata/module'
+} from '@exodus/blockchain-metadata/atoms/index.js'
+import blockchainMetadataDefinition from '@exodus/blockchain-metadata/module/index.js'
 import { AccountState, WalletAccount } from '@exodus/models'
 import assetsList from '@exodus/solana-meta'
 import createStorage from '@exodus/storage-memory'
-import { enabledWalletAccountsAtomDefinition } from '@exodus/wallet-accounts/atoms'
-import EventEmitter from 'events/'
+import { enabledWalletAccountsAtomDefinition } from '@exodus/wallet-accounts/atoms/index.js'
+import EventEmitter from 'events/events.js'
 
-import createFiatBalancesAtom from '../../atoms/fiat-balances'
-import fiatBalancesDefinition from '../'
+import createFiatBalancesAtom from '../../atoms/fiat-balances.js'
+import fiatBalancesDefinition from '../index.js'
 
 const _assets = connectAssetsList(assetsList)
 
@@ -171,7 +171,7 @@ const init = async ({ balanceFields, fiatBalanceFields }) => {
 }
 
 const checkSnapshot = async () => {
-  await new Promise(setImmediate)
+  await new Promise((resolve) => setTimeout(resolve, 0))
   const result = await fiatBalancesAtom.get()
   expect(result.balances).toMatchSnapshot()
 }

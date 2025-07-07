@@ -1,6 +1,6 @@
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
 
 describe('performanceMonitor', () => {
   let adapters
@@ -42,6 +42,8 @@ describe('performanceMonitor', () => {
 
     await exodus.application.start()
     expect(onAboveThreshold.mock.calls.length).toBeGreaterThan(0)
+
+    await exodus.application.stop()
   })
 
   it('should not call onAboveThreshold if disabled', async () => {
@@ -49,5 +51,7 @@ describe('performanceMonitor', () => {
 
     await exodus.application.start()
     expect(onAboveThreshold).not.toHaveBeenCalled()
+
+    await exodus.application.stop()
   })
 })

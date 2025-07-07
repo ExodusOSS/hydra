@@ -1,5 +1,5 @@
-import { OPTIMISTIC_FIAT_BALANCES_PAYLOAD } from '../../constants'
-import { createFiatNumberUnit, setup } from '../../utils'
+import { OPTIMISTIC_FIAT_BALANCES_PAYLOAD } from '../../constants.js'
+import { createFiatNumberUnit, setup } from '../../utils.js'
 
 describe('optimisticByBaseAssetSource', () => {
   it('should return optimistic fiat balances by base asset source', () => {

@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/ExodusMovement/hydra/compare/@exodus/storage-enhancers@1.1.0...@exodus/storage-enhancers@1.1.1) (2024-11-01)
+
+Re-licensed under MIT license.
+
 ## 1.1.0 (2023-11-10)
 
 ### Features

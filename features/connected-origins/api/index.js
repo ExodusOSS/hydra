@@ -1,6 +1,11 @@
-const connectedOriginsApi = ({ connectedOrigins, connectedOriginsAtom }) => ({
+const connectedOriginsApi = ({
+  connectedOrigins,
+  connectedOriginsAtom,
+  connectedAccountsAtom,
+}) => ({
   connectedOrigins: {
     get: connectedOriginsAtom.get,
+    getAccounts: connectedAccountsAtom.get,
     add: connectedOrigins.add,
     clear: connectedOrigins.clear,
     untrust: connectedOrigins.untrust,
@@ -12,13 +17,15 @@ const connectedOriginsApi = ({ connectedOrigins, connectedOriginsAtom }) => ({
     disconnect: connectedOrigins.disconnect,
     updateConnection: connectedOrigins.updateConnection,
     clearConnections: connectedOrigins.clearConnections,
+    getConnectedAccounts: connectedOrigins.getConnectedAccounts,
   },
 })
 
-// eslint-disable-next-line @exodus/export-default/named
-export default {
+const connectedOriginsApiDefinition = {
   id: 'connectedOriginsApi',
   type: 'api',
   factory: connectedOriginsApi,
-  dependencies: ['connectedOrigins', 'connectedOriginsAtom'],
+  dependencies: ['connectedOrigins', 'connectedOriginsAtom', 'connectedAccountsAtom'],
 }
+
+export default connectedOriginsApiDefinition

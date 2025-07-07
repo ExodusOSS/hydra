@@ -2,12 +2,12 @@ import kyc from '@exodus/kyc'
 import referrals from '@exodus/referrals'
 import { http, HttpResponse } from 'msw'
 
-import createAdapters from './adapters'
-import _config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
-import { jsonResponse } from './setup/handlers/utils'
-import mswServer from './setup/http'
+import createAdapters from './adapters/index.js'
+import _config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
+import { jsonResponse } from './setup/handlers/utils.js'
+import mswServer from './setup/http.js'
 
 const featureFlagsConfig = {
   referrals: {

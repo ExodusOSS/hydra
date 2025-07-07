@@ -26,6 +26,8 @@ declare const assetsApiDefinition: {
         lifecycleStatus?: TokenStatus[]
         query?: string
         excludeTags?: string[]
+        pageNumber?: number
+        pageSize?: number
       })
       updateTokens(): Promise<void>
       addTokens(params: {

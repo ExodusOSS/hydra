@@ -1,6 +1,6 @@
 {
   "name": "@exodus/locale",
-  "version": "2.3.0",
+  "version": "2.5.0",
   "description": "Module for tracking users locale data such as language and currency",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -19,6 +19,7 @@
     "atoms",
     "plugin",
     "redux",
+    "migrations",
     "index.d.ts",
     "CHANGELOG.md",
     "README.md",

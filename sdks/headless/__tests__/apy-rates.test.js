@@ -1,9 +1,9 @@
 import apyRates from '@exodus/apy-rates'
 
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
 describe('apy-rates', () => {
   let exodus
@@ -29,6 +29,8 @@ describe('apy-rates', () => {
     await exodus.application.load()
     await exodus.application.create({ passphrase })
   })
+
+  afterEach(() => exodus.application.stop())
 
   test('should load apy rates data when enabled', async () => {
     const expectApyRates = expectEvent({ port, event: 'apyRates' })

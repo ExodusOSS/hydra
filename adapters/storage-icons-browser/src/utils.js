@@ -1,4 +1,5 @@
 import { gunzip } from 'zlib'
+import { cleanup } from '@exodus/svg-safe'
 
 export const unzipIcon = async (base64) => {
   const buff = Buffer.from(base64, 'base64')
@@ -12,5 +13,5 @@ export const unzipIcon = async (base64) => {
       resolve(res)
     })
   })
-  return unzip.toString('utf8')
+  return cleanup(unzip.toString('utf8'))
 }

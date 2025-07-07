@@ -7,7 +7,14 @@ import markdownParser from '@exodus/eslint-parser-markdown'
 import docsPlugin from '@exodus/eslint-plugin-docs'
 
 const ignore = {
-  ignores: ['**/lib', '**/dist', '**/tmp', '**/node_modules', 'tools/generators/**/files'],
+  ignores: [
+    '**/lib',
+    '**/dist',
+    '**/tmp',
+    '**/node_modules',
+    'tools/generators/**/files',
+    'libraries/analytics-validation/src/__tests__/package.json',
+  ],
 }
 
 const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'))

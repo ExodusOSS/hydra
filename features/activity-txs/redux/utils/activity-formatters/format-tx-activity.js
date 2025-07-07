@@ -1,5 +1,5 @@
-import { TX_TYPES } from '../../constants/tx-types'
-import { getSharedProps } from './get-shared-props'
+import { TX_TYPES } from '../../constants/tx-types.js'
+import { getSharedProps } from './get-shared-props.js'
 
 function getTxType({ tx }) {
   return tx.sent ? TX_TYPES.SENT : TX_TYPES.RECEIVED

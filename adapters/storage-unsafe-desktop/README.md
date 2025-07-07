@@ -1,6 +1,6 @@
 # `@exodus/storage-unsafe-desktop`
 
-An unsafe implementation of the [storage spec](https://github.com/ExodusMovement/exodus-hydra/blob/master/modules/storage-spec/spec.md).
+An implementation [unified storage spec](https://github.com/ExodusMovement/exodus-hydra/blob/master/modules/storage-spec/spec.md) on top of Node.js's `fs` module. "Unsafe" = no encryption out of the box.
 
 ## Usage
 
@@ -12,6 +12,7 @@ const storage = createStorage({
 })
 
 await storage.set('foo', 'bar') // etc.
+// use as any other `@exodus/storage-spec` compliant interface
 ```
 
 ### `isStorageWriting()`

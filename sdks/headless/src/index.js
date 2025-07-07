@@ -36,7 +36,7 @@ import walletRpc from './features/wallet-rpc/index.js'
 import attachMigrations from './migrations/attach.js'
 import attachPlugins from './plugins/attach.js'
 import { makeChainable } from './utils/ioc.js'
-import cachedSodiumEncryptorRpc from './features/cached-sodium-encryptor-rpc'
+import cachedSodiumEncryptorRpc from './features/cached-sodium-encryptor-rpc/index.js'
 import cachedSodiumEncryptor from '@exodus/cached-sodium-encryptor'
 
 const withOverrides = ({ config, debug }) => {

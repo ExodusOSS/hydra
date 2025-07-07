@@ -78,7 +78,7 @@ Some hooks receive parameters, if so, they are documented below.
 - `onLock`: Triggered when the application is locked.
 - `onUnlock`: Triggered when the application is unlocked.
 - `onClear`: Triggered when the application is cleared, i.e.,
-  after the current wallet is deleted.
+  after the current wallet is deleted. Hook functions are executed concurrently.
 
 ### Visual representation
 

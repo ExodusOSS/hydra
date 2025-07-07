@@ -1,5 +1,7 @@
 import assert from 'minimalistic-assert'
-import { merge } from 'lodash'
+import lodash from 'lodash'
+
+const { merge } = lodash
 
 const createRatesDebug = ({ ratesAtom }) => ({
   rates: {

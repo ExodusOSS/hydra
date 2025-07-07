@@ -1,3 +1,4 @@
+import { memoize } from '@exodus/basic-utils'
 import { MY_STATE } from '@exodus/redux-dependency-injection'
 import { createSelector } from 'reselect'
 
@@ -7,14 +8,17 @@ type isAssetNameConnectedForWalletAccountParams = {
   walletAccountName: string
   assetName: string
 }
-const selectorFactory =
-  (selfSelector: any) =>
-  ({ walletAccountName, assetName }: isAssetNameConnectedForWalletAccountParams) =>
-    createSelector(
-      selfSelector,
-      ({ walletAccountNameToConnectedAssetNamesMap }: HardwareWalletsState) =>
-        walletAccountNameToConnectedAssetNamesMap[walletAccountName]?.includes(assetName) ?? false
-    )
+const selectorFactory = (selfSelector: any) =>
+  memoize(
+    ({ walletAccountName, assetName }: isAssetNameConnectedForWalletAccountParams) =>
+      createSelector(
+        selfSelector,
+        ({ walletAccountNameToConnectedAssetNamesMap }: HardwareWalletsState) =>
+          walletAccountNameToConnectedAssetNamesMap[walletAccountName]?.includes(assetName) ?? false
+      ),
+    ({ walletAccountName, assetName }: isAssetNameConnectedForWalletAccountParams) =>
+      `${walletAccountName}:${assetName}`
+  )
 
 const isAssetNameConnectedForWalletAccountSelectorDefinition = {
   id: 'isAssetNameConnectedForWalletAccount',

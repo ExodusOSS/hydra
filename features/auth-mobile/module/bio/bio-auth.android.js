@@ -1,17 +1,7 @@
-import RNTouchId from '@exodus/react-native-touch-id'
-import { pick } from '@exodus/basic-utils/src/lodash.js'
+import RNBiometrics from '@exodus/react-native-biometrics'
+import { pick } from '@exodus/basic-utils'
 
 const getErrorProps = (err) => pick(err, ['name', 'code', 'message', 'stack'])
-
-const promptConfig = {
-  title: 'Fingerprint Scanner',
-  imageColor: '#000000',
-  imageErrorColor: '#000000',
-  sensorDescription: 'Touch Sensor',
-  sensorErrorDescription: 'Invalid',
-  cancelText: 'Cancel',
-  unifiedErrors: true,
-}
 
 class BioAuth {
   #logger
@@ -20,9 +10,9 @@ class BioAuth {
     this.#logger = logger
   }
 
-  authenticate = async ({ prompt }) => {
+  authenticate = async ({ title, subtitle, cancelButtonText }) => {
     try {
-      await RNTouchId.authenticate(prompt, promptConfig)
+      await RNBiometrics.authenticate({ title, subtitle, cancelButtonText })
       return true
     } catch (err) {
       this.#logger.warn('bioauth failed', getErrorProps(err))
@@ -30,9 +20,7 @@ class BioAuth {
     }
   }
 
-  stop = async () => {
-    RNTouchId.stop()
-  }
+  stop = () => {}
 }
 
 const createBioAuth = (deps) => new BioAuth(deps)

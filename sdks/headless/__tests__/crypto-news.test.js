@@ -1,9 +1,9 @@
 import cryptoNews from '@exodus/crypto-news-monitor'
 
-import createAdapters from './adapters'
-import _config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import _config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
 const featureFlagsConfig = {
   cryptoNews: {
@@ -52,6 +52,8 @@ describe('crypto-news', () => {
     await exodus.application.create({ passphrase })
     await exodus.application.unlock({ passphrase })
   })
+
+  afterEach(() => exodus.application.stop())
 
   test('should load news data when enabled', async () => {
     await expectEvent({ port, event: 'cryptoNews' })

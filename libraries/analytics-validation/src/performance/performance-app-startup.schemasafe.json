@@ -25,6 +25,9 @@
         "stage": {
           "type": "string",
           "format": "any-string"
+        },
+        "is_instant_startup": {
+          "type": "boolean"
         }
       },
       "unevaluatedProperties": false

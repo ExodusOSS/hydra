@@ -1,4 +1,5 @@
 import { mnemonicToSeedSync } from 'bip39'
+
 import { getSeedId } from '../src/index.js'
 
 describe('getSeedId', () => {

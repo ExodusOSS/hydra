@@ -18,6 +18,7 @@ const createGeolocationLifecyclePlugin = ({ geolocationMonitor, port, geolocatio
 
   const onStop = () => {
     geolocationAtomObserver.unregister()
+    geolocationMonitor.stop()
   }
 
   return { onStart, onLoad, onStop }

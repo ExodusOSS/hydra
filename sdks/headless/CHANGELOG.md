@@ -3,6 +3,132 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0-rc.71](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.70...@exodus/headless@5.0.0-rc.71) (2025-07-01)
+
+### Features
+
+- feat: bump error-tracking in headless (#13073)
+
+## [5.0.0-rc.70](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.69...@exodus/headless@5.0.0-rc.70) (2025-06-30)
+
+### Bug Fixes
+
+- fix: prevent cumulative amount notifications after wallet restore (#12843)
+
+## [5.0.0-rc.69](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.68...@exodus/headless@5.0.0-rc.69) (2025-06-16)
+
+### Features
+
+- feat: bump `@exodus/cached-sodium-encryptor` (#12373)
+
+## [5.0.0-rc.68](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.67...@exodus/headless@5.0.0-rc.68) (2025-06-09)
+
+### Bug Fixes
+
+- fix: don't use npm: aliases for lodash (#12861)
+
+## [5.0.0-rc.67](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.65...@exodus/headless@5.0.0-rc.67) (2025-06-03)
+
+### Features
+
+- feat: export Safe Reports when locked (#12670)
+
+- feat: support Zod Nullable safe parsing (#12280)
+
+- feat: switch headless to ESM (#12553)
+
+### Bug Fixes
+
+- fix: clear reporting race timeout on finish in headless (#12480)
+
+- fix: update @exodus/errors (#12627)
+
+## [5.0.0-rc.66](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.65...@exodus/headless@5.0.0-rc.66) (2025-05-09)
+
+### Features
+
+- feat: support Zod Nullable safe parsing (#12280)
+
+## [5.0.0-rc.65](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.64...@exodus/headless@5.0.0-rc.65) (2025-05-07)
+
+### Features
+
+- feat: support Zod Records safe parsing (#12208)
+
+## [5.0.0-rc.64](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.63...@exodus/headless@5.0.0-rc.64) (2025-04-14)
+
+### Features
+
+- feat: add minute granularity support for market history charts (#11984)
+
+## [5.0.0-rc.63](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.62...@exodus/headless@5.0.0-rc.63) (2025-04-10)
+
+### Bug Fixes
+
+- fix: prevent losing private class fields in reporting API (#11987)
+
+## [5.0.0-rc.62](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.61...@exodus/headless@5.0.0-rc.62) (2025-04-09)
+
+### Features
+
+- feat: bump `@exodus/remote-config` (#11981)
+
+## [5.0.0-rc.61](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.60...@exodus/headless@5.0.0-rc.61) (2025-04-04)
+
+### Bug Fixes
+
+- fix: lodash and events imports (#11954)
+
+## [5.0.0-rc.60](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.59...@exodus/headless@5.0.0-rc.60) (2025-04-02)
+
+### Features
+
+- feat: ensure Safe Errors in reporting API (#11944)
+
+## [5.0.0-rc.59](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.58...@exodus/headless@5.0.0-rc.59) (2025-03-21)
+
+### Features
+
+- feat: accept `config.reporting` namespace (#11847)
+
+## [5.0.0-rc.58](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.57...@exodus/headless@5.0.0-rc.58) (2025-03-19)
+
+### Features
+
+- feat: omit unvalidated properties in reporting (#11832)
+
+### Bug Fixes
+
+- fix: report schema (#11811)
+
+- fix: report schema (#11820)
+
+## [5.0.0-rc.57](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.56...@exodus/headless@5.0.0-rc.57) (2025-03-17)
+
+### Features
+
+- feat: store addresses for connected assets by account (#11780)
+
+## [5.0.0-rc.56](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.55...@exodus/headless@5.0.0-rc.56) (2025-03-14)
+
+### ⚠ BREAKING CHANGES
+
+- always return promises from api methods (#11686)
+
+### Features
+
+- feat: deep alphabetize report (#11646)
+
+### Bug Fixes
+
+- fix!: always return promises from api methods (#11686)
+
+## [5.0.0-rc.55](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.54...@exodus/headless@5.0.0-rc.55) (2025-03-05)
+
+### Bug Fixes
+
+- fix: bump bip32 (#11415)
+
 ## [5.0.0-rc.54](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.53...@exodus/headless@5.0.0-rc.54) (2025-02-27)
 
 ### Features

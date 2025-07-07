@@ -1,5 +1,5 @@
-import { NFTS_NETWORK_TO_ASSET_NAME } from '../../constants'
-import { isSentTx } from './utils'
+import { NFTS_NETWORK_TO_ASSET_NAME } from '../../constants/index.js'
+import { isSentTx } from './utils.js'
 
 const resultFunction = (txsByWalletAccount) => {
   const allTxs = Object.entries(txsByWalletAccount).flatMap(([_, txsByNetwork]) =>

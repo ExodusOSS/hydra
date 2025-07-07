@@ -1,4 +1,4 @@
-import { TELEMETRY_OPT_OUT_COUNTRIES } from '../constants'
+import { TELEMETRY_OPT_OUT_COUNTRIES } from '../constants.js'
 
 const createOptInAnalyticsMigration = async ({ atoms }) => {
   const { geolocationAtom, shareActivityAtom } = atoms

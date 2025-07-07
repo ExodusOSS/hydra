@@ -1,11 +1,13 @@
 import nfts from '@exodus/nfts'
-import { isEmpty } from 'lodash'
+import lodash from 'lodash'
 
-import createAdapters from './adapters'
-import _config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
-import { BASE_URL, TEST_NFTS, TEST_TXS } from './fixtures/nfts'
+import createAdapters from './adapters/index.js'
+import _config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
+import { BASE_URL, TEST_NFTS, TEST_TXS } from './fixtures/nfts.js'
+
+const { isEmpty } = lodash
 
 const config = { ..._config, nftsProxy: { baseUrl: BASE_URL }, nftsMonitor: {} }
 
@@ -33,6 +35,8 @@ describe('nfts', () => {
     await exodus.application.start()
     await exodus.application.create({ mnemonic, passphrase })
   })
+
+  afterEach(() => exodus.application.stop())
 
   test('should emit nfts after unlock', async () => {
     const txsEvent = expectEvent({ port, event: 'nftsTxs', predicate: (v) => !isEmpty(v) })

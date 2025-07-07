@@ -1,31 +1,30 @@
-import { isEqual } from 'lodash'
-import { ACCESS_CONTROL, ACCESSIBLE } from '@exodus/react-native-keychain'
+import lodash from 'lodash'
 import {
   AUTH_KEYSTORE_BIO_AUTH_KEY,
   AUTH_KEYSTORE_BIO_AUTH_TRIGGER_KEY,
   AUTH_KEYSTORE_PIN_KEY,
-} from '../constants'
-import { InvalidPasscodeLengthError } from './utils/errors'
+  ACCESS_CONTROL_BIOMETRY_CURRENT_SET,
+  ACCESSIBLE_WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+  defaultConfig,
+} from '../constants.js'
+import { InvalidPasscodeLengthError } from './utils/errors.js'
 
-export const MODULE_ID = 'auth'
+const { isEqual } = lodash
 
 class Auth {
   #keystore
   #authAtom
   #logger
+  #eventLog
   #keyPrefix
   #biometry
 
-  constructor({
-    keystore,
-    authAtom,
-    logger,
-    biometry,
-    config: { keyPrefix = `${MODULE_ID}:` } = {},
-  }) {
+  constructor({ keystore, authAtom, logger, eventLog, biometry, config }) {
+    const { keyPrefix } = { ...defaultConfig, ...config }
     this.#keystore = keystore
     this.#authAtom = authAtom
     this.#logger = logger
+    this.#eventLog = eventLog
     this.#keyPrefix = keyPrefix
     this.#biometry = biometry
   }
@@ -44,12 +43,12 @@ class Auth {
     }
 
     const keyOpts = {
-      accessible: ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+      accessible: ACCESSIBLE_WHEN_UNLOCKED_THIS_DEVICE_ONLY,
     }
 
     const triggerOpts = {
       ...keyOpts,
-      accessControl: ACCESS_CONTROL.BIOMETRY_CURRENT_SET,
+      accessControl: ACCESS_CONTROL_BIOMETRY_CURRENT_SET,
     }
 
     await this.#keystore.setSecret(this.#key(AUTH_KEYSTORE_BIO_AUTH_KEY), on, keyOpts)
@@ -92,6 +91,8 @@ class Auth {
 
     await this.#keystore.setSecret(this.#key(AUTH_KEYSTORE_PIN_KEY), value)
     await this.#mergeIntoAtom({ hasPin: true })
+
+    await this.#eventLog.record({ event: 'auth.setPin' })
   }
 
   isCorrectPin = async (input) => {
@@ -108,6 +109,8 @@ class Auth {
     await this.disableBioAuth()
     await this.#keystore.deleteSecret(this.#key(AUTH_KEYSTORE_PIN_KEY))
     await this.#mergeIntoAtom({ hasPin: false })
+
+    await this.#eventLog.record({ event: 'auth.removePin' })
   }
 
   disableBioAuth = async () => {
@@ -125,16 +128,18 @@ class Auth {
 
   clear = async () => {
     await Promise.all([this.removePin(), this.disableBioAuth(), this.removeBioAuthTrigger()])
+
+    await this.#eventLog.record({ event: 'auth.clear' })
   }
 }
 
 const createAuthModule = (deps) => new Auth(deps)
 
 const authDefinition = {
-  id: MODULE_ID,
+  id: 'auth',
   type: 'module',
   factory: createAuthModule,
-  dependencies: ['authAtom', 'logger', 'keystore', 'biometry', 'config?'],
+  dependencies: ['authAtom', 'logger', 'eventLog', 'keystore', 'biometry', 'config?'],
   public: true,
 }
 

@@ -1,7 +1,6 @@
-import sodium from '@exodus/sodium-crypto'
 import { mapValues } from '@exodus/basic-utils'
 import * as curve25519 from '@exodus/crypto/curve25519'
-import { getSodiumKeysFromSeed } from '@exodus/crypto/sodium'
+import * as sodium from '@exodus/crypto/sodium-compat'
 
 const cloneBuffer = (buf) => {
   const newBuffer = Buffer.alloc(buf.length)
@@ -22,7 +21,7 @@ export const create = ({ getPrivateHDKey }) => {
   // garbage collected, clearing it from memory.
   const getSodiumKeysFromIdentifier = async ({ seedId, keyId }) => {
     const { privateKey: sodiumSeed } = getPrivateHDKey({ seedId, keyId })
-    return getSodiumKeysFromSeed(sodiumSeed)
+    return sodium.getSodiumKeysFromSeed(sodiumSeed)
   }
 
   const getKeysFromSeed = async ({ seedId, keyId, exportPrivate }) => {

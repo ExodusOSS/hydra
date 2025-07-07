@@ -1,6 +1,6 @@
 import { Tx } from '@exodus/models'
 
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('createBatchedAssetSourceSelector', () => {
   it('should return batched txs', () => {

@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('get-is-rate-available', () => {
   it('should return function that takes assetName and returns if rate is available for it', () => {

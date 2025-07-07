@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-ids@1.2.3...@exodus/key-ids@1.3.0) (2025-03-31)
+
+### Features
+
+- feat: make 2 modules proper ESM, disable --esbuild (#8367)
+
+### License
+
+- license: re-license under MIT license (#11907)
+
 ## [1.2.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-ids@1.2.2...@exodus/key-ids@1.2.3) (2024-07-16)
 
 ### Bug Fixes

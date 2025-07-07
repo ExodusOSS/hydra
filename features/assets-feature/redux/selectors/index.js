@@ -59,10 +59,8 @@ const createMultiAddressModeSelectorDefinition = {
   id: 'createMultiAddressMode',
   selectorFactory: (multiAddressModeDataSelector) =>
     memoize((assetName) =>
-      createSelector(
-        multiAddressModeDataSelector,
-        (multiAddressModeData) =>
-          multiAddressModeData[assetName] ?? multiAddressModeData.bitcoin ?? false
+      createSelector(multiAddressModeDataSelector, (multiAddressModeData) =>
+        Boolean(multiAddressModeData[assetName])
       )
     ),
   dependencies: [{ selector: 'multiAddressMode' }],

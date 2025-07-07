@@ -1,7 +1,7 @@
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
 describe('remoteConfig', () => {
   let container
@@ -28,6 +28,8 @@ describe('remoteConfig', () => {
     const config = await expectSync
 
     expect(typeof config).toBe('object')
+
+    await exodus.application.stop()
   })
 
   test('should sync values again on unlock', async () => {
@@ -47,6 +49,8 @@ describe('remoteConfig', () => {
     const config = await expectSecondSync
 
     expect(typeof config).toBe('object')
+
+    await exodus.application.stop()
   })
 
   test('should get all config once loaded', async () => {
@@ -57,6 +61,8 @@ describe('remoteConfig', () => {
     const config = await exodus.remoteConfig.getAll()
 
     expect(typeof config).toBe('object')
+
+    await exodus.application.stop()
   })
 
   test('should get config by key once loaded', async () => {
@@ -67,20 +73,20 @@ describe('remoteConfig', () => {
     const config = await exodus.remoteConfig.get('dapps')
 
     expect(typeof config).toBe('object')
+
+    await exodus.application.stop()
   })
 
-  test('should get all data on reporting', async () => {
+  test('should successfully export report', async () => {
     const exodus = container.resolve()
+    const reportNode = container.get('remoteConfigReport')
 
     await exodus.application.start()
-    await exodus.application.load()
-    await exodus.application.create({ passphrase })
-    await exodus.application.unlock({ passphrase })
 
-    const report = await exodus.reporting.export()
+    await expect(exodus.reporting.export()).resolves.toMatchObject({
+      remoteConfig: await reportNode.export(),
+    })
 
-    expect(report.remoteConfig).toBeDefined()
-    expect(report.remoteConfig.error).toBeDefined()
-    expect(report.remoteConfig.loaded).toBeDefined()
+    await exodus.application.stop()
   })
 })

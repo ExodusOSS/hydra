@@ -1,7 +1,7 @@
-import BIP322 from '../src/BIP322'
-import Witness from './src/helpers/Witness'
 import * as bitcoin from '@exodus/bitcoinjs'
 
+import BIP322 from '../src/BIP322'
+import Witness from './src/helpers/Witness'
 // Import module to be tested
 import Verifier from './src/Verifier'
 

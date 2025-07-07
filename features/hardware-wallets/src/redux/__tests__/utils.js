@@ -21,7 +21,7 @@ export function setup({ dependencies = [] } = {}) {
   const store = createStore(reducers, initialState, enhancers)
   const handleEvent = createHandleEvent(store)
 
-  const emit = (data) => handleEvent('hardwareWalletConnectedAssetNames', data)
+  const emit = (evt, data) => handleEvent(evt, data)
 
   return { ...redux, store, emit }
 }

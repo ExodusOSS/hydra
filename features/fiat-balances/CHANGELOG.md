@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.5.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.5.2...@exodus/fiat-balances@13.5.3) (2025-07-01)
+
+### Bug Fixes
+
+- fix(fiat-balances): calculate fiat balances only when rates are valid (#13075)
+
+## [13.5.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.5.1...@exodus/fiat-balances@13.5.2) (2025-06-11)
+
+### Performance
+
+- perf: merge fiat balances in reducer (#12879)
+
+## [13.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.5.0...@exodus/fiat-balances@13.5.1) (2025-06-11)
+
+### Performance
+
+- perf: clone balances (#12882)
+
+## [13.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.4.1...@exodus/fiat-balances@13.5.0) (2025-05-12)
+
+### Features
+
+- feat: make fiat-balances proper ESM (#12360)
+
+## [13.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.4.0...@exodus/fiat-balances@13.4.1) (2025-04-04)
+
+### Bug Fixes
+
+- fix: lodash and events imports (#11954)
+
+## [13.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.3.0...@exodus/fiat-balances@13.4.0) (2025-04-01)
+
+### Features
+
+- feat: stop exporting report definitions (#11900)
+
+## [13.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.2.1...@exodus/fiat-balances@13.3.0) (2025-03-17)
+
+### Features
+
+- feat: improve fiat balance perf (#11796)
+
+## [13.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.2.0...@exodus/fiat-balances@13.2.1) (2025-03-13)
+
+### Bug Fixes
+
+- fix: pass optimistic fiat balances config on node (#11756)
+
 ## [13.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.1.1...@exodus/fiat-balances@13.2.0) (2025-03-04)
 
 ### Features

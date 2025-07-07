@@ -1,13 +1,15 @@
-import fiatBalancesDefinition from './module'
+import fiatBalancesDefinition from './module/index.js'
 import {
   fiatBalancesAtomDefinition,
   nonDustBalanceAssetNamesAtomDefinition,
   optimisticFiatBalancesAtomDefinition,
-} from './atoms'
-import { fiatBalancesPluginDefinition, fiatBalancesAnalyticsPluginDefinition } from './plugin'
-import trackNonDustAssetsNamesPluginDefinition from './plugin/track-non-dust-asset-names'
-import fiatBalancesReportDefinition from './report'
-import { defaultConfig, defaultNonDustAssetsConfig } from './shared'
+} from './atoms/index.js'
+import {
+  fiatBalancesPluginDefinition,
+  fiatBalancesAnalyticsPluginDefinition,
+} from './plugin/index.js'
+import trackNonDustAssetsNamesPluginDefinition from './plugin/track-non-dust-asset-names.js'
+import { defaultConfig, defaultNonDustAssetsConfig } from './shared/index.js'
 
 /**
  * @param {object} config
@@ -33,7 +35,9 @@ const fiatBalances = (config = Object.create(null)) => {
       },
       { definition: fiatBalancesAtomDefinition },
       { definition: fiatBalancesPluginDefinition },
-      { definition: fiatBalancesReportDefinition },
+      // This report was intentionally omitted as it did not provide useful value in practice.
+      // We prefer less data over more when it's not meaningful, keeping them commented for reference.
+      // { definition: fiatBalancesReportDefinition },
       {
         definition: trackNonDustAssetsNamesPluginDefinition,
         config: {
@@ -51,9 +55,9 @@ const fiatBalances = (config = Object.create(null)) => {
         definition: {
           ...fiatBalancesDefinition,
           id: 'optimisticFiatBalances',
-          config: {
-            balanceFields,
-          },
+        },
+        config: {
+          balanceFields,
         },
         aliases: [
           {

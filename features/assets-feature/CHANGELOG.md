@@ -3,6 +3,84 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.1.1...@exodus/assets-feature@8.1.2) (2025-05-30)
+
+**Note:** Version bump only for package @exodus/assets-feature
+
+## [8.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.1.0...@exodus/assets-feature@8.1.1) (2025-05-20)
+
+### Bug Fixes
+
+- fix: do not remove demoted token with unchanged name (#12588)
+
+## [8.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.0.0...@exodus/assets-feature@8.1.0) (2025-05-19)
+
+### Features
+
+- feat: add support for filtering invalid token names (#12443)
+
+### Bug Fixes
+
+- fix: asset storage race condition (#12577)
+
+## [8.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@7.4.1...@exodus/assets-feature@8.0.0) (2025-05-19)
+
+### ⚠ BREAKING CHANGES
+
+- createMultiAddressModeSelector not fallback to bitcoin (#12569)
+
+### Bug Fixes
+
+- fix!: createMultiAddressModeSelector not fallback to bitcoin (#12569)
+
+## [7.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@7.4.0...@exodus/assets-feature@7.4.1) (2025-05-15)
+
+### Bug Fixes
+
+- fix: stop assets-feature monitor on stop (#12460)
+
+## [7.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@7.3.0...@exodus/assets-feature@7.4.0) (2025-04-17)
+
+### Features
+
+- feat: validate tokens using asset-schema-validation (#12011)
+
+## [7.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@7.2.2...@exodus/assets-feature@7.3.0) (2025-04-16)
+
+### Features
+
+- feat: support updating combined asset members (#12019)
+
+## [7.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@7.2.1...@exodus/assets-feature@7.2.2) (2025-04-14)
+
+### Bug Fixes
+
+- fix: provide pageNumber and pageSize to searchTokens (#12006)
+
+## [7.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@7.2.0...@exodus/assets-feature@7.2.1) (2025-04-02)
+
+### Bug Fixes
+
+- fix: provide lifecycleStatus when loading icons (#11931)
+
+## [7.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@7.1.0...@exodus/assets-feature@7.2.0) (2025-04-01)
+
+### Features
+
+- feat: stop exporting report definitions (#11900)
+
+## [7.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@7.0.3...@exodus/assets-feature@7.1.0) (2025-04-01)
+
+### Features
+
+- feat: implement assetsModule.getIcon method (#11905)
+
+## [7.0.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@7.0.2...@exodus/assets-feature@7.0.3) (2025-03-28)
+
+### Bug Fixes
+
+- fix: `asset.info` updates (#11902)
+
 ## [7.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@7.0.1...@exodus/assets-feature@7.0.2) (2025-02-21)
 
 ### Bug Fixes

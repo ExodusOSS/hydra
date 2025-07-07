@@ -1,10 +1,10 @@
 import { CT_STATUS } from '@exodus/assets'
 import { pick } from '@exodus/basic-utils'
 
-import txLogMonitorsDefinition from './module'
-import txLogMonitorsPluginDefinition from './plugin'
-import txLogMonitorsApiDefinition from './api'
-import { assetsConfigAtomDefinition } from './atoms'
+import txLogMonitorsDefinition from './module/index.js'
+import txLogMonitorsPluginDefinition from './plugin/index.js'
+import txLogMonitorsApiDefinition from './api/index.js'
+import { assetsConfigAtomDefinition } from './atoms/index.js'
 
 const MODULE_CONFIG_PARAMS = ['txLogTickConcurrency', 'orderedFirst', 'orderedLast']
 

@@ -1,6 +1,6 @@
 import { EXODUS_KEY_IDS } from '@exodus/key-ids'
 
-import createExodus from './exodus'
+import createExodus from './exodus.js'
 
 describe('cached sodium encryptor', () => {
   let exodus
@@ -14,6 +14,8 @@ describe('cached sodium encryptor', () => {
 
     await exodus.application.start()
   })
+
+  afterEach(() => exodus.application.stop())
 
   test('encrypts payload', async () => {
     await exodus.application.create({ passphrase })

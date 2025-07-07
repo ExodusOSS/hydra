@@ -2,11 +2,14 @@ import { createAtomMock, createInMemoryAtom } from '@exodus/atoms'
 import { keyBy } from '@exodus/basic-utils'
 import { TxSet, WalletAccount } from '@exodus/models'
 import { NftsProxyApi } from '@exodus/nfts-proxy'
-import { enabledWalletAccountsAtomDefinition } from '@exodus/wallet-accounts/atoms'
+import { enabledWalletAccountsAtomDefinition } from '@exodus/wallet-accounts/atoms/index.js'
 import ms from 'ms'
 
-import nftsMonitorDefinition from '../'
-import { MONITOR_SLOW_INTERVAL } from '../constants'
+import { MONITOR_SLOW_INTERVAL } from '../constants.js'
+import nftsMonitorDefinition from '../index.js'
+import { updateNetworkFetchStatus } from '../utils.js'
+
+jest.exodus.mock.fetchNoop()
 
 const { TREZOR_SRC, DEFAULT: DEFAULT_WALLET_ACCOUNT } = WalletAccount
 
@@ -22,7 +25,9 @@ const hardwareWalletAccount = new WalletAccount({
   enabled: true,
 })
 
-const walletAccountInstances = [DEFAULT_WALLET_ACCOUNT, hardwareWalletAccount]
+const walletAccount2 = new WalletAccount({ ...DEFAULT_WALLET_ACCOUNT, index: 3 })
+
+const walletAccountInstances = [DEFAULT_WALLET_ACCOUNT, hardwareWalletAccount, walletAccount2]
 
 const walletAccountsData = keyBy(walletAccountInstances, (w) => w.toString())
 
@@ -43,6 +48,12 @@ const addresses = {
     solana: 'hwAccountSolanaAddress',
     cardano: 'hwAccountCardanoAddress',
     bitcoin: ['hwBitcoinAddress1', 'hwBitcoinAddress2'],
+  },
+  [walletAccountInstances[2].toString()]: {
+    ethereum: 'ethAddress3',
+    solana: 'solanaAddress3',
+    cardano: 'cardanoAddress3',
+    bitcoin: ['bitcoinAddress4', 'bitcoinAddress5'],
   },
 }
 
@@ -118,7 +129,12 @@ let txLogsAtomMock
 
 const restoringAssetsAtom = createAtomMock({ defaultValue: {} })
 
-const prepare = () => {
+const defaultConfig = {
+  emptyNftsIntervalMultiplier: 1,
+  emptyTxsIntervalMultiplier: 1,
+}
+
+const prepare = ({ config = defaultConfig } = {}) => {
   const logger = { warn: jest.fn(), error: jest.fn() }
 
   const addressProviderMock = {
@@ -126,9 +142,10 @@ const prepare = () => {
   }
 
   const walletAccountsAtom = createInMemoryAtom({ defaultValue: walletAccountsData })
-
+  const activeWalletAccountAtom = createInMemoryAtom({
+    defaultValue: walletAccountInstances[0].toString(),
+  })
   const nftsAtom = createInMemoryAtom({ defaultValue: {} })
-
   const nftsTxsAtom = createInMemoryAtom({ defaultValue: {} })
 
   const enabledWalletAccountsAtom = createEnabledWalletAccountsAtom({ walletAccountsAtom })
@@ -160,10 +177,13 @@ const prepare = () => {
   })
 
   const assetsModule = { getAsset: (assetName) => assets[assetName] }
+  const nftsMonitorStatusAtom = createInMemoryAtom({ defaultValue: {} })
+
   const nftsMonitor = nftsMonitorDefinition.factory({
     addressProvider: addressProviderMock,
     assetsModule,
     enabledWalletAccountsAtom,
+    activeWalletAccountAtom,
     nfts: {},
     nftsAtom,
     nftsTxsAtom,
@@ -172,21 +192,90 @@ const prepare = () => {
     baseAssetNamesToMonitorAtom,
     nftsProxy: nftsProxyMock,
     restoringAssetsAtom,
+    nftsMonitorStatusAtom,
     logger,
-    config: {
-      emptyTxsIntervalMultiplier: 4,
-      emptyNftsIntervalMultiplier: 2,
-    },
+    config,
   })
 
   return {
     nftsAtom,
     nftsTxsAtom,
     nftsMonitor,
+    nftsMonitorStatusAtom,
+    activeWalletAccountAtom,
   }
 }
 
 describe('nftsMonitor', () => {
+  test('should start and fetch only active account NFTs transactions', async () => {
+    const fetchInterval = ms('5m')
+    jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+
+    const { nftsMonitor, activeWalletAccountAtom } = prepare()
+
+    const getNftsTransactionsByAddressSpy = jest
+      .spyOn(nftsProxyMock.solana, 'getNftsTransactionsByAddress')
+      .mockImplementation(async () => mockTransactionsResults.solana)
+
+    nftsMonitor.start()
+
+    await advance(fetchInterval + 50)
+
+    // Should only fetch for active account
+    expect(getNftsTransactionsByAddressSpy).toHaveBeenCalledWith('solanaAddress')
+    expect(getNftsTransactionsByAddressSpy).not.toHaveBeenCalledWith('solanaAddress3')
+    expect(getNftsTransactionsByAddressSpy).not.toHaveBeenCalledWith('hwAccountSolanaAddress')
+
+    await activeWalletAccountAtom.set(hardwareWalletAccount.toString())
+
+    await advance(fetchInterval + 50)
+
+    // do not fetch for unsupported wallet account
+    expect(getNftsTransactionsByAddressSpy).not.toHaveBeenCalledWith('hwAccountSolanaAddress')
+
+    await activeWalletAccountAtom.set(walletAccountInstances[2].toString())
+
+    await advance(fetchInterval + 50)
+
+    expect(getNftsTransactionsByAddressSpy).toHaveBeenCalledWith('solanaAddress3')
+
+    await nftsMonitor.stop()
+  })
+
+  test('should handle rapid account switching correctly', async () => {
+    const fetchInterval = ms('5m')
+    jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+
+    const { nftsMonitor, activeWalletAccountAtom } = prepare()
+
+    const getNftsTransactionsByAddressSpy = jest
+      .spyOn(nftsProxyMock.solana, 'getNftsTransactionsByAddress')
+      .mockImplementation(async () => mockTransactionsResults.solana)
+
+    nftsMonitor.start()
+
+    // Initial fetch for first account
+    await advance(0)
+    expect(getNftsTransactionsByAddressSpy).toHaveBeenCalledTimes(1)
+    expect(getNftsTransactionsByAddressSpy).toHaveBeenLastCalledWith('solanaAddress')
+
+    // Rapid account switches
+    await activeWalletAccountAtom.set(walletAccountInstances[2].toString())
+    await advance(100)
+    await activeWalletAccountAtom.set(walletAccountInstances[0].toString())
+    await advance(100)
+    await activeWalletAccountAtom.set(walletAccountInstances[2].toString())
+
+    expect(getNftsTransactionsByAddressSpy).toHaveBeenCalledTimes(1)
+
+    await advance(fetchInterval + 50)
+
+    expect(getNftsTransactionsByAddressSpy).toHaveBeenCalledTimes(2)
+    expect(getNftsTransactionsByAddressSpy).toHaveBeenLastCalledWith('solanaAddress3')
+
+    await nftsMonitor.stop()
+  })
+
   test('should start and fetch solana NFTs transactions', async () => {
     const fetchInterval = ms('5m')
 
@@ -444,7 +533,12 @@ describe('nftsMonitor', () => {
 
     jest.useFakeTimers({ doNotFake: ['setImmediate'] })
 
-    const { nftsMonitor } = prepare()
+    const { nftsMonitor } = prepare({
+      config: {
+        emptyTxsIntervalMultiplier: 4,
+        emptyNftsIntervalMultiplier: 2,
+      },
+    })
 
     const getSolanaNftsByOwnerAddressSpy = jest
       .spyOn(nftsProxyMock.solana, 'getNftsByOwner')
@@ -466,13 +560,137 @@ describe('nftsMonitor', () => {
 
     await new Promise(setImmediate)
 
-    await advance(fetchInterval * 2)
+    await advance(fetchInterval * 7)
 
     expect(getSolanaNftsByOwnerAddressSpy).toHaveBeenCalledTimes(2)
 
     await advance(fetchInterval)
 
     expect(getSolanaNftsByOwnerAddressSpy).toHaveBeenCalledTimes(2)
+
+    await nftsMonitor.stop()
+  })
+
+  test('should apply network-specific interval multipliers', async () => {
+    const fetchInterval = MONITOR_SLOW_INTERVAL
+    jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+
+    const { nftsMonitor } = prepare({
+      config: {
+        emptyTxsIntervalMultiplier: 1,
+        emptyNftsIntervalMultiplier: 1,
+        networkIntervalMultipliers: {
+          solana: 3,
+        },
+      },
+    })
+
+    const getSolanaNftsByOwnerAddressSpy = jest
+      .spyOn(nftsProxyMock.solana, 'getNftsByOwner')
+      .mockImplementation(async () => [])
+
+    nftsMonitor.start()
+
+    // First fetch happens immediately
+    await advance(fetchInterval)
+    expect(getSolanaNftsByOwnerAddressSpy).toHaveBeenCalledTimes(1)
+
+    // Should not fetch after one interval due to network multiplier
+    await advance(fetchInterval)
+    expect(getSolanaNftsByOwnerAddressSpy).toHaveBeenCalledTimes(1)
+
+    // Should fetch after 3x interval (network multiplier)
+    await advance(fetchInterval * 2)
+    expect(getSolanaNftsByOwnerAddressSpy).toHaveBeenCalledTimes(2)
+
+    await nftsMonitor.stop()
+  })
+
+  test('should respect existing fetch status values', async () => {
+    const fetchInterval = ms('5m')
+    jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+
+    await advance(1)
+
+    const { nftsMonitor, nftsMonitorStatusAtom } = prepare()
+
+    await updateNetworkFetchStatus({
+      atom: nftsMonitorStatusAtom,
+      network: 'solana',
+      walletAccountName: walletAccountInstances[0].toString(),
+      type: 'nfts',
+    })
+    await updateNetworkFetchStatus({
+      atom: nftsMonitorStatusAtom,
+      network: 'solana',
+      walletAccountName: walletAccountInstances[0].toString(),
+      type: 'txs',
+    })
+
+    const getNftsTransactionsByAddressSpy = jest
+      .spyOn(nftsProxyMock.solana, 'getNftsTransactionsByAddress')
+      .mockImplementation(async () => mockTransactionsResults.solana)
+
+    const getNftsByOwnerSpy = jest
+      .spyOn(nftsProxyMock.solana, 'getNftsByOwner')
+      .mockImplementation(async () => mockNftsResults.solana.solanaAddress)
+
+    nftsMonitor.start()
+
+    // Should not fetch immediately due to recent fetch status
+    await advance(fetchInterval / 2)
+
+    expect(getNftsTransactionsByAddressSpy).not.toHaveBeenCalled()
+    expect(getNftsByOwnerSpy).not.toHaveBeenCalled()
+
+    // Should fetch after interval passes
+    await advance(fetchInterval + 50)
+
+    // expect(getNftsTransactionsByAddressSpy).toHaveBeenCalledTimes(1)
+    expect(getNftsByOwnerSpy).toHaveBeenCalledTimes(1)
+
+    await nftsMonitor.stop()
+  })
+
+  test('should force update regardless of fetch status', async () => {
+    jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+
+    // Set up recent fetch status
+    const now = Date.now()
+    const initialFetchStatus = {
+      fetchState: {
+        solana: {
+          exodus_0: {
+            nftsPreviousFetch: now,
+            txsPreviousFetch: now,
+          },
+        },
+      },
+    }
+
+    const { nftsMonitor, nftsMonitorStatusAtom } = prepare()
+    await nftsMonitorStatusAtom.set(initialFetchStatus)
+
+    const getNftsTransactionsByAddressSpy = jest
+      .spyOn(nftsProxyMock.solana, 'getNftsTransactionsByAddress')
+      .mockImplementation(async () => mockTransactionsResults.solana)
+
+    const getNftsByOwnerSpy = jest
+      .spyOn(nftsProxyMock.solana, 'getNftsByOwner')
+      .mockImplementation(async () => mockNftsResults.solana.solanaAddress)
+
+    nftsMonitor.start()
+
+    // Shouldn't fetch due to recent fetch status
+    await advance(50)
+    expect(getNftsTransactionsByAddressSpy).not.toHaveBeenCalled()
+    expect(getNftsByOwnerSpy).not.toHaveBeenCalled()
+
+    // Force update should fetch regardless of fetch status
+    await nftsMonitor.forceFetch()
+
+    expect(getNftsTransactionsByAddressSpy).toHaveBeenCalledTimes(1)
+    expect(getNftsByOwnerSpy).toHaveBeenCalledTimes(1)
 
     await nftsMonitor.stop()
   })

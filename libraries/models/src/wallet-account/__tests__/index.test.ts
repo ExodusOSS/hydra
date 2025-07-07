@@ -9,12 +9,18 @@ import WalletAccount, {
   HARDWARE_SOURCES,
   LABEL_MAX_LENGTH,
   SEED_SRC,
+  SOFTWARE_SEED_SOURCES,
   TREZOR_SRC,
 } from '../index.js'
 
 test('walletAccount', () => {
   expect(WalletAccount.DEFAULT_NAME).toEqual('exodus_0')
   expect(String(WalletAccount.DEFAULT)).toEqual('exodus_0')
+  expect(WalletAccount.VALID_SOURCES).toEqual([
+    ...HARDWARE_SOURCES,
+    ...CUSTODIAL_SOURCES,
+    ...SOFTWARE_SEED_SOURCES,
+  ])
   expect(String(new WalletAccount({ source: 'exodus', index: 0 }))).toEqual('exodus_0')
   expect(String(new WalletAccount({ source: 'exodus', index: 1 }))).toEqual('exodus_1')
   expect(String(new WalletAccount({ source: 'exodus', index: 1337 }))).toEqual('exodus_1337')

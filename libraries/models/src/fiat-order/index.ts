@@ -53,6 +53,7 @@ type AdapterParams = {
   }
   id: string
   networkFee?: number
+  paymentMethodType?: string
   provider: Provider
   providerId: string
   rate: number
@@ -77,6 +78,7 @@ export const adapter = (
     from,
     id,
     networkFee = 0,
+    paymentMethodType,
     provider,
     providerId,
     rate,
@@ -118,6 +120,7 @@ export const adapter = (
     fromWalletAccount: isBuy ? null : walletAccount,
     orderId: id,
     orderType: type,
+    paymentMethodType,
     provider,
     providerOrderId: providerId,
     providerRate: rate,
@@ -150,6 +153,7 @@ export type FiatOrderProps<P extends Provider = Provider> = {
   fromWalletAccount: string | null
   orderId: string
   orderType: string
+  paymentMethodType?: string
   provider: P
   status: StatusByProvider[P]
   providerOrderId?: string
@@ -195,6 +199,7 @@ export default class FiatOrder<P extends Provider = Provider> implements FiatOrd
   hideInHistory?: boolean
   showedFailureBanner?: boolean
   supportMessage?: string
+  paymentMethodType?: string
 
   constructor(props: FiatOrderProps<P>, initSymbol: typeof FACTORY_SYMBOL) {
     FiatOrder.validate(props, initSymbol)
@@ -397,6 +402,7 @@ export default class FiatOrder<P extends Provider = Provider> implements FiatOrd
       isSell: this.isSell,
       orderId: this.orderId,
       orderType: this.orderType,
+      paymentMethodType: this.paymentMethodType,
       provider: this.provider,
       providerOrderId: this.providerOrderId,
       providerRate: this.providerRate,

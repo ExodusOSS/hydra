@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.8.2...@exodus/balances@13.9.0) (2025-06-03)
+
+### Features
+
+- feat: gracefully handle 'isLocked' state in report (#12669)
+
+### Bug Fixes
+
+- fix: update @exodus/errors (#12627)
+
+## [13.8.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.8.1...@exodus/balances@13.8.2) (2025-04-29)
+
+### Bug Fixes
+
+- fix: rm unnecessary dedupe (#12117)
+
+## [13.8.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.8.0...@exodus/balances@13.8.1) (2025-04-14)
+
+**Note:** Version bump only for package @exodus/balances
+
+## [13.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.7.1...@exodus/balances@13.8.0) (2025-03-19)
+
+### Features
+
+- feat: mockable balances (#11824)
+
+## [13.7.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.7.0...@exodus/balances@13.7.1) (2025-03-12)
+
+**Note:** Version bump only for package @exodus/balances
+
 ## [13.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.6.2...@exodus/balances@13.7.0) (2025-02-27)
 
 ### Features

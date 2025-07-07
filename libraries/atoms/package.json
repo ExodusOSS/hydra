@@ -1,6 +1,6 @@
 {
   "name": "@exodus/atoms",
-  "version": "9.0.1",
+  "version": "9.0.3",
   "description": "Abstraction for encapsulating a piece of data behind a simple unified interface: get, set, observe",
   "type": "module",
   "main": "lib/index.js",

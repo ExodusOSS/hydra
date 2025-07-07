@@ -10,8 +10,8 @@ const useCustomHermes = isProd || isQa
 
 const hermesSource = useCustomHermes
   ? `# Custom Exodus Hermes binaries
-source[:http] = "https://github.com/ExodusMovement/hermes/releases/download/0.0.1/ios.tar.gz"
-source[:sha256] = "c4d7a59fbf16da597310cd0f4363c8e2218d418796334dd2b04614389b3ec413"
+source[:http] = "https://github.com/ExodusMovement/hermes/releases/download/0.0.7/ios.tar.gz"
+source[:sha256] = "1a2ab8efc8f7db9c0e2b6c7f8d72dc2b8d79a26332167a4811d3f6a75fc78cda"
 `
   : `# Regular binaries
 source[:http] = "https://repo1.maven.org/maven2/com/facebook/react/react-native-artifacts/0.71.11/react-native-artifacts-0.71.11-hermes-ios-debug.tar.gz"

@@ -1,8 +1,8 @@
 import { http } from 'msw'
 
-import config from '../../config'
-import createBinAuthHandlers from './bin-auth'
-import { jsonResponse, statusResponse } from './utils'
+import config from '../../config.js'
+import createBinAuthHandlers from './bin-auth.js'
+import { jsonResponse, statusResponse } from './utils.js'
 
 const kycServerUrl = 'https://kyc-d.a.exodus.io'
 const baseUrl = config.referrals.API_URL

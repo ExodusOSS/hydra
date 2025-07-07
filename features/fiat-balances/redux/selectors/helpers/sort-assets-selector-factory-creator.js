@@ -1,7 +1,7 @@
 import { keyBy, memoize, orderBy } from '@exodus/basic-utils'
 import { isDustAmount } from '@exodus/formatting/lib/asset'
 import { createSelector } from 'reselect'
-import { isMultiNetworkAsset } from '../utils'
+import { isMultiNetworkAsset } from '../utils.js'
 
 const SORTING_MAP = [
   [(a) => a.sortAssetMetaData.fiatBalance && a.sortAssetMetaData.isFavoriteAsset, 'desc'],

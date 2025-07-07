@@ -1,7 +1,7 @@
 {
   "name": "@exodus/app-process-mobile",
   "author": "Exodus Movement, Inc.",
-  "version": "3.6.2",
+  "version": "3.7.0",
   "license": "MIT",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/app-process-mobile",
   "bugs": {
@@ -31,8 +31,10 @@
   ],
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
+    "@exodus/basic-utils": "^3.0.1",
     "@exodus/netinfo": "^1.4.2",
     "@exodus/redux-dependency-injection": "^4.0.3",
+    "@exodus/zod": "^3.24.2",
     "lodash": "^4.17.21",
     "make-concurrent": "^5.4.0"
   },

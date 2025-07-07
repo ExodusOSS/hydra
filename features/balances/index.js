@@ -14,6 +14,7 @@ import {
 } from './plugins/index.js'
 import typeforce from '@exodus/typeforce'
 import defaultConfig from './default-config.js'
+import mockableBalancesDefinition from './module/mockable-balances.js'
 
 const balances = (walletConfig) => {
   const config = {
@@ -36,7 +37,7 @@ const balances = (walletConfig) => {
     id: 'balances',
     definitions: [
       {
-        definition: balancesDefinition,
+        definition: walletConfig?.importReport ? mockableBalancesDefinition : balancesDefinition,
         config,
       },
       { definition: balancesAtomDefinition },

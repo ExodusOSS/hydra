@@ -1,9 +1,9 @@
 import personalNotes from '@exodus/personal-notes'
 
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
 describe('personal-notes', () => {
   const passphrase = 'my-password-manager-generated-this'
@@ -23,5 +23,7 @@ describe('personal-notes', () => {
     await exodus.application.unlock({ passphrase })
 
     await expectPersonalNotes
+
+    await exodus.application.stop()
   })
 })

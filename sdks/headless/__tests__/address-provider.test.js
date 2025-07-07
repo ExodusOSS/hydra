@@ -1,9 +1,9 @@
 import KeyIdentifier from '@exodus/key-identifier'
 import { WalletAccount } from '@exodus/models'
 
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
 
 describe.each(['synced', 'memory'])('address-provider (%s)', (addressCacheFlavor) => {
   let exodus
@@ -12,9 +12,11 @@ describe.each(['synced', 'memory'])('address-provider (%s)', (addressCacheFlavor
 
   let port
 
+  let reportNode
+
   const passphrase = 'my-password-manager-generated-this'
 
-  beforeEach(async () => {
+  const setupWallet = async ({ createWallet = true } = {}) => {
     adapters = createAdapters()
 
     port = adapters.port
@@ -29,8 +31,16 @@ describe.each(['synced', 'memory'])('address-provider (%s)', (addressCacheFlavor
 
     await exodus.application.start()
     await exodus.application.load()
-    await exodus.application.create({ passphrase })
-  })
+    if (createWallet) {
+      await exodus.application.create({ passphrase })
+    }
+
+    reportNode = container.getByType('report').addressProviderReport
+  }
+
+  beforeEach(setupWallet)
+
+  afterEach(() => exodus.application.stop())
 
   test('should get receive address if wallet unlocked', async () => {
     await exodus.application.unlock({ passphrase })
@@ -138,5 +148,23 @@ describe.each(['synced', 'memory'])('address-provider (%s)', (addressCacheFlavor
         walletAccount: WalletAccount.DEFAULT_NAME,
       })
     ).resolves.toEqual(84)
+  })
+
+  test('should successfully export report (pre-wallet-exists)', async () => {
+    await exodus.application.stop() // stop the instance from beforeEach
+    await setupWallet({ createWallet: false })
+
+    await expect(exodus.wallet.exists()).resolves.toBe(false)
+    await expect(exodus.reporting.export()).resolves.toMatchObject({
+      addressProvider: await reportNode.export({ walletExists: await exodus.wallet.exists() }),
+    })
+  })
+
+  test('should successfully export report (post-wallet-exists)', async () => {
+    await exodus.application.unlock({ passphrase })
+    await expect(exodus.wallet.exists()).resolves.toBe(true)
+    await expect(exodus.reporting.export()).resolves.toMatchObject({
+      addressProvider: await reportNode.export({ walletExists: await exodus.wallet.exists() }),
+    })
   })
 })

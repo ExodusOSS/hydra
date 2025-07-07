@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.1](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.6.0...@exodus/trezor-meta@3.6.1) (2025-03-10)
+
+### Bug Fixes
+
+- fix: wrong latest firmware version for Safe models (#11716)
+
+## [3.6.0](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.5.0...@exodus/trezor-meta@3.6.0) (2025-03-10)
+
+### Features
+
+- feat: bump firmware (#11695)
+
 ## [3.5.0](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.4.0...@exodus/trezor-meta@3.5.0) (2025-02-01)
 
 ### Features

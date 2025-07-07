@@ -1,9 +1,9 @@
-import type { assetPriceDefinition } from './asset-price'
-import type { assetRateDefinition } from './asset-rate'
-import type { fiatRatesDefinition } from './fiat-rates'
-import type { getIsRateAvailableDefinition } from './get-is-rate-available'
-import type { loadingDefinition } from './loading'
-import type { pricesByAssetNameDefinition } from './prices-by-asset-name'
+import type { assetPriceDefinition } from './asset-price.js'
+import type { assetRateDefinition } from './asset-rate.js'
+import type { fiatRatesDefinition } from './fiat-rates.js'
+import type { getIsRateAvailableDefinition } from './get-is-rate-available.js'
+import type { loadingDefinition } from './loading.js'
+import type { pricesByAssetNameDefinition } from './prices-by-asset-name.js'
 
 declare const selectorDefinitions: [
   typeof assetPriceDefinition,

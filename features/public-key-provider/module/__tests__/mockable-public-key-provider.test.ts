@@ -176,7 +176,7 @@ describe('MockablePublicKeyProvider', () => {
         },
       })
 
-      expect(async () => {
+      await expect(async () => {
         instance = new MockablePublicKeyProvider({ ...deps, config: { xpubs } })
         await instance.onReady
       }).rejects.toThrow('mocking xpubs is currently only supported for software walletAccounts')
@@ -203,7 +203,7 @@ describe('MockablePublicKeyProvider', () => {
     })
 
     it('throws for non-software accounts', async () => {
-      expect(async () => {
+      await expect(async () => {
         await instance.mockXPub({
           ...payload,
           walletAccount: new WalletAccount({

@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { isMultiNetworkAsset } from '../utils'
+import { isMultiNetworkAsset } from '../utils.js'
 
 // adds extra props to assets list: balance, fiatBalance, formattedFiatValue and combinedAssets with same props
 const selectorFactory =

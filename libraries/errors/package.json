@@ -1,7 +1,7 @@
 {
   "name": "@exodus/errors",
   "type": "module",
-  "version": "2.0.2",
+  "version": "3.0.0",
   "description": "Utilities for error handling in client code, such as sanitization",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -30,16 +30,16 @@
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",
     "test": "yarn run test:v8 && yarn run test:hermes",
-    "test:v8": "run -T exodus-test --esbuild --jest src/__tests__/v8/*.test.ts",
-    "test:hermes": "EXODUS_TEST_COVERAGE=0 run -T exodus-test --engine hermes:bundle --esbuild --jest src/__tests__/hermes/*.test.ts"
+    "test:v8": "run -T exodus-test --esbuild --jest src/__tests__/v8/*.test.ts src/__tests__/engine-agnostic/*.test.ts",
+    "test:hermes": "EXODUS_TEST_COVERAGE=0 run -T exodus-test --engine hermes:bundle --esbuild --jest src/__tests__/hermes/*.test.ts src/__tests__/engine-agnostic/*.test.ts"
   },
   "dependencies": {
+    "@exodus/safe-string": "^1.0.0",
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {
     "@exodus/errors-fixture": "workspace:^",
-    "@types/minimalistic-assert": "^1.0.1",
-    "hermes-engine-cli": "^0.12.0"
+    "@types/minimalistic-assert": "^1.0.1"
   },
   "publishConfig": {
     "access": "public"

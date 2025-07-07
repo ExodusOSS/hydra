@@ -22,6 +22,20 @@ export function startOfDay(date) {
   return cd
 }
 
+export function startOfMinute(date) {
+  return new Date(
+    Date.UTC(
+      date.getUTCFullYear(),
+      date.getUTCMonth(),
+      date.getUTCDate(),
+      date.getUTCHours(),
+      date.getUTCMinutes(),
+      0,
+      0
+    )
+  )
+}
+
 export const prepareTime = (date, type) => {
   let preparedTime
   switch (type) {
@@ -32,6 +46,11 @@ export const prepareTime = (date, type) => {
 
     case 'hourly': {
       preparedTime = startOfHour(date)
+      break
+    }
+
+    case 'minutely': {
+      preparedTime = startOfMinute(date)
       break
     }
   }

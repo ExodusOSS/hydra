@@ -26,6 +26,8 @@ test("it's alive!", async () => {
     assetName: 'ethereum',
   })
 
+  await sdk.application.stop()
+
   expect(ethAddress).toEqual('0xF3d46F0De925B28fDa1219BbD60F5ae2a0128F9F')
 })
 

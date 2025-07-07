@@ -1,15 +1,16 @@
 import { normalizeTxsJSON, TxSet } from '@exodus/models'
 import Emitter from '@exodus/wild-emitter'
 
-import createAdapters from './adapters'
-import defaultConfig from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
-import TX_LOGS from './fixtures/tx-logs'
+import createAdapters from './adapters/index.js'
+import defaultConfig from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
+import TX_LOGS from './fixtures/tx-logs.js'
 
 describe('blockchain-metadata', () => {
   let exodus
   let assetsModule
+  let reportNode
 
   let port
 
@@ -17,7 +18,7 @@ describe('blockchain-metadata', () => {
   const assetName = 'bitcoin'
   const walletAccount = 'exodus_0'
 
-  const setup = async ({ config = {} } = {}) => {
+  const setup = async ({ config = {}, createWallet = true } = {}) => {
     const adapters = createAdapters()
 
     port = adapters.port
@@ -30,7 +31,11 @@ describe('blockchain-metadata', () => {
 
     await exodus.application.start()
     await exodus.application.load()
-    await exodus.application.create({ passphrase })
+    if (createWallet) {
+      await exodus.application.create({ passphrase })
+    }
+
+    reportNode = container.getByType('report').blockchainMetadataReport
 
     return { adapters }
   }
@@ -76,6 +81,8 @@ describe('blockchain-metadata', () => {
       })
 
       await updateEvent
+
+      await exodus.application.stop()
     })
 
     it('should emit tx logs', async () => {
@@ -113,6 +120,8 @@ describe('blockchain-metadata', () => {
       })
 
       await updateEvent
+
+      await exodus.application.stop()
     })
   })
 
@@ -127,6 +136,8 @@ describe('blockchain-metadata', () => {
 
       whenRestarted = expectEvent({ port, event: 'restart', payload: { reason: 'delete' } })
     })
+
+    afterEach(() => exodus.application.stop())
 
     it('should reset account state and tx logs', async () => {
       const AccountState = assetsModule.getAsset(assetName).api.createAccountState()
@@ -168,6 +179,33 @@ describe('blockchain-metadata', () => {
       expect(await newExodus.blockchainMetadata.getTxLog({ assetName, walletAccount })).toEqual(
         TxSet.EMPTY
       )
+
+      await newExodus.application.stop()
+    })
+  })
+
+  describe('reporting', () => {
+    test('should successfully export report (pre-wallet-exists)', async () => {
+      await setup({ createWallet: false })
+
+      await expect(exodus.wallet.exists()).resolves.toBe(false)
+      await expect(exodus.reporting.export()).resolves.toMatchObject({
+        blockchainMetadata: await reportNode.export({ walletExists: await exodus.wallet.exists() }),
+      })
+
+      await exodus.application.stop()
+    })
+
+    test('should successfully export report (post-wallet-exists)', async () => {
+      await setup()
+
+      await exodus.application.unlock({ passphrase })
+      await expect(exodus.wallet.exists()).resolves.toBe(true)
+      await expect(exodus.reporting.export()).resolves.toMatchObject({
+        blockchainMetadata: await reportNode.export({ walletExists: await exodus.wallet.exists() }),
+      })
+
+      await exodus.application.stop()
     })
   })
 })

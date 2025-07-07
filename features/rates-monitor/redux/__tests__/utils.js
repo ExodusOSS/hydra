@@ -1,14 +1,14 @@
 import { connectAssets } from '@exodus/assets'
-import assetsRedux from '@exodus/assets-feature/redux'
+import assetsRedux from '@exodus/assets-feature/redux/index.js'
 import { asset as bitcoin } from '@exodus/bitcoin-meta'
 import combinedAssets from '@exodus/combined-assets-meta'
 import { asset as ethereum, tokens as ethereumTokens } from '@exodus/ethereum-meta'
-import localeRedux from '@exodus/locale/redux'
+import localeRedux from '@exodus/locale/redux/index.js'
 import { setupRedux } from '@exodus/redux-dependency-injection'
 import { tokens as solanaTokens } from '@exodus/solana-meta'
 import { combineReducers, createStore } from 'redux'
 
-import ratesReduxDefinition from '../'
+import ratesReduxDefinition from '../index.js'
 
 const usdcoin = ethereumTokens.find((a) => a.name === 'usdcoin')
 // eslint-disable-next-line camelcase
@@ -24,6 +24,7 @@ const assets = connectAssets({
 
 export function setup({ dependencies = [] } = {}) {
   const allDependencies = [...dependencies, ratesReduxDefinition, localeRedux, assetsRedux]
+
   const enhancers = (createStore) => (reducers, initialState, enhancer) => {
     const reducer = combineReducers(reducers)
     return createStore(reducer, initialState, enhancer)
@@ -44,5 +45,9 @@ export function setup({ dependencies = [] } = {}) {
   const emitCurrencyChange = (currency) => handleEvent('currency', currency)
   handleEvent('assets', { assets })
 
-  return { ...redux, store, emitRates, emitCurrencyChange }
+  const setSimulationEnabled = (enabled) => handleEvent('ratesSimulationEnabled', { enabled })
+
+  setSimulationEnabled(false)
+
+  return { ...redux, store, emitRates, emitCurrencyChange, setSimulationEnabled }
 }

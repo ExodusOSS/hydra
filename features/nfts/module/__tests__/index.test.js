@@ -1,13 +1,13 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 
-import nftsDefinition from '..'
+import nftsDefinition from '../index.js'
 
 const logger = { log: jest.fn(), debug: jest.fn(), warn: jest.fn(), error: jest.fn() }
 
 const createFusionMock = (defaultValue = {}) => ({
   channel: jest.fn((options) => {
     const response = {
-      awaitProcessed: jest.fn(() => new Promise((resolve) => setTimeout(resolve, 100))),
+      awaitProcessed: jest.fn(() => new Promise((resolve) => setTimeout(resolve, 1))),
       push: jest.fn(),
     }
 

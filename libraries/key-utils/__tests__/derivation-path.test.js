@@ -1,11 +1,12 @@
-import { assets } from './fixtures/assets.js'
+import { HARDENED_OFFSET } from '@exodus/bip32'
+
 import {
   buildDerivationPath,
   DerivationPath,
   isValidDerivationPath,
   parseDerivationPath,
 } from '../src/derivation-path.js'
-import { HARDENED_OFFSET } from '@exodus/bip32'
+import { assets } from './fixtures/assets.js'
 
 const INCORRECT_PATHS = [
   Buffer.from('failure'),

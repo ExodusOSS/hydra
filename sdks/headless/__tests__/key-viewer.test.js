@@ -1,6 +1,6 @@
 import { WalletAccount } from '@exodus/models'
 
-import createExodus from './exodus'
+import createExodus from './exodus.js'
 
 const HEX_STRING = /[\da-f]/i
 
@@ -18,6 +18,8 @@ describe('key-viewer', () => {
     await exodus.application.load()
     await exodus.application.create({ passphrase })
   })
+
+  afterEach(() => exodus.application.stop())
 
   test('should get receive address if wallet unlocked', async () => {
     await exodus.wallet.unlock({ passphrase })

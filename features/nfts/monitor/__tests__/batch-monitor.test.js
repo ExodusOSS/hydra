@@ -2,7 +2,7 @@ import { createAtomMock, createInMemoryAtom } from '@exodus/atoms'
 import { keyBy } from '@exodus/basic-utils'
 import { Address, WalletAccount } from '@exodus/models'
 import { NftsProxyApi } from '@exodus/nfts-proxy'
-import { enabledWalletAccountsAtomDefinition } from '@exodus/wallet-accounts/atoms'
+import { enabledWalletAccountsAtomDefinition } from '@exodus/wallet-accounts/atoms/index.js'
 import ms from 'ms'
 
 import { BATCH_TRANSACTION_LOOKBACK_PERIOD } from '../constants.js'
@@ -61,6 +61,9 @@ const prepare = () => {
   }
 
   const walletAccountsAtom = createInMemoryAtom({ defaultValue: walletAccountsData })
+  const activeWalletAccountAtom = createInMemoryAtom({
+    defaultValue: walletAccountInstances[0].toString(),
+  })
 
   const nftsAtom = createInMemoryAtom({ defaultValue: {} })
 
@@ -87,18 +90,21 @@ const prepare = () => {
   const nftsConfigAtom = createAtomMock({
     defaultValue: {},
   })
+  const nftsMonitorStatusAtom = createInMemoryAtom({ defaultValue: {} })
 
   const assetsModule = { getAsset: (assetName) => assets[assetName] }
   const nftsMonitor = nftsMonitorDefinition.factory({
     addressProvider: addressProviderMock,
     assetsModule,
     enabledWalletAccountsAtom,
+    activeWalletAccountAtom,
     nfts: {},
     nftsAtom,
     nftsTxsAtom,
     nftsConfigAtom,
     txLogsAtom: txLogsAtomMock,
     baseAssetNamesToMonitorAtom,
+    nftsMonitorStatusAtom,
     nftBatchMonitorStatusAtom: nftBatchMonitorStatusMock,
     nftsProxy: nftsProxyMock,
     logger,

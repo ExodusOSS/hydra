@@ -1,19 +1,16 @@
 import { connectAssets } from '@exodus/assets'
 import assetsBase from '@exodus/assets-base'
 import { createInMemoryAtom } from '@exodus/atoms'
-import { availableAssetsAtomDefinition } from '@exodus/available-assets/atoms'
-import { enabledAssetsDifferenceAtomDefinition } from '@exodus/enabled-assets/atoms'
-import EventEmitter from 'events/'
+import { availableAssetsAtomDefinition } from '@exodus/available-assets/atoms/index.js'
+import { enabledAssetsDifferenceAtomDefinition } from '@exodus/enabled-assets/atoms/index.js'
+import EventEmitter from 'events/events.js'
 
-import plugin from '../'
+import plugin from '../index.js'
 
 const assets = connectAssets(assetsBase)
 
 describe('tx-log-monitor plugin', () => {
-  const advance = async (ms) => {
-    jest.advanceTimersByTime(ms)
-    await new Promise(setImmediate)
-  }
+  const advance = async (ms = 0) => jest.advanceTimersByTimeAsync(ms)
 
   let txLogMonitors
   let assetsModule
@@ -34,7 +31,7 @@ describe('tx-log-monitor plugin', () => {
     })
 
   beforeEach(() => {
-    jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+    jest.useFakeTimers()
 
     enabledAssetsAtom = createInMemoryAtom({ defaultValue: {} })
     logger = {
@@ -62,10 +59,6 @@ describe('tx-log-monitor plugin', () => {
         defaultAvailableAssetNames: [],
       },
     })
-  })
-
-  afterEach(() => {
-    jest.clearAllTimers()
   })
 
   afterAll(() => {

@@ -1,6 +1,6 @@
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
 
 describe('txLogMonitors', () => {
   let container
@@ -16,10 +16,15 @@ describe('txLogMonitors', () => {
   test('should start monitors on unlock', async () => {
     const exodus = container.resolve()
 
-    const { bitcoin } = exodus.assets.getAssets()
+    const { bitcoin } = await exodus.assets.getAssets()
 
     const startMock = jest.fn()
-    bitcoin.api.createHistoryMonitor = jest.fn(() => ({ start: startMock, addHook: jest.fn() }))
+    const stopMock = jest.fn()
+    bitcoin.api.createHistoryMonitor = jest.fn(() => ({
+      start: startMock,
+      stop: stopMock, // called during application stop
+      addHook: jest.fn(),
+    }))
 
     await exodus.application.start()
     await exodus.application.create({ passphrase })
@@ -30,12 +35,16 @@ describe('txLogMonitors', () => {
 
     expect(bitcoin.api.createHistoryMonitor).toHaveBeenCalledTimes(1)
     expect(startMock).toHaveBeenCalledTimes(1)
+
+    expect(stopMock).toHaveBeenCalledTimes(0)
+    await exodus.application.stop()
+    expect(stopMock).toHaveBeenCalledTimes(1)
   })
 
   test('should stop monitors on lock', async () => {
     const exodus = container.resolve()
 
-    const { bitcoin } = exodus.assets.getAssets()
+    const { bitcoin } = await exodus.assets.getAssets()
 
     const stopMock = jest.fn()
     bitcoin.api.createHistoryMonitor = jest.fn(() => ({ stop: stopMock, addHook: jest.fn() }))
@@ -50,5 +59,7 @@ describe('txLogMonitors', () => {
     await exodus.application.lock()
 
     expect(stopMock).toHaveBeenCalledTimes(1)
+
+    await exodus.application.stop()
   })
 })

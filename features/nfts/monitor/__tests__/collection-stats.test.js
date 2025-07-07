@@ -1,7 +1,7 @@
 import { createInMemoryAtom } from '@exodus/atoms'
-import EventEmitter from 'events' // eslint-disable-line @exodus/restricted-imports/no-node-core-events
+import EventEmitter from 'events/events.js'
 
-import { createNftCollectionStatsMonitor } from '../NftsCollectionStatsMonitor'
+import { createNftCollectionStatsMonitor } from '../NftsCollectionStatsMonitor.js'
 
 const initialNfts = {
   exodus_0: {

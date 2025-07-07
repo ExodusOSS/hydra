@@ -1,10 +1,11 @@
+import ecc from '@exodus/bitcoinerlab-secp256k1'
+import * as bitcoin from '@exodus/bitcoinjs'
+import * as bitcoinMessage from 'bitcoinjs-message'
+
 import Address from '../../src/Address.js'
 import BIP322 from '../../src/BIP322.js'
-import BIP137 from './helpers/BIP137.js'
-import * as bitcoin from '@exodus/bitcoinjs'
-import ecc from '@exodus/bitcoinerlab-secp256k1'
-import * as bitcoinMessage from 'bitcoinjs-message'
 import { decodeScriptSignature } from './bitcoinjs/DecodeScriptSignature.js'
+import BIP137 from './helpers/BIP137.js'
 
 /**
  * Class that handles BIP-322 signature verification.

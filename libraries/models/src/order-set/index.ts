@@ -10,7 +10,7 @@ const createOrderSet = ({ items }: { items: Map<string, Order> }) =>
   new OrderSet({ items, initSymbol: FACTORY_SYMBOL })
 
 function isObjectOrConvert(obj: Order | OrderProps | DenormalizedOrder): Order {
-  if (obj instanceof Order) return obj
+  if (Order.isInstance(obj)) return obj
   return Order.fromJSON(obj)
 }
 

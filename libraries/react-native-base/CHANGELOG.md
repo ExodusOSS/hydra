@@ -3,6 +3,68 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/react-native-base@2.6.0...@exodus/react-native-base@3.0.0) (2025-06-05)
+
+### ⚠ BREAKING CHANGES
+
+- remove mobile crypto shim (#12819)
+
+### Features
+
+- feat!: remove mobile crypto shim (#12819)
+
+## [2.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/react-native-base@2.5.2...@exodus/react-native-base@2.6.0) (2025-06-05)
+
+### Features
+
+- feat: remove unused crypto mappings (#12814)
+
+## [2.5.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/react-native-base@2.5.1...@exodus/react-native-base@2.5.2) (2025-04-24)
+
+### Bug Fixes
+
+- fix: bump hermes to 0.0.7 (#12068)
+
+## [2.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/react-native-base@2.5.0...@exodus/react-native-base@2.5.1) (2025-04-23)
+
+### Bug Fixes
+
+- fix: wrong hermes binaries bump to 0.0.6 (#12065)
+
+## [2.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/react-native-base@2.4.0...@exodus/react-native-base@2.5.0) (2025-04-23)
+
+### Features
+
+- feat: bump hermes to 0.0.5 (#12062)
+
+## [2.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/react-native-base@2.3.1...@exodus/react-native-base@2.4.0) (2025-04-22)
+
+### Features
+
+- feat: bump custom hermes to v0.0.4 (#12051)
+
+## [2.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/react-native-base@2.3.0...@exodus/react-native-base@2.3.1) (2025-04-01)
+
+**Note:** Version bump only for package @exodus/react-native-base
+
+## [2.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/react-native-base@2.2.1...@exodus/react-native-base@2.3.0) (2025-03-27)
+
+### Features
+
+- feat(react-native-base): bump custom hermes 0.0.1 to 0.02 (#11779)
+
+## [2.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/react-native-base@2.2.0...@exodus/react-native-base@2.2.1) (2025-01-10)
+
+### License
+
+- license: re-license under MIT license (#11055)
+
+## [2.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/react-native-base@2.1.1...@exodus/react-native-base@2.2.0) (2025-01-10)
+
+### Features
+
+- feat(react-native-base): add origin check before forwarding auth header on redirect (#11026)
+
 ## [2.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/react-native-base@2.1.0...@exodus/react-native-base@2.1.1) (2025-01-02)
 
 **Note:** Version bump only for package @exodus/react-native-base

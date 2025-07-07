@@ -1,11 +1,11 @@
 {
   "name": "@exodus/slip10",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Exodus SLIP10 modules.",
   "type": "module",
   "main": "src/index.js",
   "author": "Exodus Movement, Inc.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/slip10",
   "files": [
     "src",
@@ -27,5 +27,8 @@
   },
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aslip10"
+  },
+  "devDependencies": {
+    "@exodus/test": "^1.0.0-rc.76"
   }
 }

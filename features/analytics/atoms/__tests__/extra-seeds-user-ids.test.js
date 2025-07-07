@@ -1,11 +1,11 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 import { EXODUS_KEY_IDS } from '@exodus/key-ids'
-import keychainDefinition from '@exodus/keychain/module'
-import { getSeedId } from '@exodus/keychain/module/crypto/seed-id'
+import { getSeedId } from '@exodus/keychain/module/crypto/seed-id.js'
+import keychainDefinition from '@exodus/keychain/module/index.js'
 import { WalletAccount } from '@exodus/models'
-import { mnemonicToSeedSync } from 'bip39'
+import { mnemonicToSeed } from 'bip39'
 
-import analyticsExtraSeedsUserIdsAtomDefinition from '../extra-seeds-user-ids'
+import analyticsExtraSeedsUserIdsAtomDefinition from '../extra-seeds-user-ids.js'
 
 const { factory: createAnalyticsExtraSeedsUserIdsAtom } = analyticsExtraSeedsUserIdsAtomDefinition
 const storage = {
@@ -15,14 +15,14 @@ const storage = {
 
 const logger = { warn: jest.fn() }
 
-describe('analyticsUserIdAtom', () => {
-  const seed1 = mnemonicToSeedSync(
+describe('analyticsUserIdAtom', async () => {
+  const seed1 = await mnemonicToSeed(
     'menu memory fury language physical wonder dog valid smart edge decrease worth'
   )
-  const seed2 = mnemonicToSeedSync(
+  const seed2 = await mnemonicToSeed(
     'grass custom warm saddle side clerk envelope artist ankle window people doctor'
   )
-  const seed3 = mnemonicToSeedSync(
+  const seed3 = await mnemonicToSeed(
     'buffalo hero bridge wheat rent flee office mimic tennis estate toy sheriff'
   )
   const seedId1 = getSeedId(seed1)
@@ -85,7 +85,7 @@ describe('analyticsUserIdAtom', () => {
       const listener = jest.fn()
       extraSeedsUserIdsAtom.observe(listener)
 
-      await new Promise(setImmediate)
+      await new Promise((resolve) => setTimeout(resolve, 0))
       expect(listener).toHaveBeenCalledWith({
         '3c4d2f1c13332c084d3be1f593c90f51a9904da9': 'LSzTGsrAzmq/Zxi295e74hINgNTgqcTFgs3uDe/o8o8=',
         ba41ba1370cd8d281ab8f24d49072d997440d030: 'x6FwKEq0Ul+YBZVsaSSF54pF2pf+Judaq8+fXDTcECY=',
@@ -96,11 +96,11 @@ describe('analyticsUserIdAtom', () => {
       const listener = jest.fn()
       extraSeedsUserIdsAtom.observe(listener)
 
-      await new Promise(setImmediate)
+      await new Promise((resolve) => setTimeout(resolve, 0))
       listener.mockClear()
 
       primarySeedIdAtom.set(seedId2)
-      await new Promise(setImmediate)
+      await new Promise((resolve) => setTimeout(resolve, 0))
 
       expect(listener).toHaveBeenCalledWith({
         '3c4d2f1c13332c084d3be1f593c90f51a9904da9': 'LSzTGsrAzmq/Zxi295e74hINgNTgqcTFgs3uDe/o8o8=',

@@ -1,4 +1,4 @@
-import createPersonalNotesAtom from './personal-notes'
+import createPersonalNotesAtom from './personal-notes.js'
 
 export const personalNotesAtomDefinition = {
   id: 'personalNotesAtom',

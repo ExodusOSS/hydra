@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('get-hourly-price', () => {
   it('return function to get asset historical price from selected assetName and time', () => {

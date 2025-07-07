@@ -2,7 +2,7 @@ import { mnemonicToSeed } from 'bip39'
 
 import createKeychain from './create-keychain.js'
 import { getSeedId } from '../crypto/seed-id.js'
-import { hashSync } from '@exodus/crypto/hash'
+import { hash } from '@exodus/crypto/hash'
 import KeyIdentifier from '@exodus/key-identifier'
 
 const seed = mnemonicToSeed(
@@ -10,7 +10,7 @@ const seed = mnemonicToSeed(
 )
 const entropy = '0000000000000000000000000000000000000000000000000000000000000000'
 const seedId = getSeedId(seed)
-const data = hashSync('sha256', Buffer.from('I really love keychains'))
+const data = await hash('sha256', Buffer.from('I really love keychains'))
 
 describe('keychain.signBuffer', () => {
   const keychain = createKeychain({ seed })
@@ -90,7 +90,7 @@ describe('keychain.signBuffer', () => {
       derivationAlgorithm: 'BIP32',
       keyType: 'secp256k1',
     })
-    const data = hashSync('sha256', Buffer.from('I really love keychains'))
+    const data = await hash('sha256', Buffer.from('I really love keychains'))
     const signatureType = 'schnorrZ'
 
     await expect(
@@ -130,6 +130,22 @@ describe('keychain.signBuffer', () => {
     const signatureType = 'ed25519'
     const expected =
       'd0f019e45795a86d79542143483e22a2478498289490072c902408c01744f81d2d7769c7b6c5c28ade5336d20ea8b39c3723264d1d271a24a15dca509e3d5f03'
+
+    const signature = await keychain.signBuffer({ seedId, keyId, signatureType, data })
+
+    expect(signature.toString('hex')).toBe(expected)
+  })
+
+  it('signatureType "ed25519" with keyType "cardanoByron"', async () => {
+    const keyId = new KeyIdentifier({
+      derivationPath: "m/44'/1815'/0'/0/0",
+      derivationAlgorithm: 'BIP32',
+      keyType: 'cardanoByron',
+    })
+    const signatureType = 'ed25519'
+
+    const expected =
+      'dedeffddc74a106693bf6c62892a5d931cd5e369fd6b55181fab04e52ef16f5f38507e33d8b72df4d4903b25c09f301525522fa11d9de9399667b91780463e02'
 
     const signature = await keychain.signBuffer({ seedId, keyId, signatureType, data })
 

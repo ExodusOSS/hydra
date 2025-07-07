@@ -245,6 +245,18 @@ class TxSet {
     return this._mutations
   }
 
+  reverse() {
+    return {
+      [Symbol.iterator]: () => {
+        let i = this._order.length
+        return {
+          next: () =>
+            i > 0 ? { value: this._txs.get(this._order[--i]!), done: false } : { done: true },
+        }
+      },
+    }
+  }
+
   [Symbol.iterator]() {
     return this._txs.values()
   }

@@ -29,7 +29,7 @@ describe('errorTrackingReport', () => {
       errorsAtom,
     })
 
-    const result = await report.export({ walletExists: true })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
 
     expect(typeof result).toBe('object')
     expect(Array.isArray(result.errors)).toBe(true)
@@ -43,7 +43,7 @@ describe('errorTrackingReport', () => {
       errorsAtom,
     })
 
-    const result = await report.export({ walletExists: true })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
 
     expect(typeof result).toBe('object')
     expect(Array.isArray(result.errors)).toEqual(true)

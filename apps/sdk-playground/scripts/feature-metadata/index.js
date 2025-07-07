@@ -19,20 +19,23 @@ const isPublic = restrictConcurrency(
 )
 
 await Promise.all(
-  features.map(async (feature) => {
-    const packageJsonPath = path.join(featuresDir, feature, 'package.json')
-    const { name, version, description, homepage } = JSON.parse(
-      await fs.promises.readFile(packageJsonPath, 'utf8')
-    )
+  features
+    .filter((feature) => fs.existsSync(path.join(featuresDir, feature, 'package.json')))
+    .map(async (feature) => {
+      const packageJsonPath = path.join(featuresDir, feature, 'package.json')
 
-    metadata[feature] = {
-      package: name,
-      version,
-      description,
-      homepage: homepage.replace('ExodusMovement/exodus-hydra', 'ExodusOSS/hydra'),
-      public: await isPublic(name),
-    }
-  })
+      const { name, version, description, homepage } = JSON.parse(
+        await fs.promises.readFile(packageJsonPath, 'utf8')
+      )
+
+      metadata[feature] = {
+        package: name,
+        version,
+        description,
+        homepage: homepage.replace('ExodusMovement/exodus-hydra', 'ExodusOSS/hydra'),
+        public: await isPublic(name),
+      }
+    })
 )
 
 const outputPath = path.resolve('./metadata.json')

@@ -1,9 +1,9 @@
 import Emitter from '@exodus/wild-emitter'
 
-import createAdapters from './adapters'
-import baseConfig from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import baseConfig from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
 const config = {
   ...baseConfig,
@@ -16,10 +16,11 @@ describe('enabledAssets', () => {
   let port
   let enabledAssetsAtom
   let enabledAndDisabledAssetsAtom
+  let reportNode
 
   const passphrase = 'my-password-manager-generated-this'
 
-  beforeEach(async () => {
+  const setup = async ({ createWallet = true } = {}) => {
     adapters = createAdapters()
 
     port = adapters.port
@@ -28,16 +29,23 @@ describe('enabledAssets', () => {
 
     exodus = container.resolve()
     ;({ enabledAssetsAtom, enabledAndDisabledAssetsAtom } = container.getByType('atom'))
+    reportNode = container.getByType('report').enabledAssetsReport
 
     await exodus.application.start()
-    await exodus.application.create({ passphrase })
-    await exodus.application.unlock({ passphrase })
-    await expect(enabledAndDisabledAssetsAtom.get()).resolves.toEqual({
-      disabled: { ethereum: false },
-    })
+    if (createWallet) {
+      await exodus.application.create({ passphrase })
+      await exodus.application.unlock({ passphrase })
 
-    await expect(enabledAssetsAtom.get()).resolves.toEqual({ ethereum: true })
-  })
+      await expect(enabledAndDisabledAssetsAtom.get()).resolves.toEqual({
+        disabled: { ethereum: false },
+      })
+
+      await expect(enabledAssetsAtom.get()).resolves.toEqual({ ethereum: true })
+    }
+  }
+
+  beforeEach(setup)
+  afterEach(() => exodus.application.stop())
 
   test('enable assets', async () => {
     await exodus.assets.enable(['bitcoin'])
@@ -83,5 +91,25 @@ describe('enabledAssets', () => {
     await expectStart
 
     await expect(newEnabledAssetsAtom.get()).resolves.toEqual({ ethereum: true })
+
+    await newExodus.application.stop()
+  })
+
+  test('should successfully export report (pre-wallet-exists)', async () => {
+    await exodus.application.stop() // stop the instance from beforeEach
+    await setup({ createWallet: false })
+
+    await expect(exodus.wallet.exists()).resolves.toBe(false)
+    await expect(exodus.reporting.export()).resolves.toMatchObject({
+      enabledAssets: await reportNode.export({ walletExists: await exodus.wallet.exists() }),
+    })
+  })
+
+  test('should successfully export report (post-wallet-exists)', async () => {
+    await exodus.application.unlock({ passphrase })
+    await expect(exodus.wallet.exists()).resolves.toBe(true)
+    await expect(exodus.reporting.export()).resolves.toMatchObject({
+      enabledAssets: await reportNode.export({ walletExists: await exodus.wallet.exists() }),
+    })
   })
 })

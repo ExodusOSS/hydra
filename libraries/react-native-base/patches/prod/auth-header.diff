@@ -7,15 +7,24 @@ diff --git a/node_modules/react-native/Libraries/Network/RCTHTTPRequestHandler.m
 index 274f3810f2..6190156fcf 100644
 --- a/node_modules/react-native/Libraries/Network/RCTHTTPRequestHandler.mm
 +++ b/node_modules/react-native/Libraries/Network/RCTHTTPRequestHandler.mm
-@@ -134,6 +134,13 @@ - (void)URLSession:(NSURLSession *)session
+@@ -143,6 +134,22 @@ - (void)URLSession:(NSURLSession *)session
 
    NSArray<NSHTTPCookie *> *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:request.URL];
    nextRequest.allHTTPHeaderFields = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
 +  NSString *originalAuthorizationHeader = [task.originalRequest valueForHTTPHeaderField:@"Authorization"];
 +
-+  // Forward the original `Authorization` header if set
++  // Forward the original `Authorization` header if set and origin is the same
 +  if (originalAuthorizationHeader) {
-+    [nextRequest addValue:originalAuthorizationHeader forHTTPHeaderField:@"Authorization" ];
++    NSURL *originalURL = task.originalRequest.URL;
++    NSURL *nextURL = request.URL;
++
++    BOOL hasSameScheme = [originalURL.scheme isEqualToString:nextURL.scheme];
++    BOOL hasSameHost = [originalURL.host isEqualToString:nextURL.host];
++    BOOL hasSamePort = [originalURL.port isEqualToNumber:nextURL.port] || (!originalURL.port && !nextURL.port);
++
++    if (hasSameScheme && hasSameHost && hasSamePort) {
++      [nextRequest addValue:originalAuthorizationHeader forHTTPHeaderField:@"Authorization"];
++    }
 +  }
 +
    completionHandler(nextRequest);

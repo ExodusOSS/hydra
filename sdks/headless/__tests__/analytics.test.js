@@ -1,15 +1,22 @@
-import analytics from '@exodus/analytics'
 import {
   analyticsUserIdAtomDefinition,
   persistedAnalyticsEventsAtomDefinition,
   persistedAnalyticsTraitsAtomDefinition,
   shareActivityAtomDefinition,
-} from '@exodus/analytics/atoms'
-import analyticsModule from '@exodus/analytics/module'
+} from '@exodus/analytics/atoms/index.js'
+import analyticsModule from '@exodus/analytics/module/index.js'
 
-import createAdapters from './adapters'
-import _config from './config'
-import createExodus from './exodus'
+import { validate as analyticsValidate } from '../../../libraries/analytics-validation/src/__tests__/mainschema.js'
+import createAdapters from './adapters/index.js'
+import _config from './config.js'
+import createExodus from './exodus.js'
+
+jest.doMock('@exodus/analytics-validation', () => ({
+  __esModule: true,
+  default: analyticsValidate,
+}))
+
+const { default: analytics } = await import('@exodus/analytics')
 
 const config = {
   ..._config,
@@ -63,6 +70,8 @@ describe('analytics', () => {
       appPlatform: 'mobile',
       appVersion: '1.0.0',
     })
+
+    await exodus.application.stop()
   })
 
   test('should set build metadata properties on start', async () => {
@@ -73,6 +82,8 @@ describe('analytics', () => {
       osName: 'android',
       deviceMode: undefined,
     })
+
+    await exodus.application.stop()
   })
 })
 
@@ -80,6 +91,7 @@ describe('reporting', () => {
   let exodus
   let adapters
   let analyticsTracker
+  let reportNode
 
   beforeEach(async () => {
     adapters = createAdapters()
@@ -105,33 +117,35 @@ describe('reporting', () => {
     })
 
     exodus = container.resolve()
+
+    reportNode = container.getByType('report').analyticsReport
   })
 
-  test('report pre-wallet-exists', async () => {
+  test('should successfully export report (pre-wallet-exists)', async () => {
     await exodus.application.start()
     await exodus.application.load()
     await expect(exodus.wallet.exists()).resolves.toEqual(false)
     await expect(exodus.reporting.export()).resolves.toEqual(
       expect.objectContaining({
-        analytics: {
-          userId: null,
-        },
+        analytics: await reportNode.export({ walletExists: await exodus.wallet.exists() }),
       })
     )
+
+    await exodus.application.stop()
   })
 
-  test('report post-wallet-exists', async () => {
+  test('should successfully export report (post-wallet-exists)', async () => {
     await exodus.application.start()
     await exodus.application.create()
     await exodus.application.unlock()
     await expect(exodus.wallet.exists()).resolves.toEqual(true)
     await expect(exodus.reporting.export()).resolves.toEqual(
       expect.objectContaining({
-        analytics: {
-          userId: expect.any(String),
-        },
+        analytics: await reportNode.export({ walletExists: await exodus.wallet.exists() }),
       })
     )
+
+    await exodus.application.stop()
   })
 })
 
@@ -147,5 +161,7 @@ describe('analytics not registered', () => {
     await exodus.application.start()
     await exodus.application.create()
     await expect(exodus.application.unlock()).resolves.not.toThrow()
+
+    await exodus.application.stop()
   })
 })

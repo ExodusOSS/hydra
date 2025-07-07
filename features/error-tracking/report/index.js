@@ -1,4 +1,6 @@
 import { SafeError } from '@exodus/errors'
+import { memoize } from '@exodus/basic-utils'
+import { z } from '@exodus/zod'
 
 const errorTrackingReportDefinition = {
   type: 'report',
@@ -15,6 +17,21 @@ const errorTrackingReportDefinition = {
         })),
       }
     },
+    getSchema: memoize(() =>
+      z
+        .object({
+          errors: z.array(
+            z
+              .object({
+                namespace: z.string(),
+                error: z.instanceof(SafeError),
+                time: z.number(),
+              })
+              .strict()
+          ),
+        })
+        .strict()
+    ),
   }),
   dependencies: ['errorsAtom'],
   public: true,

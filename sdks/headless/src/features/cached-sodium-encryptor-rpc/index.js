@@ -1,4 +1,4 @@
-import { createRpcFeature } from '../../utils/ioc'
+import { createRpcFeature } from '../../utils/ioc.js'
 
 const cachedSodiumEncryptorRpc = (api) => createRpcFeature('cachedSodiumEncryptor', api)
 

@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 
-import { decomposeId } from './utils'
+import { decomposeId } from './utils.js'
 
 const selectorFactory = (nftsSelector) =>
   createSelector(nftsSelector, (nfts) => ({ id, walletAccount } = {}) => {

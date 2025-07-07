@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [15.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.3.0...@exodus/analytics@15.4.0) (2025-06-03)
+
+### Features
+
+- feat: gracefully handle 'isLocked' state in report (#12669)
+
+## [15.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.2.1...@exodus/analytics@15.3.0) (2025-05-12)
+
+### Features
+
+- feat: make analytics proper ESM, fix tests to mock modules (#12220)
+
+## [15.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.2.0...@exodus/analytics@15.2.1) (2025-04-30)
+
+### Bug Fixes
+
+- fix: add missing multi-seed factory option (#12112)
+
+## [15.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.1.3...@exodus/analytics@15.2.0) (2025-04-29)
+
+### Features
+
+- feat: make multi-seed related nodes and logic optional (#12108)
+
+## [15.1.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.1.2...@exodus/analytics@15.1.3) (2025-03-19)
+
+**Note:** Version bump only for package @exodus/analytics
+
+## [15.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.1.1...@exodus/analytics@15.1.2) (2025-03-11)
+
+**Note:** Version bump only for package @exodus/analytics
+
 ## [15.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.1.0...@exodus/analytics@15.1.1) (2025-02-21)
 
 ### Bug Fixes

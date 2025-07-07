@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('create-asset-hourly-prices-loading', () => {
   it('return false if prices are not available yet', () => {

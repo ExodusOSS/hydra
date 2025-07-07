@@ -1,4 +1,4 @@
-import memoizeGetPrices from './helpers/memoize-get-price'
+import memoizeGetPrices from './helpers/memoize-get-price.js'
 
 const resultFunction = (getAssetDailyPrices, rates, assets, startOfHourTime) =>
   memoizeGetPrices(getAssetDailyPrices, rates, 'daily', assets, startOfHourTime)

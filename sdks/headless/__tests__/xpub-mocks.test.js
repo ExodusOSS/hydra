@@ -1,9 +1,9 @@
-import createAdapters from './adapters/index.js'
-import _config from './config.js'
-import createExodus from './exodus.js'
-
-jest.mock('@exodus/address-provider', () => jest.fn().mockReturnValue({ definitions: [] }))
+jest.doMock('@exodus/address-provider', () => jest.fn().mockReturnValue({ definitions: [] }))
 const mockAddressProvider = jest.requireMock('@exodus/address-provider')
+
+const { default: createAdapters } = await import('./adapters/index.js')
+const { default: _config } = await import('./config.js')
+const { default: createExodus } = await import('./exodus.js')
 
 const xpubs = {
   exodus_0: {

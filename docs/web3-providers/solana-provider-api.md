@@ -126,6 +126,38 @@ site itself. For this reason, it's important for sites to gracefully handle the
 
 :::
 
+### `solana.signIn(options)`
+
+Use `signIn` to replace the traditional connect + signMessage flow with a one-click sign-in method. It shows a popup to the user asking to sign a standardized message and then exposes the user's public key and wallet account details to the caller.
+
+In its simplest form it can be called without any arguments:
+
+```typescript
+const {
+  account: { chains, features, address, publicKey },
+  signature,
+  signedMessage,
+} = await window.exodus.solana.signIn()
+```
+
+By default the active wallet account will be used to sign in. You can provide the address of another wallet account to sign in with it.
+
+```typescript
+const { account } = await window.exodus.solana.signIn({ address })
+assert(account.address === address)
+```
+
+The message shown to the user can be further customized, for available options please refer to [the specification](https://github.com/phantom/sign-in-with-solana?tab=readme-ov-file#sign-in-input-fields)
+
+After successful sign-in, the wallet returns an object with the following properties to the caller:
+
+- account [[WalletAccount](https://github.com/wallet-standard/wallet-standard/blob/c6fa5fd7d58e9ea1e6762127d16585fbb56ff88a/packages/core/base/src/wallet.ts#L131)]: Account that was signed in.
+- signedMessage [Uint8Array]: Raw message that was signed by the wallet. The wallet is responsible for constructing this message using the provided inputs.
+- signature [Uint8Array]: The signature produced by the wallet.
+- signatureType ["ed25519"]: Optional type of the message signature produced. If not provided, the signature must be Ed25519.
+
+The signature can be used to verify that the user owns the address, e.g. using the [solana wallet standard utils](https://github.com/ExodusMovement/solana-wallet-standard/blob/6cfb9a0be49351dba765131e58d57536c31ae251/packages/core/util/src/signMessage.ts#L8C17-L8C39)
+
 ### `solana.signAndSendTransaction(transaction, options)`
 
 ```typescript

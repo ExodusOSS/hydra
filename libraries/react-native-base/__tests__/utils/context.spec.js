@@ -1,44 +1,48 @@
-jest.mock(
-  '/Users/bruce-wayne/workspace/exodus-mobile/src/node_modules/react-native/package.json',
-  () => ({
-    version: '0.42.0',
-  }),
-  { virtual: true }
-)
+const fakeRoot = '/Users/bruce-wayne/workspace/exodus-mobile'
 
-jest.mock(
-  '/Users/bruce-wayne/workspace/exodus-mobile/src/node_modules/react-native-code-push/package.json',
-  () => ({
-    version: '0.73.0',
-  }),
-  { virtual: true }
-)
+const Module = require('module')
+const { _resolveFilename } = Module
+const unmocked = new Set()
+Module._resolveFilename = function fakeResolve(request, parent) {
+  let redirected
 
-jest.mock(
-  '/Users/bruce-wayne/workspace/exodus-mobile/src/node_modules/@react-navigation/core/package.json',
-  () => ({
-    version: '1.2.3',
-  }),
-  { virtual: true }
-)
-jest.mock(
-  '/Users/bruce-wayne/workspace/exodus-mobile/src/node_modules/react-native-get-random-values/package.json',
-  () => ({
-    version: '1.2.0',
-  }),
-  { virtual: true }
-)
+  if (!unmocked.has(request)) {
+    if (request.startsWith(`${fakeRoot}/node_modules/`)) {
+      redirected = request.replace(`${fakeRoot}/node_modules/`, '')
+    } else if (request.startsWith(`${fakeRoot}/src/node_modules/`)) {
+      redirected = request.replace(`${fakeRoot}/src/node_modules/`, '')
+    }
+
+    // Redirect packages we don't have to something we have so we can mock that
+    if (redirected === 'react-native-code-push/package.json') redirected = 'lodash/package.json'
+    if (redirected === 'jest/package.json') redirected = 'glob/package.json'
+  }
+
+  return _resolveFilename(redirected ?? request, parent)
+}
+
+const mock = (dep, exports) => {
+  unmocked.delete(dep)
+  const file = require.resolve(dep)
+  require.cache[file] = { id: file, file, exports, loaded: true }
+}
+
+const unmock = (dep) => {
+  const file = require.resolve(dep)
+  delete require.cache[file]
+  unmocked.add(dep)
+}
 
 describe('context', () => {
   beforeEach(() => {
     jest.resetModules()
-    jest.mock(
-      '/Users/bruce-wayne/workspace/exodus-mobile/node_modules/jest/package.json',
-      () => ({
-        version: '9.2.3',
-      }),
-      { virtual: true }
-    )
+    mock(`${fakeRoot}/src/node_modules/react-native/package.json`, { version: '0.42.0' })
+    mock(`${fakeRoot}/src/node_modules/react-native-code-push/package.json`, { version: '0.73.0' })
+    mock(`${fakeRoot}/src/node_modules/@react-navigation/core/package.json`, { version: '1.2.3' })
+    mock(`${fakeRoot}/src/node_modules/react-native-get-random-values/package.json`, {
+      version: '1.2.0',
+    })
+    mock(`${fakeRoot}/node_modules/jest/package.json`, { version: '9.2.3' })
   })
 
   it('should derive correct paths and versions when cwd is src', () => {
@@ -70,7 +74,7 @@ describe('context', () => {
   })
 
   it('should not fail if root modules not present yet', () => {
-    jest.unmock('/Users/bruce-wayne/workspace/exodus-mobile/node_modules/jest/package.json')
+    unmock(`${fakeRoot}/node_modules/jest/package.json`)
     const context = require('../../utils/context')
     expect(context.jestVersion).toBeUndefined()
   })

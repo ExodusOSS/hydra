@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [15.12.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.11.1...@exodus/blockchain-metadata@15.12.0) (2025-06-16)
+
+### Features
+
+- feat: validate `data` property in transaction models (#12731)
+
+## [15.11.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.11.0...@exodus/blockchain-metadata@15.11.1) (2025-06-09)
+
+### Bug Fixes
+
+- fix: don't use npm: aliases for lodash (#12861)
+
+## [15.11.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.10.1...@exodus/blockchain-metadata@15.11.0) (2025-06-03)
+
+### Features
+
+- feat: gracefully handle 'isLocked' state in report (#12669)
+
+## [15.10.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.10.0...@exodus/blockchain-metadata@15.10.1) (2025-05-19)
+
+### Bug Fixes
+
+- fix: cancel sync-earliest-tx-plugin queue on stop (#12565)
+
+## [15.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.9.2...@exodus/blockchain-metadata@15.10.0) (2025-04-11)
+
+### Features
+
+- feat: improve blockchain metadata report schema (#11996)
+
+## [15.9.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.9.1...@exodus/blockchain-metadata@15.9.2) (2025-03-17)
+
+### Bug Fixes
+
+- fix: `earliestTxDate` schema (#11790)
+
+## [15.9.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.9.0...@exodus/blockchain-metadata@15.9.1) (2025-03-12)
+
+**Note:** Version bump only for package @exodus/blockchain-metadata
+
 ## [15.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.8.7...@exodus/blockchain-metadata@15.9.0) (2025-03-03)
 
 ### Features

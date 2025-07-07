@@ -84,13 +84,15 @@ describe('sync-earliest-tx-date-to-fusion-plugin', () => {
       )
     }
 
+    jest.useFakeTimers()
+
     blockchainMetadata.updateTxs({
       assetName: 'ethereum',
       walletAccount: WalletAccount.DEFAULT_NAME,
       txs: TxSet.fromArray([tx]).toJSON(),
     })
 
-    await awaitValues([null, '2019-07-22'])
+    await Promise.all([jest.advanceTimersByTimeAsync(1000), awaitValues([null, '2019-07-22'])])
 
     blockchainMetadata.updateTxs({
       assetName: 'ethereum',
@@ -106,6 +108,9 @@ describe('sync-earliest-tx-date-to-fusion-plugin', () => {
 
     await awaitValues(['2019-07-22'])
 
+    // Does not change after time passed
+    await Promise.all([jest.advanceTimersByTimeAsync(1000), awaitValues(['2019-07-22'])])
+
     blockchainMetadata.updateTxs({
       assetName: 'ethereum',
       walletAccount: WalletAccount.DEFAULT_NAME,
@@ -118,6 +123,13 @@ describe('sync-earliest-tx-date-to-fusion-plugin', () => {
       ]).toJSON(),
     })
 
-    await awaitValues(['2019-07-22', '2019-07-21'])
+    await Promise.all([
+      jest.advanceTimersByTimeAsync(1000),
+      awaitValues(['2019-07-22', '2019-07-21']),
+    ])
+
+    jest.useRealTimers()
+
+    await plugin.onStop()
   })
 })

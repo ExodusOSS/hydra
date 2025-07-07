@@ -1,7 +1,13 @@
 # @exodus/auth-client-base
 
-signature based authentication client, as used in the PrimeTrust and Shares projects
+Pseudonymous signature based authentication client. Used for when your auth scenario requires the client to generate its own keypair and sign requests with it.
+
+## Install
+
+```sh
+yarn add @exodus/auth-client-base
+```
 
 ## Usage
 
-see [./example.js](./example.js) for how to add transparent authentication to your REST client
+See [./example.js](./example.js) for how to add transparent authentication to your REST client.

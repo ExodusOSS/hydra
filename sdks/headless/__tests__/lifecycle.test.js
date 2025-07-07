@@ -1,5 +1,5 @@
-import createAdapters from './adapters'
-import createExodus from './exodus'
+import createAdapters from './adapters/index.js'
+import createExodus from './exodus.js'
 
 describe('lifecycle', () => {
   let exodus

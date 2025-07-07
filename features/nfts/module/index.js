@@ -1,8 +1,10 @@
 import pDefer from 'p-defer'
-import { cloneDeep } from 'lodash'
+import lodash from 'lodash'
 
 import { FUSION_CHANNEL_CONFIG, MODULE_ID } from './constants.js'
 import { getConfigBySchema } from './utils.js'
+
+const { cloneDeep } = lodash
 
 /**
  * @class

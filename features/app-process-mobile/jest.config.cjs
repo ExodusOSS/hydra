@@ -6,7 +6,12 @@ const rootConfig = require('../../jest.config')
 
 const { collectCoverage, coverageReporters, reporters } = rootConfig
 
-const untranspiledModulePatterns = ['p-defer', '@exodus/atoms', '@exodus/basic-utils']
+const untranspiledModulePatterns = [
+  'p-defer',
+  '@exodus/atoms',
+  '@exodus/basic-utils',
+  '@exodus/zod',
+]
 
 /** @type {import('@jest/types').Config.InitialOptions} */
 module.exports = {
@@ -16,6 +21,9 @@ module.exports = {
       '|'
     )})/)`,
   ],
+  transform: {
+    '^.+\\.(mjs)$': 'babel-jest',
+  },
   coverageReporters,
   reporters,
   preset: 'react-native',

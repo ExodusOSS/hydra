@@ -1,1 +1,1 @@
-export const safeFields = new Set(['cursor', 'tokenBalances', 'stakingInfo'])
+export const safeFields = new Set(['cursor', 'clarityCursor', 'tokenBalances', 'stakingInfo'])

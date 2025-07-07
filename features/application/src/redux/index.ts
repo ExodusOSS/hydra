@@ -11,6 +11,7 @@ const initialState: State = {
   isRestoring: false,
   lockHistory: [],
   autoLockTimer: null,
+  walletCreatedAt: null,
 }
 
 const applicationReduxDefinition = {

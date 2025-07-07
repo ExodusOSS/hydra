@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@3.0.0...@exodus/hardware-wallets@3.0.1) (2025-06-17)
+
+### Bug Fixes
+
+- fix: retry logic on hardware signing (#12944)
+
+## [3.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@2.1.0...@exodus/hardware-wallets@3.0.0) (2025-06-16)
+
+### ⚠ BREAKING CHANGES
+
+- rework hardware wallet UI signing (#12852)
+
+### Features
+
+- feat!: rework hardware wallet UI signing (#12852)
+
+## [2.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@2.0.5...@exodus/hardware-wallets@2.1.0) (2025-05-13)
+
+### Features
+
+- feat(wallet-accounts): default ledger color and icon (#12426)
+
+## [2.0.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@2.0.4...@exodus/hardware-wallets@2.0.5) (2025-05-09)
+
+### Bug Fixes
+
+- fix(hardware-wallets): complete modal flow on user refusal action (#12056)
+
+## [2.0.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@2.0.3...@exodus/hardware-wallets@2.0.4) (2025-03-05)
+
+### Bug Fixes
+
+- fix: bump bip32 (#11415)
+
+## [2.0.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@2.0.2...@exodus/hardware-wallets@2.0.3) (2024-12-20)
+
+### License
+
+- license: re-license under MIT license (#10599)
+
+## [2.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@2.0.1...@exodus/hardware-wallets@2.0.2) (2024-12-05)
+
+### Bug Fixes
+
+- fix: memoize selector factory (#10593)
+
 ## [2.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@2.0.0...@exodus/hardware-wallets@2.0.1) (2024-11-25)
 
 ### Bug Fixes

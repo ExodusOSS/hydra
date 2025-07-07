@@ -1,4 +1,4 @@
-import { compute, dedupe } from '@exodus/atoms'
+import { compute } from '@exodus/atoms'
 
 const setsAreEqual = (setA, setB) => {
   if (setA.size !== setB.size) {
@@ -34,7 +34,7 @@ const createAssetNamesWithBalanceAtom = ({ balancesAtom }) => {
     return previousValue
   }
 
-  return dedupe(compute({ atom: balancesAtom, selector }))
+  return compute({ atom: balancesAtom, selector })
 }
 
 export default createAssetNamesWithBalanceAtom

@@ -80,6 +80,7 @@ const createAssetsPlugin = ({
   const onStop = () => {
     observers.forEach((observer) => observer.unregister())
     subscribers.forEach((unsubscribe) => unsubscribe())
+    customTokensMonitor?.stop()
   }
 
   const onClear = async () => {

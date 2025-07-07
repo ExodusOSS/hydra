@@ -1,5 +1,4 @@
 const initialState = {
-  error: null,
   loaded: false,
   data: Object.create(null),
 }

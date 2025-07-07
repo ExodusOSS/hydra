@@ -1,4 +1,6 @@
-import invert from 'lodash/invert'
+import lodash from 'lodash'
+
+const { invert } = lodash
 
 export const Networks = {
   __proto__: null,

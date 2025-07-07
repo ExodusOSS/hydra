@@ -1,13 +1,13 @@
-import { getSeedId } from '@exodus/keychain/module/crypto/seed-id'
+import { mnemonicToSeed } from '@exodus/bip39'
+import { getSeedId } from '@exodus/keychain/module/crypto/seed-id.js'
 import Emitter from '@exodus/wild-emitter'
-import { mnemonicToSeed } from 'bip39'
 
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
-describe('wallet', () => {
+describe('wallet', async () => {
   let exodus
   let adapters = createAdapters()
   let port
@@ -15,7 +15,7 @@ describe('wallet', () => {
 
   const mnemonic = 'menu memory fury language physical wonder dog valid smart edge decrease worth'
   const passphrase = 'my-password-manager-generated-this'
-  const seed = mnemonicToSeed(mnemonic)
+  const seed = await mnemonicToSeed({ mnemonic })
   const seedId = getSeedId(seed)
 
   beforeEach(async () => {
@@ -50,6 +50,8 @@ describe('wallet', () => {
     const mnemonic = await exodus.application.getMnemonic({ passphrase })
 
     expect(mnemonic.split(' ').length).toBe(12)
+
+    await exodus.application.stop()
   })
 
   test('should ingest primary seed id', async () => {
@@ -58,6 +60,8 @@ describe('wallet', () => {
     await exodus.application.unlock()
 
     await expect(primarySeedIdAtom.get()).resolves.toBe(seedId)
+
+    await exodus.application.stop()
   })
 
   test('should load existing wallet', async () => {
@@ -85,6 +89,9 @@ describe('wallet', () => {
     await expect(newExodus.wallet.exists()).resolves.toBe(true)
 
     await expectStartPromise
+
+    await newExodus.application.stop()
+    await exodus.application.stop()
   })
 
   test('should import an existing wallet', async () => {
@@ -97,6 +104,8 @@ describe('wallet', () => {
     await exodus.application.unlock({ passphrase })
 
     await expect(exodus.application.getMnemonic({ passphrase })).resolves.toBe(mnemonic)
+
+    await exodus.application.stop()
   })
 
   test('should import an existing wallet forcing restart', async () => {
@@ -122,6 +131,9 @@ describe('wallet', () => {
 
     const { backedUpAtom } = newContainer.getByType('atom')
     await expect(backedUpAtom.get()).resolves.toBe(true)
+
+    await newExodus.application.stop()
+    await exodus.application.stop()
   })
 
   test('should restore a wallet', async () => {
@@ -161,6 +173,9 @@ describe('wallet', () => {
     expect(startPayload).toMatchObject({ isRestoring: true })
 
     await expect(newExodus.wallet.exists()).resolves.toBe(true)
+
+    await newExodus.application.stop()
+    await exodus.application.stop()
   })
 
   test('should change passphrase', async () => {
@@ -185,6 +200,8 @@ describe('wallet', () => {
     })
 
     await exodus.application.unlock({ passphrase: 'other' })
+
+    await exodus.application.stop()
   })
 
   test('should lock wallet', async () => {
@@ -199,6 +216,8 @@ describe('wallet', () => {
     await exodus.application.unlock({ passphrase })
 
     await expect(exodus.wallet.isLocked()).resolves.toBe(false)
+
+    await exodus.application.stop()
   })
 
   test('should delete wallet', async () => {
@@ -228,6 +247,9 @@ describe('wallet', () => {
     await expectStart
 
     await expect(newExodus.wallet.exists()).resolves.toBe(false)
+
+    await newExodus.application.stop()
+    await exodus.application.stop()
   })
 
   test('it should emit "add-seed" over the port', async () => {
@@ -241,6 +263,8 @@ describe('wallet', () => {
     })
 
     await expectAddSeedEvent
+
+    await exodus.application.stop()
   })
 
   test('import sets compatibility mode and seed id on default wallet account', async () => {
@@ -253,6 +277,8 @@ describe('wallet', () => {
     await expect(exodus.walletAccounts.getEnabled()).resolves.toMatchObject({
       exodus_0: expect.objectContaining({ compatibilityMode, seedId }),
     })
+
+    await exodus.application.stop()
   })
 
   test('create sets seed id on default wallet account', async () => {
@@ -263,5 +289,7 @@ describe('wallet', () => {
     await expect(exodus.walletAccounts.getEnabled()).resolves.toMatchObject({
       exodus_0: expect.objectContaining({ seedId }),
     })
+
+    await exodus.application.stop()
   })
 })

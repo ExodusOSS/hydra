@@ -17,6 +17,8 @@ export const parseGranularity = (granularity) => {
       return 'daily'
     case 'hour':
       return 'hourly'
+    case 'minute':
+      return 'minutely'
     default:
       return granularity
   }

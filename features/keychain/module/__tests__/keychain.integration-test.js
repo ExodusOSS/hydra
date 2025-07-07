@@ -150,7 +150,7 @@ describe.each([
             keyId: new KeyIdentifier({
               derivationAlgorithm: 'BIP32',
               derivationPath: "m/44'/1815'/0'/0/0",
-              keyType: 'legacy',
+              keyType: 'cardanoByron',
               assetName: 'cardano',
             }),
           },

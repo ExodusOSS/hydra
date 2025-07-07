@@ -1,15 +1,17 @@
-import { memoize } from 'lodash' // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
+import { memoize } from '@exodus/basic-utils'
 import ms from 'ms'
 
 const PERIOD_TO_MS = {
   hourly: ms('1h'),
   daily: ms('1d'),
+  minutely: ms('1m'),
 }
 
 const MAX_STEPS = 24
 const STEPS_BY_TYPE = {
   hourly: MAX_STEPS,
   daily: 2,
+  minutely: 1,
 }
 const findLastPrice = ({ getPrice, assetName, time, period }) => {
   let i = 0
@@ -26,10 +28,11 @@ const findLastPrice = ({ getPrice, assetName, time, period }) => {
 
 const getPriceWithFallbackSelector = {
   id: 'getPriceWithFallback',
-  resultFunction: (getDailyPrice, getHourlyPrice) => {
+  resultFunction: (getDailyPrice, getHourlyPrice, getMinutelyPrice) => {
     const fnByType = {
       daily: getDailyPrice,
       hourly: getHourlyPrice,
+      minutely: getMinutelyPrice,
     }
 
     return memoize(
@@ -45,6 +48,7 @@ const getPriceWithFallbackSelector = {
     //
     { selector: 'getDailyPrice' },
     { selector: 'getHourlyPrice' },
+    { selector: 'getMinutelyPrice' },
   ],
 }
 

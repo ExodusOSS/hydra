@@ -2,7 +2,7 @@ const resultFunction = (nfts, nftsOptimistic) => {
   let merged = { ...nfts.data }
   // assume that nft should exist, otherwise ignore optimistic data
   for (const walletAccount in nftsOptimistic) {
-    if (merged.hasOwnProperty(walletAccount)) {
+    if (Object.prototype.hasOwnProperty.call(merged, walletAccount)) {
       merged = {
         ...merged,
         [walletAccount]: {
@@ -10,7 +10,7 @@ const resultFunction = (nfts, nftsOptimistic) => {
         },
       }
       for (const network in nftsOptimistic[walletAccount]) {
-        if (merged[walletAccount].hasOwnProperty(network)) {
+        if (Object.prototype.hasOwnProperty.call(merged[walletAccount], network)) {
           merged = {
             ...merged,
             [walletAccount]: {

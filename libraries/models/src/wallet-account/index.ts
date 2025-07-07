@@ -42,7 +42,7 @@ export const DEFAULT_COLORS = Object.freeze({
   exodus: '#7b39ff',
   seed: '#7b39ff',
   trezor: '#30d968',
-  ledger: '#f5e400',
+  ledger: '#ffffff',
   ftx: '#00b4c2',
 })
 
@@ -50,7 +50,7 @@ export const DEFAULT_ICONS = Object.freeze({
   exodus: 'exodus',
   seed: 'exodus',
   trezor: 'trezor',
-  ledger: 'trezor', // don't have one yet
+  ledger: 'ledger',
   ftx: 'ftx',
 })
 
@@ -271,6 +271,10 @@ export default class WalletAccount {
       source: EXODUS_SRC,
       index: 0,
     })
+  }
+
+  static get VALID_SOURCES() {
+    return [...HARDWARE_SOURCES, ...CUSTODIAL_SOURCES, ...SOFTWARE_SEED_SOURCES]
   }
 
   static defaultWith(params: Partial<WalletAccountParams>) {

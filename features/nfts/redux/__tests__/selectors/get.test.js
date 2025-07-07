@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('get', () => {
   it('should return undefined if id not provided', () => {

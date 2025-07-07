@@ -33,7 +33,14 @@ export default function createWalletAccountsInternalAtom({
       return initialWalletAccounts
     }
 
-    return mapValues(input, (data) => new WalletAccount(data))
+    const walletAccounts = mapValues(input, (data) => new WalletAccount(data))
+
+    // Ensure that normal wallet accounts are sorted before hardware wallet accounts
+    const sortedWalletAccounts = Object.entries(walletAccounts).sort(([, a], [, b]) => {
+      return a.isHardware - b.isHardware
+    })
+
+    return Object.fromEntries(sortedWalletAccounts)
   }
 
   const serialize = (input) => {

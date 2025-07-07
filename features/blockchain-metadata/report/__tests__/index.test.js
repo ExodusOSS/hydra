@@ -102,6 +102,21 @@ describe('blockchainMetadataReport', () => {
     expect(report.namespace).toEqual('blockchainMetadata')
   })
 
+  it('should gracefully handle when a wallet does not exist or locked', async () => {
+    const deps = setup({
+      enabledAssets: {
+        ethereum: true,
+        monero: true,
+      },
+    })
+
+    const report = blockchainMetadataReportDefinition.factory(deps)
+    expect(report.getSchema().parse(await report.export({ walletExists: false }))).toEqual(null)
+    expect(
+      report.getSchema().parse(await report.export({ walletExists: true, isLocked: true }))
+    ).toEqual(null)
+  })
+
   it('should report tx logs', async () => {
     const deps = setup({
       enabledAssets: {
@@ -111,7 +126,7 @@ describe('blockchainMetadataReport', () => {
     })
 
     const report = blockchainMetadataReportDefinition.factory(deps)
-    const result = await report.export({ walletExists: true })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
 
     expect(result.txLogs).toEqual(
       JSON.parse(
@@ -144,7 +159,7 @@ describe('blockchainMetadataReport', () => {
     })
 
     const report = blockchainMetadataReportDefinition.factory(deps)
-    const result = await report.export({ walletExists: true })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
 
     expect(result.accountStates).toEqual({
       exodus_0: {
@@ -164,7 +179,7 @@ describe('blockchainMetadataReport', () => {
     const deps = setup()
 
     const report = blockchainMetadataReportDefinition.factory(deps)
-    const result = await report.export({ walletExists: true })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
 
     expect(result.accountStates).toEqual({
       exodus_0: {
@@ -199,54 +214,5 @@ describe('blockchainMetadataReport', () => {
     const report = blockchainMetadataReportDefinition.factory({ txLogsAtom, accountStatesAtom })
 
     await expect(report.export({ walletExists: true })).rejects.toEqual(error)
-  })
-
-  it('should omit tx.data, tx.meta', async () => {
-    const contaminatedTxLogs = {
-      exodus_0: {
-        ethereum: TxSet.fromArray([
-          {
-            ...ethTxJson,
-            data: {
-              my: '12 word phrase',
-            },
-          },
-        ]),
-      },
-    }
-
-    const { txLogsAtom, accountStatesAtom, enabledAssetsAtom, earliestTxDateAtom } = setup({
-      txLogs: contaminatedTxLogs,
-    })
-
-    const report = blockchainMetadataReportDefinition.factory({
-      txLogsAtom,
-      accountStatesAtom,
-      enabledAssetsAtom,
-      earliestTxDateAtom,
-    })
-    const result = await report.export({ walletExists: true })
-    expect(result.txLogs).toEqual(
-      JSON.parse(
-        JSON.stringify({
-          exodus_0: {
-            ethereum: [
-              {
-                coinAmount: '-0.23637286 ETH',
-                coinName: 'ethereum',
-                confirmations: 1,
-                date: '2019-07-22T13:54:28.000Z',
-                dropped: false,
-                feeAmount: '0.000189 ETH',
-                feeCoinName: 'ethereum',
-                to: '0xa96b536eef496e21f5432fd258b6f78cf3673f74',
-                txId: '0xff11e3ea4a32c95f86d49521ba2dbadf0b5e153c9d9849c0d395b05ce35cd746',
-                version: 1,
-              },
-            ],
-          },
-        })
-      )
-    )
   })
 })

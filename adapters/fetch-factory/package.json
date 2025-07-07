@@ -1,6 +1,6 @@
 {
   "name": "@exodus/fetch-factory",
-  "version": "2.2.6",
+  "version": "2.3.0",
   "type": "module",
   "description": "Factory to create fetch instances with custom headers and options",
   "author": "Exodus Movement, Inc.",

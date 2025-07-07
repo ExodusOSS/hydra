@@ -1,4 +1,4 @@
-import createExodusRedux from '../redux'
+import createExodusRedux from '../redux/index.js'
 
 describe('createExodusRedux', () => {
   let ioc

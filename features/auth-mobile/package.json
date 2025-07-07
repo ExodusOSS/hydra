@@ -2,7 +2,7 @@
   "name": "@exodus/auth-mobile",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
-  "version": "4.0.1",
+  "version": "6.4.1",
   "description": "Module to simplify dealing with mobile device authentication mechanisms",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/auth-mobile",
   "bugs": {
@@ -12,31 +12,40 @@
     "type": "git",
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
+  "type": "module",
   "main": "index.js",
   "files": [
+    "api",
     "atoms",
     "module",
     "plugin",
-    "api",
     "redux",
-    "constants.js",
+    "report",
     "CHANGELOG.md",
-    "README.md"
+    "README.md",
+    "constants.js",
+    "!**/__tests__/**"
   ],
   "dependencies": {
-    "@exodus/atoms": "^8.0.0",
+    "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
+    "@exodus/react-native-biometrics": "^0.1.1",
     "@exodus/react-native-keychain": "^4.0.7",
     "@exodus/react-native-touch-id": "^4.4.1-exodus.0",
+    "@exodus/zod": "^3.24.3",
     "lodash": "^4.17.21"
   },
   "scripts": {
-    "lint": "run -T eslint . --ignore-path ../../.gitignore"
+    "test": "run -T exodus-test --jest",
+    "lint": "run -T eslint -c ../../eslint.config.mjs"
   },
   "devDependencies": {
     "react-native": "^0.71.11"
   },
   "peerDependencies": {
     "react-native": "^0.71.11"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

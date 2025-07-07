@@ -1,9 +1,9 @@
 import topMovers from '@exodus/top-movers-monitor'
 
-import createAdapters from './adapters'
-import _config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import _config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
 const featureFlagsConfig = {
   topMovers: {
@@ -61,5 +61,7 @@ describe('top-movers', () => {
     await exodus.application.unlock({ passphrase })
 
     await eventPromise
+
+    await exodus.application.stop()
   })
 })

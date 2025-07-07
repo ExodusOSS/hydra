@@ -1,7 +1,7 @@
 {
   "name": "@exodus/formatting",
   "type": "module",
-  "version": "9.0.2",
+  "version": "9.0.4",
   "description": "Utils for formatting numbers, strings and money.",
   "author": "Exodus Movement, Inc.",
   "repository": {

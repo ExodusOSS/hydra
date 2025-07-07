@@ -1,10 +1,11 @@
-import createNftsAtom from './nfts'
-import createNftsTxsAtom from './nfts-txs'
-import createNftsConfigsAtom from './nfts-configs'
-import createHasNftsAtom from './has-nfts'
-import createOptimisticNftsAtom from './optimistic-nfts'
-import createNftCollectionsStatsAtom from './collection-stats'
-import createNftBatchMonitorStatusAtom from './batch-monitor-status'
+import createNftsAtom from './nfts.js'
+import createNftsTxsAtom from './nfts-txs.js'
+import createNftsConfigsAtom from './nfts-configs.js'
+import createHasNftsAtom from './has-nfts.js'
+import createOptimisticNftsAtom from './optimistic-nfts.js'
+import createNftCollectionsStatsAtom from './collection-stats.js'
+import createNftBatchMonitorStatusAtom from './batch-monitor-status.js'
+import createNftsMonitorStatusAtom from './nfts-monitor-status.js'
 
 export const nftsAtomDefinition = {
   id: 'nftsAtom',
@@ -58,6 +59,14 @@ export const nftBatchMonitorStatusAtomDefinition = {
   id: 'nftBatchMonitorStatusAtom',
   type: 'atom',
   factory: createNftBatchMonitorStatusAtom,
+  dependencies: ['storage'],
+  public: true,
+}
+
+export const nftsMonitorStatusAtomDefinition = {
+  id: 'nftsMonitorStatusAtom',
+  type: 'atom',
+  factory: createNftsMonitorStatusAtom,
   dependencies: ['storage'],
   public: true,
 }

@@ -1,8 +1,8 @@
-import id from './id'
-import initialState from './initial-state'
-import selectorDefinitions from './selectors'
-import helper from './multi-account-helper'
-import { setAccounts } from '@exodus/multi-account-redux/src/common'
+import id from './id.js'
+import initialState from './initial-state.js'
+import selectorDefinitions from './selectors/index.js'
+import helper from './multi-account-helper.js'
+import { setAccounts } from '@exodus/multi-account-redux/src/common.js'
 
 const activityTxsReduxDefinition = {
   id,

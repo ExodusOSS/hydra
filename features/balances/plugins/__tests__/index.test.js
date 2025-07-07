@@ -1,10 +1,4 @@
-import * as atomsActual from '@exodus/atoms'
-
-jest.doMock('@exodus/atoms', () => ({
-  __esModule: true,
-  ...atomsActual,
-  createAtomObserver: jest.fn(),
-}))
+jest.doMock('@exodus/atoms/factories/observer', () => ({ __esModule: true, default: jest.fn() }))
 
 const atoms = await import('@exodus/atoms')
 const { default: assetBase } = await import('@exodus/assets-base')

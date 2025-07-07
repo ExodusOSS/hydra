@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/multi-account-redux@2.1.0...@exodus/multi-account-redux@2.1.1) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [2.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/multi-account-redux@2.0.1...@exodus/multi-account-redux@2.1.0) (2024-08-31)
 
 ### Features

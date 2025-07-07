@@ -1,6 +1,7 @@
 import { AssertionError } from 'assert'
 
 import { SafeError } from '../../index.js'
+import { commonErrorCases } from '../fixtures/common-errors.js'
 
 class CustomizableTestError extends Error {
   name: string = 'CustomizableTestError'
@@ -62,26 +63,26 @@ describe('SafeError', () => {
       [new CustomizableTestError({ hint: 200 }), { name: 'UnknownError' }],
       // -- safe hint
       [
-        new CustomizableTestError({ hint: SafeError.hints.broadcastTx.other }),
+        new CustomizableTestError({ hint: 'otherErr:broadcastTx' }),
         {
           name: 'UnknownError',
-          hint: SafeError.hints.broadcastTx.other,
+          hint: 'otherErr:broadcastTx',
         },
       ],
       [
-        new CustomizableTestError({ message: SafeError.hints.ethCall.executionReverted }),
+        new CustomizableTestError({ message: 'ethCall:executionReverted' }),
         {
           name: 'UnknownError',
-          hint: SafeError.hints.ethCall.executionReverted,
+          hint: 'ethCall:executionReverted',
         },
       ],
       [
         new CustomizableTestError({
-          message: `${SafeError.hints.getNftArguments.general} bad stuff happened`,
+          message: `getNftArguments bad stuff happened`,
         }),
         {
           name: 'UnknownError',
-          hint: SafeError.hints.getNftArguments.general,
+          hint: 'getNftArguments',
         },
       ],
 
@@ -90,12 +91,12 @@ describe('SafeError', () => {
         new CustomizableTestError({
           name: 'Error',
           code: 'EXOD-0',
-          hint: SafeError.hints.broadcastTx.retry,
+          hint: 'retry:broadcastTx',
         }),
         {
           name: 'Error',
           code: 'EXOD-0',
-          hint: SafeError.hints.broadcastTx.retry,
+          hint: 'retry:broadcastTx',
         },
       ],
       [
@@ -109,7 +110,8 @@ describe('SafeError', () => {
           code: 'EXOD-0',
         },
       ],
-    ])('should convert %s to %s', (errorIn, safeErrorOut) => {
+      ...commonErrorCases,
+    ] as const)('should convert %s to %s', (errorIn, safeErrorOut) => {
       expect(SafeError.from(errorIn).toJSON()).toEqual({
         stack: expect.any(String),
         ...safeErrorOut,
@@ -215,7 +217,7 @@ describe('SafeError', () => {
     expect(safeError.stackFrames![0]!.line).toBe(observedLine)
 
     const observedStackLength = safeError.stackFrames!.length
-    safeError.stackFrames!.push({})
+    safeError.stackFrames!.push({} as any)
     expect(safeError.stackFrames!.length).toBe(observedStackLength)
   })
 })

@@ -2,7 +2,7 @@ import { mnemonicToSeed } from 'bip39'
 
 import createKeychain from './create-keychain.js'
 import { getSeedId } from '../crypto/seed-id.js'
-import { hash, hashSync } from '@exodus/crypto/hash'
+import { hash } from '@exodus/crypto/hash'
 import KeyIdentifier from '@exodus/key-identifier'
 
 const seed = mnemonicToSeed(
@@ -95,9 +95,9 @@ describe.each([
   })
 })
 
-describe('EcDSA Signer Signature Encoding', () => {
+describe('EcDSA Signer Signature Encoding', async () => {
   const keychain = createKeychain({ seed })
-  const data = hashSync('sha256', 'I really love keychains')
+  const data = await hash('sha256', 'I really love keychains')
   const expected = {
     default:
       '30440220722491f3d490960c4fc16b56b8dacafa9d446e17d9321dbbe3b216da845adc9802203afd466c1450c60f7ef0fcdf55b1e3bb206d9f989530996059890a9d92ab1ef9',

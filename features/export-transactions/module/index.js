@@ -1,11 +1,11 @@
-import ExodusModule from '@exodus/module' // eslint-disable-line import/no-deprecated
-import { get } from 'lodash'
-import { TX_EXPORT_FIELDS } from './constants'
-import { formatTransactionOutput } from './utils'
+import lodash from 'lodash'
 
-export const MODULE_ID = 'exportTransactions'
+import { TX_EXPORT_FIELDS } from './constants.js'
+import { formatTransactionOutput } from './utils.js'
 
-class ExportTransactions extends ExodusModule {
+const { get } = lodash
+
+class ExportTransactions {
   #blockchainMetadata = null
   #assetsModule = null
   #personalNotesAtom = null
@@ -17,13 +17,10 @@ class ExportTransactions extends ExodusModule {
     blockchainMetadata,
     assetsModule,
     personalNotesAtom,
-    logger,
     enabledWalletAccountsAtom,
     multipleWalletAccountsEnabledAtom,
     ordersAtom,
   }) {
-    super({ name: MODULE_ID, logger })
-
     this.#blockchainMetadata = blockchainMetadata
     this.#assetsModule = assetsModule
 
@@ -71,8 +68,50 @@ class ExportTransactions extends ExodusModule {
     })
   }
 
+  #getTxStakingType = (tx) => {
+    if (!tx || typeof tx !== 'object') return null
+
+    const { data = {} } = tx
+
+    if (
+      data.type === 'delegate' ||
+      data.type === 'stake' ||
+      data.type === 'staking' ||
+      data?.delegate !== undefined ||
+      data.staking?.method === 'delegate' ||
+      data.staking?.method === 'createAccountWithSeed' ||
+      data?.txType === 'addStake'
+    ) {
+      return 'staked'
+    }
+
+    if (
+      data.type === 'undelegate' ||
+      data.type === 'unstake' ||
+      data.type === 'unstaking' ||
+      data?.undelegate !== undefined ||
+      data.delegation === 'undelegate' ||
+      data.staking?.method === 'undelegate' ||
+      data?.txType === 'unlock'
+    ) {
+      return 'unstaked'
+    }
+
+    if (
+      data.type === 'reward' ||
+      data.type === 'claim' ||
+      data.claim === true ||
+      data.withdraw === true
+    ) {
+      return 'claimed'
+    }
+
+    return null
+  }
+
   #prepareTxForExport = async ({ tx, walletAccount, personalNotes }) => {
     let isWithdrawal = tx.sent && !tx.coinAmount.isPositive
+    const stakingType = this.#getTxStakingType(tx)
 
     let coinAmount = tx.coinAmount
     const assetName = tx.coinName
@@ -102,11 +141,13 @@ class ExportTransactions extends ExodusModule {
           coinAmount = asset.currency.baseUnit(tx.data.reward || 0) // reward tx
         }
 
+        const fee = tx.feeAmount ?? asset.currency.baseUnit(0)
+
         // When staking, a 2 ADA deposit is taken. This deposit is returned upon Unstaking.
         if (tx.data && tx.data.delegate) {
-          feeAmount = tx.feeAmount.abs().add(asset.ADA_KEY_DEPOSIT_FEE).negate() // staking txn
+          feeAmount = fee.abs().add(asset.ADA_KEY_DEPOSIT_FEE).negate() // staking txn
         } else if (tx.data && tx.data.delegate === null) {
-          feeAmount = asset.ADA_KEY_DEPOSIT_FEE.sub(tx.feeAmount.abs()) // unstaking txn
+          feeAmount = asset.ADA_KEY_DEPOSIT_FEE.sub(fee.abs()) // unstaking txn
         }
 
         break
@@ -122,11 +163,13 @@ class ExportTransactions extends ExodusModule {
       }
     }
 
+    const type = stakingType || (isWithdrawal ? 'withdrawal' : 'deposit')
+
     const oppositeWalletAccount = await this.#getTxOppositeWalletAccount(tx)
 
     return formatTransactionOutput({
       tx,
-      isWithdrawal,
+      type,
       asset,
       coinAmount,
       coinCurrency,
@@ -260,9 +303,8 @@ class ExportTransactions extends ExodusModule {
 
 export const create = (args) => new ExportTransactions(args)
 
-// eslint-disable-next-line @exodus/export-default/named
-export default {
-  id: MODULE_ID,
+const exportTransactionsDefinition = {
+  id: 'exportTransactions',
   type: 'module',
   factory: create,
   dependencies: [
@@ -272,7 +314,8 @@ export default {
     'multipleWalletAccountsEnabledAtom',
     'personalNotesAtom',
     'ordersAtom',
-    'logger',
   ],
   public: true,
 }
+
+export default exportTransactionsDefinition

@@ -1,7 +1,16 @@
 import assert from 'minimalistic-assert'
 
-import createDebug from './debug'
-import createReporting from './reporting'
+import createDebug from './debug.js'
+import createReporting from './reporting.js'
+import { mapValues } from '@exodus/basic-utils'
+
+const asyncify = (fn) => {
+  if (typeof fn === 'object') {
+    return mapValues(fn, asyncify)
+  }
+
+  return async (...args) => fn(...args)
+}
 
 const createApi = ({ ioc, port, config, debug, logger }) => {
   const apis = ioc.getByType('api')
@@ -11,7 +20,11 @@ const createApi = ({ ioc, port, config, debug, logger }) => {
   for (const api of Object.values(apis)) {
     for (const [namespace, methods] of Object.entries(api)) {
       if (!(namespace in featureApis)) {
-        featureApis[namespace] = methods
+        // our RPC wrapped features use the proxy client which targets a function (https://github.com/ExodusMovement/exodus-hydra/blob/0e66207c3318051664e57e6b02627169eb7e10b5/libraries/sdk-rpc/src/client.ts#L41),
+        // wrapping it further in an async function will break these features
+        featureApis[namespace] =
+          typeof methods === 'function' ? methods : mapValues(methods, asyncify)
+
         continue
       }
 
@@ -21,7 +34,7 @@ const createApi = ({ ioc, port, config, debug, logger }) => {
           `duplicate definition of API method "${method}" in "${namespace}"`
         )
 
-        featureApis[namespace][method] = implementation
+        featureApis[namespace][method] = asyncify(implementation)
       }
     }
   }
@@ -66,7 +79,7 @@ const createApi = ({ ioc, port, config, debug, logger }) => {
   })
 
   const debugApi = createDebug({ ioc, port, debug })
-  const reportingApi = createReporting({ ioc, config })
+  const reportingApi = createReporting({ ioc, config: config.reporting })
 
   const api = {
     ...featureApis,

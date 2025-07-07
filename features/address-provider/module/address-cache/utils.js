@@ -82,22 +82,27 @@ export const getCachePath = ({ walletAccountName, baseAssetName, derivationPath 
   ]
 }
 
-export const diffCaches = (cache1, cache2) => {
+export const diffCaches = (cache1, cache2, fromSync) => {
   let isDifferent = false
   let needsSync = false
 
-  const result = {}
+  const result = Object.create(null)
   for (const walletAccount in cache2) {
     const subCache = cache2[walletAccount]
     for (const path in subCache) {
       const existing = get(cache1, [walletAccount, path])
+      const incoming = subCache[path]
       const newAddress = !existing
-      const addressMismatch = !newAddress && existing.address !== subCache[path].address
+      const addressMismatch = !newAddress && existing.address !== incoming.address
       needsSync = needsSync || existing?.synced === false
-      const justSynced = !existing?.synced && subCache[path].synced
-      if (newAddress || addressMismatch || justSynced) {
+      const justSynced = !existing?.synced && incoming.synced
+      if (fromSync && addressMismatch && !existing?.synced) {
+        // We have an address scheduled to sync up, that is mismatching with a
+        // sync down, in this case we actually prefer the one scheduled to sync up.
+        set(result, [walletAccount, path], existing)
+      } else if (newAddress || addressMismatch || justSynced) {
         isDifferent = true
-        set(result, [walletAccount, path], subCache[path])
+        set(result, [walletAccount, path], incoming)
       }
     }
   }
@@ -110,7 +115,7 @@ export const diffCaches = (cache1, cache2) => {
 }
 
 export const getUnsyncedAddressesForPush = (cache, currentCache) => {
-  const out = {}
+  const out = Object.create(null)
   for (const walletAccount in cache) {
     const subCache = cache[walletAccount]
     for (const path in subCache) {

@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('prices-by-asset-nane', () => {
   it('should return map of asset names with map of prices by currency', () => {

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/filesystem@1.2.0...@exodus/filesystem@1.2.1) (2025-04-04)
+
+### Bug Fixes
+
+- fix: lodash and events imports (#11954)
+
 ## [1.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/filesystem@1.1.2...@exodus/filesystem@1.2.0) (2024-12-06)
 
 ### Features

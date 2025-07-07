@@ -7,6 +7,9 @@ import {
 
 import { getUrlHostname, isValidDomain } from './validate-domain.js'
 
+const omitNullish = (obj) =>
+  Object.fromEntries(Object.entries(obj).filter(([_, value]) => value != null))
+
 export class FetchFactory {
   constructor(fetchFn) {
     if (!fetchFn) {
@@ -48,7 +51,11 @@ export class FetchFactory {
         }
 
         for (const key of allowedHeaders) {
-          this.headerConfigs[GLOBAL_HOST][key] = headers[key]
+          if (headers[key] == null) {
+            delete this.headerConfigs[GLOBAL_HOST][key]
+          } else {
+            this.headerConfigs[GLOBAL_HOST][key] = headers[key]
+          }
         }
 
         continue
@@ -62,7 +69,7 @@ export class FetchFactory {
         this.headerConfigs[domain] = Object.create(null)
       }
 
-      this.headerConfigs[domain] = { ...this.headerConfigs[domain], ...headers }
+      this.headerConfigs[domain] = omitNullish({ ...this.headerConfigs[domain], ...headers })
     }
 
     return this

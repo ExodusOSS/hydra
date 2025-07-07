@@ -1,6 +1,7 @@
-import createStorage from '@exodus/storage-memory'
 import { PersonalNoteSet } from '@exodus/models'
-import createPersonalNotesAtom from '../personal-notes'
+import createStorage from '@exodus/storage-memory'
+
+import createPersonalNotesAtom from '../personal-notes.js'
 
 describe('personalNotesAtom', () => {
   it('returns deserialized personal note', async () => {

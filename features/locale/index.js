@@ -1,6 +1,10 @@
 import localeApiDefinition from './api/index.js'
 import { localeLifecyclePluginDefinition, localeAnalyticsPluginDefinition } from './plugin/index.js'
-import { currencyAtomDefinition, languageAtomDefinition } from './atoms/index.js'
+import {
+  currencyAtomDefinition,
+  languageAtomDefinition,
+  languageFusionAtomDefinition,
+} from './atoms/index.js'
 
 const DEFAULT_LANGUAGE = 'en'
 const DEFAULT_CURRENCY = 'USD'
@@ -20,6 +24,9 @@ const locale = (
         config: { defaultValue: defaultLanguage },
         aliases: [{ implementationId: 'unsafeStorage', interfaceId: 'storage' }],
         storage: { namespace: 'locale' },
+      },
+      {
+        definition: languageFusionAtomDefinition,
       },
       { definition: localeLifecyclePluginDefinition },
       {

@@ -1,9 +1,11 @@
 import { compute, combine, filter, enforceObservableRules } from '@exodus/atoms'
 import { WalletAccount } from '@exodus/models'
 
-import { uniq } from 'lodash'
+import lodash from 'lodash'
 
-import getSeedDerivedId from './get-seed-derived-id'
+import getSeedDerivedId from './get-seed-derived-id.js'
+
+const { uniq } = lodash
 
 const getUniqueExtraSeedIds = ({ primarySeedId, accounts }) => {
   const seedIds = Object.values(accounts)

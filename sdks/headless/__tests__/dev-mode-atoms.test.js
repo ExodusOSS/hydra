@@ -1,11 +1,13 @@
 import { createStorageAtomFactory } from '@exodus/atoms'
 import createInMemoryStorage from '@exodus/storage-memory'
 import delay from 'delay'
-import { cloneDeep } from 'lodash'
+import lodash from 'lodash'
 
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
+
+const { cloneDeep } = lodash
 
 const advance = async (ms) => {
   jest.advanceTimersByTime(ms)

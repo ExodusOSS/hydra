@@ -10,10 +10,7 @@ import {
   txLogsAtomDefinition,
 } from '@exodus/blockchain-metadata/atoms/index.js'
 import blockchainMetadataDefinition from '@exodus/blockchain-metadata/module/index.js'
-import {
-  createGetKeyIdentifier as createCardanoGetKeyIdentifier,
-  getSupportedPurposes,
-} from '@exodus/cardano-lib'
+import { createGetKeyIdentifier as createCardanoGetKeyIdentifier } from '@exodus/cardano-lib'
 import { createGetKeyIdentifier } from '@exodus/ethereum-lib'
 import { getSeedId } from '@exodus/keychain/module/crypto/seed-id.js'
 import { Keychain } from '@exodus/keychain/module/index.js'
@@ -25,7 +22,7 @@ import createHardwareWalletPublicKeysAtom from '@exodus/wallet-accounts/atoms/ha
 import { enabledWalletAccountsAtomDefinition } from '@exodus/wallet-accounts/atoms/index.js'
 import createWalletAccountsAtom from '@exodus/wallet-accounts/atoms/wallet-accounts.js'
 import createWalletAccountsInternalAtom from '@exodus/wallet-accounts/atoms/wallet-accounts-internal.js'
-import { mnemonicToSeedSync } from 'bip39'
+import { mnemonicToSeed } from 'bip39'
 
 import createAssetClientInterface from '../asset-client-interface.js'
 
@@ -59,6 +56,7 @@ const assetsMock = {
     },
     api: {
       createAccountState: () => DummyAccountState,
+      features: { accountState: true },
     },
   },
   usdcoin_algorand: {
@@ -81,6 +79,7 @@ const assetsMock = {
     api: {
       getKeyIdentifier: createCardanoGetKeyIdentifier(),
       createAccountState: () => DummyAccountState,
+      features: { accountState: true },
     },
   },
   ethereum: {
@@ -94,6 +93,7 @@ const assetsMock = {
         assetName: 'ethereum',
       }),
       createAccountState: () => DummyAccountState,
+      features: { accountState: true },
     },
   },
   tetherusd: {
@@ -110,6 +110,7 @@ const assetsMock = {
     api: {
       createAccountState: () => SolanaAccountState,
       getKeyIdentifier: createCardanoGetKeyIdentifier(),
+      features: { accountState: true },
     },
   },
   disabled_coin: {
@@ -333,8 +334,8 @@ describe('aci get account state', () => {
   })
 })
 
-describe('getPublicKey', () => {
-  const seed = mnemonicToSeedSync(
+describe('getPublicKey', async () => {
+  const seed = await mnemonicToSeed(
     'menu memory fury language physical wonder dog valid smart edge decrease worth'
   )
   const seedId = getSeedId(seed)
@@ -346,6 +347,7 @@ describe('getPublicKey', () => {
   let assetClientInterface
   let publicKeyProvider
   let addressProvider
+  let assetSources
 
   const walletAccounts = {
     [WalletAccount.DEFAULT]: new WalletAccount({ ...WalletAccount.DEFAULT, seedId }),
@@ -394,11 +396,15 @@ describe('getPublicKey', () => {
 
         return 'some-address'
       },
-      getSupportedPurposes: jest.fn(),
+    }
+
+    assetSources = {
+      getDefaultPurpose: jest.fn(),
     }
 
     assetClientInterface = createAssetClientInterface({
       assetsModule,
+      assetSources,
       publicKeyProvider,
       walletAccountsAtom,
       addressProvider,
@@ -406,7 +412,7 @@ describe('getPublicKey', () => {
   })
 
   test('returns public key', async () => {
-    addressProvider.getSupportedPurposes.mockImplementation(async () => [44])
+    assetSources.getDefaultPurpose.mockImplementation(async () => 44)
 
     const key = await assetClientInterface.getPublicKey({
       assetName: 'ethereum',
@@ -419,7 +425,7 @@ describe('getPublicKey', () => {
   })
 
   test('returns extended public key', async () => {
-    addressProvider.getSupportedPurposes.mockImplementation(async () => [44])
+    assetSources.getDefaultPurpose.mockImplementation(async () => 44)
 
     const key = await assetClientInterface.getExtendedPublicKey({
       assetName: 'ethereum',
@@ -431,9 +437,6 @@ describe('getPublicKey', () => {
 
   test('defaults to the correct purpose', async () => {
     publicKeyProvider.getPublicKey = jest.fn()
-    addressProvider.getSupportedPurposes.mockImplementation(async () =>
-      getSupportedPurposes({ compatibilityMode: trezorAccount.compatibilityMode })
-    )
 
     await assetClientInterface.getPublicKey({
       assetName: 'cardano',
@@ -448,9 +451,6 @@ describe('getPublicKey', () => {
 
   test('defaults to the correct purpose for extended public key', async () => {
     publicKeyProvider.getExtendedPublicKey = jest.fn()
-    addressProvider.getSupportedPurposes.mockImplementation(async () =>
-      getSupportedPurposes({ compatibilityMode: trezorAccount.compatibilityMode })
-    )
 
     await assetClientInterface.getExtendedPublicKey({
       assetName: 'cardano',

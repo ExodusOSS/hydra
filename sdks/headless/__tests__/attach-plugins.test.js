@@ -1,6 +1,6 @@
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
 
 describe('attach plugins', () => {
   let container
@@ -37,13 +37,15 @@ describe('attach plugins', () => {
     await exodus.application.load()
   })
 
+  afterEach(() => exodus.application.stop())
+
   test('built-in plugin is attached', () => {
     expect(typeof container.get('logLifecyclePlugin').onCreate).toBe('function')
   })
 
   test('autoEnableAssetsPlugin is attached', () => {
     const { autoEnableAssetsPlugin } = container.getByType('plugin')
-    expect(typeof autoEnableAssetsPlugin.onUnlock).toBe('function')
+    expect(typeof autoEnableAssetsPlugin.onAssetsSynced).toBe('function')
   })
 
   test('should execute plugins for lifecycle methods', async () => {

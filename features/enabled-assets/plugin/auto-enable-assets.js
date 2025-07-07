@@ -17,7 +17,6 @@ class AutoEnableAssets {
   #nonDustBalanceAssetNamesAtom
   #ordersAtom
   #fiatOrdersAtom
-  #restoreAtom
   #syncedBalancesAtom
   #availableAssetNamesAtom
   #logger
@@ -35,7 +34,6 @@ class AutoEnableAssets {
     nonDustBalanceAssetNamesAtom,
     ordersAtom,
     fiatOrdersAtom,
-    restoreAtom,
     syncedBalancesAtom,
     enabledAssetsAtom,
     availableAssetNamesAtom,
@@ -48,7 +46,6 @@ class AutoEnableAssets {
     this.#nonDustBalanceAssetNamesAtom = nonDustBalanceAssetNamesAtom
     this.#ordersAtom = ordersAtom
     this.#fiatOrdersAtom = fiatOrdersAtom
-    this.#restoreAtom = restoreAtom
     this.#syncedBalancesAtom = syncedBalancesAtom
     this.#enabledAssetsAtom = enabledAssetsAtom
     this.#availableAssetNamesAtom = availableAssetNamesAtom
@@ -59,7 +56,7 @@ class AutoEnableAssets {
     this.#logger = logger
   }
 
-  onUnlock = async () => {
+  onAssetsSynced = async () => {
     if (this.#loaded) {
       return
     }
@@ -71,9 +68,13 @@ class AutoEnableAssets {
     const toAutoEnable = await this.#filterAutoEnableable(this.#defaultEnabledAssetNames)
     this.#enqueue(toAutoEnable)
     this.#subscriptions = [
-      this.#nonDustBalanceAssetNamesAtom?.observe?.(
-        this.#alwaysAutoEnable ? this.#enqueue : this.#maybeAutoEnable
-      ),
+      this.#nonDustBalanceAssetNamesAtom?.observe?.(async (assetNames) => {
+        if (this.#alwaysAutoEnable) {
+          this.#enqueue(assetNames)
+        } else {
+          this.#maybeAutoEnable(assetNames)
+        }
+      }),
       this.#ordersAtom?.observe(this.#handleOrders),
       this.#fiatOrdersAtom?.observe(this.#handleFiatOrders),
       this.#syncedBalancesAtom?.observe(this.#handleSyncedBalances),
@@ -81,11 +82,22 @@ class AutoEnableAssets {
         this.#handleFormerBultInTokens(value)
       }),
     ].filter(Boolean)
+
+    // Process any pending assets that were waiting for restore to complete
+    const currentAssetNames = await this.#nonDustBalanceAssetNamesAtom.get()
+    if (currentAssetNames.length > 0) {
+      if (this.#alwaysAutoEnable) {
+        this.#enqueue(currentAssetNames)
+      } else {
+        this.#maybeAutoEnable(currentAssetNames)
+      }
+    }
   }
 
   onStop = () => {
     this.#subscriptions.forEach((unsubscribe) => unsubscribe())
     this.#subscriptions = []
+    this.#flush.cancel()
   }
 
   #filterAutoEnableable = async (assetNames) =>
@@ -133,10 +145,6 @@ class AutoEnableAssets {
 
   // enable assets to make order show up faster
   #handleOrders = async (orderSet) => {
-    // Don't enable assets during restore as their balance will be 0 until the monitor picks them up
-    const isRestoring = await this.#restoreAtom.get()
-    if (isRestoring) return
-
     const assetNamesToEnable = [...orderSet].flatMap((order) => [order.fromAsset, order.toAsset])
 
     await this.#maybeAutoEnable(assetNamesToEnable)
@@ -153,10 +161,6 @@ class AutoEnableAssets {
   }
 
   #handleFormerBultInTokens = async (value) => {
-    // Don't enable assets during restore as their balance will be 0 until the monitor picks them up
-    const isRestoring = await this.#restoreAtom.get()
-    if (isRestoring) return
-
     const newTokenNamesToEnable = Object.keys(value.disabled)
       .map((assetName) => {
         const newStyleTokenName = this.#oldToNewStyleTokenNames[assetName]
@@ -174,9 +178,6 @@ class AutoEnableAssets {
   }
 
   #handleSyncedBalances = async (byAssetSource) => {
-    const isRestoring = await this.#restoreAtom.get()
-    if (isRestoring) return
-
     const enabledAssets = await this.#enabledAssetsAtom.get()
     const availableAssetNames = new Set(await this.#availableAssetNamesAtom.get())
     const notEnabledAssetNamesWithSyncedBalance = new Set()
@@ -211,7 +212,6 @@ const autoEnableAssetsPluginDefinition = {
     'nonDustBalanceAssetNamesAtom?',
     'ordersAtom?',
     'fiatOrdersAtom?',
-    'restoreAtom',
     'syncedBalancesAtom?',
     'enabledAssetsAtom',
     'availableAssetNamesAtom',

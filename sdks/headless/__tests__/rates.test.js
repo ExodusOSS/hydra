@@ -1,7 +1,7 @@
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
 describe('rates', () => {
   let exodus
@@ -24,6 +24,8 @@ describe('rates', () => {
     await exodus.application.start()
     await exodus.application.create({ passphrase })
   })
+
+  afterEach(() => exodus.application.stop())
 
   const priceSchema = {
     price: expect.any(Number),

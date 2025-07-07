@@ -1,7 +1,8 @@
-import pluginDefinition from '../'
 import { createInMemoryAtom } from '@exodus/atoms'
-import { EventEmitter } from 'events/'
 import { SynchronizedTime } from '@exodus/basic-utils'
+import EventEmitter from 'events/events.js'
+
+import pluginDefinition from '../index.js'
 
 describe('sync-time plugin', () => {
   jest.useFakeTimers({ doNotFake: ['setImmediate'] })

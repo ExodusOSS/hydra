@@ -1,4 +1,26 @@
 {
+  "cardano": [
+    {
+      "version": 1,
+      "currencies": {
+        "cardano": {
+          "lovelaces": 0,
+          "ADA": 6
+        }
+      },
+      "txId": "6966fccfff24b1520a6c603e3ec5cfed4d7f39ad32a4b3f32e2133c652392b20",
+      "date": "2021-03-18T03:37:23.000Z",
+      "confirmations": 1,
+      "from": ["Ae2tdPwUPEZA6dQGdjoVLyY4ArBVNCa42YQ3BFPgA8mmk8bLnoynstJPuw5"],
+      "data": {
+        "type": "staking",
+        "delegate": true,
+        "reward": null
+      },
+      "coinName": "cardano",
+      "coinAmount": "1497.202474 ADA"
+    }
+  ],
   "solana": [
     {
       "txId": "6SE7MfLC7jWTyP7hDmaCyHH6oxicuhznaPLJyJkvM9pTLAVvQa2cd4QhPXqKARfohp4UosrkzEu3cdjutZP2RBS",

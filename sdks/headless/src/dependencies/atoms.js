@@ -1,4 +1,4 @@
-import baseAssetNamesToMonitorAtomDefinition from '../atoms/base-asset-names-to-monitor'
+import baseAssetNamesToMonitorAtomDefinition from '../atoms/base-asset-names-to-monitor.js'
 
 const createAtomDependencies = ({ config }) => [
   {

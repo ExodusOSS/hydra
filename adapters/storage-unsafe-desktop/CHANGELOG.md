@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0](https://github.com/ExodusMovement/hydra/compare/@exodus/storage-unsafe-desktop@1.1.3...@exodus/storage-unsafe-desktop@2.0.0) (2025-06-02)
+
+### ⚠ BREAKING CHANGES
+
+- inject fs api into storage-unsafe-desktop/internal (#12760)
+
+### Features
+
+- feat!: inject fs api into storage-unsafe-desktop/internal (#12760)
+
+## [1.1.3](https://github.com/ExodusMovement/hydra/compare/@exodus/storage-unsafe-desktop@1.1.2...@exodus/storage-unsafe-desktop@1.1.3) (2025-04-08)
+
+### Bug Fixes
+
+- fix(storage-unsafe-desktop): create a new file if the old file is corrupted (#11957)
+
+## [1.1.2](https://github.com/ExodusMovement/hydra/compare/@exodus/storage-unsafe-desktop@1.1.1...@exodus/storage-unsafe-desktop@1.1.2) (2024-11-01)
+
+Re-licensed under MIT license.
+
 ## [1.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/storage-unsafe-desktop@1.1.0...@exodus/storage-unsafe-desktop@1.1.1) (2023-11-15)
 
 ### Bug Fixes

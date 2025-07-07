@@ -1,4 +1,4 @@
-import { FaCopy } from 'react-icons/fa6'
+import { FaCopy } from '../deps/react-icons-fa6'
 
 import type { IconProps } from '../types.js'
 

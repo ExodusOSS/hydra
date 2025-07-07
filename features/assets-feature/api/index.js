@@ -17,6 +17,7 @@ const createAssetsApi = ({ assetPreferences, assetsModule }) => {
       addTokens: (...args) => assetsModule.addTokens(...args),
       getAsset: (assetName) => assetsModule.getAsset(assetName),
       getAssets: () => assetsModule.getAssets(),
+      getIcon: (assetName) => assetsModule.getIcon(assetName),
     },
   }
 }

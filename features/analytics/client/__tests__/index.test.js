@@ -1,4 +1,11 @@
-import clientDefinition from '../index.js'
+jest.doMock('@exodus/analytics-validation', () => ({
+  __esModule: true,
+  default: () => {
+    throw new Error('Always-failing validation')
+  },
+}))
+
+const { default: clientDefinition } = await import('../index.js')
 
 const event = {
   event: 'TestEvent',

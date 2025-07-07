@@ -2,7 +2,7 @@ import { connectAssets } from '@exodus/assets'
 import _assets from '@exodus/assets-base'
 import { pick } from '@exodus/basic-utils'
 
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 const assets = connectAssets(_assets)
 describe('createConversion', () => {

@@ -1,5 +1,7 @@
-import fixtures from '../../../test/tx-log-fixtures.json'
-import { setup } from '../utils'
+import loadFixture from '../../../test/load-fixture.cjs'
+import { setup } from '../utils.js'
+
+const fixtures = loadFixture('tx-log-fixtures')
 
 describe('data', () => {
   it('should return data', () => {

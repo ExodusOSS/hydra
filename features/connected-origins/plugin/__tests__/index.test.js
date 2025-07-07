@@ -32,12 +32,14 @@ describe('connectedOriginsPlugin', () => {
 
     connectedOrigins = new (class ModuleMock {
       clear = jest.fn()
+      updateConnectedAccounts = jest.fn()
     })()
 
     plugin = connectedOriginsPluginDefinition.factory({
       port,
       connectedOriginsAtom,
       connectedOrigins,
+      enabledWalletAccountsAtom: atoms.createInMemoryAtom({ defaultValue: {} }),
     })
   })
 

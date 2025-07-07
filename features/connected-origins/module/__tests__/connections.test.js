@@ -1,14 +1,90 @@
+import addressProviderDefinition from '@exodus/address-provider/module/index.js'
 import { createInMemoryAtom } from '@exodus/atoms'
+import ethereumPlugin from '@exodus/ethereum-plugin'
+import { getSeedId } from '@exodus/key-utils'
+import { Keychain } from '@exodus/keychain/module/index.js'
+import { WalletAccount } from '@exodus/models'
+import publicKeyProviderDefinition from '@exodus/public-key-provider/lib/module/index.js'
+import solanaPlugin from '@exodus/solana-plugin'
+import { mnemonicToSeedSync } from 'bip39'
 
 import createConnectedOriginsDefinition from '../index.js'
 
+const solana = solanaPlugin.createAsset({ assetClientInterface: {} })
+const ethereum = ethereumPlugin.createAsset({ assetClientInterface: {} })
+const { factory: createPublicKeyProvider } = publicKeyProviderDefinition
+const { factory: createAddressProvider } = addressProviderDefinition
+
 describe('connected origins module', () => {
   let connectedOriginsAtom
+  let connectedAccountsAtom
   let connectedOrigins
+  let activeWalletAccountAtom
+  let enabledWalletAccountsAtom
+
+  const seed = mnemonicToSeedSync(
+    'test memory fury language physical wonder dog valid smart edge decrease mirror'
+  )
+
+  const seedId = getSeedId(seed)
+
+  const walletAccounts = {
+    exodus_0: WalletAccount.defaultWith({ seedId }),
+    exodus_1: WalletAccount.defaultWith({ index: 1, name: 'Exodus 1', seedId }),
+  }
 
   beforeEach(async () => {
+    const walletAccountsAtom = createInMemoryAtom({ defaultValue: walletAccounts })
+    enabledWalletAccountsAtom = walletAccountsAtom
+
+    const keychain = new Keychain({})
+    keychain.addSeed(seed)
+
+    const publicKeyProvider = createPublicKeyProvider({
+      keychain,
+      walletAccountsAtom,
+      publicKeyStore: { add: () => {} },
+      getBuildMetadata: () => ({}),
+    })
+
+    const assetSources = {
+      getSupportedPurposes: async () => [44],
+      isSupported: async () => true,
+    }
+
+    const assets = { solana, ethereum, optimism: solana }
+    solana.baseAsset = solana
+    ethereum.baseAsset = ethereum
+
+    const assetsModule = {
+      getAssets() {
+        return assets
+      },
+      getAsset(name) {
+        return assets[name]
+      },
+    }
+
+    const addressCache = { get: async () => {}, set: async () => {} }
+
+    const addressProvider = createAddressProvider({
+      publicKeyProvider,
+      assetSources,
+      assetsModule,
+      addressCache,
+    })
+
     connectedOriginsAtom = createInMemoryAtom({ defaultValue: [] })
-    connectedOrigins = createConnectedOriginsDefinition.factory({ connectedOriginsAtom })
+    connectedAccountsAtom = createInMemoryAtom({ defaultValue: [] })
+    activeWalletAccountAtom = createInMemoryAtom({ defaultValue: 'exodus_0' })
+
+    connectedOrigins = createConnectedOriginsDefinition.factory({
+      activeWalletAccountAtom,
+      connectedOriginsAtom,
+      connectedAccountsAtom,
+      addressProvider,
+      enabledWalletAccountsAtom,
+    })
   })
 
   test('trust new origin', async () => {
@@ -32,9 +108,168 @@ describe('connected origins module', () => {
       activeConnections: [],
     })
 
+    await expect(connectedAccountsAtom.get()).resolves.toEqual({
+      exodus_0: {
+        addresses: {
+          solana: 'ASwcbiBuegaMrNUuXeN5WDYKoRuDXxMRt5DdStjvdSro',
+        },
+      },
+      exodus_1: {
+        addresses: {
+          solana: '4orUhPn6CRzVcgq5DHfAVt2odiZpPjNy7wNQPYMT4bF1',
+        },
+      },
+    })
+
     const stored = await connectedOriginsAtom.get()
 
     expect(stored).toHaveLength(1)
+  })
+
+  test('updates accounts when new assets added', async () => {
+    await connectedOrigins.add({
+      origin: 'exodus.com',
+      name: 'Exodus',
+      icon: 'exodus_icon',
+      connectedAssetName: 'solana',
+      assetNames: ['solana'],
+      trusted: true,
+    })
+
+    await connectedOrigins.add({
+      origin: 'exodus.com',
+      assetNames: ['solana', 'ethereum'],
+    })
+
+    await expect(connectedAccountsAtom.get()).resolves.toEqual({
+      exodus_0: {
+        addresses: {
+          ethereum: '0xbf41610c6D5e6E1DF97f37249D118Cc6FC47d407',
+          solana: 'ASwcbiBuegaMrNUuXeN5WDYKoRuDXxMRt5DdStjvdSro',
+        },
+      },
+      exodus_1: {
+        addresses: {
+          ethereum: '0x1Dc234Aa1c77e3AA781BB2DdF2099489053E11B2',
+          solana: '4orUhPn6CRzVcgq5DHfAVt2odiZpPjNy7wNQPYMT4bF1',
+        },
+      },
+    })
+  })
+
+  test('returns connected accounts with active wallet account first', async () => {
+    await connectedOrigins.add({
+      origin: 'exodus.com',
+      name: 'Exodus',
+      icon: 'exodus_icon',
+      connectedAssetName: 'solana',
+      assetNames: ['solana'],
+      trusted: true,
+    })
+
+    await connectedOrigins.add({
+      origin: 'wayne.foundation',
+      name: 'Wayne Foundation',
+      icon: 'exodus_icon',
+      connectedAssetName: 'ethereum',
+      assetNames: ['ethereum'],
+      trusted: true,
+    })
+
+    await activeWalletAccountAtom.set('exodus_1')
+
+    const accounts = await connectedOrigins.getConnectedAccounts({ origin: 'exodus.com' })
+    expect(accounts).toEqual([
+      {
+        name: 'exodus_1',
+        addresses: {
+          solana: '4orUhPn6CRzVcgq5DHfAVt2odiZpPjNy7wNQPYMT4bF1',
+        },
+      },
+      {
+        name: 'exodus_0',
+        addresses: {
+          solana: 'ASwcbiBuegaMrNUuXeN5WDYKoRuDXxMRt5DdStjvdSro',
+        },
+      },
+    ])
+  })
+
+  test('returns no connected accounts for untrusted account', async () => {
+    await connectedOrigins.add({
+      origin: 'exodus.com',
+      name: 'Exodus',
+      icon: 'exodus_icon',
+      connectedAssetName: 'solana',
+      assetNames: ['solana'],
+      trusted: true,
+    })
+
+    await connectedOrigins.untrust({ origin: 'exodus.com' })
+
+    const accounts = await connectedOrigins.getConnectedAccounts({ origin: 'exodus.com' })
+    expect(accounts).toEqual([])
+  })
+
+  test('updates connected accounts when adding a wallet account', async () => {
+    await connectedOrigins.add({
+      origin: 'exodus.com',
+      name: 'Exodus',
+      icon: 'exodus_icon',
+      connectedAssetName: 'solana',
+      assetNames: ['solana'],
+      trusted: true,
+    })
+
+    await enabledWalletAccountsAtom.set((current) => ({
+      ...current,
+      exodus_2: WalletAccount.defaultWith({ index: 2, name: 'Exodus 2', seedId }),
+    }))
+
+    await connectedOrigins.updateConnectedAccounts()
+
+    await expect(connectedAccountsAtom.get()).resolves.toEqual({
+      exodus_0: {
+        addresses: {
+          solana: 'ASwcbiBuegaMrNUuXeN5WDYKoRuDXxMRt5DdStjvdSro',
+        },
+      },
+      exodus_1: {
+        addresses: {
+          solana: '4orUhPn6CRzVcgq5DHfAVt2odiZpPjNy7wNQPYMT4bF1',
+        },
+      },
+      exodus_2: {
+        addresses: {
+          solana: '6MGVoPUB4VGF1rQwxG83icg6AFwUPXuKY1xwC4qxyYy2',
+        },
+      },
+    })
+  })
+
+  test('updates connected accounts when removing a wallet account', async () => {
+    await connectedOrigins.add({
+      origin: 'exodus.com',
+      name: 'Exodus',
+      icon: 'exodus_icon',
+      connectedAssetName: 'solana',
+      assetNames: ['solana'],
+      trusted: true,
+    })
+
+    await enabledWalletAccountsAtom.set({
+      exodus_0: walletAccounts.exodus_0,
+    })
+
+    await connectedOrigins.updateConnectedAccounts()
+
+    await expect(connectedAccountsAtom.get()).resolves.toEqual({
+      exodus_0: {
+        addresses: {
+          solana: 'ASwcbiBuegaMrNUuXeN5WDYKoRuDXxMRt5DdStjvdSro',
+        },
+      },
+    })
   })
 
   test('trust new origin for different asset', async () => {

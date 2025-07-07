@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.6.0...@exodus/wallet-accounts@17.6.1) (2025-06-09)
+
+### Bug Fixes
+
+- fix: don't use npm: aliases for lodash (#12861)
+
+## [17.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.5.2...@exodus/wallet-accounts@17.6.0) (2025-06-03)
+
+### Features
+
+- feat: gracefully handle 'isLocked' state in report (#12669)
+
+## [17.5.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.5.1...@exodus/wallet-accounts@17.5.2) (2025-05-13)
+
+### Bug Fixes
+
+- fix: add sorting for wallet accounts by type (#12398)
+
+## [17.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.5.0...@exodus/wallet-accounts@17.5.1) (2025-04-14)
+
+**Note:** Version bump only for package @exodus/wallet-accounts
+
+## [17.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.4.1...@exodus/wallet-accounts@17.5.0) (2025-03-14)
+
+### Features
+
+- feat: make `multipleWalletAccountsEnabled` default to `undefined` (#11759)
+
+## [17.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.4.0...@exodus/wallet-accounts@17.4.1) (2025-03-13)
+
+**Note:** Version bump only for package @exodus/wallet-accounts
+
 ## [17.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.3.2...@exodus/wallet-accounts@17.4.0) (2025-03-07)
 
 ### Features

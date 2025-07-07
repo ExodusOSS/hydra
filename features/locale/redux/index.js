@@ -10,10 +10,12 @@ const ratesReduxDefinition = {
     currency: (state, currency) => ({
       ...state,
       currency,
+      currencyLoaded: true,
     }),
     language: (state, language) => ({
       ...state,
       language,
+      languageLoaded: true,
     }),
   },
   selectorDefinitions,

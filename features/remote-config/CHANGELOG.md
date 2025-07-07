@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/remote-config@3.0.0...@exodus/remote-config@3.0.1) (2025-06-09)
+
+### Bug Fixes
+
+- fix: don't use npm: aliases for lodash (#12861)
+
+- fix: unbreak remote-config stop timer (#12465)
+
+## [3.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/remote-config@2.10.0...@exodus/remote-config@3.0.0) (2025-04-09)
+
+### ⚠ BREAKING CHANGES
+
+- track errors with `errorTracking` module (#11966)
+
+### Features
+
+- feat: add schema for `remote-config` report node (#11961)
+
+- feat!: track errors with `errorTracking` module (#11966)
+
 ## [2.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/remote-config@2.9.3...@exodus/remote-config@2.10.0) (2025-02-26)
 
 ### Features

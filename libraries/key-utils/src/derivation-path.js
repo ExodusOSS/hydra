@@ -1,9 +1,9 @@
 import BIPPath from 'bip32-path'
 import assert from 'minimalistic-assert'
-import { HARDENED_OFFSET } from '@exodus/bip32'
 import { BIP32_PURPOSES } from './constants.js'
 
-const PATH_INDEX_REGEX = /^(\d+)(')?$/
+const HARDENED_OFFSET = 0x80_00_00_00
+const PATH_INDEX_REGEX = /^(\d+)(')?$/u
 
 /**
  * Adapted bip32-path with stricter input validation and more flexible input parsing
@@ -203,7 +203,7 @@ export const assertValidDerivationPath = (path, requireAllHardened = false) => {
     // BIPPath does not start+end check ^$ with its regex and uses exec()
     // which allows arbitrary strings to be in the path
     // This assert avoids: "m/0'somestring" to pass
-    indexesWithoutM.every((index) => typeof index === 'string' && /^\d+(')?$/.test(index)),
+    indexesWithoutM.every((index) => typeof index === 'string' && /^\d+(')?$/u.test(index)),
     `derivationPath must contain only a number and optionally a hardening character '`
   )
 

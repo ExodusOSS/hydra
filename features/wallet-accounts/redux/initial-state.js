@@ -7,7 +7,7 @@ export default {
   loaded: false,
   // flag while replacing all data with data in fusion
   data: Object.create(null),
-  multipleWalletAccountsEnabled: false,
+  multipleWalletAccountsEnabled: undefined, // important to distinguish "not changed by user" state
   // prefix to avoid confusion with selector
   configuredActiveWalletAccount: null,
 }

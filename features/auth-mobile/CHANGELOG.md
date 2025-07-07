@@ -3,6 +3,79 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.4.0...@exodus/auth-mobile@6.4.1) (2025-06-27)
+
+### Bug Fixes
+
+- fix(application,auth-mobile): await recording event logs (#13017)
+
+## [6.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.3.0...@exodus/auth-mobile@6.4.0) (2025-06-24)
+
+### Features
+
+- feat: event recordings for restore / pin flows (#12973)
+
+## [6.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.1.0...@exodus/auth-mobile@6.3.0) (2025-05-12)
+
+### Features
+
+- feat: move auth-mobile config default usage to /module/auth (#12273)
+
+- feat: switch auth-mobile to ESM (#12252)
+
+### Bug Fixes
+
+- fix: make auth-mobile/module/auth Node.js-compatible (#12253)
+
+- fix: mixed up touch id titles (#12340)
+
+## [6.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.1.0...@exodus/auth-mobile@6.2.0) (2025-05-08)
+
+### Features
+
+- feat: move auth-mobile config default usage to /module/auth (#12273)
+
+- feat: switch auth-mobile to ESM (#12252)
+
+### Bug Fixes
+
+- fix: make auth-mobile/module/auth Node.js-compatible (#12253)
+
+## [6.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.0.0...@exodus/auth-mobile@6.1.0) (2025-03-26)
+
+### Features
+
+- feat: auth report node (#11876)
+
+## [6.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@5.0.0...@exodus/auth-mobile@6.0.0) (2024-12-20)
+
+### ⚠ BREAKING CHANGES
+
+- **auth-mobile:** forward keyPrefix from feature config (#10822)
+
+### Features
+
+- feat(auth-mobile)!: forward keyPrefix from feature config (#10822)
+
+### License
+
+- license: re-license under MIT license (#10599)
+
+## [5.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@4.0.2...@exodus/auth-mobile@5.0.0) (2024-11-05)
+
+### ⚠ BREAKING CHANGES
+
+- use @exodus/react-native-biometrics for android bio authentication (#10313)
+
+### Features
+
+- use @exodus/react-native-biometrics for android bio authentication ([#10313](https://github.com/ExodusMovement/exodus-hydra/issues/10313)) ([5bd6dba](https://github.com/ExodusMovement/exodus-hydra/commit/5bd6dbae8aa37f452db72a539de919b269e7e9e6))
+- use atoms v9 ([#9651](https://github.com/ExodusMovement/exodus-hydra/issues/9651)) ([524aa61](https://github.com/ExodusMovement/exodus-hydra/commit/524aa61f69c81e6ac00b2f94ea830688a105b3e4))
+
+## [4.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@4.0.1...@exodus/auth-mobile@4.0.2) (2024-09-09)
+
+**Note:** Version bump only for package @exodus/auth-mobile
+
 ## [4.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@4.0.0...@exodus/auth-mobile@4.0.1) (2024-08-16)
 
 **Note:** Version bump only for package @exodus/auth-mobile

@@ -68,6 +68,34 @@ describe('createWalletAccountsInternalAtom', () => {
     })
   })
 
+  it('should sort normal wallet accounts before hardware wallet accounts', async () => {
+    const walletAccount = new WalletAccount({
+      ...WalletAccount.DEFAULT,
+      label: 'Normal Portfolio',
+      index: 0,
+    })
+
+    const hardwareWalletAccount = new WalletAccount({
+      ...WalletAccount.DEFAULT,
+      label: 'Wayne Portfolio',
+      source: 'ledger',
+      id: 'someid',
+      index: 0,
+    })
+
+    await storage.set('walletAccounts', {
+      ledger_0_someid: hardwareWalletAccount.toJSON(),
+      exodus_0: walletAccount.toJSON(),
+    })
+
+    const walletAccountsAtom = createWalletAccountsInternalAtom({
+      storage,
+      config,
+    })
+
+    expect(Object.keys(await walletAccountsAtom.get())).toEqual(['exodus_0', 'ledger_0_someid'])
+  })
+
   it('should deserialize wallet accounts from storage', async () => {
     const walletAccount = new WalletAccount({
       ...WalletAccount.DEFAULT,

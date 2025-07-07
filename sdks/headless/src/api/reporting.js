@@ -1,9 +1,25 @@
 import { SafeError } from '@exodus/errors'
-import { zipObject } from 'lodash'
+import lodash from 'lodash'
 
-import { rejectAfter } from '../utils/promises'
+import { rejectAfter } from '../utils/promises.js'
+import { deepAlphabetize } from '../utils/deep-alphabetize.js'
+import safeParse from './safe-parse.js'
 
-const createReporting = ({ ioc, config: { exportTimeout = 5000 } }) => {
+const { cloneDeepWith, zipObject } = lodash
+
+const reportCustomizer = (value) => {
+  if (value instanceof Error) {
+    return SafeError.from(value)
+  }
+
+  // Lodash issue: https://github.com/lodash/lodash/issues/5247
+  // Avoid cloning SafeError instances to prevent losing private class fields, which are used during JSON serialization.
+  if (value instanceof SafeError) {
+    return value
+  }
+}
+
+const createReporting = ({ ioc, config: { exportTimeout = 5000 } = {} }) => {
   const logger = ioc.get('createLogger')('reporting')
   const nodes = ioc.getByType('report')
 
@@ -11,9 +27,6 @@ const createReporting = ({ ioc, config: { exportTimeout = 5000 } }) => {
 
   const getReports = async () => {
     const [exists, locked] = await Promise.all([wallet.exists(), lockedAtom.get()])
-    if (exists && locked) {
-      throw new Error('Unable to export when locked')
-    }
 
     const reports = Object.values(nodes)
 
@@ -24,22 +37,30 @@ const createReporting = ({ ioc, config: { exportTimeout = 5000 } }) => {
 
     const exportReport = async (report) => {
       const start = performance.now()
-      const result = await report.export({ walletExists: exists })
+      const unvalidatedExport = await report.export({ walletExists: exists, isLocked: locked })
+      const schema = report.getSchema?.()
+      if (!schema) {
+        throw new Error(`Validation schema is missing for ${report.namespace}.`)
+      }
+
+      const validatedExport = safeParse(schema, cloneDeepWith(unvalidatedExport, reportCustomizer))
       const duration = performance.now() - start
       logger.debug(`Exported report for ${report.namespace} in ${duration}ms`)
-      return result
+      return validatedExport
     }
 
     const resolvedReports = await Promise.allSettled(
-      reports.map((report) => Promise.race([exportReport(report), timeoutPromise]))
+      reports.map((report) => Promise.race([exportReport(report), timeoutPromise.promise]))
     )
+
+    timeoutPromise.clear()
 
     const namespaces = reports.map((report) => report.namespace)
     const data = resolvedReports.map((outcome) =>
       outcome.status === 'fulfilled' ? outcome.value : { error: SafeError.from(outcome.reason) }
     )
 
-    return zipObject(namespaces, data)
+    return deepAlphabetize(zipObject(namespaces, data))
   }
 
   return { export: getReports }

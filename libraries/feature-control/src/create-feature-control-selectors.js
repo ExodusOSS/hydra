@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import assert from 'assert'
+import assert from 'minimalistic-assert'
 
 import createFeatureControl from './create-feature-control.js'
 

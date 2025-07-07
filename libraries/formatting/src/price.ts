@@ -29,8 +29,8 @@ export const formatPrice = (
   const currencyFormat = format || getCurrencyFormat(currency)
 
   const result = formatCurrency(priceNumber, {
-    minFraction: priceNumber === 0 ? 0 : Math.min(maxFraction, 2),
-    maxFraction: priceNumber === 0 ? 0 : maxFraction,
+    minimumFractionDigits: priceNumber === 0 ? 0 : Math.min(maxFraction, 2),
+    maximumFractionDigits: priceNumber === 0 ? 0 : maxFraction,
     format: currencyFormat,
     symbol: currencySymbol,
     useGrouping,
@@ -38,8 +38,8 @@ export const formatPrice = (
   // formatted number might be rounded to 0, we don't want to show 0.00 with 2 decimals
   if (parseFloat(result.replace(currencySymbol || '', '')) === 0) {
     return formatCurrency(0, {
-      minFraction: 0,
-      maxFraction: 0,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
       format: currencyFormat,
       symbol: currencySymbol,
       useGrouping,

@@ -1,17 +1,17 @@
-import assetsRedux from '@exodus/assets-feature/redux'
-import availableAssetsRedux from '@exodus/available-assets/redux'
-import balancesRedux from '@exodus/balances/redux'
-import txLogsRedux from '@exodus/blockchain-metadata/redux/tx-logs'
-import enabledAssetsRedux from '@exodus/enabled-assets/redux'
-import favoriteAssetsRedux from '@exodus/favorite-assets/redux'
-import feeDataReduxDefinition from '@exodus/fee-data-monitors/redux'
+import assetsRedux from '@exodus/assets-feature/redux/index.js'
+import availableAssetsRedux from '@exodus/available-assets/redux/index.js'
+import balancesRedux from '@exodus/balances/redux/index.js'
+import txLogsRedux from '@exodus/blockchain-metadata/redux/tx-logs/index.js'
+import enabledAssetsRedux from '@exodus/enabled-assets/redux/index.js'
+import favoriteAssetsRedux from '@exodus/favorite-assets/redux/index.js'
+import feeDataReduxDefinition from '@exodus/fee-data-monitors/redux/index.js'
 import fiat from '@exodus/fiat-currencies'
-import ratesMonitorRedux from '@exodus/rates-monitor/redux'
+import ratesMonitorRedux from '@exodus/rates-monitor/redux/index.js'
 import { setupRedux } from '@exodus/redux-dependency-injection'
-import walletAccountsRedux from '@exodus/wallet-accounts/redux'
+import walletAccountsRedux from '@exodus/wallet-accounts/redux/index.js'
 import { combineReducers, createStore } from 'redux'
 
-import createFiatBalancesReduxDefinition from '../'
+import createFiatBalancesReduxDefinition from '../index.js'
 
 export const createFiatNumberUnit = (value) => fiat.USD.defaultUnit(value)
 

@@ -1,9 +1,9 @@
 import uiConfig from '@exodus/ui-config'
 
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
 describe('ui-config', () => {
   let exodus
@@ -41,6 +41,8 @@ describe('ui-config', () => {
 
     await eventPromise1
     await eventPromise2
+
+    await exodus.application.stop()
   })
 
   test('uiConfig API should work', async () => {
@@ -54,6 +56,8 @@ describe('ui-config', () => {
 
     exodus.uiConfig.delightUser.set(false)
     await expect(expectEvent({ port, event: 'delightUser' })).resolves.toEqual(false)
+
+    await exodus.application.stop()
   })
 
   test('should keep syncable configs synced with fusion', async () => {
@@ -79,5 +83,7 @@ describe('ui-config', () => {
     await adapters.fusion.mergeProfile({ soundsEnabled: false })
     await new Promise(setImmediate)
     await expect(exodus.uiConfig.soundsEnabled.get()).resolves.toEqual(false)
+
+    await exodus.application.stop()
   })
 })

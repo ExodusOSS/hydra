@@ -1,7 +1,7 @@
-import getSelectorDefinition from './get'
-import getBatchSelectorDefinition from './get-batch'
-import moneroSendTxsSelectorDefinition from './monero-send-txs'
-import withBatchIdSelectorDefinition from './with-batch-id'
+import getSelectorDefinition from './get.js'
+import getBatchSelectorDefinition from './get-batch.js'
+import moneroSendTxsSelectorDefinition from './monero-send-txs.js'
+import withBatchIdSelectorDefinition from './with-batch-id.js'
 
 export default [
   getSelectorDefinition,

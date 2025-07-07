@@ -1,6 +1,9 @@
 import hardwareWalletsApiDefinition from './api/index.js'
 import hardwareWalletsModuleDefinition from './module/hardware-wallets.js'
-import { hardwareWalletConnectedAssetNamesAtomDefinition } from './atoms/index.js'
+import {
+  hardwareWalletConnectedAssetNamesAtomDefinition,
+  hardwareWalletSigningRequestsAtomDefinition,
+} from './atoms/index.js'
 import hardwareWalletsPluginDefinition from './plugin/index.js'
 
 const hardwareWallets = () => {
@@ -15,6 +18,9 @@ const hardwareWallets = () => {
       },
       {
         definition: hardwareWalletConnectedAssetNamesAtomDefinition,
+      },
+      {
+        definition: hardwareWalletSigningRequestsAtomDefinition,
       },
       {
         definition: hardwareWalletsPluginDefinition,

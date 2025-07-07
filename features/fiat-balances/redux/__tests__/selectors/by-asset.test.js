@@ -1,5 +1,5 @@
-import { FIAT_BALANCES_PAYLOAD } from '../constants'
-import { createFiatNumberUnit, setup } from '../utils'
+import { FIAT_BALANCES_PAYLOAD } from '../constants.js'
+import { createFiatNumberUnit, setup } from '../utils.js'
 
 describe('byAsset', () => {
   it('should return fiat balances by asset', () => {

@@ -26,4 +26,4 @@ export { default as waitUntil } from './effects/wait-until.js'
 export { default as enforceObservableRules } from './enforce-rules.js'
 export { default as fromEventEmitter } from './event-emitter.js'
 
-export type { Atom, ReadonlyAtom, Listener, Unsubscribe } from './utils/types.js'
+export type * from './utils/types.js'

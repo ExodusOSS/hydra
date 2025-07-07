@@ -1,18 +1,24 @@
-import delay from 'delay'
-import EventEmitter from 'events/'
+import EventEmitter from 'events/events.js'
 
-import NftsDataNetworkMonitor from './NftsDataNetworkMonitor'
-import NftsTransactionsNetworkMonitor from './NftsTransactionsNetworkMonitor'
+import NftsDataNetworkMonitor from './NftsDataNetworkMonitor.js'
+import NftsTransactionsNetworkMonitor from './NftsTransactionsNetworkMonitor.js'
 import assert from 'minimalistic-assert'
-import { NFTS_NETWORKS_WAIT_RESTORE_COMPLETE, NFTS_NETWORK_TO_ASSET_NAME } from '../constants'
-import { calculateDynamicInterval } from './utils'
-import { WalletAccount } from '@exodus/models'
+import {
+  NFTS_NETWORKS_WAIT_RESTORE_COMPLETE,
+  NFTS_NETWORK_TO_ASSET_NAME,
+} from '../constants/index.js'
+import {
+  doesWalletAccountSupportNFTs,
+  calculateDynamicInterval,
+  getFetchStatus,
+  updateNetworkFetchStatus,
+} from './utils.js'
 import {
   DEFAULT_EMPTY_NFTS_INTERVAL_MULTIPLIER,
   DEFAULT_EMPTY_TXS_INTERVAL_MULTIPLIER,
   MONITOR_MINIMUM_INTERVAL,
   MONITOR_SLOW_INTERVAL,
-} from './constants'
+} from './constants.js'
 
 class NftsNetworkMonitor extends EventEmitter {
   #dataMonitor
@@ -21,12 +27,16 @@ class NftsNetworkMonitor extends EventEmitter {
   #restoringAssetsAtom
   #txLogsAtom
   #enabledWalletAccountsAtom
+  #activeWalletAccountAtom
+  #nftsAtom
+  #nftsMonitorStatusAtom
   #config
   #isStarted = false
   #interval = MONITOR_SLOW_INTERVAL
   #minInterval = MONITOR_MINIMUM_INTERVAL
   #previousTick = 0
-  #previousFetchData = new Map()
+  #handleImportOnStart
+  #tickTimeout
 
   constructor({
     asset,
@@ -34,9 +44,12 @@ class NftsNetworkMonitor extends EventEmitter {
     handleImportOnStart,
     addressProvider,
     enabledWalletAccountsAtom,
+    activeWalletAccountAtom,
     nftsProxy,
     nftsModule,
     nftsConfigAtom,
+    nftsAtom,
+    nftsMonitorStatusAtom,
     restoringAssetsAtom,
     txLogsAtom,
     logger,
@@ -50,13 +63,17 @@ class NftsNetworkMonitor extends EventEmitter {
     this.#restoringAssetsAtom = restoringAssetsAtom
     this.#txLogsAtom = txLogsAtom
     this.#enabledWalletAccountsAtom = enabledWalletAccountsAtom
+    this.#activeWalletAccountAtom = activeWalletAccountAtom
+    this.#nftsAtom = nftsAtom
+    this.#nftsMonitorStatusAtom = nftsMonitorStatusAtom
     this.#config = config
+    this.#handleImportOnStart = handleImportOnStart
 
     this.#dataMonitor = new NftsDataNetworkMonitor({
       logger,
       asset,
       network,
-      handleImportOnStart,
+      nftsMonitorStatusAtom,
       addressProvider,
       nftsProxy,
       nftsModule,
@@ -73,15 +90,11 @@ class NftsNetworkMonitor extends EventEmitter {
           addressProvider,
           nftsProxy,
           logger,
+          nftsMonitorStatusAtom,
         })
       : undefined
 
     this.#dataMonitor.on('nfts', ({ walletAccountName, nfts }) => {
-      this.#previousFetchData.set(walletAccountName, {
-        updatedAt: Date.now(),
-        nftsCount: nfts.length,
-      })
-
       this.emit('nfts', { [walletAccountName]: { [network]: nfts } })
     })
 
@@ -103,17 +116,89 @@ class NftsNetworkMonitor extends EventEmitter {
     })
   }
 
-  #tick = async ({ walletAccounts } = Object.create(null)) => {
-    this.#previousTick = Date.now()
-    let walletAccountsToFetch = walletAccounts
-    if (!walletAccounts) {
-      walletAccountsToFetch = await this.#getWalletAccounts()
+  #shouldFetch = async ({ walletAccountName, lastFetchType, dynamicInterval, force }) => {
+    const lastFetch = await getFetchStatus({
+      atom: this.#nftsMonitorStatusAtom,
+      network: this.#network,
+      walletAccountName,
+      type: lastFetchType,
+    })
+
+    return force || !lastFetch || Date.now() - lastFetch >= dynamicInterval
+  }
+
+  #fetchAndUpdate = async ({ monitor, walletAccount, type }) => {
+    await monitor.fetch({ walletAccount })
+    await updateNetworkFetchStatus({
+      atom: this.#nftsMonitorStatusAtom,
+      network: this.#network,
+      walletAccountName: walletAccount.toString(),
+      type,
+    })
+  }
+
+  #fetchWalletData = async ({ walletAccount, dynamicInterval, force }) => {
+    const walletAccountName = walletAccount.toString()
+    if (this.#handleImportOnStart) {
+      this.#dataMonitor.enableImportForWalletAccount(walletAccountName)
     }
 
-    await Promise.all([
-      this.#dataMonitor.fetch({ walletAccounts: walletAccountsToFetch }),
-      this.#transactionsMonitor?.fetch({ walletAccounts: walletAccountsToFetch }),
-    ])
+    const fetchPromises = []
+
+    if (
+      await this.#shouldFetch({ walletAccountName, lastFetchType: 'nfts', dynamicInterval, force })
+    ) {
+      fetchPromises.push(
+        this.#fetchAndUpdate({ monitor: this.#dataMonitor, walletAccount, type: 'nfts' })
+      )
+    }
+
+    if (
+      this.#transactionsMonitor &&
+      (await this.#shouldFetch({ walletAccountName, lastFetchType: 'txs', dynamicInterval, force }))
+    ) {
+      fetchPromises.push(
+        this.#fetchAndUpdate({ monitor: this.#transactionsMonitor, walletAccount, type: 'txs' })
+      )
+    }
+
+    Promise.all(fetchPromises)
+  }
+
+  #tick = async ({ walletAccounts, force = false } = Object.create(null)) => {
+    this.#previousTick = Date.now()
+    const walletAccountsToFetch = walletAccounts || (await this.#getWalletAccountsToFetch())
+
+    const nftsData = await this.#nftsAtom.get()
+    const txLogData = await this.#txLogsAtom.get()
+    const assetName = NFTS_NETWORK_TO_ASSET_NAME[this.#network]
+
+    const emptyNftsMultiplier =
+      this.#config?.emptyNftsIntervalMultiplier || DEFAULT_EMPTY_NFTS_INTERVAL_MULTIPLIER
+    const emptyTxsMultiplier =
+      this.#config?.emptyTxsIntervalMultiplier || DEFAULT_EMPTY_TXS_INTERVAL_MULTIPLIER
+
+    await Promise.all(
+      walletAccountsToFetch.map(async (walletAccount) => {
+        const walletAccountName = walletAccount.toString()
+        const nftsCount = nftsData?.[walletAccountName]?.[this.#network]?.length || 0
+        const txsCount = txLogData?.value?.[walletAccountName]?.[assetName]?.size || 0
+
+        const dynamicInterval = calculateDynamicInterval({
+          baseInterval: this.#interval,
+          nftsCount,
+          txsCount,
+          emptyNftsMultiplier,
+          emptyTxsMultiplier,
+          network: this.#network,
+          networkMultipliers: this.#config?.networkIntervalMultipliers,
+        })
+
+        await this.#fetchWalletData({ walletAccount, dynamicInterval, force })
+      })
+    )
+
+    this.#handleImportOnStart = false
   }
 
   #preFetchCheck = async () => {
@@ -122,60 +207,40 @@ class NftsNetworkMonitor extends EventEmitter {
     }
   }
 
-  #shouldFetchWalletAccount = async ({ walletAccountName }) => {
-    const { updatedAt, nftsCount } =
-      this.#previousFetchData.get(walletAccountName) || Object.create(null)
-
-    const previousFetch = updatedAt || 0
-    const txLogData = await this.#txLogsAtom.get()
-
-    const assetName = NFTS_NETWORK_TO_ASSET_NAME[this.#network]
-    const emptyNftsMultiplier =
-      this.#config?.emptyNftsIntervalMultiplier || DEFAULT_EMPTY_NFTS_INTERVAL_MULTIPLIER
-    const emptyTxsMultiplier =
-      this.#config?.emptyTxsIntervalMultiplier || DEFAULT_EMPTY_TXS_INTERVAL_MULTIPLIER
-    const txsCount = txLogData?.value?.[walletAccountName]?.[assetName]?.size
-
-    const adjustedInterval = calculateDynamicInterval({
-      baseInterval: this.#interval,
-      txsCount,
-      nftsCount,
-      emptyNftsMultiplier,
-      emptyTxsMultiplier,
-    })
-
-    return Date.now() - previousFetch >= adjustedInterval
-  }
-
   #getWalletAccountsToFetch = async () => {
-    const allWalletAccounts = await this.#getWalletAccounts()
-    const accountsToFetch = []
-    for (const walletAccount of allWalletAccounts) {
-      const fetchNow = await this.#shouldFetchWalletAccount({
-        walletAccountName: walletAccount.toString(),
-      })
-
-      if (fetchNow) {
-        accountsToFetch.push(walletAccount)
-      }
+    // fetch for all accounts on import
+    if (this.#handleImportOnStart) {
+      const walletAccounts = await this.#enabledWalletAccountsAtom.get()
+      return Object.values(walletAccounts).filter(doesWalletAccountSupportNFTs)
     }
 
-    return accountsToFetch
-  }
+    const activeAccount = await this.#activeWalletAccountAtom.get()
+    if (!activeAccount) return []
 
-  #getWalletAccounts = async () => {
     const walletAccounts = await this.#enabledWalletAccountsAtom.get()
+    const fullActiveAccount = walletAccounts[activeAccount.toString()]
+    if (!fullActiveAccount || !doesWalletAccountSupportNFTs(fullActiveAccount)) {
+      return []
+    }
 
-    return Object.values(walletAccounts).filter(
-      (account) => account.isSoftware || account.source === WalletAccount.LEDGER_SRC
-    )
+    return [fullActiveAccount]
   }
 
-  forceUpdate = async () => {
+  forceUpdate = async ({ walletAccountName } = Object.create(null)) => {
     if (!this.#isStarted) return
 
-    await this.#preFetchCheck()
-    await this.#tick()
+    let walletAccounts
+    if (walletAccountName) {
+      const allWalletAccounts = await this.#enabledWalletAccountsAtom.get()
+      const fullActiveAccount = allWalletAccounts[walletAccountName]
+      if (!fullActiveAccount || !doesWalletAccountSupportNFTs(fullActiveAccount)) {
+        return
+      }
+
+      walletAccounts = [fullActiveAccount]
+    }
+
+    await this.#tick({ walletAccounts, force: true })
   }
 
   start = async () => {
@@ -192,12 +257,16 @@ class NftsNetworkMonitor extends EventEmitter {
         await this.#tick({ walletAccounts: walletAccountsToFetch })
       }
 
-      await delay(this.#minInterval)
+      if (!this.#isStarted) break
+      await new Promise((resolve) => {
+        this.#tickTimeout = setTimeout(resolve, this.#minInterval)
+      })
     }
   }
 
   stop = async () => {
     this.#isStarted = false
+    clearTimeout(this.#tickTimeout)
   }
 
   setInterval = (ms) => {

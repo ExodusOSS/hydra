@@ -1,4 +1,4 @@
-import helper from './multi-account-helper'
+import helper from './multi-account-helper.js'
 
 const initialState = helper.createInitialState()
 

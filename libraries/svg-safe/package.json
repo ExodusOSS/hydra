@@ -1,0 +1,31 @@
+{
+  "name": "@exodus/svg-safe",
+  "version": "1.0.0-rc.3",
+  "author": "Exodus Movement, Inc.",
+  "description": "Validates that a string is a valid SVG XML.",
+  "main": "src/index.mjs",
+  "module": "src/index.mjs",
+  "type": "module",
+  "files": [
+    "src/**/*.mjs",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "test": "run -T exodus-test --jest",
+    "lint": "run -T eslint",
+    "lint:fix": "yarn lint --fix"
+  },
+  "sideEffects": false,
+  "license": "MIT",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/svg-safe",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asvg-safe"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

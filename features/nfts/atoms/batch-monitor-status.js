@@ -6,7 +6,7 @@ const createNftBatchMonitorStatusAtom = ({ storage }) => {
   return dedupe(
     atomFactory({
       key: 'nftBatchMonitorStatus',
-      defaultValue: {},
+      defaultValue: Object.create(null),
       isSoleWriter: true,
     })
   )

@@ -11,7 +11,7 @@ import { createIsInstance, omitUndefined } from '../utils.js'
 const { get, isPlainObject, isString } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
 function coerceToObject(obj: Order | Partial<OrderProps> | Partial<SerializedOrder>) {
-  return obj instanceof Order ? obj.toJSON() : obj
+  return Order.isInstance(obj) ? obj.toJSON() : obj
 }
 
 const ERROR_STATUSES = {

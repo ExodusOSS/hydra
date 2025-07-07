@@ -5,16 +5,16 @@ import createIocContainer from '@exodus/dependency-injection'
 import preprocess from '@exodus/dependency-preprocessors'
 // rename dependencies, e.g. from a global 'marketHistoryRefreshIntervalAtom' implementation id
 // to a 'refreshIntervalAtom' interface id declared in the module's dependencies
-import alias from '@exodus/dependency-preprocessors/src/preprocessors/alias'
+import alias from '@exodus/dependency-preprocessors/src/preprocessors/alias.js'
 // auto-inject config from config.restoreProgressTracker when 'config' is listed in dependencies
-import config from '@exodus/dependency-preprocessors/src/preprocessors/config'
+import config from '@exodus/dependency-preprocessors/src/preprocessors/config.js'
 // auto-inject logger when 'logger' is listed in dependencies
-import logify from '@exodus/dependency-preprocessors/src/preprocessors/logify'
+import logify from '@exodus/dependency-preprocessors/src/preprocessors/logify.js'
 import createInMemoryStorage from '@exodus/storage-memory'
-import EventEmitter from 'events/'
+import EventEmitter from 'events/events.js'
 
-import { restoringAssetsAtomDefinition } from '../../atoms'
-import restoreProgressTrackerDefinition from '../index'
+import { restoringAssetsAtomDefinition } from '../../atoms/index.js'
+import restoreProgressTrackerDefinition from '../index.js'
 
 const createLogger = (namespace) => console
 

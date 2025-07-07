@@ -2,6 +2,7 @@ const createMarketHistoryApi = ({ marketHistoryMonitor }) => {
   return {
     marketHistory: {
       update: marketHistoryMonitor.update,
+      updateAll: marketHistoryMonitor.updateAll,
       fetchAssetPricesFromDate: marketHistoryMonitor.fetchAssetPricesFromDate,
     },
   }

@@ -14,7 +14,6 @@ export const ORDER_STATUS = {
   complete: 'complete',
   failed: 'failed',
   in_progress: 'in-progress',
-  initiated: 'initiated',
 } as const
 
 export type OrderStatus = Values<typeof ORDER_STATUS>
@@ -86,8 +85,7 @@ export const ORDER_STATUS_TO_PAYPAL_STATUS = {
   __proto__: null,
   [ORDER_STATUS.complete]: [PAYPAL_ORDER_STATUS.completed],
   [ORDER_STATUS.failed]: [PAYPAL_ORDER_STATUS.failed],
-  [ORDER_STATUS.in_progress]: [PAYPAL_ORDER_STATUS.pending],
-  [ORDER_STATUS.initiated]: [PAYPAL_ORDER_STATUS.initiated],
+  [ORDER_STATUS.in_progress]: [PAYPAL_ORDER_STATUS.initiated, PAYPAL_ORDER_STATUS.pending],
 } as const
 
 export const RAMP_ORDER_STATUS = {

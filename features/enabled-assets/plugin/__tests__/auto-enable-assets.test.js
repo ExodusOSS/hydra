@@ -55,6 +55,14 @@ const { once } = EventEmitter
 const createAutoEnableAssets = autoEnableAssetsPluginDefinition.factory
 
 describe('auto-enable-assets', () => {
+  beforeEach(() => {
+    jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
   const prepare = async ({
     requiredEnabledAssetNames = [],
     assetNamesChangedByUser = [],
@@ -105,9 +113,6 @@ describe('auto-enable-assets', () => {
     const syncedBalancesAtom = createInMemoryAtom()
     const enabledAssetsAtom = createInMemoryAtom({ defaultValue: {} })
     const availableAssetNamesAtom = createInMemoryAtom({ defaultValue: [] })
-    const restoreAtom = createInMemoryAtom({
-      defaultValue: false,
-    })
 
     const autoEnabledAssets = createAutoEnableAssets({
       nonDustBalanceAssetNamesAtom,
@@ -123,13 +128,15 @@ describe('auto-enable-assets', () => {
       logger: {
         debug: jest.fn(),
       },
-      restoreAtom,
       ...opts,
       config,
     })
-    autoEnabledAssets.onUnlock()
+    await autoEnabledAssets.onAssetsSynced()
 
-    await once(emitter, 'enabled')
+    // Wait for throttled flush (leading: false means it waits)
+    await jest.advanceTimersByTimeAsync(50)
+
+    // Check if enable was called directly instead of waiting for event
     expect(enable).toBeCalledTimes(1)
     expect(enable).toBeCalledWith(config.defaultEnabledAssetNames)
     enable.mockClear()
@@ -146,7 +153,6 @@ describe('auto-enable-assets', () => {
       syncedBalancesAtom,
       enabledAssetsAtom,
       availableAssetNamesAtom,
-      restoreAtom,
     }
   }
 
@@ -172,7 +178,10 @@ describe('auto-enable-assets', () => {
 
     const promiseEmitted = once(emitter, 'enabled')
     nonDustBalanceAssetNamesAtom.set(['builtInToken'])
+
+    await jest.advanceTimersByTimeAsync(50)
     await promiseEmitted
+
     expect(enable).toBeCalledTimes(1)
     expect(enable).toHaveBeenCalledWith(['builtInToken'])
   })
@@ -184,9 +193,12 @@ describe('auto-enable-assets', () => {
       },
     })
 
+    const promiseEmitted = once(emitter, 'enabled')
     enabledAndDisabledAssetsAtom.set({ disabled: { oldStyleAsset: false } })
 
-    await once(emitter, 'enabled')
+    await jest.advanceTimersByTimeAsync(50)
+    await promiseEmitted
+
     expect(enable).toHaveBeenCalledWith(expect.arrayContaining(['newStyleCustomToken']))
     expect(enable).not.toHaveBeenCalledWith(expect.arrayContaining(['oldStyleAsset']))
   })
@@ -199,6 +211,8 @@ describe('auto-enable-assets', () => {
     })
 
     await enabledAndDisabledAssetsAtom.set({ disabled: { oldStyleAsset: true } })
+
+    await jest.advanceTimersByTimeAsync(50)
     expect(enable).not.toHaveBeenCalled()
   })
 
@@ -212,6 +226,8 @@ describe('auto-enable-assets', () => {
     await enabledAndDisabledAssetsAtom.set({
       disabled: { oldStyleAsset: false, newStyleCustomToken: true },
     })
+
+    await jest.advanceTimersByTimeAsync(50)
     expect(enable).not.toHaveBeenCalled()
   })
 
@@ -222,6 +238,7 @@ describe('auto-enable-assets', () => {
       },
     })
 
+    const promiseEmitted = once(emitter, 'enabled')
     ordersAtom.set(
       OrderSet.fromArray([
         Order.fromJSON({
@@ -234,7 +251,9 @@ describe('auto-enable-assets', () => {
       ])
     )
 
-    await once(emitter, 'enabled')
+    await jest.advanceTimersByTimeAsync(50)
+    await promiseEmitted
+
     expect(enable).toHaveBeenCalledWith(expect.arrayContaining(['customToken']))
     expect(enable).not.toHaveBeenCalledWith(expect.arrayContaining(['builtInToken']))
   })
@@ -246,6 +265,7 @@ describe('auto-enable-assets', () => {
       },
     })
 
+    const promiseEmitted = once(emitter, 'enabled')
     ordersAtom.set(
       OrderSet.fromArray([
         Order.fromJSON({
@@ -261,7 +281,9 @@ describe('auto-enable-assets', () => {
       ])
     )
 
-    await once(emitter, 'enabled')
+    await jest.advanceTimersByTimeAsync(50)
+    await promiseEmitted
+
     expect(enable).toHaveBeenCalledWith(expect.arrayContaining(['customToken']))
   })
 
@@ -274,7 +296,6 @@ describe('auto-enable-assets', () => {
     })
 
     Object.assign(assets, assetsMock)
-    jest.useFakeTimers({ doNotFake: ['setImmediate'] })
 
     ordersAtom.set(
       OrderSet.fromArray([
@@ -308,29 +329,22 @@ describe('auto-enable-assets', () => {
     await jest.advanceTimersByTimeAsync(20)
     expect(enable).toBeCalledTimes(1)
     expect(enable).toHaveBeenCalledWith(['builtInBaseAsset', 'builtInToken', 'customToken'])
-
-    jest.useRealTimers()
   })
 
-  it('auto-enables non-zero balance assets from synced-balances considering available assets and restoring flag', async () => {
-    const {
-      emitter,
-      enable,
-      syncedBalancesAtom,
-      enabledAssetsAtom,
-      availableAssetNamesAtom,
-      restoreAtom,
-    } = await prepare({
-      config: {
-        defaultEnabledAssetNames: ['builtInBaseAsset'],
-      },
-    })
+  it('auto-enables non-zero balance assets from synced-balances considering available assets', async () => {
+    const { enable, syncedBalancesAtom, enabledAssetsAtom, availableAssetNamesAtom } =
+      await prepare({
+        config: {
+          defaultEnabledAssetNames: ['builtInBaseAsset'],
+        },
+      })
 
     await enabledAssetsAtom.set({
       bitcoin: true,
       ethereum: true,
     })
-    await restoreAtom.set(true)
+
+    await availableAssetNamesAtom.set(['bitcoin', 'ethereum', 'cosmos'])
 
     const syncedBalancesCosmosPayload = {
       exodus_0: {
@@ -339,17 +353,54 @@ describe('auto-enable-assets', () => {
     }
 
     await syncedBalancesAtom.set(syncedBalancesCosmosPayload)
-    expect(enable).not.toHaveBeenCalled()
-
-    await availableAssetNamesAtom.set(['bitcoin', 'ethereum', 'cosmos'])
-
-    await syncedBalancesAtom.set(syncedBalancesCosmosPayload)
-    expect(enable).not.toHaveBeenCalled()
-
-    await restoreAtom.set(false)
-    await syncedBalancesAtom.set(syncedBalancesCosmosPayload)
-    await once(emitter, 'enabled')
+    await jest.advanceTimersByTimeAsync(50)
     expect(enable).toHaveBeenCalledWith(['cosmos'])
+  })
+
+  it('auto-enables assets when nonDustBalance atom changes', async () => {
+    const { enable, nonDustBalanceAssetNamesAtom, assets } = await prepare({
+      config: {
+        defaultEnabledAssetNames: ['builtInBaseAsset'],
+        alwaysAutoEnable: true,
+      },
+    })
+
+    assets.ethereum = {
+      name: 'ethereum',
+      currency: UnitType.create({ base: 0, notBase: 18 }),
+    }
+
+    nonDustBalanceAssetNamesAtom.set(['ethereum'])
+
+    await jest.advanceTimersByTimeAsync(50)
+
+    expect(enable).toHaveBeenCalledWith(['ethereum'])
+  })
+
+  it('processes pending assets via onAssetsSynced hook', async () => {
+    const { enable, nonDustBalanceAssetNamesAtom, autoEnabledAssets, assets } = await prepare({
+      config: {
+        defaultEnabledAssetNames: ['builtInBaseAsset'],
+        alwaysAutoEnable: true,
+      },
+    })
+
+    assets.ethereum = {
+      name: 'ethereum',
+      currency: UnitType.create({ base: 0, notBase: 18 }),
+    }
+
+    // Set some assets that need to be enabled
+    await nonDustBalanceAssetNamesAtom.set(['ethereum'])
+
+    // Wait for initial processing
+    await jest.advanceTimersByTimeAsync(10)
+
+    // Simulate assets sync completed
+    await autoEnabledAssets.onAssetsSynced()
+    await jest.advanceTimersByTimeAsync(50)
+
+    expect(enable).toHaveBeenCalledWith(['ethereum'])
   })
 
   describe('fiat orders', () => {
@@ -406,22 +457,22 @@ describe('auto-enable-assets', () => {
     })
 
     it('enables assets from buy order', async () => {
-      const { enable, emitter } = await prepare({ fiatOrdersAtom, assets })
+      const { enable } = await prepare({ fiatOrdersAtom, assets })
 
       fiatOrdersAtom.set(FiatOrderSet.fromArray([buyOrder]))
 
-      await once(emitter, 'enabled')
+      await jest.advanceTimersByTimeAsync(50)
 
       expect(enable).toHaveBeenCalledTimes(1)
       expect(enable).toHaveBeenCalledWith(['waynecoin'])
     })
 
     it('enables assets from sell order', async () => {
-      const { enable, emitter } = await prepare({ fiatOrdersAtom, assets })
+      const { enable } = await prepare({ fiatOrdersAtom, assets })
 
       fiatOrdersAtom.set(FiatOrderSet.fromArray([sellOrder]))
 
-      await once(emitter, 'enabled')
+      await jest.advanceTimersByTimeAsync(50)
 
       expect(enable).toHaveBeenCalledTimes(1)
       expect(enable).toHaveBeenCalledWith(['jokercoin'])

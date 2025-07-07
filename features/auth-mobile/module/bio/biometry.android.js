@@ -1,5 +1,6 @@
 import RNTouchId from '@exodus/react-native-touch-id'
-import { TOUCH_ID } from '../../constants'
+
+const TOUCH_ID = 'Fingerprint'
 
 class Biometry {
   #logger

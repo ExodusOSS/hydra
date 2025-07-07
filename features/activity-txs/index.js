@@ -1,5 +1,5 @@
-import { activityTxsAtomDefinition } from './atoms'
-import activityTxsPluginDefinition from './plugin'
+import { activityTxsAtomDefinition } from './atoms/index.js'
+import activityTxsPluginDefinition from './plugin/index.js'
 
 const activityTxs = () => ({
   id: 'activityTxs',

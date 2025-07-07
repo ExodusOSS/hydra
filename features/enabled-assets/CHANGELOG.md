@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.10.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/enabled-assets@10.10.0...@exodus/enabled-assets@10.10.1) (2025-06-30)
+
+### Bug Fixes
+
+- fix: prevent cumulative amount notifications after wallet restore (#12843)
+
+## [10.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/enabled-assets@10.9.3...@exodus/enabled-assets@10.10.0) (2025-06-03)
+
+### Features
+
+- feat: gracefully handle 'isLocked' state in report (#12669)
+
+## [10.9.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/enabled-assets@10.9.2...@exodus/enabled-assets@10.9.3) (2025-05-15)
+
+### Bug Fixes
+
+- fix: cancel enabled-assets flush queue on stop (#12470)
+
+## [10.9.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/enabled-assets@10.9.1...@exodus/enabled-assets@10.9.2) (2025-04-14)
+
+**Note:** Version bump only for package @exodus/enabled-assets
+
+## [10.9.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/enabled-assets@10.9.0...@exodus/enabled-assets@10.9.1) (2025-03-12)
+
+**Note:** Version bump only for package @exodus/enabled-assets
+
 ## [10.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/enabled-assets@10.8.3...@exodus/enabled-assets@10.9.0) (2025-02-21)
 
 ### Features

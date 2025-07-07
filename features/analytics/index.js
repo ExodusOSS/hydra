@@ -15,13 +15,12 @@ import {
 } from './atoms/index.js'
 import analyticsReportDefinition from './report/index.js'
 
-const analytics = (
-  {
-    segmentConfig: { apiKey, apiBaseUrl = 'https://api.segment.io/v1/' },
-    keyIdentifier = EXODUS_KEY_IDS.TELEMETRY,
-    installEventReportingUrl,
-  } = Object.create(null)
-) => {
+const analytics = ({
+  segmentConfig: { apiKey, apiBaseUrl = 'https://api.segment.io/v1/' },
+  keyIdentifier = EXODUS_KEY_IDS.TELEMETRY,
+  installEventReportingUrl,
+  multiSeed = true,
+}) => {
   typeforce(
     {
       apiKey: 'String',
@@ -47,6 +46,7 @@ const analytics = (
       {
         definition: analyticsExtraSeedsUserIdsAtomDefinition,
         config: { keyIdentifier },
+        if: multiSeed,
       },
       {
         definition: analyticsTrackerDefinition,
@@ -54,7 +54,7 @@ const analytics = (
           segment: { apiKey, apiBaseUrl },
         },
       },
-      { definition: analyticsLifecyclePluginDefinition },
+      { definition: analyticsLifecyclePluginDefinition, config: { multiSeed } },
       {
         definition: analyticsAnonymousIdAtomDefinition,
         aliases: [{ implementationId: 'unsafeStorage', interfaceId: 'storage' }],

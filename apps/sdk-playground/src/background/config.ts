@@ -4,10 +4,13 @@ import {
   defaultEnabledAssetsList,
   defaultEnabledAssetsListForFreshWallets,
 } from './constants/assets.js'
+import type { Config as ExchangeConfig } from '@exodus/exchange'
 
 const appName = 'sdk-playground'
 
-const config = {
+type Config = { exchange: ExchangeConfig } & Record<string, unknown>
+
+const config: Config = {
   availableAssets: {
     defaultAvailableAssetNames: ['bitcoin', 'ethereum'],
   },
@@ -21,8 +24,6 @@ const config = {
   exchange: {
     services: {
       assets: {
-        appName,
-        appVersion: '1.0.0',
         baseUrl: 'https://exchange.exodus.io/v3',
       },
       orders: {
@@ -32,7 +33,7 @@ const config = {
       },
     },
     providers: {
-      exodus: {
+      direct: {
         appName,
         appVersion: '1.0.0',
         baseUrl: 'https://exchange.exodus.io/v3',
@@ -41,16 +42,6 @@ const config = {
           extraFeatures: ['pid'],
           bypassProvidersValidation: true,
         },
-      },
-      lifi: {
-        baseUrl: 'https://li.quest/v1',
-        enabled: true,
-        apiKeys: {
-          default: '06736151-26d9-4583-a984-8b622fe7c4b7.2aebe520-6838-4940-b6a0-f29f601b59c9', // not a secret - this is a client side identifier
-        },
-      },
-      jupiter: {
-        enabled: true,
       },
     },
   },

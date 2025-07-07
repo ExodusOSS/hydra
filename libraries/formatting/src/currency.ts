@@ -16,7 +16,7 @@ export function getCurrencyFormat(currency: string) {
 
 export const formatNumber = (number: string | number, decimals = 0) => {
   return formatCurrency(number, {
-    maxFraction: decimals,
-    minFraction: decimals,
+    maximumFractionDigits: decimals,
+    minimumFractionDigits: decimals,
   })
 }

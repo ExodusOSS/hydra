@@ -1,9 +1,11 @@
 import { SafeError } from '@exodus/errors'
+import { memoize } from '@exodus/basic-utils'
+import { z } from '@exodus/zod'
 
 const createBalancesReport = ({ enabledWalletAccountsAtom, balancesAtom }) => ({
   namespace: 'balances',
-  export: async ({ walletExists } = Object.create(null)) => {
-    if (!walletExists) return null
+  export: async ({ walletExists, isLocked } = Object.create(null)) => {
+    if (!walletExists || isLocked) return null
 
     let walletAccounts
     let balances
@@ -32,6 +34,20 @@ const createBalancesReport = ({ enabledWalletAccountsAtom, balancesAtom }) => ({
         return data
       }, {})
   },
+  getSchema: memoize(() =>
+    z
+      .record(
+        z.union([
+          z
+            .object({
+              balances: z.record(z.string(), z.string()),
+            })
+            .strict(),
+          z.instanceof(SafeError),
+        ])
+      )
+      .nullable()
+  ),
 })
 
 const balancesReportDefinition = {

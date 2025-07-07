@@ -1,6 +1,7 @@
 import type { Atom } from '@exodus/atoms'
 import { createInMemoryAtom } from '@exodus/atoms'
 import { WalletAccount } from '@exodus/models'
+import type { WalletAccountSource } from 'libraries/models/lib/wallet-account/index.js'
 
 import { createSoftwareWalletPublicKeysAtom } from '../../../atoms/software-wallet-public-keys.js'
 import type { MoneroPublicKeyBuffer } from '../formats/serialization/index.js'
@@ -41,7 +42,7 @@ describe('PublicKeyStore', () => {
       source: WalletAccount.TREZOR_SRC,
     })
 
-    mockWalletAccountsAtom.set({
+    void mockWalletAccountsAtom.set({
       exodus_0: softwareWalletAccount,
       exodus_1: softwareWalletAccount,
       trezor_0_69b383b8477be56d6ff5ba24cff0c24e: hardwareWalletAccount,
@@ -137,7 +138,7 @@ describe('PublicKeyStore', () => {
       const walletAccount = new WalletAccount({
         ...WalletAccount.DEFAULT,
         id: 'unsuported',
-        source: 'unsuported',
+        source: 'unsuported' as WalletAccountSource,
       })
 
       await expect(

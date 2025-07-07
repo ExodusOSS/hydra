@@ -1,12 +1,11 @@
-const fs = require('fs-extra')
-
 const makeConcurrent = require('make-concurrent')
 const delay = require('delay')
 const { getLockFile, getTmpFile, getFlagFile } = require('./utils')
 
 const checkContents = (writtenContents) => writtenContents.length > 0
 
-function createStorageInternal({ file }) {
+// fs must provide fs-extra compatible { readFile, outputFile, ensureFile, move, remove }
+function createStorageInternal({ fs, file, createNewFileIfError = false }) {
   const lockFile = getLockFile(file)
   const tmpFile = getTmpFile(file)
   const flagFile = getFlagFile(file)
@@ -18,7 +17,7 @@ function createStorageInternal({ file }) {
       data = await fs.readFile(file)
       data = Object.assign(Object.create(null), JSON.parse(data))
     } catch (err) {
-      if (err.code !== 'ENOENT') throw err
+      if (!createNewFileIfError && err.code !== 'ENOENT') throw err
 
       data = Object.create(null)
     }
@@ -45,7 +44,7 @@ function createStorageInternal({ file }) {
         do {
           // only log on retry
           if (writtenContents) console.warn(`unsafe storage write invalid; retrying ${tries}`)
-          await fs.writeFile(tmpFile, newData)
+          await fs.outputFile(tmpFile, newData)
           writtenContents = await fs.readFile(tmpFile)
         } while (!checkContents(writtenContents) && ++tries < 5)
 

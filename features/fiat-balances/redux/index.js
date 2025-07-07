@@ -1,30 +1,29 @@
-import id from './id'
-import initialState from './initial-state'
-import createSelectorDefinitions from './selectors'
-import { merge } from 'lodash'
+import id from './id.js'
+import initialState from './initial-state.js'
+import createSelectorDefinitions from './selectors/index.js'
 
-const mergeWalletAccountChanges = (balances, byWalletAccount) =>
-  merge(
-    //
-    {},
-    balances,
-    byWalletAccount
-  )
+const mergeChanges = (balances, changes) => {
+  const result = { ...balances }
 
-const mergeAssetSourceChanges = (balances, byType) =>
-  merge(
-    //
-    {},
-    balances,
-    byType
-  )
+  for (const key in changes) {
+    const sourceValue = changes[key]
+
+    if (sourceValue && typeof sourceValue === 'object' && sourceValue.constructor === Object) {
+      result[key] = mergeChanges(result[key] || {}, sourceValue)
+    } else {
+      result[key] = sourceValue
+    }
+  }
+
+  return result
+}
 
 const prepareData = ({ state, payload }) => {
   const { totals, byWalletAccount, ...rest } = payload
   return {
-    ...mergeAssetSourceChanges(state.data, rest),
+    ...mergeChanges(state.data, rest),
     totals,
-    byWalletAccount: mergeWalletAccountChanges(state.data.byWalletAccount, byWalletAccount),
+    byWalletAccount: mergeChanges(state.data.byWalletAccount, byWalletAccount),
   }
 }
 

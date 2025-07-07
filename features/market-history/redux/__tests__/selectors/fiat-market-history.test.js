@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('fiat-market-history', () => {
   it('return market history for active currency', () => {

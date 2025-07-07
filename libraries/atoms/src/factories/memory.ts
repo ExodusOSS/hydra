@@ -19,7 +19,7 @@ const createAtomMock = <T>(options: Params<T> = {}): Atom<T> => {
   const initialized = pDefer() as DeferredPromise<void> & { resolved: boolean }
 
   const get = async () => {
-    if (!('defaultValue' in options)) {
+    if (!Object.hasOwn(options, 'defaultValue')) {
       await initialized.promise
     }
 

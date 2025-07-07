@@ -1,5 +1,5 @@
-import { syncTimeAtomDefinition } from './atoms'
-import syncTimePluginDefinition from './plugin'
+import { syncTimeAtomDefinition } from './atoms/index.js'
+import syncTimePluginDefinition from './plugin/index.js'
 
 const DEFAULT_INTERVAL = 5000
 

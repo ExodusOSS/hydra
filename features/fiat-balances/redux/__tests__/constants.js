@@ -1,4 +1,4 @@
-import { createFiatNumberUnit } from './utils'
+import { createFiatNumberUnit } from './utils.js'
 
 export const FIAT_BALANCES_PAYLOAD = {
   totals: {

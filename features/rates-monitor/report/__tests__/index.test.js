@@ -1,6 +1,6 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 
-import ratesReportDefinition from '..'
+import ratesReportDefinition from '../index.js'
 
 describe('ratesReport', () => {
   const ratesData = {

@@ -2,11 +2,11 @@ import announcements from '@exodus/announcements'
 import { waitUntil } from '@exodus/atoms'
 import { http } from 'msw'
 
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
-import { jsonResponse } from './setup/handlers/utils'
-import mswServer from './setup/http'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
+import { jsonResponse } from './setup/handlers/utils.js'
+import mswServer from './setup/http.js'
 
 const url = 'https://remote-config.exodus.io/v2/announcements.json'
 
@@ -67,5 +67,7 @@ describe('announcements', () => {
     })
 
     await expect(exodus.announcements.dispose('7')).resolves.not.toThrow()
+
+    await exodus.application.stop()
   })
 })

@@ -1,7 +1,7 @@
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
 describe('availableAssets', () => {
   let adapters
@@ -32,6 +32,8 @@ describe('availableAssets', () => {
     await exodus.application.unlock({ passphrase })
 
     await expectAvailableAssetNames
+
+    await exodus.application.stop()
   })
 
   test('availableAssets integration example', async () => {
@@ -56,5 +58,7 @@ describe('availableAssets', () => {
 
     const availableAssetNames = await exodus.availableAssets.get()
     expect(availableAssetNames).toEqual(['bitcoin'])
+
+    await exodus.application.stop()
   })
 })

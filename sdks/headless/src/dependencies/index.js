@@ -3,12 +3,12 @@
 
 import assert from 'minimalistic-assert'
 
-import createAdapterDependencies from './adapters'
-import createAtomDependencies from './atoms'
-import createConfigDependencies from './configs'
-import createModuleDependencies from './modules'
-import createPluginDependencies from './plugins'
-import { wrapConstant } from './utils'
+import createAdapterDependencies from './adapters.js'
+import createAtomDependencies from './atoms.js'
+import createConfigDependencies from './configs.js'
+import createModuleDependencies from './modules.js'
+import createPluginDependencies from './plugins.js'
+import { wrapConstant } from './utils.js'
 
 const adapterKeys = ['createLogger', 'legacyPrivToPub', 'unsafeStorage', 'fetch', 'freeze']
 

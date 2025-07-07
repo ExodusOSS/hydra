@@ -1,5 +1,5 @@
-import id from './id'
-import initialState from './initial-state'
+import id from './id.js'
+import initialState from './initial-state.js'
 
 const restoringAssetsReduxDefinition = {
   id,

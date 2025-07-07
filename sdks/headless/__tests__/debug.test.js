@@ -1,6 +1,6 @@
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
 
 const hogwarts = {
   id: 'howgarts',

@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect'
-import { isMultiNetworkAsset } from '../utils'
-import { groupBy } from 'lodash'
+import { isMultiNetworkAsset } from '../utils.js'
+import lodash from 'lodash'
+
+const { groupBy } = lodash
 
 const EMPTY = Object.freeze([])
 const selectorFactory =

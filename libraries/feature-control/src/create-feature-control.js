@@ -1,5 +1,5 @@
 import semver from 'semver'
-import assert from 'assert'
+import assert from 'minimalistic-assert'
 
 import _isShutDown from './modules/is-shut-down.js'
 import _getUnavailableStatus from './modules/get-unavailable-status.js'

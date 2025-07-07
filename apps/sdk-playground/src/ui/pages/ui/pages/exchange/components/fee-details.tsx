@@ -1,5 +1,5 @@
 const FeeDetails = () => {
-  return <div>Fee details: TODO</div>
+  return null
 }
 
 export default FeeDetails

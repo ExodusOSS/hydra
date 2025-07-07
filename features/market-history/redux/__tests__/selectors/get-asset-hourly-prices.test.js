@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('get-asset-hourly-prices', () => {
   it('return hourly prices for active currency for selected assetName', () => {

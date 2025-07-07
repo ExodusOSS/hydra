@@ -1,4 +1,4 @@
-import { areAddressesEqual } from '../../utils'
+import { areAddressesEqual } from '../../utils.js'
 
 export const decomposeId = (composedId = '', separator = '') => composedId.split(separator)
 

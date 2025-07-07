@@ -1,6 +1,6 @@
 {
   "name": "@exodus/filesystem",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Module for tracking filesystem info",
   "author": "Exodus Movement, Inc.",
   "repository": {

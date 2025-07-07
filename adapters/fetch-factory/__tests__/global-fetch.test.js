@@ -29,6 +29,12 @@ describe('FetchFactory', () => {
     expect(globalHeadersResult).toEqual({
       'user-agent': 'custom-agent',
     })
+
+    fetchFactory.setHeaders({ 'User-Agent': undefined })
+
+    const globalHeadersResult2 = await fetchFactory.create()('https://example.com')
+
+    expect(globalHeadersResult2).toEqual({})
   })
 
   test('set exodus headers', async () => {
@@ -99,6 +105,14 @@ describe('FetchFactory', () => {
     expect(pathRequestResult).toEqual({
       'x-custom-header3': 'custom-value',
     })
+
+    fetchFactory.setHeaders({ 'x-custom-header3': undefined })
+
+    const pathRequestResult2 = await fetchFactory.create()('/some-path', {
+      headers: new Headers({}),
+    })
+
+    expect(pathRequestResult2).toEqual({})
   })
 
   test('validate domains and subdomains on setHeaders', async () => {

@@ -4,8 +4,10 @@ import errorTracking from '@exodus/error-tracking'
 import { createNoopLogger } from '@exodus/logger'
 import { TxSet } from '@exodus/models'
 
-import fixtures from '../../test/tx-log-fixtures.json'
-import activityTxsAtomDefinition from '../activity-txs'
+import loadFixture from '../../test/load-fixture.cjs'
+import activityTxsAtomDefinition from '../activity-txs.js'
+
+const fixtures = loadFixture('tx-log-fixtures')
 
 const bitcoin = createBitcoin({ assetClientInterface: { createLogger: createNoopLogger } })
 const assets = {

@@ -1,17 +1,26 @@
 import { set } from '@exodus/basic-utils'
 import { isNumberUnit } from '@exodus/currency'
-import { cloneDeepWith, isEqual } from 'lodash'
+import lodash from 'lodash'
 import fiatCurrencies from '@exodus/fiat-currencies'
 import { combine } from '@exodus/atoms'
-import { getCreateConversion } from '../shared/get-create-conversion.js'
+
+const { isEqual } = lodash
 
 // not super efficient, so we're assuming small objects, like { [walletAccount]: xyz }
 const areKeysSame = (a, b) => isEqual(Object.keys(a).sort(), Object.keys(b).sort())
 
-const cloneBalances = (balances) =>
-  cloneDeepWith(balances, (val) => {
-    if (isNumberUnit(val)) return val
-  })
+export const cloneBalances = (balances) => {
+  if (isNumberUnit(balances)) {
+    return balances
+  }
+
+  const cloned = Object.create(Object.getPrototypeOf(balances))
+  for (const key in balances) {
+    cloned[key] = cloneBalances(balances[key])
+  }
+
+  return cloned
+}
 
 class FiatBalances {
   #logger
@@ -66,21 +75,27 @@ class FiatBalances {
       this.#cachedRates &&
         this.#fiatCurrency &&
         this.#latestAssetBalances &&
-        this.#cachedRates[this.#fiatCurrency]
+        this.#cachedRates[this.#fiatCurrency] &&
+        !Object.values(this.#cachedRates[this.#fiatCurrency]).every(({ invalid }) => invalid)
     )
   }
 
-  // seems cheap, worth memoizing?
-  #getCreateConversion = ({ assetName }) => {
+  #convertToFiat = ({ assetName, value }) => {
     const fiatCurrency = fiatCurrencies[this.#fiatCurrency]
+    if (value.isZero) return fiatCurrency.ZERO
     const rates = this.#cachedRates[this.#fiatCurrency]
     const asset = this.#assetsModule.getAsset(assetName)
+    let fiatRate
+    // HACK: Super hacky, terrible, the rates state object should have the prices split up by sub-objects per fiat
+    if (fiatCurrency.defaultUnit.unitName === 'USD') {
+      fiatRate = rates?.[asset.ticker]?.priceUSD || 0
+    } else {
+      fiatRate = rates?.[asset.ticker]?.price || 0
+    }
 
-    return getCreateConversion(fiatCurrency, rates)(asset)
-  }
+    if (fiatRate === 0) return fiatCurrency.ZERO
 
-  #convertToFiat = ({ assetName, value }) => {
-    return this.#getCreateConversion({ assetName })(value)
+    return fiatCurrency.defaultUnit(value.mul(fiatRate).toDefaultNumber())
   }
 
   #maybeRecompute = () => {

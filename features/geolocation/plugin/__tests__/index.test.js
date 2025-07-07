@@ -1,11 +1,7 @@
-import * as atoms from '@exodus/atoms'
+jest.doMock('@exodus/atoms/factories/observer', () => ({ __esModule: true, default: jest.fn() }))
 
-import geolocationLifecyclePluginDefinition from '..'
-
-jest.mock('@exodus/atoms', () => ({
-  ...jest.requireActual('@exodus/atoms'),
-  createAtomObserver: jest.fn(),
-}))
+const atoms = await import('@exodus/atoms')
+const { default: geolocationLifecyclePluginDefinition } = await import('../index.js')
 
 describe('geolocationLifecyclePlugin', () => {
   let port
@@ -26,7 +22,7 @@ describe('geolocationLifecyclePlugin', () => {
     geolocationAtom = atoms.createInMemoryAtom({
       defaultValue: { ip: '123', isAllowed: true, other: 'more data' },
     })
-    geolocationMonitor = { start: jest.fn() }
+    geolocationMonitor = { start: jest.fn(), stop: jest.fn() }
     plugin = geolocationLifecyclePluginDefinition.factory({
       port,
       geolocationMonitor,
@@ -47,10 +43,19 @@ describe('geolocationLifecyclePlugin', () => {
     expect(geolocationAtomObserver.start).not.toHaveBeenCalled()
   })
 
-  it('should call start from monitor when started', () => {
+  it('should call start/stop from monitor when started/stopped', () => {
+    expect(geolocationMonitor.start).toHaveBeenCalledTimes(0)
+    expect(geolocationMonitor.stop).toHaveBeenCalledTimes(0)
+
     plugin.onStart()
 
-    expect(geolocationMonitor.start).toHaveBeenCalled()
+    expect(geolocationMonitor.start).toHaveBeenCalledTimes(1)
+    expect(geolocationMonitor.stop).toHaveBeenCalledTimes(0)
+
+    plugin.onStop()
+
+    expect(geolocationMonitor.start).toHaveBeenCalledTimes(1)
+    expect(geolocationMonitor.stop).toHaveBeenCalledTimes(1)
   })
 
   it('should start observing atoms when loaded', () => {

@@ -1,8 +1,7 @@
-import createNftsProxy from './nfts-proxy'
+import createNftsProxy from './nfts-proxy.js'
 
 const nftsProxyDefinition = {
   id: 'nftsProxy',
-  // TODO: support client type?
   type: 'module',
   factory: createNftsProxy,
   dependencies: ['config', 'fetch'],

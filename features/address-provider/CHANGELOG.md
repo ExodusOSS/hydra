@@ -3,6 +3,68 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.11.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.10.1...@exodus/address-provider@12.11.0) (2025-06-03)
+
+### Features
+
+- feat: gracefully handle 'isLocked' state in report (#12669)
+
+## [12.10.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.10.0...@exodus/address-provider@12.10.1) (2025-06-03)
+
+### Bug Fixes
+
+- fix: race in address cache pushes to fusion (#12714)
+
+## [12.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.9.7...@exodus/address-provider@12.10.0) (2025-05-27)
+
+### Features
+
+- feat: batch fusion writes for address cache (#12656)
+
+### Bug Fixes
+
+- fix: update @exodus/errors (#12627)
+
+## [12.9.7](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.9.6...@exodus/address-provider@12.9.7) (2025-05-18)
+
+### Bug Fixes
+
+- fix: ensure no address-provider writeToDisk attempts after stop (#12471)
+
+## [12.9.6](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.9.5...@exodus/address-provider@12.9.6) (2025-05-15)
+
+### Bug Fixes
+
+- fix: cancel scheduled address-cache writes on stop (#12462)
+
+## [12.9.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.9.4...@exodus/address-provider@12.9.5) (2025-05-07)
+
+### Bug Fixes
+
+- fix: allow ledger portfolios in address provider export (#12204)
+
+## [12.9.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.9.3...@exodus/address-provider@12.9.4) (2025-03-20)
+
+### Bug Fixes
+
+- fix: relax schema (#11844)
+
+## [12.9.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.9.2...@exodus/address-provider@12.9.3) (2025-03-17)
+
+### Bug Fixes
+
+- fix: missing `null` in report schema (#11784)
+
+## [12.9.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.9.1...@exodus/address-provider@12.9.2) (2025-03-12)
+
+**Note:** Version bump only for package @exodus/address-provider
+
+## [12.9.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.9.0...@exodus/address-provider@12.9.1) (2025-03-05)
+
+### Bug Fixes
+
+- fix: bump bip32 (#11415)
+
 ## [12.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.8.1...@exodus/address-provider@12.9.0) (2025-02-27)
 
 ### Features

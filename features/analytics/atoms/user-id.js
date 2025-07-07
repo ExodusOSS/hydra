@@ -1,7 +1,7 @@
 import { waitUntil } from '@exodus/atoms'
 
-import getSeedDerivedId from './get-seed-derived-id'
-import createUserIdEnhance from './user-id-enhance'
+import getSeedDerivedId from './get-seed-derived-id.js'
+import createUserIdEnhance from './user-id-enhance.js'
 
 const enhance = createUserIdEnhance('userId')
 

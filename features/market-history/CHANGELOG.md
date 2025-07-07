@@ -3,6 +3,110 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.3.0...@exodus/market-history@10.3.1) (2025-07-01)
+
+### Bug Fixes
+
+- fix: market history loading (#13078)
+
+## [10.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.2.4...@exodus/market-history@10.3.0) (2025-07-01)
+
+### Features
+
+- feat: merge price-api with market-history (#12962)
+
+## [10.2.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.2.3...@exodus/market-history@10.2.4) (2025-06-17)
+
+### Performance
+
+- perf(market-history): Optimize price transformation logic (#12932)
+
+## [10.2.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.2.2...@exodus/market-history@10.2.3) (2025-06-16)
+
+### Performance
+
+- perf: don't clone historicalPrices to handle current rate logic (#12931)
+
+## [10.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.2.1...@exodus/market-history@10.2.2) (2025-05-26)
+
+### Bug Fixes
+
+- fix: potential race condition (#12678)
+
+## [10.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.2.0...@exodus/market-history@10.2.1) (2025-05-18)
+
+### Bug Fixes
+
+- fix: market-history stop (#12548)
+
+## [10.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.1.3...@exodus/market-history@10.2.0) (2025-05-08)
+
+### Features
+
+- feat: make market-history proper ESM (#12256)
+
+## [10.1.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.1.2...@exodus/market-history@10.1.3) (2025-05-06)
+
+### Bug Fixes
+
+- fix: actually check for data in marketHistory loading selectors (#12146)
+
+## [10.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.1.1...@exodus/market-history@10.1.2) (2025-04-25)
+
+### Bug Fixes
+
+- fix: round down fetch limit to avoid fractional values in API request (#12061)
+
+## [10.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.1.0...@exodus/market-history@10.1.1) (2025-04-22)
+
+### Bug Fixes
+
+- fix: market history. mutliple calls on foreground, missing timers setup (#12036)
+
+- fix: only set market history loaded=true when actual data exists (#12031)
+
+- fix: prevent update all call until started (#12025)
+
+## [10.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.0.1...@exodus/market-history@10.1.0) (2025-04-14)
+
+### Features
+
+- feat: add minute granularity support for market history charts (#11984)
+
+## [10.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.0.0...@exodus/market-history@10.0.1) (2025-04-01)
+
+### Bug Fixes
+
+- fix: type for market history api (#11917)
+
+## [10.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@9.2.1...@exodus/market-history@10.0.0) (2025-03-27)
+
+### ⚠ BREAKING CHANGES
+
+- combine historical prices atom calls (#11874)
+
+### Features
+
+- feat!: combine historical prices atom calls (#11874)
+
+## [9.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@9.2.0...@exodus/market-history@9.2.1) (2025-03-25)
+
+### Bug Fixes
+
+- fix: don't fetch combined assets (#11868)
+
+## [9.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@9.1.2...@exodus/market-history@9.2.0) (2025-01-24)
+
+### Features
+
+- feat(market-history): add ts types (#11216)
+
+## [9.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@9.1.1...@exodus/market-history@9.1.2) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [9.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@9.1.0...@exodus/market-history@9.1.1) (2024-11-13)
 
 ### Bug Fixes

@@ -1,6 +1,6 @@
-import { memoize } from 'lodash' // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
 import { createSelector } from 'reselect'
-import assetLoadingResultFunc from './helpers/asset-loading-result-func'
+import assetLoadingResultFunc from './helpers/asset-loading-result-func.js'
+import { memoize } from '@exodus/basic-utils'
 
 const selectorFactory = (getAssetDailyPricesSelector) =>
   memoize((assetName) =>

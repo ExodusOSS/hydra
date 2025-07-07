@@ -2,10 +2,12 @@ import { createAtomMock, createInMemoryAtom } from '@exodus/atoms'
 import { keyBy } from '@exodus/basic-utils'
 import { WalletAccount } from '@exodus/models'
 import { NftsProxyApi } from '@exodus/nfts-proxy'
-import { enabledWalletAccountsAtomDefinition } from '@exodus/wallet-accounts/atoms'
+import { enabledWalletAccountsAtomDefinition } from '@exodus/wallet-accounts/atoms/index.js'
 import ms from 'ms'
 
 import nftsMonitorDefinition from '../index.js'
+
+jest.exodus.mock.fetchNoop()
 
 const { TREZOR_SRC, DEFAULT: DEFAULT_WALLET_ACCOUNT, EXODUS_SRC } = WalletAccount
 
@@ -73,6 +75,9 @@ const prepare = ({ config = {} } = {}) => {
   }
 
   const walletAccountsAtom = createInMemoryAtom({ defaultValue: walletAccountsData })
+  const activeWalletAccountAtom = createInMemoryAtom({
+    defaultValue: walletAccountInstances[0].toString(),
+  })
 
   const nftsAtom = createInMemoryAtom({ defaultValue: {} })
 
@@ -109,10 +114,13 @@ const prepare = ({ config = {} } = {}) => {
 
   const txLogsAtom = createInMemoryAtom({ defaultValue: {} })
 
+  const nftsMonitorStatusAtom = createInMemoryAtom({ defaultValue: {} })
+
   const nftsMonitor = nftsMonitorDefinition.factory({
     addressProvider: addressProviderMock,
     assetsModule,
     enabledWalletAccountsAtom,
+    activeWalletAccountAtom,
     nftsAtom,
     nftsTxsAtom,
     txLogsAtom,
@@ -121,6 +129,7 @@ const prepare = ({ config = {} } = {}) => {
     nftsProxy: nftsProxyMock,
     nftsConfigAtom: nftsConfigAtomMock,
     restoringAssetsAtom,
+    nftsMonitorStatusAtom,
     logger,
     config,
   })

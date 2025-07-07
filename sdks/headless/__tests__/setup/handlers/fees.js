@@ -1,6 +1,6 @@
 import { http } from 'msw'
 
-import { jsonResponse } from './utils'
+import { jsonResponse } from './utils.js'
 
 const BINANCE_FEES_RESPONSE = [
   { msg_type: 'submit_proposal', fee: 100_000_000, fee_for: 1 },

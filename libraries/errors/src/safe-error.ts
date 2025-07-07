@@ -1,7 +1,10 @@
+import { getAllowlist, isSafe } from '@exodus/safe-string'
 import assert from 'minimalistic-assert'
 import parseStackTraceNatively, { stackFramesToString } from './stack.js'
 import type { Frame } from './types.js'
 import { omitUndefined } from './utils.js'
+import type { CommonErrorString } from './common-errors.js'
+import { toCommonErrorMessage } from './common-errors.js'
 
 type ReadonlySetValues<S> = S extends ReadonlySet<infer T> ? T : never
 
@@ -21,50 +24,6 @@ const SAFE_NAMES_SET = makeReadonlySet([
   'TimeoutError',
 ])
 
-const safeHints = {
-  __proto__: null,
-  broadcastTx: {
-    general: 'broadcastTx',
-    other: 'otherErr:broadcastTx',
-    retry: 'retry:broadcastTx',
-  },
-  getNftArguments: {
-    general: 'getNftArguments',
-  },
-  ethCall: {
-    general: 'ethCall',
-    executionReverted: 'ethCall:executionReverted',
-  },
-  safeError: {
-    failedToParse: 'failed to parse error',
-  },
-} as const
-
-const SAFE_HINTS_SET = makeReadonlySet(
-  // @ts-expect-error doesn't like __proto__: null
-  Object.values(safeHints).flatMap((safeHintCategory) => Object.values(safeHintCategory))
-)
-
-function getSafeHint(value: unknown): SafeHint | undefined {
-  if (typeof value !== 'string') {
-    return undefined
-  }
-
-  if (value === '') {
-    return undefined
-  }
-
-  if (isSafeHint(value)) {
-    return value
-  }
-
-  return [...SAFE_HINTS_SET].find((sh) => value.includes(sh))
-}
-
-function isSafeHint(value: string): value is SafeHint {
-  return (SAFE_HINTS_SET as ReadonlySet<string>).has(value)
-}
-
 function isSafeName(value: string): value is SafeName {
   return (SAFE_NAMES_SET as ReadonlySet<string>).has(value)
 }
@@ -77,9 +36,18 @@ function isSafeCode(value: string): value is SafeCode {
   return (SAFE_CODES_SET as ReadonlySet<string>).has(value) || isExodusErrorCode(value)
 }
 
+type StaticAllowlistString = string & { __branded_type: 'StaticAllowlistString' }
+const staticAllowlist = getAllowlist() as StaticAllowlistString[]
+
+type RuntimeSafeString = string & { __branded_type: 'RuntimeSafeString' }
+
+function getSafeString(str: string): RuntimeSafeString | undefined {
+  if (isSafe(str)) return str as RuntimeSafeString
+}
+
 export type SafeName = ReadonlySetValues<typeof SAFE_NAMES_SET>
-export type SafeHint = ReadonlySetValues<typeof SAFE_HINTS_SET>
 export type SafeCode = string & { __branded_type: 'SafeCodeOutcome' }
+export type SafeString = CommonErrorString | StaticAllowlistString | RuntimeSafeString
 
 type UnknownError = Error & {
   hint?: unknown
@@ -89,12 +57,10 @@ type UnknownError = Error & {
 const FACTORY_SYMBOL = Symbol('SafeError')
 
 export class SafeError {
-  static readonly hints = safeHints
-
   static from<T extends UnknownError>(err: T): SafeError {
     let safeName
     let safeCode
-    let safeHint
+    let safeHint: SafeString | undefined
     try {
       const { name, message, hint, code } = err
 
@@ -102,7 +68,14 @@ export class SafeError {
 
       const safeCodeCandidate = `${code}`
       safeCode = isSafeCode(safeCodeCandidate) ? safeCodeCandidate : undefined
-      safeHint = getSafeHint(hint) || getSafeHint(message)
+      const hintCandidates = [hint, message].filter((str) => typeof str === 'string')
+      safeHint =
+        // chicken sacrifice to TypeScript, otherwise would be hintCandidates.find((str) => isSafe(str))
+        hintCandidates.map((str) => getSafeString(str)).find(Boolean) ||
+        staticAllowlist.find((safePrefix) =>
+          hintCandidates.some((str) => str.startsWith(safePrefix))
+        ) ||
+        toCommonErrorMessage(message)
 
       const safeStack: Frame[] | undefined = parseStackTraceNatively(err)
 
@@ -131,7 +104,7 @@ export class SafeError {
 
   readonly #name: SafeName
   readonly #code?: SafeCode
-  readonly #hint?: SafeHint
+  readonly #hint?: SafeString
   readonly #stackFrames?: Frame[]
   readonly #timestamp: number
 
@@ -173,7 +146,7 @@ export class SafeError {
     }) as {
       name: SafeName
       code?: SafeCode
-      hint?: SafeHint
+      hint?: SafeString
       stack?: string
       timestamp: number
     }
@@ -188,7 +161,7 @@ export class SafeError {
   }: {
     name: SafeName
     code?: SafeCode
-    hint?: SafeHint
+    hint?: SafeString
     stack?: Frame[]
     initSymbol: typeof FACTORY_SYMBOL
   }) {

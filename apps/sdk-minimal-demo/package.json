@@ -22,18 +22,19 @@
     "!**/*.test.js"
   ],
   "scripts": {
-    "build": "run -T tsc --build",
-    "clean": "run -T tsc --build --clean",
-    "watch": "run -T tsc --watch",
+    "build": "run -T tsc --build tsconfig.build.json",
+    "clean": "run -T tsc --build --clean tsconfig.build.json",
+    "watch": "run -T tsc --watch tsconfig.build.json",
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",
-    "test": "run -T jest"
+    "test": "run -T exodus-test --jest --esbuild=.ts --forceExit"
   },
   "dependencies": {
     "@exodus/basic-utils": "workspace:^",
     "@exodus/deferring-storage": "workspace:^",
     "@exodus/domain-serialization": "workspace:^",
-    "@exodus/ethereum-plugin": "^2.2.0",
+    "@exodus/ethereum-plugin": "^2.7.3",
+    "@exodus/event-log": "workspace:^",
     "@exodus/fetch": "^1.3.1",
     "@exodus/fusion-local": "workspace:^",
     "@exodus/headless": "workspace:^",

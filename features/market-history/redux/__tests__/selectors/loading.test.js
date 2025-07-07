@@ -1,15 +1,34 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('loading', () => {
   it('should return loading selectors', () => {
     const { store, selectors, emitMarketHistory } = setup()
 
-    expect(selectors.marketHistory.loaded(store.getState())).toEqual(false)
     expect(selectors.marketHistory.hourlyLoading(store.getState())).toEqual(true)
     expect(selectors.marketHistory.dailyLoading(store.getState())).toEqual(true)
     expect(selectors.marketHistory.loadingMap(store.getState())).toEqual({
       dailyLoading: true,
       hourlyLoading: true,
+      minutelyLoading: true,
+    })
+
+    // .start() scaffolds out empty data structures before it loads real data
+    emitMarketHistory({
+      data: {
+        USD: {
+          daily: Object.create(null),
+          hourly: Object.create(null),
+          minutely: Object.create(null),
+        },
+      },
+    })
+
+    expect(selectors.marketHistory.hourlyLoading(store.getState())).toEqual(true)
+    expect(selectors.marketHistory.dailyLoading(store.getState())).toEqual(true)
+    expect(selectors.marketHistory.loadingMap(store.getState())).toEqual({
+      dailyLoading: true,
+      hourlyLoading: true,
+      minutelyLoading: true,
     })
 
     emitMarketHistory({
@@ -29,12 +48,12 @@ describe('loading', () => {
       },
     })
 
-    expect(selectors.marketHistory.loaded(store.getState())).toEqual(true)
     expect(selectors.marketHistory.hourlyLoading(store.getState())).toEqual(false)
     expect(selectors.marketHistory.dailyLoading(store.getState())).toEqual(false)
     expect(selectors.marketHistory.loadingMap(store.getState())).toEqual({
       dailyLoading: false,
       hourlyLoading: false,
+      minutelyLoading: true,
     })
   })
 })

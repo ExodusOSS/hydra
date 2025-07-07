@@ -2,7 +2,7 @@ import { cn } from '@/ui/utils/classnames'
 import React from 'react'
 
 type PercentageSwitchProps = {
-  value?: string
+  value: string | null
   options: { id: string; label: string }[]
   loading: boolean
   onChange: (value: string) => void

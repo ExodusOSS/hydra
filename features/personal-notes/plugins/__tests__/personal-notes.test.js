@@ -1,11 +1,16 @@
-import { PersonalNoteSet } from '@exodus/models'
 import * as atoms from '@exodus/atoms'
-import { personalNotesPluginDefinition } from '..'
+import { PersonalNoteSet } from '@exodus/models'
 
-jest.mock('@exodus/atoms', () => ({
-  ...jest.requireActual('@exodus/atoms'),
-  createAtomObserver: jest.fn(),
+const createAtomObserver = jest.fn()
+
+jest.doMock('@exodus/atoms', () => ({
+  __esModule: true,
+  ...atoms,
+  createAtomObserver,
 }))
+
+const { createInMemoryAtom } = atoms
+const { personalNotesPluginDefinition } = await import('../index.js')
 
 describe('personalNotesPlugin', () => {
   const data = PersonalNoteSet.fromArray([{ txId: '1', message: 'test' }])
@@ -22,7 +27,7 @@ describe('personalNotesPlugin', () => {
     register = jest.fn()
     unregister = jest.fn()
     start = jest.fn()
-    atoms.createAtomObserver.mockReturnValue({
+    createAtomObserver.mockReturnValue({
       register,
       unregister,
       start,
@@ -30,12 +35,12 @@ describe('personalNotesPlugin', () => {
 
     port = { emit: jest.fn() }
     personalNotes = { clear: jest.fn() }
-    personalNotesAtom = atoms.createInMemoryAtom({ defaultValue: data })
+    personalNotesAtom = createInMemoryAtom({ defaultValue: data })
     plugin = personalNotesPluginDefinition.factory({ port, personalNotesAtom, personalNotes })
   })
 
   it('should create atom observer', () => {
-    expect(atoms.createAtomObserver).toHaveBeenCalledWith({
+    expect(createAtomObserver).toHaveBeenCalledWith({
       port,
       atom: personalNotesAtom,
       event: 'personalNotes',

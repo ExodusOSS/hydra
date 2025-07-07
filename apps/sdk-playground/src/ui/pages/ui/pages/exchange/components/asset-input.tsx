@@ -3,9 +3,9 @@ import type { Asset } from '@exodus/exchange-ui'
 type AssetInputProps = {
   asset: Asset
   loading?: boolean
-  onBlur?: () => void
+  onBlur: () => void
   onChangeText: (value: string) => void
-  onFocus?: () => void
+  onFocus: () => void
   placeholder: string
   value?: string
 }
@@ -25,7 +25,7 @@ const AssetInput: React.FC<AssetInputProps> = ({
 
   return (
     <input
-      className="w-full bg-transparent text-right text-2xl outline-none"
+      className="w-full border-0 bg-transparent text-right text-2xl outline-none focus:outline-none"
       value={value || ''}
       placeholder={placeholder}
       style={{ color: asset.primaryColor }}

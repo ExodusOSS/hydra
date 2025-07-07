@@ -4,10 +4,10 @@ import {
   CT_STATUS as STATUS,
   CT_UPDATEABLE_PROPERTIES,
 } from '@exodus/assets'
-import { keyBy, mapValues, partition, pick, pickBy } from '@exodus/basic-utils'
+import { keyBy, mapValues, partition, pick, pickBy, difference } from '@exodus/basic-utils'
 import lodash from 'lodash'
 import assert from 'minimalistic-assert'
-
+import { memoizeLruCache } from '@exodus/asset-lib'
 import {
   CT_DATA_KEY,
   CT_FETCH_CACHE_EXPIRY,
@@ -16,8 +16,11 @@ import {
 } from './constants.js'
 import { getAssetFromAssetId, getFetchErrorMessage, isDisabledCustomToken } from './utils.js'
 import createFetchival from '@exodus/fetch/create-fetchival'
+import { validateCustomToken, isValidCustomToken } from '@exodus/asset-schema-validation'
+import makeConcurrent from 'make-concurrent'
+import oldToNewStyleTokenNames from '@exodus/asset-legacy-token-name-mapping'
 
-const { get, isEmpty, once } = lodash
+const { get, isEmpty, once, uniq } = lodash
 
 const FILTERED_FIELDS = [
   'assetId',
@@ -77,7 +80,7 @@ export class AssetsModule {
   #customTokensServerUrl
   #updateableProps
   #iconsStorage
-  #validateCustomToken
+  #shouldValidateCustomToken
   #assetPlugins
   #combinedAssetsList
   #storageDataKey
@@ -87,14 +90,19 @@ export class AssetsModule {
   #assetsAtom
   #fetchival
   #logger
+  #invalidTokenNames
 
   constructor({
     storage,
-    iconsStorage = { storeIcons: async () => {} },
+    iconsStorage = {
+      storeIcons: async () => {},
+      unzipIcon: (icon) => {
+        return icon
+      },
+    },
     assetPlugins,
     assetsAtom,
     combinedAssetsList = [],
-    validateCustomToken = () => true,
     config = {},
     fetch,
     logger,
@@ -109,13 +117,14 @@ export class AssetsModule {
     this.#customTokensServerUrl = config.customTokensServerUrl || CT_DEFAULT_SERVER
     this.#updateableProps = [...CT_UPDATEABLE_PROPERTIES, 'version']
     this.#iconsStorage = iconsStorage
-    this.#validateCustomToken = validateCustomToken
+    this.#shouldValidateCustomToken = config.shouldValidateCustomToken ?? true
     this.#storageDataKey = config.storageDataKey || CT_DATA_KEY
     this.#storageTimestampKey = config.storageTimestampKey || CT_TIMESTAMP_KEY
     this.#customTokenUpdateInterval = config.customTokenUpdateInterval || CT_UPDATE_INTERVAL
     this.#fetchCacheExpiry = config.fetchCacheExpiry ?? CT_FETCH_CACHE_EXPIRY
     this.#fetchival = createFetchival({ fetch })
     this.#logger = logger
+    this.#invalidTokenNames = new Set(Object.keys(oldToNewStyleTokenNames))
   }
 
   #setRegistry = (registry) => {
@@ -217,11 +226,17 @@ export class AssetsModule {
     }
 
     const _token = await fetchTokenAndCacheError()
-    if (!this.#validateCustomToken(_token)) {
-      this.#logger.warn('Invalid Custom Token schema')
-      const err = new Error('Token did not pass validation')
-      this.#setCache(key, { cachedError: err })
-      throw err
+    if (this.#shouldValidateCustomToken) {
+      try {
+        validateCustomToken(_token)
+      } catch (e) {
+        this.#logger.warn(
+          `Token did not pass validation ${baseAssetName} ${assetId}. Error: ${e.message}`
+        )
+        const err = new Error('Token did not pass validation')
+        this.#setCache(key, { cachedError: err })
+        throw err
+      }
     }
 
     const token = normalizeToken(_token)
@@ -242,13 +257,14 @@ export class AssetsModule {
 
     try {
       const token = await this.fetchToken(assetId, baseAssetName)
-      const { asset, isAdded } = this.#handleFetchedToken(token)
+      const { asset, isAdded, updates } = this.#handleFetchedToken(token)
+      const updated = updates.map(this.getAsset)
 
       if (isAdded) {
         await this.#storeCustomTokens([token])
-        this.#flushChanges({ added: [asset] })
+        this.#flushChanges({ added: [asset], updated })
       } else {
-        this.#flushChanges({ updated: [asset] })
+        this.#flushChanges({ updated: [asset, ...updated] })
       }
 
       return asset
@@ -312,7 +328,7 @@ export class AssetsModule {
         ? await this.#fetch('tokens', { tokenNames: tokenNamesToFetch }, 'tokens')
         : []
 
-    const validTokens = fetchedTokens.filter(this.#validateCustomToken).map(normalizeToken)
+    const validTokens = fetchedTokens.filter(this.#isValidCustomToken).map(normalizeToken)
     if (validTokens.length !== fetchedTokens.length)
       this.#logger.warn('Invalid Custom Token schema')
 
@@ -360,11 +376,20 @@ export class AssetsModule {
       (token) => _isDisabledCustomToken(token) && !isDisabledCustomToken(this.getAsset(token.name))
     )
     const updatedAssets = tokens.map(this.#registry.updateCustomToken)
+    const parentNames = uniq(tokens.flatMap(this.#handleCombinedParents))
+    updatedAssets.push(...parentNames.map(this.getAsset))
 
     this.#flushChanges({ updated: updatedAssets, disabled })
   }
 
-  searchTokens = async ({ baseAssetName, lifecycleStatus, query, excludeTags = ['offensive'] }) => {
+  searchTokens = async ({
+    baseAssetName,
+    lifecycleStatus,
+    query,
+    excludeTags = ['offensive'],
+    pageNumber,
+    pageSize,
+  }) => {
     assert(
       !baseAssetName || typeof baseAssetName === 'string' || Array.isArray(baseAssetName),
       'searchTokens(): baseAssetName must be a string or an array if supplied'
@@ -383,10 +408,10 @@ export class AssetsModule {
 
     const tokens = await this.#fetch(
       'search',
-      { baseAssetName: baseAssetNames, lifecycleStatus, query, excludeTags },
+      { baseAssetName: baseAssetNames, lifecycleStatus, query, excludeTags, pageNumber, pageSize },
       'tokens'
     )
-    const validTokens = tokens.filter(this.#validateCustomToken)
+    const validTokens = tokens.filter(this.#isValidCustomToken)
 
     if (validTokens.length !== tokens.length) this.#logger.warn('Invalid Custom Token schema')
 
@@ -403,7 +428,7 @@ export class AssetsModule {
 
   #fetchUpdates = async (assetVersions) => {
     const updatedTokens = await this.#fetch('updates', assetVersions, 'tokens')
-    const validatedTokens = updatedTokens.filter(this.#validateCustomToken).map(normalizeToken)
+    const validatedTokens = updatedTokens.filter(this.#isValidCustomToken).map(normalizeToken)
     if (validatedTokens.length !== updatedTokens.length) {
       this.#logger.warn('Invalid Custom Token schema')
     }
@@ -456,34 +481,104 @@ export class AssetsModule {
     }
   }
 
+  #handleCombinedParents = ({ name, parents }) => {
+    if (!parents) return []
+    assert(Array.isArray(parents), 'Array expected')
+
+    const currentParents = this.#getAssetNamesBy(
+      (asset) => asset.isCombined && asset.combinedAssetNames.includes(name)
+    )
+    const updatedCombinedAssetNames = []
+
+    const removedParents = difference(currentParents, parents)
+    removedParents.forEach((parent) => {
+      this.#registry.updateCombinedAsset(parent, { removeMembers: [name] })
+      updatedCombinedAssetNames.push(parent)
+    })
+
+    const addedParents = difference(parents, currentParents)
+    addedParents.forEach((parent) => {
+      const asset = this.getAsset(parent)
+      if (!asset || !asset.isCombined) return
+
+      this.#registry.updateCombinedAsset(parent, { addMembers: [name] })
+      updatedCombinedAssetNames.push(parent)
+    })
+
+    return uniq(updatedCombinedAssetNames)
+  }
+
   #handleFetchedToken = (token) => {
     const asset = this.getAsset(token.name)
-    if (asset) return { asset, isAdded: false }
+    if (asset) return { asset, isAdded: false, updates: [] }
 
     const { name } = this.#registry.addCustomToken(token) // add to registry
+    const updates = this.#handleCombinedParents(token)
+
     this.#logger.log('Custom token added:', name)
-    return { asset: this.getAsset(name), isAdded: true }
+    return { asset: this.getAsset(name), isAdded: true, updates }
   }
 
   #handleFetchedTokens = (tokens) => {
     const fetchedAndHandledTokens = []
     const added = []
     const updated = []
+    const parentNames = []
     for (const token of tokens) {
       try {
-        const { asset, isAdded } = this.#handleFetchedToken(token)
+        const { asset, isAdded, updates } = this.#handleFetchedToken(token)
+
         if (isAdded) {
           added.push(asset)
           fetchedAndHandledTokens.push(token)
         } else {
           updated.push(asset)
         }
+
+        if (updates.length > 0) {
+          parentNames.push(...updates)
+        }
       } catch (err) {
         this.#logger.warn('Handle fetched custom tokens error:', err.message)
       }
     }
 
+    updated.push(...uniq(parentNames).map(this.getAsset))
+
     return { fetchedAndHandledTokens, added, updated }
+  }
+
+  #fetchIcon = memoizeLruCache(
+    async (assetName) => {
+      const tokenNames = [assetName]
+
+      const tokens = await this.#fetch(
+        'tokens',
+        { tokenNames, lifecycleStatus: ['c', 'v', 'u'] },
+        'tokens'
+      )
+      const token = tokens[0]
+      if (token?.icon) {
+        return this.#iconsStorage.unzipIcon(token.icon)
+      }
+    },
+    (assetName) => assetName,
+    { max: 100 }
+  )
+
+  getIcon = async (assetName) => {
+    assert(assetName, 'assetName is required')
+
+    const asset = await this.getAsset(assetName)
+    if (asset) {
+      return this.#iconsStorage.getIcon(assetName)
+    }
+
+    try {
+      return await this.#fetchIcon(assetName)
+    } catch (e) {
+      this.#logger.error(`Cannot load icon for ${assetName} from CTR. ${e.message}`, e)
+    }
   }
 
   #assertSupportsCustomTokens = (baseAssetName) => {
@@ -507,23 +602,30 @@ export class AssetsModule {
     if (!this.#storage) return []
 
     const tokens = await this.#storage.get(this.#storageDataKey)
-    return mapValues(tokens, normalizeToken)
-  }
-
-  #storeCustomTokens = async (tokens) => {
-    const _tokens = await this.#readCustomTokens()
-    await this.#storage.set(this.#storageDataKey, { ..._tokens, ...keyBy(tokens, 'name') })
+    const normalizedTokens = mapValues(tokens, normalizeToken)
+    return pickBy(
+      normalizedTokens,
+      ({ name }) => !this.#invalidTokenNames.has(name) || name === oldToNewStyleTokenNames[name]
+    )
   }
 
   #updateStoredCustomTokens = async (tokens) => {
-    const _tokens = await this.#readCustomTokens()
-    // safer not to overwrite everything
-    const updates = tokens.map((token) => ({
-      ..._tokens[token.name],
-      ...pick(token, this.#updateableProps), // like state updates, safer not to overwrite everything in storage
-    }))
-    await this.#storage.set(this.#storageDataKey, { ..._tokens, ...keyBy(updates, 'name') })
+    await this.#storeCustomTokens(tokens, true)
   }
+
+  #storeCustomTokens = makeConcurrent(async (tokens, isUpdate) => {
+    const _tokens = await this.#readCustomTokens()
+    if (isUpdate) {
+      // safer not to overwrite everything
+      const updates = tokens.map((token) => ({
+        ..._tokens[token.name],
+        ...pick(token, this.#updateableProps), // like state updates, safer not to overwrite everything in storage
+      }))
+      await this.#storage.set(this.#storageDataKey, { ..._tokens, ...keyBy(updates, 'name') })
+    } else {
+      await this.#storage.set(this.#storageDataKey, { ..._tokens, ...keyBy(tokens, 'name') })
+    }
+  })
 
   #getVersionedAssetNames = async () => {
     const tokens = await this.#readCustomTokens()
@@ -538,6 +640,14 @@ export class AssetsModule {
   #isNextUpdateDate = async () => {
     const lastUpdateDate = await this.#storage.get(this.#storageTimestampKey)
     return !lastUpdateDate || Date.now() - lastUpdateDate > this.#customTokenUpdateInterval
+  }
+
+  #isValidCustomToken = (token) => {
+    if (!this.#shouldValidateCustomToken) {
+      return true
+    }
+
+    return isValidCustomToken(token)
   }
 
   clear = async () =>

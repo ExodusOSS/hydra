@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/errors@2.1.1...@exodus/errors@3.0.0) (2025-05-16)
+
+### ⚠ BREAKING CHANGES
+
+- un-export hints whitelist, pass through safe-strings (#12479)
+
+- refactor!: un-export hints whitelist, pass through safe-strings (#12479)
+
+## [2.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/errors@2.1.0...@exodus/errors@2.1.1) (2025-05-08)
+
+### Bug Fixes
+
+- fix: remove `void` keyword (#12267)
+
+## [2.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/errors@2.0.2...@exodus/errors@2.1.0) (2025-04-28)
+
+### Features
+
+- feat: introduce `captureStackTrace` util (#12042)
+
 ## [2.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/errors@2.0.1...@exodus/errors@2.0.2) (2025-02-27)
 
 ### Bug Fixes

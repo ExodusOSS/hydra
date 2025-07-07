@@ -1,7 +1,7 @@
 {
   "name": "@exodus/connected-origins",
-  "version": "4.1.0",
-  "license": "UNLICENSED",
+  "version": "4.3.0",
+  "license": "MIT",
   "author": "Exodus Movement, Inc.",
   "description": "The connected origins module maintains a list of the third-party websites that the user has authorized to interact with Exodus. It stores the authorization status and connection status, along with  metadata such as the name and icon of the website.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/connected-origins",
@@ -26,6 +26,7 @@
   ],
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
+    "@exodus/basic-utils": "^4.2.1",
     "lodash": "^4.17.21"
   },
   "scripts": {
@@ -34,8 +35,19 @@
     "test": "run -T exodus-test --jest"
   },
   "devDependencies": {
+    "@exodus/address-provider": "workspace:^",
+    "@exodus/ethereum-plugin": "^2.7.3",
+    "@exodus/key-utils": "workspace:^",
+    "@exodus/keychain": "workspace:^",
+    "@exodus/models": "workspace:^",
+    "@exodus/public-key-provider": "workspace:^",
     "@exodus/redux-dependency-injection": "workspace:^",
+    "@exodus/solana-plugin": "^1.18.0",
     "@exodus/storage-memory": "workspace:^",
+    "bip39": "^3.1.0",
     "redux": "^4.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

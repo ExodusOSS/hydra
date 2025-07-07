@@ -1,9 +1,9 @@
 import connectedOrigins from '@exodus/connected-origins'
 
-import createAdapters from './adapters'
-import baseConfig from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import baseConfig from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
 const config = {
   ...baseConfig,
@@ -13,7 +13,7 @@ const origin = {
   origin: 'exodus.com',
   name: 'Exodus',
   icon: 'exodus_icon',
-  connectedAssetName: 'solana',
+  connectedAssetName: 'ethereum',
   trusted: true,
 }
 
@@ -46,6 +46,8 @@ describe('connectedOrigins', () => {
     await exodus.application.create({ passphrase })
     await exodus.application.unlock({ passphrase })
   })
+
+  afterEach(() => exodus.application.stop())
 
   test('add connected origin', async () => {
     const expectedConnectedOrigin = getExpectConnectedOrigin(port)

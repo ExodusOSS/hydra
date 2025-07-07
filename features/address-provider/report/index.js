@@ -1,8 +1,10 @@
 import { SafeError } from '@exodus/errors'
 import BipPath from 'bip32-path'
-import { set, pick, pickBy } from '@exodus/basic-utils'
+import { set, pick, pickBy, memoize } from '@exodus/basic-utils'
 import KeyIdentifier from '@exodus/key-identifier'
 import convertXpub from 'xpub-converter'
+import { z } from '@exodus/zod'
+import { WalletAccount } from '@exodus/models'
 
 const lexicographicCompare = (a, b) => String(a).localeCompare(String(b))
 
@@ -15,8 +17,8 @@ const createAddressProviderReport = ({
   accountStatesAtom,
 }) => ({
   namespace: 'addressProvider',
-  export: async ({ walletExists } = Object.create(null)) => {
-    if (!walletExists) return null
+  export: async ({ walletExists, isLocked } = Object.create(null)) => {
+    if (!walletExists || isLocked) return null
 
     const baseAssets = pickBy(
       assetsModule.getAssets(),
@@ -140,6 +142,32 @@ const createAddressProviderReport = ({
     return results
   },
   import: addressProvider.importReport,
+  getSchema: memoize(() => {
+    const assetSource = z
+      .object({
+        address: z.string().nullable(),
+        chain: z.tuple([z.number(), z.number()]),
+        xpub: z.string().nullable(),
+        zpub: z.string().nullable(),
+        encodedPublicKey: z.string().nullable(),
+        error: z.instanceof(SafeError).nullable(),
+      })
+      .strict()
+      .partial()
+
+    const purposeKeys = z.record(z.string().regex(/^bip\d+/u), assetSource)
+
+    // Maps asset names (e.g., "bitcoin", "ethereum") to their purpose keys.
+    const assets = z.record(z.string(), purposeKeys)
+
+    // Maps wallet accounts (e.g., "exodus_0") to their assets.
+    return z
+      .record(
+        z.string().regex(new RegExp(`^(${WalletAccount.VALID_SOURCES.join('|')})`, 'u')),
+        assets
+      )
+      .nullable()
+  }),
 })
 
 const addressProviderReportDefinition = {

@@ -1,11 +1,13 @@
 import { createInMemoryAtom, waitUntil } from '@exodus/atoms'
 import { UnitType } from '@exodus/currency'
 import fiatCurrencies from '@exodus/fiat-currencies'
-import { isEqual } from 'lodash'
+import lodash from 'lodash'
 import assert from 'minimalistic-assert'
 
-import { defaultNonDustAssetsConfig } from '../../shared'
-import pluginDefinition from '../track-non-dust-asset-names'
+import { defaultNonDustAssetsConfig } from '../../shared/index.js'
+import pluginDefinition from '../track-non-dust-asset-names.js'
+
+const { isEqual } = lodash
 
 const rates = {
   USD: 1,

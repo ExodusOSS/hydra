@@ -1,5 +1,5 @@
-import { memoize } from 'lodash' // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
-import { ASSET_NAME_TO_NFTS_NETWORK } from '../../constants'
+import { memoize } from '@exodus/basic-utils'
+import { ASSET_NAME_TO_NFTS_NETWORK } from '../../constants/index.js'
 
 const resultFunction = (allNfts) =>
   memoize((assetName) => {

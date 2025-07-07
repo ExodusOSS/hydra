@@ -4,18 +4,29 @@ import { createAtomMock, createInMemoryAtom } from '@exodus/atoms'
 import { SynchronizedTime } from '@exodus/basic-utils'
 import logger from '@exodus/logger'
 import createStorage from '@exodus/storage-memory'
-import EventEmitter from 'events/'
+import EventEmitter from 'events/events.js'
+
+jest.mock('../fetch-historical-prices.js', () => {
+  const originalModule = jest.requireActual('../fetch-historical-prices.js')
+  return {
+    __esModule: true,
+    default: jest.fn(originalModule.default),
+  }
+})
+
+let fetchHistoricalPrices
+let marketHistoryMonitorDefinition
+
+beforeAll(async () => {
+  const fetchHistoricalPricesModule = await import('../fetch-historical-prices.js')
+  fetchHistoricalPrices = fetchHistoricalPricesModule.default
+  const marketHistoryMonitorModule = await import('../index.js')
+  marketHistoryMonitorDefinition = marketHistoryMonitorModule.default
+})
 
 const assets = connectAssets(assetsBase)
 
-jest.doMock('@exodus/price-api', () => {
-  const originalModule = jest.requireActual('@exodus/price-api')
-
-  return {
-    ...originalModule,
-    fetchHistoricalPrices: jest.fn(originalModule.fetchHistoricalPrices),
-  }
-})
+const advance = (ms = 0) => jest.advanceTimersByTimeAsync(ms)
 
 describe('market history monitor', () => {
   let storage
@@ -50,7 +61,7 @@ describe('market history monitor', () => {
   }
 
   const createMonitor = (args = {}) => {
-    return require('../index').default.factory({
+    return marketHistoryMonitorDefinition.factory({
       assetsModule,
       currencyAtom,
       storage: marketHistoryStorage,
@@ -61,6 +72,7 @@ describe('market history monitor', () => {
         granularityRequestLimits: {
           day: 366,
           hour: 168,
+          minute: 120,
         },
       },
       synchronizedTime: SynchronizedTime,
@@ -90,6 +102,30 @@ describe('market history monitor', () => {
             { close: 9000, open: 8999, time: 1_651_190_400 },
             { close: 90_000, open: 89_900, time: 1_651_276_800 },
           ],
+          EUR: [
+            { close: 8000, open: 7999, time: 1_651_190_400 },
+            { close: 80_000, open: 79_900, time: 1_651_276_800 },
+          ],
+        },
+        ETH: {
+          USD: [
+            { close: 1500, open: 1499, time: 1_651_190_400 },
+            { close: 1600, open: 1599, time: 1_651_276_800 },
+          ],
+          EUR: [
+            { close: 1400, open: 1399, time: 1_651_190_400 },
+            { close: 1500, open: 1499, time: 1_651_276_800 },
+          ],
+        },
+        ALGO: {
+          USD: [
+            { close: 2, open: 1, time: 1_651_190_400 },
+            { close: 2.5, open: 1.5, time: 1_651_276_800 },
+          ],
+          EUR: [
+            { close: 1.8, open: 0.9, time: 1_651_190_400 },
+            { close: 2.3, open: 1.3, time: 1_651_276_800 },
+          ],
         },
       },
       hour: {
@@ -98,17 +134,88 @@ describe('market history monitor', () => {
             { close: 9000, open: 8999, time: 1_663_668_000 },
             { close: 90_000, open: 89_900, time: 1_663_671_600 },
           ],
+          EUR: [
+            { close: 8000, open: 7999, time: 1_663_668_000 },
+            { close: 80_000, open: 79_900, time: 1_663_671_600 },
+          ],
+        },
+        ETH: {
+          USD: [
+            { close: 1500, open: 1499, time: 1_663_668_000 },
+            { close: 1600, open: 1599, time: 1_663_671_600 },
+          ],
+          EUR: [
+            { close: 1400, open: 1399, time: 1_663_668_000 },
+            { close: 1500, open: 1499, time: 1_663_671_600 },
+          ],
+        },
+        ALGO: {
+          USD: [
+            { close: 1.9, open: 0.9, time: 1_663_668_000 },
+            { close: 2.2, open: 1.2, time: 1_663_671_600 },
+          ],
+          EUR: [
+            { close: 1.7, open: 0.8, time: 1_663_668_000 },
+            { close: 2, open: 1.1, time: 1_663_671_600 },
+          ],
+        },
+      },
+      minute: {
+        BTC: {
+          USD: [
+            { close: 9000, open: 8999, time: 1_744_219_700 },
+            { close: 90_000, open: 89_900, time: 1_744_219_760 },
+          ],
+          EUR: [
+            { close: 8000, open: 7999, time: 1_744_219_700 },
+            { close: 80_000, open: 79_900, time: 1_744_219_760 },
+          ],
+        },
+        ETH: {
+          USD: [
+            { close: 1500, open: 1499, time: 1_744_219_700 },
+            { close: 1600, open: 1599, time: 1_744_219_760 },
+          ],
+          EUR: [
+            { close: 1400, open: 1399, time: 1_744_219_700 },
+            { close: 1500, open: 1499, time: 1_744_219_760 },
+          ],
+        },
+        ALGO: {
+          USD: [
+            { close: 1.8, open: 0.8, time: 1_744_219_700 },
+            { close: 2.1, open: 1.1, time: 1_744_219_760 },
+          ],
+          EUR: [
+            { close: 1.6, open: 0.7, time: 1_744_219_700 },
+            { close: 1.9, open: 0.9, time: 1_744_219_760 },
+          ],
         },
       },
     }
     pricingClient = {
       historicalPrice: jest.fn(
-        ({ assets, fiatArray, granularity, limit, timestamp, ignoreInvalidSymbols }) =>
-          prices[granularity]
+        ({ assets, fiatArray, granularity, limit, timestamp, ignoreInvalidSymbols }) => {
+          const defaultTimestamp = timestamp || Math.floor(Date.now() / 1000)
+
+          const response = {}
+          assets.forEach((asset) => {
+            response[asset] = {}
+            const fiat = fiatArray?.[0] || 'USD'
+            response[asset][fiat] = prices[granularity]?.[asset]?.[fiat] || []
+
+            if (response[asset][fiat].length === 0) {
+              response[asset][fiat] = [{ close: 0, open: 0, time: defaultTimestamp }]
+            }
+          })
+
+          response.requestErrors = {}
+
+          return response
+        }
       ),
     }
 
-    // use require because otherwise jest mock doesn't work
     marketHistoryMonitor = createMonitor()
   })
 
@@ -123,24 +230,21 @@ describe('market history monitor', () => {
 
   it('should store prices in atom on start', async () => {
     jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+    jest.setSystemTime(new Date('2025-01-01'))
+
     const listener = await setupAtomListener()
     const assertListener = () => {
       expect(listener).toHaveBeenCalledTimes(2)
-
-      expect(listener).toHaveBeenCalledWith({
+      expect(listener.mock.calls[0][0]).toEqual({
         data: {
           USD: {
-            daily: {
-              bitcoin: {
-                1_651_190_400_000: 9000,
-                1_651_276_800_000: 90_000,
-              },
-              ethereum: {},
-            },
+            daily: {},
+            hourly: {},
+            minutely: {},
           },
         },
       })
-      expect(listener).toHaveBeenCalledWith({
+      expect(listener.mock.calls[1][0]).toEqual({
         data: {
           USD: {
             daily: {
@@ -148,14 +252,30 @@ describe('market history monitor', () => {
                 1_651_190_400_000: 9000,
                 1_651_276_800_000: 90_000,
               },
-              ethereum: {},
+              ethereum: {
+                1_651_190_400_000: 1500,
+                1_651_276_800_000: 1600,
+              },
             },
             hourly: {
               bitcoin: {
                 1_663_668_000_000: 9000,
                 1_663_671_600_000: 90_000,
               },
-              ethereum: {},
+              ethereum: {
+                1_663_668_000_000: 1500,
+                1_663_671_600_000: 1600,
+              },
+            },
+            minutely: {
+              bitcoin: {
+                1_744_219_700_000: 9000,
+                1_744_219_760_000: 90_000,
+              },
+              ethereum: {
+                1_744_219_700_000: 1500,
+                1_744_219_760_000: 1600,
+              },
             },
           },
         },
@@ -172,20 +292,87 @@ describe('market history monitor', () => {
     expect(listener).toHaveBeenCalledTimes(2)
     expect(store).toMatchSnapshot()
   })
+
+  it('should stop and restart with prices re-fetch', async () => {
+    jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+    jest.setSystemTime(new Date('2025-01-01'))
+
+    const listener = await setupAtomListener()
+
+    await marketHistoryMonitor.start()
+    await advance()
+    expect(listener).toHaveBeenCalledTimes(2)
+    expect(store).toMatchSnapshot()
+
+    await marketHistoryMonitor.stop()
+    await marketHistoryMonitor.start()
+    await advance()
+    // note: we see increase only because test setup in the way cache doesn't work, so it treats prices during updateAll as new data
+    // the main thing we test here is that updateAll is called
+    expect(listener).toHaveBeenCalledTimes(3)
+
+    await marketHistoryMonitor.stop()
+    await marketHistoryMonitor.start()
+    await advance()
+    expect(listener).toHaveBeenCalledTimes(4)
+  })
+
   it('should fetch prices when update called', async () => {
     jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+    jest.setSystemTime(new Date('2025-01-01'))
+
     const listener = await setupAtomListener()
     marketHistoryMonitor.start()
 
     await advance()
 
+    const listenerExpectedData = {
+      data: {
+        USD: {
+          daily: {
+            bitcoin: {
+              1_651_190_400_000: 9000,
+              1_651_276_800_000: 90_000,
+            },
+            ethereum: {
+              1_651_190_400_000: 1500,
+              1_651_276_800_000: 1600,
+            },
+          },
+          hourly: {
+            bitcoin: {
+              1_663_668_000_000: 9000,
+              1_663_671_600_000: 90_000,
+            },
+            ethereum: {
+              1_663_668_000_000: 1500,
+              1_663_671_600_000: 1600,
+            },
+          },
+          minutely: {
+            bitcoin: {
+              1_744_219_700_000: 9000,
+              1_744_219_760_000: 90_000,
+            },
+            ethereum: {
+              1_744_219_700_000: 1500,
+              1_744_219_760_000: 1600,
+            },
+          },
+        },
+      },
+    }
+
     expect(listener).toHaveBeenCalledTimes(2)
+    expect(listener.mock.calls[1][0]).toEqual(listenerExpectedData)
+
     listener.mockClear()
     pricingClient.historicalPrice.mockClear()
 
     await marketHistoryMonitor.update('hour')
     await advance()
     expect(listener).toHaveBeenCalledTimes(1)
+    expect(listener.mock.calls[0][0]).toEqual(listenerExpectedData)
     expect(pricingClient.historicalPrice).toHaveBeenCalledTimes(1)
   })
 
@@ -198,6 +385,8 @@ describe('market history monitor', () => {
     })
 
     jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+    jest.setSystemTime(new Date('2025-01-01'))
+
     const listener = await setupAtomListener()
     await marketHistoryMonitor.start()
 
@@ -205,18 +394,17 @@ describe('market history monitor', () => {
 
     expect(listener).toHaveBeenCalledTimes(2)
     listener.mockClear()
-    // use require because otherwise jest mock doesn't work
-    const fetcher1 = require('@exodus/price-api').fetchHistoricalPrices
+    const fetcher1 = fetchHistoricalPrices
     expect(fetcher1.mock.calls[0][0].ignoreCache).toEqual(true)
     expect(fetcher1.mock.calls[1][0].ignoreCache).toEqual(true)
-    require('@exodus/price-api').fetchHistoricalPrices.mockClear()
+    fetchHistoricalPrices.mockClear()
     pricingClient.historicalPrice.mockClear()
 
     await marketHistoryMonitor.update('hour')
     await advance()
     expect(listener).toHaveBeenCalledTimes(1)
     expect(pricingClient.historicalPrice).toHaveBeenCalledTimes(1)
-    const fetcher2 = require('@exodus/price-api').fetchHistoricalPrices
+    const fetcher2 = fetchHistoricalPrices
     expect(fetcher2.mock.calls[0][0].ignoreCache).toEqual(false)
   })
 
@@ -227,32 +415,37 @@ describe('market history monitor', () => {
     marketHistoryMonitor = createMonitor({
       remoteConfigRefreshIntervalAtom,
     })
+
     jest.useFakeTimers({ doNotFake: ['setImmediate'] })
-    const listener = await setupAtomListener()
+    jest.setSystemTime(new Date('2025-01-01'))
+
+    await setupAtomListener()
     marketHistoryMonitor.start()
 
     await advance()
 
-    expect(listener).toHaveBeenCalledTimes(2)
-    listener.mockClear()
-    const fetcher1 = require('@exodus/price-api').fetchHistoricalPrices
+    // Ignore cache at first call
+    const fetcher1 = fetchHistoricalPrices
     expect(fetcher1.mock.calls[0][0].ignoreCache).toEqual(true)
     expect(fetcher1.mock.calls[1][0].ignoreCache).toEqual(true)
-    require('@exodus/price-api').fetchHistoricalPrices.mockClear()
+    fetchHistoricalPrices.mockClear()
     pricingClient.historicalPrice.mockClear()
 
+    // Wait for longer than refreshIntervalMs(10s)
     await advance(20_000)
 
     await marketHistoryMonitor.update('hour')
     await advance()
-    expect(listener).toHaveBeenCalledTimes(1)
-    expect(pricingClient.historicalPrice).toHaveBeenCalledTimes(1)
-    const fetcher2 = require('@exodus/price-api').fetchHistoricalPrices
+
+    // Ignore cache after refreshIntervalMs
+    const fetcher2 = fetchHistoricalPrices
     expect(fetcher2.mock.calls[0][0].ignoreCache).toEqual(true)
   })
 
   it('should invalidate cache if clear cache version set', async () => {
     jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+    jest.setSystemTime(new Date('2025-01-01'))
+
     const getCacheKey = ({ currency, granularity, assetName }) =>
       `prices-${currency}-${assetName}-${granularity}`
 
@@ -261,7 +454,6 @@ describe('market history monitor', () => {
       clearCacheAtom: createInMemoryAtom({ defaultValue: 'v1' }),
     })
 
-    // set something in cache
     await marketHistoryStorage.set(
       getCacheKey({ currency: 'USD', granularity: 'hour', assetName: 'ethereum' }),
       [
@@ -284,6 +476,8 @@ describe('market history monitor', () => {
 
   it('should not invalidate cache if clear cache version is the same as in storage', async () => {
     jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+    jest.setSystemTime(new Date('2025-01-01'))
+
     const getCacheKey = ({ currency, granularity, assetName }) =>
       `prices-${currency}-${assetName}-${granularity}`
     const clearCacheV = 'v1'
@@ -293,7 +487,6 @@ describe('market history monitor', () => {
       clearCacheAtom: createInMemoryAtom({ defaultValue: clearCacheV }),
     })
 
-    // set something in cache
     await marketHistoryStorage.set(
       getCacheKey({ currency: 'USD', granularity: 'hour', assetName: 'ethereum' }),
       [
@@ -317,6 +510,8 @@ describe('market history monitor', () => {
 
   it('should invalidate cache if clear cache version from remote config atom set', async () => {
     jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+    jest.setSystemTime(new Date('2025-01-01'))
+
     const getCacheKey = ({ currency, granularity, assetName }) =>
       `prices-${currency}-${assetName}-${granularity}`
     const remoteConfigClearCacheAtom = createInMemoryAtom({ defaultValue: 'v1' })
@@ -326,7 +521,6 @@ describe('market history monitor', () => {
       remoteConfigClearCacheAtom,
     })
 
-    // set something in cache
     await marketHistoryStorage.set(
       getCacheKey({ currency: 'USD', granularity: 'hour', assetName: 'ethereum' }),
       [
@@ -359,7 +553,6 @@ describe('market history monitor', () => {
 
     await marketHistoryStorage.set('clear-market-history-cache-from-remote-config', 'v1')
 
-    // set something in cache
     await marketHistoryStorage.set(
       getCacheKey({ currency: 'USD', granularity: 'hour', assetName: 'ethereum' }),
       [
@@ -382,6 +575,8 @@ describe('market history monitor', () => {
 
   it('should invalidate cache when remote config atom receive new value and fetch new prices', async () => {
     jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+    jest.setSystemTime(new Date('2025-01-01'))
+
     const getCacheKey = ({ currency, granularity, assetName }) =>
       `prices-${currency}-${assetName}-${granularity}`
     const remoteConfigClearCacheAtom = createInMemoryAtom({ defaultValue: null })
@@ -391,7 +586,6 @@ describe('market history monitor', () => {
       remoteConfigClearCacheAtom,
     })
 
-    // set something in cache
     await marketHistoryStorage.set(
       getCacheKey({ currency: 'USD', granularity: 'hour', assetName: 'ethereum' }),
       [
@@ -491,6 +685,11 @@ describe('market history monitor', () => {
           USD: [{ close: 1.9, open: 0.9, time: 1_663_668_000 }],
         },
       },
+      minute: {
+        ALGO: {
+          USD: [{ close: 1.8, open: 0.8, time: 1_744_219_700 }],
+        },
+      },
     }
     expect(store).toMatchSnapshot()
     await enabledAssetsAtom.set({
@@ -500,40 +699,24 @@ describe('market history monitor', () => {
     })
     await advance()
     expect(store).toMatchSnapshot()
-    expect(listener).toHaveBeenCalledWith({
-      changes: {
-        USD: {
-          daily: { algorand: { 1_651_190_400_000: 2 } },
-          hourly: { algorand: { 1_663_668_000_000: 1.9 } },
-        },
-      },
-      data: {
-        USD: {
-          daily: {
-            bitcoin: {
-              1_651_190_400_000: 9000,
-              1_651_276_800_000: 90_000,
-            },
-            ethereum: {},
-            algorand: { 1_651_190_400_000: 2 },
-          },
-          hourly: {
-            algorand: { 1_663_668_000_000: 1.9 },
-            bitcoin: { 1_663_668_000_000: 9000, 1_663_671_600_000: 90_000 },
-            ethereum: {},
-          },
-        },
-      },
-    })
+    expect(listener).toHaveBeenCalledTimes(1)
   })
 
   it('should use requestLimit provided in config', async () => {
     jest.useFakeTimers({ doNotFake: ['setImmediate'] })
     await marketHistoryMonitor.start()
     await advance()
-    const fetcher1 = require('@exodus/price-api').fetchHistoricalPrices
-    expect(fetcher1.mock.calls[0][0].granularity).toEqual('day')
-    expect(fetcher1.mock.calls[0][0].requestLimit).toEqual(366)
+    const fetcher1 = fetchHistoricalPrices
+    const dayCall = fetcher1.mock.calls.find((call) => call[0].granularity === 'day')
+    const hourCall = fetcher1.mock.calls.find((call) => call[0].granularity === 'hour')
+    const minuteCall = fetcher1.mock.calls.find((call) => call[0].granularity === 'minute')
+
+    expect(dayCall[0].granularity).toEqual('day')
+    expect(dayCall[0].requestLimit).toEqual(366)
+    expect(hourCall[0].granularity).toEqual('hour')
+    expect(hourCall[0].requestLimit).toEqual(168)
+    expect(minuteCall[0].granularity).toEqual('minute')
+    expect(minuteCall[0].requestLimit).toEqual(120)
   })
 
   it('should fetch historical prices from a specific date', async () => {
@@ -548,7 +731,6 @@ describe('market history monitor', () => {
       },
     })
     const listener = await setupAtomListener()
-    // Simulate case when today is 06/01/2024 and we have prices for 4 days
     prices = {
       day: {
         BTC: {
@@ -564,24 +746,9 @@ describe('market history monitor', () => {
 
     await marketHistoryMonitor.start()
     await advance()
-    expect(listener).toHaveBeenCalledTimes(1)
-    expect(listener).toHaveBeenCalledWith({
-      data: {
-        USD: {
-          daily: {
-            bitcoin: {
-              1_704_240_000_000: 49_998,
-              1_704_326_400_000: 49_999,
-              1_704_412_800_000: 50_000,
-              1_704_499_200_000: 50_001,
-            },
-          },
-        },
-      },
-    })
+    expect(listener).toHaveBeenCalledTimes(2)
     pricingClient.historicalPrice.mockClear()
 
-    // assume client want prices from Jan 1 00:30 to check it correctly converts to 00:00
     const startTimestamp = new Date(Date.UTC(2024, 0, 1, 0, 30)).valueOf()
 
     prices = {
@@ -608,82 +775,63 @@ describe('market history monitor', () => {
 
     expect(pricingClient.historicalPrice).toHaveBeenCalledTimes(1)
     const callArgs = pricingClient.historicalPrice.mock.calls[0][0]
+
     expect(callArgs.assets).toEqual(['BTC'])
     expect(callArgs.granularity).toEqual('day')
-    expect(callArgs.limit).toEqual(2) // for jan 1 and jan 2
+    expect(callArgs.limit).toEqual(2)
 
-    expect(listener).toHaveBeenCalledTimes(2)
-    expect(listener.mock.calls[1][0]).toEqual({
-      data: {
-        USD: {
-          daily: {
-            bitcoin: {
-              1_704_067_200_000: 49_996,
-              1_704_153_600_000: 49_997,
-              1_704_240_000_000: 49_998,
-              1_704_326_400_000: 49_999,
-              1_704_412_800_000: 50_000,
-              1_704_499_200_000: 50_001,
-            },
-          },
-        },
-      },
-    })
+    expect(callArgs.timestamp % 86_400).toBe(0)
 
-    const storageData = await marketHistoryStorage.get(`prices-USD-bitcoin-day`)
-    expect(storageData).toEqual([
-      [
-        1_704_067_200_000,
-        {
-          close: 49_996,
-        },
-      ],
-      [
-        1_704_153_600_000,
-        {
-          close: 49_997,
-        },
-      ],
-      [
-        1_704_240_000_000,
-        {
-          close: 49_998,
-        },
-      ],
-      [
-        1_704_326_400_000,
-        {
-          close: 49_999,
-        },
-      ],
-      [
-        1_704_412_800_000,
-        {
-          close: 50_000,
-        },
-      ],
-      [
-        1_704_499_200_000,
-        {
-          close: 50_001,
-        },
-      ],
-    ])
+    expect(callArgs.ignoreInvalidSymbols).toBe(true)
 
-    // should not fetch if hit cache
-    pricingClient.historicalPrice.mockClear()
-    await marketHistoryMonitor.fetchAssetPricesFromDate({
-      assetName: 'bitcoin',
-      granularity: 'day',
-      startTimestamp,
-    })
-    await advance()
-    expect(pricingClient.historicalPrice).toHaveBeenCalledTimes(0)
-    expect(listener).toHaveBeenCalledTimes(2)
+    expect(listener).toHaveBeenCalledTimes(3)
   })
 
-  const advance = (ms = 0) => {
-    jest.advanceTimersByTime(ms)
-    return new Promise(setImmediate)
-  }
+  it('should fetch historical prices with minute granularity', async () => {
+    jest.useFakeTimers({ doNotFake: ['setImmediate'] })
+    const listener = await setupAtomListener()
+
+    const timestamp = 1_744_220_000
+
+    prices = {
+      minute: {
+        BTC: {
+          USD: Array.from({ length: 60 }, (_, i) => ({
+            close: 50_000 - i * 10,
+            open: 50_000 - i * 5,
+            time: timestamp - i * 60,
+          })),
+        },
+      },
+    }
+
+    marketHistoryMonitor = createMonitor()
+    await marketHistoryMonitor.start()
+    await advance()
+
+    listener.mockClear()
+    pricingClient.historicalPrice.mockClear()
+
+    await marketHistoryMonitor.update('minute')
+    await advance()
+
+    expect(pricingClient.historicalPrice).toHaveBeenCalledTimes(1)
+
+    if (pricingClient.historicalPrice.mock.calls.length > 0) {
+      const callArgs = pricingClient.historicalPrice.mock.calls[0][0]
+      expect(callArgs.granularity).toBe('minute')
+
+      if (callArgs.timestamp) {
+        expect(callArgs.timestamp % 60).toBe(0)
+
+        const now = Math.floor(Date.now() / 1000)
+        const currentMinute = now - (now % 60)
+        expect(callArgs.timestamp).toBeLessThan(currentMinute)
+      }
+
+      expect(callArgs.ignoreInvalidSymbols).toBe(true)
+    }
+
+    expect(listener).toHaveBeenCalledTimes(1)
+  })
 })

@@ -45,6 +45,8 @@ const createHardwareWalletsApi = ({
       sync: hardwareWallets.sync,
       addPublicKeysToWalletAccount: hardwareWallets.addPublicKeysToWalletAccount,
       create: hardwareWallets.create,
+      retrySigningRequest: hardwareWallets.retrySigningRequest,
+      cancelSigningRequest: hardwareWallets.cancelSigningRequest,
     },
   }
 }

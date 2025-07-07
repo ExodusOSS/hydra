@@ -14,8 +14,8 @@ folder has to be added. This can be done in the top level `tsconfig.json`:
     // ...
     paths: {
       // ...
-      '@exodus/networking-spec': ['./modules/networking-spec/src'],
-      '@exodus/networking-spec/*': ['./modules/networking-spec/src/*'],
+      '@exodus/transform-storage': ['./libraries/transform-storage/src'],
+      '@exodus/transform-storage/*': ['./libraries/transform-storage/src/*'],
     },
   },
 }

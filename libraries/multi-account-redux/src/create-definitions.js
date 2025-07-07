@@ -13,7 +13,7 @@ import {
   setLoading,
 } from './common.js'
 
-const { get, memoize } = lodash // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
+const { get, memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
 function toFirstUpper(value) {
   const first = value[0]

@@ -1,6 +1,8 @@
 import delay from 'delay'
-import { isEqual } from 'lodash'
+import lodash from 'lodash'
 import ms from 'ms'
+
+const { isEqual } = lodash
 
 const createFilesystemMonitor = ({ filesystemStatsAtom, getFilesystemInfo, logger }) => {
   const start = async () => {

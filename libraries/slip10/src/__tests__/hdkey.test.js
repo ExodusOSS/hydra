@@ -1,4 +1,4 @@
-import test from '@exodus/test/tape' // eslint-disable-line import/no-unresolved
+import test from '@exodus/test/tape'
 
 import HdKey from '../hdkey.js'
 

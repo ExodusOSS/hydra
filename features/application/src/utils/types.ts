@@ -61,6 +61,7 @@ type BackupType = 'passkeys' | 'seed-phrase'
 export type StartApplicationParams = {
   /** Allows manually setting the restoring flag which will be propagated to lifecycle hooks. Use with caution, this is normally set automatically by the corresponding application methods */
   restoring?: boolean
+  importing?: boolean
 }
 
 export type ImportApplicationParams = CreateWalletParams & {
@@ -78,4 +79,13 @@ export type DeleteApplicationParams = {
 export type LockHistoryEntry = {
   locked: boolean
   timestamp: Date
+}
+
+export type EventLog = {
+  record: (event: string | { event: string; [key: string]: unknown }) => Promise<void>
+  remove: ({ timestamp }: { timestamp: number }) => Promise<void>
+  exportFormatted: () => Promise<Event[]>
+  clear: () => Promise<void>
+  getVersionHistory: () => Promise<Event[]>
+  isEmpty: () => Promise<boolean>
 }

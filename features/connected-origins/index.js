@@ -1,7 +1,9 @@
-import { connectedOriginsAtomDefinition } from './atoms/index.js'
+import { connectedAccountsAtomDefinition, connectedOriginsAtomDefinition } from './atoms/index.js'
 import connectedOriginsDefinition from './module/index.js'
 import connectedOriginsApiDefinition from './api/index.js'
 import connectedOriginsPluginDefinition from './plugin/index.js'
+
+const STORAGE_NAMESPACE = 'connectedOrigins'
 
 const connectedOrigins = () => {
   return {
@@ -9,7 +11,17 @@ const connectedOrigins = () => {
     definitions: [
       {
         definition: connectedOriginsAtomDefinition,
-        storage: { namespace: 'connectedOrigins' },
+        storage: { namespace: STORAGE_NAMESPACE },
+        aliases: [
+          {
+            implementationId: 'unsafeStorage',
+            interfaceId: 'storage',
+          },
+        ],
+      },
+      {
+        definition: connectedAccountsAtomDefinition,
+        storage: { namespace: STORAGE_NAMESPACE },
         aliases: [
           {
             implementationId: 'unsafeStorage',

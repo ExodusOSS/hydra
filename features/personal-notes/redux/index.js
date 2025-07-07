@@ -1,8 +1,8 @@
 import { PersonalNoteSet } from '@exodus/models'
 
-import id from './id'
-import initialState from './initial-state'
-import selectorDefinitions from './selectors'
+import id from './id.js'
+import initialState from './initial-state.js'
+import selectorDefinitions from './selectors/index.js'
 
 const personalNotesReduxDefinition = {
   id,

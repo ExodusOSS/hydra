@@ -16,7 +16,7 @@
       "properties": {
         "mode_activated": {
           "type": "string",
-          "enum": ["donut", "card"]
+          "enum": ["donut", "cards"]
         }
       },
       "unevaluatedProperties": false

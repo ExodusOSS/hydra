@@ -1,16 +1,16 @@
-import { getSeedId } from '@exodus/keychain/module/crypto/seed-id'
+import { mnemonicToSeed } from '@exodus/bip39'
+import { getSeedId } from '@exodus/keychain/module/crypto/seed-id.js'
 import { WalletAccount } from '@exodus/models'
-import { mnemonicToSeed } from 'bip39'
 
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
 
-describe('message-signer', () => {
+describe('message-signer', async () => {
   let exodus
 
   const mnemonic = 'menu memory fury language physical wonder dog valid smart edge decrease worth'
-  const seed = mnemonicToSeed(mnemonic)
+  const seed = await mnemonicToSeed({ mnemonic })
   const seedId = getSeedId(seed)
   const passphrase = 'my-password-manager-generated-this'
 
@@ -24,6 +24,8 @@ describe('message-signer', () => {
     await exodus.application.load()
     await exodus.application.import({ mnemonic, passphrase })
   })
+
+  afterEach(() => exodus.application.stop())
 
   test('signs message', async () => {
     await exodus.application.unlock({ passphrase })

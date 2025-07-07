@@ -1,4 +1,4 @@
-import createRestoringAssetsAtom from './storage'
+import createRestoringAssetsAtom from './storage.js'
 
 export const restoringAssetsAtomDefinition = {
   id: 'restoringAssetsAtom',

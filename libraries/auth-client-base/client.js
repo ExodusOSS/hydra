@@ -1,14 +1,16 @@
-const { get, pickBy } = require('lodash')
-const { fetch: exodusFetch } = require('@exodus/fetch')
-const typeforce = require('@exodus/typeforce')
+import lodash from 'lodash'
+import { pickBy } from '@exodus/basic-utils'
+import { fetch as exodusFetch } from '@exodus/fetch' // eslint-disable-line no-restricted-imports
+import typeforce from '@exodus/typeforce'
 
 const HTTP_METHODS = ['get', 'post', 'delete', 'put', 'patch']
+const { get } = lodash
 
 const DEFAULT_CONFIG = {
   maxReauthAttempts: 2,
 }
 
-const urlJoin = (a, b) => a.replace(/\/+$/, '') + '/' + b.replace(/^\/+/, '')
+const urlJoin = (a, b) => a.replace(/\/+$/u, '') + '/' + b.replace(/^\/+/u, '')
 const DEFAULT_AUTH_OPTION_VALUE = true
 
 const getHeadersFromMetadata = (metadata) =>
@@ -62,14 +64,20 @@ class Client {
   }
 
   _buildUrl({ endpoint, query }) {
-    const url = /^https?:\/\//.test(endpoint) ? endpoint : urlJoin(this._config.baseUrl, endpoint)
+    const url = /^https?:\/\//u.test(endpoint) ? endpoint : urlJoin(this._config.baseUrl, endpoint)
     return query ? url + `?${new URLSearchParams(query)}` : url
   }
 
   async _request(
     method,
     endpoint,
-    { auth = DEFAULT_AUTH_OPTION_VALUE, data, query, headers: additionalHeaders }
+    {
+      auth = DEFAULT_AUTH_OPTION_VALUE,
+      data,
+      query,
+      headers: additionalHeaders,
+      resolveBodyOnly = true,
+    }
   ) {
     const url = this._buildUrl({ endpoint, query })
     const headers = {
@@ -91,7 +99,7 @@ class Client {
 
     if (!response.ok) {
       const { status, statusText, url } = response
-      let messages = [status, statusText, url]
+      const messages = [status, statusText, url]
       let details = {}
       try {
         details = await response.json()
@@ -103,7 +111,7 @@ class Client {
             messages.push(`${title}: ${detail}`)
           }
         }
-      } catch (err) {}
+      } catch {}
 
       const err = new Error(messages.filter(Boolean).join(' '))
       err.response = response
@@ -111,7 +119,7 @@ class Client {
       throw err
     }
 
-    return response.json()
+    return resolveBodyOnly ? response.json() : response
   }
 
   // fetch, optionally with re-auth
@@ -140,6 +148,7 @@ class Client {
       if (!keyPair) {
         return
       }
+
       const { challenge } = await this._request('POST', authChallengeUrl, {
         auth: false,
         data: {
@@ -171,12 +180,15 @@ class Client {
   async _awaitAuthenticated() {
     try {
       await this._authPromise
-    } catch (err) {
+    } catch {
       // retry if previous auth failed
       await this._authenticate()
     }
   }
 }
 
-module.exports = (opts) => new Client(opts)
-module.exports.Client = Client
+export { Client }
+
+const createClient = (opts) => new Client(opts)
+
+export default createClient

@@ -1,19 +1,18 @@
 import { createInMemoryAtom } from '@exodus/atoms'
-import { createMockFetch } from '@exodus/mock-fetch'
 import ms from 'ms'
-import * as path from 'path'
 
-import { MODULE_ID } from '../monitor'
-import createGeolocationMonitor from '../monitor/geolocation'
+import createGeolocationMonitor from '../monitor/geolocation.js'
+import { MODULE_ID } from '../monitor/index.js'
+
+jest.exodus.mock.fetchReplay()
+const fetch = globalThis.fetch // replaced
 
 describe('geolocation', () => {
   let geolocationAtom
-  let fetch
   let monitor
   let getBuildMetadata
 
   beforeAll(() => {
-    fetch = createMockFetch(path.join(__dirname, 'responses.json'))
     getBuildMetadata = async () => ({
       appId: 'testing-geolocation',
       dev: false,
@@ -113,8 +112,14 @@ describe('geolocation', () => {
       getBuildMetadata,
     })
 
+    // Tick two recursive setTimeouts, until https://github.com/ExodusMovement/test/commit/130d06b647d gets in
+    setTimeout(() => jest.advanceTimersByTime(5000), 1)
+    setTimeout(() => jest.advanceTimersByTime(10_000), 2)
+    jest.useFakeTimers()
+
     geolocationAtom.observe((geolocation) => {
       expect(geolocation).toEqual({ error: 'Getting location failed.' })
+      jest.useRealTimers()
       done()
     })
 

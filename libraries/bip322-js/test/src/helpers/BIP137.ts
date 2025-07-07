@@ -1,5 +1,5 @@
-import secp256k1 from '@exodus/secp256k1'
 import * as bitcoinMessage from '@exodus/bitcoinjs/message'
+import secp256k1 from '@exodus/secp256k1'
 
 /**
  * Class that implement BIP137-related utility functions.

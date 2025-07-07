@@ -1,8 +1,8 @@
 import { setupRedux } from '@exodus/redux-dependency-injection'
-import walletAccountsRedux from '@exodus/wallet-accounts/redux'
+import walletAccountsRedux from '@exodus/wallet-accounts/redux/index.js'
 import { combineReducers, createStore } from 'redux'
 
-import nftsReduxDefinition from '..'
+import nftsReduxDefinition from '../index.js'
 
 export function setup() {
   const allDependencies = [nftsReduxDefinition, walletAccountsRedux()]

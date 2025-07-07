@@ -1,0 +1,105 @@
+[
+  {
+    "request": {
+      "resource": "https://exchange-s.exodus.io/v3/geolocation",
+      "options": {
+        "timeout": 30000,
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["App-Name", "testing-geolocation"],
+          ["App-Version", "23.0.0"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://exchange-s.exodus.io/v3/geolocation",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {
+      "ip": "1.2.3",
+      "countryCode": "US",
+      "regionCode": "GO",
+      "regionName": "Gotham Metro",
+      "timezoneName": "GMT +02:00 (US/Gotham)",
+      "isAllowed": true
+    }
+  },
+  {
+    "request": {
+      "resource": "https://exchange.exodus.io/geo-location-error",
+      "options": {
+        "timeout": 30000,
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["App-Name", "testing-geolocation"],
+          ["App-Version", "23.0.0"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 400,
+    "statusText": "Bad Request",
+    "ok": false,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://exchange.exodus.io/geo-location-error",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {}
+  },
+  {
+    "request": {
+      "resource": "https://exchange.exodus.io/geo-location-error",
+      "options": {
+        "timeout": 30000,
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["App-Name", "testing-geolocation"],
+          ["App-Version", "23.0.0"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 400,
+    "statusText": "Bad Request",
+    "ok": false,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://exchange.exodus.io/geo-location-error",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {}
+  },
+  {
+    "request": {
+      "resource": "https://exchange.exodus.io/geo-location-error",
+      "options": {
+        "timeout": 30000,
+        "method": "GET",
+        "headers": [
+          ["Accept", "application/json"],
+          ["App-Name", "testing-geolocation"],
+          ["App-Version", "23.0.0"],
+          ["Content-Type", "application/json"]
+        ]
+      }
+    },
+    "status": 400,
+    "statusText": "Bad Request",
+    "ok": false,
+    "headers": [["content-type", "application/json"]],
+    "url": "https://exchange.exodus.io/geo-location-error",
+    "redirected": false,
+    "type": "default",
+    "bodyType": "json",
+    "body": {}
+  }
+]

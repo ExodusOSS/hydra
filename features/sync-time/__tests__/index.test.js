@@ -1,12 +1,13 @@
+import { SynchronizedTime } from '@exodus/basic-utils'
 import createIocContainer from '@exodus/dependency-injection'
 import preprocess from '@exodus/dependency-preprocessors'
-import logify from '@exodus/dependency-preprocessors/src/preprocessors/logify'
-import optional from '@exodus/dependency-preprocessors/src/preprocessors/optional'
-import readOnlyAtoms from '@exodus/dependency-preprocessors/src/preprocessors/read-only-atoms'
-import alias from '@exodus/dependency-preprocessors/src/preprocessors/alias'
-import syncTime from '../'
-import { EventEmitter } from 'events/'
-import { SynchronizedTime } from '@exodus/basic-utils'
+import alias from '@exodus/dependency-preprocessors/src/preprocessors/alias.js'
+import logify from '@exodus/dependency-preprocessors/src/preprocessors/logify.js'
+import optional from '@exodus/dependency-preprocessors/src/preprocessors/optional.js'
+import readOnlyAtoms from '@exodus/dependency-preprocessors/src/preprocessors/read-only-atoms.js'
+import EventEmitter from 'events/events.js'
+
+import syncTime from '../index.js'
 
 const createLogger = (namespace) => console
 

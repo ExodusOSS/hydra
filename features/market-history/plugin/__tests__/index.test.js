@@ -1,7 +1,7 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 import EventEmitter from 'events' // eslint-disable-line @exodus/restricted-imports/no-node-core-events
 
-import marketHistoryLifecyclePluginDefinition from '..'
+import marketHistoryLifecyclePluginDefinition from '../index.js'
 
 const createPlugin = marketHistoryLifecyclePluginDefinition.factory
 
@@ -21,20 +21,20 @@ describe('marketHistoryLifecyclePlugin', () => {
     plugin = createPlugin({ marketHistoryMonitor, marketHistoryAtom, appProcessAtom, port })
   })
 
-  test('should start if no app process atom passed', async () => {
+  test('should unlock if no app process atom passed', async () => {
     plugin = createPlugin({ marketHistoryMonitor, marketHistoryAtom, port })
 
-    expect(plugin.onStart).not.toThrow()
+    expect(plugin.onUnlock).not.toThrow()
   })
 
-  test('should not update market history when start', async () => {
-    await plugin.onStart()
+  test('on unlock starts once', async () => {
+    await plugin.onUnlock()
 
-    expect(marketHistoryMonitor.start).not.toHaveBeenCalled()
+    expect(marketHistoryMonitor.start).toHaveBeenCalledTimes(1)
   })
 
   test('should update market history when app coming back from background', async () => {
-    await plugin.onStart()
+    await plugin.onUnlock()
 
     await appProcessAtom.set({ mode: 'background' })
     await appProcessAtom.set({ mode: 'active' })
@@ -43,7 +43,7 @@ describe('marketHistoryLifecyclePlugin', () => {
   })
 
   test('should call monitor.stop when app going to background', async () => {
-    await plugin.onStart()
+    await plugin.onUnlock()
 
     await appProcessAtom.set({ mode: 'active' })
     await appProcessAtom.set({ mode: 'background' })

@@ -1,6 +1,1 @@
-const createClient = require('./client')
-
-module.exports = {
-  Client: createClient.Client,
-  createClient,
-}
+export { default as createClient, Client } from './client.js'

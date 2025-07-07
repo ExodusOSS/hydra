@@ -86,5 +86,9 @@ test('toRedactedJSON() includes only whitelist fields', (t) => {
     feeCoinName: 'myfeetoken',
     coinAmount: '0.001 MYTOKEN',
     feeAmount: '0.003 MYFEETOKEN',
+
+    data: {
+      x: 10,
+    },
   })
 })

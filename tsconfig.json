@@ -11,10 +11,6 @@
     "noUncheckedIndexedAccess": true,
     "esModuleInterop": true,
     "paths": {
-      "@exodus/networking-common": ["./modules/networking-common/src"],
-      "@exodus/networking-common/*": ["./modules/networking-common/src/*"],
-      "@exodus/networking-spec": ["./modules/networking-spec/src"],
-      "@exodus/networking-spec/*": ["./modules/networking-spec/src/*"],
       "@exodus/transform-storage": ["./libraries/transform-storage/src"],
       "@exodus/transform-storage/*": ["./libraries/transform-storage/src/*"]
     }

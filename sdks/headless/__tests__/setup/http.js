@@ -1,6 +1,6 @@
 import { setupServer } from 'msw/node'
 
-import handlers from './handlers'
+import handlers from './handlers/index.js'
 
 const mswServer = setupServer(...handlers)
 

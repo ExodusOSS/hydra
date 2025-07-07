@@ -1,5 +1,5 @@
 import type NumberUnit from '@exodus/currency'
-import type { Asset, Side } from '@exodus/exchange-ui'
+import type { Asset } from '@exodus/exchange-ui'
 import { formatAssetAmount } from '@exodus/formatting/lib/asset'
 
 const getBalanceLabel = ({ side, asset, customTokenBeingAdded, balance }) => {
@@ -16,11 +16,10 @@ type AssetLabelProps = {
   asset: Asset
   balance?: NumberUnit
   className?: string
-  side: Side
   style?: React.CSSProperties
 }
 
-export const FromAssetLabel: React.FC<AssetLabelProps & { balance: NumberUnit }> = ({
+export const FromAssetLabel: React.FC<AssetLabelProps & { balance: NumberUnit; side: 'from' }> = ({
   asset,
   balance,
   side,
@@ -37,7 +36,7 @@ export const FromAssetLabel: React.FC<AssetLabelProps & { balance: NumberUnit }>
   )
 }
 
-export const ToAssetLabel: React.FC<AssetLabelProps> = ({ asset, side }) => {
+export const ToAssetLabel: React.FC<AssetLabelProps & { side: 'to' }> = ({ asset, side }) => {
   return (
     <div>
       {getBalanceLabel({

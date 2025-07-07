@@ -1,6 +1,6 @@
-import createFiatBalancesAtom from './fiat-balances'
-import createOptimisticFiatBalancesAtom from './optimistic-fiat-balances'
-import createNonDustBalanceAssetNamesAtom from './non-dust-balance-asset-names-atom'
+import createFiatBalancesAtom from './fiat-balances.js'
+import createOptimisticFiatBalancesAtom from './optimistic-fiat-balances.js'
+import createNonDustBalanceAssetNamesAtom from './non-dust-balance-asset-names-atom.js'
 
 export const fiatBalancesAtomDefinition = {
   id: 'fiatBalancesAtom',

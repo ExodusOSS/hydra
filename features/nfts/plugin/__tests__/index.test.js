@@ -1,7 +1,7 @@
 import * as atoms from '@exodus/atoms'
-import EventEmitter from 'events/'
+import EventEmitter from 'events/events.js'
 
-import createNftsLifecyclePlugin from '../lifecycle'
+import createNftsLifecyclePlugin from '../lifecycle.js'
 
 describe('nftsLifecyclePlugin', () => {
   let port

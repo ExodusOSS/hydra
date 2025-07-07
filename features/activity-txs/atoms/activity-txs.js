@@ -1,6 +1,6 @@
 import { combine, compute } from '@exodus/atoms'
 import { createSelector } from 'reselect'
-import { createDeepEqualOutputSelector } from '@exodus/core-selectors/utils/deep-equal'
+import { createDeepEqualOutputSelector } from '@exodus/core-selectors/utils/deep-equal.js'
 import { memoize } from '@exodus/basic-utils'
 
 const createAssetSourceActivityTxsSelector = memoize(

@@ -1,4 +1,4 @@
-import sortAssetsSelectorFactoryCreator from '../helpers/sort-assets-selector-factory-creator'
+import sortAssetsSelectorFactoryCreator from '../helpers/sort-assets-selector-factory-creator.js'
 
 const createSelectorFactory =
   ({ ignoreMarketCapAssets }) =>

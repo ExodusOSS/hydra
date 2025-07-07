@@ -1,1 +1,1 @@
-export { default } from './tx-log-monitors'
+export { default } from './tx-log-monitors.js'

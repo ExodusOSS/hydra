@@ -1,7 +1,6 @@
-import { mapValuesAsync } from '@exodus/basic-utils'
-import EventEmitter from 'events/'
-import { getNftsAddresses } from './addresses-utils'
-import { handleNftsOnImport } from './utils'
+import EventEmitter from 'events/events.js'
+import { getNftsAddresses } from './addresses-utils.js'
+import { handleNftsOnImport } from './utils.js'
 
 const sortByTitle = (nfts) => nfts.sort((a, b) => a.collectionName?.localeCompare(b.collectionName))
 
@@ -15,14 +14,14 @@ class NftsDataNetworkMonitor extends EventEmitter {
   #logger
   #config
 
-  #handleImportOnNextFetch = false
+  #pendingAccountsForImport = new Set()
 
   constructor({
     logger,
     asset,
     network,
     config,
-    handleImportOnStart,
+    nftsMonitorStatusAtom,
     addressProvider,
     nftsProxy,
     nftsModule,
@@ -37,7 +36,6 @@ class NftsDataNetworkMonitor extends EventEmitter {
     this.#nftsConfigAtom = nftsConfigAtom
     this.#logger = logger
     this.#config = config
-    this.#handleImportOnNextFetch = handleImportOnStart
   }
 
   fetch = async (...args) => {
@@ -46,6 +44,10 @@ class NftsDataNetworkMonitor extends EventEmitter {
     } catch (err) {
       this.#logger.error(err)
     }
+  }
+
+  enableImportForWalletAccount = (walletAccountName) => {
+    this.#pendingAccountsForImport.add(walletAccountName)
   }
 
   #getData = async ({ walletAccount, network }) => {
@@ -112,27 +114,25 @@ class NftsDataNetworkMonitor extends EventEmitter {
     )
   }
 
-  #fetch = async ({ walletAccounts }) => {
+  #fetch = async ({ walletAccount }) => {
+    const walletAccountName = walletAccount.toString()
+    const handleImport = this.#pendingAccountsForImport.has(walletAccountName)
     const network = this.#network
 
-    mapValuesAsync(walletAccounts, async (walletAccount) => {
-      const walletAccountName = walletAccount.toString()
-      const nfts = await this.#getData({ walletAccount, walletAccountName, network })
-
-      if (nfts) {
-        if (this.#handleImportOnNextFetch) {
-          try {
-            await this.#handleNftsOnImport({ nfts })
-          } catch (err) {
-            this.#logger.warn('failed to auto-approve nfts', network, err.message)
-          }
+    const nfts = await this.#getData({ walletAccount, walletAccountName, network })
+    if (nfts) {
+      if (handleImport) {
+        try {
+          await this.#handleNftsOnImport({ nfts })
+        } catch (err) {
+          this.#logger.warn('failed to auto-approve nfts', network, err.message)
         }
 
-        this.emit('nfts', { walletAccountName, nfts })
+        this.#pendingAccountsForImport.delete(walletAccountName)
       }
-    }).then(() => {
-      this.#handleImportOnNextFetch = false
-    })
+
+      this.emit('nfts', { walletAccountName, nfts })
+    }
   }
 }
 

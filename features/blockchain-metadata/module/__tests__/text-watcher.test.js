@@ -5,7 +5,7 @@ import { asset as _ethereum } from '@exodus/ethereum-meta'
 import { normalizeTxsJSON, TxSet } from '@exodus/models'
 
 import txWatcherModuleDefinition from '../tx-watcher.js'
-import fixtures from './test-watcher-fixtures.json'
+import fixtures from './test-watcher-fixtures.cjs'
 
 const ethereum = connectAsset(_ethereum)
 

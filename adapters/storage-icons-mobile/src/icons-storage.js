@@ -68,6 +68,8 @@ class IconsStorage {
     assert(iconNameRegex.test(assetName), 'token name contains invalid characters')
     return `${this.#iconsDirectory}/${assetName}.svg`
   }
+
+  unzipIcon = unzipIcon
 }
 
 const unzipIcon = (base64) => {

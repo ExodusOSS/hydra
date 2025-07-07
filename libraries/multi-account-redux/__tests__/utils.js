@@ -1,11 +1,10 @@
+import { connectAssets } from '@exodus/assets'
+import assetsBase from '@exodus/assets-base'
 import assetsReduxDefinition from '@exodus/assets-feature/redux/index.js'
 import { WalletAccount } from '@exodus/models'
 import { setupRedux } from '@exodus/redux-dependency-injection'
 import walletAccountsReduxDefinition from '@exodus/wallet-accounts/redux/index.js'
 import { combineReducers, createStore } from 'redux'
-
-import { connectAssets } from '@exodus/assets'
-import assetsBase from '@exodus/assets-base'
 
 const assets = connectAssets(assetsBase)
 

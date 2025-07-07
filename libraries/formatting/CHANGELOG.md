@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/formatting@9.0.3...@exodus/formatting@9.0.4) (2025-06-18)
+
+### Bug Fixes
+
+- fix(formatting): avoid unnecessary fields as formatter cache key (#12958)
+
+## [9.0.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/formatting@9.0.2...@exodus/formatting@9.0.3) (2025-03-31)
+
+### Bug Fixes
+
+- fix: handle undefined, null and NaN values in formatPercentage (#11906)
+
 ## [9.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/formatting@9.0.1...@exodus/formatting@9.0.2) (2024-11-25)
 
 ### License

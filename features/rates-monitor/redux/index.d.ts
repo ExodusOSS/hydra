@@ -1,5 +1,5 @@
-import type initialState from './initial-state'
-import type selectorDefinitions from './selectors'
+import type initialState from './initial-state.js'
+import type selectorDefinitions from './selectors/index.js'
 
 declare const ratesReduxDefinition: {
   id: 'rates'

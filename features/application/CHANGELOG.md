@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.9.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.9.0...@exodus/application@2.9.1) (2025-06-27)
+
+### Bug Fixes
+
+- fix(application,auth-mobile): await recording event logs (#13017)
+
+## [2.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.8.0...@exodus/application@2.9.0) (2025-06-24)
+
+### Features
+
+- feat: event recordings for restore / pin flows (#12973)
+
+## [2.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.7.1...@exodus/application@2.8.0) (2025-06-03)
+
+### Features
+
+- feat: gracefully handle 'isLocked' state in report (#12669)
+
+## [2.7.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.7.0...@exodus/application@2.7.1) (2025-05-26)
+
+### Bug Fixes
+
+- fix(application): walletExist on restore (#12622)
+
+## [2.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.6.0...@exodus/application@2.7.0) (2025-03-24)
+
+### Features
+
+- feat: store `walletCreatedAt` in application's state (#11859)
+
+## [2.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.5.2...@exodus/application@2.6.0) (2025-03-19)
+
+### Features
+
+- feat: include `lockHistory` in Safe Report (#11834)
+
+## [2.5.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.5.1...@exodus/application@2.5.2) (2025-03-13)
+
+### Bug Fixes
+
+- fix(application): add importing flag to start method (#11760)
+
+## [2.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.5.0...@exodus/application@2.5.1) (2025-03-12)
+
+**Note:** Version bump only for package @exodus/application
+
 ## [2.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.4.0...@exodus/application@2.5.0) (2025-02-17)
 
 ### Features

@@ -1,29 +1,46 @@
-import createStorage from '@exodus/storage-memory'
-import blockchainMetadataDefinition from '@exodus/blockchain-metadata/module'
-import EventEmitter from 'events/'
 import { connectAssets } from '@exodus/assets'
 import assetsBase from '@exodus/assets-base'
-import { OrderSet, PersonalNoteSet, WalletAccount, normalizeTxsJSON } from '@exodus/models'
-import { keyBy, mapValues } from '@exodus/basic-utils'
 import { createInMemoryAtom } from '@exodus/atoms'
-import fixtures from './tx-log-fixtures.json'
-import ordersFixtures from './orders-fixtures.json'
-import { create as createExportTransactions } from '..'
+import { keyBy, mapValues } from '@exodus/basic-utils'
 import {
   accountStatesAtomDefinition,
   txLogsAtomDefinition,
-} from '@exodus/blockchain-metadata/atoms'
+} from '@exodus/blockchain-metadata/atoms/index.js'
+import blockchainMetadataDefinition from '@exodus/blockchain-metadata/module/index.js'
+import { normalizeTxsJSON, OrderSet, PersonalNoteSet, WalletAccount } from '@exodus/models'
+import createStorage from '@exodus/storage-memory'
+import EventEmitter from 'events/events.js'
+
+import { create as createExportTransactions } from '../index.js'
+import loadFixture from './load-fixture.cjs'
+
+const ordersFixtures = loadFixture('orders-fixtures')
+const fixtures = loadFixture('tx-log-fixtures')
 
 const assets = connectAssets(assetsBase)
 
 const txFixtures = mapValues(fixtures, (json) => normalizeTxsJSON({ json, assets }))
 
-const { factory: createBlockchainMetadata } = blockchainMetadataDefinition
+const getAssetSpecificConstants = (asset) => {
+  const constants = {}
 
+  if (asset.name === 'cardano') {
+    constants.ADA_KEY_DEPOSIT_FEE = assets[asset.name].currency.defaultUnit('2')
+  }
+
+  return constants
+}
+
+const { factory: createBlockchainMetadata } = blockchainMetadataDefinition
 const createAssetsModule = () =>
   Object.assign(new EventEmitter(), {
     getAssets: () => assets,
-    getAsset: (assetName) => assets[assetName],
+    getAsset: (assetName) => {
+      return {
+        ...assets[assetName],
+        ...getAssetSpecificConstants(assets[assetName]),
+      }
+    },
   })
 
 const personalNoteMessage = 'test'
@@ -88,6 +105,11 @@ describe('export-transactions', () => {
 
     await blockchainMetadata
       .batch()
+      .updateTxs({
+        assetName: 'cardano',
+        walletAccount: 'exodus_0',
+        txs: txFixtures.cardano,
+      })
       .updateTxs({
         assetName: 'serum',
         walletAccount: 'exodus_0',

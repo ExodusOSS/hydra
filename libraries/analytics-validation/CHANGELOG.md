@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.58.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.57.0...@exodus/analytics-validation@2.58.0) (2025-06-11)
+
+### Features
+
+- feat(analytics): increase `maxLength` of `app_version` from 10 to 32 characters (#12876)
+
+## [2.57.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.56.0...@exodus/analytics-validation@2.57.0) (2025-06-05)
+
+### Features
+
+- feat(analytics-validation): add is_instant_startup property to PerformanceAppStartup (#12826)
+
+## [2.56.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.55.0...@exodus/analytics-validation@2.56.0) (2025-05-21)
+
+### Features
+
+- feat(analytics-validation): portfolio rewards and animation (#12610)
+
+## [2.55.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.54.0...@exodus/analytics-validation@2.55.0) (2025-05-20)
+
+### Features
+
+- feat(analytics-validation): add ExchangeSwap event (#12589)
+
+## [2.54.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.53.0...@exodus/analytics-validation@2.54.0) (2025-05-13)
+
+### Features
+
+- feat(telemetry): add new properties to modal first fund view telemetry event validation (#12409)
+
+## [2.53.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.52.2...@exodus/analytics-validation@2.53.0) (2025-05-07)
+
+### Features
+
+- feat: xmr balance in analytics data (#12215)
+
+## [2.52.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.52.1...@exodus/analytics-validation@2.52.2) (2025-03-13)
+
+### Bug Fixes
+
+- fix: rename property value of mode_activated from card to cards in WalletStyleCardsDonutToggle event (#11770)
+
+## [2.52.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.52.0...@exodus/analytics-validation@2.52.1) (2025-03-10)
+
+### Bug Fixes
+
+- fix(analytics-validation): harden object and do not follow links (#11583)
+
 ## [2.52.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.51.3...@exodus/analytics-validation@2.52.0) (2025-02-24)
 
 ### Features

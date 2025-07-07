@@ -1,13 +1,10 @@
 import assetBase from '@exodus/assets-base'
-import * as atoms from '@exodus/atoms'
-import EventEmitter from 'events/'
+import EventEmitter from 'events/events.js'
 
-import pluginDefinition from '..'
+jest.doMock('@exodus/atoms/factories/observer', () => ({ __esModule: true, default: jest.fn() }))
 
-jest.mock('@exodus/atoms', () => ({
-  ...jest.requireActual('@exodus/atoms'),
-  createAtomObserver: jest.fn(),
-}))
+const atoms = await import('@exodus/atoms')
+const { default: pluginDefinition } = await import('../index.js')
 
 describe('restoreAssetsPlugin', () => {
   const { bitcoin } = assetBase

@@ -1,10 +1,10 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 import { EXODUS_KEY_IDS } from '@exodus/key-ids'
-import keychainDefinition from '@exodus/keychain/module'
-import { getSeedId } from '@exodus/keychain/module/crypto/seed-id'
-import { mnemonicToSeedSync } from 'bip39'
+import { getSeedId } from '@exodus/keychain/module/crypto/seed-id.js'
+import keychainDefinition from '@exodus/keychain/module/index.js'
+import { mnemonicToSeed } from 'bip39'
 
-import analyticsUserIdAtomDefinition from '../user-id'
+import analyticsUserIdAtomDefinition from '../user-id.js'
 
 const { factory: createUserIdAtom } = analyticsUserIdAtomDefinition
 const storage = {
@@ -14,8 +14,8 @@ const storage = {
 
 const logger = { warn: jest.fn() }
 
-describe('analyticsUserIdAtom', () => {
-  const seed = mnemonicToSeedSync(
+describe('analyticsUserIdAtom', async () => {
+  const seed = await mnemonicToSeed(
     'menu memory fury language physical wonder dog valid smart edge decrease worth'
   )
   const seedId = getSeedId(seed)

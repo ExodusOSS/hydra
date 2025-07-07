@@ -1,4 +1,4 @@
-import createPersonalNotesPlugin from './personal-notes'
+import createPersonalNotesPlugin from './personal-notes.js'
 
 export const personalNotesPluginDefinition = {
   id: 'personalNotesPlugin',

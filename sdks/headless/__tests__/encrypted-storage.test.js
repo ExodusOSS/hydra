@@ -1,6 +1,6 @@
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
 
 describe('wallet', () => {
   let exodus
@@ -18,6 +18,8 @@ describe('wallet', () => {
 
     await exodus.application.start()
   })
+
+  afterEach(() => exodus.application.stop())
 
   test('unlock should unlock encrypted storage', async () => {
     const mnemonic = 'menu memory fury language physical wonder dog valid smart edge decrease worth'

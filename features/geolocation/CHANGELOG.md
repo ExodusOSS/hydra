@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/geolocation@4.5.1...@exodus/geolocation@4.5.2) (2025-06-16)
+
+### Bug Fixes
+
+- fix: fetch geolocation more aggressively until first successful fetch (#12915)
+
+## [4.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/geolocation@4.5.0...@exodus/geolocation@4.5.1) (2025-05-15)
+
+### Bug Fixes
+
+- fix: stop geolocation monitor on stop (#12453)
+
+## [4.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/geolocation@4.4.0...@exodus/geolocation@4.5.0) (2025-05-05)
+
+### Features
+
+- feat: fix geolocation stop(), make it valid ESM (#12150)
+
+## [4.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/geolocation@4.3.1...@exodus/geolocation@4.4.0) (2025-04-04)
+
+### Features
+
+- feat(headless): type debug apis (#11235)
+
+### Bug Fixes
+
+- fix: lodash and events imports (#11954)
+
 ## [4.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/geolocation@4.3.0...@exodus/geolocation@4.3.1) (2024-12-06)
 
 ### License

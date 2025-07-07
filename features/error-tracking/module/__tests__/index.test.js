@@ -1,6 +1,7 @@
-import errorsAtomDefinition from '../../atoms/index.js'
+import { createInMemoryAtom } from '@exodus/atoms'
+
+import { errorsAtomDefinition } from '../../atoms/index.js'
 import { errorTrackingDefinition } from '../error-tracking.js'
-import { remoteErrorTrackingDefinition } from '../remote-error-tracking.js'
 
 const { factory: createErrorsAtom } = errorsAtomDefinition
 
@@ -10,6 +11,10 @@ describe('errorTracking module tests', () => {
 
     const module = errorTrackingDefinition.factory({
       errorsAtom,
+      remoteErrorTrackingEnabledAtom: createInMemoryAtom({ defaultValue: false }),
+      remoteErrorTracking: {
+        track: jest.fn(),
+      },
       config: { maxErrorsCount: 10 },
     })
 
@@ -19,17 +24,22 @@ describe('errorTracking module tests', () => {
   it('should have all errors in the namespace object of the module', async () => {
     const errorsAtom = createErrorsAtom()
 
+    const trackRemoteError = jest.fn()
     const module = errorTrackingDefinition.factory({
       errorsAtom,
+      remoteErrorTrackingEnabledAtom: createInMemoryAtom({ defaultValue: false }),
+      remoteErrorTracking: { track: trackRemoteError },
       config: { maxErrorsCount: 10 },
     })
+
     await module.track({
-      error: { message: 'message1' },
+      error: new Error('message1'),
       context: {},
       namespace: 'test',
     })
+
     await module.track({
-      error: { message: 'message2' },
+      error: new Error('message2'),
       context: {},
       namespace: 'test',
     })
@@ -39,27 +49,32 @@ describe('errorTracking module tests', () => {
     expect(errors).toBeDefined()
     expect(errors.length).toEqual(2)
     expect(errors[0].error.message).toEqual('message2')
+    expect(trackRemoteError).not.toHaveBeenCalled()
   })
 
   it("should not exceed the errors it's holding more than maxErrorsCount as provided by the config", async () => {
     const errorsAtom = createErrorsAtom()
 
+    const trackRemoteError = jest.fn()
     const module = errorTrackingDefinition.factory({
       errorsAtom,
+      remoteErrorTrackingEnabledAtom: createInMemoryAtom({ defaultValue: false }),
+      remoteErrorTracking: { track: trackRemoteError },
       config: { maxErrorsCount: 2 },
     })
+
     await module.track({
-      error: { message: 'message1' },
+      error: new Error('message1'),
       context: {},
       namespace: 'test',
     })
     await module.track({
-      error: { message: 'message2' },
+      error: new Error('message2'),
       context: {},
       namespace: 'test',
     })
     await module.track({
-      error: { message: 'message3' },
+      error: new Error('message3'),
       context: {},
       namespace: 'test',
     })
@@ -69,32 +84,44 @@ describe('errorTracking module tests', () => {
     expect(errors.length).toEqual(2)
     expect(errors[0].error.message).toEqual('message3')
     expect(errors[1].error.message).toEqual('message2')
+    expect(trackRemoteError).not.toHaveBeenCalled()
+  })
+
+  it('should throw an error if the error is not an instance of Error', async () => {
+    const errorsAtom = createErrorsAtom()
+
+    const module = errorTrackingDefinition.factory({
+      errorsAtom,
+      config: { maxErrorsCount: 2 },
+    })
+
+    await expect(
+      module.track({
+        error: 'not an error',
+        context: {},
+        namespace: 'test',
+      })
+    ).rejects.toThrow('error must be an instance of Error')
   })
 })
 
-describe('remoteErrorTracking module tests', () => {
-  const sentryConfig = {
-    dsnUrl: 'https://...',
-    publicKey: 'publicKey',
-    projectId: 'projectId',
-    environment: 'staging',
-    os: 'testos',
-    osVersion: '1.2.3',
-    platform: 'testplatform',
-    appName: 'testapp',
-    appVersion: '4.5.6',
-    buildId: 'some-build-id',
-    jsEngine: 'jsc',
-  }
+test('remote error tracking', async () => {
+  const errorsAtom = createErrorsAtom()
 
-  const fetch = jest.fn(async () => ({ status: 200, json: async () => {} }))
-
-  it('should setup correctly', async () => {
-    const module = remoteErrorTrackingDefinition.factory({
-      fetch,
-      config: sentryConfig,
-    })
-
-    expect(module.captureError).toBeDefined()
+  const trackRemoteError = jest.fn()
+  const errorTracking = errorTrackingDefinition.factory({
+    errorsAtom,
+    remoteErrorTrackingEnabledAtom: createInMemoryAtom({ defaultValue: true }),
+    remoteErrorTracking: { track: trackRemoteError },
+    config: { maxErrorsCount: 10 },
   })
+
+  await errorTracking.track({
+    error: new Error('message1'),
+    context: {},
+    namespace: 'test',
+  })
+
+  await new Promise(setImmediate)
+  expect(trackRemoteError).toHaveBeenCalledWith({ error: new Error('message1') })
 })

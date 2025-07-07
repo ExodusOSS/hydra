@@ -1,43 +1,44 @@
 {
   "name": "@exodus/market-history",
-  "version": "9.1.1",
+  "version": "10.3.1",
   "description": "Fetches historical prices for assets",
   "author": "Exodus Movement, Inc.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "lint": "run -T eslint -c ../../eslint.config.mjs",
     "lint:fix": "yarn lint --fix",
-    "test": "run -T jest"
+    "test": "run -T exodus-test --jest"
   },
+  "type": "module",
   "main": "index.js",
   "files": [
     "api",
-    "module",
     "atoms",
+    "module",
     "plugin",
     "redux",
-    "utils.js",
+    "index.d.ts",
     "CHANGELOG.md",
     "README.md",
+    "utils.js",
     "!**/__tests__/**"
   ],
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
     "@exodus/dayjs": "^1.0.2",
-    "@exodus/price-api": "^3.3.4",
-    "@exodus/remote-config-atoms": "^1.0.1",
-    "lodash": "^4.17.21",
+    "@exodus/remote-config-atoms": "^1.1.0",
+    "delay": "^5.0.0",
     "make-concurrent": "^5.4.0",
     "ms": "^0.7.1",
     "reselect": "^3.0.1"
   },
   "devDependencies": {
-    "@exodus/assets": "^8.0.94",
-    "@exodus/assets-base": "^8.1.6",
+    "@exodus/assets": "^11.0.0",
+    "@exodus/assets-base": "^10.0.0",
     "@exodus/assets-feature": "workspace:^",
-    "@exodus/bitcoin-meta": "^1.0.1",
-    "@exodus/ethereum-meta": "^1.0.30",
+    "@exodus/bitcoin-meta": "^2.0.0",
+    "@exodus/ethereum-meta": "^2.4.1",
     "@exodus/locale": "workspace:^",
     "@exodus/logger": "workspace:^",
     "@exodus/rates-monitor": "workspace:^",
@@ -53,5 +54,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

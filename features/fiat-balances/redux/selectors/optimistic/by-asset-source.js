@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { toBalanceOnly } from '../utils'
+import { toBalanceOnly } from '../utils.js'
 
 const selectorFactory = (optimisticByAssetSourceFieldSelector) =>
   createSelector(optimisticByAssetSourceFieldSelector, toBalanceOnly)

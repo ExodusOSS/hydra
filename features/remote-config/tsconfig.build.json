@@ -3,5 +3,5 @@
   "compilerOptions": {
     "paths": {}
   },
-  "exclude": ["./**/*.spec.ts", "./**/*.test.ts", "lib", "redux/__tests__/**"]
+  "exclude": ["./**/*.spec.ts", "./**/*.test.ts", "lib", "**/__tests__"]
 }

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@7.9.0...@exodus/keychain@7.10.0) (2025-05-29)
+
+### Features
+
+- feat(keychain): use exodus/crypto instead of sodium (#12085)
+
+## [7.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@7.8.1...@exodus/keychain@7.9.0) (2025-05-09)
+
+### Features
+
+- feat: add support for cardano in keychain (#12158)
+
 ## [7.8.1](https://github.com/ExodusMovement/exodus-oss/compare/@exodus/keychain@7.8.0...@exodus/keychain@7.8.1) (2025-02-20)
 
 ### Bug Fixes

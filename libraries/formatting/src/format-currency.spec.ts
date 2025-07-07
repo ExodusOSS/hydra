@@ -56,7 +56,6 @@ describe('formatCurrency()', () => {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
       maximumSignificantDigits: 3,
-      nanZero: true,
       style: 'decimal',
       useGrouping: true,
     })
@@ -67,7 +66,6 @@ describe('formatCurrency()', () => {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
       maximumSignificantDigits: 3,
-      nanZero: true,
       style: 'decimal',
       useGrouping: true,
     })
@@ -79,7 +77,6 @@ describe('formatCurrency()', () => {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
       minimumSignificantDigits: 3,
-      nanZero: true,
       style: 'decimal',
       useGrouping: true,
     })
@@ -92,7 +89,6 @@ describe('formatCurrency()', () => {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
       minimumSignificantDigits: 3,
-      nanZero: true,
       style: 'decimal',
       useGrouping: true,
     })
@@ -105,7 +101,6 @@ describe('formatCurrency()', () => {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
       maximumIntegerDigits: 3,
-      nanZero: true,
       style: 'decimal',
       useGrouping: true,
     })
@@ -117,7 +112,17 @@ describe('formatCurrency()', () => {
       localeMatcher: 'best fit',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
-      nanZero: true,
+      style: 'decimal',
+      useGrouping: true,
+    })
+
+    formatCurrency(0, { locale: 'en-GB', format: '%v', code: 'not-sure', symbol: 'money' }) // ignored fields does not effect Intl call
+
+    expect(global.Intl.NumberFormat).toBeCalledWith(['en-GB'], {
+      locale: 'en-GB',
+      localeMatcher: 'best fit',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
       style: 'decimal',
       useGrouping: true,
     })

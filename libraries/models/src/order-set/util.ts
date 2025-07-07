@@ -12,11 +12,11 @@ export const orderSetFromJSONLegacy = (orders: any[], { assets }: { assets: Asse
 }
 
 export const orderSetToJSONLegacy = (orderSet: OrderSet) => {
-  assert(orderSet instanceof OrderSet, 'orderSetToJSONLegacy: expecting an OrderSet')
+  assert(OrderSet.isInstance(orderSet), 'orderSetToJSONLegacy: expecting an OrderSet')
 
   return [...orderSet].map((order) => orderToJSONLegacy(order))
 }
 
 const isObjectOrConvert = (order: Order | OrderProps, assets: Assets) => {
-  return order instanceof Order ? order : orderFromJSONLegacy(order, { assets })
+  return Order.isInstance(order) ? order : orderFromJSONLegacy(order, { assets })
 }

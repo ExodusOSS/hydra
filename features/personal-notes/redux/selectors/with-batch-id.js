@@ -1,5 +1,7 @@
-import { get } from 'lodash'
+import lodash from 'lodash'
 import { PersonalNoteSet } from '@exodus/models'
+
+const { get } = lodash
 
 const resultFunction = (personalNotes) =>
   PersonalNoteSet.fromArray(

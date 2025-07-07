@@ -6,7 +6,7 @@ const createNftsAtom = ({ storage }) => {
   return dedupe(
     atomFactory({
       key: 'nfts',
-      defaultValue: {},
+      defaultValue: Object.create(null),
       isSoleWriter: true,
     })
   )

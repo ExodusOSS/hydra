@@ -1,6 +1,6 @@
 {
   "name": "@exodus/analytics-validation",
-  "version": "2.52.0",
+  "version": "2.58.0",
   "description": "JSON schemas for analytics events, to prevent sensitive data from being sent up to the infamous cloud",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -24,12 +24,11 @@
     "build": "node scripts/build-schemasafe.js",
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",
-    "test": "yarn build && run -T jest",
+    "test": "yarn build && run -T exodus-test --jest",
     "prepublishOnly": "yarn run -T build --scope @exodus/analytics-validation"
   },
   "devDependencies": {
-    "@exodus/schemasafe": "^1.0.0",
-    "@exodus/schemasafe-babel-plugin": "^1.1.0"
+    "@exodus/schemasafe": "^1.0.0"
   },
   "nx": {
     "targets": {

@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('txsById', () => {
   it('should return default txs by txId default', () => {

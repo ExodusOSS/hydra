@@ -1,5 +1,6 @@
-import { assets } from '../../../features/keychain/module/__tests__/fixtures/assets.js'
 import { createKeyIdentifierForExodus } from '@exodus/key-ids'
+
+import { assets } from '../../../features/keychain/module/__tests__/fixtures/assets.js'
 import KeyIdentifier from '../src/key-identifier.js'
 
 describe('KeyIdentifier', () => {

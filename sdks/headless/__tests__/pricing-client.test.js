@@ -1,6 +1,6 @@
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
 
 function mockResponse(json) {
   return {
@@ -16,6 +16,7 @@ describe('pricingClient', () => {
   let adapters
   let container
   let fetch
+  let exodus
 
   beforeEach(async () => {
     fetch = jest.fn().mockImplementation(async (url) => {
@@ -26,12 +27,14 @@ describe('pricingClient', () => {
     adapters = createAdapters({ fetch })
     container = createExodus({ adapters, config })
 
-    const exodus = container.resolve()
+    exodus = container.resolve()
 
     await exodus.application.start()
     await exodus.application.create({ passphrase })
     await exodus.application.unlock({ passphrase })
   })
+
+  afterEach(() => exodus.application.stop())
 
   test('pricingClient is available', async () => {
     const { pricingClient } = container.getAll()

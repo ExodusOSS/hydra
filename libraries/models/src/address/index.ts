@@ -89,11 +89,19 @@ export default class Address {
     return this.address
   }
 
+  /**
+   * @deprecated This does not truly determine whether address is an instance of Address. Use Address.isInstance.
+   */
   static isAddress(address: unknown): address is Address {
+    if (address instanceof Address) return true
+    if (typeof address !== 'object') return false
+    if (address === null) return false
+
+    const ownKeys = Object.keys(new Address(''))
+    const candidateKeys = Object.keys(address)
+
     return (
-      typeof address === 'object' &&
-      address !== null &&
-      (address instanceof Address || ('address' in address && 'meta' in address))
+      candidateKeys.length === ownKeys.length && candidateKeys.every((key) => ownKeys.includes(key))
     )
   }
 

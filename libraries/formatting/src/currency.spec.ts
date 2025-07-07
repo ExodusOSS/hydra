@@ -1,6 +1,16 @@
-import { formatCurrency } from './currency.js'
+import { formatCurrency, formatNumber } from './currency.js'
 
 describe('currency', () => {
+  describe('formatNumber', () => {
+    it('should format with decimal params', () => {
+      expect(formatNumber('1234.123456789012345678')).toEqual('1,234')
+    })
+
+    it('should format with custom decimal params', () => {
+      expect(formatNumber('1234.123456789012345678', 3)).toEqual('1,234.123')
+    })
+  })
+
   describe('formatCurrency', () => {
     it('should format with maximumFractionDigits option', () => {
       expect(formatCurrency('1234.123456789012345678', { maximumFractionDigits: 8 })).toEqual(

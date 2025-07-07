@@ -2,7 +2,7 @@ import commonjs from 'vite-plugin-commonjs'
 import { flowPlugin, esbuildFlowPlugin } from '@bunchtogether/vite-plugin-flow'
 import react from '@vitejs/plugin-react'
 import { defineConfig, transformWithEsbuild } from 'vite'
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import nodePolyfills from '@exodus/vite-plugin-node-polyfills'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 const port = 8008

@@ -8,6 +8,8 @@ import assert from 'minimalistic-assert'
 import * as ed25519 from './crypto/ed25519.js'
 import * as secp256k1 from './crypto/secp256k1.js'
 import * as sodium from './crypto/sodium.js'
+import * as cardanoEd25519 from './crypto/cardano.js'
+
 import {
   throwIfInvalidKeyIdentifier,
   throwIfInvalidMasters,
@@ -42,6 +44,7 @@ export class Keychain {
     this.sodium = sodium.create({ getPrivateHDKey: this.#getPrivateHDKey })
     this.ed25519 = ed25519.create({ getPrivateHDKey: this.#getPrivateHDKey })
     this.secp256k1 = secp256k1.create({ getPrivateHDKey: this.#getPrivateHDKey })
+    this.cardanoEd25519 = cardanoEd25519.create({ getPrivateHDKey: this.#getPrivateHDKey })
   }
 
   #assertPrivateKeysUnlocked(seedIds) {
@@ -143,22 +146,22 @@ export class Keychain {
   }
 
   #getPublicKeyFromHDKey = async ({ hdkey, keyId }) => {
-    let publicKey = hdkey.publicKey
-
     if (keyId.keyType === 'legacy') {
-      if (keyId.assetName in this.#legacyPrivToPub) {
-        const legacyPrivToPub = this.#legacyPrivToPub[keyId.assetName]
-        publicKey = await legacyPrivToPub(hdkey.privateKey)
-      } else {
-        throw new Error(`asset name ${keyId.assetName} has no legacyPrivToPub mapper`)
+      if (Object.hasOwn(this.#legacyPrivToPub, keyId.assetName)) {
+        return this.#legacyPrivToPub[keyId.assetName](hdkey.privateKey)
       }
+
+      throw new Error(`asset name ${keyId.assetName} has no legacyPrivToPub mapper`)
     } else if (keyId.derivationAlgorithm !== 'SLIP10' && keyId.keyType === 'nacl') {
       // SLIP10 already produces the correct public key for curve ed25119
       // so we can safely skip using the privToPub mapper.
-      publicKey = await sodium.privToPub(hdkey.privateKey)
+      return sodium.privToPub(hdkey.privateKey)
+    } else if (keyId.keyType === 'cardanoByron') {
+      const { publicKey } = await cardanoEd25519.getCardanoV1ExtendedPublicKey(hdkey.privateKey)
+      return publicKey
     }
 
-    return publicKey
+    return hdkey.publicKey
   }
 
   async exportKey({ seedId, keyId, exportPrivate, exportPublic = true }) {
@@ -211,12 +214,17 @@ export class Keychain {
     assert(data instanceof Uint8Array, `expected "data" to be a Uint8Array, got: ${typeof data}`)
     assert(
       (['ecdsa', 'schnorr', 'schnorrZ'].includes(signatureType) && keyId.keyType === 'secp256k1') ||
-        (signatureType === 'ed25519' && keyId.keyType === 'nacl'),
+        (signatureType === 'ed25519' && ['nacl', 'cardanoByron'].includes(keyId.keyType)),
       `"keyId.keyType" ${keyId.keyType} does not support "signatureType" ${signatureType}`
     )
 
     if (signatureType === 'ed25519') {
       assert(noOpts, 'unsupported options supplied for ed25519 signature')
+
+      if (keyId.keyType === 'cardanoByron') {
+        return this.cardanoEd25519.signBuffer({ seedId, keyId, data })
+      }
+
       return this.ed25519.signBuffer({ seedId, keyId, data })
     }
 

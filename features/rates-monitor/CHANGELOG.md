@@ -3,6 +3,76 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.14.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.14.2...@exodus/rates-monitor@4.14.3) (2025-06-09)
+
+### Bug Fixes
+
+- fix: don't use npm: aliases for lodash (#12861)
+
+## [4.14.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.14.0...@exodus/rates-monitor@4.14.2) (2025-05-15)
+
+### Bug Fixes
+
+- fix: abort rates-monitor when not started (#12467)
+
+- fix: disable simulation at the source in rates-monitor plugin (#12277)
+
+- fix: don't call setInterval from stopped rates-monitor (#12457)
+
+## [4.14.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.14.0...@exodus/rates-monitor@4.14.1) (2025-05-09)
+
+### Bug Fixes
+
+- fix: disable simulation at the source in rates-monitor plugin (#12277)
+
+## [4.14.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.13.0...@exodus/rates-monitor@4.14.0) (2025-05-08)
+
+### Features
+
+- feat: make rates-monitor proper ESM (#12255)
+
+## [4.13.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.12.2...@exodus/rates-monitor@4.13.0) (2025-04-28)
+
+### Features
+
+- feat(rates-monitor): add onClear hook & move wallet-deletion cleanup from exodus-mobile (#12080)
+
+## [4.12.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.12.1...@exodus/rates-monitor@4.12.2) (2025-04-16)
+
+### Bug Fixes
+
+- fix: duplicate \_update calls on simulation initialization and improve simulation state handling (#12023)
+
+## [4.12.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.12.0...@exodus/rates-monitor@4.12.1) (2025-04-15)
+
+### Bug Fixes
+
+- fix: set minimum price threshold in simulation to prevent cache invalidation issues on mobile (#12015)
+
+## [4.12.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.11.1...@exodus/rates-monitor@4.12.0) (2025-04-11)
+
+### Features
+
+- feat: add real-time price simulation for top assets (#11734)
+
+## [4.11.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.11.0...@exodus/rates-monitor@4.11.1) (2025-04-04)
+
+### Bug Fixes
+
+- fix: lodash and events imports (#11954)
+
+## [4.11.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.10.0...@exodus/rates-monitor@4.11.0) (2025-04-01)
+
+### Features
+
+- feat: stop exporting report definitions (#11900)
+
+## [4.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.9.1...@exodus/rates-monitor@4.10.0) (2025-03-18)
+
+### Features
+
+- feat: add real time rate flag (#11810)
+
 ## [4.9.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.9.0...@exodus/rates-monitor@4.9.1) (2025-03-04)
 
 ### Bug Fixes

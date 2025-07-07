@@ -1,7 +1,7 @@
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
 describe('locales', () => {
   let exodus
@@ -31,6 +31,8 @@ describe('locales', () => {
     await exodus.application.unlock({ passphrase })
 
     await currencyEvent
+
+    await exodus.application.stop()
   })
 
   test('should emit default language value', async () => {
@@ -42,6 +44,8 @@ describe('locales', () => {
     await exodus.application.unlock({ passphrase })
 
     await languageEvent
+
+    await exodus.application.stop()
   })
 
   test('should change currency', async () => {
@@ -55,6 +59,8 @@ describe('locales', () => {
     await exodus.locale.setCurrency('EUR')
 
     await currencyEvent
+
+    await exodus.application.stop()
   })
 
   test('should change language', async () => {
@@ -68,6 +74,8 @@ describe('locales', () => {
     await exodus.locale.setLanguage('es')
 
     await languageEvent
+
+    await exodus.application.stop()
   })
 
   test('should store language in namespaced storage', async () => {
@@ -81,5 +89,7 @@ describe('locales', () => {
     const storedValue = await adapters.unsafeStorage.namespace('locale').get('language')
 
     expect(storedValue).toBe('es')
+
+    await exodus.application.stop()
   })
 })

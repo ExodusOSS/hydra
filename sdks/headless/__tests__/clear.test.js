@@ -1,10 +1,10 @@
 import personalNotes from '@exodus/personal-notes'
 import Emitter from '@exodus/wild-emitter'
 
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
 describe('wallet', () => {
   const passphrase = 'my-password-manager-generated-this'
@@ -33,7 +33,7 @@ describe('wallet', () => {
     const newExodus = container.resolve()
     const atoms = container.getByType('atom')
 
-    newExodus.application.start()
+    const newExodusStartPromise = newExodus.application.start()
 
     const clearedAtoms = []
     for (const id in atoms) {
@@ -42,7 +42,11 @@ describe('wallet', () => {
       const reset = atom.reset
 
       atom.set = async (value) => {
-        if (value === undefined || (typeof value === 'function' && value() === undefined))
+        if (
+          value === undefined ||
+          id === 'eventLogAtom' ||
+          (typeof value === 'function' && value() === undefined)
+        )
           clearedAtoms.push(id)
 
         return set(value)
@@ -72,5 +76,9 @@ describe('wallet', () => {
         ...(process.env.MULTI_PROCESS ? [] : ['seedMetadataAtom']),
       ])
     )
+
+    await newExodusStartPromise
+    await newExodus.application.stop()
+    await exodus.application.stop()
   })
 })

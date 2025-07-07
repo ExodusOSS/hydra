@@ -1,8 +1,9 @@
-import personalNotesDefinition from '../'
-import createPersonalNotesAtom from '../../atoms/personal-notes'
-import createStorage from '@exodus/storage-memory'
 import { PersonalNoteSet } from '@exodus/models'
+import createStorage from '@exodus/storage-memory'
 import delay from 'delay'
+
+import createPersonalNotesAtom from '../../atoms/personal-notes.js'
+import personalNotesDefinition from '../index.js'
 
 const createPersonalNotes = personalNotesDefinition.factory
 
@@ -29,6 +30,7 @@ describe('personal-notes module', () => {
     const personalNotes = createPersonalNotes({
       personalNotesAtom,
       fusion,
+      logger: { debug: jest.fn() },
     })
 
     return {
@@ -161,6 +163,7 @@ describe('personal-notes module', () => {
     const personalNotesA = createPersonalNotes({
       personalNotesAtom: personalNotesAtomA,
       fusion: fusionA,
+      logger: { debug: jest.fn() },
     })
 
     const personalNotesAtomB = createPersonalNotesAtom({ storage: createStorage() }).atom
@@ -170,6 +173,7 @@ describe('personal-notes module', () => {
     const personalNotesB = createPersonalNotes({
       personalNotesAtom: personalNotesAtomB,
       fusion: fusionB,
+      logger: { debug: jest.fn() },
     })
 
     it("update in one instance causing processBatch for second shouldn't result in infinite updates", async () => {

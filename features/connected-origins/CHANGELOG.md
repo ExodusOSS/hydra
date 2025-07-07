@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/connected-origins@4.2.0...@exodus/connected-origins@4.3.0) (2025-03-17)
+
+### Features
+
+- feat: update connected accounts on wallet account change (#11788)
+
+## [4.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/connected-origins@4.1.1...@exodus/connected-origins@4.2.0) (2025-03-17)
+
+### Features
+
+- feat: store addresses for connected assets by account (#11780)
+
+## [4.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/connected-origins@4.1.0...@exodus/connected-origins@4.1.1) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [4.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/connected-origins@4.0.0...@exodus/connected-origins@4.1.0) (2024-11-07)
 
 ### Features

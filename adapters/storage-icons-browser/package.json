@@ -1,10 +1,10 @@
 {
   "name": "@exodus/storage-icons-browser",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "description": "Implementation of icons storage interface for browser extensions",
-  "author": "Exodus Movement Inc.",
+  "author": "Exodus Movement, Inc.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/adapters/storage-icons-browser",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Astorage-icons-browser"
   },
@@ -19,12 +19,14 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "lint": "eslint . --ignore-path ../../.gitignore",
+    "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
-    "@exodus/module": "^1.1.0",
     "@exodus/svg-safe": "^1.0.0-alpha.0",
     "lodash": "^4.17.21"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

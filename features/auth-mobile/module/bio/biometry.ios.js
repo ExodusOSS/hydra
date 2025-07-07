@@ -1,6 +1,8 @@
 import { AUTHENTICATION_TYPE, BIOMETRY_TYPE } from '@exodus/react-native-keychain'
 import * as keychain from '@exodus/react-native-keychain'
-import { FACE_ID, TOUCH_ID } from '../../constants'
+import { FACE_ID } from '../../constants.js'
+
+const TOUCH_ID = 'Touch ID'
 
 const TYPES = {
   [BIOMETRY_TYPE.TOUCH_ID]: TOUCH_ID,

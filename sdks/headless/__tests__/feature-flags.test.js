@@ -1,8 +1,8 @@
-import createAdapters from './adapters'
-import _config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
-import { createMockRemoteConfig } from './utils/remote-config'
+import createAdapters from './adapters/index.js'
+import _config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
+import { createMockRemoteConfig } from './utils/remote-config.js'
 
 const featureFlagsConfig = {
   dogeMode: {
@@ -65,6 +65,8 @@ describe('feature-flags', () => {
     const featureFlags = await expectFeatureFlags
 
     expect(featureFlags).toEqual({ dogeMode: { isOn: true } })
+
+    await exodus.application.stop()
   })
 
   test('should disable feature via remote config', async () => {
@@ -82,5 +84,7 @@ describe('feature-flags', () => {
     await expect(featureFlagsEvent).resolves.toEqual({
       dogeMode: { isOn: false, unavailableReason: 'enabledOverride' },
     })
+
+    await exodus.application.stop()
   })
 })

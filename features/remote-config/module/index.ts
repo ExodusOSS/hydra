@@ -3,8 +3,8 @@ import delay from 'delay'
 import lodash from 'lodash'
 import EventEmitter from 'eventemitter3'
 import type { Atom } from '@exodus/atoms'
-
-import { synchronizeTime, isFreezable, unwrapErrorMessage } from './helpers.js'
+import type { ErrorTrackingModule } from '@exodus/error-tracking'
+import { synchronizeTime, isFreezable } from './helpers.js'
 import type { Fetch, Freeze, RemoteConfigType, GetBuildMetadata } from '../types/index.js'
 import type { RemoteConfigStatus } from '../atoms/index.js'
 import type { Definition } from '@exodus/dependency-types'
@@ -21,6 +21,7 @@ type Config = {
 }
 
 type ConstructorParameters = {
+  errorTracking: ErrorTrackingModule
   remoteConfigStatusAtom: Atom<RemoteConfigStatus>
   freeze: Freeze
   logger: Logger
@@ -39,6 +40,7 @@ export class RemoteConfig extends EventEmitter implements RemoteConfigType {
   #remoteConfigUrl?: string
   #getBuildMetadata: GetBuildMetadata
 
+  readonly #errorTracking: ErrorTrackingModule
   readonly #logger: Logger
   readonly #fetch: Fetch
   readonly #freeze: Freeze
@@ -54,6 +56,7 @@ export class RemoteConfig extends EventEmitter implements RemoteConfigType {
   #timer?: Promise<void> & { clear: () => void }
 
   constructor({
+    errorTracking,
     logger,
     freeze,
     fetch,
@@ -63,6 +66,7 @@ export class RemoteConfig extends EventEmitter implements RemoteConfigType {
   }: ConstructorParameters) {
     super()
 
+    this.#errorTracking = errorTracking
     this.#logger = logger
     this.#fetch = (...args) => fetch(...args)
     this.#freeze = freeze
@@ -109,6 +113,8 @@ export class RemoteConfig extends EventEmitter implements RemoteConfigType {
     while (this.#started) {
       const { error } = await this.update()
 
+      if (!this.#started) break // eslint-disable-line @typescript-eslint/no-unnecessary-condition
+
       this.#timer = delay(error ? errorBackoffTime : fetchInterval)
 
       await this.#timer
@@ -142,20 +148,18 @@ export class RemoteConfig extends EventEmitter implements RemoteConfigType {
 
       void this.#loadedStatusAtom.set({
         remoteConfigUrl: this.#remoteConfigUrl!,
-        error: null,
         loaded: true,
         gitHash: this.#current?.meta?.gitHash ?? null,
       })
       this.#resolveLoaded!()
       return { success: true }
-    } catch (err) {
-      const errMessage = unwrapErrorMessage(err)
-      this.#logger.error(errMessage)
-      void this.#loadedStatusAtom.set((value) => ({
-        ...value,
-        error: errMessage,
-      }))
-      return { error: err }
+    } catch (error: unknown) {
+      void this.#errorTracking.track({
+        error: error as Error,
+        namespace: 'remoteConfig',
+      })
+      this.#logger.error(error)
+      return { error }
     }
   }
 
@@ -213,6 +217,7 @@ export class RemoteConfig extends EventEmitter implements RemoteConfigType {
  */
 
 const createRemoteConfig = ({
+  errorTracking,
   freeze,
   logger,
   fetch,
@@ -221,6 +226,7 @@ const createRemoteConfig = ({
   remoteConfigStatusAtom,
 }: ConstructorParameters): RemoteConfig => {
   return new RemoteConfig({
+    errorTracking,
     logger,
     fetch,
     freeze,
@@ -241,6 +247,7 @@ const remoteConfigDefinition = {
     'remoteConfigStatusAtom',
     'getBuildMetadata',
     'config?',
+    'errorTracking',
   ],
   public: true,
 } as const satisfies Definition

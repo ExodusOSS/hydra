@@ -1,20 +1,51 @@
 import lodash from 'lodash'
+import { pick } from '@exodus/basic-utils'
 
-const { uniqBy } = lodash
+const { uniqBy, xor } = lodash
 
 class ConnectedOrigins {
-  #connectedOriginsAtom = null
+  #connectedOriginsAtom
+  #connectedAccountsAtom
+  #enabledWalletAccountsAtom
+  #activeWalletAccountAtom
+  #addressProvider
 
-  constructor({ connectedOriginsAtom }) {
+  constructor({
+    activeWalletAccountAtom,
+    connectedOriginsAtom,
+    connectedAccountsAtom,
+    enabledWalletAccountsAtom,
+    addressProvider,
+  }) {
+    this.#activeWalletAccountAtom = activeWalletAccountAtom
     this.#connectedOriginsAtom = connectedOriginsAtom
+    this.#connectedAccountsAtom = connectedAccountsAtom
+    this.#enabledWalletAccountsAtom = enabledWalletAccountsAtom
+    this.#addressProvider = addressProvider
   }
 
   #getData = async () => {
     return this.#connectedOriginsAtom.get()
   }
 
+  #getConnectedAssets = (connectedOrigins) => {
+    return [
+      ...new Set(
+        connectedOrigins.flatMap((connection) =>
+          [connection.connectedAssetName, ...(connection.assetNames ?? [])].filter(Boolean)
+        )
+      ),
+    ]
+  }
+
   #setData = async (data) => {
-    return this.#connectedOriginsAtom.set(data)
+    const assetNames = this.#getConnectedAssets(data)
+    const accounts = await this.#getAccounts(assetNames)
+
+    return Promise.all([
+      this.#connectedOriginsAtom.set(data),
+      this.#connectedAccountsAtom.set(accounts),
+    ])
   }
 
   #setAttributes = async ({ origin, attributes }) => {
@@ -39,6 +70,7 @@ class ConnectedOrigins {
 
   clear = async () => {
     await this.#connectedOriginsAtom.set(undefined)
+    await this.#connectedAccountsAtom.set(undefined)
   }
 
   #addNewItem = async ({
@@ -47,6 +79,7 @@ class ConnectedOrigins {
     icon,
     connectedAssetName,
     assetNames,
+    accounts,
     trusted = false,
     favorite = false,
     walletAccount,
@@ -59,6 +92,7 @@ class ConnectedOrigins {
       favorite,
       connectedAssetName,
       assetNames,
+      accounts,
       autoApprove: false,
       createdAt: Date.now(),
       activeConnections: [],
@@ -69,6 +103,38 @@ class ConnectedOrigins {
     const newData = [...data, newOrigin]
 
     await this.#setData(newData)
+  }
+
+  #getAccounts = async (assetNames) => {
+    const walletAccounts = Object.values(await this.#enabledWalletAccountsAtom.get())
+
+    const entries = await Promise.all(
+      walletAccounts.map(async (walletAccount) => [
+        walletAccount.toString(),
+        {
+          addresses: await this.#getWalletAccountAddresses(walletAccount, assetNames),
+        },
+      ])
+    )
+
+    return Object.fromEntries(entries)
+  }
+
+  #getWalletAccountAddresses = async (walletAccount, assetNames) => {
+    const connectedAccounts = await this.#connectedAccountsAtom.get()
+    const entries = await Promise.all(
+      assetNames.map(async (assetName) => {
+        const existingAddress = connectedAccounts[walletAccount]?.addresses[assetName]
+        if (existingAddress) {
+          return [assetName, existingAddress]
+        }
+
+        const address = await this.#addressProvider.getDefaultAddress({ assetName, walletAccount })
+        return [assetName, address.toString()]
+      })
+    )
+
+    return Object.fromEntries(entries)
   }
 
   add = async ({
@@ -176,6 +242,36 @@ class ConnectedOrigins {
     await this.#setAttributes({ origin, attributes: { activeConnections: newConnections } })
   }
 
+  /**
+   * Returns the connected accounts for a given origin with the active wallet account sorted first. Can be used while
+   * the wallet is locked
+   */
+  getConnectedAccounts = async ({ origin }) => {
+    const isTrusted = await this.isTrusted({ origin })
+    if (!isTrusted) return []
+
+    const value = await this.#getOrigin({ origin })
+    const assetNames = [value.connectedAssetName, ...(value.assetNames ?? [])].filter(
+      (name, index, ary) => Boolean(name) && ary.indexOf(name) === index
+    )
+
+    const activeWalletAccount = await this.#activeWalletAccountAtom.get()
+    const accounts = await this.#connectedAccountsAtom.get()
+
+    const connectedAccounts = []
+    for (const name of Object.keys(accounts)) {
+      if (name === activeWalletAccount) continue
+      connectedAccounts.push({ name, addresses: pick(accounts[name].addresses, assetNames) })
+    }
+
+    connectedAccounts.unshift({
+      name: activeWalletAccount,
+      addresses: pick(accounts[activeWalletAccount].addresses, assetNames),
+    })
+
+    return connectedAccounts
+  }
+
   updateConnection = async ({ origin, icon, connectedAssetName }) => {
     const value = await this.#getOrigin({ origin })
 
@@ -199,15 +295,39 @@ class ConnectedOrigins {
     const newData = data.map((origin) => ({ ...origin, activeConnections: [] }))
     await this.#setData(newData)
   }
+
+  updateConnectedAccounts = async () => {
+    const walletAccounts = await this.#enabledWalletAccountsAtom.get()
+    const connectedAccounts = await this.#connectedAccountsAtom.get()
+
+    const difference = xor(Object.keys(walletAccounts), Object.keys(connectedAccounts))
+    if (difference.length === 0) {
+      // up-to-date
+      return
+    }
+
+    const connectedOrigins = await this.#connectedOriginsAtom.get()
+    const assetNames = this.#getConnectedAssets(connectedOrigins)
+    const updatedAccounts = await this.#getAccounts(assetNames)
+
+    await this.#connectedAccountsAtom.set(updatedAccounts)
+  }
 }
 
 const createConnectedOrigins = (args) => new ConnectedOrigins({ ...args })
 
-// eslint-disable-next-line @exodus/export-default/named
-export default {
+const connectedOriginsDefinition = {
   id: 'connectedOrigins',
   type: 'module',
   factory: createConnectedOrigins,
-  dependencies: ['connectedOriginsAtom'],
+  dependencies: [
+    'connectedOriginsAtom',
+    'connectedAccountsAtom',
+    'enabledWalletAccountsAtom',
+    'addressProvider',
+    'activeWalletAccountAtom',
+  ],
   public: true,
 }
+
+export default connectedOriginsDefinition

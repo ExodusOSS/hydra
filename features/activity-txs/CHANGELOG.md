@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@4.8.0...@exodus/activity-txs@5.0.0) (2025-05-29)
+
+### ⚠ BREAKING CHANGES
+
+- rename argument for pending fiat orders (#12718)
+
+### Features
+
+- feat!: rename argument for pending fiat orders (#12718)
+
+## [4.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@4.7.2...@exodus/activity-txs@4.8.0) (2025-05-22)
+
+### Features
+
+- feat: add fiat orders without tx (#12625)
+
+## [4.7.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@4.7.1...@exodus/activity-txs@4.7.2) (2025-05-21)
+
+### Bug Fixes
+
+- fix: Cross-Portfolio Swap Transactions Appear in All Portfolios (#12623)
+
+## [4.7.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@4.7.0...@exodus/activity-txs@4.7.1) (2025-05-20)
+
+### Bug Fixes
+
+- fix: activity with nft item without tx (#12591)
+
+## [4.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@4.6.5...@exodus/activity-txs@4.7.0) (2025-05-14)
+
+### Features
+
+- feat: make activity-txs to proper ESM (#12451)
+
+## [4.6.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@4.6.4...@exodus/activity-txs@4.6.5) (2025-04-03)
+
+### Bug Fixes
+
+- fix: filter out tx activities associated with a spam nft (#11950)
+
 ## [4.6.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@4.6.3...@exodus/activity-txs@4.6.4) (2025-02-12)
 
 ### Performance

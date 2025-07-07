@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.0](https://github.com/ExodusMovement/hydra/compare/@exodus/fetch-factory@2.2.6...@exodus/fetch-factory@2.3.0) (2025-05-23)
+
+### Features
+
+- feat: unset headers when they are null/undefined (#12651)
+
 ## [2.2.6](https://github.com/ExodusMovement/hydra/compare/@exodus/fetch-factory@2.2.5...@exodus/fetch-factory@2.2.6) (2025-03-07)
 
 ### Bug Fixes

@@ -1,5 +1,5 @@
-import unlockEncryptedStorageDefinition from '../unlock-encrypted-storage'
-import { withType } from './utils'
+import unlockEncryptedStorageDefinition from '../unlock-encrypted-storage.js'
+import { withType } from './utils.js'
 
 const createModuleDependencies = () =>
   [{ definition: unlockEncryptedStorageDefinition }].map(withType('module'))

@@ -1,4 +1,4 @@
-import sortAssetsSelectorFactoryCreator from '../helpers/sort-assets-selector-factory-creator'
+import sortAssetsSelectorFactoryCreator from '../helpers/sort-assets-selector-factory-creator.js'
 
 const noBalances = Object.freeze(Object.create(null))
 const noBalancesSelector = () => () => noBalances

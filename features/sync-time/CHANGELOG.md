@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/sync-time@1.3.0...@exodus/sync-time@1.4.0) (2025-05-10)
+
+### Features
+
+- feat: make sync-time proper ESM (#12332)
+
+## [1.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/sync-time@1.1.3...@exodus/sync-time@1.3.0) (2025-04-14)
+
+### Features
+
+- feat: add minute granularity support for market history charts (#11984)
+
+- feat: add placeholder types files (#11228)
+
+- feat: use atoms v9 (#9651)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
+## [1.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/sync-time@1.1.3...@exodus/sync-time@1.2.0) (2024-11-25)
+
+### Features
+
+- feat: use atoms v9 (#9651)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
 ## [1.1.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/sync-time@1.1.2...@exodus/sync-time@1.1.3) (2024-09-09)
 
 **Note:** Version bump only for package @exodus/sync-time

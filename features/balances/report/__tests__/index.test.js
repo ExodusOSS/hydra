@@ -56,11 +56,21 @@ describe('balances report', () => {
     expect(report.namespace).toEqual('balances')
   })
 
+  it('should gracefully handle when a wallet does not exist or locked', async () => {
+    const deps = setup()
+
+    const report = balancesReportDefinition.factory(deps)
+    expect(report.getSchema().parse(await report.export({ walletExists: false }))).toEqual(null)
+    expect(
+      report.getSchema().parse(await report.export({ walletExists: true, isLocked: true }))
+    ).toEqual(null)
+  })
+
   it('should report balances', async () => {
     const deps = setup()
 
     const report = balancesReportDefinition.factory(deps)
-    const result = await report.export({ walletExists: true })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
 
     expect(result).toEqual({
       exodus_0: {
@@ -85,7 +95,7 @@ describe('balances report', () => {
     })
 
     const report = balancesReportDefinition.factory(deps)
-    const result = await report.export({ walletExists: true })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
 
     expect(result).toEqual({})
   })
@@ -103,7 +113,7 @@ describe('balances report', () => {
     })
 
     const report = balancesReportDefinition.factory(deps)
-    const result = await report.export({ walletExists: true })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
 
     expect(result).toEqual({
       exodus_0: { balances: { bitcoin: bitcoin.defaultUnit(1).toDefaultString({ unit: true }) } },
@@ -123,7 +133,7 @@ describe('balances report', () => {
     })
 
     const report = balancesReportDefinition.factory(deps)
-    const result = await report.export({ walletExists: true })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
 
     expect(result).toEqual({
       exodus_1: {
@@ -141,7 +151,7 @@ describe('balances report', () => {
     jest.spyOn(deps.enabledWalletAccountsAtom, 'get').mockRejectedValueOnce(error)
 
     const report = balancesReportDefinition.factory(deps)
-    const result = await report.export({ walletExists: true })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
 
     expect(result).toEqual({
       error: expect.any(SafeError),
@@ -154,7 +164,7 @@ describe('balances report', () => {
     jest.spyOn(deps.balancesAtom, 'get').mockRejectedValueOnce(error)
 
     const report = balancesReportDefinition.factory(deps)
-    const result = await report.export({ walletExists: true })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
 
     expect(result).toEqual({
       error: expect.any(SafeError),

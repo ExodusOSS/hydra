@@ -1,6 +1,6 @@
-import { getSharedProps } from './get-shared-props'
-import { TX_TYPES } from '../../constants/tx-types'
-import { isPending } from './format-tx-activity'
+import { getSharedProps } from './get-shared-props.js'
+import { TX_TYPES } from '../../constants/tx-types.js'
+import { isPending } from './format-tx-activity.js'
 
 export const formatUnindexedNftTx = ({ assetName, nftTx }) => {
   return {

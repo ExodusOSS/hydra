@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@2.2.0...@exodus/error-tracking@3.0.0) (2025-07-01)
+
+### ⚠ BREAKING CHANGES
+
+- merge errorTracking.track/trackRemote, enable/disable remote tracking based on config (#13038)
+
+### Features
+
+- feat!: merge errorTracking.track/trackRemote, enable/disable remote tracking based on config (#13038)
+
+## [2.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@2.1.0...@exodus/error-tracking@2.2.0) (2025-06-23)
+
+### Features
+
+- feat: bump `@exodus/sentry-client` to v6 (#12992)
+
+## [2.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@2.0.0...@exodus/error-tracking@2.1.0) (2025-06-04)
+
+### Features
+
+- feat: bump `@exodus/sentry-client` to 5.0.0 (#12792)
+
+### Bug Fixes
+
+- fix: update @exodus/errors (#12627)
+
+## [2.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@1.5.1...@exodus/error-tracking@2.0.0) (2025-04-09)
+
+### ⚠ BREAKING CHANGES
+
+- require `error` to be `Error` instances (#11965)
+
+### Features
+
+- feat!: require `error` to be `Error` instances (#11965)
+
+### Bug Fixes
+
+- fix: make `context` parameter optional in type definitions (#11975)
+
+## [1.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@1.5.0...@exodus/error-tracking@1.5.1) (2025-03-13)
+
+**Note:** Version bump only for package @exodus/error-tracking
+
 ## [1.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@1.4.1...@exodus/error-tracking@1.5.0) (2025-02-27)
 
 ### Features

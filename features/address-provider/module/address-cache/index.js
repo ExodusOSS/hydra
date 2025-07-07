@@ -1,6 +1,6 @@
 import { mapValues, set } from '@exodus/basic-utils'
 import lodash from 'lodash'
-import makeConcurrent from 'make-concurrent'
+import restrictConcurrency from 'make-concurrent'
 import assert from 'minimalistic-assert'
 import ms from 'ms'
 import pDefer from 'p-defer'
@@ -9,7 +9,7 @@ import { diffCaches, getUnsyncedAddressesForPush, getCachePath } from './utils.j
 
 const { get, merge, once, throttle, zipObject } = lodash
 
-const channelName = 'addressCache1'
+const channelName = 'addressCache2'
 
 const addressCacheChannel = {
   type: 'addressCache',
@@ -19,8 +19,8 @@ const addressCacheChannel = {
 }
 
 const emptyAtomState = {
-  caches: {},
-  mismatches: {},
+  caches: Object.create(null),
+  mismatches: Object.create(null),
 }
 
 class AddressCache {
@@ -49,44 +49,58 @@ class AddressCache {
     this.#fusion = fusion
   }
 
-  #update = makeConcurrent(async (addressCacheChanges, { fromSync } = {}) => {
+  #update = restrictConcurrency(async (addressCacheChanges, { fromSync } = Object.create(null)) => {
     await this.#loaded.promise
     const preState = await this.#addressCacheAtom.get()
 
-    const { isDifferent, needsSync } = diffCaches(preState.caches, addressCacheChanges.caches)
+    const { isDifferent, needsSync, diff } = diffCaches(
+      preState.caches,
+      addressCacheChanges.caches,
+      fromSync
+    )
     if (isDifferent) {
-      const postState = merge({}, preState, addressCacheChanges)
-      await this.#setData(postState)
+      const postState = merge(Object.create(null), preState, {
+        ...addressCacheChanges,
+        caches: diff, // diffCaches can modify the cache
+      })
+
+      await this.#addressCacheAtom.set(postState)
+      await this.#writeToDisk?.(postState)
     }
 
     if (!fromSync && needsSync) {
-      // don't await so we don't block other updates in atom & storage while fusion is syncing
-      this.#pushToFusion(addressCacheChanges)
+      this.#logger.debug('scheduled a push of address cache to fusion')
+      this.#throttledUpdateFusion?.()
     }
   })
 
-  #pushToFusion = makeConcurrent(async (addressCacheChanges) => {
-    if (this.#config.noSync) return
-    const channel = await this.#getSyncedChannel()
-    const currentCache = await this.#addressCacheAtom.get()
-    const toPush = getUnsyncedAddressesForPush(addressCacheChanges.caches, currentCache.caches)
-    if (Object.keys(toPush).length === 0) return
+  /**
+   * Schedule a push to fusion. This is throttled to avoid flooding the channel with messages.
+   */
+  #throttledUpdateFusion = throttle(
+    restrictConcurrency(async () => {
+      if (this.#config.noSync) return
 
-    for (const walletAccount in toPush) {
-      for (const path in toPush[walletAccount]) {
-        const item = {
-          type: addressCacheChannel.type,
-          data: {
-            [walletAccount]: {
-              [path]: toPush[walletAccount][path],
-            },
-          },
-        }
+      // Let's await for the channel to be synced down
+      // so our addressCacheAtom is up to date
+      const channel = await this.#getSyncedChannel()
+      const currentCache = await this.#addressCacheAtom.get()
 
-        await channel.push(item)
-      }
-    }
-  })
+      // Get only unsynced addresses, so we don't push the whole cache every time
+      const data = getUnsyncedAddressesForPush(currentCache.caches)
+
+      // Also be nice and not push empty data to fusion
+      if (Object.keys(data).length === 0) return
+
+      this.#logger.debug('pushing address cache update to fusion', data)
+      await channel.push({
+        type: addressCacheChannel.type,
+        data,
+      })
+    }),
+    this.#config?.fusionPushDelay ?? ms('60s'),
+    { leading: false, trailing: true }
+  )
 
   #getSyncedChannel = async () => {
     await this.#channel.awaitProcessed()
@@ -101,7 +115,7 @@ class AddressCache {
 
   clear = async () => {
     this.#storage.clear()
-    await this.#addressCacheAtom.set({})
+    await this.#addressCacheAtom.set(Object.create(null))
   }
 
   load = async () => {
@@ -137,6 +151,7 @@ class AddressCache {
           }))
         )
 
+        this.#logger.debug('received address cache update from fusion', withSyncedFlag)
         await this.#update({ caches: withSyncedFlag }, { fromSync: true })
       },
     })
@@ -164,16 +179,17 @@ class AddressCache {
       enabledWalletAccountsNames,
       await Promise.all(
         enabledWalletAccountsNames.map(
-          async (walletAccount) => (await this.#cachesStorage.get(walletAccount)) || {}
+          async (walletAccount) =>
+            (await this.#cachesStorage.get(walletAccount)) || Object.create(null)
         )
       )
     )
-    const mismatches = (await this.#mismatchesStorage.get('data')) || {}
+    const mismatches = (await this.#mismatchesStorage.get('data')) || Object.create(null)
 
     // don't overwrite any existing state on load from disk
     if (this.#atomInitialized) {
       const oldState = await this.#addressCacheAtom.get()
-      await this.#addressCacheAtom.set(merge({}, { caches, mismatches }, oldState))
+      await this.#addressCacheAtom.set(merge(Object.create(null), { caches, mismatches }, oldState))
     } else {
       await this.#addressCacheAtom.set({ caches, mismatches })
       this.#atomInitialized = true
@@ -181,7 +197,7 @@ class AddressCache {
 
     // preferable way to do it, but it is broken
     // await this.#addressCacheAtom.set((oldState) => {
-    //   return merge({}, { caches, mismatches }, oldState)
+    //   return merge(Object.create(null), { caches, mismatches }, oldState)
     // }) // don't overwrite any existing state on load from disk
   }
 
@@ -202,11 +218,6 @@ class AddressCache {
     ms('10s'),
     { leading: false, trailing: true }
   )
-
-  #setData = async (data) => {
-    await this.#addressCacheAtom.set(data)
-    await this.#writeToDisk(data)
-  }
 
   get = async ({ baseAssetName, walletAccountName, derivationPath }) => {
     assert(typeof walletAccountName === 'string', 'expected string "walletAccountName"')
@@ -250,7 +261,7 @@ class AddressCache {
       derivationPath,
     })
 
-    const addressCacheChanges = {}
+    const addressCacheChanges = Object.create(null)
 
     if (currentValue && currentValue.address) {
       const mismatch = currentValue.address.toString() !== address.toString()
@@ -282,6 +293,10 @@ class AddressCache {
 
   stop = () => {
     this.#unsubscribe?.()
+    this.#writeToDisk?.cancel() // alternatively: flush(), but will have to await then
+    this.#writeToDisk = null
+    this.#throttledUpdateFusion?.cancel()
+    this.#throttledUpdateFusion = null
   }
 }
 

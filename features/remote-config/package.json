@@ -1,7 +1,7 @@
 {
   "name": "@exodus/remote-config",
   "type": "module",
-  "version": "2.10.0",
+  "version": "3.0.1",
   "description": "Module to provide unified access remote config",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@exodus/dependency-types": "workspace:^",
+    "@exodus/error-tracking": "workspace:^",
     "@exodus/logger": "workspace:^",
     "@exodus/redux-dependency-injection": "workspace:^",
     "@types/lodash": "^4.14.182",
@@ -42,9 +43,10 @@
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
     "@exodus/typeforce": "^1.18.0",
+    "@exodus/zod": "^3.24.3",
     "delay": "^5.0.0",
     "eventemitter3": "^4.0.7",
-    "lodash": "npm:@exodus/lodash@^4.17.21-exodus.2",
+    "lodash": "^4.17.21",
     "ms": "^0.7.1",
     "reselect": "^3.0.1"
   },

@@ -46,5 +46,13 @@ describe('price', () => {
       expect(formatPercentage('+0.0')).toBe('0%')
       expect(formatPercentage('-0.0')).toBe('0%')
     })
+
+    it('should return empty string for undefined, null, or NaN values', () => {
+      // @ts-expect-error - Permits undefined, null, and NaN values
+      expect(formatPercentage()).toBe('')
+      expect(formatPercentage(null)).toBe('')
+      expect(formatPercentage(NaN)).toBe('')
+      expect(formatPercentage('invalid')).toBe('')
+    })
   })
 })

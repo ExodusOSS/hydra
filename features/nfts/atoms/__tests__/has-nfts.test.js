@@ -1,6 +1,6 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 
-import createHasNftsAtom from '../has-nfts'
+import createHasNftsAtom from '../has-nfts.js'
 
 describe('hasNftsAtom', () => {
   let hasNftsAtom

@@ -1,6 +1,6 @@
 import { PersonalNote } from '@exodus/models'
 
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('moneroSendTxs', () => {
   it('should return empty object if no monero notes', () => {

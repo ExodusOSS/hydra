@@ -4,6 +4,7 @@ import Emitter from '@exodus/wild-emitter'
 import { randomBytes } from '@exodus/crypto/randomBytes'
 import delay from 'delay'
 import { NoDeviceFoundError, UserRefusedError } from '@exodus/hw-common'
+import restrictConcurrency from 'make-concurrent'
 
 import type {
   HardwareSignerProvider,
@@ -31,6 +32,8 @@ import type {
   SyncedKeysData,
   KeyToSyncData,
   RequireDeviceForParams,
+  SigningRequest,
+  SigningRequestState,
 } from './interfaces.js'
 import type { Definition } from '@exodus/dependency-types'
 import type {
@@ -41,12 +44,13 @@ import type {
 import type { Atom } from '@exodus/atoms'
 import type { IPublicKeyStore } from '@exodus/public-key-provider/lib/module/store/types'
 import type { Logger } from '@exodus/logger'
+import pDefer from 'p-defer'
 
 export type Dependencies = {
   assetsModule: any
   ledgerDiscovery: HardwareWalletDiscovery
   logger: Logger
-  userInterface: any
+  hardwareWalletSigningRequestsAtom: Atom<SigningRequestState>
   publicKeyStore: IPublicKeyStore
   wallet: any
   walletAccountsAtom: Atom<WalletAccount>
@@ -59,8 +63,8 @@ export class HardwareWallets implements HardwareSignerProvider {
   readonly #assetsModule: any
   readonly #ledgerDiscovery: HardwareWalletDiscovery
   readonly #logger: Logger
-  readonly #userInterface: any
   readonly #publicKeyStore: any
+  readonly #signingRequestAtom: Atom<SigningRequestState>
   readonly #wallet: any
   readonly #walletAccountsAtom: Atom<WalletAccount>
   readonly #walletAccounts: any
@@ -70,13 +74,16 @@ export class HardwareWallets implements HardwareSignerProvider {
   /* A temporary in-memory map that contains the public keys and xpubs to sync during onboarding */
   #syncedKeysMap = new Map<SyncedKeysId, SyncedKeysData>()
 
+  /** The currently active signing request */
+  #signingRequest: SigningRequest | undefined
+
   readonly events = new Emitter()
 
   constructor({
     assetsModule,
     ledgerDiscovery,
     logger,
-    userInterface,
+    hardwareWalletSigningRequestsAtom,
     publicKeyStore,
     wallet,
     walletAccountsAtom,
@@ -87,8 +94,8 @@ export class HardwareWallets implements HardwareSignerProvider {
     this.#assetsModule = assetsModule
     this.#ledgerDiscovery = ledgerDiscovery
     this.#logger = logger
-    this.#userInterface = userInterface
     this.#publicKeyStore = publicKeyStore
+    this.#signingRequestAtom = hardwareWalletSigningRequestsAtom
     this.#wallet = wallet
     this.#walletAccountsAtom = walletAccountsAtom
     this.#walletAccounts = walletAccounts
@@ -108,74 +115,140 @@ export class HardwareWallets implements HardwareSignerProvider {
     throw new NoDeviceFoundError()
   }
 
-  #requestUserAction = async (params: unknown) => {
-    const rpc = this.#userInterface.getRPC()
-    return rpc.callMethod('handle-hardware-wallet', params)
+  #updateSigningRequest = async (state: SigningRequestState): Promise<void> => {
+    // Update the internal map
+    this.#logger.debug(`Updating signing request state: ${JSON.stringify(state)}`)
+    await this.#signingRequestAtom.set(state)
+    this.#logger.debug(`Finished updating signing request state: ${JSON.stringify(state)}`)
   }
 
-  #signGeneric = async ({ baseAssetName, scenario, sign }: GenericSignParams) => {
-    let attempts = 0
-    const MAX_ATTEMPTS = 50 // High enough that users wouldn't hit this.
-    while (attempts < MAX_ATTEMPTS) {
+  /**
+   * Clears the signing request from the internal map and updates the UI state.
+   * @param {string} id - The ID of the signing request to delete.
+   */
+  #deleteSigningRequest = async (id: string) => {
+    if (this.#signingRequest?.id === id) {
+      this.#signingRequest = undefined
+      await this.#signingRequestAtom.reset()
+      this.#logger.debug(`Signing request with id: ${id} has been deleted`)
+    } else {
+      this.#logger.warn(`No signing request found for id: ${id}`)
+    }
+  }
+
+  retrySigningRequest = async (id: string) => {
+    const request = this.#signingRequest
+    if (request?.id !== id) {
+      this.#logger.warn(`No signing request found for id: ${id}`)
+      return
+    }
+
+    try {
+      this.#logger.debug(`Attempting to get selected device for signing request with id: ${id}`)
+      const { device } = await this.#getSelectedDevice()
+      this.#logger.debug(`Attempting to sign for signing request with id: ${id}`)
+      const result = await request.sign({ device })
+      await this.#deleteSigningRequest(id)
+      request.resolve(result)
+    } catch (error) {
+      if (this.#signingRequest?.id !== id) {
+        this.#logger.warn(`Signing request with id: ${id} was cancelled, not retrying`)
+        return
+      }
+
+      const _error = error as Error
+
+      if (['DisconnectedDevice', 'DisconnectedDeviceDuringOperation'].includes(_error.name)) {
+        // When an application is opened on the device, it may disconnect
+        // the USB / BLE connection because the firmware hands over control
+        // to the application, this involves a USB / BLE reset to flush any
+        // pending messages. In this case, we wait a little bit and retry the signing request.
+        this.#logger.debug(
+          `Device disconnected during signing request, likely due to app opening: ${id}`,
+          _error
+        )
+        await delay(300)
+
+        await this.retrySigningRequest(id) // Retry the signing request
+        return
+      }
+
+      // Errors for which we won't retry
+      if (_error.message.includes('timeout') || _error.name === 'UserRefusedError') {
+        // User refused the action on the device
+        await this.cancelSigningRequest(id, false)
+        return
+      }
+
+      // Allow the user to retry the signing request
+      await this.#updateSigningRequest({
+        id,
+        scenario: 'error',
+        error: _error,
+      })
+    }
+  }
+
+  cancelSigningRequest = async (id: string, fromUI: boolean) => {
+    const request = this.#signingRequest
+    this.#logger.debug(`Cancelling signing request for id: ${id}, fromUI: ${fromUI}`)
+    if (request?.id !== id) {
+      this.#logger.warn(`No signing request found for id: ${id}`)
+      return
+    }
+
+    await this.#deleteSigningRequest(id)
+
+    // Ensure we cancel the action on the device
+    if (fromUI) {
+      this.#logger.debug(`Cancelling signing request on device for id: ${id}`)
       try {
-        const approvePromise = this.#requestUserAction({
-          scenario,
-          baseAssetName,
-        })
         const { device } = await this.#getSelectedDevice()
-        const runSign = async () => {
-          await device.ensureApplicationIsOpened(baseAssetName)
-          return sign({ device })
-        }
-
-        const result = await Promise.race([approvePromise, runSign()])
-        if (typeof result === 'object' && result.tryAgain === false) {
-          device.cancelAction()
-          throw new UserRefusedError(false)
-        }
-
-        this.#requestUserAction({ scenario: 'completed' })
-        return result
+        await device.cancelAction()
+        this.#logger.debug(`Succesfully cancelled signing request on device for id: ${id}`)
       } catch (error: any) {
-        if ((error as Error).message.includes('timeout')) {
-          // The request has timed  out
-          break
-        } else if ((error as Error).name === 'UserRefusedError') {
-          // The user has refused the action on the device
-          throw error
-        }
-
-        if (
-          ['DisconnectedDevice', 'DisconnectedDeviceDuringOperation'].includes(
-            (error as Error).name
-          )
-        ) {
-          // App was opened, bluetooth reset
-          continue
-        }
-
-        try {
-          const { tryAgain } = await this.#requestUserAction({
-            error,
-            baseAssetName,
-          })
-          if (!tryAgain) {
-            this.#logger.warn(error)
-            break
-          }
-        } catch (_error) {
-          this.#logger.error(_error)
-          break
-        }
-      } finally {
-        attempts++
-        await delay(200)
+        this.#logger.error(`Failed to cancel signing request on device for id: ${id}`, error)
       }
     }
 
-    this.#requestUserAction({ scenario: 'completed' })
-    throw new UserRefusedError(false)
+    // Now reject the promise returned to the asset caller
+    request.reject(new UserRefusedError(!fromUI))
   }
+
+  #signGeneric = restrictConcurrency(
+    async ({ baseAssetName, scenario, sign }: GenericSignParams) => {
+      const id = randomBytes(16).toString('hex')
+      this.#logger.debug(
+        `Starting signing request for ${baseAssetName} with scenario: ${scenario} and id: ${id}`
+      )
+      const deferred = pDefer()
+
+      // Track the signing request in the internal map
+      // so the UI can retry & cancel if needed.
+      this.#signingRequest = {
+        id,
+        sign: async ({ device }) => {
+          // Kick off the signing request to the UI
+          await this.#updateSigningRequest({
+            id,
+            baseAssetName,
+            scenario,
+          })
+
+          await device.ensureApplicationIsOpened(baseAssetName)
+          return sign({ device })
+        },
+        resolve: deferred.resolve,
+        reject: deferred.reject,
+      }
+
+      // We don't await for the signing request to complete here,
+      // as the UI will handle it asynchronously.
+      void this.retrySigningRequest(id)
+
+      return deferred.promise
+    }
+  )
 
   signTransaction = async ({
     baseAssetName,
@@ -543,7 +616,7 @@ export class HardwareWallets implements HardwareSignerProvider {
    * to our wallet for a given wallet account.
    * note: this will only sync the currently opened asset on Ledger.
    * @param {StoreSyncedKeysParams} params
-   * @param {string} params.walletAccountName - the wallet account name to store for
+   * @param {WalletAccount} params.walletAccount - the wallet account object to store for
    * @param {string} params.syncedKeysId - the unique id for synced keys
    */
   addPublicKeysToWalletAccount = async ({ walletAccount, syncedKeysId }: StoreSyncedKeysParams) => {
@@ -628,8 +701,8 @@ const hardwareWalletsModuleDefinition = {
     'assetsModule',
     'logger',
     'ledgerDiscovery',
-    'userInterface',
     'publicKeyStore',
+    'hardwareWalletSigningRequestsAtom',
     'wallet',
     'walletAccountsAtom',
     'walletAccounts',

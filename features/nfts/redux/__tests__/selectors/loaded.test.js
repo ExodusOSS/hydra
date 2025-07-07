@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('loaded', () => {
   it('should return false when not loaded', () => {

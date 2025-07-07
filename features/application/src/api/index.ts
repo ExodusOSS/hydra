@@ -1,9 +1,11 @@
 import type { Application } from '../modules/application.js'
 import type { Definition } from '@exodus/dependency-types'
 import type { PassphraseCache } from '../modules/passphrase-cache.js'
+import type { EventLog } from '../utils/types.js'
 
 type FactoryParams = {
   application: Application
+  eventLog: EventLog
   passphraseCache?: PassphraseCache
 }
 
@@ -195,8 +197,10 @@ export interface ApplicationApi {
   }
 }
 
-const factory = ({ application, passphraseCache }: FactoryParams): ApplicationApi => {
+const factory = ({ application, eventLog, passphraseCache }: FactoryParams): ApplicationApi => {
   const restoreFromCurrentPhrase = async ({ passphrase }: RestoreFromCurrentPhraseParams = {}) => {
+    await eventLog.record({ event: 'applicationApi.restoreFromCurrentPhrase' })
+
     if (!passphrase && passphraseCache) passphrase = await passphraseCache.get()
     const mnemonic = await application.getMnemonic({ passphrase })
     await application.import({ passphrase, mnemonic })
@@ -229,7 +233,7 @@ const applicationApiDefinition = {
   id: 'applicationApi',
   type: 'api',
   factory,
-  dependencies: ['application', 'passphraseCache?'],
+  dependencies: ['application', 'eventLog', 'passphraseCache?'],
 } as const satisfies Definition
 
 export default applicationApiDefinition

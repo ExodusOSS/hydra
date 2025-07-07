@@ -1,6 +1,6 @@
 {
   "name": "@exodus/export-transactions",
-  "version": "2.0.1",
+  "version": "2.3.2",
   "description": "Library that helps to export transactions with any associated metadata, such as orders and personal notes.",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -8,35 +8,39 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/export-transactions",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aexport-transactions"
   },
+  "type": "module",
   "main": "index.js",
   "files": [
     "api",
     "module",
+    "index.d.ts",
     "README.md",
     "CHANGELOG.md",
     "!**/__tests__/**"
   ],
   "scripts": {
-    "lint": "run -T eslint . --ignore-path ../../.gitignore",
+    "lint": "run -T eslint -c ../../eslint.config.mjs",
     "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest --esbuild"
+    "test": "run -T exodus-test --jest"
   },
   "dependencies": {
-    "@exodus/module": "^1.1.0",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@exodus/assets": "^8.0.88",
-    "@exodus/assets-base": "^8.1.6",
+    "@exodus/assets": "^11.0.0",
+    "@exodus/assets-base": "^10.0.0",
     "@exodus/atoms": "workspace:^",
-    "@exodus/basic-utils": "^2.0.0",
-    "@exodus/blockchain-metadata": "^15.3.5",
-    "@exodus/models": "^8.10.4",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/blockchain-metadata": "workspace:^",
+    "@exodus/models": "workspace:^",
     "@exodus/storage-memory": "workspace:^",
     "events": "^3.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

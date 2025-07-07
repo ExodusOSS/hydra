@@ -1,5 +1,7 @@
 import { combine, compute, dedupe } from '@exodus/atoms'
-import { uniq } from 'lodash'
+import lodash from 'lodash'
+
+const { uniq } = lodash
 
 const getNetworks = (assetNames, assets) =>
   uniq(

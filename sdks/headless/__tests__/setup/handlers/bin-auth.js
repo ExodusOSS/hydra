@@ -1,6 +1,6 @@
 import { http } from 'msw'
 
-import { jsonResponse } from './utils'
+import { jsonResponse } from './utils.js'
 
 export default function createBinAuthHandlers({ baseUrl }) {
   return [

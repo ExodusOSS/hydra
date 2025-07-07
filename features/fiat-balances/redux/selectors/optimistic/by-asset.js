@@ -1,4 +1,4 @@
-import resultFunction from '../helpers/by-asset-result-func'
+import resultFunction from '../helpers/by-asset-result-func.js'
 
 const byAssetSelector = {
   id: 'optimisticByAsset',

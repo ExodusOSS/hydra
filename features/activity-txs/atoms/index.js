@@ -1,1 +1,1 @@
-export { default as activityTxsAtomDefinition } from './activity-txs'
+export { default as activityTxsAtomDefinition } from './activity-txs.js'

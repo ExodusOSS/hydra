@@ -1,4 +1,5 @@
-import { mapValues } from '@exodus/basic-utils'
+import { mapValues, memoize } from '@exodus/basic-utils'
+import { z } from '@exodus/zod'
 
 const createWalletAccountsReport = ({
   walletAccountsAtom,
@@ -6,8 +7,8 @@ const createWalletAccountsReport = ({
   multipleWalletAccountsEnabledAtom,
 }) => ({
   namespace: 'walletAccounts',
-  export: async ({ walletExists } = Object.create(null)) => {
-    if (!walletExists) return null
+  export: async ({ walletExists, isLocked } = Object.create(null)) => {
+    if (!walletExists || isLocked) return null
 
     const [walletAccounts, configuredActiveWalletAccount, multipleWalletAccountsEnabled] =
       await Promise.all([
@@ -24,6 +25,22 @@ const createWalletAccountsReport = ({
       multipleWalletAccountsEnabled,
     }
   },
+  getSchema: memoize(() => {
+    // { [walletAccount]: { index: 0, source: 'exodus', enabled: true } }
+    const redactedWalletAccountSchema = z.record(
+      z.string(),
+      z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])).optional()
+    )
+
+    return z
+      .object({
+        data: redactedWalletAccountSchema,
+        configuredActiveWalletAccount: z.string().nullable(),
+        multipleWalletAccountsEnabled: z.boolean().optional(),
+      })
+      .strict()
+      .nullable()
+  }),
 })
 
 const walletAccountsReportDefinition = {

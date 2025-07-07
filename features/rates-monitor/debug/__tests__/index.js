@@ -1,6 +1,6 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 
-import ratesDebugDefinition from '..'
+import ratesDebugDefinition from '../index.js'
 
 const USD_BTC_INITIAL_DATA = {
   price: 30_000,

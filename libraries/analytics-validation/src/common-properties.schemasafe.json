@@ -46,7 +46,7 @@
     "app_version": {
       "type": "string",
       "format": "semver-string",
-      "maxLength": 10,
+      "maxLength": 32,
       "$comment": "Max length is arbitrary"
     },
     "account_source": {
@@ -334,6 +334,13 @@
     "lightning_btc_balance_usd": {
       "type": "number",
       "minimum": 0
+    },
+    "xmr_balance": {
+      "type": "number",
+      "minimum": 0
+    },
+    "xmr_balance_usd": {
+      "type": "number"
     }
   }
 }

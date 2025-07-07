@@ -1,3 +1,5 @@
+import { WalletAccount } from '@exodus/models'
+import { set } from '@exodus/basic-utils'
 import ms from 'ms'
 
 export const calculateDynamicInterval = ({
@@ -6,6 +8,8 @@ export const calculateDynamicInterval = ({
   txsCount,
   emptyNftsMultiplier,
   emptyTxsMultiplier,
+  network,
+  networkMultipliers,
 }) => {
   let adjustedInterval = baseInterval
 
@@ -20,6 +24,11 @@ export const calculateDynamicInterval = ({
 
   if (txsCount === 0) {
     adjustedInterval *= emptyTxsMultiplier
+  }
+
+  // Apply optional network-specific multiplier
+  if (network && typeof networkMultipliers?.[network] === 'number') {
+    adjustedInterval *= networkMultipliers[network]
   }
 
   return adjustedInterval
@@ -48,4 +57,20 @@ export const handleNftsOnImport = async ({ nfts }, { nftsModule, nftsConfigAtom,
   if (nftsConfigToUpdate.length > 0) {
     await nftsModule.upsertConfigs(nftsConfigToUpdate)
   }
+}
+
+export const doesWalletAccountSupportNFTs = (walletAccount) =>
+  walletAccount.isSoftware || walletAccount.source === WalletAccount.LEDGER_SRC
+
+export const updateNetworkFetchStatus = async ({ atom, network, walletAccountName, type }) => {
+  await atom.set((state) => {
+    const newState = { ...state }
+    set(newState, ['fetchState', network, walletAccountName, `${type}PreviousFetch`], Date.now())
+    return newState
+  })
+}
+
+export const getFetchStatus = async ({ atom, network, walletAccountName, type }) => {
+  const state = await atom.get()
+  return state?.fetchState?.[network]?.[walletAccountName]?.[`${type}PreviousFetch`] || 0
 }

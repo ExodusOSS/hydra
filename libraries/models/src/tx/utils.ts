@@ -74,6 +74,7 @@ export function currenciesForAsset(asset: Asset) {
 
 export const safeFields = [
   'txId',
+  'data',
   'date',
   'confirmations',
   'from',

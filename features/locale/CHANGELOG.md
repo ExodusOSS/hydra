@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/locale@2.4.0...@exodus/locale@2.5.0) (2025-04-24)
+
+### Features
+
+- feat(locale): loaded state for currency/language locales (#12064)
+
+## [2.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/locale@2.3.0...@exodus/locale@2.4.0) (2025-04-21)
+
+### Features
+
+- feat: store language in fusion (#11992)
+
 ## [2.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/locale@2.2.2...@exodus/locale@2.3.0) (2024-12-06)
 
 ### Features

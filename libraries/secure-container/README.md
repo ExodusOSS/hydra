@@ -1,18 +1,12 @@
-secure-container
-================
+# secure-container
 
-[![Build Status](https://travis-ci.org/ExodusMovement/secure-container.svg?branch=master)](https://travis-ci.org/ExodusMovement/secure-container)
+## Install
 
+```sh
+npm i --save secure-container
+```
 
-Install
--------
-
-    npm i --save secure-container
-
-
-
-API
------
+## API
 
 ### Main Module
 
@@ -20,13 +14,9 @@ This is the main module most users should use; other modules are for advanced us
 
 ```js
 import * as seco from 'secure-container'
-// OR
-const seco = require('secure-container')
 ```
 
-#### `seco.encrypt()`
-
-`encrypt(data, options)`
+#### `async seco.encrypt(data, options)`
 
 - `data` (String | Buffer) Data to encrypt
 - `options` (Object)
@@ -45,9 +35,7 @@ Returns an Object that contains:
 - `blobKey` (Buffer)
 - `metadata` (Object)
 
-#### `seco.decrypt()`
-
-`decrypt(encryptedData, passphrase)`
+#### `async seco.decrypt(encryptedData, passphrase)`
 
 - `encryptedData` (Buffer) Data to decrypt
 - `passphrase` (String | Buffer) Passphrase to decrypt the data
@@ -62,9 +50,7 @@ Returns an Object that contains:
 ### `header` module
 
 ```js
-import * as header from 'secure-container/lib/header'
-// OR
-const header = require('secure-container/lib/header')
+import { header } from 'secure-container'
 ```
 
 #### `header.create(data)`
@@ -88,16 +74,14 @@ Decodes a header buffer and returns the Object.
 ### `metadata` module
 
 ```js
-import * as metadata from 'secure-container/lib/metadata'
-// OR
-const metadata = require('secure-container/lib/metadata')
+import { metadata } from 'secure-container'
 ```
 
 #### `metadata.create()`
 
 Create a metadata object. Returns an Object.
 
-#### `metadata.encryptBlobKey(metadata, passphrase, blobKey)`
+#### `async metadata.encryptBlobKey(metadata, passphrase, blobKey)`
 
 - `metadata` (Object) Metadata created with `metadata.create()`.
 - `passphrase` (String | Buffer)
@@ -113,7 +97,7 @@ Serialize a metadata object. Returns a Buffer.
 
 Takes a metadata buffer, decodes it, and returns an object.
 
-#### `metadata.decryptBlobKey(metadata, passphrase)`
+#### `async metadata.decryptBlobKey(metadata, passphrase)`
 
 - `metadata` (Object) Metadata with an encrypted blobKey.
 - `passphrase` (String | Buffer)
@@ -123,12 +107,10 @@ Returns `blobKey` as a buffer.
 ### `blob` module
 
 ```js
-import * as blob from 'secure-container/lib/blob'
-// OR
-const blob = require('secure-container/lib/blob')
+import { blob } from 'secure-container'
 ```
 
-#### `blob.encrypt(data, metadata, blobKey)`
+#### `async blob.encrypt(data, metadata, blobKey)`
 
 - `data` (Buffer) Data or message to encrypt.
 - `metadata` (Object) Metadata object.
@@ -139,7 +121,7 @@ Mutates `metadata`. Returns an object:
 - `blob` (Buffer) Encrypted data.
 - `blobKey` (Buffer) The `blobKey` you passed in.
 
-#### `blob.decrypt(blob, metadata, blobKey)`
+#### `async blob.decrypt(blob, metadata, blobKey)`
 
 - `blob` (Buffer) Encrypted data.
 - `metadata` (Object) Metadata object.
@@ -150,12 +132,10 @@ Returns the decrypted data as a buffer.
 ### `file` module
 
 ```js
-import * as file from 'secure-container/lib/file'
-// OR
-const file = require('secure-container/lib/file')
+import { file } from 'secure-container'
 ```
 
-#### `file.computeChecksum(metadata, blob)`
+#### `async file.computeChecksum(metadata, blob)`
 
 - `metadata` (Buffer) Metadata as a Buffer
 - `blob` (Buffer) Encrypted blob
@@ -176,8 +156,13 @@ Returns a buffer.
 
 The opposite of `file.encode()`. Takes a buffer and returns an object.
 
-File Format Description
------------
+#### `async file.checkContents(fileBuffer)`
+
+Performs `.decode()` and checks that the checksum matches.
+
+Return a boolean, `true` if checksum matched, `false` if not.
+
+## File Format Description
 
 This is the documentation for the binary structure of secure containers.
 
@@ -185,17 +170,17 @@ For clarity, we have split the documentation into four sections: `header`, `chec
 
 ### Header
 
-Size | Label | Description |
----- | ----- | ----------- |
-4 | `magic` | The magic header indicating the file type. Always `SECO`.
-4 | `version` | File format version. Currently `0`, stored as `UInt32BE`.
-4 | `reserved` | Reserved for future use.
-1 | `versionTagLength` | Length of `versionTag` as `UInt8`.
-`versionTagLength` | `versionTag` | Should be `'seco-v0-scrypt-aes'`.
-1 | `appNameLength` | Length of `appName` as `UInt8`.
-`appNameLength` | `appName` | Name of the application writing the file.
-1 | `appVersionLength` | Length of `appVersion` as `UInt8`.
-`appVersionLength` | `appVersion` | Version of the application writing the file.
+| Size               | Label              | Description                                               |
+| ------------------ | ------------------ | --------------------------------------------------------- |
+| 4                  | `magic`            | The magic header indicating the file type. Always `SECO`. |
+| 4                  | `version`          | File format version. Currently `0`, stored as `UInt32BE`. |
+| 4                  | `reserved`         | Reserved for future use.                                  |
+| 1                  | `versionTagLength` | Length of `versionTag` as `UInt8`.                        |
+| `versionTagLength` | `versionTag`       | Should be `'seco-v0-scrypt-aes'`.                         |
+| 1                  | `appNameLength`    | Length of `appName` as `UInt8`.                           |
+| `appNameLength`    | `appName`          | Name of the application writing the file.                 |
+| 1                  | `appVersionLength` | Length of `appVersion` as `UInt8`.                        |
+| `appVersionLength` | `appVersion`       | Version of the application writing the file.              |
 
 ### Checksum
 
@@ -207,22 +192,22 @@ Size | Label | Description |
 
 ### Metadata
 
-Size | Label | Description |
----- | ----- | ----------- |
-32 | `salt` | Scrypt salt.
-4 | `n` | Scrypt `n` parameter.
-4 | `r` | Scrypt `r` parameter.
-4 | `p` | Scrypt `p` parameter.
-32 | `cipher` | Currently `aes-256-gcm` stored as a zero-terminated C-string.
-12 | `iv` | `blobKey`'s `iv`.
-16 | `authTag` | `blobKey`'s `authTag`.
-32 | `key` | `blobKey`'s `key`.
-12 | `iv` | The `blob`'s `iv`.
-16 | `authTag` | The `blob`'s `authTag`.
+| Size | Label     | Description                                                   |
+| ---- | --------- | ------------------------------------------------------------- |
+| 32   | `salt`    | Scrypt salt.                                                  |
+| 4    | `n`       | Scrypt `n` parameter.                                         |
+| 4    | `r`       | Scrypt `r` parameter.                                         |
+| 4    | `p`       | Scrypt `p` parameter.                                         |
+| 32   | `cipher`  | Currently `aes-256-gcm` stored as a zero-terminated C-string. |
+| 12   | `iv`      | `blobKey`'s `iv`.                                             |
+| 16   | `authTag` | `blobKey`'s `authTag`.                                        |
+| 32   | `key`     | `blobKey`'s `key`.                                            |
+| 12   | `iv`      | The `blob`'s `iv`.                                            |
+| 16   | `authTag` | The `blob`'s `authTag`.                                       |
 
 ### Blob
 
-Size | Label | Description |
----- | ----- | ----------- |
-4 | `blobLength` | Length of `blob` as `UInt32BE`.
-`blobLength` | `blob` | Encrypted data.
+| Size         | Label        | Description                     |
+| ------------ | ------------ | ------------------------------- |
+| 4            | `blobLength` | Length of `blob` as `UInt32BE`. |
+| `blobLength` | `blob`       | Encrypted data.                 |

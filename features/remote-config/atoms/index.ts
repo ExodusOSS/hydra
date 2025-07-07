@@ -2,14 +2,12 @@ import { createInMemoryAtom } from '@exodus/atoms'
 import type { Definition } from '@exodus/dependency-types'
 
 export type RemoteConfigStatus = {
-  error: string | null
   remoteConfigUrl: string | null
   loaded: boolean
   gitHash: string | null
 }
 const initialState: RemoteConfigStatus = {
   remoteConfigUrl: null,
-  error: null,
   loaded: false,
   gitHash: null,
 }

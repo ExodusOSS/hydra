@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw'
 
-import { jsonResponse } from './utils'
+import { jsonResponse } from './utils.js'
 
 const crossProduct = ({ from, to, value }) => {
   return Object.fromEntries(

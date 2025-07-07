@@ -1,7 +1,7 @@
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
 describe('asset-sources', () => {
   let exodus
@@ -31,6 +31,8 @@ describe('asset-sources', () => {
     await exodus.application.unlock({ passphrase })
 
     await event
+
+    await exodus.application.stop()
   })
 
   test('api', async () => {
@@ -42,5 +44,7 @@ describe('asset-sources', () => {
     await expect(
       exodus.assetSources.isSupported({ assetName: 'bitcoin', walletAccount: 'exodus_0' })
     ).resolves.toEqual(true)
+
+    await exodus.application.stop()
   })
 })

@@ -1,6 +1,6 @@
-import { memoize } from 'lodash' // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
 import { createSelector } from 'reselect'
-import memoizeGetAssetPrice from './helpers/memoize-get-asset-price'
+import memoizeGetAssetPrice from './helpers/memoize-get-asset-price.js'
+import { memoize } from '@exodus/basic-utils'
 
 const createGetAssetDailyPriceSelector = {
   id: 'getAssetDailyPrice',

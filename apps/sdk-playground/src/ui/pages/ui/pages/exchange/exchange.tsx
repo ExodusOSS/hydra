@@ -2,7 +2,7 @@ import selectors from '@/ui/flux/selectors'
 import { ExchangeForm } from '@exodus/exchange-ui'
 import { useSelector } from 'react-redux'
 
-import Asset from './components/asset.js'
+import { FromAsset, ToAsset } from './components/asset.js'
 import AssetInput from './components/asset-input.js'
 import AssetValue from './components/asset-value.js'
 import FeeDetails from './components/fee-details.js'
@@ -52,7 +52,7 @@ const ExchangeUI = () => {
             />
             <div className="flex flex-col">
               <ExchangeForm.FromAssetLabel Component={FromAssetLabel} />
-              <ExchangeForm.FromAsset Component={Asset} onPress={handleAssetClick} />
+              <ExchangeForm.FromAsset Component={FromAsset} onPress={handleAssetClick} />
             </div>
 
             <div className="flex flex-1 flex-col">
@@ -70,7 +70,7 @@ const ExchangeUI = () => {
             />
             <div className="flex flex-col">
               <ExchangeForm.ToAssetLabel Component={ToAssetLabel} />
-              <ExchangeForm.ToAsset Component={Asset} onPress={handleAssetClick} />
+              <ExchangeForm.ToAsset Component={ToAsset} onPress={handleAssetClick} />
             </div>
 
             <div className="flex flex-1 flex-col">

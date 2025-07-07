@@ -1,13 +1,12 @@
-/* @flow */
-import * as scCrypto from './crypto'
+import * as scCrypto from './crypto.js'
 
-export function encrypt (message: Buffer, metadata: Object, blobKey: Buffer) {
-  const { authTag, iv, blob } = scCrypto.aesEncrypt(blobKey, message)
+export async function encrypt(message, metadata, blobKey) {
+  const { authTag, iv, blob } = await scCrypto.aesEncrypt(blobKey, message)
+  // eslint-disable-next-line @exodus/mutable/no-param-reassign-prop-only
   metadata.blob = { authTag, iv }
   return { blob, blobKey }
 }
 
-export function decrypt (blob: Buffer, metadata: Object, blobKey: Buffer): Buffer {
-  const message = scCrypto.aesDecrypt(blobKey, blob, metadata.blob)
-  return message
+export async function decrypt(blob, metadata, blobKey) {
+  return scCrypto.aesDecrypt(blobKey, blob, metadata.blob)
 }

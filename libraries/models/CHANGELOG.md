@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.14.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.13.0...@exodus/models@12.14.0) (2025-06-16)
+
+### Features
+
+- feat: add `data` to redacted JSON (#12730)
+
+## [12.13.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.12.1...@exodus/models@12.13.0) (2025-06-02)
+
+### Features
+
+- feat: add reverse order iterator to support getting absolute balance (#12722)
+
+## [12.12.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.12.0...@exodus/models@12.12.1) (2025-05-27)
+
+### Bug Fixes
+
+- chore: add clarityCursor in account-state reporting (#12689)
+
+## [12.12.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.11.0...@exodus/models@12.12.0) (2025-05-15)
+
+### Features
+
+- feat(orders): update to use .isInstance() (#12448)
+
+## [12.11.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.10.0...@exodus/models@12.11.0) (2025-05-13)
+
+### Features
+
+- feat(wallet-accounts): default ledger color and icon (#12426)
+
+## [12.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.9.0...@exodus/models@12.10.0) (2025-05-12)
+
+### Features
+
+- feat(fiat): add payment method to fiat order (#12329)
+
+## [12.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.8.2...@exodus/models@12.9.0) (2025-05-12)
+
+### Features
+
+- feat: add `VALID_SOURCES` static method (#12230)
+
+## [12.8.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.8.1...@exodus/models@12.8.2) (2025-03-24)
+
+### Bug Fixes
+
+- fix(fiat): update paypal order status from `initiated` to `in progress` (#11783)
+
 ## [12.8.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.8.0...@exodus/models@12.8.1) (2025-03-04)
 
 ### Bug Fixes

@@ -8,6 +8,7 @@ export type AnalyticsApiConfig = {
   }
   keyIdentifier?: KeyIdentifier
   installEventReportingUrl?: string
+  multiSeed?: boolean
 }
 
 declare const analytics: (config?: AnalyticsApiConfig) => {

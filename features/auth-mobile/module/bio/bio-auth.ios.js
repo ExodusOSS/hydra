@@ -1,4 +1,4 @@
-import { BiometryChangedError } from '../utils/errors'
+import { BiometryChangedError } from '../utils/errors.js'
 
 class BioAuth {
   #auth

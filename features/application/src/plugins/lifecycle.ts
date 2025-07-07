@@ -5,12 +5,13 @@ import type { LockHistoryEntry } from '../utils/types.js'
 import type { Definition } from '@exodus/dependency-types'
 
 type Params = {
-  port: Emitter<string, boolean | number | LockHistoryEntry>
+  port: Emitter<string, boolean | number | LockHistoryEntry | string>
   lockedAtom: ReadonlyAtom<boolean>
   lockHistoryAtom: ReadonlyAtom<LockHistoryEntry>
   restoreAtom: Atom<boolean>
   backedUpAtom: Atom<boolean | undefined>
   autoLockTimerAtom: Atom<number | undefined>
+  walletCreatedAtAtom: Atom<string | undefined>
 }
 
 const applicationLifecyclePlugin = ({
@@ -20,6 +21,7 @@ const applicationLifecyclePlugin = ({
   restoreAtom,
   backedUpAtom,
   autoLockTimerAtom,
+  walletCreatedAtAtom,
 }: Params) => {
   const observers = [
     createAtomObserver({ port, atom: lockedAtom, event: 'locked' }),
@@ -27,6 +29,7 @@ const applicationLifecyclePlugin = ({
     createAtomObserver({ port, atom: restoreAtom, event: 'restore' }),
     createAtomObserver({ port, atom: backedUpAtom, event: 'backedUp' }),
     createAtomObserver({ port, atom: autoLockTimerAtom, event: 'autoLockTimer' }),
+    createAtomObserver({ port, atom: walletCreatedAtAtom, event: 'walletCreatedAt' }),
   ]
 
   const onStart = ({ isRestoring }: { isRestoring: boolean }) => {
@@ -72,6 +75,7 @@ const applicationLifecyclePluginDefinition = {
     'restoreAtom',
     'backedUpAtom',
     'autoLockTimerAtom',
+    'walletCreatedAtAtom',
   ],
   public: true,
 } as const satisfies Definition

@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('hasNfts', () => {
   it('should return false if not loaded', () => {

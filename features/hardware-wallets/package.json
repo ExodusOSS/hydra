@@ -1,6 +1,6 @@
 {
   "name": "@exodus/hardware-wallets",
-  "version": "2.0.1",
+  "version": "3.0.1",
   "description": "An Exodus SDK feature that provides a high level abstraction for interacting with hardware wallet devices",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/hardware-wallets",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Ahardware-wallets"
   },
@@ -30,14 +30,16 @@
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.2.0",
-    "@exodus/bip32": "^3.3.0",
+    "@exodus/bip32": "^4.0.2",
     "@exodus/crypto": "^1.0.0-rc.14",
     "@exodus/hw-common": "^3.1.0",
-    "@exodus/models": "^12.0.1",
+    "@exodus/models": "^12.11.0",
     "@exodus/redux-dependency-injection": "^4.0.0",
     "@exodus/wild-emitter": "^1.1.0",
     "delay": "^5.0.0",
+    "make-concurrent": "^5.4.0",
     "minimalistic-assert": "^1.0.1",
+    "p-defer": "^4.0.1",
     "reselect": "^3.0.1"
   },
   "devDependencies": {
@@ -45,7 +47,9 @@
     "@exodus/key-identifier": "^1.3.0",
     "@exodus/logger": "workspace:^",
     "@exodus/public-key-provider": "workspace:^",
-    "p-defer": "^4.0.1",
     "redux": "^4.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

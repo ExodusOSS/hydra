@@ -1,8 +1,8 @@
 {
   "name": "@exodus/multi-account-redux",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/multi-account-redux",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "author": "Exodus Movement, Inc.",
   "description": "Util for redux slices that store data per-asset per-walletAccount",
   "bugs": {
@@ -14,12 +14,12 @@
   },
   "scripts": {
     "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint . --ignore-path ../../.gitignore",
+    "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
     "@exodus/basic-utils": "^3.0.1",
-    "@exodus/models": "^12.0.1",
+    "@exodus/models": "^12.3.0",
     "@exodus/redux-dependency-injection": "^4.0.0",
     "lodash": "^4.17.21",
     "reselect": "^3.0.1"
@@ -37,5 +37,8 @@
     "@exodus/assets-feature": "workspace:^",
     "@exodus/wallet-accounts": "workspace:^",
     "redux": "^4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

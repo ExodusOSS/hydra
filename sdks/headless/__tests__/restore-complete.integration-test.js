@@ -75,6 +75,8 @@ describe('restore-complete', () => {
     await expectEthereumRestored
 
     await expectRestoreComplete
+
+    await exodus.application.stop()
   })
 
   test('should restore a wallet after restart', async () => {
@@ -137,6 +139,9 @@ describe('restore-complete', () => {
     await expectEthereumRestored
 
     await expectRestoreComplete
+
+    await newExodus.application.stop()
+    await exodus.application.stop()
   })
 
   test('should continue restore after user restart in the middle of process', async () => {
@@ -148,6 +153,7 @@ describe('restore-complete', () => {
     await exodus.application.unlock({ passphrase })
     await exodus.application.import({ passphrase, mnemonic })
 
+    const newInstances = []
     const restartWallet = async () => {
       const newPort = new Emitter()
       const listener = jest.fn()
@@ -161,6 +167,8 @@ describe('restore-complete', () => {
       await newExodus.application.load()
       await expect(newExodus.wallet.exists()).resolves.toBe(true)
       await newExodus.application.unlock({ passphrase })
+
+      newInstances.push(newExodus)
 
       return {
         listener,
@@ -226,5 +234,8 @@ describe('restore-complete', () => {
       ],
       [{}],
     ])
+
+    for (const instance of newInstances) await instance.application.stop()
+    await exodus.application.stop()
   })
 })

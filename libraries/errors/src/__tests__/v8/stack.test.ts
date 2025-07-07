@@ -1,4 +1,4 @@
-import parseStackTrace from '../../stack.js'
+import parseStackTrace, { captureStackTrace } from '../../stack.js'
 import { extendedExpect } from '../setup.js'
 
 function foo() {
@@ -22,4 +22,21 @@ it(`gets stack trace for v8`, () => {
   expect({ ...stack }).toMatchSnapshot({
     ...Array.from({ length: stack.length }).fill(callSiteMatcher),
   })
+})
+
+it('parseStackTrace should return undefined if error.stack was accessed before', () => {
+  const err = new Error('stuff')
+  void err.stack
+
+  const stack = parseStackTrace(err)!
+  expect(stack).toEqual(undefined)
+})
+
+it('parseStackTrace should capture stack trace even if error.stack was accessed before', () => {
+  const err2 = new Error('stuff')
+  captureStackTrace(err2)
+  void err2.stack
+
+  expect(parseStackTrace(err2)).toBeInstanceOf(Array)
+  expect(parseStackTrace(err2)!.length).toBeGreaterThan(0)
 })

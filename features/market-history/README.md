@@ -10,7 +10,7 @@ yarn add @exodus/market-history
 
 ## Usage
 
-This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md).
+This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/development/using-the-sdk.md).
 
 ### Play with it
 
@@ -20,7 +20,7 @@ This feature is designed to be used together with `@exodus/headless`. See [using
 
 ### API Side
 
-See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK.
+See [using the sdk](../../docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK.
 
 If you're building a feature that requires historical asset prices, add a dependency on the `marketHistoryAtom`, which stores data in the following shape:
 
@@ -69,7 +69,7 @@ await exodus.marketHistory.fetchAssetPricesFromDate({
 
 ### UI Side
 
-See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md#events) for more details on basic UI-side setup.
+See [using the sdk](../../docs/development/using-the-sdk.md#events) for more details on basic UI-side setup.
 
 ```js
 import selectors from '~/ui/flux/selectors'

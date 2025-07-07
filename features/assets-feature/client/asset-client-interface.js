@@ -7,6 +7,7 @@ const { isEmpty } = lodash
 class AssetClientInterface {
   #addressProvider
   #assetsModule
+  #assetSources
   #availableAssetNamesAtom
   #blockchainMetadata
   #config
@@ -20,6 +21,7 @@ class AssetClientInterface {
   constructor({
     addressProvider,
     assetsModule,
+    assetSources,
     availableAssetNamesAtom,
     blockchainMetadata,
     createLogger,
@@ -32,6 +34,7 @@ class AssetClientInterface {
   }) {
     this.#addressProvider = addressProvider
     this.#assetsModule = assetsModule
+    this.#assetSources = assetSources
     this.#availableAssetNamesAtom = availableAssetNamesAtom
     this.#blockchainMetadata = blockchainMetadata
     this.#config = config
@@ -115,6 +118,11 @@ class AssetClientInterface {
     accountState,
     batch = this.#blockchainMetadata.batch(),
   }) => {
+    const asset = this.#assetsModule.getAsset(assetName)
+    if (!asset.baseAsset.api.features.accountState) {
+      return batch
+    }
+
     // merge mem to keep the previous accountMem behavior
     if (!isEmpty(newData?.mem) && (!accountState || accountState.mem)) {
       newData = { ...newData, mem: { ...accountState?.mem, ...newData.mem } }
@@ -163,12 +171,8 @@ class AssetClientInterface {
     assert(asset, `assetName ${assetName} is not supported`)
     assert(walletAccountInstance, `walletAccountInstance ${walletAccount} is not available`)
 
-    const baseAsset = asset.baseAsset
-    const out = {
-      confirmationsNumber: baseAsset.api?.getConfirmationsNumber
-        ? baseAsset.api.getConfirmationsNumber()
-        : 1,
-    }
+    const confirmationsNumber = await this.getConfirmationsNumber({ assetName })
+    const out = { confirmationsNumber }
 
     const gapLimit =
       this.#config?.compatibilityModeGapLimits?.[walletAccountInstance.compatibilityMode]
@@ -220,12 +224,17 @@ class AssetClientInterface {
     addressIndex = 0,
     chainIndex = 0,
   }) => {
+    const [walletAccountInstance, defaultPurpose] = await Promise.all([
+      this.#getWalletAccount(walletAccount),
+      purpose === undefined
+        ? this.#assetSources.getDefaultPurpose({ assetName, walletAccount })
+        : undefined,
+    ])
     if (purpose === undefined) {
-      ;[purpose] = await this.getSupportedPurposes({ assetName, walletAccount })
+      purpose = defaultPurpose
     }
 
     const asset = this.#assetsModule.getAsset(assetName)
-    const walletAccountInstance = await this.#getWalletAccount(walletAccount)
     const keyIdentifier = asset.baseAsset.api.getKeyIdentifier({
       purpose,
       accountIndex: walletAccountInstance.index,
@@ -241,18 +250,18 @@ class AssetClientInterface {
   }
 
   getExtendedPublicKey = async ({ assetName, walletAccount, purpose }) => {
-    const asset = this.#assetsModule.getAsset(assetName)
-    const [walletAccountInstance, purposes] = await Promise.all([
+    const [walletAccountInstance, defaultPurpose] = await Promise.all([
       this.#getWalletAccount(walletAccount),
       purpose === undefined
-        ? await this.getSupportedPurposes({ assetName, walletAccount })
+        ? this.#assetSources.getDefaultPurpose({ assetName, walletAccount })
         : undefined,
     ])
 
     if (purpose === undefined) {
-      ;[purpose] = purposes
+      purpose = defaultPurpose
     }
 
+    const asset = this.#assetsModule.getAsset(assetName)
     const keyIdentifier = asset.baseAsset.api.getKeyIdentifier({
       purpose,
       accountIndex: walletAccountInstance.index,
@@ -308,10 +317,7 @@ class AssetClientInterface {
   }
 
   getSupportedPurposes = async ({ assetName, walletAccount }) => {
-    return this.#addressProvider.getSupportedPurposes({
-      assetName,
-      walletAccount: await this.#getWalletAccount(walletAccount),
-    })
+    return this.#assetSources.getSupportedPurposes({ assetName, walletAccount })
   }
 
   getUnusedAddressIndexes = async ({ assetName, walletAccount, highestUnusedIndexes }) => {
@@ -322,7 +328,7 @@ class AssetClientInterface {
     })
   }
 
-  saveUnusedAddressIndexes = async () => {
+  saveUnusedAddressIndexes = async ({ assetName, walletAccount, changedUnusedAddressIndexes }) => {
     // no op!! getUnusedAddressIndexes loads from tx log, not from storage
   }
 

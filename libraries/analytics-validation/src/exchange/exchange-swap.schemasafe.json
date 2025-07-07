@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "ExchangeSwap"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [
+        "is_cross_portfolio",
+        "portfolio_from_account_source",
+        "portfolio_to_account_source",
+        "user_amount_from_usd"
+      ],
+      "properties": {
+        "is_cross_portfolio": {
+          "type": "boolean"
+        },
+        "portfolio_from_account_source": {
+          "type": "string"
+        },
+        "portfolio_to_account_source": {
+          "type": "string"
+        },
+        "user_amount_from_usd": {
+          "type": "number"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

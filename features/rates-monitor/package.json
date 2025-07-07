@@ -1,6 +1,6 @@
 {
   "name": "@exodus/rates-monitor",
-  "version": "4.9.1",
+  "version": "4.14.3",
   "license": "MIT",
   "author": "Exodus Movement, Inc.",
   "description": "Fetches asset prices in fiat on a timer",
@@ -13,10 +13,11 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "scripts": {
-    "test": "run -T exodus-test --jest --esbuild",
+    "test": "run -T exodus-test --jest",
     "lint": "run -T eslint -c ../../eslint.config.mjs",
     "lint:fix": "yarn lint --fix"
   },
+  "type": "module",
   "main": "index.js",
   "files": [
     "api",
@@ -34,21 +35,21 @@
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
-    "lodash": "npm:@exodus/lodash@^4.17.21-exodus.2",
+    "lodash": "^4.17.21",
     "make-concurrent": "^5.4.0",
     "minimalistic-assert": "^1.0.1",
     "ms": "^0.7.1",
     "reselect": "^3.0.1"
   },
   "devDependencies": {
-    "@exodus/assets": "^8.0.94",
+    "@exodus/assets": "^11.0.0",
     "@exodus/assets-feature": "workspace:^",
-    "@exodus/bitcoin-meta": "^1.0.1",
-    "@exodus/combined-assets-meta": "^1.2.6-alpha-1",
-    "@exodus/ethereum-meta": "^1.0.30",
+    "@exodus/bitcoin-meta": "^2.0.0",
+    "@exodus/combined-assets-meta": "^3.3.2",
+    "@exodus/ethereum-meta": "^2.4.1",
     "@exodus/locale": "workspace:^",
     "@exodus/redux-dependency-injection": "workspace:^",
-    "@exodus/solana-meta": "^1.0.2",
+    "@exodus/solana-meta": "^2.0.0",
     "redux": "^4.0.0"
   },
   "publishConfig": {

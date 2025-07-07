@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <a xlink:href="javascript:alert('Hacked!')">
+    <text x="20" y="20" font-size="20">Click me</text>
+  </a>
+</svg>

@@ -1,6 +1,6 @@
 import { Tx } from '@exodus/models'
 
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('createBatchedAssetSourceByIdSelector', () => {
   it('should return activity txs by id', () => {

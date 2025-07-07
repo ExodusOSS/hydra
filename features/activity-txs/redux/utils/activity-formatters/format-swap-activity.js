@@ -1,5 +1,5 @@
-import { getSharedProps } from './get-shared-props'
-import { TX_TYPES } from '../../constants/tx-types'
+import { getSharedProps } from './get-shared-props.js'
+import { TX_TYPES } from '../../constants/tx-types.js'
 
 const FINAL_ORDER_STATUS = {
   inProgress: 'in-progress',

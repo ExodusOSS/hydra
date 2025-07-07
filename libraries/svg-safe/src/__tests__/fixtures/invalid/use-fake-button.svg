@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <rect id="fake-btn" x="10" y="10" width="100" height="30" fill="red" />
+  <use href="#fake-btn" x="0" y="0" />
+</svg>

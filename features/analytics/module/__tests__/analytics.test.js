@@ -1,7 +1,7 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 import createInMemoryStorage from '@exodus/storage-memory'
 
-import analyticsDefinition from '..'
+import analyticsDefinition from '../index.js'
 
 const { factory: createAnalytics } = analyticsDefinition
 
@@ -73,7 +73,7 @@ describe('Analytics module', () => {
       analytics.setUserId('userId')
       analytics.flush()
 
-      await new Promise(process.nextTick) // to wait for the async `track` function to complete
+      await new Promise((resolve) => setTimeout(resolve, 0)) // to wait for the async `track` function to complete
 
       expect(mockTracker.track).toBeCalledWith(event)
 
@@ -87,7 +87,7 @@ describe('Analytics module', () => {
       analytics.setUserId('userId')
       analytics.flush()
 
-      await new Promise(process.nextTick) // to wait for the async `track` function to complete
+      await new Promise((resolve) => setTimeout(resolve, 0)) // to wait for the async `track` function to complete
 
       expect(mockTracker.identify).toBeCalledWith(traits)
 
@@ -101,7 +101,7 @@ describe('Analytics module', () => {
       analytics.setUserId('userId')
       analytics.flush()
 
-      await new Promise(process.nextTick) // to wait for the async `track` function to complete
+      await new Promise((resolve) => setTimeout(resolve, 0)) // to wait for the async `track` function to complete
 
       expect(fetch).toHaveBeenCalledWith(
         new URL(installEventReportingUrl),
@@ -249,7 +249,7 @@ describe('Analytics module', () => {
       expect(mockTracker.track).not.toBeCalled()
 
       await analytics.flush()
-      await new Promise(process.nextTick)
+      await new Promise((resolve) => setTimeout(resolve, 0))
 
       expect(mockTracker.track).toBeCalledWith(eventWithTimestamp)
     })

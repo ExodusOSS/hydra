@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-log-monitors@2.5.1...@exodus/tx-log-monitors@2.5.2) (2025-06-05)
+
+### Bug Fixes
+
+- fix(tx-monitors): make update interface uniform (#12833)
+
+## [2.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-log-monitors@2.5.0...@exodus/tx-log-monitors@2.5.1) (2025-05-15)
+
+### Bug Fixes
+
+- fix: stop stray timeout in tx-log-monitors (#12456)
+
+## [2.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-log-monitors@2.4.2...@exodus/tx-log-monitors@2.5.0) (2025-05-06)
+
+### Features
+
+- feat: make tx-log-monitors proper ESM (#12188)
+
+## [2.4.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-log-monitors@2.4.1...@exodus/tx-log-monitors@2.4.2) (2025-04-04)
+
+### Bug Fixes
+
+- fix: lodash and events imports (#11954)
+
 ## [2.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-log-monitors@2.4.0...@exodus/tx-log-monitors@2.4.1) (2024-12-06)
 
 ### License

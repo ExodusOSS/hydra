@@ -1,6 +1,6 @@
 import { WalletAccount } from '@exodus/models'
 
-import createLogger from './adapters/create-logger'
+import createLogger from './adapters/create-logger.js'
 
 // eslint-disable-next-line @exodus/export-default/named
 export default {
@@ -95,5 +95,27 @@ export default {
     segmentConfig: {
       apiKey: '<dummy api key>',
     },
+  },
+  fiatRamp: {
+    assets: {
+      USD: {
+        name: 'USD',
+        providers: {
+          moonpay: { isBuySupported: true, isSellSupported: true },
+        },
+      },
+    },
+    countries: {
+      US: {
+        code: 'US',
+        name: 'United States',
+        providers: {
+          moonpay: { isBuySupported: true, isSellSupported: true },
+        },
+      },
+    },
+  },
+  reporting: {
+    exportTimeout: 10_000,
   },
 }

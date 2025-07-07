@@ -1,6 +1,6 @@
 {
   "name": "@exodus/enabled-assets",
-  "version": "10.9.0",
+  "version": "10.10.1",
   "description": "This Exodus SDK feature provides a way to enable/disable assets, as well as auto-enable them under certain conditions, e.g. when the asset is involved in a purchase/sale/exchange.",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -35,6 +35,7 @@
     "@exodus/asset-legacy-token-name-mapping": "^1.0.0",
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
+    "@exodus/zod": "^3.24.2",
     "lodash": "^4.17.21",
     "make-concurrent": "^5.3.0",
     "reselect": "^3.0.1"

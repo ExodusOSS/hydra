@@ -1,7 +1,7 @@
-import id from './id'
-import initialState from './initial-state'
-import eventReducers from './event-reducers'
-import selectorDefinitions from './selectors'
+import id from './id.js'
+import initialState from './initial-state.js'
+import eventReducers from './event-reducers.js'
+import selectorDefinitions from './selectors/index.js'
 
 const nftsReduxDefinition = {
   id,

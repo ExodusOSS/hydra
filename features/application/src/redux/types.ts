@@ -9,4 +9,5 @@ export type State = {
   isRestoring: boolean
   lockHistory: LockHistoryEntry[]
   autoLockTimer: null | number
+  walletCreatedAt: null | string
 }

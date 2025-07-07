@@ -1,4 +1,6 @@
-import { get, memoize } from 'lodash' // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
+import lodash from 'lodash'
+
+const { get, memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
 const resultFunction = (personalNotes) =>
   memoize((batchId) => {

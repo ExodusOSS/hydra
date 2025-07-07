@@ -1,26 +1,27 @@
-import { getSeedId } from '@exodus/keychain/module/crypto/seed-id'
+import { mnemonicToSeed } from '@exodus/bip39'
+import { getSeedId } from '@exodus/keychain/module/crypto/seed-id.js'
 import { WalletAccount } from '@exodus/models'
 import Emitter from '@exodus/wild-emitter'
-import { mnemonicToSeed } from 'bip39'
 
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
-describe('wallet-accounts', () => {
+describe('wallet-accounts', async () => {
   /** @type {import('../src/index').ExodusApi} */
   let exodus
   let adapters
   let port
+  let reportNode
 
   const mnemonic = 'menu memory fury language physical wonder dog valid smart edge decrease worth'
   const otherMnemonic = 'excuse fly local lyrics tattoo hub way range globe put supreme glass'
-  const seed = mnemonicToSeed(mnemonic)
+  const seed = await mnemonicToSeed({ mnemonic })
   const seedId = getSeedId(seed)
   const passphrase = 'my-password-manager-generated-this'
 
-  beforeEach(async () => {
+  const setup = async ({ importWallet = true } = {}) => {
     adapters = createAdapters()
 
     port = adapters.port
@@ -28,11 +29,17 @@ describe('wallet-accounts', () => {
     const container = createExodus({ adapters, config })
 
     exodus = container.resolve()
+    reportNode = container.getByType('report').walletAccountsReport
 
     await exodus.application.start()
-    await exodus.application.import({ mnemonic, passphrase })
-    await exodus.application.unlock({ passphrase })
-  })
+    if (importWallet) {
+      await exodus.application.import({ mnemonic, passphrase })
+      await exodus.application.unlock({ passphrase })
+    }
+  }
+
+  beforeEach(setup)
+  afterEach(() => exodus.application.stop())
 
   test('should default to 1 walletAccount', async () => {
     await expect(exodus.walletAccounts.getEnabled()).resolves.toEqual({
@@ -124,6 +131,8 @@ describe('wallet-accounts', () => {
     const enabledAccounts = await newExodus.walletAccounts.getEnabled()
     expect(Object.keys(enabledAccounts).length).toEqual(1)
     await expect(Object.keys(enabledAccounts)[0]).toEqual(WalletAccount.DEFAULT_NAME)
+
+    await newExodus.application.stop()
   })
 
   test('addSeed should auto-create a walletAccount', async () => {
@@ -148,6 +157,7 @@ describe('wallet-accounts', () => {
   })
 
   test('create updates seedId on default wallet account', async () => {
+    await exodus.application.stop() // stop the instance from beforeEach
     const container = createExodus({ adapters: createAdapters(), config })
 
     exodus = container.resolve()
@@ -160,6 +170,24 @@ describe('wallet-accounts', () => {
       exodus_0: expect.objectContaining({
         seedId: 'c3d6347aa044325cbad76c524f1b3cacda024c3c',
       }),
+    })
+  })
+
+  test('should successfully export report (pre-wallet-exists)', async () => {
+    await exodus.application.stop() // stop the instance from beforeEach
+    await setup({ importWallet: false })
+
+    await expect(exodus.wallet.exists()).resolves.toBe(false)
+    await expect(exodus.reporting.export()).resolves.toMatchObject({
+      walletAccounts: await reportNode.export({ walletExists: await exodus.wallet.exists() }),
+    })
+  })
+
+  test('should successfully export report (post-wallet-exists)', async () => {
+    await exodus.application.unlock({ passphrase })
+    await expect(exodus.wallet.exists()).resolves.toBe(true)
+    await expect(exodus.reporting.export()).resolves.toMatchObject({
+      walletAccounts: await reportNode.export({ walletExists: await exodus.wallet.exists() }),
     })
   })
 })

@@ -1,5 +1,5 @@
-import createNftsAnalyticsPlugin from './analytics'
-import createNftsLifecyclePlugin from './lifecycle'
+import createNftsAnalyticsPlugin from './analytics.js'
+import createNftsLifecyclePlugin from './lifecycle.js'
 
 export const nftsLifecyclePluginDefinition = {
   id: 'nftsLifecyclePlugin',

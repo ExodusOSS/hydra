@@ -1,6 +1,6 @@
 export const formatTransactionOutput = ({
   tx,
-  isWithdrawal,
+  type,
   asset,
   coinAmount,
   coinCurrency,
@@ -14,23 +14,27 @@ export const formatTransactionOutput = ({
     typeof coinAmount?.toDefaultNumber === 'function' ? coinAmount.toDefaultNumber() : ''
   const feeAmountOutput =
     typeof feeAmount?.toDefaultNumber === 'function' ? feeAmount.toDefaultNumber() : ''
+  const isWithdrawal = type === 'withdrawal'
+  const isStaked = type === 'staked'
+  const isUnstakedOrClaimed = ['unstaked', 'claimed'].includes(type)
 
   return {
     date: tx.date,
-    type: `${isWithdrawal ? 'withdrawal' : 'deposit'}${tx.error ? ' (failed)' : ''}`,
+    type: `${type}${tx.error ? ' (failed)' : ''}`,
     fromPortfolio: tx.sent ? walletAccount : oppositeWalletAccount,
     toPortfolio: tx.sent ? oppositeWalletAccount : walletAccount,
-    outAmount: isWithdrawal ? coinAmountOutput : '',
-    outCurrency: isWithdrawal ? coinCurrency : '',
+    outAmount: isWithdrawal || isStaked ? coinAmountOutput : '',
+    outCurrency: isWithdrawal || isStaked ? coinCurrency : '',
     feeAmount: isWithdrawal || !feeAmount?.isZero ? feeAmountOutput : '',
     feeCurrency: isWithdrawal || !feeAmount?.isZero ? feeCurrency : '',
+    fromAddress: [tx.from].flat().join(' | '),
     toAddress: [tx.to].flat().join(' | '),
-    outTxId: isWithdrawal ? tx.txId : '',
-    outTxUrl: isWithdrawal ? asset.blockExplorer.txUrl(tx.txId) : '',
-    inAmount: isWithdrawal ? '' : coinAmountOutput,
-    inCurrency: isWithdrawal ? '' : coinCurrency,
-    inTxId: isWithdrawal ? '' : tx.txId,
-    inTxUrl: isWithdrawal ? '' : asset.blockExplorer.txUrl(tx.txId),
+    outTxId: isWithdrawal || isStaked ? tx.txId : '',
+    outTxUrl: isWithdrawal || isStaked ? asset.blockExplorer.txUrl(tx.txId) : '',
+    inAmount: isWithdrawal || isUnstakedOrClaimed ? '' : coinAmountOutput,
+    inCurrency: isWithdrawal || isUnstakedOrClaimed ? '' : coinCurrency,
+    inTxId: isWithdrawal || isUnstakedOrClaimed ? '' : tx.txId,
+    inTxUrl: isWithdrawal || isUnstakedOrClaimed ? '' : asset.blockExplorer.txUrl(tx.txId),
     personalNote: personalNote?.getMessage({ to: tx.to }),
 
     tokens: tx.tokens.join(' '),

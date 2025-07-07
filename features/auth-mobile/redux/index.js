@@ -1,4 +1,4 @@
-import selectorDefinitions from './selectors'
+import selectorDefinitions from './selectors.js'
 
 const initialState = {
   loading: true,

@@ -1,6 +1,7 @@
 import { createKeyIdentifierForExodus } from '@exodus/key-ids'
-import KeyIdentifier from '../src/key-identifier.js'
 import { DerivationPath } from '@exodus/key-utils'
+
+import KeyIdentifier from '../src/key-identifier.js'
 
 describe('KeyIdentifier', () => {
   it('should fail on incorrect construction', () => {
@@ -56,6 +57,11 @@ describe('KeyIdentifier', () => {
         derivationAlgorithm: 'BIP32',
         assetName: 'ethereum',
         derivationPath: "m/44'/60'/0'/0/0",
+      },
+      {
+        derivationPath: "m/44'/1815'/0'/0/0",
+        derivationAlgorithm: 'BIP32',
+        keyType: 'cardanoByron',
       },
     ]
 

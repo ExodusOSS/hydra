@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect'
 import { memoize } from '@exodus/basic-utils'
-import { formattersByType } from '../utils/activity-formatters'
-import { formatUnindexedOrder } from '../utils/activity-formatters/format-swap-activity'
+import { formattersByType } from '../utils/activity-formatters/index.js'
+import { formatUnindexedOrder } from '../utils/activity-formatters/format-swap-activity.js'
 
 const EMPTY = Object.freeze([])
 
@@ -102,11 +102,16 @@ const createAssetSourceBaseActivitySelectorDefinition = {
               const orderIdsFromActivity = new Set(
                 activityResult.map((item) => item.order?.orderId)
               )
-              const ordersForIndexlessAssets = [...orderSet].filter(
-                (order) =>
-                  [order.fromAsset, order.toAsset].includes(assetName) &&
-                  order.exodusStatus !== 'syncing'
-              )
+              const ordersForIndexlessAssets = [...orderSet].filter((order) => {
+                const isFromAsset =
+                  order.fromAsset === assetName && order.fromWalletAccount === walletAccount
+                const isToAsset =
+                  order.toAsset === assetName && order.toWalletAccount === walletAccount
+
+                const shouldDisplay =
+                  isFromAsset || isToAsset || !order.fromWalletAccount || !order.toWalletAccount
+                return shouldDisplay && order.exodusStatus !== 'syncing'
+              })
 
               ordersForIndexlessAssets.forEach((order) => {
                 // Prevent dups by checking if this order already exists.

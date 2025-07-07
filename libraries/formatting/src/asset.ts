@@ -61,12 +61,12 @@ export function formatAssetAmount(
   // We want to crop number to N digits with rounding
   const roundedToDecimal = formatCurrency(absAmount, {
     useGrouping: false,
-    minFraction: 0,
-    maxFraction: maxSignificant,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: maxSignificant,
   })
   const withMaxSignificant = formatCurrency(roundedToDecimal, {
     useGrouping,
-    maxSignificant: Math.max(maxSignificant, intLength), // don't round whole numbers
+    maximumSignificantDigits: Math.max(maxSignificant, intLength), // don't round whole numbers
   })
   if (convertDust && parseFloat(withMaxSignificant) === 0 && amount !== 0) {
     return '0'

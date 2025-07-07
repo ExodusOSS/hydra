@@ -1,37 +1,15 @@
-import { mapValues } from '@exodus/basic-utils'
-import { fetchHistoricalPrices, fetchPricesInterval } from '@exodus/price-api'
-import ms from 'ms'
-
-import { getAssetFromTicker, parseGranularity } from '../utils'
-import { combine, createInMemoryAtom, difference } from '@exodus/atoms'
 import dayjs from '@exodus/dayjs'
-import { byArguments as makeConcurrentByArguments } from 'make-concurrent'
+import delay from 'delay'
+import makeConcurrent, { byArguments as makeConcurrentByArguments } from 'make-concurrent'
+import ms from 'ms'
+import { createInMemoryAtom, difference } from '@exodus/atoms'
+import { getAssetFromTicker, parseGranularity } from '../utils.js'
+import fetchHistoricalPrices from './fetch-historical-prices.js'
 
 const CLEAR_MARKET_HISTORY_CACHE_KEY = 'clear-market-history-cache'
 const CLEAR_MARKET_HISTORY_CACHE_FROM_REMOTE_CONFIG_KEY =
   'clear-market-history-cache-from-remote-config'
 const MARKET_HISTORY_REFRESH_KEY = 'market-history-cache-refresh'
-
-const transformPriceEntries = (entries = []) => {
-  const closePrices = entries.map((entry) => [entry[0], entry[1].close])
-  return Object.fromEntries(closePrices)
-}
-
-const transformPricesByAssetName = (pricesByAssetName) =>
-  mapValues(pricesByAssetName, (entries) => transformPriceEntries(entries))
-
-const mergePricesInAtom = ({ prices, atomData, parsedGranularity, currency }) => {
-  return {
-    ...atomData,
-    [currency]: {
-      ...atomData[currency],
-      [parsedGranularity]: {
-        ...atomData[currency]?.[parsedGranularity],
-        ...prices,
-      },
-    },
-  }
-}
 
 // when provided cache version from local or remote config is different from stored on device we clear the cache and fetch new prices
 const _invalidateStorageCache = async ({
@@ -71,14 +49,73 @@ const getOldestTimestampFromCache = (cache) =>
   cache.length === 0 ? null : Math.min(...cache.map((item) => item[0]))
 
 const filterMapAssetDataFromServer = (data) =>
-  data
-    .filter((piece) => piece.close !== 0)
-    .map((piece) => [piece.time * 1000, { close: piece.close }])
+  data.filter((item) => item.close !== 0).map((item) => [item.time * 1000, { close: item.close }])
+
+const mapPricesForCache = (pricesMap, assetNames, assets) => {
+  const result = Object.create(null)
+  for (const assetName of assetNames) {
+    const assetPricesMap = pricesMap.get(assets[assetName].ticker)
+    result[assetName] = assetPricesMap ? [...assetPricesMap] : []
+  }
+
+  return result
+}
+
+const transformHistoricalPrices = (pricesMap, assetNames, assets) => {
+  const result = Object.create(null)
+  for (const assetName of assetNames) {
+    const assetPrices = pricesMap.get(assets[assetName].ticker)
+    if (assetPrices) {
+      const closePrices = Object.create(null)
+      // assetPrices is a Map, iterate it directly to avoid creating an intermediate array
+      for (const [time, priceData] of assetPrices.entries()) {
+        closePrices[time] = priceData.close
+      }
+
+      result[assetName] = closePrices
+    } else {
+      result[assetName] = Object.create(null)
+    }
+  }
+
+  return result
+}
+
+const delayWithJitter = (ms, jitter = 0, signal) =>
+  delay(Math.floor(ms + Math.random() * jitter), { signal })
+
+const setupPriceFetchInterval = async ({
+  func,
+  abortController,
+  granularity,
+  getJitter = () => 0,
+  delay = 0,
+  getCurrentTime = () => Date.now(),
+}) => {
+  while (abortController ? !abortController.signal.aborted : true) {
+    const now = getCurrentTime()
+    const untilEndOfPeriod = dayjs.utc(now).endOf(granularity).valueOf() - now
+
+    try {
+      await delayWithJitter(untilEndOfPeriod + delay, getJitter(), abortController?.signal)
+    } catch {
+      // aborted
+      break
+    }
+
+    try {
+      await func()
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
 
 class MarketHistoryMonitor {
   #pricingClient
   #currencyAtom
   #currency = null
+  #previouslyEnabledAssets = null
   #getCacheKey = getCacheKeyDefault
   #remoteConfigRefreshIntervalAtom = null
   #clearCacheAtom = null
@@ -90,6 +127,8 @@ class MarketHistoryMonitor {
   #logger = null
   #abortController = new AbortController()
   #synchronizedTime
+  #errorTracking
+  #atomListeners = []
 
   constructor({
     assetsModule,
@@ -105,6 +144,7 @@ class MarketHistoryMonitor {
     logger,
     config = Object.create(null),
     synchronizedTime,
+    errorTracking,
   }) {
     const { granularityRequestLimits } = config
     if (!granularityRequestLimits) {
@@ -114,6 +154,7 @@ class MarketHistoryMonitor {
     this.assetsModule = assetsModule
     this.storage = storage
     this.#pricingClient = pricingClient
+    this.#errorTracking = errorTracking
     this.#getCacheKey = getCacheKey
     this.#remoteConfigRefreshIntervalAtom = remoteConfigRefreshIntervalAtom
     this.#clearCacheAtom = clearCacheAtom
@@ -126,7 +167,7 @@ class MarketHistoryMonitor {
     this.#synchronizedTime = synchronizedTime
   }
 
-  #started = false
+  #isActive = false
 
   #setCache = async ({ currency, granularity, pricesByAssetName }) => {
     let hasChanges = false
@@ -166,25 +207,24 @@ class MarketHistoryMonitor {
       assetName: getAssetFromTicker(this.assetsModule.getAssets(), assetTicker).name,
     })
 
-  #fetch = async ({ currency, granularity, assetNames, requestLimit, dontReturnCache }) => {
+  #fetch = async ({ currency, granularity, assetNames, requestLimit }) => {
     const assets = this.assetsModule.getAssets()
-    const assetTickers = assetNames.map((assetName) => assets[assetName].ticker)
-
-    const cacheRefreshData =
-      (await this.storage.get(MARKET_HISTORY_REFRESH_KEY)) || Object.create(null)
-
-    const cacheRefreshKey = `${granularity}-${currency}`
-    const latestRefreshTimestamp = cacheRefreshData[cacheRefreshKey] || 0
+    const assetTickers = assetNames
+      .filter((assetName) => !assets[assetName].isCombined)
+      .map((assetName) => assets[assetName].ticker)
+    const dynamicRefreshKey = `${granularity}-${currency}`
+    const refreshKey = `${MARKET_HISTORY_REFRESH_KEY}-${dynamicRefreshKey}`
+    const latestRefreshTimestamp = (await this.storage.get(refreshKey)) || 0
     const refreshIntervalMs = this.#remoteConfigRefreshIntervalAtom
       ? await this.#remoteConfigRefreshIntervalAtom.get()
       : null
+    const timeSinceLastUpdate = this.#synchronizedTime.now() - latestRefreshTimestamp
     const ignoreCache =
       !!refreshIntervalMs &&
       !Number.isNaN(refreshIntervalMs) &&
-      this.#synchronizedTime.now() - latestRefreshTimestamp > refreshIntervalMs
+      timeSinceLastUpdate > refreshIntervalMs
     if (ignoreCache) {
-      cacheRefreshData[cacheRefreshKey] = this.#synchronizedTime.now()
-      await this.storage.set(MARKET_HISTORY_REFRESH_KEY, cacheRefreshData)
+      await this.storage.set(refreshKey, this.#synchronizedTime.now())
     }
 
     // TODO migrate logic from fetchHistoricalPrices inside this module.
@@ -208,78 +248,80 @@ class MarketHistoryMonitor {
       requestLimit: requestLimit || this.#granularityRequestLimits[granularity],
     })
 
-    const mapPrices = (pricesMap) => {
-      return Object.fromEntries(
-        assetNames.map((assetName) => {
-          const assetPricesMap = pricesMap.get(assets[assetName].ticker)
-          const value = assetPricesMap ? [...assetPricesMap] : []
-          return [assetName, value]
-        })
-      )
+    if (fetchedPricesMap.size > 0) {
+      const pricesByAssetNameForCache = mapPricesForCache(fetchedPricesMap, assetNames, assets)
+      await this.#setCache({
+        currency,
+        granularity,
+        pricesByAssetName: pricesByAssetNameForCache,
+      })
     }
 
-    const pricesByAssetName = mapPrices(fetchedPricesMap)
+    const fullHistoryByAssetName = transformHistoricalPrices(
+      historicalPricesMap,
+      assetNames,
+      assets
+    )
 
-    const fullHistoryByAssetName =
-      fetchedPricesMap.size === historicalPricesMap.size
-        ? pricesByAssetName
-        : mapPrices(historicalPricesMap)
-
-    if (fetchedPricesMap.size === 0 && dontReturnCache) {
-      return
+    return {
+      prices: fullHistoryByAssetName,
+      hasNewPrices: fetchedPricesMap.size > 0,
     }
+  }
 
-    this.#setCache({ currency, granularity, pricesByAssetName })
-
-    return transformPricesByAssetName(fullHistoryByAssetName)
+  #getEnabledAssetNames = async () => {
+    const enabledAssets = await this.#enabledAssetsAtom.get()
+    return Object.keys(enabledAssets)
   }
 
   update = async (granularity) => {
-    const enabledAssets = await this.#enabledAssetsAtom.get()
-    const parsedGranularity = parseGranularity(granularity)
-    const currency = this.#currency
-    const assetNames = Object.keys(enabledAssets)
-    const hasRuntimeCache = this.#runtimeCache.size > 0
-
+    this.#logger.info(`Update started (granularity=${granularity})`)
+    const assetNames = await this.#getEnabledAssetNames()
     try {
-      const prices = await this.#fetch({
-        currency,
-        granularity,
-        assetNames,
-        dontReturnCache: hasRuntimeCache,
-      })
-
-      if (!prices) {
-        return
-      }
-
-      await this.#marketHistoryAtom.set(async (current) => ({
-        data: mergePricesInAtom({
-          prices,
-          atomData: current?.data ?? Object.create(null),
-          currency,
-          parsedGranularity,
-        }),
-      }))
+      await this.#updateAssets(assetNames, [granularity])
     } catch (error) {
-      this.#logger.error(
-        'MarketHistoryMonitor: Failed to fetch rates',
-        assetNames,
-        currency,
-        parsedGranularity,
-        error
-      )
+      this.#logger.error(`Update error (granularity=${granularity})`, error)
     }
   }
 
-  #updateAll = () => {
-    return Promise.all([this.update('hour'), this.update('day')])
+  updateAll = async () => {
+    if (!this.#isActive) {
+      const e = new Error('market-history updateAll cannot be called before module started')
+      this.#errorTracking.track({
+        error: e,
+        namespace: 'marketHistory',
+        context: { method: 'updateAll' },
+      })
+      throw e
+    }
+
+    if (!this.#currency) {
+      const e = new Error('market-history updateAll cannot be called before currency is loaded')
+      this.#errorTracking.track({
+        error: e,
+        namespace: 'marketHistory',
+        context: { method: 'updateAll' },
+      })
+      throw e
+    }
+
+    this.#logger.info('Market history update all started')
+    try {
+      const assetNames = await this.#getEnabledAssetNames()
+      await this.#updateAssets(assetNames, ['day', 'hour', 'minute'])
+      this.#logger.info('Market history update all completed')
+    } catch (error) {
+      this.#errorTracking.track({
+        error,
+        namespace: 'marketHistory',
+        context: { method: 'updateAll' },
+      })
+      this.#logger.error('Market history update all failed', error)
+    }
   }
 
-  #updateAssets = async (granularity, assetNames) => {
+  #fetchPricesByGranularity = async ({ granularity, assetNames, currency }) => {
     const parsedGranularity = parseGranularity(granularity)
-    const currency = this.#currency
-
     try {
       return await this.#fetch({
         currency,
@@ -297,53 +339,68 @@ class MarketHistoryMonitor {
     }
   }
 
-  #updateNewAssets = async (assetNames) => {
+  #updateAssets = async (assetNames, granularities) => {
+    if (!this.#isActive) {
+      return
+    }
+
     const currency = this.#currency
-
-    const granularities = ['hour', 'day']
-
-    const promises = granularities.map((granularity) => this.#updateAssets(granularity, assetNames))
+    const promises = granularities.map((granularity) =>
+      this.#fetchPricesByGranularity({ granularity, assetNames, currency })
+    )
 
     const results = await Promise.all(promises)
-    let changes = Object.create(null)
-    const updateChanges = ({ prices, granularity }) => {
-      changes = {
-        ...changes,
+
+    if (!this.#isActive) {
+      return
+    }
+
+    await this.#marketHistoryAtom.set((current) => {
+      const detectHasChanges = (result, parsedGranularity) => {
+        if (!current || !current.data) return true
+        if (result.hasNewPrices) return true
+
+        // simply check if any asset missing prices. if asset already exist in atom and updated it should be covered by previous condition
+        return Object.keys(result.prices).some((assetName) => {
+          if (!result.prices[assetName] || Object.values(result.prices[assetName]).length === 0)
+            return false
+          return !current?.data?.[currency]?.[parsedGranularity]?.[assetName]
+        })
+      }
+
+      const hasChanges = granularities.some((granularity, index) => {
+        const result = results[index]
+        return result && detectHasChanges(result, parseGranularity(granularity))
+      })
+
+      if (!hasChanges) return current
+
+      const data = {
+        ...current?.data,
         [currency]: {
-          ...changes[currency],
-          [granularity]: prices,
+          daily: Object.create(null),
+          hourly: Object.create(null),
+          minutely: Object.create(null),
+          ...current?.data?.[currency],
         },
       }
-    }
 
-    granularities.forEach((granularity, index) => {
-      const result = results[index]
-      if (result) {
-        updateChanges({ prices: result, granularity: parseGranularity(granularity) })
-      }
-    })
+      granularities.forEach((granularity, index) => {
+        const result = results[index]?.prices
+        if (result) {
+          const parsedGranularity = parseGranularity(granularity)
 
-    if (Object.keys(changes).length > 0) {
-      await this.#marketHistoryAtom.set((current) => {
-        let data = current?.data ?? Object.create(null)
-        granularities.forEach((granularity, index) => {
-          const result = results[index]
-          if (result) {
-            data = mergePricesInAtom({
-              prices: result,
-              atomData: data,
-              currency,
-              parsedGranularity: parseGranularity(granularity),
-            })
+          data[currency][parsedGranularity] = {
+            ...data[currency][parsedGranularity],
+            ...result,
           }
-        })
-
-        return {
-          data,
-          changes,
         }
       })
-    }
+
+      return {
+        data,
+      }
+    })
   }
 
   #invalidateStorage = async ({ remoteConfigClearCacheVersion }) => {
@@ -359,24 +416,43 @@ class MarketHistoryMonitor {
   }
 
   #listenRemoteConfigClearCacheVersionChanges = () => {
-    difference(this.#remoteConfigClearCacheAtom).observe(async ({ current, previous }) => {
-      if (previous !== undefined && current !== previous) {
-        await this.#invalidateStorage({ remoteConfigClearCacheVersion: current })
-        await this.#updateAll()
-      }
-    })
+    this.#atomListeners.push(
+      difference(this.#remoteConfigClearCacheAtom).observe(({ current, previous }) => {
+        const clear = async () => {
+          await this.#invalidateStorage({ remoteConfigClearCacheVersion: current })
+
+          if (!this.#isActive) {
+            return
+          }
+
+          await this.updateAll()
+        }
+
+        if (previous !== undefined && current !== previous) {
+          clear().catch((e) => {
+            this.#errorTracking.track({
+              error: e,
+              namespace: 'marketHistory',
+              context: { method: 'listenRemoteConfigClearCacheVersionChanges' },
+            })
+          })
+        }
+      })
+    )
   }
 
   #setupTimers = () => {
+    this.#logger.info('market history setupTimers')
     const jitters = {
       day: ms('3m'),
       hour: ms('15s'),
+      minute: ms('10s'),
     }
     const getCurrentTime = this.#synchronizedTime.now
     const updatePrices = (granularity) => this.update.bind(this, granularity)
 
     const fetchPricesForGranularity = (granularity) => {
-      fetchPricesInterval({
+      setupPriceFetchInterval({
         func: updatePrices(granularity),
         abortController: this.#abortController,
         granularity,
@@ -387,56 +463,119 @@ class MarketHistoryMonitor {
 
     fetchPricesForGranularity('day')
     fetchPricesForGranularity('hour')
+    fetchPricesForGranularity('minute')
   }
 
-  start = async () => {
-    if (this.#started) {
-      return
-    }
-
-    this.#started = true
-    this.#abortController = new AbortController()
-
-    const remoteConfigClearCacheVersion = await this.#remoteConfigClearCacheAtom.get()
-    await this.#invalidateStorage({ remoteConfigClearCacheVersion })
-    this.#listenRemoteConfigClearCacheVersionChanges()
-
-    const combinedAtom = combine({
-      currency: this.#currencyAtom,
-      enabledAssets: this.#enabledAssetsAtom,
-    })
-
-    await difference(combinedAtom).observe(({ current, previous = Object.create(null) }) => {
-      const { currency, enabledAssets } = current
-      const { currency: previousCurrency, enabledAssets: previousEnabledAssets } = previous
-      if (!enabledAssets || Object.keys(enabledAssets).length === 0) return
-
-      if (!this.#currency) {
+  #listenCurrencyChanges = () => {
+    const currencyListener = this.#currencyAtom.observe((currency) => {
+      if (this.#currency !== currency) {
+        this.#logger.info('market history update because currency changes', currency)
         this.#currency = currency
-        return this.#setupTimers()
+        this.#marketHistoryAtom.set((current) => {
+          const data = current?.data || {}
+
+          return {
+            data: {
+              ...data,
+              [currency]: data[currency] || {
+                daily: Object.create(null),
+                hourly: Object.create(null),
+                minutely: Object.create(null),
+              },
+            },
+          }
+        })
+        if (!this.#isActive) {
+          return
+        }
+
+        this.updateAll()
       }
+    })
+    this.#atomListeners.push(currencyListener)
+  }
 
-      if (currency !== previousCurrency) {
-        this.#currency = currency
-        this.#updateAll()
+  #listenEnabledAssetsChanges = () => {
+    const enabledAssetsListener = this.#enabledAssetsAtom.observe((enabledAssets) => {
+      const newAssetNames = Object.keys(enabledAssets).filter(
+        (assetName) => !this.#previouslyEnabledAssets[assetName]
+      )
+      this.#previouslyEnabledAssets = enabledAssets
+      if (newAssetNames.length > 0) {
+        this.#logger.info('market history update because new assets enabled', newAssetNames)
+        this.#updateAssets(newAssetNames, ['day', 'hour', 'minute'])
+      }
+    })
+    this.#atomListeners.push(enabledAssetsListener)
+  }
+
+  #initMarketHistoryAtom = async () => {
+    await this.#marketHistoryAtom.set((current) => {
+      if (current) return current
+
+      return {
+        data: {
+          [this.#currency]: {
+            daily: Object.create(null),
+            hourly: Object.create(null),
+            minutely: Object.create(null),
+          },
+        },
+      }
+    })
+  }
+
+  start = makeConcurrent(
+    async () => {
+      if (this.#isActive) return
+      this.#logger.info('market history start')
+      this.#isActive = true
+      this.#abortController = new AbortController()
+
+      const remoteConfigClearCacheVersion = await this.#remoteConfigClearCacheAtom.get()
+      await this.#invalidateStorage({ remoteConfigClearCacheVersion })
+
+      if (!this.#isActive) {
         return
       }
 
-      const newAssetNames = Object.keys(enabledAssets).filter(
-        (assetName) => !previousEnabledAssets[assetName]
-      )
-      if (newAssetNames.length > 0) {
-        this.#updateNewAssets(newAssetNames)
+      this.#currency = await this.#currencyAtom.get()
+      this.#previouslyEnabledAssets = await this.#enabledAssetsAtom.get()
+
+      if (!this.#isActive) {
+        return
       }
-    })
-  }
+
+      // Initialize atom if necessary
+      await this.#initMarketHistoryAtom()
+
+      if (!this.#isActive) {
+        return
+      }
+
+      this.#setupTimers()
+      this.#listenRemoteConfigClearCacheVersionChanges()
+      this.#listenCurrencyChanges()
+      this.#listenEnabledAssetsChanges()
+
+      if (!this.#isActive) {
+        return
+      }
+
+      await this.updateAll()
+    },
+    { concurrency: 1 }
+  )
 
   stop = () => {
-    if (!this.#started) {
+    if (!this.#isActive) {
       return
     }
 
-    this.#started = false
+    this.#logger.info('market history stops')
+    this.#atomListeners.forEach((unsubscribe) => unsubscribe())
+    this.#atomListeners = []
+    this.#isActive = false
     this.#abortController.abort()
   }
 
@@ -505,18 +644,21 @@ class MarketHistoryMonitor {
       })
 
       await this.#marketHistoryAtom.set(async (current) => {
-        const transformedPrices = transformPriceEntries([...updatedAssetHistoryMap])
-        const mergedData = mergePricesInAtom({
-          prices: {
-            [assetName]: transformedPrices,
-          },
-          atomData: current?.data ?? Object.create(null),
-          currency,
-          parsedGranularity: parseGranularity(granularity),
-        })
+        const transformedPrices = Object.fromEntries(
+          [...updatedAssetHistoryMap].map(([time, priceData]) => [time, priceData.close])
+        )
+        const parsedGranularity = parseGranularity(granularity)
 
         return {
-          data: mergedData,
+          data: {
+            [currency]: {
+              ...current?.data?.[currency],
+              [parsedGranularity]: {
+                ...current?.data?.[currency]?.[parsedGranularity],
+                [assetName]: transformedPrices,
+              },
+            },
+          },
         }
       })
     }
@@ -544,6 +686,7 @@ const marketHistoryMonitorDefinition = {
     'getCacheKey?',
     'config',
     'synchronizedTime',
+    'errorTracking',
   ],
   public: true,
 }

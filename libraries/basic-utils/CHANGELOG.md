@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@4.2.1...@exodus/basic-utils@4.2.2) (2025-03-31)
+
+### License
+
+- license: re-license under MIT license (#11907)
+
+## [4.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@4.2.0...@exodus/basic-utils@4.2.1) (2025-03-05)
+
+### Bug Fixes
+
+- fix(basic-utils): export pick-by-array-paths (#11665)
+
+## [4.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@4.1.0...@exodus/basic-utils@4.2.0) (2025-03-04)
+
+### Features
+
+- feat(basic-utils): isEmpty util (#11644)
+
+## [4.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@4.0.0...@exodus/basic-utils@4.1.0) (2025-03-04)
+
+### Features
+
+- feat(basic-utils): pickByArrayPaths, a more performent replacement for 'pick' (#11643)
+
+## [4.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.5.1...@exodus/basic-utils@4.0.0) (2025-02-14)
+
+### ⚠ BREAKING CHANGES
+
+- support paths in lodash-like pick() (#11439)
+
+### Features
+
+- feat!: support paths in lodash-like pick() (#11439)
+
 ## [3.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.5.0...@exodus/basic-utils@3.5.1) (2025-02-07)
 
 ### Bug Fixes

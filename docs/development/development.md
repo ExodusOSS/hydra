@@ -38,7 +38,13 @@ Examples:
 
 ```
 # test one library
-yarn test --scope @exodus/fiat-client
+yarn test --scope @exodus/address-provider
+```
+
+Update Snapshots:
+
+```
+yarn test --scope @exodus/address-provider -- --write-snapshots
 ```
 
 ## Build
@@ -53,5 +59,5 @@ Examples:
 yarn build
 
 # build one library
-yarn build --scope @exodus/fiat-client
+yarn build --scope @exodus/address-provider
 ```

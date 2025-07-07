@@ -3,7 +3,7 @@ import _assets from '@exodus/assets-base'
 import { pick } from '@exodus/basic-utils'
 import { WalletAccount } from '@exodus/models'
 
-import { createFiatNumberUnit, setup } from '../../utils'
+import { createFiatNumberUnit, setup } from '../../utils.js'
 
 const assets = connectAssets(_assets)
 

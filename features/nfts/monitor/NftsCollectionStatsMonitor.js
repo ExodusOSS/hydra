@@ -1,4 +1,4 @@
-import { Networks } from '../constants'
+import { Networks } from '../constants/index.js'
 
 const NFTS_NETWORKS_WITH_COLLECTION_STATS = new Set([
   Networks.solana,
@@ -38,6 +38,8 @@ class NftCollectionStatsMonitor {
 
   #fetchCollectionStats = async ({ key, nft }) => {
     const { id, network, collectionSymbol } = nft
+
+    if (typeof this.#nftsProxy?.[network]?.getCollectionStats !== 'function') return
 
     const stats = await this.#nftsProxy[network].getCollectionStats({ nftId: id, collectionSymbol })
 

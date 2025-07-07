@@ -3,7 +3,14 @@ import { difference as atomDifference } from '@exodus/atoms'
 
 const WAIT_FUSION_SYNC_DURATION = 10_000
 
-const rejectAfter = (ms) => new Promise((resolve, reject) => setTimeout(reject, ms))
+const rejectAfter = (ms) => {
+  let timeout
+  const promise = new Promise((_resolve, reject) => {
+    timeout = setTimeout(reject, ms)
+  })
+
+  return { promise, clear: () => clearTimeout(timeout) }
+}
 
 const createTxLogMonitorsPlugin = ({
   txLogMonitors,
@@ -32,10 +39,12 @@ const createTxLogMonitorsPlugin = ({
   const recentlyAdded = new Set()
 
   const onUnlock = () => {
-    Promise.race([walletAccounts.awaitSynced(), rejectAfter(WAIT_FUSION_SYNC_DURATION)])
+    const timeoutPromise = rejectAfter(WAIT_FUSION_SYNC_DURATION)
+    Promise.race([walletAccounts.awaitSynced(), timeoutPromise.promise])
       .catch(() => logger.warn('failed to wait wallet accounts'))
       .finally(() => {
         txLogMonitors.start()
+        timeoutPromise.clear()
       })
   }
 

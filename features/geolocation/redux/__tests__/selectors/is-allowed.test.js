@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('is-allowed', () => {
   it('should return false by default', () => {

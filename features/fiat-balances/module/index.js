@@ -1,1 +1,1 @@
-export { default } from './fiat-balances'
+export { default } from './fiat-balances.js'

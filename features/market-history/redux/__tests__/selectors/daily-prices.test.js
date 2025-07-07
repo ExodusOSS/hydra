@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('daily-prices', () => {
   it('return daily prices for active currency', () => {

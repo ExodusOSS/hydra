@@ -1,7 +1,7 @@
 import { omit } from '@exodus/basic-utils'
 import { OrderSet, Tx } from '@exodus/models'
 
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('createAssetSourceBaseActivity', () => {
   test('should return array of activities in wallet', () => {
@@ -79,6 +79,85 @@ describe('createAssetSourceBaseActivity', () => {
     expect(result[0].id).toEqual('swap.ethereum.btc-eth-order')
     expect(result[0].type).toEqual('exchange')
     expect(result).toMatchSnapshot()
+  })
+
+  test('should add orders only related to provided account', () => {
+    const { store, selectors, handleEvent, assets } = setup()
+
+    const BTC_ETH_ORDER = {
+      orderId: 'btc-eth-order',
+      fromAsset: 'bitcoin',
+      toAsset: 'ethereum',
+      txIds: [{ txId: 'cross-portfolio-swap' }],
+      date: '2019-07-22T13:54:28.000Z',
+      fromWalletAccount: 'exodus_0',
+      toWalletAccount: 'exodus_1',
+      toAmount: assets.ethereum.currency.defaultUnit(3),
+    }
+
+    handleEvent('activityTxs', {
+      exodus_0: {
+        ethereum: [
+          Tx.fromJSON({
+            txId: 'just-tx',
+            error: null,
+            date: '2019-07-22T13:54:28.000Z',
+            confirmations: 1,
+            meta: {},
+            token: null,
+            dropped: false,
+            coinAmount: '2 ETH',
+            coinName: 'ethereum',
+            feeCoinName: 'ethereum',
+            feeAmount: '0.01 ETH',
+            currencies: { ethereum: assets.ethereum.currency },
+          }),
+        ],
+      },
+      exodus_1: {
+        ethereum: [
+          Tx.fromJSON({
+            txId: 'cross-portfolio-swap',
+            error: null,
+            date: '2019-07-22T13:54:28.000Z',
+            confirmations: 1,
+            meta: {},
+            token: null,
+            dropped: false,
+            coinAmount: '1 ETH',
+            coinName: 'ethereum',
+            feeCoinName: 'ethereum',
+            feeAmount: '0.000189 ETH',
+            currencies: { ethereum: assets.ethereum.currency },
+          }),
+        ],
+      },
+    })
+    handleEvent('orders', OrderSet.fromArray([BTC_ETH_ORDER]))
+
+    const selector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'ethereum',
+      walletAccount: 'exodus_1',
+      displayOrderWithoutTx: true,
+    })
+
+    const result = selector(store.getState())
+
+    expect(result.length).toEqual(1)
+    expect(result[0].id).toEqual('swap.ethereum.btc-eth-order')
+    expect(result[0].type).toEqual('exchange')
+
+    const selector2 = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'ethereum',
+      walletAccount: 'exodus_0',
+      displayOrderWithoutTx: true,
+    })
+
+    const result2 = selector2(store.getState())
+
+    expect(result2.length).toEqual(1)
+    expect(result2[0].id).toEqual('ethereum.just-tx')
+    expect(result2[0].type).toEqual('rx')
   })
 
   test('should return activity for asset', () => {

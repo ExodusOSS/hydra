@@ -1,4 +1,4 @@
-import { withType } from './utils'
+import { withType } from './utils.js'
 
 const createConfigDependencies = ({ config }) => {
   return [

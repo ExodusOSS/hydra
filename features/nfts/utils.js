@@ -1,4 +1,4 @@
-import { NFTS_EVM_NETWORKS } from './constants'
+import { NFTS_EVM_NETWORKS } from './constants/index.js'
 
 export const areAddressesEqual = (a, b, { network }) => {
   const isEvm = NFTS_EVM_NETWORKS.includes(network)

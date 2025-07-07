@@ -10,7 +10,7 @@ yarn add @exodus/locale
 
 ## Usage
 
-This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md).
+This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/development/using-the-sdk.md).
 
 ### Play with it
 
@@ -20,7 +20,7 @@ This feature is designed to be used together with `@exodus/headless`. See [using
 
 ### API Side
 
-See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK and the API interface in the [type declaration](./api/index.d.ts).
+See [using the sdk](../../docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK and the API interface in the [type declaration](./api/index.d.ts).
 
 ```ts
 await exodus.locale.setLanguage('nl')
@@ -30,7 +30,7 @@ await exodus.locale.setCurrency('EUR')
 
 ### UI Side
 
-See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md#events) for more details on basic UI-side setup.
+See [using the sdk](../../docs/development/using-the-sdk.md#events) for more details on basic UI-side setup.
 
 ```jsx
 import { selectors } from '~/ui/flux'

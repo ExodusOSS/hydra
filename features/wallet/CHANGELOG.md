@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [15.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@15.2.0...@exodus/wallet@15.3.0) (2025-06-05)
+
+### Features
+
+- feat: use exodus/bip39 (#12816)
+
+## [15.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@15.1.2...@exodus/wallet@15.2.0) (2025-05-07)
+
+### Features
+
+- feat: add password usage configuration to wallet (#12217)
+
 ## [15.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@15.1.1...@exodus/wallet@15.1.2) (2025-01-31)
 
 ### Bug Fixes

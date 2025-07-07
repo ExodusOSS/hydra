@@ -1,6 +1,6 @@
 {
   "name": "@exodus/restore-progress-tracker",
-  "version": "3.7.1",
+  "version": "3.9.0",
   "description": "Tracks progress of restoring a wallet's full transaction history across assets",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -12,6 +12,7 @@
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Arestore-progress-tracker"
   },
+  "type": "module",
   "main": "index.js",
   "files": [
     "api",
@@ -29,17 +30,18 @@
   "scripts": {
     "lint": "run -T eslint -c ../../eslint.config.mjs",
     "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest --esbuild"
+    "test": "run -T exodus-test --jest"
   },
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
+    "@exodus/zod": "^3.24.2",
     "make-concurrent": "^5.4.0",
     "p-defer": "^4.0.0"
   },
   "devDependencies": {
-    "@exodus/assets": "^8.0.75",
-    "@exodus/assets-base": "^8.1.6",
+    "@exodus/assets": "^11.0.0",
+    "@exodus/assets-base": "^10.0.0",
     "@exodus/dependency-injection": "workspace:^",
     "@exodus/dependency-preprocessors": "workspace:^",
     "@exodus/storage-memory": "workspace:^",

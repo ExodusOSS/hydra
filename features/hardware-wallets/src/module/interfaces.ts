@@ -103,9 +103,25 @@ export interface CreateParams {
 export type GenericSignCallback = ({ device }: { device: HardwareWalletDevice }) => Promise<any>
 export interface GenericSignParams {
   baseAssetName: string
-  scenario: string
+  scenario: 'signTransaction' | 'signMessage'
   sign: GenericSignCallback
 }
+
+export interface SigningRequestState {
+  // An ID for the signing request, so the UI can cancel it if needed
+  id: string
+  baseAssetName?: string
+  scenario: 'signTransaction' | 'signMessage' | 'error'
+  error?: Error
+}
+
+export interface SigningRequest {
+  id: string
+  sign: GenericSignCallback
+  resolve: (result: any) => void
+  reject: (error: Error) => void
+}
+
 export interface SignTransactionParams {
   baseAssetName: string
   unsignedTx: UnsignedTransaction

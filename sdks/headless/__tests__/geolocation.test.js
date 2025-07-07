@@ -1,7 +1,7 @@
-import createAdapters from './adapters'
-import config from './config'
-import createExodus from './exodus'
-import expectEvent from './expect-event'
+import createAdapters from './adapters/index.js'
+import config from './config.js'
+import createExodus from './exodus.js'
+import expectEvent from './expect-event.js'
 
 describe('geolocation', () => {
   const passphrase = 'my-password-manager-generated-this'
@@ -32,5 +32,7 @@ describe('geolocation', () => {
       regionName: expect.any(String),
       timezoneName: expect.any(String),
     })
+
+    await exodus.application.stop()
   })
 })

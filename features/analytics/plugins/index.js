@@ -1,4 +1,4 @@
-import createAnalyticsLifecyclePlugin from './lifecycle'
+import createAnalyticsLifecyclePlugin from './lifecycle.js'
 
 export const analyticsLifecyclePluginDefinition = {
   id: 'analyticsLifecyclePlugin',
@@ -10,7 +10,8 @@ export const analyticsLifecyclePluginDefinition = {
     'shareActivityAtom',
     'analyticsUserIdAtom',
     'analyticsAnonymousIdAtom',
-    'analyticsExtraSeedsUserIdsAtom',
+    'analyticsExtraSeedsUserIdsAtom?',
+    'config',
   ],
   public: true,
 }

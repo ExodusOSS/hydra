@@ -1,12 +1,13 @@
 import ms from 'ms'
-import { geolocationAtomDefinition } from './atoms'
-import geolocationDebugDefinition from './debug'
-import geolocationMonitorDefinition from './monitor'
-import geolocationPluginDefinition from './plugin'
-import geolocationAnalyticsPluginDefinition from './plugin/analytics'
+import { geolocationAtomDefinition } from './atoms/index.js'
+import geolocationDebugDefinition from './debug/index.js'
+import geolocationMonitorDefinition from './monitor/index.js'
+import geolocationPluginDefinition from './plugin/index.js'
+import geolocationAnalyticsPluginDefinition from './plugin/analytics.js'
 
 const DEFAULT_CONFIG = {
   fetchInterval: ms('5m'),
+  fetchIntervalUntilFirstSuccess: ms('5s'),
 }
 
 const ENV_CONFIG = {

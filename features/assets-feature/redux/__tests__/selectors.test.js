@@ -94,14 +94,14 @@ describe('selectors', () => {
     expect(bitcoinMultiAddressModeSelector(store.getState())).toEqual(true)
   })
 
-  test('createMultiAddressMode using bitcoin default', () => {
+  test('createMultiAddressMode not using bitcoin default', () => {
     emitAssets(assetsByName)
     const litecoinMultiAddressModeSelector = selectors.assets.createMultiAddressMode('litecoin')
 
     expect(litecoinMultiAddressModeSelector(store.getState())).toEqual(false)
 
     handleEvent('multiAddressMode', { bitcoin: true })
-    expect(litecoinMultiAddressModeSelector(store.getState())).toEqual(true)
+    expect(litecoinMultiAddressModeSelector(store.getState())).toEqual(false)
 
     handleEvent('multiAddressMode', { bitcoin: false })
     expect(litecoinMultiAddressModeSelector(store.getState())).toEqual(false)

@@ -1,7 +1,9 @@
-import { get, groupBy, merge } from 'lodash'
+import lodash from 'lodash'
 import { createSelector } from 'reselect'
 import { Tx } from '@exodus/models'
 import { memoize } from '@exodus/basic-utils'
+
+const { get, groupBy, merge } = lodash
 
 // TODO: Remove in the future.
 // Batch swapping transactions using personal notes is no longer needed.

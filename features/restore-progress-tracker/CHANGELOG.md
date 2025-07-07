@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/restore-progress-tracker@3.7.3...@exodus/restore-progress-tracker@3.9.0) (2025-06-03)
+
+### Features
+
+- feat: gracefully handle 'isLocked' state in report (#12669)
+
+- feat: make restore-progress-tracker proper ESM (#12289)
+
+## [3.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/restore-progress-tracker@3.7.3...@exodus/restore-progress-tracker@3.8.0) (2025-05-09)
+
+### Features
+
+- feat: make restore-progress-tracker proper ESM (#12289)
+
+## [3.7.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/restore-progress-tracker@3.7.2...@exodus/restore-progress-tracker@3.7.3) (2025-04-14)
+
+**Note:** Version bump only for package @exodus/restore-progress-tracker
+
+## [3.7.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/restore-progress-tracker@3.7.1...@exodus/restore-progress-tracker@3.7.2) (2025-03-13)
+
+**Note:** Version bump only for package @exodus/restore-progress-tracker
+
 ## [3.7.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/restore-progress-tracker@3.7.0...@exodus/restore-progress-tracker@3.7.1) (2025-02-21)
 
 ### Bug Fixes

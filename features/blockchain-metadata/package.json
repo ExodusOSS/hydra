@@ -1,6 +1,6 @@
 {
   "name": "@exodus/blockchain-metadata",
-  "version": "15.9.0",
+  "version": "15.12.0",
   "author": "Exodus Movement, Inc.",
   "description": "Manages access to and persistence of blockchain metadata, specifically transaction history and account state.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/blockchain-metadata",
@@ -29,7 +29,7 @@
   "scripts": {
     "lint": "run -T eslint . -c ../../eslint.config.mjs",
     "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest --esbuild"
+    "test": "run -T exodus-test --jest"
   },
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Ablockchain-metadata"
@@ -42,8 +42,9 @@
     "@exodus/models": "^12.1.1",
     "@exodus/multi-account-redux": "^2.0.1",
     "@exodus/redux-dependency-injection": "^4.0.0",
+    "@exodus/zod": "^3.24.2",
     "events": "^3.3.0",
-    "lodash": "npm:@exodus/lodash@^4.17.21-exodus.2",
+    "lodash": "^4.17.21",
     "ms": "^2.1.3",
     "p-defer": "^4.0.0",
     "proxy-freeze": "^1.0.0",

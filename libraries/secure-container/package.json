@@ -1,58 +1,55 @@
 {
   "name": "secure-container",
   "description": "Secure container.",
-  "version": "2.0.0",
-  "author": "JP Richardson <jprichardson@gmail.com> (http://www.exodus.io)",
+  "version": "3.2.1",
+  "author": "Exodus Movement, Inc.",
+  "type": "module",
   "bugs": {
-    "url": "https://github.com/exodusmovement/secure-container/issues"
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asecure-container"
   },
   "contributors": [
+    "JP Richardson",
     "Kirill Fomichev"
   ],
   "dependencies": {
-    "@exodus/scryptsy": "^2.2.0",
-    "browserify-aes": "^1.2.0",
-    "create-hash": "^1.2.0",
-    "randombytes": "^2.1.0",
+    "@exodus/crypto": "^1.0.0-rc.25",
     "varstruct": "^5.2.0"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.12.1",
-    "@babel/core": "^7.12.3",
-    "@babel/plugin-transform-modules-commonjs": "^7.12.1",
-    "@babel/preset-flow": "^7.12.1",
-    "@babel/register": "^7.12.1",
-    "babel-eslint": "^6.0.4",
-    "standard": "^7.1.0",
-    "tap-spec": "^5.0.0",
-    "tape": "^4.5.1",
-    "tape-promise": "^1.1.0"
   },
   "engines": {
     "node": ">= 12.0.0"
   },
   "files": [
-    "lib/"
+    "src",
+    "compressed.js",
+    "file.js",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
   ],
-  "homepage": "https://github.com/exodusmovement/secure-container#readme",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/secure-container",
   "keywords": [
     "secure"
   ],
   "license": "MIT",
-  "main": "./lib/index.js",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./blob": "./src/blob.js",
+    "./compressed": "./src/compressed.js",
+    "./file": "./src/file.js",
+    "./header": "./src/header.js",
+    "./metadata": "./src/metadata.js"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/exodusmovement/secure-container.git"
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "scripts": {
-    "build": "babel src --out-dir lib",
-    "lint": "standard",
-    "prepare": "npm test",
-    "test": "npm run build && npm run lint && npm run unit",
-    "unit": "find ./tests -name *.test.js -exec tape -r @babel/register {} \\; | tap-spec"
+    "lint": "run -T eslint",
+    "test": "run -T exodus-test"
   },
-  "standard": {
-    "ignore": "lib/",
-    "parser": "babel-eslint"
+  "devDependencies": {
+    "@exodus/test": "^1.0.0-rc.76",
+    "aw": "^0.1.0",
+    "fs-extra": "^10.0.0"
   }
 }

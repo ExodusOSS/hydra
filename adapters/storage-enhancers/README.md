@@ -1,28 +1,14 @@
-# `@exodus/storage-unsafe-storage`
+# `@exodus/storage-enhancers`
 
-An unsafe implementation of the [storage spec](https://github.com/ExodusMovement/exodus-hydra/blob/master/modules/storage-spec/spec.md).
+Storage enhancers for `@exodus/storage-spec` implementations.
 
-## Usage
+## `namespacing`
 
-```js
-const { createStorage } = require('@exodus/storage-unsafe-storage')
-
-const storage = createStorage({
-  file: 'path/to/unsafe-storage.json', // creates new or loads existing file
-})
-
-await storage.set('foo', 'bar') // etc.
-```
-
-### `isStorageWriting()`
-
-Check if storage is currently writing before killing the application to prevent corruption.
-
-**NOTE:** synchronous filesystem call!
+Adds `storage.namespace(string)` method that returns a new storage instance with a namespace prepended to all keys.
 
 ```js
-const { isStorageWriting } = require('@exodus/storage-unsafe')
+import withNamespacing from '@exodus/storage-enhancers/namespacing'
 
-isStorageWriting('path/to/storage.json')
-// returns true or false
+storage = withNamespacing(storage)
+storage.namespace('foo').set('bar', 'baz')
 ```

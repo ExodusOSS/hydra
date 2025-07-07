@@ -18,21 +18,28 @@ describe('pick', function () {
     expect(pick(object, ['a', 'b'])).toEqual({ a: object.a, b: object.b })
   })
 
-  it('should NOT support deep paths', function () {
-    expect(pick(nested, ['b.c'])).toEqual({})
-  })
-
-  it('should support keys with the . character', function () {
-    const object = { 'a.b': 1, a: { b: 2 } }
-    expect(pick(object, ['a.b'])).toEqual({ 'a.b': 1 })
-  })
-
   it('should return an empty object when `object` is nullish', function () {
-    expect(pick(null, ['a'])).toEqual({})
-    expect(pick(undefined, ['a'])).toEqual({})
+    expect(pick(null, ['a'])).toEqual(Object.create(null))
+    expect(pick(undefined, ['a'])).toEqual(Object.create(null))
   })
 
   it('should ignore prototype properties', function () {
-    expect(pick('', ['slice'])).toEqual({})
+    expect(pick('', ['slice'])).toEqual(Object.create(null))
+  })
+
+  test('picks paths from an object', () => {
+    expect(pick(nested, ['a', 'b.c'])).toEqual({ a: 1, b: { c: 2 } })
+  })
+
+  test('ignores missing paths', () => {
+    expect(pick(nested, ['b.c', 'x.y'])).toEqual({ b: { c: 2 } })
+  })
+
+  test('returns an empty object if no valid paths are given', () => {
+    expect(pick(nested, ['x.y', 'z'])).toEqual(Object.create(null))
+  })
+
+  test('supports array paths', () => {
+    expect(pick(nested, [['a'], ['b', 'c']])).toEqual({ a: 1, b: { c: 2 } })
   })
 })

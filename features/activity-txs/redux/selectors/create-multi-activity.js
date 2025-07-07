@@ -1,7 +1,9 @@
 import { memoize } from '@exodus/basic-utils'
 import { createSelector } from 'reselect'
 import assert from 'minimalistic-assert'
-import { uniqBy } from 'lodash'
+import lodash from 'lodash'
+
+const { uniqBy } = lodash
 
 const selectorFactory =
   () =>

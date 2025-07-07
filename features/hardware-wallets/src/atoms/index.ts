@@ -3,6 +3,8 @@ import { memoize } from '@exodus/basic-utils'
 import type { Definition } from '@exodus/dependency-types'
 import { HARDENED_OFFSET } from '@exodus/bip32'
 
+export { hardwareWalletSigningRequestsAtomDefinition } from './hardwareWalletSigningRequestsAtom.js'
+
 type WalletAccountName = string
 type AssetName = string
 export type WalletAccountNameToConnectedAssetNamesMap = Record<WalletAccountName, AssetName[]>

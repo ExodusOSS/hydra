@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('get-asset-daily-prices', () => {
   it('return daily prices for active currency for selected assetName', () => {

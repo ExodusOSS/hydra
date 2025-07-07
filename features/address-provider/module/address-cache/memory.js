@@ -6,7 +6,7 @@ import { getCachePath } from './utils.js'
 const { get } = lodash
 
 export const createAddressCache = () => {
-  let cache = {}
+  let cache = Object.create(null)
   return {
     get: async ({ baseAssetName, walletAccountName, derivationPath }) => {
       assert(typeof walletAccountName === 'string', 'expected string "walletAccountName"')
@@ -33,11 +33,11 @@ export const createAddressCache = () => {
       set(cache, path, address)
     },
     clear: async () => {
-      cache = {}
+      cache = Object.create(null)
     },
     load: async () => null,
     awaitSynced: async () => null,
-    getMismatches: async () => ({}),
+    getMismatches: async () => Object.create(null),
     stop: () => {},
   }
 }

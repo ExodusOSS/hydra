@@ -1,6 +1,6 @@
 import { pick } from '@exodus/basic-utils'
 
-import { FUSION_SCHEMA } from './constants'
+import { FUSION_SCHEMA } from './constants.js'
 
 export const getConfigBySchema = (nftConfig) => {
   if (typeof nftConfig?.id !== 'string') {

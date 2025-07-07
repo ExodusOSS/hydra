@@ -1,7 +1,7 @@
-import { memoize } from 'lodash' // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
-import { ASSET_NAME_TO_NFTS_NETWORK } from '../../constants'
+import { memoize } from '@exodus/basic-utils'
+import { ASSET_NAME_TO_NFTS_NETWORK } from '../../constants/index.js'
 import { createSelector } from 'reselect'
-import { isSentTx } from './utils'
+import { isSentTx } from './utils.js'
 
 const createAssetSourceNftTxsByIdSelectorDefinition = {
   id: 'createAssetSourceNftTxsById',
@@ -10,21 +10,23 @@ const createAssetSourceNftTxsByIdSelectorDefinition = {
     { selector: 'txsData' },
   ],
   selectorFactory: (txsDataSelector) =>
-    memoize(({ assetName, walletAccount }) =>
-      createSelector(txsDataSelector, (txsByWalletAccount) => {
-        const network = ASSET_NAME_TO_NFTS_NETWORK[assetName]
-        if (!txsByWalletAccount[walletAccount]?.[network]) {
-          return new Map()
-        }
+    memoize(
+      ({ assetName, walletAccount }) =>
+        createSelector(txsDataSelector, (txsByWalletAccount) => {
+          const network = ASSET_NAME_TO_NFTS_NETWORK[assetName]
+          if (!txsByWalletAccount[walletAccount]?.[network]) {
+            return new Map()
+          }
 
-        const txs = txsByWalletAccount[walletAccount][network].filter(Boolean).map((tx) => ({
-          ...tx,
-          network,
-          sent: isSentTx({ tx, network }),
-        }))
+          const txs = txsByWalletAccount[walletAccount][network].filter(Boolean).map((tx) => ({
+            ...tx,
+            network,
+            sent: isSentTx({ tx, network }),
+          }))
 
-        return new Map(txs.map((nftTx) => [nftTx.txId, nftTx]))
-      })
+          return new Map(txs.map((nftTx) => [nftTx.txId, nftTx]))
+        }),
+      ({ assetName, walletAccount }) => `${assetName}|${walletAccount}`
     ),
 }
 

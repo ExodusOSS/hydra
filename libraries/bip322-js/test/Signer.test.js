@@ -1,8 +1,51 @@
 import * as bitcoin from '@exodus/bitcoinjs'
+import * as secp256k1 from '@exodus/crypto/secp256k1'
 import * as bitcoinMessage from 'bitcoinjs-message'
 
 // Import module to be tested
 import Signer from '../src/Signer'
+
+const createSigner = (encodedKey, network) => {
+  const signer = bitcoin.ECPair.fromWIF(encodedKey, network)
+  const { privateKey, publicKey } = signer
+
+  const tweakPrivateKey = (tweak) => {
+    const tweakedPrivateKey =
+      publicKey[0] === 3 ? secp256k1.privateKeyTweakNegate({ privateKey }) : privateKey
+
+    return secp256k1.privateKeyTweakAdd({ privateKey: tweakedPrivateKey, tweak, format: 'buffer' })
+  }
+
+  return {
+    getPublicKey: async () => publicKey,
+    sign: async ({
+      data,
+      signatureType = 'ecdsa',
+      enc = 'sig|rec',
+      tweak,
+      extraEntropy = null,
+    }) => {
+      if (signatureType === 'schnorr') {
+        const tweakedPrivateKey = tweak ? tweakPrivateKey(tweak) : privateKey
+        return secp256k1.schnorrSign({
+          data,
+          privateKey: tweakedPrivateKey,
+          extraEntropy,
+          format: 'buffer',
+        })
+      }
+
+      return secp256k1.ecdsaSignHash({
+        hash: data,
+        privateKey,
+        extraEntropy,
+        der: enc === 'der',
+        recovery: enc !== 'der' && enc !== 'sig',
+        format: 'buffer',
+      })
+    },
+  }
+}
 
 describe('Signer Test', () => {
   it('Can sign legacy P2PKH signature', () => {
@@ -17,6 +60,32 @@ describe('Signer Test', () => {
     const signature = Signer.sign(privateKey, address, message)
     const signatureTestnet = Signer.sign(
       privateKeyTestnet,
+      addressTestnet,
+      message,
+      bitcoin.networks.testnet
+    )
+
+    // Assert
+    expect(bitcoinMessage.verify(message, address, signature)).toBeTruthy()
+    expect(bitcoinMessage.verify(message, addressTestnet, signatureTestnet)).toBeTruthy()
+  })
+
+  it('Can sign legacy P2PKH signature with external signer', async () => {
+    // Arrange
+    const privateKey = 'L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k'
+    const privateKeyTestnet = 'cTrF79uahxMC7bQGWh2931vepWPWqS8KtF8EkqgWwv3KMGZNJ2yP' // Equivalent to L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k
+    const address = '14vV3aCHBeStb5bkenkNHbe2YAFinYdXgc'
+    const addressTestnet = 'mjSSLdHFzft9NC5NNMik7WrMQ9rRhMhNpT'
+    const message = 'Hello World'
+
+    // Act
+    const signature = await Signer.signAsync(
+      createSigner(privateKey, bitcoin.networks.bitcoin),
+      address,
+      message
+    )
+    const signatureTestnet = await Signer.signAsync(
+      createSigner(privateKeyTestnet, bitcoin.networks.testnet),
       addressTestnet,
       message,
       bitcoin.networks.testnet
@@ -51,6 +120,34 @@ describe('Signer Test', () => {
     expect(signatureTestnet).toEqual(expectedSignature)
   })
 
+  it('Can sign BIP-322 signature using nested segwit address with external signer', async () => {
+    // Arrange
+    const privateKey = 'KwTbAxmBXjoZM3bzbXixEr9nxLhyYSM4vp2swet58i19bw9sqk5z' // Private key of "3HSVzEhCFuH9Z3wvoWTexy7BMVVp3PjS6f"
+    const privateKeyTestnet = 'cMpadsm2xoVpWV5FywY5cAeraa1PCtSkzrBM45Ladpf9rgDu6cMz' // Equivalent to 'KwTbAxmBXjoZM3bzbXixEr9nxLhyYSM4vp2swet58i19bw9sqk5z'
+    const address = '3HSVzEhCFuH9Z3wvoWTexy7BMVVp3PjS6f'
+    const addressTestnet = '2N8zi3ydDsMnVkqaUUe5Xav6SZqhyqEduap'
+    const message = 'Hello World'
+    const expectedSignature =
+      'AkgwRQIhAMd2wZSY3x0V9Kr/NClochoTXcgDaGl3OObOR17yx3QQAiBVWxqNSS+CKen7bmJTG6YfJjsggQ4Fa2RHKgBKrdQQ+gEhAxa5UDdQCHSQHfKQv14ybcYm1C9y6b12xAuukWzSnS+w'
+
+    // Act
+    const signature = await Signer.signAsync(
+      createSigner(privateKey, bitcoin.networks.bitcoin),
+      address,
+      message
+    )
+    const signatureTestnet = await Signer.signAsync(
+      createSigner(privateKeyTestnet, bitcoin.networks.testnet),
+      addressTestnet,
+      message,
+      bitcoin.networks.testnet
+    )
+
+    // Assert
+    expect(signature).toBe(expectedSignature)
+    expect(signatureTestnet).toBe(expectedSignature)
+  })
+
   it('Can sign BIP-322 signature using native segwit address', () => {
     // Arrange
     // Test vector listed at https://github.com/bitcoin/bitcoin/blob/29b28d07fa958b89e1c7916fda5d8654474cf495/src/test/util_tests.cpp#L2713
@@ -74,6 +171,36 @@ describe('Signer Test', () => {
     // Assert
     expect(signature).toEqual(expectedSignature)
     expect(signatureTestnet).toEqual(expectedSignature)
+  })
+
+  it('Can sign BIP-322 signature using native segwit address with external signer', async () => {
+    // Arrange
+    // Test vector listed at https://github.com/bitcoin/bitcoin/blob/29b28d07fa958b89e1c7916fda5d8654474cf495/src/test/util_tests.cpp#L2713
+    const privateKey = 'L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k'
+    const privateKeyTestnet = 'cTrF79uahxMC7bQGWh2931vepWPWqS8KtF8EkqgWwv3KMGZNJ2yP' // Equivalent to L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k
+    const address = 'bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l'
+    const addressTestnet = 'tb1q9vza2e8x573nczrlzms0wvx3gsqjx7vaxwd45v'
+    const message = 'Hello World'
+    const expectedSignature =
+      'AkgwRQIhAOzyynlqt93lOKJr+wmmxIens//zPzl9tqIOua93wO6MAiBi5n5EyAcPScOjf1lAqIUIQtr3zKNeavYabHyR8eGhowEhAsfxIAMZZEKUPYWI4BruhAQjzFT8FSFSajuFwrDL1Yhy'
+
+    // Act
+    const signature = await Signer.signAsync(
+      createSigner(privateKey, bitcoin.networks.bitcoin),
+      address,
+      message
+    )
+
+    const signatureTestnet = await Signer.signAsync(
+      createSigner(privateKeyTestnet, bitcoin.networks.testnet),
+      addressTestnet,
+      message,
+      bitcoin.networks.testnet
+    )
+
+    // Assert
+    expect(signature).toBe(expectedSignature)
+    expect(signatureTestnet).toBe(expectedSignature)
   })
 
   // Skipping intentionally due to switching to `SIGHASH_DEFAULT` in Signer.ts

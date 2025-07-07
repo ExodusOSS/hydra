@@ -1,7 +1,7 @@
 import type { DerivationPath } from '@exodus/key-utils'
 
 type PathIndex = number | string
-type KeyType = 'legacy' | 'nacl' | 'secp256k1'
+type KeyType = 'legacy' | 'nacl' | 'secp256k1' | 'cardanoByron'
 type DerivationAlgorithm = 'BIP32' | 'SLIP10'
 
 type ConstructorParams = {
@@ -36,6 +36,8 @@ export default class KeyIdentifier {
     keyType: KeyType
     derivationPath: string
   }
+
+  toString(): string
 
   static validate(potentialKeyIdentifier: KeyIdentifierLike): boolean
   static compare(a: KeyIdentifierLike, b: KeyIdentifierLike): boolean

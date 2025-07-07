@@ -11,7 +11,7 @@ import {
   setLoading,
 } from './common.js'
 
-const { get, memoize } = lodash // eslint-disable-line @exodus/restricted-imports/prefer-basic-utils -- TODO: fix next time we touch this file
+const { get, memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
 export const getKeyFromAssetSource = ({ walletAccount, asset: assetName, network }) =>
   network ? `${walletAccount}.${assetName}.${network}` : `${walletAccount}.${assetName}`

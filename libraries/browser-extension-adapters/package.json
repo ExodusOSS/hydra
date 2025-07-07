@@ -1,7 +1,7 @@
 {
   "name": "@exodus/browser-extension-adapters",
-  "version": "1.3.2",
-  "description": "Various storage adapters using in the browser extension",
+  "version": "1.3.3",
+  "description": "Storage adapters for use in browser extensions.",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abrowser-extension-adapters"
   },
   "dependencies": {
-    "@exodus/basic-utils": "^2.0.0",
+    "@exodus/basic-utils": "^4.2.2",
     "@exodus/key-identifier": "^1.0.0",
     "@exodus/storage-encrypted": "^1.4.2",
     "@exodus/storage-memory": "^2.2.1",

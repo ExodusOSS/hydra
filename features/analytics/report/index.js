@@ -1,10 +1,18 @@
+import { z } from '@exodus/zod'
+import { memoize } from '@exodus/basic-utils'
+
 const createAnalyticsReport = ({ analyticsUserIdAtom }) => ({
   namespace: 'analytics',
-  export: async ({ walletExists } = Object.create(null)) => {
-    return {
-      userId: walletExists ? await analyticsUserIdAtom.get() : null,
-    }
-  },
+  export: async ({ walletExists, isLocked } = Object.create(null)) => ({
+    userId: walletExists && !isLocked ? await analyticsUserIdAtom.get() : null,
+  }),
+  getSchema: memoize(() =>
+    z
+      .object({
+        userId: z.string().nullable(),
+      })
+      .strict()
+  ),
 })
 
 const analyticsReportDefinition = {

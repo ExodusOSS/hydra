@@ -1,4 +1,4 @@
-import { setup } from '../utils'
+import { setup } from '../utils.js'
 
 describe('is-in-country', () => {
   it('should return false if no country code passed', () => {

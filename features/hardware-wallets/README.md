@@ -118,7 +118,7 @@ sequenceDiagram
 
 ```
 
-### `addPublicKeysToWalletAccount({ walletAccountName, syncedKeysId })`
+### `addPublicKeysToWalletAccount({ walletAccount, syncedKeysId })`
 
 Adds public keys (XPUBS / public keys) to an existing wallet account.
 
@@ -133,14 +133,14 @@ sequenceDiagram
     participant RestoreProgressTracker
     participant TxLogMonitors
 
-    Consumer->>HardwareWallets: addPublicKeysToWalletAccount({ walletAccountName, syncedKeysId })
+    Consumer->>HardwareWallets: addPublicKeysToWalletAccount({ walletAccount, syncedKeysId })
     activate HardwareWallets
 
     HardwareWallets->>HardwareWallets: Retrieve keys from syncedKeysMap using syncedKeysId
     Note right of HardwareWallets: Retrieves assetNames and keysToSync
 
     loop for each key in keysToSync
-        HardwareWallets->>PublicKeyStore: add({ walletAccountName, keyIdentifier, xpub, publicKey })
+        HardwareWallets->>PublicKeyStore: add({ walletAccount, keyIdentifier, xpub, publicKey })
 
     end
 

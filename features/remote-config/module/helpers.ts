@@ -18,15 +18,3 @@ export async function synchronizeTime<Response extends { headers: Headers }>(
 export function isFreezable(val: unknown): boolean {
   return !!val && typeof val === 'object'
 }
-
-export function unwrapErrorMessage(e: unknown): string {
-  if (typeof e === 'string') {
-    return e
-  }
-
-  if (e instanceof Error) {
-    return e.message
-  }
-
-  return `Unknown error type occurred: ${e}`
-}

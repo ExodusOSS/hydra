@@ -1,4 +1,4 @@
-import id from './id'
+import id from './id.js'
 
 const analyticsReduxDefinition = {
   id,

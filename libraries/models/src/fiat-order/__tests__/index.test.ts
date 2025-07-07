@@ -6,6 +6,7 @@ import { serialize } from '../../account-state/index.js'
 import type { Provider, StatusByProvider } from '../constants.js'
 import {
   MOONPAY_ORDER_STATUS,
+  ORDER_STATUS,
   ORDER_STATUS_TO_BLOCKCHAIN_STATUS,
   ORDER_STATUS_TO_MOONPAY_STATUS,
   ORDER_STATUS_TO_ONRAMPER_STATUS,
@@ -43,6 +44,7 @@ const serializedOrder = {
   toAsset: 'EUR',
   toWalletAccount: 'exodus_0',
   txId: 'c159af6b1386a73543878a44ceef04a5da89cf9c22317e2cf6664fa7eb441359',
+  paymentMethodType: 'card',
 } as const
 
 test('can deserialize order', () => {
@@ -53,6 +55,7 @@ test('can deserialize order', () => {
   expect(order.date.toISOString()).toEqual(serializedOrder.date)
   expect(order.fromAmount instanceof NumberUnit).toBeTruthy()
   expect((order.fromAmount as NumberUnit).toDefaultString({ unit: true })).toBe('0.0015 BTC')
+  expect(order.paymentMethodType).toBe('card')
 })
 
 test('can serialize order', () => {
@@ -120,6 +123,7 @@ test('can adapt provider order', () => {
     toAsset: 'bitcoin',
     toWalletAccount: 'exodus_0',
     txId: undefined,
+    paymentMethodType: 'bank',
   }
 
   const order = adapter(providerOrder, assets)
@@ -232,6 +236,7 @@ describe('toRedactedJSON()', () => {
       toAsset: order.toAsset,
       toWalletAccount: order.toWalletAccount,
       txIds: [order.txId],
+      paymentMethodType: order.paymentMethodType,
     })
   })
 
@@ -273,6 +278,7 @@ describe('toRedactedJSON()', () => {
       toAsset: order.toAsset,
       toWalletAccount: order.toWalletAccount,
       txIds: [order.txId],
+      paymentMethodType: order.paymentMethodType,
     })
   })
 
@@ -353,5 +359,15 @@ describe('order status', () => {
     })
 
     expect(order.exodusStatus).toBe('in-progress')
+  })
+
+  test('all status mappings should only contain valid status keys', () => {
+    const VALID_STATUS_KEYS = [ORDER_STATUS.complete, ORDER_STATUS.failed, ORDER_STATUS.in_progress]
+
+    for (const providerStatuses of Object.values(statusMappings)) {
+      for (const status of Object.keys(providerStatuses!)) {
+        expect(VALID_STATUS_KEYS).toContain(status)
+      }
+    }
   })
 })

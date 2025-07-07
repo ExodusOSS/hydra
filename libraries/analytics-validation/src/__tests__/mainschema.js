@@ -1,7 +1,13 @@
-import validateSchema from '../main.schemasafe.json'
+import { readFileSync } from 'fs'
+import { join } from 'path'
 
-/* eslint-disable unicorn/prefer-export-from */
-export const validate = validateSchema
+import buildSchema from './_build-schema.js'
+
+const schema = JSON.parse(
+  readFileSync(join(import.meta.dirname, '../main.schemasafe.json'), 'utf8') // bundleable when single-line
+)
+
+export const validate = buildSchema(schema)
 export const commonProps = {
   time: 1_682_084_347,
   app_build: 'prod',

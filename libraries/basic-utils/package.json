@@ -1,11 +1,11 @@
 {
   "name": "@exodus/basic-utils",
-  "version": "3.5.1",
+  "version": "4.2.2",
   "description": "Lightweight lodash-like utils.",
   "type": "module",
   "main": "src/index.js",
   "author": "Exodus Movement, Inc.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/basic-utils",
   "files": [
     "src",
@@ -28,5 +28,12 @@
   },
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abasic-utils"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.7",
+    "lodash": "^4.17.21"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@exodus/feature-control",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "type": "module",
   "description": "This library abstracts and simplifies handling and use of feature flags and other feature controls.",
   "main": "index.js",
@@ -21,7 +21,7 @@
     "**/<node_internals>"
   ],
   "dependencies": {
-    "assert": "^1.1.1",
+    "minimalistic-assert": "^1.0.1",
     "reselect": "^3.0.1",
     "semver": "^6.3.0"
   },
@@ -35,5 +35,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "@types/minimalistic-assert": "^1.0.1"
   }
 }

@@ -3,16 +3,17 @@ import {
   marketHistoryClearCacheAtomDefinition,
   marketHistoryRefreshIntervalAtomDefinition,
   remoteConfigClearMarketHistoryCacheAtomDefinition,
-} from './atoms'
-import marketHistoryMonitorDefinition from './module'
+} from './atoms/index.js'
+import marketHistoryMonitorDefinition from './module/index.js'
 
-import marketHistoryPluginDefinition from './plugin'
-import marketHistoryApiDefinition from './api'
+import marketHistoryPluginDefinition from './plugin/index.js'
+import marketHistoryApiDefinition from './api/index.js'
 
 const CLEAR_MARKET_HISTORY_VERSION = 'infrastructure.marketHistory.clearVersion'
 const REFRESH_INTERVAL_ATOM_PATH = 'infrastructure.marketHistory.refreshInterval'
 const DEFAULT_DAILY_REQUEST_LIMIT = 366
 const DEFAULT_HOURLY_REQUEST_LIMIT = 7 * 24
+const DEFAULT_MINUTELY_REQUEST_LIMIT = 2 * 60
 
 const marketHistory = (
   {
@@ -23,6 +24,7 @@ const marketHistory = (
     marketHistoryRefreshIntervalDefaultValue = null,
     dailyRequestLimit = DEFAULT_DAILY_REQUEST_LIMIT,
     hourlyRequestLimit = DEFAULT_HOURLY_REQUEST_LIMIT,
+    minutelyRequestLimit = DEFAULT_MINUTELY_REQUEST_LIMIT,
   } = Object.create(null)
 ) => {
   return {
@@ -53,6 +55,7 @@ const marketHistory = (
           granularityRequestLimits: {
             day: dailyRequestLimit,
             hour: hourlyRequestLimit,
+            minute: minutelyRequestLimit,
           },
         },
       },

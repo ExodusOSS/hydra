@@ -1,7 +1,31 @@
 import Address from './Address.js'
 import BIP322 from './BIP322.js'
+import type { SignerAsync } from '@exodus/bitcoinjs'
 import * as bitcoin from '@exodus/bitcoinjs'
 import * as bitcoinMessage from '@exodus/bitcoinjs/message'
+import assert from 'minimalistic-assert'
+import type { Signer as AssetSigner } from '@exodus/asset-types/src/signer'
+
+type ToAsyncSignerParams = {
+  publicKey: Buffer
+  signatureType?: 'ecdsa' | 'schnorr'
+  tweak?: Buffer
+  signer: AssetSigner
+}
+
+const createAsyncSigner = ({ signer, publicKey, tweak }: ToAsyncSignerParams): SignerAsync => {
+  return {
+    publicKey,
+    getPublicKey: () => publicKey,
+    sign: async (data: Buffer) => signer.sign({ signatureType: 'ecdsa', data, enc: 'sig' }),
+    signSchnorr: async (hash: Buffer) =>
+      signer.sign({
+        signatureType: 'schnorr',
+        data: hash,
+        tweak,
+      }),
+  }
+}
 
 /**
  * Class that signs BIP-322 signature using a private key.
@@ -75,6 +99,71 @@ class Signer {
       .finalizeAllInputs()
     // Extract and return the signature
     return BIP322.encodeWitness(toSignTxSigned)
+  }
+
+  public static async signAsync(
+    signer: string | Buffer | AssetSigner,
+    address: string,
+    message: string,
+    network: bitcoin.Network = bitcoin.networks.bitcoin
+  ) {
+    if (typeof signer === 'string' || Buffer.isBuffer(signer)) {
+      return this.sign(signer, address, message, network)
+    }
+
+    const publicKey = await signer.getPublicKey()
+
+    assert(
+      this.checkPubKeyCorrespondToAddress(publicKey, address),
+      `Invalid signer for address "${address}".`
+    )
+
+    if (Address.isP2PKH(address)) {
+      const asyncSigner = {
+        sign(
+          hash: Buffer,
+          extraEntropy?: Buffer
+        ): Promise<{ signature: Buffer; recovery: number }> {
+          return signer.sign({
+            signatureType: 'ecdsa',
+            data: hash,
+            extraEntropy,
+            enc: 'sig,rec',
+          })
+        },
+      }
+
+      return bitcoinMessage.signAsync(message, asyncSigner, true)
+    }
+
+    const scriptPubKey = Address.convertAdressToScriptPubkey(address)
+    const toSpendTx = BIP322.buildToSpendTx(message, scriptPubKey)
+    let toSignTx: bitcoin.Psbt
+    let tweak: Buffer | undefined
+
+    if (Address.isP2SH(address)) {
+      const redeemScript = bitcoin.payments.p2wpkh({
+        hash: bitcoin.crypto.hash160(publicKey),
+        network,
+      }).output as Buffer
+      toSignTx = BIP322.buildToSignTx(toSpendTx.getId(), redeemScript, true)
+    } else if (Address.isP2WPKH(address)) {
+      toSignTx = BIP322.buildToSignTx(toSpendTx.getId(), scriptPubKey)
+    } else {
+      // P2TR signing path
+      const internalPublicKey = publicKey.subarray(1, 33)
+      tweak = bitcoin.crypto.taggedHash('TapTweak', publicKey.subarray(1, 33))
+      toSignTx = BIP322.buildToSignTx(toSpendTx.getId(), scriptPubKey, false, internalPublicKey)
+    }
+
+    const asyncSigner = createAsyncSigner({ signer, publicKey, tweak })
+
+    await toSignTx.signAllInputsAsync(asyncSigner, [
+      bitcoin.Transaction.SIGHASH_ALL,
+      bitcoin.Transaction.SIGHASH_DEFAULT,
+    ])
+
+    return BIP322.encodeWitness(toSignTx.finalizeAllInputs())
   }
 
   /**

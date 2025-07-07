@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/feature-control@2.2.3...@exodus/feature-control@2.2.4) (2025-05-12)
+
+### Bug Fixes
+
+- fix: swap assert with minimalistic-assert (#12313)
+
 ## [2.2.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/feature-control@2.2.2...@exodus/feature-control@2.2.3) (2025-02-14)
 
 **Note:** Version bump only for package @exodus/feature-control

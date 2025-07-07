@@ -57,7 +57,7 @@ const createAnalyticsLifecyclePlugin = ({
       analytics.setUserId(userId)
     })
 
-    extraSeedsUserIdsUnobserve = analyticsExtraSeedsUserIdsAtom.observe((extraSeedUserIds) => {
+    extraSeedsUserIdsUnobserve = analyticsExtraSeedsUserIdsAtom?.observe((extraSeedUserIds) => {
       const extraSeedIds = Object.values(extraSeedUserIds)
       extraSeedIds.sort()
 

@@ -1,6 +1,6 @@
 const buildMetadata = {
   appId: 'sdk-minimal-demo',
-  build: 'latest',
+  build: 'exodus',
   version: '1.0.0',
   platformName: 'browser',
   dev: true,

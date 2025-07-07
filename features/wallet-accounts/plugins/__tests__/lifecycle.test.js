@@ -2,12 +2,7 @@ import { WalletAccount } from '@exodus/models'
 import delay from 'delay'
 import { when } from 'jest-when'
 
-const atomsActual = await import('@exodus/atoms')
-jest.doMock('@exodus/atoms', () => ({
-  __esModule: true,
-  ...atomsActual,
-  createAtomObserver: jest.fn(),
-}))
+jest.doMock('@exodus/atoms/factories/observer', () => ({ __esModule: true, default: jest.fn() }))
 
 const atoms = await import('@exodus/atoms')
 const { default: createWalletAccountsPlugin } = await import('../lifecycle.js')

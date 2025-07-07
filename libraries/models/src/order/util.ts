@@ -30,7 +30,7 @@ export const orderFromJSONLegacy = (json: any, { assets }: { assets: Assets }) =
 }
 
 export const orderToJSONLegacy = (order: Order) => {
-  assert(order && order instanceof Order, 'toJSONLegacy: requires an Order')
+  assert(order && Order.isInstance(order), 'toJSONLegacy: requires an Order')
 
   const obj: Record<string, any> = { ...order.toJSON(), date: order.date.toISOString() }
 

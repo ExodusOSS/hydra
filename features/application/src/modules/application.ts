@@ -17,6 +17,7 @@ import type {
   UnlockWalletParams,
   AddSeedParams,
   StartApplicationParams,
+  EventLog,
 } from '../utils/types.js'
 import type { Atom } from '@exodus/atoms'
 import type { Logger } from '@exodus/logger'
@@ -62,12 +63,14 @@ export type ApplicationParams = {
   backedUpAtom: Atom<boolean>
   passphraseCache: PassphraseCache
   logger: Logger
+  eventLog: EventLog
   errorTracking: ErrorTrackingModule
 }
 
 export class Application extends EventEmitter {
   #hooks: Partial<Record<LifecycleHookName, LifecycleHookListener[]>> = {}
   #logger: Logger
+  #eventLog: EventLog
   #wallet: Wallet
   #lockedAtom: Atom<boolean>
   #backedUpAtom: Atom<boolean>
@@ -85,11 +88,13 @@ export class Application extends EventEmitter {
     backedUpAtom,
     passphraseCache = passphraseCachePlaceholder,
     logger,
+    eventLog,
     errorTracking,
   }: ApplicationParams) {
     super()
 
     this.#logger = logger
+    this.#eventLog = eventLog
     this.#wallet = wallet
     this.#lockedAtom = lockedAtom
     this.#backedUpAtom = backedUpAtom
@@ -107,7 +112,7 @@ export class Application extends EventEmitter {
     return super.emit(name, ...args.map((arg: any) => (isFreezable(arg) ? proxyFreeze(arg) : arg)))
   }
 
-  start = async ({ restoring }: StartApplicationParams = {}) => {
+  start = async ({ restoring, importing }: StartApplicationParams = {}) => {
     const [deleteFlag, importFlag] = await this.#flagsStorage.batchGet([DELETE_FLAG, IMPORT_FLAG])
 
     if (restoring) {
@@ -115,7 +120,7 @@ export class Application extends EventEmitter {
     }
 
     const isDeleting = !!deleteFlag
-    const isImporting = !!importFlag
+    const isImporting = importing || !!importFlag
 
     if (isDeleting) await this.#wallet.clear()
 
@@ -127,6 +132,11 @@ export class Application extends EventEmitter {
     const walletExists = await this.#wallet.exists()
 
     if (isImporting || !walletExists) {
+      await this.#eventLog.record({
+        event: 'application.willFireClearHook',
+        applicationWillFireClearHookOpts: { isImporting, walletExists },
+      })
+
       await this.fire(Hook.Clear, null, { concurrent: true })
     }
 
@@ -249,6 +259,15 @@ export class Application extends EventEmitter {
 
   import = async (opts: ImportApplicationParams) => {
     this.#logger.log('importing wallet')
+
+    await this.#eventLog.record({
+      event: 'application.import',
+      applicationImportOpts: {
+        forceRestart: opts.forceRestart,
+        forgotPassphrase: opts.forgotPassphrase,
+        backupType: opts.backupType,
+      },
+    })
 
     await this.#flagsStorage.set(RESTORE_FLAG, true)
 
@@ -441,6 +460,7 @@ const applicationModuleDefinition = {
     'backedUpAtom',
     'passphraseCache?',
     'logger',
+    'eventLog',
     'errorTracking',
   ],
   public: true,
