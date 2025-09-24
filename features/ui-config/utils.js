@@ -2,7 +2,7 @@ import { toUpperSnakeCase } from '@exodus/formatting'
 
 export const getAtomId = (id) => `${id}ConfigAtom`
 
-const toReduxEvent = (type) => `EVENT_${toUpperSnakeCase(type.replace(/configatom$/i, ''))}_CONFIG`
+const toReduxEvent = (type) => `EVENT_${toUpperSnakeCase(type.replace(/configatom$/iu, ''))}_CONFIG`
 const getConfigReduxEventName = (id) => toReduxEvent(getAtomId(id))
 
 export const getEventReduxMap = (config) =>

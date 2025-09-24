@@ -1,18 +1,20 @@
-import { mnemonicToSeed } from 'bip39'
-import { createKeyIdentifierForExodus } from '@exodus/key-ids'
-import createKeychain from './create-keychain.js'
-import { getSeedId } from '../crypto/seed-id.js'
+import { mnemonicToSeed } from '@exodus/bip39'
 import KeyIdentifier from '@exodus/key-identifier'
+import { createKeyIdentifierForExodus } from '@exodus/key-ids'
 
-const seed = mnemonicToSeed(
-  'menu memory fury language physical wonder dog valid smart edge decrease worth'
-)
+import { getSeedId } from '../crypto/seed-id.js'
+import createKeychain from './create-keychain.js'
 
-const seed1 = mnemonicToSeed(
-  'menu memory fury language physical wonder dog valid smart edge decrease test'
-)
+const seed = await mnemonicToSeed({
+  mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
+})
 
-const otherSeed = mnemonicToSeed('language'.repeat(12))
+const seed1 = await mnemonicToSeed({
+  mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease test',
+  validate: false,
+})
+
+const otherSeed = await mnemonicToSeed({ mnemonic: 'language'.repeat(12), validate: false })
 
 const seedId = getSeedId(seed)
 const otherSeedId = getSeedId(otherSeed)
@@ -136,7 +138,7 @@ describe('lockPrivateKeys', () => {
     const keychain = createKeychain({ seed })
     keychain.lockPrivateKeys()
 
-    const wrongSeed = mnemonicToSeed('menu'.repeat(12))
+    const wrongSeed = await mnemonicToSeed({ mnemonic: 'menu'.repeat(12), validate: false })
     await expect(async () => keychain.unlockPrivateKeys([wrongSeed])).rejects.toThrow(
       /must pass in existing seed/
     )
@@ -155,7 +157,7 @@ describe('lockPrivateKeys', () => {
     keychain.addSeed(seed1)
     keychain.lockPrivateKeys()
 
-    const wrongSeed = mnemonicToSeed('menu'.repeat(12))
+    const wrongSeed = await mnemonicToSeed({ mnemonic: 'menu'.repeat(12), validate: false })
     await expect(async () => keychain.unlockPrivateKeys([seed, wrongSeed])).rejects.toThrow(
       /must pass in existing seed/
     )
@@ -176,10 +178,15 @@ describe('lockPrivateKeys', () => {
     ).rejects.toThrow(/private keys are locked/)
   })
 
-  it('should block signTx when locked', async () => {
+  it('should block signBuffer when locked', async () => {
     const keychain = createKeychain({ seed })
     keychain.lockPrivateKeys()
-    await expect(keychain.signTx({})).rejects.toThrow(/private keys are locked/)
+    const keyId = {
+      keyType: 'nacl',
+    }
+    await expect(
+      keychain.signBuffer({ data: new Uint8Array([0]), keyId, signatureType: 'ed25519' })
+    ).rejects.toThrow(/private keys are locked/)
   })
 
   it('should block sodium when locked', async () => {

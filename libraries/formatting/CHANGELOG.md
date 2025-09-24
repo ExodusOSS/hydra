@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/formatting@9.0.4...@exodus/formatting@9.1.0) (2025-08-04)
+
+### Features
+
+- feat(formatting): add formatZeroWithoutDecimals option to price formatting functions (#13435)
+
 ## [9.0.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/formatting@9.0.3...@exodus/formatting@9.0.4) (2025-06-18)
 
 ### Bug Fixes

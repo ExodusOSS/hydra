@@ -1,8 +1,10 @@
 import * as secp256k1 from '@exodus/crypto/secp256k1'
 import * as ethers from '@exodus/ethersproject-transactions'
 import AppEth, { ledgerService } from '@exodus/ledgerhq-hw-app-eth'
-import type { TypedMessage, MessageTypes } from '@metamask/eth-sig-util'
-import { TypedDataUtils, SignTypedDataVersion } from '@metamask/eth-sig-util'
+// @ts-expect-error just needs a tsconfig update
+import type { TypedMessage, MessageTypes } from '@exodus/ethereumjs/eth-sig-util'
+// @ts-expect-error just needs a tsconfig update
+import { TypedDataUtils, SignTypedDataVersion } from '@exodus/ethereumjs/eth-sig-util'
 import assert from 'minimalistic-assert'
 
 import type Transport from '@ledgerhq/hw-transport'
@@ -32,7 +34,7 @@ function hashEIP712Message(typedData: unknown) {
     sanitizedData.types,
     version
   )
-  let hashStructMessage = Buffer.alloc(0)
+  let hashStructMessage: Buffer<ArrayBufferLike> = Buffer.alloc(0)
   if (sanitizedData.primaryType !== 'EIP712Domain') {
     hashStructMessage = hashStruct(
       '' + sanitizedData.primaryType,
@@ -49,12 +51,13 @@ function hashEIP712Message(typedData: unknown) {
 }
 
 function isEIP712Message(message: Record<string, unknown>): message is EIP712Message {
+  if (typeof message !== 'object') return false
+
+  const ownKeys = ['types', 'primaryType', 'domain', 'message']
+  const candidateKeys = Object.keys(message)
+
   return (
-    typeof message === 'object' &&
-    'types' in message &&
-    'primaryType' in message &&
-    'domain' in message &&
-    'message' in message
+    candidateKeys.length === ownKeys.length && candidateKeys.every((key) => ownKeys.includes(key))
   )
 }
 

@@ -1,6 +1,6 @@
 import { hash } from '@exodus/crypto/hash'
 import { hmac } from '@exodus/crypto/hmac'
-import { signDetached, edwardsToPublic } from '@exodus/crypto/curve25519'
+import { signDetached, edwardsToPublic } from '@exodus/crypto/ed25519'
 import assert from 'minimalistic-assert'
 
 const SEED_SIZE = 32

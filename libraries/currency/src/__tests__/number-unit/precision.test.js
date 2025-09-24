@@ -1,7 +1,8 @@
 import assert from 'assert'
-import { bitcoin, dollar } from '../_fixtures.js'
+
 import conversion from '../../conversion.js'
 import conversionByRate from '../../conversion-by-rate.js'
+import { bitcoin, dollar } from '../_fixtures.js'
 
 const baseDecimal = bitcoin.satoshis('1.2345')
 const defaultDecimal = bitcoin.BTC('1.2345678901234')

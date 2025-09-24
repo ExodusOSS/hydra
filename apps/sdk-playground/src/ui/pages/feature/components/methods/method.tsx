@@ -36,10 +36,10 @@ const Method = ({ name, args = {}, doc, returnType, onSubmit }) => {
   return (
     <form
       id={kebabCase(name)}
-      className="mb-8  rounded-lg border border-deep-50"
+      className="border-deep-50  mb-8 rounded-lg border"
       onSubmit={handleSubmit}
     >
-      <div className="border-b border-deep-50 bg-deep-300 px-4 py-2">
+      <div className="border-deep-50 bg-deep-300 border-b px-4 py-2">
         <Text>{name}</Text>
       </div>
 
@@ -104,7 +104,7 @@ const Method = ({ name, args = {}, doc, returnType, onSubmit }) => {
         </Button>
       </div>
 
-      <div className="flex justify-between bg-deep-300 px-4 py-2">
+      <div className="bg-deep-300 flex justify-between px-4 py-2">
         <Text size={14} className="text-slate-500">
           Response
         </Text>
@@ -126,19 +126,19 @@ const Method = ({ name, args = {}, doc, returnType, onSubmit }) => {
             {error && <span className="mr-2 text-red-700">Error</span>}
           </Text>
 
-          <Text className="mb-2" size={13}>
-            {error ? (
-              <>
-                <span className="mr-2">Message:</span>
-                <span>{error}</span>
-              </>
-            ) : (
-              <>
-                <span className="mr-2">Value:</span>
-                <Value value={response} />
-              </>
-            )}
-          </Text>
+          {error ? (
+            <Text className="mb-2" size={13}>
+              <span className="mr-2">Message:</span>
+              <span>{error}</span>
+            </Text>
+          ) : (
+            <div className="mb-2">
+              <Text as="span" className="mr-2" size={13}>
+                Value:
+              </Text>
+              <Value value={response} />
+            </div>
+          )}
         </div>
       )}
     </form>

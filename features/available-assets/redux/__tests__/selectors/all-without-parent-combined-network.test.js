@@ -1,4 +1,4 @@
-import { bitcoin, ethereum, usdcoin, setup } from '../utils.js'
+import { bitcoin, ethereum, setup, usdcoin } from '../utils.js'
 
 describe('allWithoutParentCombinedNetwork', () => {
   it('should return assets that are not combined', () => {

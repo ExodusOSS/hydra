@@ -1,11 +1,6 @@
 const ratesApi = ({ ratesMonitor }) => ({
   rates: {
     refresh: () => ratesMonitor.update(),
-    simulation: {
-      enable: () => ratesMonitor.enableSimulation(),
-      disable: () => ratesMonitor.disableSimulation(),
-      isEnabled: () => ratesMonitor.isSimulationEnabled(),
-    },
   },
 })
 

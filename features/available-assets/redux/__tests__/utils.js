@@ -5,6 +5,7 @@ import { keyBy } from '@exodus/basic-utils'
 import combinedAssetsList from '@exodus/combined-assets-meta'
 import { setupRedux } from '@exodus/redux-dependency-injection'
 import { combineReducers, createStore } from 'redux'
+
 import availableAssetsReduxDefinition from '../index.js'
 
 const combinedAssets = keyBy(combinedAssetsList, ({ name }) => name)

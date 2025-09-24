@@ -1,8 +1,6 @@
-# Number (with) Unit
+# @exodus/currency
 
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](http://standardjs.com)
-
-A [heavily tested](https://github.com/ExodusMovement/exodus-core/tree/master/packages/currency/src/__tests__) JavaScript component to handle arbitrary precision numbers with units.
+A heavily tested JavaScript library to handle arbitrary precision numbers with units.
 
 ## Why?
 
@@ -29,8 +27,8 @@ this library was built.**
 
 ## Install
 
-```
-npm i --save @exodus/currency
+```sh
+yarn add @exodus/currency
 ```
 
 ## Important Concepts
@@ -74,7 +72,7 @@ To convert _beween_ units from different families, e.g. bitcoin -> USD, use the 
 
 ## Usage
 
-**Quick example:**
+### Example
 
 ```js
 import NumberUnit, { UnitType } from '@exodus/currency'

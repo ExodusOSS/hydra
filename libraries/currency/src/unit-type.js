@@ -25,8 +25,10 @@ export default class UnitType {
     return a === b || a.equals(b)
   }
 
+  static isUnitType = isUnitType
+
   // [unitName] // would like this to be "Unit", but TypeScript errors pop up; Flow can't handle this
-  units
+  units = Object.create(null)
   baseUnit
   defaultUnit
 
@@ -35,8 +37,6 @@ export default class UnitType {
   constructor(definitions, initSymbol) {
     assert(initSymbol === FACTORY_SYMBOL, 'please use UnitType.create()')
     assert(!isEmpty(definitions), 'definitions must have at least one item')
-
-    this.units = {}
 
     Object.keys(definitions).forEach((key) => {
       this.units[key] = createUnit(this, key, definitions[key])
@@ -54,7 +54,7 @@ export default class UnitType {
     // default unit is the last unit (after stable ascending sort by power) with the max power
     this.defaultUnit = Object.values(this.units).reduce((maxUnit, unit) => {
       return Math.trunc(maxUnit.power) > unit.power ? maxUnit : unit
-    }, {})
+    }, Object.create(null))
 
     this.#zero = this.defaultUnit(0)
   }
@@ -75,8 +75,8 @@ export default class UnitType {
 
   parse(str) {
     const [amount, unit] = str.split(' ') // e.g. 100 bits or 150.30 USD
-    if (this.units[unit] === undefined)
-      throw new Error(`Unit "${unit}" not found from parsing "${str}"`)
+    assert(this.units[unit] !== undefined, `Unit "${unit}" not found from parsing "${str}"`)
+
     return this.units[unit](amount)
   }
 

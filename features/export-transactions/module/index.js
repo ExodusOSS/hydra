@@ -77,7 +77,8 @@ class ExportTransactions {
       data.type === 'delegate' ||
       data.type === 'stake' ||
       data.type === 'staking' ||
-      data?.delegate !== undefined ||
+      data.delegate ||
+      data.delegation === 'delegate' ||
       data.staking?.method === 'delegate' ||
       data.staking?.method === 'createAccountWithSeed' ||
       data?.txType === 'addStake'
@@ -89,7 +90,7 @@ class ExportTransactions {
       data.type === 'undelegate' ||
       data.type === 'unstake' ||
       data.type === 'unstaking' ||
-      data?.undelegate !== undefined ||
+      data.undelegate ||
       data.delegation === 'undelegate' ||
       data.staking?.method === 'undelegate' ||
       data?.txType === 'unlock'
@@ -141,13 +142,21 @@ class ExportTransactions {
           coinAmount = asset.currency.baseUnit(tx.data.reward || 0) // reward tx
         }
 
-        const fee = tx.feeAmount ?? asset.currency.baseUnit(0)
+        const feeAmount = tx.feeAmount ?? asset.currency.baseUnit(0)
 
         // When staking, a 2 ADA deposit is taken. This deposit is returned upon Unstaking.
-        if (tx.data && tx.data.delegate) {
-          feeAmount = fee.abs().add(asset.ADA_KEY_DEPOSIT_FEE).negate() // staking txn
-        } else if (tx.data && tx.data.delegate === null) {
-          feeAmount = asset.ADA_KEY_DEPOSIT_FEE.sub(fee.abs()) // unstaking txn
+        if (stakingType === 'staked') {
+          coinAmount = asset.ADA_KEY_DEPOSIT_FEE.negate()
+        } else if (stakingType === 'unstaked') {
+          coinAmount = asset.ADA_KEY_DEPOSIT_FEE.sub(feeAmount.abs())
+        }
+
+        break
+      }
+
+      case 'cosmos': {
+        if (tx.data.undelegate) {
+          coinAmount = asset.currency.baseUnit(tx.data.undelegate)
         }
 
         break

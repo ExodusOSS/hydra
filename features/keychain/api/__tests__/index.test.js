@@ -1,17 +1,18 @@
+import { mnemonicToSeed } from '@exodus/bip39'
 import { hash } from '@exodus/crypto/hash'
 import KeyIdentifier from '@exodus/key-identifier'
-import { mnemonicToSeed } from 'bip39'
-import apiDefinition from '../index.js'
-import moduleDefinition from '../../module/index.js'
+
 import { getSeedId } from '../../module/crypto/seed-id.js'
+import moduleDefinition from '../../module/index.js'
+import apiDefinition from '../index.js'
 
 let keychain
 const mnemonic = 'cousin access oak tragic entire dynamic marine expand govern enjoy honey tissue'
 const otherMnemonic =
   'menu memory fury language physical wonder dog valid smart edge decrease worth'
 
-const seed = mnemonicToSeed(mnemonic)
-const otherSeed = mnemonicToSeed(otherMnemonic)
+const seed = await mnemonicToSeed({ mnemonic })
+const otherSeed = await mnemonicToSeed({ mnemonic: otherMnemonic })
 const seedId = getSeedId(seed)
 const otherSeedId = getSeedId(otherSeed)
 const solanaKeyId = new KeyIdentifier({

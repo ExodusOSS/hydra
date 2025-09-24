@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/core-selectors@4.0.1...@exodus/core-selectors@4.0.2) (2025-08-13)
+
+### Bug Fixes
+
+- fix: remove \_test code from package (#13572)
+
 ## [4.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/core-selectors@4.0.0...@exodus/core-selectors@4.0.1) (2025-03-05)
 
 **Note:** Version bump only for package @exodus/core-selectors

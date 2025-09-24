@@ -17,7 +17,11 @@ const createAuthPlugin = ({ port, auth, authAtom, logger }) => {
     observer.unregister()
   }
 
-  return { onLoad, onClear, onStop }
+  return {
+    onLoad: Object.defineProperty(onLoad, 'priority', { value: 5, writable: false }),
+    onClear,
+    onStop,
+  }
 }
 
 const authPluginDefinition = {

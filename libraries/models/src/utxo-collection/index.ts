@@ -80,9 +80,9 @@ export default class UtxoCollection {
   ) {
     const currency = options.currency || pickCurrencyFromArray(utxoArray)
     // may cause bugs later
-    if (currency == null && utxoArray == null)
+    if (currency == null && utxoArray == null) {
       console.warn('UtxoCollection.fromArray(): both currency and utxoArray are null.')
-    else if (currency == null && utxoArray?.length === 0) {
+    } else if (currency == null && utxoArray?.length === 0) {
       console.warn('UtxoCollection.fromArray(): currency is null and utxoArray has zero items.')
     }
 

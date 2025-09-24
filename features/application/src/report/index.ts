@@ -7,7 +7,6 @@ import type { LockHistoryEntry, Wallet } from '../utils/types.js'
 import type { Application } from '../modules/application.js'
 
 const createApplicationReport = ({
-  wallet,
   walletCreatedAtAtom,
   application,
   lockHistoryAtom,
@@ -18,7 +17,7 @@ const createApplicationReport = ({
   lockHistoryAtom: Atom<LockHistoryEntry[]>
 }) => ({
   namespace: 'application',
-  export: async ({ isLocked } = Object.create(null)) => {
+  export: async ({ isLocked, walletExists } = Object.create(null)) => {
     const [isRestoring, isBackedUp, lockHistory] = await Promise.all([
       application.isRestoring(),
       application.isBackedUp(),
@@ -38,7 +37,20 @@ const createApplicationReport = ({
       }
     }
 
-    const getCreatedAt = async () => ((await wallet.exists()) ? walletCreatedAtAtom.get() : null)
+    const getCreatedAt = async () => {
+      if (!walletExists) {
+        return null
+      }
+
+      // We have a theory that this might take a while to fetch, so we add a timeout.
+      // Consider removing this if we don't see any placeholder errors below in Safe Reports.
+      const timeout = new Promise((resolve) =>
+        setTimeout(() => {
+          resolve('Cannot fetch wallet created at.')
+        }, 5000)
+      )
+      return Promise.race([walletCreatedAtAtom.get(), timeout])
+    }
 
     return {
       isLocked,
@@ -73,7 +85,7 @@ const applicationReportDefinition = {
   id: 'applicationReport',
   type: 'report',
   factory: createApplicationReport,
-  dependencies: ['wallet', 'walletCreatedAtAtom', 'application', 'lockHistoryAtom'],
+  dependencies: ['walletCreatedAtAtom', 'application', 'lockHistoryAtom'],
 } as const satisfies Definition
 
 export default applicationReportDefinition

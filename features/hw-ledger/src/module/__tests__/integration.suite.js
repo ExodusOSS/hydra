@@ -4,16 +4,15 @@ import Zemu, { DEFAULT_START_OPTIONS } from '@zondax/zemu'
 
 import { assetApplications } from '../assets'
 import { fixtures } from './fixtures'
-import { ASSET_NAME_TO_ELF_NAME_MAP, DEBUG, METADATA } from './metadata'
+import { ASSET_NAME_TO_ELF_NAME_MAP, DEBUG } from './metadata'
 import { getAppPath } from './utils'
 
 jest.setTimeout(4 * 60 * 1000)
 
-export default function integrationSuite(assetName) {
+export default function integrationSuite(assetName, metadata, fixture) {
   describe(assetName, () => {
     /* Setup asset specific fixtures & grab supported models & app versions */
-    const fixture = fixtures[assetName]
-    const { applicationName, baseAssetName, models, appVersions } = METADATA[assetName]
+    const { applicationName, baseAssetName, models, appVersions } = metadata
 
     describe.each(models)('%s', (model) => {
       describe.each(appVersions)('%s', (appVersion) => {
@@ -41,7 +40,7 @@ export default function integrationSuite(assetName) {
             custom: `-s "${fixtures.mnemonic}"`,
             startTimeout: 60_000,
           }
-          if (model === 'stax') options.startText = 'This app enables'
+          if (model === 'stax') options.startText = 'This app'
           await sim.start(options)
 
           // const transport = await Transport.open({ apduPort: 40_000 })

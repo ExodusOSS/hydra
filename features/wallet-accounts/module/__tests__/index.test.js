@@ -80,7 +80,6 @@ describe('WalletAccounts', () => {
     const wallet = { getPrimarySeedId: async () => primarySeedId }
     const walletAccountsInternalAtom = createWalletAccountsInternalAtom({
       storage: createInMemoryStorage(),
-      config: {},
     })
     await walletAccountsInternalAtom.set(converted)
 
@@ -130,8 +129,8 @@ describe('WalletAccounts', () => {
 
         expect(fusionMock.channel).toHaveBeenCalled()
 
-        expect(walletAccounts.get('exodus_0')).toEqual(stored.exodus_0)
-        expect(walletAccounts.get('exodus_1')).toEqual(stored.exodus_1)
+        expect(await walletAccounts.get('exodus_0')).toEqual(stored.exodus_0)
+        expect(await walletAccounts.get('exodus_1')).toEqual(stored.exodus_1)
       })
     })
 
@@ -178,7 +177,10 @@ describe('WalletAccounts', () => {
           },
         })
 
-        const nextIndex = walletAccounts.getNextIndex({ seedId: primarySeedId, source: EXODUS_SRC })
+        const nextIndex = await walletAccounts.getNextIndex({
+          seedId: primarySeedId,
+          source: EXODUS_SRC,
+        })
         expect(nextIndex).toBe(4)
       })
 
@@ -213,6 +215,41 @@ describe('WalletAccounts', () => {
             index: 1,
             seedId: primarySeedId,
             compatibilityMode,
+          }),
+        })
+      })
+
+      it('should create new exodus account with same compatibility mode as default account even if undefined', async () => {
+        const { walletAccounts, walletAccountsAtom } = await prepare({
+          walletAccounts: {
+            exodus_0: {
+              ...stored.exodus_0,
+              compatibilityMode: undefined,
+            },
+          },
+        })
+
+        await walletAccounts.create({
+          label: 'Another',
+          color: '#ff0000',
+          icon: 'exodus',
+          compatibilityMode: 'metamask',
+        })
+
+        const all = await walletAccountsAtom.get()
+
+        expect(all).toEqual({
+          exodus_0: expect.objectContaining({
+            label: 'Exodus',
+            index: 0,
+            seedId: primarySeedId,
+            compatibilityMode: undefined,
+          }),
+          exodus_1: expect.objectContaining({
+            label: 'Another',
+            index: 1,
+            seedId: primarySeedId,
+            compatibilityMode: undefined,
           }),
         })
       })
@@ -265,7 +302,7 @@ describe('WalletAccounts', () => {
           icon: 'exodus',
         })
 
-        const walletAccount = walletAccounts.get('ftx_12357')
+        const walletAccount = await walletAccounts.get('ftx_12357')
 
         expect(walletAccount.index).toBeNull()
         expect(walletAccount.seedId).toBeUndefined()
@@ -294,12 +331,12 @@ describe('WalletAccounts', () => {
           icon: 'exodus',
         })
 
-        const stash = walletAccounts.get('exodus_1')
+        const stash = await walletAccounts.get('exodus_1')
 
         expect(stash.label).toBe('Potters Big Stash')
         expect(stash.index).toBe(1)
 
-        const chamber = walletAccounts.get('exodus_3')
+        const chamber = await walletAccounts.get('exodus_3')
         expect(chamber.label).toBe('Potters Secret Chamber')
         expect(chamber.index).toBe(3)
       })
@@ -322,7 +359,7 @@ describe('WalletAccounts', () => {
           icon: 'exodus',
         })
 
-        const stash = walletAccounts.get('exodus_1')
+        const stash = await walletAccounts.get('exodus_1')
 
         expect(stash.label).toBe('Potters Big Stash')
         expect(stash.index).toBe(1)
@@ -444,8 +481,8 @@ describe('WalletAccounts', () => {
           },
         ])
 
-        const first = walletAccounts.get('exodus_2')
-        const second = walletAccounts.get('exodus_3')
+        const first = await walletAccounts.get('exodus_2')
+        const second = await walletAccounts.get('exodus_3')
 
         expect(first).toMatchObject(created[0])
         expect(second).toMatchObject(created[1])
@@ -497,6 +534,41 @@ describe('WalletAccounts', () => {
           ])
         ).rejects.toThrow(/with same/)
       })
+
+      it('should create new exodus account with same compatibility mode as default account even if undefined', async () => {
+        const { walletAccounts, walletAccountsAtom } = await prepare({
+          walletAccounts: {},
+        })
+
+        await walletAccounts.createMany([
+          WalletAccount.DEFAULT,
+          {
+            source: 'exodus',
+            index: 1,
+            label: 'Another',
+            color: '#ff0000',
+            icon: 'exodus',
+            compatibilityMode: 'metamask',
+          },
+        ])
+
+        const all = await walletAccountsAtom.get()
+
+        expect(all).toEqual({
+          exodus_0: expect.objectContaining({
+            label: 'Exodus',
+            index: 0,
+            seedId: primarySeedId,
+            compatibilityMode: undefined,
+          }),
+          exodus_1: expect.objectContaining({
+            label: 'Another',
+            index: 1,
+            seedId: primarySeedId,
+            compatibilityMode: undefined,
+          }),
+        })
+      })
     })
 
     describe('update', () => {
@@ -507,7 +579,7 @@ describe('WalletAccounts', () => {
           label: 'Updated',
         })
 
-        const walletAccount = walletAccounts.get('exodus_1')
+        const walletAccount = await walletAccounts.get('exodus_1')
 
         expect(walletAccount.label).toBe('Updated')
       })
@@ -521,7 +593,7 @@ describe('WalletAccounts', () => {
           })
         ).rejects.toThrow(/Can't disable default walletAccount/)
 
-        const walletAccount = walletAccounts.get('exodus_0')
+        const walletAccount = await walletAccounts.get('exodus_0')
 
         expect(walletAccount.enabled).toBe(true)
 
@@ -537,7 +609,7 @@ describe('WalletAccounts', () => {
           })
         ).rejects.toThrow(/seedId can only be set if previously undefined/)
 
-        const walletAccount = walletAccounts.get('exodus_0')
+        const walletAccount = await walletAccounts.get('exodus_0')
 
         expect(walletAccount.seedId).toBe(primarySeedId)
         expect(pushToFusion).not.toHaveBeenCalled()
@@ -598,8 +670,8 @@ describe('WalletAccounts', () => {
           },
         })
 
-        const defaultWalletAccount = walletAccounts.get('exodus_0')
-        const otherWalletAccount = walletAccounts.get('exodus_1')
+        const defaultWalletAccount = await walletAccounts.get('exodus_0')
+        const otherWalletAccount = await walletAccounts.get('exodus_1')
 
         expect(defaultWalletAccount.label).toBe('Updated default')
         expect(otherWalletAccount.label).toBe('Updated other')
@@ -612,7 +684,8 @@ describe('WalletAccounts', () => {
 
         await walletAccounts.disable('exodus_1')
 
-        expect(walletAccounts.get('exodus_1').enabled).toBe(false)
+        // eslint-disable-next-line unicorn/no-await-expression-member
+        expect((await walletAccounts.get('exodus_1')).enabled).toBe(false)
       })
 
       it('should change active account when disabled', async () => {
@@ -647,11 +720,11 @@ describe('WalletAccounts', () => {
           },
           allowedSources: [TREZOR_SRC, EXODUS_SRC],
         })
-        expect(walletAccounts.get('trezor_1_hp')).toBeDefined()
+        expect(await walletAccounts.get('trezor_1_hp')).toBeDefined()
 
         await walletAccounts.disable('trezor_1_hp')
 
-        expect(walletAccounts.get('trezor_1_hp')).toBeUndefined()
+        expect(await walletAccounts.get('trezor_1_hp')).toBeUndefined()
       })
 
       it('should delete hardware wallet public keys for wallet account', async () => {
@@ -740,7 +813,7 @@ describe('WalletAccounts', () => {
         await walletAccounts.clear()
         const after = await walletAccountsInternalAtom.get()
 
-        expect(after.exodus_1).toBeUndefined()
+        expect(after?.exodus_1).toBeUndefined()
         await expect(
           walletAccounts.update('exodus_1', { label: "Potter's Stash" })
         ).rejects.toThrow('is not a known wallet account')
@@ -763,7 +836,7 @@ describe('WalletAccounts', () => {
           },
         })
 
-        expect(walletAccounts.get('trezor_1_hp')).toBeUndefined()
+        expect(await walletAccounts.get('trezor_1_hp')).toBeUndefined()
       })
 
       it('should skip processing in case of pending updates', async () => {
@@ -779,8 +852,8 @@ describe('WalletAccounts', () => {
             },
           },
         }) // down sync is assumed to be the one we just sent up
-
-        expect(walletAccounts.get('exodus_0').label).toEqual('the account') // local change should not have been overwritten
+        // eslint-disable-next-line unicorn/no-await-expression-member
+        expect((await walletAccounts.get('exodus_0')).label).toEqual('the account') // local change should not have been overwritten
 
         await channelOptions.processOne({
           data: {
@@ -790,8 +863,8 @@ describe('WalletAccounts', () => {
             },
           },
         })
-
-        expect(walletAccounts.get('exodus_0').label).toEqual('Wayne Foundation') // no down sync pending, apply remote update
+        // eslint-disable-next-line unicorn/no-await-expression-member
+        expect((await walletAccounts.get('exodus_0')).label).toEqual('Wayne Foundation') // no down sync pending, apply remote update
       })
 
       it('should set seed id on exodus wallet accounts if missing', async () => {
@@ -813,7 +886,7 @@ describe('WalletAccounts', () => {
         })
 
         expect(
-          Object.values(walletAccounts.getAll()).every((it) => it.seedId === primarySeedId)
+          Object.values(await walletAccounts.getAll()).every((it) => it.seedId === primarySeedId)
         ).toBe(true)
       })
 
@@ -897,8 +970,8 @@ describe('WalletAccounts', () => {
         await walletAccounts.disable('exodus_1')
 
         await walletAccounts.enable('exodus_1')
-
-        expect(walletAccounts.get('exodus_1').enabled).toBe(true)
+        // eslint-disable-next-line unicorn/no-await-expression-member
+        expect((await walletAccounts.get('exodus_1')).enabled).toBe(true)
       })
     })
 
@@ -906,7 +979,7 @@ describe('WalletAccounts', () => {
       it('should return all wallet accounts', async () => {
         const { walletAccounts } = await prepare()
 
-        const walletAccountsNames = Object.keys(walletAccounts.getAll())
+        const walletAccountsNames = Object.keys(await walletAccounts.getAll())
 
         expect(walletAccountsNames).toHaveLength(2)
         expect(walletAccountsNames[0]).toBe('exodus_0')
@@ -968,7 +1041,7 @@ describe('WalletAccounts', () => {
       it('should return a wallet account', async () => {
         const { walletAccounts } = await prepare()
 
-        const walletAccount = walletAccounts.get('exodus_1')
+        const walletAccount = await walletAccounts.get('exodus_1')
 
         expect(walletAccount).toEqual(stored.exodus_1)
       })
@@ -1063,7 +1136,7 @@ describe('WalletAccounts', () => {
 
     it('should debounce atom writes', async () => {
       const { walletAccountsInternalAtom } = await batchWrite()
-      expect(walletAccountsInternalAtom.set).toHaveBeenCalledTimes(1)
+      expect(walletAccountsInternalAtom.set).toHaveBeenCalledTimes(3)
     })
   })
 
@@ -1085,32 +1158,31 @@ describe('WalletAccounts', () => {
     await expect(channel.tail()).resolves.toEqual(tailData)
   })
 
-  it('should not block fixing compatibility or seedId mismatch', async () => {
-    const seedId = primarySeedId
-    const { channelOptions, walletAccountsAtom, walletAccounts } = await prepare({
-      allowedSources: [EXODUS_SRC],
-      walletAccounts: {
-        exodus_0: { ...stored.exodus_0, seedId: undefined },
-      },
-      load: false,
+  describe('fromSafeReportAtom', () => {
+    it('should prevent fusion updates when fromSafeReportAtom returns true', async () => {
+      const fromSafeReportAtom = createAtomMock({ defaultValue: true })
+      const { walletAccounts, pushToFusion } = await prepare({ fromSafeReportAtom })
+
+      await walletAccounts.update('exodus_0', { label: 'Updated Label' })
+
+      expect(pushToFusion).not.toHaveBeenCalled()
     })
 
-    const whenProcessed = channelOptions.processOne({
-      data: {
-        walletAccounts: {
-          exodus_0: stored.exodus_0,
-        },
-      },
+    it('should allow fusion updates when fromSafeReportAtom returns false', async () => {
+      const fromSafeReportAtom = createAtomMock({ defaultValue: false })
+      const { walletAccounts, pushToFusion } = await prepare({ fromSafeReportAtom })
+
+      await walletAccounts.update('exodus_0', { label: 'Updated Label' })
+
+      expect(pushToFusion).toHaveBeenCalled()
     })
 
-    await walletAccounts.load({ seedId })
+    it('should work normally when fromSafeReportAtom is not provided', async () => {
+      const { walletAccounts, pushToFusion } = await prepare()
 
-    await whenProcessed
+      await walletAccounts.update('exodus_0', { label: 'Updated Label' })
 
-    const all = await walletAccountsAtom.get()
-
-    expect(all).toEqual({
-      exodus_0: expect.objectContaining({ ...stored.exodus_0 }),
+      expect(pushToFusion).toHaveBeenCalled()
     })
   })
 })

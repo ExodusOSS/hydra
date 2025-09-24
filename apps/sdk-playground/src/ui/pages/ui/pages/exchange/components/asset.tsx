@@ -9,7 +9,7 @@ interface BaseAssetProps {
 }
 
 const BaseAsset = ({ asset, loading, onPress }: BaseAssetProps) => {
-  const ticker = asset ? ('ticker' in asset ? asset.ticker : asset.symbol) : ''
+  const ticker = asset ? ('displayTicker' in asset ? asset.displayTicker : asset.symbol) : ''
 
   return (
     <button

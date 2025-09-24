@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.9.1...@exodus/app-process-mobile@3.10.0) (2025-07-18)
+
+### Features
+
+- feat: lifecycle hook priority (#13200)
+
+## [3.9.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.9.0...@exodus/app-process-mobile@3.9.1) (2025-07-11)
+
+### Bug Fixes
+
+- fix: Android offline icon not showing when app starts in airplane mode (#13166)
+
+## [3.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.7.0...@exodus/app-process-mobile@3.9.0) (2025-07-10)
+
+### Features
+
+- feat: switch app-process-mobile to proper ESM and exodus-test (#12288)
+
+### Bug Fixes
+
+- fix: network status detection issue when offline to online transition (#13144)
+
+## [3.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.7.0...@exodus/app-process-mobile@3.8.0) (2025-05-09)
+
+### Features
+
+- feat: switch app-process-mobile to proper ESM and exodus-test (#12288)
+
 ## [3.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.6.3...@exodus/app-process-mobile@3.7.0) (2025-03-19)
 
 ### Features

@@ -95,7 +95,11 @@ class RestoreProgressTracker {
     })
   }
 
-  #onRestoredAsset = async ({ assetName: baseAssetName }) => {
+  #onRestoredAsset = async ({ assetName: baseAssetName, tickErrors, error }) => {
+    if (Boolean(error) || Boolean(tickErrors)) {
+      return
+    }
+
     if (
       this.#restoreAllStarted &&
       this.#assetsWaitingSecondTick[baseAssetName] &&

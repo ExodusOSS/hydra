@@ -1,6 +1,6 @@
 {
   "name": "@exodus/storage-unsafe-desktop",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "storage-spec interface implementation for the Node.js environment",
   "author": "Exodus Movement, Inc.",
   "repository": {

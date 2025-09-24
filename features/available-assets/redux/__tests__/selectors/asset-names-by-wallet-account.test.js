@@ -1,4 +1,4 @@
-import { bitcoin, ethereum, usdcoinSolana, setup } from '../utils.js'
+import { bitcoin, ethereum, setup, usdcoinSolana } from '../utils.js'
 
 describe('assetNamesByWalletAccount', () => {
   it('should return available assets by walletAccount', () => {

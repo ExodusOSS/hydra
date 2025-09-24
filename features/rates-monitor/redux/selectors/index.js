@@ -4,7 +4,6 @@ import getIsRateAvailable from './get-is-rate-available.js'
 import pricesByAssetNameSelector from './prices-by-asset-name.js'
 import createAssetPriceSelector from './asset-price.js'
 import createAssetRateSelector from './asset-rate.js'
-import simulationEnabledSelector from './simulation-enabled.js'
 
 export default [
   loading,
@@ -13,5 +12,4 @@ export default [
   pricesByAssetNameSelector,
   createAssetPriceSelector,
   createAssetRateSelector,
-  simulationEnabledSelector,
 ]

@@ -111,14 +111,17 @@ describe('SafeError', () => {
         },
       ],
       ...commonErrorCases,
-    ] as const)('should convert %s to %s', (errorIn, safeErrorOut) => {
-      expect(SafeError.from(errorIn).toJSON()).toEqual({
-        stack: expect.any(String),
-        ...safeErrorOut,
-        stackFrames: expect.arrayContaining([]),
-        timestamp: 0,
-      })
-    })
+    ] as typeof commonErrorCases)(
+      'should convert %s to %s',
+      (errorIn, { missingStack, ...safeErrorOut }) => {
+        expect(SafeError.from(errorIn).toJSON()).toEqual({
+          stack: expect.any(String),
+          ...safeErrorOut,
+          stackFrames: missingStack ? undefined : expect.arrayContaining([]),
+          timestamp: 0,
+        })
+      }
+    )
 
     it('should provide stack frames', () => {
       class SomeResourceHandle {

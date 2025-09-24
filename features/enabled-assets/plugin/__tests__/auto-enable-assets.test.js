@@ -128,6 +128,9 @@ describe('auto-enable-assets', () => {
       logger: {
         debug: jest.fn(),
       },
+      errorTracking: {
+        track: jest.fn(),
+      },
       ...opts,
       config,
     })

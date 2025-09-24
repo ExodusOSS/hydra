@@ -16,7 +16,7 @@ describe('wallet', async () => {
   const mnemonic = 'menu memory fury language physical wonder dog valid smart edge decrease worth'
   const passphrase = 'my-password-manager-generated-this'
   const seed = await mnemonicToSeed({ mnemonic })
-  const seedId = getSeedId(seed)
+  const seedId = await getSeedId(seed)
 
   beforeEach(async () => {
     adapters = createAdapters()
@@ -274,7 +274,8 @@ describe('wallet', async () => {
     await exodus.application.import({ mnemonic, compatibilityMode })
     await exodus.wallet.unlock()
 
-    await expect(exodus.walletAccounts.getEnabled()).resolves.toMatchObject({
+    const enabledAccounts = await exodus.walletAccounts.getEnabled()
+    expect(enabledAccounts).toMatchObject({
       exodus_0: expect.objectContaining({ compatibilityMode, seedId }),
     })
 
@@ -286,7 +287,8 @@ describe('wallet', async () => {
     await exodus.application.create({ mnemonic })
     await exodus.application.unlock()
 
-    await expect(exodus.walletAccounts.getEnabled()).resolves.toMatchObject({
+    const enabledAccounts = await exodus.walletAccounts.getEnabled()
+    expect(enabledAccounts).toMatchObject({
       exodus_0: expect.objectContaining({ seedId }),
     })
 

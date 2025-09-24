@@ -1,3 +1,5 @@
 dist
 api.json
 metadata.json
+playwright-report
+test-results

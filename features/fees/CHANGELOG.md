@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fees@1.2.4...@exodus/fees@1.2.5) (2025-09-03)
+
+### Bug Fixes
+
+- fix: walletAccounts.get usage (#13754)
+
 ## [1.2.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fees@1.2.3...@exodus/fees@1.2.4) (2024-12-27)
 
 **Note:** Version bump only for package @exodus/fees

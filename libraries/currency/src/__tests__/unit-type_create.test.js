@@ -1,5 +1,6 @@
-import { UnitType } from '../index.js'
 import { strict as assert } from 'assert'
+
+import { UnitType } from '../index.js'
 
 const unitDefs = {
   satoshis: 0,

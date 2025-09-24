@@ -1,6 +1,6 @@
 const platform = process.env.EXODUS_TEST_PLATFORM
 
-export const commonErrorCases: [Error, { name: string; hint: string }][] = [
+export const commonErrorCases: [Error, { name: string; hint: string; missingStack?: boolean }][] = [
   [
     (() => {
       const a = {}
@@ -14,7 +14,7 @@ export const commonErrorCases: [Error, { name: string; hint: string }][] = [
     })() as Error,
     {
       name: 'TypeError',
-      hint: 'Cannot read property/properties of undefined',
+      hint: 'Cannot read properties of undefined',
     },
   ],
   [
@@ -31,7 +31,7 @@ export const commonErrorCases: [Error, { name: string; hint: string }][] = [
     })() as Error,
     {
       name: 'TypeError',
-      hint: 'Cannot read property/properties of null',
+      hint: 'Cannot read properties of null',
     },
   ],
   [
@@ -44,7 +44,7 @@ export const commonErrorCases: [Error, { name: string; hint: string }][] = [
     })() as Error,
     {
       name: 'TypeError',
-      hint: 'Cannot set property/properties of undefined',
+      hint: 'Cannot set properties of undefined',
     },
   ],
   [
@@ -57,7 +57,7 @@ export const commonErrorCases: [Error, { name: string; hint: string }][] = [
     })() as Error,
     {
       name: 'TypeError',
-      hint: 'Cannot set property/properties of null',
+      hint: 'Cannot set properties of null',
     },
   ],
   [
@@ -88,7 +88,7 @@ export const commonErrorCases: [Error, { name: string; hint: string }][] = [
       name: 'TypeError',
       hint:
         platform === 'hermes'
-          ? 'Cannot read property/properties of undefined'
+          ? 'Cannot read properties of undefined'
           : 'Value is not a constructor',
     },
   ],
@@ -101,8 +101,78 @@ export const commonErrorCases: [Error, { name: string; hint: string }][] = [
       }
     })() as Error,
     {
-      name: 'UnknownError',
-      hint: 'Unexpected end of input',
+      name: 'SyntaxError',
+      hint: 'JSON Parse error: Unexpected end of input',
+      missingStack: platform === 'hermes',
+    },
+  ],
+  [
+    (() => {
+      try {
+        JSON.parse('<html></html>')
+      } catch (e) {
+        return e
+      }
+    })() as Error,
+    {
+      name: 'SyntaxError',
+      hint: 'JSON Parse error: Unexpected token',
+    },
+  ],
+  [
+    new Error('network request failed'),
+    {
+      name: 'Error',
+      hint: 'Network request failed',
+    },
+  ],
+  [
+    new Error('Network Request Failed'),
+    {
+      name: 'Error',
+      hint: 'Network request failed',
+    },
+  ],
+  [
+    new Error('network error occurred'),
+    {
+      name: 'Error',
+      hint: 'Network error',
+    },
+  ],
+  [
+    new Error('Network Error'),
+    {
+      name: 'Error',
+      hint: 'Network error',
+    },
+  ],
+  [
+    new Error('connection failed to server'),
+    {
+      name: 'Error',
+      hint: 'Connection failed',
+    },
+  ],
+  [
+    new Error('Connection Failed'),
+    {
+      name: 'Error',
+      hint: 'Connection failed',
+    },
+  ],
+  [
+    new Error('request failed with status 500'),
+    {
+      name: 'Error',
+      hint: 'Request failed',
+    },
+  ],
+  [
+    new Error('Request Failed'),
+    {
+      name: 'Error',
+      hint: 'Request failed',
     },
   ],
 ]

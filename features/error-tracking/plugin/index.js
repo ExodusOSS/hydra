@@ -1,6 +1,6 @@
 import { combine, compute } from '@exodus/atoms'
 
-import whyIsRemoteTrackingDisabled from './why-is-remote-tracking-disabled.js'
+import { whyIsRemoteTrackingDisabled } from './why-is-remote-tracking-disabled.js'
 
 function errorTrackingPlugin({
   abTestingAtom,
@@ -8,7 +8,12 @@ function errorTrackingPlugin({
   walletCreatedAtAtom,
   getBuildMetadata,
   remoteErrorTrackingEnabledAtom,
-  config: { remoteErrorTrackingABExperimentId, trackWalletsCreatedAfter, trackFundedWallets },
+  config: {
+    remoteErrorTrackingABExperimentId,
+    remoteErrorTrackingFundedWalletsABExperimentId,
+    trackWalletsCreatedAfter,
+    trackFundedWallets,
+  },
   logger,
 }) {
   const subscriptions = []
@@ -30,12 +35,14 @@ function errorTrackingPlugin({
       selector: async ({ abTesting, earliestTxDate, walletCreatedAt }) => {
         const reasonDisabled = whyIsRemoteTrackingDisabled({
           remoteErrorTrackingABExperimentId,
+          remoteErrorTrackingFundedWalletsABExperimentId,
           abTesting,
           trackWalletsCreatedAfter,
           walletCreatedAt,
           trackFundedWallets,
           earliestTxDate,
           buildMetadata: await getBuildMetadata(),
+          logger,
         })
 
         if (reasonDisabled) {

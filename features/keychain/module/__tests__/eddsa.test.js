@@ -1,18 +1,19 @@
-import { mnemonicToSeed } from 'bip39'
-import { createKeyIdentifierForExodus } from '@exodus/key-ids'
+import { mnemonicToSeed } from '@exodus/bip39'
 import KeyIdentifier from '@exodus/key-identifier'
-import createKeychain from './create-keychain.js'
-import { getSeedId } from '../crypto/seed-id.js'
+import { createKeyIdentifierForExodus } from '@exodus/key-ids'
 
-const seed = mnemonicToSeed(
-  'menu memory fury language physical wonder dog valid smart edge decrease worth'
-)
+import { getSeedId } from '../crypto/seed-id.js'
+import createKeychain from './create-keychain.js'
+
+const seed = await mnemonicToSeed({
+  mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
+})
 
 const seedId = getSeedId(seed)
 
-const secondSeed = mnemonicToSeed(
-  'wine system mean beyond filter human meat rubber episode wash stomach aunt'
-)
+const secondSeed = await mnemonicToSeed({
+  mnemonic: 'wine system mean beyond filter human meat rubber episode wash stomach aunt',
+})
 
 const fusionKeyId = createKeyIdentifierForExodus({ exoType: 'FUSION' })
 const plaintextMessage = Buffer.from('I really love keychains')

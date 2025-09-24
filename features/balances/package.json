@@ -1,6 +1,6 @@
 {
   "name": "@exodus/balances",
-  "version": "13.9.0",
+  "version": "13.13.1",
   "description": "Tracks crypto balances across enabled wallet accounts.",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
@@ -35,12 +35,13 @@
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
-    "@exodus/core-selectors": "^3.0.0",
+    "@exodus/core-selectors": "^4.0.0",
     "@exodus/currency": "^5.0.2",
     "@exodus/errors": "^3.0.0",
     "@exodus/models": "^12.0.1",
     "@exodus/multi-account-redux": "^2.0.1",
     "@exodus/redux-dependency-injection": "^4.0.3",
+    "@exodus/safe-string": "^1.1.0",
     "@exodus/typeforce": "^1.18.0",
     "@exodus/zod": "^3.24.2",
     "lodash": "^4.17.21",

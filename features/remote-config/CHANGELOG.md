@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/remote-config@3.0.1...@exodus/remote-config@3.1.0) (2025-09-18)
+
+### Features
+
+- feat: remote-config will ignore simultaneous calls to update (#13842)
+
 ## [3.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/remote-config@3.0.0...@exodus/remote-config@3.0.1) (2025-06-09)
 
 ### Bug Fixes

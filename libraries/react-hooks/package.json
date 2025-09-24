@@ -1,16 +1,16 @@
 {
   "name": "@exodus/react-hooks",
-  "version": "5.3.2",
+  "version": "5.3.4",
   "description": "The react-hooks library",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/react-hooks",
-  "license": "UNLICENSED",
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/react-hooks",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Areact-hooks"
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Areact-hooks"
   },
   "type": "module",
   "main": "index.js",
@@ -34,9 +34,7 @@
   },
   "devDependencies": {
     "@babel/parser": "^7.22.7",
-    "@testing-library/react-hooks": "^8.0.1",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "zxcvbn": "^4.3.x"
+    "@testing-library/react-hooks": "^8.0.1"
   },
   "peerDependencies": {
     "lodash": "*",

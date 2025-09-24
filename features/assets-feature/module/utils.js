@@ -1,4 +1,5 @@
 import { CT_STATUS as STATUS } from '@exodus/assets'
+import { pick } from '@exodus/basic-utils'
 import lodash from 'lodash'
 import assert from 'minimalistic-assert'
 
@@ -44,3 +45,25 @@ export async function getFetchErrorMessage(error) {
     return defaultExtraMessage
   }
 }
+
+const FILTERED_FIELDS = [
+  'assetId',
+  'baseAssetName',
+  'displayName',
+  'displayTicker',
+  'gradientColors',
+  'icon', // there is no icon field in built in assets, but there may be for custom tokens (TODO?)
+  'isBuiltIn',
+  'isCustomToken',
+  'lifecycleStatus',
+  'name',
+  'primaryColor',
+  'properName',
+  'properTicker',
+  'ticker',
+]
+
+export const filterBuiltInProps = (asset) => ({
+  ...pick(asset, FILTERED_FIELDS),
+  assetName: asset.name,
+})

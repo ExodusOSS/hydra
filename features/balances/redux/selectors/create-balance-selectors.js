@@ -5,12 +5,14 @@ import { createSelector } from 'reselect'
 const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
 const createBalanceSelectorFactory = ({ field, id }) => {
-  const selectorFactory = (selfSelector) =>
+  const selectorFactory = (assetsSelector, selfSelector) =>
     memoize(
       ({ assetName, walletAccount }) =>
         createSelector(
+          assetsSelector,
           selfSelector,
-          (balances) => balances[walletAccount]?.data[assetName]?.[field]
+          (assets, balances) =>
+            balances[walletAccount]?.data[assetName]?.[field] ?? assets[assetName]?.currency.ZERO
         ),
       ({ assetName, walletAccount, field }) => [assetName, walletAccount, field].join('-')
     )
@@ -18,7 +20,7 @@ const createBalanceSelectorFactory = ({ field, id }) => {
   return {
     id,
     selectorFactory,
-    dependencies: [{ selector: MY_STATE }],
+    dependencies: [{ module: 'assets', selector: 'all' }, { selector: MY_STATE }],
   }
 }
 

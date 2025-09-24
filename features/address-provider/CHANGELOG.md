@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.11.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.11.0...@exodus/address-provider@12.11.1) (2025-07-02)
+
+### Bug Fixes
+
+- fix(address-provider): use `number` type for index (#13070)
+
 ## [12.11.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.10.1...@exodus/address-provider@12.11.0) (2025-06-03)
 
 ### Features

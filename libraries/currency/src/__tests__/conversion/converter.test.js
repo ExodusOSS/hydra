@@ -1,7 +1,8 @@
 import assert from 'assert'
+
+import conversion from '../../conversion.js'
 import * as currencies from '../_fixtures.js'
 import rates from '../_rate_fixtures.cjs'
-import conversion from '../../conversion.js'
 
 const { bitcoin, ethereum } = currencies
 

@@ -1,6 +1,6 @@
 import { Order, orderFromJSONLegacy, OrderSet } from '@exodus/models'
 
-import assets from '../../_test/assets.js'
+import assets from '../../__tests__/assets.js'
 import createAllOrdersInEnabledWalletAccountsSelector from '../all-orders-in-enabled-accounts.js'
 
 describe('createAllOrdersInEnabledWalletAccountsSelector', () => {

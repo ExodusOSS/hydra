@@ -8,206 +8,6 @@ const normalizeValue = (value, opts = Object.create(null)) => {
   return value
 }
 
-export function initializeSimulationDataForTickers({
-  tickers,
-  realTimeData,
-  now,
-  simulationInterval,
-  slowRates,
-  staggerUpdateEnabled = true,
-}) {
-  const simData = {
-    data: { ...realTimeData },
-    change24Data: {},
-    lastSimulationTime: now,
-    lastAssetUpdateTime: {},
-    updateOffsets: {},
-    staggerUpdateEnabled,
-  }
-
-  for (let i = 0; i < tickers.length; i++) {
-    const ticker = tickers[i]
-    const offset = Math.floor((i / tickers.length) * simulationInterval)
-    simData.updateOffsets[ticker] = offset
-    simData.lastAssetUpdateTime[ticker] = now - offset
-
-    const initialChange24 = slowRates[ticker]?.change24 || 0
-    simData.change24Data[ticker] = initialChange24
-  }
-
-  return simData
-}
-
-/**
- * Implements a mean reversion model based on a discrete-time approximation of the Ornstein-Uhlenbeck process.
- * https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process
- */
-export function generateMockPrice({ lastPrice, meanPrice, lastChange24 }) {
-  const d = 0.0005
-  const revertStrength = 0.03
-
-  const noise = d * (Math.random() * 2 - 1)
-  const correction = (revertStrength * (meanPrice - lastPrice)) / meanPrice
-
-  const priceChangeRatio = noise + correction
-  let newPrice = lastPrice * (1 + priceChangeRatio)
-
-  // If the price is 0 or negative, set it to a very small value
-  // This prevents getIsRateAvailable selector from returning false during simulation
-  if (newPrice <= 0) {
-    newPrice = 0.001
-  }
-
-  const newChange24 = lastChange24 + priceChangeRatio * 100
-
-  return {
-    price: newPrice,
-    change24: newChange24,
-  }
-}
-
-export function generatePriceSimulation({
-  simulationEnabled,
-  fiatCurrency,
-  realTimeRatesByFiat,
-  topAssetTickers,
-  simulatedRatesByFiat,
-  slowRates,
-  simulationInterval,
-  logger,
-}) {
-  if (!simulationEnabled) {
-    return { hasChanged: false }
-  }
-
-  const realTimeEntry = realTimeRatesByFiat[fiatCurrency]
-
-  if (!realTimeEntry || !realTimeEntry.data) {
-    return { hasChanged: false }
-  }
-
-  const lastRealDataTime = realTimeEntry.timestamp || 0
-  const now = Date.now()
-  const timeSinceLastUpdate = now - lastRealDataTime
-
-  if (lastRealDataTime > 0 && timeSinceLastUpdate > 60_000) {
-    logger?.warn('Real-time data is outdated, stopping simulation')
-    return { hasChanged: false }
-  }
-
-  let currentSimData = simulatedRatesByFiat[fiatCurrency]
-
-  // Initialize simulation data if it doesn't exist
-  if (!currentSimData) {
-    currentSimData = initializeSimulationDataForTickers({
-      tickers: Object.keys(realTimeEntry.data).filter((t) => realTimeEntry.data[t]),
-      realTimeData: { ...realTimeEntry.data },
-      now,
-      simulationInterval,
-      slowRates,
-      staggerUpdateEnabled: true,
-    })
-
-    return {
-      hasChanged: true,
-      simulatedData: currentSimData,
-      newRealTimeData: {
-        data: { ...currentSimData.data },
-        timestamp: now,
-      },
-    }
-  }
-
-  const lastSimTime = currentSimData.lastSimulationTime || now
-
-  // Reset simulation with new API data
-  if (lastRealDataTime > lastSimTime) {
-    const newSimData = initializeSimulationDataForTickers({
-      tickers: Object.keys(realTimeEntry.data).filter((t) => realTimeEntry.data[t]),
-      realTimeData: { ...realTimeEntry.data },
-      now,
-      simulationInterval,
-      slowRates,
-      staggerUpdateEnabled: true,
-    })
-
-    logger?.info('Simulation data reset with new API data')
-
-    return {
-      hasChanged: true,
-      simulatedData: newSimData,
-      newRealTimeData: {
-        data: { ...newSimData.data },
-        timestamp: now,
-      },
-    }
-  }
-
-  const newSimulatedData = { ...currentSimData.data }
-  const change24Data = { ...currentSimData.change24Data }
-  const lastAssetUpdateTime = { ...currentSimData.lastAssetUpdateTime }
-  const updateOffsets = { ...currentSimData.updateOffsets }
-  const staggerUpdateEnabled = currentSimData.staggerUpdateEnabled !== false
-
-  let hasChanged = false
-  let updatedAssetCount = 0
-
-  for (const ticker of topAssetTickers) {
-    const basePrice = realTimeEntry.data[ticker]
-    if (!basePrice || !ticker) continue
-
-    const lastUpdateTime = lastAssetUpdateTime[ticker] || 0
-    const timeSinceLastAssetUpdate = now - lastUpdateTime
-
-    if (staggerUpdateEnabled && timeSinceLastAssetUpdate < simulationInterval) {
-      continue
-    }
-
-    const currentPrice = currentSimData.data[ticker] || basePrice
-    const currentChange24 = change24Data[ticker] || slowRates[ticker]?.change24 || 0
-
-    const { price: newPrice, change24: newChange24 } = generateMockPrice({
-      lastPrice: currentPrice,
-      meanPrice: basePrice,
-      lastChange24: currentChange24,
-    })
-
-    newSimulatedData[ticker] = newPrice
-    change24Data[ticker] = newChange24
-    lastAssetUpdateTime[ticker] = now
-    hasChanged = true
-    updatedAssetCount++
-  }
-
-  if (hasChanged) {
-    const newSimData = {
-      data: newSimulatedData,
-      change24Data,
-      lastSimulationTime: now,
-      lastAssetUpdateTime,
-      updateOffsets,
-      staggerUpdateEnabled,
-    }
-
-    const statusMessage = staggerUpdateEnabled
-      ? `Price simulation completed for ${updatedAssetCount} of ${topAssetTickers.length} real-time assets`
-      : `Price simulation completed for ${topAssetTickers.length} real-time assets`
-
-    logger?.info(statusMessage)
-
-    return {
-      hasChanged: true,
-      simulatedData: newSimData,
-      newRealTimeData: {
-        data: newSimulatedData,
-        timestamp: now,
-      },
-    }
-  }
-
-  return { hasChanged: false }
-}
-
 function buildSlowRates({ tickers, fiatCurrency, currentPriceResponse, tickerResponse }) {
   const slowRates = Object.create(null)
   for (const ticker of tickers) {
@@ -239,17 +39,13 @@ class RatesMonitor {
   #pricingClient
   #currencyAtom
   #getTicker
-  #availableAssetNamesAtom
+  #ratesAssetNamesToMonitorAtom
   #fetchInterval
   #debounceInterval
   #fetchRealTimePricesInterval
-  #simulationInterval
   #slowRates = Object.create(null)
   #rates = Object.create(null)
   #realTimeRatesByFiat = Object.create(null)
-  #simulatedRatesByFiat = Object.create(null)
-  #baseRealTimeRatesByFiat = Object.create(null)
-  #lastSimulationTime = Object.create(null)
   #ratesAtom
   #subscriptions = []
   #started = false
@@ -257,33 +53,32 @@ class RatesMonitor {
   #realTimeFetchInFlight = false
   #slowIntervalId = null
   #realTimeIntervalId = null
-  #simulationIntervalId = null
   #lastCurrentPriceCtx = { tickers: [], fiatCurrency: '', lastModified: undefined }
   #lastRealTimeCtxByFiat = Object.create(null)
-  #topAssetTickers = []
   #logger
-  #ratesSimulationEnabledAtom
+  #errorTracking
+  #prevAssetNames = []
 
   constructor({
     currencyAtom,
     pricingClient,
     assetsModule,
-    availableAssetNamesAtom,
+    ratesAssetNamesToMonitorAtom,
     logger,
     ratesAtom,
     config,
-    ratesSimulationEnabledAtom,
+    errorTracking,
   }) {
     this.#currencyAtom = currencyAtom
     this.#pricingClient = pricingClient
-    this.#availableAssetNamesAtom = availableAssetNamesAtom
+    this.#ratesAssetNamesToMonitorAtom = ratesAssetNamesToMonitorAtom
     this.#logger = logger
     this.#ratesAtom = ratesAtom
+    this.#errorTracking = errorTracking
     this.#fetchInterval = config.fetchInterval
     this.#debounceInterval = config.debounceInterval
     this.#fetchRealTimePricesInterval = config.fetchRealTimePricesInterval
-    this.#simulationInterval = config.simulationInterval
-    this.#ratesSimulationEnabledAtom = ratesSimulationEnabledAtom
+
     this.#getTicker = (assetName) => assetsModule.getAsset(assetName)?.ticker
     this._update = pDebounce(this._updateInstant, this.#debounceInterval)
     this._fetchSlowRatesConcurrent = makeConcurrent((...args) => this.#fetchSlowRates(...args), {
@@ -292,8 +87,8 @@ class RatesMonitor {
   }
 
   #getAvailableAssetTickers = async () => {
-    const assetNames = await this.#availableAssetNamesAtom.get()
-    return assetNames.map(this.#getTicker).sort()
+    const assetNames = await this.#ratesAssetNamesToMonitorAtom.get()
+    return assetNames.map(this.#getTicker).filter(Boolean).sort()
   }
 
   #getCurrency = async () => this.#currencyAtom.get()
@@ -361,42 +156,17 @@ class RatesMonitor {
         entityTag: oldCtx.entityTag,
       })
       if (realTimeRes.isModified) {
-        const realTimeData = realTimeRes.data.reduce((acc, next) => {
-          const ticker = Object.keys(next)[0]
-          acc[ticker] = next[ticker][fiatCurrency]
-          return acc
-        }, Object.create(null))
-
         this.#realTimeRatesByFiat[fiatCurrency] = {
-          data: { ...realTimeData },
-          timestamp: Date.now(),
+          data: realTimeRes.data.reduce((acc, next) => {
+            const ticker = Object.keys(next)[0]
+            acc[ticker] = next[ticker][fiatCurrency]
+            return acc
+          }, Object.create(null)),
         }
-
-        this.#baseRealTimeRatesByFiat[fiatCurrency] = {
-          data: { ...realTimeData },
-          timestamp: Date.now(),
-          isRealData: true,
-        }
-
-        this.#updateTopAssets(realTimeData)
-        this.#lastSimulationTime[fiatCurrency] = Date.now()
-
-        const now = Date.now()
-        const tickers = Object.keys(realTimeData).filter((ticker) => !!realTimeData[ticker])
-        this.#simulatedRatesByFiat[fiatCurrency] = initializeSimulationDataForTickers({
-          tickers,
-          realTimeData,
-          now,
-          simulationInterval: this.#simulationInterval,
-          slowRates: this.#slowRates,
-          staggerUpdateEnabled: true,
-        })
-
         this.#lastRealTimeCtxByFiat[fiatCurrency] = {
           lastModified: realTimeRes.lastModified,
           entityTag: realTimeRes.entityTag,
         }
-
         changed = true
       } else {
         this.#logger.info(
@@ -412,12 +182,6 @@ class RatesMonitor {
     return changed
   }
 
-  #updateTopAssets(realTimeData) {
-    this.#topAssetTickers = Object.keys(realTimeData).filter((ticker) => !!realTimeData[ticker])
-
-    this.#logger.info(`Real-time data assets updated: ${this.#topAssetTickers.length} assets`)
-  }
-
   async update() {
     const [slowChanged, realChanged] = await Promise.all([
       this.#fetchSlowRates(),
@@ -430,8 +194,10 @@ class RatesMonitor {
 
   stop() {
     this.#started = false
+
     this.#subscriptions.forEach((unsubscribe) => unsubscribe())
     this.#subscriptions = []
+
     if (this.#slowIntervalId) {
       clearInterval(this.#slowIntervalId)
       this.#slowIntervalId = null
@@ -441,33 +207,18 @@ class RatesMonitor {
       clearInterval(this.#realTimeIntervalId)
       this.#realTimeIntervalId = null
     }
-
-    if (this.#simulationIntervalId) {
-      clearInterval(this.#simulationIntervalId)
-      this.#simulationIntervalId = null
-    }
   }
 
   _updateInstant = async () => {
     const tickers = await this.#getAvailableAssetTickers()
     const fiatCurrency = await this.#getCurrency()
-    const simulationEnabled = await this.#ratesSimulationEnabledAtom.get()
     const mergedRates = Object.fromEntries(
       tickers.map((ticker) => {
         const finalObj = Object.assign(Object.create(null), this.#slowRates[ticker])
-
         const realTimeData = this.#getRealTimeData({ fiatCurrency, ticker })
 
         if (realTimeData) {
           Object.assign(finalObj, realTimeData, { invalid: false, isRealTime: true })
-
-          if (
-            simulationEnabled &&
-            this.#simulatedRatesByFiat[fiatCurrency] &&
-            typeof this.#simulatedRatesByFiat[fiatCurrency].change24Data?.[ticker] === 'number'
-          ) {
-            finalObj.change24 = this.#simulatedRatesByFiat[fiatCurrency].change24Data[ticker]
-          }
         }
 
         if (Object.keys(finalObj).length === 0) {
@@ -519,68 +270,18 @@ class RatesMonitor {
 
   async start() {
     if (this.#started) return
-    // Store the current simulation state at the initialization point in start()
-    let prevSimulationEnabled = await this.#ratesSimulationEnabledAtom.get()
-
     this.#started = true
     this.#subscriptions.push(
       this.#currencyAtom.observe(() => {
         if (Object.keys(this.#rates).length === 0) return
         this.#started && this.update()
       }),
-      this.#availableAssetNamesAtom.observe((availableAssetNames) => {
+      this.#ratesAssetNamesToMonitorAtom.observe((assetNames) => {
         if (!this.#started) return
-
-        if (this.prevAvailableAssetNames) {
-          const newAssetNames = difference(availableAssetNames, this.prevAvailableAssetNames)
-          const addedTickers = newAssetNames.map(this.#getTicker).sort()
-
-          if (addedTickers.length === 0) {
-            return
-          }
-
-          this._fetchSlowRatesConcurrent({ tickers: addedTickers }).then(() => this._update())
-        }
-
-        this.prevAvailableAssetNames = availableAssetNames
+        void this.#handleAssetNamesChange(assetNames)
       }),
       this.#ratesAtom.observe((rates) => {
         this.#rates = rates
-      }),
-
-      this.#ratesSimulationEnabledAtom.observe((enabled) => {
-        // If the simulation state is the same as the previous state, skip the initial call of _update()
-        if (enabled === prevSimulationEnabled) {
-          this.#logger.info('Simulation state is the same, skipping update')
-          return
-        }
-
-        prevSimulationEnabled = enabled
-
-        this.#logger.info(`Simulation ${enabled ? 'enabled' : 'disabled'}`)
-
-        if (this.#simulationIntervalId) {
-          clearInterval(this.#simulationIntervalId)
-          this.#simulationIntervalId = null
-        }
-
-        if (enabled && this.#started) {
-          this.#startSimulation()
-        } else if (!enabled) {
-          // If the simulation is disabled, reset to real-time data
-          for (const fiatCurrency in this.#realTimeRatesByFiat) {
-            if (this.#baseRealTimeRatesByFiat[fiatCurrency]?.isRealData) {
-              this.#realTimeRatesByFiat[fiatCurrency] = {
-                ...this.#baseRealTimeRatesByFiat[fiatCurrency],
-                timestamp: Date.now(),
-              }
-            }
-          }
-
-          this.#simulatedRatesByFiat = Object.create(null)
-          this.#logger.info('Simulation disabled, resetting to real-time data')
-          this._update()
-        }
       })
     )
     try {
@@ -617,76 +318,28 @@ class RatesMonitor {
         this.#logger.error(err)
       }
     }, this.#fetchRealTimePricesInterval)
-
-    if (await this.#ratesSimulationEnabledAtom.get()) {
-      this.#startSimulation()
-    }
   }
 
-  #startSimulation() {
-    if (this.#simulationIntervalId) {
-      clearInterval(this.#simulationIntervalId)
-    }
+  #handleAssetNamesChange = async (currentAssetNames) => {
+    try {
+      if (this.#prevAssetNames.length > 0) {
+        const newAssetNames = difference(currentAssetNames, this.#prevAssetNames)
+        const addedTickers = newAssetNames.map(this.#getTicker).filter(Boolean).sort()
 
-    const checkInterval = Math.min(this.#simulationInterval, 1000)
-
-    this.#simulationIntervalId = setInterval(async () => {
-      if (!this.#started) return
-      try {
-        await this.#runPriceSimulation()
-      } catch (err) {
-        this.#logger.error(err)
-      }
-    }, checkInterval)
-  }
-
-  #runPriceSimulation = async () => {
-    const simulationEnabled = await this.#ratesSimulationEnabledAtom.get()
-    if (!simulationEnabled) {
-      return
-    }
-
-    const fiatCurrency = await this.#getCurrency()
-    const result = generatePriceSimulation({
-      simulationEnabled,
-      fiatCurrency,
-      realTimeRatesByFiat: this.#realTimeRatesByFiat,
-      topAssetTickers: this.#topAssetTickers,
-      simulatedRatesByFiat: this.#simulatedRatesByFiat,
-      slowRates: this.#slowRates,
-      simulationInterval: this.#simulationInterval,
-      logger: this.#logger,
-    })
-
-    if (result.hasChanged) {
-      if (result.simulatedData) {
-        this.#simulatedRatesByFiat[fiatCurrency] = {
-          ...result.simulatedData,
-          staggerUpdateEnabled: true,
+        if (addedTickers.length === 0) {
+          this.#prevAssetNames = currentAssetNames
+          return
         }
+
+        this._fetchSlowRatesConcurrent({ tickers: addedTickers }).then(() => this._update())
       }
 
-      if (result.newRealTimeData) {
-        this.#realTimeRatesByFiat[fiatCurrency] = result.newRealTimeData
-      }
-
-      await this._update()
-      return true
+      this.#prevAssetNames = currentAssetNames
+    } catch (error) {
+      this.#errorTracking.track({
+        error,
+      })
     }
-
-    return false
-  }
-
-  enableSimulation() {
-    return this.#ratesSimulationEnabledAtom.set(true)
-  }
-
-  disableSimulation() {
-    return this.#ratesSimulationEnabledAtom.set(false)
-  }
-
-  async isSimulationEnabled() {
-    return this.#ratesSimulationEnabledAtom.get()
   }
 }
 
@@ -700,11 +353,11 @@ const ratesMonitorDefinition = {
     'currencyAtom',
     'pricingClient',
     'assetsModule',
-    'availableAssetNamesAtom',
+    'ratesAssetNamesToMonitorAtom',
     'logger',
     'ratesAtom',
     'config',
-    'ratesSimulationEnabledAtom',
+    'errorTracking',
   ],
   public: true,
 }

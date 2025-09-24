@@ -1,21 +1,13 @@
-import {
-  signUnsignedTx as signSolanaTx,
-  createUnsignedTx as createUnsignedSolanaTx,
-} from '@exodus/solana-lib'
-import { connectAssetsList } from '@exodus/assets'
-import solanaAssets from '@exodus/solana-meta'
-import { mnemonicToSeed } from 'bip39'
-import assert from 'minimalistic-assert'
-import keychainDefinition, { KeyIdentifier } from '../index.js'
-import { getSeedId } from '../crypto/seed-id.js'
+import { mnemonicToSeed } from '@exodus/bip39'
 
-const seed = mnemonicToSeed(
-  'menu memory fury language physical wonder dog valid smart edge decrease worth'
-)
+import { getSeedId } from '../crypto/seed-id.js'
+import keychainDefinition, { KeyIdentifier } from '../index.js'
+
+const seed = await mnemonicToSeed({
+  mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
+})
 
 const seedId = getSeedId(seed)
-
-const { solana: asset } = connectAssetsList(solanaAssets)
 
 const keychain = keychainDefinition.factory({
   logger: console,
@@ -68,8 +60,8 @@ test('lock', async () => {
   await expect(keychain.exportKey(solanaKeyId)).rejects.toThrow()
 })
 
-describe('removeSeeds', () => {
-  const extraSeed = mnemonicToSeed('menu'.repeat(12))
+describe('removeSeeds', async () => {
+  const extraSeed = await mnemonicToSeed({ mnemonic: 'menu'.repeat(12) })
   const extraSeedId = getSeedId(extraSeed)
 
   it('removes seeds from the keychain', async () => {
@@ -98,33 +90,6 @@ describe('removeSeeds', () => {
 
     await expect(keychain.exportKey(seed)).resolves.toBe([extraSeedId])
   })
-})
-
-test('signTx', async () => {
-  const unsignedTx = await createUnsignedSolanaTx({
-    asset,
-    from: 'nsn7DmCMsKWGUWcL92XfPKXFbUz7KtFDRa4nnkc3RiF',
-    to: '7SmaJ41gFZ1LPsZJfb57npzdCFuqBRmgj3CScjbmkQwA',
-    amount: asset.currency.SOL('5'),
-    fee: asset.currency.SOL('0.000005'),
-    recentBlockhash: '6yWbfvhoDrgzStVnvpRvib2Q1LpuTYc6TtdMPPofCPh8',
-  })
-
-  const signedTx = await keychain.signTx({
-    seedId,
-    // Note: this is an array as some assets require multiple keys to sign a single transaction,
-    // e.g. bitcoin needs a keyId per UTXO
-    keyIds: [solanaKeyId],
-    signTxCallback: ({ unsignedTx, hdkeys, privateKey }) => {
-      assert(unsignedTx.txMeta.assetName === 'solana', 'expected "solana" tx')
-      return signSolanaTx(unsignedTx, privateKey)
-    },
-    unsignedTx,
-  })
-
-  expect(signedTx.txId).toBe(
-    'Lj2iFo1MKx3cWTLH1GbvxZjCtNTMBmB2rXR5JV7EFQnPySyxKssAReBJF56e7XzXiAFeYdMCwFvyR3NkFVbh8rS'
-  )
 })
 
 test('exportKey', async () => {

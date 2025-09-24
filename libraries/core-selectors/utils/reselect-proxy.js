@@ -76,12 +76,13 @@ export const createSelector = (...func) => {
 
   let selector = reselect.createSelectorCreator(reselect.defaultMemoize)(...func, resultFunc)
   if (useDeepEqualSelectorWithLogs) selector = createDeepEqualSelectorWithLogs(...func, resultFunc)
-  if (useSelectorWithLogs)
+  if (useSelectorWithLogs) {
     selector = createSelectorWithLogs([...func, resultFunc], (...args) => {
       useSelectorWithLogsLogger[computationIndex] =
         useSelectorWithLogsLogger[computationIndex] || []
       useSelectorWithLogsLogger[computationIndex].push(args)
     })
+  }
 
   return (...args) => {
     const out = selector(...args)
@@ -104,16 +105,19 @@ export const createSelector = (...func) => {
         delete useSelectorWithLogsLogger[computationIndex]
       }
 
-      if (showCombinedTime && times[localIndex].time > combinedTimeShowTreshold)
+      if (showCombinedTime && times[localIndex].time > combinedTimeShowTreshold) {
         throttledLog(
           `Selector compute total is ${times[localIndex].time}ms in ${times[localIndex].count} invocations. Func:`,
           originalResultFunc.name,
           [originalResultFunc]
         )
-      if (showCombinedTimeForAllSelectors)
+      }
+
+      if (showCombinedTimeForAllSelectors) {
         throttledAllSelectorsLog(
           `Selector compute total for all selectors is ${times.all.time}ms in ${times.all.count} invocations.`
         )
+      }
 
       computationIndex++
 

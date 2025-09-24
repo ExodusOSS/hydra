@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.2.0...@exodus/assets-feature@8.3.0) (2025-08-11)
+
+### Features
+
+- feat(assets-feature): filter invalid fetched tokens (#13532)
+
+- feat(assets-feature): paginate fetch tokens call (#13533)
+
+## [8.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.1.3...@exodus/assets-feature@8.2.0) (2025-08-07)
+
+### Features
+
+- feat(assets-feature): add fetch tokens method (#13362)
+
+## [8.1.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.1.2...@exodus/assets-feature@8.1.3) (2025-07-02)
+
+### Bug Fixes
+
+- fix: remove gradientCoords (#13023)
+
 ## [8.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.1.1...@exodus/assets-feature@8.1.2) (2025-05-30)
 
 **Note:** Version bump only for package @exodus/assets-feature

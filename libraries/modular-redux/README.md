@@ -15,8 +15,6 @@ Redux Store enhancer to support building modular features on top of Redux.
 
 With Modular Redux, each Redux module is responsible for registering itself with the store rather than the other way around. This means not having to export a reducer function (keeping these Redux-specific concepts hidden). This also enables each module to work with more than one "slice" of the state.
 
-For more insight please refer to the [Frontend Architecture Guideline](https://eng-handbook.exodus-dev.io/docs/engineering/administration/technical-design-documents/q3/2021.09.09-frontend-architecture-guideline#modular-redux) article on th Engineering Handbook.
-
 ## Installation
 
 ```sh

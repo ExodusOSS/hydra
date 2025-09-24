@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.0](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.6.1...@exodus/trezor-meta@3.7.0) (2025-08-14)
+
+### Features
+
+- feat: remove XMR from trezor assets support (#13591)
+
 ## [3.6.1](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.6.0...@exodus/trezor-meta@3.6.1) (2025-03-10)
 
 ### Bug Fixes

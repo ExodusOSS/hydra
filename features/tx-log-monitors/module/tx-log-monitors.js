@@ -22,6 +22,7 @@ class Monitors extends EventEmitter {
   #yieldToUI
   #orderedFirst
   #orderedLast
+  #queuedRefresh
 
   constructor({
     assetsModule,
@@ -43,6 +44,7 @@ class Monitors extends EventEmitter {
     this.#yieldToUI = yieldToUI
     this.#orderedFirst = config.orderedFirst || []
     this.#orderedLast = config.orderedLast || []
+    this.#queuedRefresh = new Set([])
 
     // Shared limiter for all monitors and all blockchain, up to 5 monitors' ticks can be done in parallel.
     // concurrency could be config driven
@@ -90,15 +92,24 @@ class Monitors extends EventEmitter {
   // @deprecated
   refreshMonitor = (assetName) => {
     const monitor = this.#monitors.get(assetName)
-    if (monitor)
+    if (monitor) {
       return monitor.update({
         refresh: true,
       })
+    }
   }
 
-  update = async ({ assetName, ...opts }) => {
+  update = async (opts) => {
+    const { assetName, refresh } = opts
     const monitor = this.#monitors.get(assetName)
-    if (monitor) return monitor.update(opts) // { refresh }
+
+    if (monitor) {
+      return monitor.update(opts)
+    }
+
+    if (refresh) {
+      this.#queuedRefresh.add(assetName)
+    }
   }
 
   updateAll = async () => {
@@ -167,7 +178,9 @@ class Monitors extends EventEmitter {
 
     this.#monitors.set(assetName, monitor)
 
-    return monitor.start()
+    const refresh = this.#queuedRefresh.delete(assetName)
+
+    return monitor.start({ assetName, refresh })
   }
 
   #unsubscribe = () => {

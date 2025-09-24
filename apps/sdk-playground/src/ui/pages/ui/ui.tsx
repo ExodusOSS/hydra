@@ -1,7 +1,10 @@
+import { scan } from 'react-scan'
 import { Link, useParams } from 'wouter'
+
 import Icon from '@/ui/components/icon'
 
 import Exchange from './pages/exchange/index.js'
+import { useEffect } from 'react'
 
 const UIComponents = {
   exchange: Exchange,
@@ -11,6 +14,11 @@ function UIPage() {
   const { name } = useParams<{ name: string }>()
 
   const UIComponent = UIComponents[name]
+
+  useEffect(() => {
+    scan({ enabled: false, showToolbar: true })
+    return () => scan({ enabled: false, showToolbar: false })
+  }, [])
 
   return (
     <div className="py-6">

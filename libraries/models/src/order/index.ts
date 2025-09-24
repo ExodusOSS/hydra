@@ -127,11 +127,13 @@ export default class Order implements OrderProps {
     this.orderId = props.orderId
     assert(typeof this.orderId === 'string', `orderId must be a string, received: ${this.orderId}`)
 
-    if (props.fromAmount !== undefined && !isNumberUnit(props.fromAmount))
+    if (props.fromAmount !== undefined && !isNumberUnit(props.fromAmount)) {
       throw new Error('fromAmount must be of type: NumberUnit')
+    }
 
-    if (props.toAmount !== undefined && !isNumberUnit(props.toAmount))
+    if (props.toAmount !== undefined && !isNumberUnit(props.toAmount)) {
       throw new Error('toAmount must be of type: NumberUnit')
+    }
 
     this.status = props.status || ''
     if (props.errorDetails) this.errorDetails = props.errorDetails

@@ -4,7 +4,6 @@ import exchangeRedux from '@exodus/exchange/lib/redux'
 import favoriteAssetsRedux from '@exodus/favorite-assets/redux'
 import createFiatBalancesRedux from '@exodus/fiat-balances/redux'
 import syncTimeRedux from '@exodus/sync-time/redux'
-import uiRedux from '@exodus/headless-react/redux'
 import activityTxsRedux from '@exodus/activity-txs/redux'
 import ordersRedux from '@exodus/orders/redux'
 import personalNotesRedux from '@exodus/personal-notes/redux'
@@ -26,7 +25,6 @@ const createDependencies = () => [
   favoriteAssetsRedux,
   fiatBalancesRedux,
   syncTimeRedux,
-  uiRedux,
   activityTxsRedux,
   ordersRedux,
   personalNotesRedux,

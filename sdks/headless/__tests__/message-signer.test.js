@@ -11,7 +11,7 @@ describe('message-signer', async () => {
 
   const mnemonic = 'menu memory fury language physical wonder dog valid smart edge decrease worth'
   const seed = await mnemonicToSeed({ mnemonic })
-  const seedId = getSeedId(seed)
+  const seedId = await getSeedId(seed)
   const passphrase = 'my-password-manager-generated-this'
 
   beforeEach(async () => {

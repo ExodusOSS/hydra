@@ -1,7 +1,7 @@
 const { snakeCase: _snakeCase } = require('snake-case')
 
 const snakeCase = (input) => {
-  return _snakeCase(input).replace(/([A-Za-z])(\d+)/g, '$1_$2')
+  return _snakeCase(input).replace(/([A-Za-z])(\d+)/gu, '$1_$2')
 }
 
 const safeAssign = (obj, key, value) => {

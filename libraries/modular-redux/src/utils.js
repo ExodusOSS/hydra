@@ -4,7 +4,7 @@ import reduxWatch from 'redux-watch'
 import { bindActionCreators as _bindActionCreators } from 'redux'
 
 export const bindActionCreators = (store, actions, deps, onError) => {
-  const boundActionCreators = {}
+  const boundActionCreators = Object.create(null)
 
   const wrapErrorHandling =
     (fn) =>
@@ -36,10 +36,10 @@ export const bindActionCreators = (store, actions, deps, onError) => {
 }
 
 export const bindSelectors = (store, selectors) => {
-  const boundSelectors = {}
+  const boundSelectors = Object.create(null)
 
   Object.keys(selectors).forEach((ac) => {
-    const fnName = ac.replace(/Selector$/, '')
+    const fnName = ac.replace(/Selector$/u, '')
 
     boundSelectors[fnName] = (...args) => {
       const result = selectors[ac](store.getState())

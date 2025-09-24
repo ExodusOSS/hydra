@@ -1,6 +1,6 @@
 {
   "name": "@exodus/wallet-accounts",
-  "version": "17.6.1",
+  "version": "20.0.0",
   "description": "CRUD interface for managing wallet accounts, a.k.a. portfolios.",
   "author": "Exodus Movement, Inc.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/wallet-accounts",
@@ -36,9 +36,10 @@
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.5.1",
-    "@exodus/core-selectors": "^3.0.0",
+    "@exodus/core-selectors": "^4.0.0",
     "@exodus/fusion-atoms": "^1.2.1",
     "@exodus/models": "^12.0.1",
+    "@exodus/safe-string": "^1.1.0",
     "@exodus/typeforce": "^1.19.0",
     "@exodus/zod": "^3.24.2",
     "lodash": "^4.17.21",

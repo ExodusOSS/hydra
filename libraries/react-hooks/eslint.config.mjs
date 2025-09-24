@@ -1,9 +1,9 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import javascriptReactBabelConfig from '@exodus/eslint-config-javascript-react-babel'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { javascriptReactBabelPreset } from '@exodus/eslint-config-exodus'
 import baseConfig from '../../eslint.config.mjs'
 
 const config = [
-  javascriptReactBabelConfig,
+  javascriptReactBabelPreset,
   baseConfig,
   {
     languageOptions: {

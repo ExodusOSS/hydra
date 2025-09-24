@@ -2,6 +2,7 @@ const createBlockchainMetadataApi = ({ blockchainMetadata, blockchainQuery }) =>
   blockchainMetadata: {
     getTxLog: blockchainMetadata.getTxLog,
     getLoadedTxLogs: blockchainMetadata.getLoadedTxLogs,
+    addTxs: blockchainMetadata.addTxs,
     updateTxs: blockchainMetadata.updateTxs,
     overwriteTxs: blockchainMetadata.overwriteTxs,
     clearTxs: blockchainMetadata.clearTxs,

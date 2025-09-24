@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.0](https://github.com/ExodusMovement/hydra/compare/@exodus/storage-mobile@1.1.0...@exodus/storage-mobile@1.2.0) (2025-07-25)
+
+### Features
+
+- feat(storage-mobile): withFilesystemFallback stringifies payload once (#13338)
+
 ## [1.1.0](https://github.com/ExodusMovement/hydra/compare/@exodus/storage-mobile@1.0.7...@exodus/storage-mobile@1.1.0) (2025-01-17)
 
 ### Features

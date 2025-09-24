@@ -1,5 +1,5 @@
-import { bitcoin } from './_fixtures.js'
 import NumberUnit from '../index.js'
+import { bitcoin } from './_fixtures.js'
 
 test('number-unit: isNumberUnit()', function () {
   const b0 = bitcoin.ZERO

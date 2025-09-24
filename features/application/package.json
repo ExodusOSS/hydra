@@ -1,6 +1,6 @@
 {
   "name": "@exodus/application",
-  "version": "2.9.1",
+  "version": "2.12.1",
   "type": "module",
   "description": "Feature that manages the Exodus SDK application lifecycle.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/application",
@@ -19,7 +19,7 @@
   },
   "author": "Exodus Movement, Inc.",
   "scripts": {
-    "build": "run -T tsc --build tsconfig.build.json",
+    "build": "run -T tsc -p tsconfig.build.json",
     "clean": "run -T tsc --build --clean",
     "lint": "run -T eslint .",
     "test": "run -T exodus-test --jest --esbuild",

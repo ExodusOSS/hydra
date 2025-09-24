@@ -1,4 +1,4 @@
-import { signDetached } from '@exodus/crypto/curve25519'
+import { signDetached } from '@exodus/crypto/ed25519'
 import { mapValues } from '@exodus/basic-utils'
 import assert from 'minimalistic-assert'
 

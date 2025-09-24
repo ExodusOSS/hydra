@@ -17,19 +17,19 @@ const commonErrors = [
   },
   {
     pattern: /cannot read (property|properties).* of null/iu,
-    normalized: 'Cannot read property/properties of null',
+    normalized: 'Cannot read properties of null',
   },
   {
     pattern: /cannot read (property|properties).* of undefined/iu,
-    normalized: 'Cannot read property/properties of undefined',
+    normalized: 'Cannot read properties of undefined',
   },
   {
     pattern: /cannot set (property|properties).* of null/iu,
-    normalized: 'Cannot set property/properties of null',
+    normalized: 'Cannot set properties of null',
   },
   {
     pattern: /cannot set (property|properties).* of undefined/iu,
-    normalized: 'Cannot set property/properties of undefined',
+    normalized: 'Cannot set properties of undefined',
   },
   {
     pattern: /undefined is not an object \(evaluating '.*'\)/iu,
@@ -40,12 +40,40 @@ const commonErrors = [
     normalized: 'Cannot access property of null',
   },
   {
+    pattern: /JSON Parse error: Unexpected (token|character)/iu,
+    normalized: 'JSON Parse error: Unexpected token',
+  },
+  {
+    pattern: /Unexpected token.*is not valid JSON/iu,
+    normalized: 'JSON Parse error: Unexpected token',
+  },
+  {
     pattern: /unexpected (token|character)/iu,
     normalized: 'Unexpected token',
   },
   {
     pattern: /unexpected end of( JSON)? input/iu,
-    normalized: 'Unexpected end of input',
+    normalized: 'JSON Parse error: Unexpected end of input',
+  },
+  {
+    pattern: /^JSON Parse error:/iu,
+    normalized: 'JSON Parse error',
+  },
+  {
+    pattern: /network request failed/iu,
+    normalized: 'Network request failed',
+  },
+  {
+    pattern: /network error/iu,
+    normalized: 'Network error',
+  },
+  {
+    pattern: /connection failed/iu,
+    normalized: 'Connection failed',
+  },
+  {
+    pattern: /request failed/iu,
+    normalized: 'Request failed',
   },
 ] as const
 

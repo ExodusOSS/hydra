@@ -4,6 +4,7 @@
     "target": "es2022",
     "moduleResolution": "node",
     "declaration": true,
+    "useDefineForClassFields": true,
     "removeComments": true,
     "skipLibCheck": true,
     "strict": true,

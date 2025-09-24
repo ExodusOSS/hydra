@@ -1,4 +1,4 @@
-import { bitcoin, usdcoin, usdcoinSolana, setup } from '../utils.js'
+import { bitcoin, setup, usdcoin, usdcoinSolana } from '../utils.js'
 
 describe('createCombinedChildrenNames', () => {
   it('should return children names of combined assets', () => {

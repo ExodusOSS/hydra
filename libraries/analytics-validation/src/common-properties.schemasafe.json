@@ -201,7 +201,7 @@
     "os_version": {
       "type": "string",
       "format": "any-string",
-      "maxLength": 10,
+      "maxLength": 32,
       "$comment": "Max length is arbitrary"
     },
     "screen_height": {

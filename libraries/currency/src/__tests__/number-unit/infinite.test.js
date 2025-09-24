@@ -1,5 +1,6 @@
-import { bitcoin } from '../_fixtures.js'
 import assert from 'assert'
+
+import { bitcoin } from '../_fixtures.js'
 
 test('infinity not supported', () => {
   assert.throws(() => bitcoin.BTC(Number.POSITIVE_INFINITY), 'Infinity')

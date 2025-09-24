@@ -1,4 +1,5 @@
-import type { WalletAccount } from '@exodus/models'
+import { WalletAccount } from '@exodus/models'
+import type { WalletAccountSource } from '@exodus/models/lib/wallet-account'
 
 import { UnsupportedWalletAccountSource } from '../errors.js'
 import transactionSignerDefinition from '../transaction-signer.js'
@@ -26,21 +27,43 @@ describe('TransactionSigner', () => {
   })
 
   it.each([
-    ['exodus', mockSeedBasedTransactionSigner],
-    ['seed', mockSeedBasedTransactionSigner],
-    ['ledger', mockHardwareWalletDevice],
-    ['trezor', mockHardwareWalletDevice],
-  ])('should call the %s signer', async (source, signer) => {
+    [
+      new WalletAccount({
+        source: 'exodus',
+        index: 0,
+      }),
+      mockSeedBasedTransactionSigner,
+    ],
+    [
+      new WalletAccount({
+        source: 'seed',
+        index: 0,
+        seedId: 'some',
+      }),
+      mockSeedBasedTransactionSigner,
+    ],
+    [
+      new WalletAccount({
+        source: 'ledger',
+        index: 0,
+        id: 'ledger',
+      }),
+      mockHardwareWalletDevice,
+    ],
+    [
+      new WalletAccount({
+        source: 'trezor',
+        index: 0,
+        id: 'trezor',
+      }),
+      mockHardwareWalletDevice,
+    ],
+  ])('should call the %s signer', async (walletAccount, signer) => {
     const baseAssetName = ''
     const unsignedTx = {
       txData: {},
       txMeta: {},
     }
-    const accountIndex = 0
-    const walletAccount = {
-      source,
-      index: accountIndex,
-    } as WalletAccount
 
     await transactionSigner.signTransaction({
       baseAssetName,
@@ -61,10 +84,13 @@ describe('TransactionSigner', () => {
       txMeta: {},
     }
     const accountIndex = 0
-    const walletAccount = {
-      source: 'unknown',
+    const walletAccount = new WalletAccount({
+      source: 'unknown' as WalletAccountSource,
       index: accountIndex,
-    } as WalletAccount
+      id: 'unknown',
+      color: '#FFF',
+      icon: 'some',
+    })
 
     await expect(
       transactionSigner.signTransaction({
@@ -85,7 +111,7 @@ describe('TransactionSigner without hardware wallets', () => {
     jest.clearAllMocks()
   })
 
-  it.each([['exodus', mockSeedBasedTransactionSigner]])(
+  it.each([['exodus' as WalletAccountSource, mockSeedBasedTransactionSigner]])(
     'should call the %s signer',
     async (source, signer) => {
       const baseAssetName = ''
@@ -94,10 +120,10 @@ describe('TransactionSigner without hardware wallets', () => {
         txMeta: {},
       }
       const accountIndex = 0
-      const walletAccount = {
+      const walletAccount = new WalletAccount({
         source,
         index: accountIndex,
-      } as WalletAccount
+      })
 
       await transactionSigner.signTransaction({
         baseAssetName,
@@ -113,8 +139,8 @@ describe('TransactionSigner without hardware wallets', () => {
   )
 
   it.each([
-    ['ledger', mockHardwareWalletDevice],
-    ['trezor', mockHardwareWalletDevice],
+    ['ledger' as WalletAccountSource, mockHardwareWalletDevice],
+    ['trezor' as WalletAccountSource, mockHardwareWalletDevice],
   ])('should call the %s wallet', async (source) => {
     const baseAssetName = ''
     const unsignedTx = {
@@ -122,11 +148,11 @@ describe('TransactionSigner without hardware wallets', () => {
       txMeta: {},
     }
     const accountIndex = 0
-    const walletAccount = {
+    const walletAccount = new WalletAccount({
+      id: source,
       source,
       index: accountIndex,
-    } as WalletAccount
-
+    })
     await expect(
       transactionSigner.signTransaction({
         baseAssetName,

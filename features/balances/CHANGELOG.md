@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.13.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.13.0...@exodus/balances@13.13.1) (2025-08-22)
+
+**Note:** Version bump only for package @exodus/balances
+
+## [13.13.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.12.0...@exodus/balances@13.13.0) (2025-07-16)
+
+### Features
+
+- feat: track errors from balances module (#13237)
+
+## [13.12.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.11.0...@exodus/balances@13.12.0) (2025-07-10)
+
+### Features
+
+- feat: update basic utils in balances (#13183)
+
+## [13.11.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.10.0...@exodus/balances@13.11.0) (2025-07-09)
+
+### Features
+
+- feat: getBalance, createBalance selectors to default 0 NU (#13164)
+
+## [13.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.9.1...@exodus/balances@13.10.0) (2025-07-04)
+
+### Features
+
+- feat: provide feeData to asset.api.getBalances (#13104)
+
+### Bug Fixes
+
+- fix: provide feeData as undefined to getBalances when disabled (#13113)
+
+## [13.9.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.9.0...@exodus/balances@13.9.1) (2025-06-11)
+
+### Performance
+
+- perf: clone balances (#12882)
+
 ## [13.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.8.2...@exodus/balances@13.9.0) (2025-06-03)
 
 ### Features

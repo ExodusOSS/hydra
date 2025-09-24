@@ -1,11 +1,9 @@
-import { EXODUS_KEY_IDS } from '@exodus/key-ids'
 import { rejectAfter } from '../utils/promises.js'
 import { safeString } from '@exodus/safe-string'
 
 const attachMigrations = ({ migrations = [], application, modules, adapters, config, ...deps }) => {
   const { unsafeStorage, migrateableStorage } = adapters
-  const { analytics, wallet, unlockEncryptedStorage, migrateableFusion, keychain, errorTracking } =
-    modules
+  const { analytics, unlockEncryptedStorage, migrateableFusion, errorTracking } = modules
   // Override encrypted storage with migrations own instance to make sure no modules reads from it before migrations ran
   const maxDuration = config?.migrations?.maxDuration ?? 5000
 
@@ -70,29 +68,11 @@ const attachMigrations = ({ migrations = [], application, modules, adapters, con
 
   application.hook('migrate', async () => {
     try {
-      const setupTimeout = rejectAfter(
-        maxDuration,
-        safeString`timed out unlocking storage / fusion in migrations`
-      )
+      if (typeof migrateableStorage.unlock === 'function') {
+        await unlockEncryptedStorage(migrateableStorage)
+      }
 
-      // Race the entire hook callback against timeout
-      await Promise.race([
-        (async () => {
-          await unlockEncryptedStorage(migrateableStorage)
-
-          const seedId = await wallet.getPrimarySeedId()
-          const keys = await keychain.sodium.getKeysFromSeed({
-            seedId,
-            keyId: EXODUS_KEY_IDS.FUSION,
-            exportPrivate: true,
-          })
-
-          await migrateableFusion.load({ keys })
-        })(),
-        setupTimeout.promise,
-      ])
-
-      setupTimeout.clear()
+      await migrateableFusion.load()
 
       const migrationNames = migrations.map((migration) => migration.name)
       const migrationFlags = await migrationFlagsStorage.batchGet(migrationNames)

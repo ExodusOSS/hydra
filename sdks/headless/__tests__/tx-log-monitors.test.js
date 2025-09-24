@@ -20,18 +20,22 @@ describe('txLogMonitors', () => {
 
     const startMock = jest.fn()
     const stopMock = jest.fn()
-    bitcoin.api.createHistoryMonitor = jest.fn(() => ({
-      start: startMock,
-      stop: stopMock, // called during application stop
-      addHook: jest.fn(),
-    }))
+    const createMonitorPromise = new Promise((resolve) => {
+      bitcoin.api.createHistoryMonitor = jest.fn(() => {
+        resolve()
+        return {
+          start: startMock,
+          stop: stopMock, // called during application stop
+          addHook: jest.fn(),
+        }
+      })
+    })
 
     await exodus.application.start()
     await exodus.application.create({ passphrase })
     await exodus.application.unlock({ passphrase })
 
-    // txLogMonitor.start does not await for monitors to start
-    await new Promise(setImmediate)
+    await createMonitorPromise
 
     expect(bitcoin.api.createHistoryMonitor).toHaveBeenCalledTimes(1)
     expect(startMock).toHaveBeenCalledTimes(1)
@@ -47,14 +51,18 @@ describe('txLogMonitors', () => {
     const { bitcoin } = await exodus.assets.getAssets()
 
     const stopMock = jest.fn()
-    bitcoin.api.createHistoryMonitor = jest.fn(() => ({ stop: stopMock, addHook: jest.fn() }))
+    const createMonitorPromise = new Promise((resolve) => {
+      bitcoin.api.createHistoryMonitor = jest.fn(() => {
+        resolve()
+        return { stop: stopMock, addHook: jest.fn() }
+      })
+    })
 
     await exodus.application.start()
     await exodus.application.create({ passphrase })
     await exodus.application.unlock({ passphrase })
 
-    // txLogMonitor.start does not await for monitors to start
-    await new Promise(setImmediate)
+    await createMonitorPromise
 
     await exodus.application.lock()
 

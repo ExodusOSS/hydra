@@ -1,3 +1,4 @@
+import _combinedAssetsList from '@exodus/combined-assets-meta'
 import Emitter from '@exodus/wild-emitter'
 import { SynchronizedTime } from '@exodus/basic-utils'
 import createIconsStorageModule from '@exodus/storage-icons-browser'
@@ -8,6 +9,10 @@ import createStorage from './storage.js'
 import createLogger from '../../utils/logger.js'
 import createKeychainMock from '@exodus/keystore-mobile/src/__tests__/keychain-mock-no-jest.js'
 import createKeystore from '@exodus/keystore-mobile'
+
+const combinedAssetsList = _combinedAssetsList.filter(
+  (asset) => asset.assetType === 'MULTI_NETWORK_ASSET'
+)
 
 const createUnlockableStorage = (storage) => {
   const deferringStorage = createDeferringStorage(storage)
@@ -41,6 +46,7 @@ const adapters = {
   fetch: fetch.bind(window),
   freeze: Object.freeze,
   assetPlugins,
+  combinedAssetsList,
   customTokensStorage: storageRoot.namespace('customTokens'),
   iconsStorage: createIconsStorageModule({ storage: storageRoot }),
   getBuildMetadata,

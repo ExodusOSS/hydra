@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/personal-notes@3.8.0...@exodus/personal-notes@3.9.0) (2025-08-15)
+
+### Features
+
+- feat(personal-notes): add getMessage utility function (#13590)
+
 ## [3.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/personal-notes@3.7.0...@exodus/personal-notes@3.8.0) (2025-04-24)
 
 ### Features

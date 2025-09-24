@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@3.1.1...@exodus/error-tracking@3.1.2) (2025-09-09)
+
+### Bug Fixes
+
+- fix: respect ab-testing variant for sentry [2] (#13783)
+
+## [3.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@3.1.0...@exodus/error-tracking@3.1.1) (2025-08-25)
+
+### Bug Fixes
+
+- fix: pass through experiment id, make naming less confusing (#13685)
+
+## [3.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@3.0.1...@exodus/error-tracking@3.1.0) (2025-08-25)
+
+### Features
+
+- feat: support sentry rollout for funded wallets in separate experiment (#13679)
+
+## [3.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@3.0.0...@exodus/error-tracking@3.0.1) (2025-08-21)
+
+### Bug Fixes
+
+- fix: respect ab-testing variant for sentry (#13655)
+
 ## [3.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@2.2.0...@exodus/error-tracking@3.0.0) (2025-07-01)
 
 ### ⚠ BREAKING CHANGES

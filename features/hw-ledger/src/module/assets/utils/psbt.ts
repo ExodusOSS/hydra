@@ -91,6 +91,7 @@ export function tagPsbtWithDerivationPaths(
     derivationPathToPublicKeyMap
   )
 
+  const derivationPathsToSignFor: string[] = []
   for (let inputIndex = 0; inputIndex < psbt.getGlobalInputCount(); inputIndex++) {
     const witnessUtxo = psbt.getInputWitnessUtxo(inputIndex)
     const nonWitnessUtxo = psbt.getInputNonWitnessUtxo(inputIndex)
@@ -141,6 +142,8 @@ export function tagPsbtWithDerivationPaths(
           derivationPathNumerical
         )
       }
+
+      derivationPathsToSignFor.push(derivationPath)
     }
   }
 
@@ -182,6 +185,8 @@ export function tagPsbtWithDerivationPaths(
       }
     }
   }
+
+  return derivationPathsToSignFor
 }
 
 function computeScriptPubKeyToDerivationPathMap(

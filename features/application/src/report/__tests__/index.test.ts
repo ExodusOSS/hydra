@@ -46,7 +46,9 @@ describe('applicationReport', () => {
       walletCreatedAtAtom,
     })
 
-    const result = report.getSchema().parse(await report.export({ isLocked: false }))
+    const result = report
+      .getSchema()
+      .parse(await report.export({ isLocked: false, walletExists: true }))
 
     expect(result).toEqual({
       isLocked: false,
@@ -68,10 +70,39 @@ describe('applicationReport', () => {
       walletCreatedAtAtom,
     })
 
-    const result = report.getSchema().parse(await report.export({ isLocked: true }))
+    const result = report
+      .getSchema()
+      .parse(await report.export({ isLocked: true, walletExists: true }))
 
     expect(result).toEqual({
       isLocked: true,
+      isRestoring: await application.isRestoring(),
+      isBackedUp: await application.isBackedUp(),
+      lockHistory: lockHistory.map((lockHistoryEntry) => ({
+        ...lockHistoryEntry,
+        timestamp: lockHistoryEntry.timestamp.toISOString(),
+      })),
+    })
+  })
+
+  it('should handle gracefully when walletCreatedAtAtom is taking a while to fetch', async () => {
+    // No default value to force getting a value indefinitely stuck
+    const walletCreatedAtAtom = createInMemoryAtom()
+    const report = applicationReportDefinition.factory({
+      application,
+      lockHistoryAtom,
+      wallet,
+      // @ts-expect-error - intentionally broke up the atom above.
+      walletCreatedAtAtom,
+    })
+
+    const result = report
+      .getSchema()
+      .parse(await report.export({ isLocked: false, walletExists: true }))
+
+    expect(result).toEqual({
+      isLocked: false,
+      createdAt: 'Cannot fetch wallet created at.',
       isRestoring: await application.isRestoring(),
       isBackedUp: await application.isBackedUp(),
       lockHistory: lockHistory.map((lockHistoryEntry) => ({

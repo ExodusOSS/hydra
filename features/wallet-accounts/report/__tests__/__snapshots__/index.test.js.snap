@@ -3,13 +3,17 @@ exports[`walletAccountsReport should report wallet accounts 1`] = `
   "configuredActiveWalletAccount": "exodus_0",
   "data": {
     "exodus_0": {
+      "color": "#ff3974",
       "enabled": true,
+      "icon": "exodus",
       "index": 0,
       "isMultisig": false,
       "source": "exodus",
     },
     "exodus_1": {
+      "color": "#30d968",
       "enabled": true,
+      "icon": "trezor",
       "index": 1,
       "isMultisig": false,
       "source": "exodus",

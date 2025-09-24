@@ -440,7 +440,7 @@ export class AddressProvider {
       assetName,
     }
 
-    if (!multiAddressMode || !asset.useMultipleAddresses) {
+    if (!multiAddressMode || !asset.baseAsset.api.features.multipleAddresses) {
       normalized.addressIndex = initialAddressIndex
       return normalized
     }

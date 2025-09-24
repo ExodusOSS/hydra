@@ -7,6 +7,7 @@ jest.doMock(
     AppState: {
       currentState: 'active',
       addEventListener: jest.fn(() => ({ remove: jest.fn() })),
+      removeEventListener: jest.fn(),
     },
     DeviceEventEmitter: null,
     Platform: { OS: 'ios' },
@@ -15,8 +16,15 @@ jest.doMock(
 )
 
 jest.doMock('@exodus/netinfo', () => ({
-  addEventListener: jest.fn(() => ({ remove: jest.fn() })),
-  getConnectionInfo: jest.fn(() => Promise.resolve({ isConnected: true, type: 'wifi' })),
+  __esModule: true,
+  default: {
+    addEventListener: jest.fn(() => ({ remove: jest.fn() })),
+    removeEventListener: jest.fn(),
+    getConnectionInfo: jest.fn(() => Promise.resolve({ isConnected: true, type: 'wifi' })),
+    isConnected: {
+      fetch: jest.fn(() => Promise.resolve(true)),
+    },
+  },
 }))
 
 const { default: appProcessMobile } = await import('@exodus/app-process-mobile')
@@ -47,7 +55,14 @@ describe('app-process-mobile', () => {
     await exodus.application.unlock({ passphrase })
   })
 
-  afterEach(() => exodus.application.stop())
+  afterEach(() => {
+    exodus.application.stop()
+
+    const appProcessPlugin = exodus.container?.get?.('appProcessPlugin')
+    if (appProcessPlugin?.onStop) {
+      appProcessPlugin.onStop()
+    }
+  })
 
   test('should successfully export report', async () => {
     await expect(exodus.reporting.export()).resolves.toMatchObject({

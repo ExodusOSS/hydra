@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [16.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@15.4.0...@exodus/wallet@16.0.0) (2025-09-05)
+
+### ⚠ BREAKING CHANGES
+
+- wallet.create and wallet.import returns object (#13272)
+
+### Features
+
+- feat!: wallet.create and wallet.import returns object (#13272)
+
+## [15.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@15.3.0...@exodus/wallet@15.4.0) (2025-07-24)
+
+### Features
+
+- feat: rm keychain.clear noop calls (#13307)
+
 ## [15.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@15.2.0...@exodus/wallet@15.3.0) (2025-06-05)
 
 ### Features

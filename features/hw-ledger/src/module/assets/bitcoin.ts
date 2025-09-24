@@ -110,7 +110,16 @@ async function createHandler(
       derivationPathToPublicKeyMap[derivationPath] = publicKey
     }
 
-    tagPsbtWithDerivationPaths(psbt, fpr, derivationPathToPublicKeyMap, addressToDerivationPathMap)
+    // We retrieve the derivation paths for all the inputs we intend to sign
+    // because params.derivationPaths may also include derivation paths that are only
+    // relevant for the outputs (e.g change output) and it should not try to sign with
+    // a wallet policy for which it can't find any inputs or firmware will throw an error.
+    const derivationPathsToSignFor: string[] = tagPsbtWithDerivationPaths(
+      psbt,
+      fpr,
+      derivationPathToPublicKeyMap,
+      addressToDerivationPathMap
+    )
 
     addDummyInputs(psbt)
 
@@ -118,14 +127,14 @@ async function createHandler(
     // derivation paths that were not allowed listed.
     assertPsbtOnlyHasAllowedDerivationPaths(psbt, fpr, params.derivationPaths)
 
-    const signatures: any[] = []
     const walletPolicies = await derivationPathsToWalletPolicy(
       fpr,
       app,
-      params.derivationPaths,
+      derivationPathsToSignFor,
       params.multisigData
     )
 
+    const signatures: any[] = []
     for (const walletPolicy of walletPolicies) {
       const hmac = params.multisigData ? await registerWalletPolicy(walletPolicy) : null
       const _signatures = await app.signPsbt(psbt.serialize(), walletPolicy, hmac)

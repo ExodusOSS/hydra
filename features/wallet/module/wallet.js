@@ -133,7 +133,7 @@ class Wallet {
     await this.#assertWalletIsUnlocked()
 
     const seed = await mnemonicToSeed({ mnemonic, format: 'buffer', validate: false })
-    const seedId = getSeedId(seed)
+    const seedId = await getSeedId(seed)
     if (seedId === (await this.#primarySeedIdAtom.get())) {
       throw new Error('Seed already present')
     }
@@ -175,20 +175,16 @@ class Wallet {
     }
 
     const extraSeeds = await this.#getExtraSeeds()
+    const extraSeedsIds = new Map(
+      await Promise.all(extraSeeds.map(async (seed) => [seed, await getSeedId(seed.seed)]))
+    )
 
-    const remainingSeeds = extraSeeds.filter((seed) => {
-      const seedId = getSeedId(seed.seed)
-      return !seedIds.includes(seedId)
-    })
-
-    const seedsToRemove = extraSeeds.filter((seed) => {
-      const seedId = getSeedId(seed.seed)
-      return seedIds.includes(seedId)
-    })
+    const remainingSeeds = extraSeeds.filter((seed) => !seedIds.includes(extraSeedsIds.get(seed)))
+    const seedsToRemove = extraSeeds.filter((seed) => seedIds.includes(extraSeedsIds.get(seed)))
 
     await this.#setExtraSeeds(remainingSeeds)
     this.#removeManySeedsMetadata(seedIds)
-    this.#keychain.removeSeeds(seedsToRemove.map((seed) => seed.seed))
+    await this.#keychain.removeSeeds(seedsToRemove.map((seed) => seed.seed))
   }
 
   removeSeed = (seedId) => {
@@ -224,7 +220,7 @@ class Wallet {
 
   getExtraSeedIds = async () => {
     const extraSeeds = await this.#getExtraSeeds()
-    return extraSeeds.map(({ seed }) => getSeedId(seed))
+    return Promise.all(extraSeeds.map(async ({ seed }) => getSeedId(seed)))
   }
 
   create = makeConcurrent(
@@ -234,9 +230,8 @@ class Wallet {
       const dateCreated = this.#clock.now()
       const seedBuffer = await mnemonicToSeed({ mnemonic, format: 'buffer', validate: false })
       const seed = { mnemonic, seed: seedBuffer, dateCreated }
-      const seedId = getSeedId(seedBuffer)
+      const seedId = await getSeedId(seedBuffer)
 
-      await this.#keychain.clear()
       await this.#setSeed({ seed, passphrase })
 
       this.#seedMetadataAtom.set((previous) => ({
@@ -244,7 +239,7 @@ class Wallet {
         [seedId]: { dateCreated },
       }))
 
-      return seedId
+      return { seedId }
     },
     { concurrency: 1 }
   )
@@ -253,7 +248,6 @@ class Wallet {
     async ({ mnemonic, passphrase }) => {
       await assertMnemonic(mnemonic, this.#validMnemonicLengths)
 
-      await this.#keychain.clear()
       return this.create({ passphrase, mnemonic })
     },
     { concurrency: 1 }
@@ -264,7 +258,6 @@ class Wallet {
 
     // Avoid using this.walletStorage.clear as it's not implemented in mobile
     await Promise.all([
-      this.#keychain.clear(),
       this.walletStorage.delete(SEED_KEY),
       this.walletStorage.delete(EXTRA_SEEDS_KEY),
       this.walletStorage.delete(GENERATED_PASSPHRASE_KEY),
@@ -284,11 +277,11 @@ class Wallet {
   unlock = async ({ passphrase } = {}) => {
     try {
       const { seed } = await this.#getSeed({ passphrase })
-      const primarySeedId = this.#keychain.addSeed(seed)
+      const primarySeedId = await this.#keychain.addSeed(seed)
       this.#primarySeedIdAtom.set(primarySeedId)
 
       const extraSeeds = await this.#getExtraSeeds()
-      extraSeeds.forEach(({ seed }) => this.#keychain.addSeed(seed))
+      await Promise.all(extraSeeds.map(({ seed }) => this.#keychain.addSeed(seed)))
 
       this.#isLocked = false
 
@@ -308,12 +301,14 @@ class Wallet {
 
       if (!seedId || (await this.getPrimarySeedId()) === seedId) return mnemonic
 
-      const extraSeeds = await this.#getExtraSeeds()
-      const seed = extraSeeds.find(({ seed }) => getSeedId(seed) === seedId)
-      if (!seed) throw new Error('No seed matches seedId.')
-      if (!seed.mnemonic) throw new Error('No mnemonic found for seedId.')
+      // Sequential, as sync fallback is slower
+      for (const seed of await this.#getExtraSeeds()) {
+        if (seedId !== (await getSeedId(seed.seed))) continue
+        if (!seed.mnemonic) throw new Error('No mnemonic found for seedId.')
+        return seed.mnemonic
+      }
 
-      return seed.mnemonic
+      throw new Error('No seed matches seedId.')
     } catch (err) {
       if (err.message === 'No seed matches seedId.') {
         this.#logger.debug('getMnemonic() failed: no seed matches seedId.')

@@ -1,6 +1,6 @@
 {
   "name": "@exodus/tx-signer",
-  "version": "2.10.1",
+  "version": "3.1.0",
   "description": "a module to sign transactions",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -20,7 +20,7 @@
     "!**/__tests__/**"
   ],
   "scripts": {
-    "build": "run -T tsc --build tsconfig.build.json",
+    "build": "run -T tsc -p tsconfig.build.json",
     "clean": "run -T tsc --build --clean",
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",
@@ -39,12 +39,11 @@
     "@exodus/asset-sources": "workspace:^",
     "@exodus/assets": "^11.0.0",
     "@exodus/atoms": "workspace:^",
+    "@exodus/bip39": "workspace:^",
     "@exodus/bitcoin-plugin": "^1.21.1",
     "@exodus/dependency-types": "workspace:^",
     "@exodus/keychain": "^7.8.0",
-    "@exodus/solana-plugin": "^1.15.0",
-    "bip39": "^3.1.0",
-    "ts-jest": "^29.0.3"
+    "@exodus/solana-plugin": "^1.15.0"
   },
   "publishConfig": {
     "access": "public"

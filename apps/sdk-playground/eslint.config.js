@@ -15,7 +15,7 @@ const config = [
     },
   },
   {
-    files: ['scripts/**/*.js'],
+    files: ['scripts/**/*.js', '*.config.*', '__tests__/**/*', 'e2e/**/*'],
     rules: {
       'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },

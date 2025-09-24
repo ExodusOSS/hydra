@@ -95,7 +95,9 @@ export class Keychain {
   }
 
   addSeed(seed) {
-    assert(Buffer.isBuffer(seed) && seed.length === 64, 'seed must be buffer of 64 bytes')
+    assert(seed instanceof Uint8Array && seed.length === 64, 'seed must be Uint8Array of 64 bytes')
+    if (!Buffer.isBuffer(seed)) seed = Buffer.from(seed.buffer, seed.byteOffset, seed.byteLength)
+
     const masters = Object.assign(
       Object.create(null),
       mapValues(MAP_KDF, (fromSeed) => fromSeed(seed))

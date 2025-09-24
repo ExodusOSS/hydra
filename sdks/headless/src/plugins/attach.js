@@ -24,6 +24,10 @@ const attachPlugins = ({ plugins, application, logger, pluginTimeout }) => {
 
     Object.defineProperty(timeFn, 'name', { value: name, writable: false })
 
+    if (typeof fn.priority === 'number') {
+      Object.defineProperty(timeFn, 'priority', { value: fn.priority, writable: false })
+    }
+
     return timeFn
   }
 

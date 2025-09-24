@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.3.0](https://github.com/ExodusMovement/hydra/compare/@exodus/currency@6.2.1...@exodus/currency@6.3.0) (2025-07-24)
+
+### Features
+
+- feat(currency): different-type check only on dev & test (#13334)
+
+## [6.2.1](https://github.com/ExodusMovement/hydra/compare/@exodus/currency@6.2.0...@exodus/currency@6.2.1) (2025-03-04)
+
+### Bug Fixes
+
+- fix: `isInstance` function handling (#11640)
+
+- fix: `isInstance` function handling (#11654)
+
+## [6.2.0](https://github.com/ExodusMovement/hydra/compare/@exodus/currency@6.1.0...@exodus/currency@6.2.0) (2025-02-28)
+
+### Features
+
+- feat: introduce `NumberUnit.isInstance` (#11619)
+
+## [6.1.0](https://github.com/ExodusMovement/hydra/compare/@exodus/currency@6.0.2...@exodus/currency@6.1.0) (2024-12-02)
+
+### Features
+
+- feat: export `isUnitType` (#10621)
+
+### License
+
+- license: re-license under MIT license (#10339)
+
+## [6.0.3](https://github.com/ExodusMovement/hydra/compare/@exodus/currency@6.0.2...@exodus/currency@6.0.3) (2024-11-25)
+
+### License
+
+- license: re-license under MIT license (#10339)
+
+## [6.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/currency@6.0.1...@exodus/currency@6.0.2) (2024-11-18)
+
+**Note:** Version bump only for package @exodus/currency
+
 ## [6.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/currency@6.0.0...@exodus/currency@6.0.1) (2024-09-27)
 
 ### Bug Fixes

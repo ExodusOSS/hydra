@@ -12,6 +12,7 @@ const createAssetsApi = ({ assetPreferences, assetsModule }) => {
     },
     assets: {
       fetchToken: (...args) => assetsModule.fetchToken(...args),
+      fetchTokens: (...args) => assetsModule.fetchTokens(...args),
       searchTokens: (...args) => assetsModule.searchTokens(...args),
       updateTokens: (...args) => assetsModule.updateTokens(...args),
       addTokens: (...args) => assetsModule.addTokens(...args),

@@ -33,41 +33,6 @@ describe('createWalletAccountsInternalAtom', () => {
     })
   })
 
-  it('should return default wallet account if none set', async () => {
-    const walletAccountsAtom = createWalletAccountsInternalAtom({
-      storage,
-      config,
-    })
-
-    await expect(walletAccountsAtom.get()).resolves.toEqual({ exodus_0: WalletAccount.DEFAULT })
-  })
-
-  it('should return default wallet account with custom label', async () => {
-    const walletAccountsAtom = createWalletAccountsInternalAtom({
-      storage,
-      config: {
-        defaultLabel: 'Custom Portfolio',
-      },
-    })
-
-    await expect(walletAccountsAtom.get()).resolves.toEqual({
-      exodus_0: { ...WalletAccount.DEFAULT, label: 'Custom Portfolio' },
-    })
-  })
-
-  it('should return default wallet account with custom color', async () => {
-    const walletAccountsAtom = createWalletAccountsInternalAtom({
-      storage,
-      config: {
-        defaultColor: '#FFF',
-      },
-    })
-
-    await expect(walletAccountsAtom.get()).resolves.toEqual({
-      exodus_0: { ...WalletAccount.DEFAULT, color: '#FFF' },
-    })
-  })
-
   it('should sort normal wallet accounts before hardware wallet accounts', async () => {
     const walletAccount = new WalletAccount({
       ...WalletAccount.DEFAULT,

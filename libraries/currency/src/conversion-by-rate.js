@@ -1,10 +1,11 @@
 import isUnitType from './is-unit-type.js'
 
-export default function conversionByRate(ut1, ut2, rate, opts = {}) {
+export default function conversionByRate(ut1, ut2, rate, opts = Object.create(null)) {
   // ut1 * rate = ut2
 
-  if (!isUnitType(ut1) || !isUnitType(ut2))
+  if (!isUnitType(ut1) || !isUnitType(ut2)) {
     throw new Error('Must pass in an instance of UnitType for ut1 and ut2.')
+  }
 
   const { unit1, unit2 } = { unit1: ut1.defaultUnit, unit2: ut2.defaultUnit, ...opts } // allows you to specify what units the rate is for
 

@@ -1,4 +1,4 @@
-import { bitcoin, usdcoin, usdcoinSolana, setup } from '../utils.js'
+import { bitcoin, setup, usdcoin, usdcoinSolana } from '../utils.js'
 
 describe('allWithParentCombinedNetwork', () => {
   it('should combine assets that are a multi network asset', () => {

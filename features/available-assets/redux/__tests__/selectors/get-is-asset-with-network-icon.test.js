@@ -1,4 +1,4 @@
-import { bitcoin, ethereum, usdcoinSolana, usdcoinFtx, setup } from '../utils.js'
+import { bitcoin, ethereum, setup, usdcoinFtx, usdcoinSolana } from '../utils.js'
 
 describe('isAssetWithNetworkIcon', () => {
   test('should return false for asset without network icon', () => {

@@ -1,4 +1,4 @@
-import { bitcoin, ethereum, usdcoin, usdcoinSolana, setup } from '../utils.js'
+import { bitcoin, ethereum, setup, usdcoin, usdcoinSolana } from '../utils.js'
 
 describe('all', () => {
   it('should return all available assets', () => {

@@ -1,6 +1,4 @@
-/* eslint-disable import/no-unresolved */
-
-import assert from 'assert'
+import assert from 'minimalistic-assert'
 import { combineReducers } from 'redux'
 
 const modularRedux = (createStore) => (reducers, initialState, enhancer) => {

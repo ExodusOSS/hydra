@@ -2,28 +2,168 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'Inter';
-  font-style: italic;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/inter/v18/UcCm3FwrK3iLTcvnUwQT9mI1F54.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
-    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+:root {
+  --background: #07060d; /* lighter black */
+  --foreground: #e3e7fb; /* pastel purple */
+  --primary: #8367e7; /* purple */
+  --primary-foreground: #111111; /* lighter black */
+  --secondary: #27272a; /* Default Tailwind zinc-800 for dark secondary */
+  --secondary-foreground: #e3e7fb; /* pastel purple */
+  --muted: #27272a; /* Default Tailwind zinc-800 */
+  --muted-foreground: #a1a1aa; /* Default Tailwind zinc-400 */
+  --accent: #b19dff; /* purple-200 in exodus */
+  --accent-foreground: #e3e7fb; /* pastel purple */
+  --destructive: #eb7c3e; /* orange */
+  --destructive-foreground: #111111; /* lighter black */
+  --border: #3f3f46; /* Default Tailwind zinc-700 */
+  --input: #3f3f46; /* Default Tailwind zinc-700 */
+  --ring: #8367e7; /* purple */
+
+  --admonition-green: #bcf0df;
+  --admonition-green-light: #2ecf95;
+  --admonition-cyan: #c4eff9;
+  --admonition-cyan-light: #3ec7eb;
+  --admonition-orange: #f9d8c4;
+  --admonition-orange-light: #eb7c3e;
+  --admonition-yellow: #f9f1c4;
+  --admonition-yellow-light: #ebd43e;
+
+  --cta-gradient-start: #8367e7;
+  --cta-gradient-end: #6042c7;
+
+  --radius: 0.5rem; /* Default radius */
+  --font-inter: 'Inter', sans-serif;
+  --font-eudoxus: 'Eudoxus Sans', sans-serif;
+}
+
+/* For modern browsers */
+@supports (color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html,
+  body {
+    @apply overflow-hidden bg-background text-foreground;
+  }
 }
 
 @font-face {
   font-family: 'Inter';
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/inter/v18/UcCo3FwrK3iLTcviYwYZ8UA3.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
-    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src: url('/fonts/Inter-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/Inter-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/Inter-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Eudoxus Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/EudoxusSans-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Eudoxus Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/EudoxusSans-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Eudoxus Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/EudoxusSans-Bold.woff2') format('woff2');
 }
 
 html {
   scroll-padding-top: 100px;
   font-family: 'Inter', sans-serif;
-  @apply bg-deep-600 text-white;
+  @apply bg-background text-foreground;
+}
+
+/* Custom scrollbar styling to match first image */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Remove ALL scrollbar buttons/arrows */
+::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-button:single-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-button:double-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-button:vertical:start:decrement,
+::-webkit-scrollbar-button:vertical:end:increment {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }

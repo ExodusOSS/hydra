@@ -1,6 +1,6 @@
-import createUiConfigPluginDefinition from '../index.js'
-
 import { createInMemoryAtom } from '@exodus/atoms'
+
+import createUiConfigPluginDefinition from '../index.js'
 
 const configValues = [
   {

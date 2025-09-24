@@ -1,7 +1,7 @@
 {
   "name": "@exodus/errors",
   "type": "module",
-  "version": "3.0.0",
+  "version": "3.3.0",
   "description": "Utilities for error handling in client code, such as sanitization",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -24,7 +24,7 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "run -T tsc --build tsconfig.build.json",
+    "build": "run -T tsc -p tsconfig.build.json",
     "prepublishOnly": "yarn run -T build --scope @exodus/errors",
     "clean": "run -T tsc --build --clean",
     "lint": "run -T eslint .",
@@ -34,7 +34,7 @@
     "test:hermes": "EXODUS_TEST_COVERAGE=0 run -T exodus-test --engine hermes:bundle --esbuild --jest src/__tests__/hermes/*.test.ts src/__tests__/engine-agnostic/*.test.ts"
   },
   "dependencies": {
-    "@exodus/safe-string": "^1.0.0",
+    "@exodus/safe-string": "^1.2.0",
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {

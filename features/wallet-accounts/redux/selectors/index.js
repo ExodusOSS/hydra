@@ -9,6 +9,8 @@ import allWalletAccountsSelector from './all.js'
 import enabledWalletAccountsSelector from './enabled.js'
 import filterWalletAccountsSelector from './filter.js'
 import hasMaxAmountOfAccountsSelector from './has-max-amount-of-accounts.js'
+import hasMaxAmountOfLedgerAccountsSelector from './has-max-amount-of-ledger-accounts.js'
+import hasMaxAmountOfTrezorAccountsSelector from './has-max-amount-of-trezor-accounts.js'
 import findSelector from './find.js'
 import allNonCustodialSelector from './all-non-custodial.js'
 import getProperNameSelector from './get-proper-name.js'
@@ -36,6 +38,8 @@ const createSelectorDefinitions = (config) => [
   enabledWalletAccountsSelector,
   filterWalletAccountsSelector,
   hasMaxAmountOfAccountsSelector(config),
+  hasMaxAmountOfLedgerAccountsSelector(config),
+  hasMaxAmountOfTrezorAccountsSelector(config),
   isCustodialWalletAccountSelector,
   findSelector,
   allNonCustodialSelector,

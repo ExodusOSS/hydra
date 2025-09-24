@@ -1,6 +1,8 @@
-import { renderHook } from '@testing-library/react-hooks'
-import useMemoCompare from '../useMemoCompare.js'
 import crypto from 'node:crypto'
+
+import { renderHook } from '@testing-library/react-hooks'
+
+import useMemoCompare from '../useMemoCompare.js'
 
 describe('useMemoCompare', () => {
   const setup = ({ getDependencies, compareFcts }) => {

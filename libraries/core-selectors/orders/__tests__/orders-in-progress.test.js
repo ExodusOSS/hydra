@@ -1,6 +1,6 @@
 import { Order, orderFromJSONLegacy, OrderSet } from '@exodus/models'
 
-import assets from '../../_test/assets.js'
+import assets from '../../__tests__/assets.js'
 import createOrdersInProgressSelector from '../orders-in-progress.js'
 
 describe('createOrdersInProgressSelector', () => {

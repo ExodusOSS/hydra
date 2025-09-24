@@ -7,7 +7,7 @@ type WalletAccountsData = Partial<{
   source: string
   index: number
   label: string
-  enabled: string
+  enabled: boolean
 }>
 
 type UpdateableData = Omit<WalletAccountsData, 'id' | 'seedId' | 'index' | 'compatibilityMode'>

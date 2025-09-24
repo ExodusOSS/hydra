@@ -27,22 +27,15 @@ class TransactionSigner implements ITransactionSigner {
   }
 
   #getTransactionSigner = async (walletAccount: WalletAccount): Promise<InternalSigner> => {
-    switch (walletAccount.source) {
-      case 'exodus':
-      case 'seed':
-        return this.#seedBasedTransactionSigner
-      case 'trezor':
-      case 'ledger':
-        // Request the user to connect the correct device for given wallet account.
-        if (this.#hardwareWallets) {
-          return this.#hardwareWallets.requireDeviceFor(walletAccount)
-        }
-
-        throw new UnsupportedWalletAccountSource()
-
-      default:
-        throw new UnsupportedWalletAccountSource()
+    if (walletAccount.isSoftware) {
+      return this.#seedBasedTransactionSigner
     }
+
+    if (walletAccount.isHardware && this.#hardwareWallets) {
+      return this.#hardwareWallets.requireDeviceFor(walletAccount)
+    }
+
+    throw new UnsupportedWalletAccountSource(walletAccount.source)
   }
 
   signTransaction = async (opts: SignTransactionParams) => {

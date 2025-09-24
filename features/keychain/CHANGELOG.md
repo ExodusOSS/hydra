@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.11.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@7.11.0...@exodus/keychain@7.11.1) (2025-07-18)
+
+### Bug Fixes
+
+- fix: bump bip32 to 4.0.2 (#13279)
+
+## [7.11.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@7.10.0...@exodus/keychain@7.11.0) (2025-06-03)
+
+### Features
+
+- feat: allow addSeed to accept Uint8Array instances (#12780)
+
 ## [7.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@7.9.0...@exodus/keychain@7.10.0) (2025-05-29)
 
 ### Features

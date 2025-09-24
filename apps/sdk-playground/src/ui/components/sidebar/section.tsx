@@ -12,24 +12,40 @@ interface SectionProps {
 const Section = ({ title, items, active }: SectionProps) => {
   return (
     <li>
-      <h2 className="font-display text-sm font-light text-slate-300">{title}</h2>
+      <h2 className="font-display pl-4 text-sm font-bold text-foreground">{title}</h2>
 
-      <ul role="list" className="ml-1 mt-4 space-y-2 border-l-2 border-deep-100">
-        {items.map(({ name, href, incomplete }) => (
-          <li key={name} className="relative">
-            <Link href={href}>
-              <div
-                className={cn('block w-full cursor-pointer pl-4 text-sm', {
-                  'font-thin': active === name,
-                  'text-slate-500 hover:text-slate-400': active !== name,
-                  'text-slate-700': incomplete,
-                })}
-              >
-                {name}
-              </div>
-            </Link>
-          </li>
-        ))}
+      <ul role="list" className="mt-4 space-y-1">
+        {items.map(({ name, href, incomplete }) => {
+          const isActive =
+            active === name ||
+            active === name.toLowerCase() ||
+            active === name.replace(/\s+/gu, '').toLowerCase() ||
+            active ===
+              name
+                .replace(/\s+/gu, '')
+                .toLowerCase()
+                .replace(/[^\da-z]/gu, '')
+
+          return (
+            <li key={name} className="relative">
+              <Link href={href}>
+                <div
+                  className={cn(
+                    'block w-full cursor-pointer rounded-md py-1.5 text-sm font-medium transition-all',
+                    'pl-8 pr-2', // 2rem left padding - more than section title
+                    {
+                      'bg-secondary font-bold text-accent': isActive,
+                      'text-muted-foreground hover:bg-muted': !isActive,
+                      'text-muted-foreground/50': incomplete,
+                    }
+                  )}
+                >
+                  {name}
+                </div>
+              </Link>
+            </li>
+          )
+        })}
       </ul>
     </li>
   )

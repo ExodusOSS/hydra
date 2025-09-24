@@ -1,10 +1,7 @@
-/* eslint-disable @exodus/mutable/no-param-reassign-prop-only */
-import { createInMemoryAtom } from '@exodus/atoms'
+import { createAtomMock, createInMemoryAtom } from '@exodus/atoms'
 
-import ratesMonitorDefinition, {
-  generateMockPrice,
-  initializeSimulationDataForTickers,
-} from '../index.js'
+import { ratesAssetNamesToMonitorAtomDefinition } from '../../atoms/index.js'
+import ratesMonitorDefinition from '../index.js'
 
 const createRatesMonitor = ratesMonitorDefinition.factory
 
@@ -13,15 +10,13 @@ const advanceTimers = (ms) => {
   return new Promise(setImmediate)
 }
 
-const { generatePriceSimulation } = await import('../index.js')
-
 describe('RatesMonitor', () => {
   const currency = 'EUR'
 
   const debounceInterval = 10
   const fetchInterval = 500
   const fetchRealTimePricesInterval = 200
-  const simulationInterval = 5000
+
   const requestDuration = 150
 
   let assets
@@ -29,7 +24,9 @@ describe('RatesMonitor', () => {
   let ratesAtom
   let pricingClient
   let logger
-  let ratesSimulationEnabledAtom
+  let enabledAssetsAtom
+  let restoreAtom
+  let ratesAssetNamesToMonitorAtom
   let assetNamesAtomObservers = []
   let triggerAssetNamesAtomObservers
 
@@ -37,7 +34,13 @@ describe('RatesMonitor', () => {
     getAsset: (name) => assets.find((asset) => asset.name === name),
   }
 
-  const currencyAtom = createInMemoryAtom({ defaultValue: currency })
+  const currencyAtom = {
+    get: jest.fn().mockResolvedValue(currency),
+    observe: jest.fn((callback) => {
+      callback(currency)
+      return () => {}
+    }),
+  }
 
   let availableAssetNamesAtom
 
@@ -47,8 +50,9 @@ describe('RatesMonitor', () => {
 
   beforeEach(() => {
     jest.useFakeTimers({ doNotFake: ['setImmediate'] })
-    ratesAtom = createInMemoryAtom({})
-    ratesSimulationEnabledAtom = createInMemoryAtom({ defaultValue: false })
+    ratesAtom = createAtomMock({})
+    enabledAssetsAtom = createInMemoryAtom({ defaultValue: { bitcoin: true, ethereum: true } })
+    restoreAtom = createInMemoryAtom({ defaultValue: false })
 
     logger = {
       info: jest.fn(),
@@ -71,6 +75,10 @@ describe('RatesMonitor', () => {
 
     availableAssetNamesAtom = createInMemoryAtom({
       defaultValue: assets.map((asset) => asset.name),
+    })
+
+    ratesAssetNamesToMonitorAtom = ratesAssetNamesToMonitorAtomDefinition.factory({
+      availableAssetNamesAtom,
     })
 
     const originalObserve = availableAssetNamesAtom.observe
@@ -99,15 +107,14 @@ describe('RatesMonitor', () => {
       currencyAtom,
       pricingClient,
       assetsModule,
-      availableAssetNamesAtom,
+      ratesAssetNamesToMonitorAtom,
       logger,
       ratesAtom,
-      ratesSimulationEnabledAtom,
+      errorTracking: { track: jest.fn() },
       config: {
         fetchInterval,
         debounceInterval,
         fetchRealTimePricesInterval,
-        simulationInterval,
       },
     })
 
@@ -198,10 +205,8 @@ describe('RatesMonitor', () => {
     )
   })
 
-  it('should not call update when simulation state is unchanged', async () => {
+  it('should not call update when API data is not modified', async () => {
     expect.assertions(2)
-
-    await ratesSimulationEnabledAtom.set(false)
 
     pricingClient.currentPrice.mockResolvedValue({
       isModified: false,
@@ -261,6 +266,9 @@ describe('RatesMonitor', () => {
   })
   it('should reset lastModified if the tracked assets changed', async () => {
     expect.assertions(3)
+
+    await restoreAtom.set(true)
+
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
       data: {
@@ -309,6 +317,8 @@ describe('RatesMonitor', () => {
 
   it('should fetch for added assets from observed available asset names and emit all the assets', async () => {
     expect.assertions(4)
+
+    await restoreAtom.set(true)
 
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
@@ -467,6 +477,8 @@ describe('RatesMonitor', () => {
   it("should fetch for added assets before next fetch interval even if there's request in progress", async () => {
     expect.assertions(3)
 
+    await restoreAtom.set(true)
+
     const ratesAtomObserver = jest.fn()
 
     const createDelayedResponse = (response) => async () => {
@@ -575,6 +587,8 @@ describe('RatesMonitor', () => {
     assets = [...assets, { ticker: 'OTH', name: 'other' }]
     await availableAssetNamesAtom.set(assets.map((asset) => asset.name))
 
+    await enabledAssetsAtom.set({ bitcoin: true, ethereum: true, other: true })
+
     pricingClient.currentPrice.mockResolvedValue({
       isModified: true,
       data: {
@@ -619,6 +633,8 @@ describe('RatesMonitor', () => {
     expect(logger.warn).toHaveBeenCalledTimes(1)
     assets = [...assets, { ticker: 'OTH', name: 'other' }]
     await availableAssetNamesAtom.set(assets.map((asset) => asset.name))
+
+    await enabledAssetsAtom.set({ bitcoin: true, ethereum: true, other: true })
     await triggerAssetNamesAtomObservers()
 
     await advanceTimers(fetchInterval)
@@ -870,8 +886,6 @@ describe('RatesMonitor', () => {
     it('should fallback to slow data if real-time data is missing for that asset', async () => {
       jest.useFakeTimers({ doNotFake: ['setImmediate'] })
 
-      ratesSimulationEnabledAtom.set(false)
-
       pricingClient.currentPrice.mockResolvedValue({
         isModified: true,
         data: {
@@ -927,8 +941,6 @@ describe('RatesMonitor', () => {
 
     it('should continue using existing real-time data even if time passes (no flicker back to slow)', async () => {
       jest.useFakeTimers({ doNotFake: ['setImmediate'] })
-
-      ratesSimulationEnabledAtom.set(false)
 
       pricingClient.currentPrice.mockResolvedValue({
         isModified: true,
@@ -1296,1079 +1308,72 @@ describe('RatesMonitor', () => {
       })
     })
   })
-})
 
-describe('Price Simulation', () => {
-  const simulationInterval = 5000
-  const currency = 'USD'
-  let assets,
-    ratesMonitor,
-    ratesAtom,
-    pricingClient,
-    logger,
-    ratesSimulationEnabledAtom,
-    availableAssetNamesAtom
+  describe('filtered atom behavior', () => {
+    it('should monitor all available assets regardless of enabled state', async () => {
+      await ratesMonitor.stop()
 
-  const assetsModule = {
-    getAsset: (name) => assets.find((asset) => asset.name === name),
-  }
-
-  const currencyAtom = createInMemoryAtom({ defaultValue: currency })
-
-  beforeEach(() => {
-    jest.useFakeTimers({ doNotFake: ['setImmediate'] })
-    ratesAtom = createInMemoryAtom({})
-    ratesSimulationEnabledAtom = createInMemoryAtom({ defaultValue: false })
-
-    logger = {
-      info: jest.fn(),
-      warn: jest.fn(),
-      error: jest.fn(),
-    }
-
-    pricingClient = {
-      currentPrice: jest.fn(),
-      ticker: jest.fn(),
-      realTimePrice: jest.fn(),
-    }
-
-    assets = [
-      { name: 'bitcoin', ticker: 'BTC' },
-      { name: 'ethereum', ticker: 'ETH' },
-      { name: 'tether', ticker: 'USDT' },
-      { name: 'binancecoin', ticker: 'BNB' },
-      { name: 'ripple', ticker: 'XRP' },
-      { name: 'solana', ticker: 'SOL' },
-      { name: 'cardano', ticker: 'ADA' },
-      { name: 'dogecoin', ticker: 'DOGE' },
-      { name: 'polkadot', ticker: 'DOT' },
-      { name: 'litecoin', ticker: 'LTC' },
-      { name: 'avalanche', ticker: 'AVAX' },
-    ]
-
-    availableAssetNamesAtom = createInMemoryAtom({
-      defaultValue: assets.map((asset) => asset.name),
-    })
-
-    pricingClient.realTimePrice.mockResolvedValue({
-      isModified: true,
-      data: [
-        { BTC: { USD: 50_000 } },
-        { ETH: { USD: 3000 } },
-        { USDT: { USD: 1 } },
-        { BNB: { USD: 400 } },
-        { XRP: { USD: 0.5 } },
-        { SOL: { USD: 100 } },
-        { ADA: { USD: 0.3 } },
-        { DOGE: { USD: 0.1 } },
-        { DOT: { USD: 5 } },
-        { LTC: { USD: 80 } },
-        { AVAX: { USD: 20 } },
-      ],
-    })
-
-    pricingClient.ticker.mockResolvedValue({
-      BTC: { USD: { c24h: 2.5, v24h: 30_000_000_000, mc: 950_000_000_000 } },
-      ETH: { USD: { c24h: 1.8, v24h: 15_000_000_000, mc: 350_000_000_000 } },
-      USDT: { USD: { c24h: 0.01, v24h: 50_000_000_000, mc: 80_000_000_000 } },
-      BNB: { USD: { c24h: 3.2, v24h: 2_000_000_000, mc: 60_000_000_000 } },
-      XRP: { USD: { c24h: -1.5, v24h: 1_000_000_000, mc: 25_000_000_000 } },
-      SOL: { USD: { c24h: 5.2, v24h: 3_000_000_000, mc: 40_000_000_000 } },
-      ADA: { USD: { c24h: -0.8, v24h: 500_000_000, mc: 10_000_000_000 } },
-      DOGE: { USD: { c24h: 1.2, v24h: 800_000_000, mc: 15_000_000_000 } },
-      DOT: { USD: { c24h: 0.5, v24h: 400_000_000, mc: 5_000_000_000 } },
-      LTC: { USD: { c24h: -0.3, v24h: 600_000_000, mc: 6_000_000_000 } },
-      AVAX: { USD: { c24h: 2, v24h: 300_000_000, mc: 7_000_000_000 } },
-    })
-
-    pricingClient.currentPrice.mockResolvedValue({
-      isModified: true,
-      data: {
-        BTC: { USD: 50_000 },
-        ETH: { USD: 3000 },
-        USDT: { USD: 1 },
-        BNB: { USD: 400 },
-        XRP: { USD: 0.5 },
-        SOL: { USD: 100 },
-        ADA: { USD: 0.3 },
-        DOGE: { USD: 0.1 },
-        DOT: { USD: 5 },
-        LTC: { USD: 80 },
-        AVAX: { USD: 20 },
-      },
-    })
-
-    ratesMonitor = createRatesMonitor({
-      currencyAtom,
-      pricingClient,
-      assetsModule,
-      availableAssetNamesAtom,
-      logger,
-      ratesAtom,
-      ratesSimulationEnabledAtom,
-      config: {
-        fetchInterval: 60_000,
-        debounceInterval: 10,
-        fetchRealTimePricesInterval: 25_000,
-        simulationInterval,
-      },
-    })
-  })
-
-  afterEach(() => {
-    ratesMonitor.stop()
-    jest.useRealTimers()
-  })
-
-  it('simulation runs every 5 seconds', async () => {
-    const handler = jest.fn()
-    ratesAtom.observe(handler)
-
-    // Save original Math.random
-    const originalRandom = Math.random
-
-    // Mock Math.random to return values with predictable amplitude
-    let randomCallCount = 0
-    Math.random = jest.fn().mockImplementation(() => {
-      randomCallCount++
-      // Return values between 0.7-0.8 to ensure price changes
-      return 0.7 + (randomCallCount % 10) * 0.01
-    })
-
-    try {
-      // Disable staggered updates - ensure behavior matches existing tests
-      ratesMonitor.start()
-      await advanceTimers(0)
-      await advanceTimers(10)
-
-      await ratesSimulationEnabledAtom.set(true)
-      await advanceTimers(10)
-
-      // Set staggerUpdateEnabled to false so all assets update simultaneously
-      Object.values(ratesMonitor).forEach((value) => {
-        if (
-          value &&
-          typeof value === 'object' &&
-          value.USD &&
-          value.USD.staggerUpdateEnabled !== undefined
-        ) {
-          value.USD.staggerUpdateEnabled = false
-        }
-      })
-
-      const initialState = handler.mock.calls[handler.mock.calls.length - 1][0]
-      const initialBtcPrice = initialState[currency].BTC.price
-
-      await advanceTimers(simulationInterval)
-      await advanceTimers(10)
-
-      const secondState = handler.mock.calls[handler.mock.calls.length - 1][0]
-      const secondBtcPrice = secondState[currency].BTC.price
-
-      await advanceTimers(simulationInterval)
-      await advanceTimers(10)
-
-      const thirdState = handler.mock.calls[handler.mock.calls.length - 1][0]
-      const thirdBtcPrice = thirdState[currency].BTC.price
-
-      // Check for definite price changes
-      expect(secondBtcPrice).not.toEqual(initialBtcPrice)
-      expect(thirdBtcPrice).not.toEqual(secondBtcPrice)
-
-      expect(handler.mock.calls.length).toBeGreaterThanOrEqual(3)
-    } finally {
-      // Always restore original Math.random when test completes
-      Math.random = originalRandom
-    }
-  })
-
-  it('simulated prices fluctuate naturally', async () => {
-    const handler = jest.fn()
-    ratesAtom.observe(handler)
-
-    ratesMonitor.start()
-    await advanceTimers(0)
-    await advanceTimers(10)
-
-    for (let i = 0; i < 5; i++) {
-      await advanceTimers(simulationInterval)
-      await advanceTimers(10)
-    }
-
-    const calls = handler.mock.calls
-    const btcPrices = calls.map((call) => call[0][currency].BTC.price)
-
-    const changes = []
-    for (let i = 1; i < btcPrices.length; i++) {
-      const change = Math.abs((btcPrices[i] - btcPrices[i - 1]) / btcPrices[i - 1])
-      changes.push(change)
-    }
-
-    changes.forEach((change) => {
-      expect(change).toBeLessThan(0.001)
-    })
-  })
-
-  it('simulation data is reset when real API data arrives', async () => {
-    const handler = jest.fn()
-    ratesAtom.observe(handler)
-
-    // Save original Math.random
-    const originalRandom = Math.random
-
-    // Mock Math.random to return values with predictable amplitude
-    let randomCallCount = 0
-    Math.random = jest.fn().mockImplementation(() => {
-      randomCallCount++
-      // Return values between 0.7-0.8 to ensure price changes
-      return 0.7 + (randomCallCount % 10) * 0.01
-    })
-
-    try {
-      ratesMonitor.start()
-      await advanceTimers(0)
-      await advanceTimers(10)
-
-      await ratesSimulationEnabledAtom.set(true)
-      await advanceTimers(10)
-
-      // Set staggerUpdateEnabled to false so all assets update simultaneously
-      Object.values(ratesMonitor).forEach((value) => {
-        if (
-          value &&
-          typeof value === 'object' &&
-          value.USD &&
-          value.USD.staggerUpdateEnabled !== undefined
-        ) {
-          value.USD.staggerUpdateEnabled = false
-        }
-      })
-
-      for (let i = 0; i < 3; i++) {
-        await advanceTimers(simulationInterval)
-        await advanceTimers(10)
-      }
-
-      const lastSimulatedPrice =
-        handler.mock.calls[handler.mock.calls.length - 1][0][currency].BTC.price
-
-      pricingClient.realTimePrice.mockResolvedValueOnce({
-        isModified: true,
-        data: [
-          { BTC: { USD: 52_000 } },
-          { ETH: { USD: 3000 } },
-          { USDT: { USD: 1 } },
-          { BNB: { USD: 400 } },
-          { XRP: { USD: 0.5 } },
-          { SOL: { USD: 100 } },
-          { ADA: { USD: 0.3 } },
-          { DOGE: { USD: 0.1 } },
-          { DOT: { USD: 5 } },
-          { LTC: { USD: 80 } },
-          { AVAX: { USD: 20 } },
-        ],
-      })
-
-      await advanceTimers(25_000 - 3 * simulationInterval)
-      await advanceTimers(10)
-
-      const apiPrice = handler.mock.calls[handler.mock.calls.length - 1][0][currency].BTC.price
-
-      expect(apiPrice).toEqual(52_000)
-      expect(apiPrice).not.toEqual(lastSimulatedPrice)
-
-      await advanceTimers(simulationInterval)
-      await advanceTimers(10)
-
-      const newSimulatedPrice =
-        handler.mock.calls[handler.mock.calls.length - 1][0][currency].BTC.price
-      expect(newSimulatedPrice).not.toEqual(apiPrice)
-
-      const change = Math.abs((newSimulatedPrice - apiPrice) / apiPrice)
-      expect(change).toBeLessThan(0.001)
-    } finally {
-      Math.random = originalRandom
-    }
-  })
-
-  it('simulation is only applied to assets from real-time API', async () => {
-    const handler = jest.fn()
-    ratesAtom.observe(handler)
-
-    // Save original Math.random
-    const originalRandom = Math.random
-
-    // Mock Math.random to return values with predictable amplitude
-    let randomCallCount = 0
-    Math.random = jest.fn().mockImplementation(() => {
-      randomCallCount++
-      return 0.7 + (randomCallCount % 10) * 0.01
-    })
-
-    try {
-      assets = [
-        { name: 'bitcoin', ticker: 'BTC' },
-        { name: 'ethereum', ticker: 'ETH' },
-        { name: 'cardano', ticker: 'ADA' },
-        { name: 'solana', ticker: 'SOL' },
-        { name: 'polygon', ticker: 'MATIC' },
-        { name: 'polkadot', ticker: 'DOT' },
-      ]
-
-      await availableAssetNamesAtom.set(assets.map((asset) => asset.name))
+      await availableAssetNamesAtom.set([])
+      await enabledAssetsAtom.set({})
+      await restoreAtom.set(false)
 
       pricingClient.currentPrice.mockResolvedValue({
         isModified: true,
         data: {
-          BTC: { USD: 50_000 },
-          ETH: { USD: 3000 },
-          ADA: { USD: 0.3 },
-          SOL: { USD: 100 },
-          MATIC: { USD: 0.8 },
-          DOT: { USD: 5 },
+          BTC: { EUR: 50_000, USD: 55_000 },
+          ETH: { EUR: 3000, USD: 3300 },
         },
       })
-
       pricingClient.ticker.mockResolvedValue({
-        BTC: { USD: { c24h: 2.5 } },
-        ETH: { USD: { c24h: 1.8 } },
-        ADA: { USD: { c24h: -0.8 } },
-        SOL: { USD: { c24h: 5.2 } },
-        MATIC: { USD: { c24h: 3 } },
-        DOT: { USD: { c24h: 0.5 } },
+        BTC: { EUR: { c24h: 5, v24h: 1_000_000, mc: 1_000_000_000 } },
+        ETH: { EUR: { c24h: -3, v24h: 500_000, mc: 400_000_000 } },
       })
-
       pricingClient.realTimePrice.mockResolvedValue({
         isModified: true,
-        data: [
-          { BTC: { USD: 50_000 } },
-          { ETH: { USD: 3000 } },
-          { ADA: { USD: 0.3 } },
-          { SOL: { USD: 100 } },
-        ],
+        data: [{ BTC: { EUR: 51_000 } }, { ETH: { EUR: 3100 } }],
       })
+
+      const handler = jest.fn()
+      ratesAtom.observe(handler)
+
+      pricingClient.currentPrice.mockClear()
+      pricingClient.realTimePrice.mockClear()
 
       ratesMonitor.start()
       await advanceTimers(0)
-      await advanceTimers(10)
+      await advanceTimers(debounceInterval)
 
-      await ratesSimulationEnabledAtom.set(true)
-      await advanceTimers(10)
+      expect(pricingClient.currentPrice).not.toHaveBeenCalled()
 
-      // Set staggerUpdateEnabled to false so all assets update simultaneously
-      Object.values(ratesMonitor).forEach((value) => {
-        if (
-          value &&
-          typeof value === 'object' &&
-          value.USD &&
-          value.USD.staggerUpdateEnabled !== undefined
-        ) {
-          value.USD.staggerUpdateEnabled = false
-        }
-      })
+      pricingClient.realTimePrice.mockClear()
 
-      const initialState = handler.mock.calls[handler.mock.calls.length - 1][0]
-      const initialPrices = {
-        BTC: initialState[currency].BTC.price,
-        ETH: initialState[currency].ETH.price,
-        ADA: initialState[currency].ADA.price,
-        SOL: initialState[currency].SOL.price,
-        MATIC: initialState[currency].MATIC.price,
-        DOT: initialState[currency].DOT.price,
-      }
-
-      await advanceTimers(simulationInterval)
-      await advanceTimers(10)
-
-      const simulatedState = handler.mock.calls[handler.mock.calls.length - 1][0]
-
-      expect(simulatedState[currency].BTC.price).not.toEqual(initialPrices.BTC)
-      expect(simulatedState[currency].ETH.price).not.toEqual(initialPrices.ETH)
-      expect(simulatedState[currency].ADA.price).not.toEqual(initialPrices.ADA)
-      expect(simulatedState[currency].SOL.price).not.toEqual(initialPrices.SOL)
-
-      expect(simulatedState[currency].MATIC.price).toEqual(initialPrices.MATIC)
-      expect(simulatedState[currency].DOT.price).toEqual(initialPrices.DOT)
-
-      expect(simulatedState[currency].BTC.change24).not.toEqual(initialState[currency].BTC.change24)
-      expect(simulatedState[currency].ETH.change24).not.toEqual(initialState[currency].ETH.change24)
-
-      expect(simulatedState[currency].MATIC.change24).toEqual(initialState[currency].MATIC.change24)
-      expect(simulatedState[currency].DOT.change24).toEqual(initialState[currency].DOT.change24)
-
-      pricingClient.realTimePrice.mockResolvedValueOnce({
-        isModified: true,
-        data: [{ BTC: { USD: 50_000 } }, { ETH: { USD: 3000 } }],
-      })
-
-      await advanceTimers(25_000)
-      await advanceTimers(10)
-
-      await advanceTimers(simulationInterval)
-      await advanceTimers(10)
-
-      const finalState = handler.mock.calls[handler.mock.calls.length - 1][0]
-
-      expect(finalState[currency].BTC.price).not.toEqual(simulatedState[currency].BTC.price)
-      expect(finalState[currency].ETH.price).not.toEqual(simulatedState[currency].ETH.price)
-
-      expect(finalState[currency].ADA.price).toEqual(0.3)
-      expect(finalState[currency].SOL.price).toEqual(100)
-
-      expect(finalState[currency].MATIC.price).toEqual(initialPrices.MATIC)
-      expect(finalState[currency].DOT.price).toEqual(initialPrices.DOT)
-    } finally {
-      Math.random = originalRandom
-    }
-  })
-
-  it('should toggle simulation on/off based on ratesSimulationEnabledAtom value', async () => {
-    const handler = jest.fn()
-    ratesAtom.observe(handler)
-
-    // Save original Math.random
-    const originalRandom = Math.random
-
-    // Mock Math.random to return values with predictable amplitude
-    let randomCallCount = 0
-    Math.random = jest.fn().mockImplementation(() => {
-      randomCallCount++
-      return 0.7 + (randomCallCount % 10) * 0.01
-    })
-
-    try {
-      // Simulation is initially disabled (false)
-      ratesMonitor.start()
+      await availableAssetNamesAtom.set(['bitcoin', 'ethereum'])
       await advanceTimers(0)
-      await advanceTimers(10)
+      await advanceTimers(debounceInterval)
+      await advanceTimers(requestDuration)
+      await advanceTimers(debounceInterval)
 
-      const initialState = handler.mock.calls[handler.mock.calls.length - 1][0]
-      const initialBtcPrice = initialState[currency].BTC.price
-
-      // Turn simulation on first
-      await ratesSimulationEnabledAtom.set(true)
-      await advanceTimers(10)
-
-      // Set staggerUpdateEnabled to false so all assets update simultaneously
-      Object.values(ratesMonitor).forEach((value) => {
-        if (
-          value &&
-          typeof value === 'object' &&
-          value.USD &&
-          value.USD.staggerUpdateEnabled !== undefined
-        ) {
-          value.USD.staggerUpdateEnabled = false
-        }
+      expect(pricingClient.currentPrice).toHaveBeenCalledWith({
+        assets: ['BTC', 'ETH'],
+        fiatCurrency: 'EUR',
+        lastModified: undefined,
       })
 
-      expect(logger.info).toHaveBeenCalledWith('Simulation enabled')
+      await advanceTimers(fetchRealTimePricesInterval)
+      await advanceTimers(debounceInterval)
 
-      // Run first simulation cycle
-      await advanceTimers(simulationInterval)
-      await advanceTimers(10)
-
-      const simulatedState = handler.mock.calls[handler.mock.calls.length - 1][0]
-      const simulatedBtcPrice = simulatedState[currency].BTC.price
-
-      // When simulation is on, prices should fluctuate
-      expect(simulatedBtcPrice).not.toEqual(initialBtcPrice)
-
-      // Turn off simulation
-      await ratesSimulationEnabledAtom.set(false)
-      await advanceTimers(10)
-
-      expect(logger.info).toHaveBeenCalledWith('Simulation disabled')
-
-      // Prices should be reset to original API values
-      const afterToggleState = handler.mock.calls[handler.mock.calls.length - 1][0]
-      expect(afterToggleState[currency].BTC.price).toEqual(50_000) // Original API value
-
-      // When simulation is off, prices should not change even after simulation interval
-      await advanceTimers(simulationInterval)
-      await advanceTimers(10)
-
-      const noSimulationState = handler.mock.calls[handler.mock.calls.length - 1][0]
-      expect(noSimulationState[currency].BTC.price).toEqual(afterToggleState[currency].BTC.price)
-
-      // Turn simulation back on
-      await ratesSimulationEnabledAtom.set(true)
-      await advanceTimers(10)
-
-      expect(logger.info).toHaveBeenCalledWith('Simulation enabled')
-
-      // After simulation is enabled again, ensure enough time for prices to change
-      // Actual simulation will change prices in the next cycle
-      await advanceTimers(simulationInterval)
-      await advanceTimers(10)
-
-      const firstSimulationAfterToggleState = handler.mock.calls[handler.mock.calls.length - 1][0]
-
-      // Advance one more cycle
-      await advanceTimers(simulationInterval)
-      await advanceTimers(10)
-
-      const secondSimulationAfterToggleState = handler.mock.calls[handler.mock.calls.length - 1][0]
-
-      // Verify that prices change after re-enabling simulation
-      expect(secondSimulationAfterToggleState[currency].BTC.price).not.toEqual(
-        firstSimulationAfterToggleState[currency].BTC.price
-      )
-    } finally {
-      Math.random = originalRandom
-    }
-  })
-
-  it('topAssetTickers list is correctly maintained', async () => {
-    logger.info = jest.fn()
-
-    const handler = jest.fn()
-    ratesAtom.observe(handler)
-
-    // Save original Math.random
-    const originalRandom = Math.random
-
-    // Mock Math.random to return values with predictable amplitude
-    let randomCallCount = 0
-    Math.random = jest.fn().mockImplementation(() => {
-      randomCallCount++
-      return 0.7 + (randomCallCount % 10) * 0.01
-    })
-
-    try {
-      pricingClient.realTimePrice.mockResolvedValue({
-        isModified: true,
-        data: [{ BTC: { USD: 50_000 } }, { ETH: { USD: 3000 } }, { ADA: { USD: 0.3 } }],
+      expect(pricingClient.realTimePrice).toHaveBeenCalledWith({
+        fiatCurrency: 'EUR',
+        ignoreInvalidSymbols: true,
+        lastModified: undefined,
+        entityTag: undefined,
       })
 
-      ratesMonitor.start()
-      await advanceTimers(0)
-      await advanceTimers(10)
-
-      await ratesSimulationEnabledAtom.set(true)
-      await advanceTimers(10)
-
-      // Set staggerUpdateEnabled to false so all assets update simultaneously
-      Object.values(ratesMonitor).forEach((value) => {
-        if (
-          value &&
-          typeof value === 'object' &&
-          value.USD &&
-          value.USD.staggerUpdateEnabled !== undefined
-        ) {
-          value.USD.staggerUpdateEnabled = false
-        }
-      })
-
-      expect(logger.info).toHaveBeenCalledWith(
-        expect.stringContaining('Real-time data assets updated: 3 assets')
-      )
-
-      pricingClient.realTimePrice.mockResolvedValueOnce({
-        isModified: true,
-        data: [{ BTC: { USD: 51_000 } }],
-      })
-
-      await advanceTimers(25_000)
-      await advanceTimers(10)
-
-      expect(logger.info).toHaveBeenCalledWith(
-        expect.stringContaining('Real-time data assets updated: 1 assets')
-      )
-
-      await advanceTimers(simulationInterval)
-      await advanceTimers(10)
-
-      const simulatedState = handler.mock.calls[handler.mock.calls.length - 1][0]
-
-      expect(simulatedState[currency].BTC.price).not.toEqual(51_000)
-      expect(simulatedState[currency].ETH.price).toEqual(3000)
-      expect(simulatedState[currency].ADA.price).toEqual(0.3)
-    } finally {
-      Math.random = originalRandom
-    }
-  })
-
-  it('assets are updated with staggered timing', async () => {
-    const handler = jest.fn()
-    ratesAtom.observe(handler)
-
-    // Save original Math.random
-    const originalRandom = Math.random
-
-    // Mock Math.random to create variations in the noise pattern
-    let randomCallCount = 0
-    Math.random = jest.fn().mockImplementation(() => {
-      randomCallCount++
-      // Return 0.1, 0.2, ... 0.9, 0.1, ... repeating pattern
-      return ((randomCallCount % 9) + 1) / 10
+      expect(handler).toHaveBeenCalled()
+      const lastCall = handler.mock.calls[handler.mock.calls.length - 1][0]
+      expect(lastCall.EUR).toBeDefined()
+      expect(lastCall.EUR.BTC).toBeDefined()
+      expect(lastCall.EUR.ETH).toBeDefined()
     })
-
-    try {
-      // Start and initialize simulation
-      ratesMonitor.start()
-      await advanceTimers(0)
-      await advanceTimers(10)
-
-      // Enable simulation
-      await ratesSimulationEnabledAtom.set(true)
-      await advanceTimers(10)
-
-      // Store initial state
-      const initialState = handler.mock.calls[handler.mock.calls.length - 1][0]
-
-      // Access simulatedRatesByFiat object directly to set staggerUpdateEnabled to true
-      // This approach is recommended for testing purposes only
-      Object.values(ratesMonitor).forEach((value) => {
-        if (
-          value &&
-          typeof value === 'object' &&
-          value.USD &&
-          value.USD.staggerUpdateEnabled !== undefined
-        ) {
-          value.USD.staggerUpdateEnabled = true
-        }
-      })
-
-      // Advance simulation time by 1/3
-      await advanceTimers(Math.floor(simulationInterval / 3))
-      await advanceTimers(10)
-
-      // Get state at 1/3 point
-      const oneThirdState = handler.mock.calls[handler.mock.calls.length - 1][0]
-
-      // Count changed and unchanged assets
-      let changedAssetsCount = 0
-      let unchangedAssetsCount = 0
-
-      // Count changed and unchanged assets at 1/3 point
-      for (const ticker of Object.keys(initialState[currency])) {
-        if (initialState[currency][ticker].isRealTime) {
-          if (initialState[currency][ticker].price === oneThirdState[currency][ticker].price) {
-            unchangedAssetsCount++
-          } else {
-            changedAssetsCount++
-          }
-        }
-      }
-
-      console.log(
-        `After 1/3 interval - Changed: ${changedAssetsCount}, Unchanged: ${unchangedAssetsCount}`
-      )
-
-      // Some assets should change and some should remain unchanged
-      // However, in Jest test environment this might not work consistently
-      // so use more lenient verification
-
-      // There should be at least one real-time asset
-      const realTimeAssetCount = Object.keys(initialState[currency]).filter(
-        (ticker) => initialState[currency][ticker].isRealTime
-      ).length
-
-      expect(realTimeAssetCount).toBeGreaterThan(0)
-
-      // Wait for full simulation interval
-      await advanceTimers(simulationInterval)
-      await advanceTimers(10)
-
-      // Check if all real-time assets were updated in final state
-      const finalState = handler.mock.calls[handler.mock.calls.length - 1][0]
-      let allChangedCount = 0
-
-      for (const ticker of Object.keys(initialState[currency])) {
-        if (
-          initialState[currency][ticker].isRealTime &&
-          initialState[currency][ticker].price !== finalState[currency][ticker].price
-        ) {
-          allChangedCount++
-        }
-      }
-
-      console.log(`After full interval - All changed: ${allChangedCount} of ${realTimeAssetCount}`)
-
-      // In final state, all assets should be updated
-      expect(allChangedCount).toBeGreaterThan(0)
-    } finally {
-      // Always restore original Math.random when test completes
-      Math.random = originalRandom
-    }
-  })
-})
-
-describe('initializeSimulationDataForTickers', () => {
-  const now = 1_625_000_000_000 // Fixed timestamp
-  const simulationInterval = 1000
-
-  test('should initialize with default values correctly', () => {
-    // Arrange
-    const tickers = ['BTC', 'ETH']
-    const realTimeData = {
-      BTC: 50_000,
-      ETH: 2000,
-    }
-    const slowRates = {
-      BTC: { change24: 5.5 },
-      ETH: { change24: -2.3 },
-    }
-
-    // Act
-    const result = initializeSimulationDataForTickers({
-      tickers,
-      realTimeData,
-      now,
-      simulationInterval,
-      slowRates,
-    })
-
-    // Assert
-    expect(result.data).toEqual(realTimeData)
-    expect(result.change24Data).toEqual({
-      BTC: 5.5,
-      ETH: -2.3,
-    })
-    expect(result.lastSimulationTime).toBe(now)
-    expect(result.staggerUpdateEnabled).toBe(true)
-
-    // Should properly set updateOffsets and lastAssetUpdateTime
-    expect(Object.keys(result.updateOffsets)).toEqual(tickers)
-    expect(Object.keys(result.lastAssetUpdateTime)).toEqual(tickers)
-
-    // BTC is the first ticker, so offset should be 0
-    expect(result.updateOffsets.BTC).toBe(0)
-    expect(result.lastAssetUpdateTime.BTC).toBe(now - 0)
-
-    // ETH is the second ticker, so offset should be half of simulationInterval
-    expect(result.updateOffsets.ETH).toBe(500)
-    expect(result.lastAssetUpdateTime.ETH).toBe(now - 500)
-  })
-
-  test('should allow setting staggerUpdateEnabled to false', () => {
-    const tickers = ['BTC']
-    const realTimeData = { BTC: 50_000 }
-    const slowRates = { BTC: { change24: 5.5 } }
-
-    const result = initializeSimulationDataForTickers({
-      tickers,
-      realTimeData,
-      now,
-      simulationInterval,
-      slowRates,
-      staggerUpdateEnabled: false,
-    })
-
-    expect(result.staggerUpdateEnabled).toBe(false)
-  })
-
-  test('should initialize change24 to 0 for tickers not in slowRates', () => {
-    const tickers = ['BTC', 'UNKNOWN']
-    const realTimeData = {
-      BTC: 50_000,
-      UNKNOWN: 100,
-    }
-    const slowRates = {
-      BTC: { change24: 5.5 },
-      // UNKNOWN is not in slowRates
-    }
-
-    const result = initializeSimulationDataForTickers({
-      tickers,
-      realTimeData,
-      now,
-      simulationInterval,
-      slowRates,
-    })
-
-    expect(result.change24Data).toEqual({
-      BTC: 5.5,
-      UNKNOWN: 0,
-    })
-  })
-
-  test('should return empty objects when given empty ticker array', () => {
-    const tickers = []
-    const realTimeData = {}
-    const slowRates = {}
-
-    const result = initializeSimulationDataForTickers({
-      tickers,
-      realTimeData,
-      now,
-      simulationInterval,
-      slowRates,
-    })
-
-    expect(result.data).toEqual({})
-    expect(result.change24Data).toEqual({})
-    expect(Object.keys(result.updateOffsets)).toHaveLength(0)
-    expect(Object.keys(result.lastAssetUpdateTime)).toHaveLength(0)
-  })
-
-  test('should handle complex case with multiple tickers', () => {
-    const tickers = ['BTC', 'ETH', 'XRP', 'ADA', 'DOT']
-    const realTimeData = {
-      BTC: 50_000,
-      ETH: 2000,
-      XRP: 1,
-      ADA: 2,
-      DOT: 30,
-    }
-    const slowRates = {
-      BTC: { change24: 5.5 },
-      ETH: { change24: -2.3 },
-      XRP: { change24: 0 },
-      ADA: { change24: 1.1 },
-      // DOT is not in slowRates
-    }
-
-    const result = initializeSimulationDataForTickers({
-      tickers,
-      realTimeData,
-      now,
-      simulationInterval,
-      slowRates,
-    })
-
-    // All tickers should be in change24Data
-    expect(Object.keys(result.change24Data).sort()).toEqual(tickers.sort())
-
-    // DOT should have default value of 0
-    expect(result.change24Data.DOT).toBe(0)
-
-    // Offsets should be evenly distributed
-    expect(result.updateOffsets.BTC).toBe(0)
-    expect(result.updateOffsets.ETH).toBe(200)
-    expect(result.updateOffsets.XRP).toBe(400)
-    expect(result.updateOffsets.ADA).toBe(600)
-    expect(result.updateOffsets.DOT).toBe(800)
-  })
-})
-
-describe('generatePriceSimulation', () => {
-  it('should return hasChanged=false when simulation is disabled', () => {
-    const result = generatePriceSimulation({
-      simulationEnabled: false,
-      fiatCurrency: 'USD',
-      realTimeRatesByFiat: {},
-      topAssetTickers: [],
-      simulatedRatesByFiat: {},
-      slowRates: {},
-      simulationInterval: 1000,
-      logger: null,
-    })
-
-    expect(result.hasChanged).toBe(false)
-  })
-
-  it('should return hasChanged=false when realTimeEntry is missing', () => {
-    const result = generatePriceSimulation({
-      simulationEnabled: true,
-      fiatCurrency: 'USD',
-      realTimeRatesByFiat: {},
-      topAssetTickers: ['BTC', 'ETH'],
-      simulatedRatesByFiat: {},
-      slowRates: {},
-      simulationInterval: 1000,
-      logger: null,
-    })
-
-    expect(result.hasChanged).toBe(false)
-  })
-
-  it('should initialize simulation data when no current data exists', () => {
-    const now = Date.now()
-    const realTimeRatesByFiat = {
-      USD: {
-        data: {
-          BTC: 50_000,
-          ETH: 2000,
-        },
-        timestamp: now,
-      },
-    }
-
-    const slowRates = {
-      BTC: { change24: 5 },
-      ETH: { change24: 2 },
-    }
-
-    const result = generatePriceSimulation({
-      simulationEnabled: true,
-      fiatCurrency: 'USD',
-      realTimeRatesByFiat,
-      topAssetTickers: ['BTC', 'ETH'],
-      simulatedRatesByFiat: {},
-      slowRates,
-      simulationInterval: 1000,
-      logger: null,
-    })
-
-    expect(result.hasChanged).toBe(true)
-    expect(result.simulatedData).toBeDefined()
-    expect(result.newRealTimeData).toBeDefined()
-    expect(result.simulatedData.data.BTC).toBe(50_000)
-    expect(result.simulatedData.data.ETH).toBe(2000)
-    expect(result.simulatedData.change24Data.BTC).toBe(5)
-    expect(result.simulatedData.change24Data.ETH).toBe(2)
-  })
-
-  it('should reset simulation with new API data when newer real-time data exists', () => {
-    const oldTime = Date.now() - 10_000
-    const newTime = Date.now()
-
-    const realTimeRatesByFiat = {
-      USD: {
-        data: {
-          BTC: 52_000,
-          ETH: 2100,
-        },
-        timestamp: newTime,
-      },
-    }
-
-    const simulatedRatesByFiat = {
-      USD: {
-        data: {
-          BTC: 50_000,
-          ETH: 2000,
-        },
-        lastSimulationTime: oldTime,
-        change24Data: {
-          BTC: 4,
-          ETH: 1,
-        },
-        lastAssetUpdateTime: {
-          BTC: oldTime,
-          ETH: oldTime,
-        },
-        updateOffsets: {
-          BTC: 0,
-          ETH: 500,
-        },
-        staggerUpdateEnabled: true,
-      },
-    }
-
-    const slowRates = {
-      BTC: { change24: 5 },
-      ETH: { change24: 2 },
-    }
-
-    const result = generatePriceSimulation({
-      simulationEnabled: true,
-      fiatCurrency: 'USD',
-      realTimeRatesByFiat,
-      topAssetTickers: ['BTC', 'ETH'],
-      simulatedRatesByFiat,
-      slowRates,
-      simulationInterval: 1000,
-      logger: { info: jest.fn() },
-    })
-
-    expect(result.hasChanged).toBe(true)
-    expect(result.simulatedData.data.BTC).toBe(52_000)
-    expect(result.simulatedData.data.ETH).toBe(2100)
-    expect(result.simulatedData.change24Data.BTC).toBe(5)
-    expect(result.simulatedData.change24Data.ETH).toBe(2)
-  })
-
-  it('should return hasChanged=false when real-time data is outdated', () => {
-    const outdatedTimestamp = Date.now() - 70_000 // More than 60 seconds old
-
-    const realTimeRatesByFiat = {
-      USD: {
-        data: {
-          BTC: 50_000,
-          ETH: 2000,
-        },
-        timestamp: outdatedTimestamp,
-      },
-    }
-
-    const result = generatePriceSimulation({
-      simulationEnabled: true,
-      fiatCurrency: 'USD',
-      realTimeRatesByFiat,
-      topAssetTickers: ['BTC', 'ETH'],
-      simulatedRatesByFiat: {},
-      slowRates: {},
-      simulationInterval: 1000,
-      logger: { warn: jest.fn() },
-    })
-
-    expect(result.hasChanged).toBe(false)
-  })
-})
-
-describe('generateMockPrice', () => {
-  it('should never return a price less than or equal to zero', () => {
-    // Test normal case with positive prices
-    const result1 = generateMockPrice({
-      lastPrice: 100,
-      meanPrice: 100,
-      lastChange24: 0,
-    })
-    expect(result1.price).toBeGreaterThan(0)
-
-    // Test edge case with zero price
-    const result2 = generateMockPrice({
-      lastPrice: 0,
-      meanPrice: 100,
-      lastChange24: 0,
-    })
-    expect(result2.price).toBeGreaterThan(0)
-
-    // Test edge case with very small price
-    const result3 = generateMockPrice({
-      lastPrice: 0.001,
-      meanPrice: 100,
-      lastChange24: 0,
-    })
-    expect(result3.price).toBeGreaterThan(0)
-
-    // Test with negative price (should still return positive value)
-    const result4 = generateMockPrice({
-      lastPrice: -10,
-      meanPrice: 100,
-      lastChange24: 0,
-    })
-    expect(result4.price).toBeGreaterThan(0)
-
-    // Force the price to go negative by mocking Math.random
-    const originalRandom = Math.random
-    Math.random = jest.fn().mockReturnValue(0) // This will make noise negative
-
-    // This should create conditions for a negative price, but our fix should prevent it
-    const result5 = generateMockPrice({
-      lastPrice: 0.0001,
-      meanPrice: 100,
-      lastChange24: 0,
-    })
-    expect(result5.price).toBeGreaterThan(0)
-
-    // Restore original Math.random
-    Math.random = originalRandom
-  })
-
-  it('should return price close to meanPrice over time (mean reversion)', () => {
-    // Test the mean reversion property
-    let price = 50 // Start with price below meanPrice
-    const meanPrice = 100
-    let change24 = 0
-
-    // Simulate multiple iterations to see if price reverts to mean
-    for (let i = 0; i < 1000; i++) {
-      const result = generateMockPrice({
-        lastPrice: price,
-        meanPrice,
-        lastChange24: change24,
-      })
-
-      price = result.price
-      change24 = result.change24
-    }
-
-    // After many iterations, price should be relatively close to meanPrice
-    // We use a wide range because it's a random process
-    expect(price).toBeGreaterThan(0) // Always positive
-    expect(Math.abs(price - meanPrice) / meanPrice).toBeLessThan(0.5) // Within 50% of mean
   })
 })

@@ -1,4 +1,5 @@
 import selectors from '@/ui/flux/selectors'
+import type { Asset } from '@exodus/exchange-ui'
 import { ExchangeForm } from '@exodus/exchange-ui'
 import { useSelector } from 'react-redux'
 
@@ -13,31 +14,39 @@ import ErrorComponent from './components/error.js'
 import WalletAccount from './components/wallet-account.js'
 import SubmitButton from './components/submit-button.js'
 import useModal from './hooks/use-modal.js'
-import Modal from './components/modal.js'
 import StateInspector from './components/state-inspector.js'
+import Actions from './components/actions.js'
+import SelectAsset from './components/select-asset.js'
+import SelectWalletAccount from './components/select-wallet-account.js'
 import { FromAssetLabel, ToAssetLabel } from './components/asset-label.js'
 
+type AssetsModalParams = {
+  key: string
+  side: 'from' | 'to'
+  assets: Asset[]
+}
+
 const ExchangeUI = () => {
-  const [currentModal, showModal] = useModal()
+  const [assetsModal, showAssetsModal] = useModal<AssetsModalParams>()
+  const [walletAccountsModal, showWalletAccountsModal] = useModal()
 
   const isLocked = useSelector(selectors.application.isLocked)
-  const walletAccounts: string[] = useSelector(selectors.walletAccounts.enabled)
-
   if (isLocked) return null
 
   const handleAssetClick = async ({ side, assets }) => {
-    const options = assets.map((value) => ({ value, label: value.displayName }))
-    const title = side === 'from' ? 'From Asset' : 'To Asset'
-    return showModal({ title, options })
+    return showAssetsModal({ key: side, side, assets })
   }
 
-  const handleWalletAccountClick = async () => {
-    const options = walletAccounts.map((value) => ({ value, label: value }))
-    return showModal({ title: 'Wallet Accounts', options })
+  const handleWalletAccountSelect = async ({ walletAccount }) => {
+    return walletAccountsModal?.onClick(walletAccount)
+  }
+
+  const handleAssetSelect = async (source) => {
+    return assetsModal?.onClick(source)
   }
 
   return (
-    <div className="flex">
+    <div className="flex gap-4">
       <ExchangeForm>
         <div className="relative flex h-[650px] w-[360px] flex-col rounded-lg bg-[#282a44] text-white">
           <div className="pb-10 pt-8">
@@ -48,7 +57,7 @@ const ExchangeUI = () => {
           <div className="flex pr-6">
             <ExchangeForm.FromWalletAccount
               Component={WalletAccount}
-              onPress={handleWalletAccountClick}
+              onPress={showWalletAccountsModal}
             />
             <div className="flex flex-col">
               <ExchangeForm.FromAssetLabel Component={FromAssetLabel} />
@@ -66,7 +75,7 @@ const ExchangeUI = () => {
           <div className="flex pr-6">
             <ExchangeForm.ToWalletAccount
               Component={WalletAccount}
-              onPress={handleWalletAccountClick}
+              onPress={showWalletAccountsModal}
             />
             <div className="flex flex-col">
               <ExchangeForm.ToAssetLabel Component={ToAssetLabel} />
@@ -80,16 +89,38 @@ const ExchangeUI = () => {
           </div>
 
           <ExchangeForm.PercentageSwitch Component={PercentageSwitch} />
-
           <ExchangeForm.Error Component={ErrorComponent} />
           <ExchangeForm.FeeDetails Component={FeeDetails} />
           <ExchangeForm.SubmitButton Component={SubmitButton} />
 
-          <Modal {...currentModal} />
-        </div>
+          {assetsModal?.side === 'from' && (
+            <ExchangeForm.FromSelect Component={SelectAsset} onSelect={handleAssetSelect} />
+          )}
 
-        <StateInspector />
+          {assetsModal?.side === 'to' && (
+            <ExchangeForm.ToSelect Component={SelectAsset} onSelect={handleAssetSelect} />
+          )}
+
+          {walletAccountsModal?.side === 'from' && (
+            <ExchangeForm.FromSelect
+              Component={SelectWalletAccount}
+              onSelect={handleWalletAccountSelect}
+            />
+          )}
+
+          {walletAccountsModal?.side === 'to' && (
+            <ExchangeForm.ToSelect
+              Component={SelectWalletAccount}
+              onSelect={handleWalletAccountSelect}
+            />
+          )}
+        </div>
       </ExchangeForm>
+
+      <div>
+        <StateInspector />
+        <Actions />
+      </div>
     </div>
   )
 }

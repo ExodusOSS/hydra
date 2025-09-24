@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.4](https://github.com/ExodusMovement/hydra/compare/@exodus/react-hooks@5.3.3...@exodus/react-hooks@5.3.4) (2025-04-11)
+
+### Bug Fixes
+
+- fix: export useDebouncedCallback hook (#11997)
+
+## [5.3.3](https://github.com/ExodusMovement/hydra/compare/@exodus/react-hooks@5.3.2...@exodus/react-hooks@5.3.3) (2024-11-01)
+
+Re-licensed under MIT license.
+
 ## [5.3.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/react-hooks@5.3.1...@exodus/react-hooks@5.3.2) (2024-10-02)
 
 ### Bug Fixes

@@ -35,7 +35,6 @@ export interface UnsignedTransaction {
 
 export interface Asset {
   name: string
-  useMultipleAddresses?: boolean
   baseAsset: Asset
   api: {
     features: { [x: string]: any }

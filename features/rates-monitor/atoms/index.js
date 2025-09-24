@@ -1,4 +1,4 @@
-import { createStorageAtomFactory, createInMemoryAtom } from '@exodus/atoms'
+import { createInMemoryAtom, createStorageAtomFactory, filter } from '@exodus/atoms'
 
 function createRatesAtom({ storage, config: { persistRates } }) {
   if (persistRates) {
@@ -11,11 +11,11 @@ function createRatesAtom({ storage, config: { persistRates } }) {
   return createInMemoryAtom() // eslint-disable-line @exodus/hydra/in-memory-atom-default-value
 }
 
-function createSimulationEnabledAtom({ storage }) {
-  return createStorageAtomFactory({ storage })({
-    key: 'simulationEnabled',
-    defaultValue: false,
-  })
+function createRatesAssetNamesToMonitorAtom({ availableAssetNamesAtom }) {
+  return filter(
+    availableAssetNamesAtom,
+    (assetNames) => Array.isArray(assetNames) && assetNames.length > 0
+  )
 }
 
 export const ratesAtomDefinition = {
@@ -26,10 +26,9 @@ export const ratesAtomDefinition = {
   public: true,
 }
 
-export const simulationEnabledAtomDefinition = {
-  id: 'ratesSimulationEnabledAtom',
+export const ratesAssetNamesToMonitorAtomDefinition = {
+  id: 'ratesAssetNamesToMonitorAtom',
   type: 'atom',
-  factory: createSimulationEnabledAtom,
-  dependencies: ['storage'],
-  public: true,
+  factory: createRatesAssetNamesToMonitorAtom,
+  dependencies: ['availableAssetNamesAtom'],
 }

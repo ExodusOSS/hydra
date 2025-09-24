@@ -1,25 +1,22 @@
 import pDefer from 'p-defer'
 import { useCallback, useState } from 'react'
 
-type ModalDefinition = {
-  title: string
-  options: any[]
+type ModalDefinition<T> = T & {
   onClick: (value: any) => void
 }
 
-type ShowModal = (definition: Omit<ModalDefinition, 'onClick'>) => Promise<any>
+type ShowModal<T> = (params: T) => Promise<any>
 
-const useModal = (): [ModalDefinition | null, ShowModal] => {
-  const [current, setCurrent] = useState<ModalDefinition | null>(null)
+function useModal<T = any>(): [ModalDefinition<T> | null, ShowModal<T>] {
+  const [current, setCurrent] = useState<ModalDefinition<T> | null>(null)
 
-  const show = useCallback(async ({ title, options }) => {
+  const show = useCallback(async (params: T = {} as T) => {
     const resultDefer = pDefer()
 
     let result: any
 
     setCurrent({
-      title,
-      options,
+      ...params,
       onClick: (value) => {
         result = value
         resultDefer.resolve()

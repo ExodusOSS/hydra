@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [20.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@19.1.0...@exodus/wallet-accounts@20.0.0) (2025-09-16)
+
+### ⚠ BREAKING CHANGES
+
+- remove default accounts fallback from enabled accounts selector (#13806)
+
+### Features
+
+- feat!: remove default accounts fallback from enabled accounts selector (#13806)
+
+- feat(wallet-accounts): limit amount of ledger portfolios (#13793)
+
+## [19.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@19.0.0...@exodus/wallet-accounts@19.1.0) (2025-09-02)
+
+### Features
+
+- feat: wallet accounts support fromSafeReportAtom (#13631)
+
+## [19.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@19.0.0-rc.0...@exodus/wallet-accounts@19.0.0) (2025-08-28)
+
+**Note:** Version bump only for package @exodus/wallet-accounts
+
+## [19.0.0-rc.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@18.0.0...@exodus/wallet-accounts@19.0.0) (2025-08-22)
+
+### ⚠ BREAKING CHANGES
+
+- remove default wallet account (#13322)
+
+### Features
+
+- feat!: remove default wallet account (#13322)
+
+## [18.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.6.2...@exodus/wallet-accounts@18.0.0) (2025-08-12)
+
+### ⚠ BREAKING CHANGES
+
+- use atoms in wallet accounts (#13495)
+
+### Features
+
+- feat!: use atoms in wallet accounts (#13495)
+
+## [17.6.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.6.1...@exodus/wallet-accounts@17.6.2) (2025-07-22)
+
+### Bug Fixes
+
+- fix: walletAccounts API enabled type (#13317)
+
 ## [17.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@17.6.0...@exodus/wallet-accounts@17.6.1) (2025-06-09)
 
 ### Bug Fixes

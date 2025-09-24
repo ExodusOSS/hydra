@@ -32,11 +32,16 @@ describe('createHardwareWalletConnectedAssetNamesAtom', () => {
     },
   })
 
+  const availableAssetNamesAtom = createInMemoryAtom({
+    defaultValue: ['bitcoin', 'ethereum', 'litecoin'],
+  })
+
   // Call the function
   const result = createHardwareWalletConnectedAssetNamesAtom({
     assetsModule,
     hardwareWalletPublicKeysAtom,
     walletAccountsAtom,
+    availableAssetNamesAtom,
   })
 
   it('should return an object mapping wallet account names to synced asset names', async () => {

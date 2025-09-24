@@ -1,6 +1,6 @@
 {
   "name": "@exodus/assets-feature",
-  "version": "8.1.2",
+  "version": "8.3.0",
   "license": "MIT",
   "description": "This Exodus SDK feature provides access to instances of all blockchain asset adapters supported by the wallet, and enables you to search for and add custom tokens at runtime.",
   "type": "module",
@@ -52,13 +52,14 @@
   },
   "devDependencies": {
     "@exodus/available-assets": "workspace:^",
+    "@exodus/bip39": "workspace:^",
     "@exodus/bip44-constants": "^195.0.0",
     "@exodus/bitcoin-meta": "^2.0.0",
     "@exodus/bitcoin-plugin": "^1.29.1",
     "@exodus/bitcoinregtest-plugin": "^1.11.0",
     "@exodus/bitcointestnet-plugin": "^1.13.1",
     "@exodus/blockchain-metadata": "workspace:^",
-    "@exodus/cardano-lib": "^2.2.0",
+    "@exodus/cardano-lib": "^3.4.1",
     "@exodus/combined-assets-meta": "^3.0.0",
     "@exodus/cosmos-plugin": "^1.3.3",
     "@exodus/ethereum-lib": "^5.0.0",
@@ -74,7 +75,6 @@
     "@exodus/storage-memory": "workspace:^",
     "@exodus/wallet-accounts": "workspace:^",
     "@exodus/wild-emitter": "^1.0.0",
-    "bip39": "^3.1.0",
     "events": "^3.3.0",
     "msw": "^2.0.0",
     "redux": "^4.0.0"

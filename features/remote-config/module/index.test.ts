@@ -51,6 +51,7 @@ describe('createRemoteConfig', () => {
     errorTracking = (createErrorTracking as any)({
       errorsAtom,
       config: { maxErrorsCount: 10 },
+      logger: console,
     })
     freeze = jest.fn((val) => val)
     logger = { debug: jest.fn(), error: jest.fn() } as never as Logger

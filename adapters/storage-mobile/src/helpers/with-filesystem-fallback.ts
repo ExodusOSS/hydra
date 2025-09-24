@@ -2,7 +2,11 @@ import type { Storage } from '@exodus/storage-interface'
 import { assertValidFilesystemKey } from './assertions.js'
 import type { Dependencies as FactoryDependencies, Filesystem, FunctionProperties } from './types'
 
-class FilesystemStorage<In, Out = In> implements Storage<In, Out> {
+type StorageWithStringSet<In = unknown, Out = In> = Storage<In, Out> & {
+  setString: (key: string, value: string) => Promise<void>
+}
+
+class FilesystemStorage<In, Out = In> implements StorageWithStringSet<In, Out> {
   private whenDirectoryCreated: Promise<void>
 
   constructor(
@@ -11,7 +15,7 @@ class FilesystemStorage<In, Out = In> implements Storage<In, Out> {
     private readonly hashString: (value: string) => string
   ) {
     this.whenDirectoryCreated = this.filesystem.mkdirp(rootDir)
-    this.postponeUntilDirectoryCreated('clear', 'delete', 'get', 'set', 'batchDelete')
+    this.postponeUntilDirectoryCreated('clear', 'delete', 'get', 'set', 'setString', 'batchDelete')
   }
 
   batchDelete = async (keys: string[]): Promise<void> => {
@@ -55,20 +59,26 @@ class FilesystemStorage<In, Out = In> implements Storage<In, Out> {
     await this.filesystem.writeUtf8(this.asFilesystemKey(key), JSON.stringify(value))
   }
 
+  setString = async (key: string, value: string) => {
+    await this.filesystem.writeUtf8(this.asFilesystemKey(key), value)
+  }
+
   private asFilesystemKey = (key: string) => {
     const hashedKey = this.hashString(key)
     assertValidFilesystemKey(hashedKey)
     return `${this.rootDir}/${hashedKey}`
   }
 
-  private postponeUntilDirectoryCreated = (...functions: FunctionProperties<Storage>) => {
+  private postponeUntilDirectoryCreated = (
+    ...functions: FunctionProperties<StorageWithStringSet>
+  ) => {
     functions.forEach((functionProperty) => {
       type Property = typeof functionProperty
       const originalFunction = this[functionProperty].bind(this) as (...args: never[]) => void
 
       this[functionProperty] = (async (
-        ...args: Parameters<Storage[Property]>
-      ): Promise<ReturnType<Storage[Property]>> => {
+        ...args: Parameters<StorageWithStringSet[Property]>
+      ): Promise<ReturnType<StorageWithStringSet[Property]>> => {
         await this.whenDirectoryCreated
         return originalFunction(...(args as never[]))
       }) as never
@@ -79,7 +89,7 @@ class FilesystemStorage<In, Out = In> implements Storage<In, Out> {
 const ONE_MB = 1024 * 1024
 
 type Dependencies<Value> = {
-  storage: Storage<Value>
+  storage: StorageWithStringSet<Value>
 } & FactoryDependencies['androidFallback']
 
 export default function withFilesystemFallback<Value>(
@@ -94,21 +104,19 @@ export default function withFilesystemFallback<Value>(
     placeholder = '~',
   } = dependencies
 
-  const exceedsThreshold = (value: Value) => {
-    const charCount = JSON.stringify(value).length
-    return charCount > threshold
-  }
-
   const filesystemStorage = new FilesystemStorage<Value>(filesystem, rootDir, hashString)
 
   const set = async (key: string, value: Value) => {
-    if (exceedsThreshold(value)) {
+    const stringifiedPayload = JSON.stringify(value)
+
+    const payloadExceedsThreshold = stringifiedPayload.length > threshold
+    if (payloadExceedsThreshold) {
       await storage.set(key, placeholder as never)
-      await filesystemStorage.set(key, value)
+      await filesystemStorage.setString(key, stringifiedPayload)
       return
     }
 
-    await storage.set(key, value)
+    await storage.setString(key, stringifiedPayload)
   }
 
   const batchDelete = async (keys: string[]) => {
@@ -156,7 +164,7 @@ export default function withFilesystemFallback<Value>(
       return withFilesystemFallback<Value>({
         ...dependencies,
         rootDir: `${rootDir}/${prefix}`,
-        storage: storage.namespace<Value>(prefix),
+        storage: storage.namespace<Value>(prefix) as StorageWithStringSet<Value>,
       })
     },
   }

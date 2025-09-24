@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react'
 import { defineConfig, transformWithEsbuild } from 'vite'
 import nodePolyfills from '@exodus/vite-plugin-node-polyfills'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import svgr from 'vite-plugin-svgr'
 
 const port = 8008
 const strictPort = true
@@ -15,6 +16,7 @@ export default defineConfig(() => ({
   },
   optimizeDeps: {
     force: true,
+    include: ['wretch'],
     esbuildOptions: {
       plugins: [
         esbuildFlowPlugin(undefined, () => 'jsx', {
@@ -27,8 +29,25 @@ export default defineConfig(() => ({
   },
   plugins: [
     tsconfigPaths({ root: __dirname }),
+    {
+      name: 'fix-exodus-fetch-wretch',
+      transform(code, id) {
+        if (id.includes('@exodus/fetch/wretch.browser.js')) {
+          // Replace the problematic CommonJS require with a direct ES import
+          return `
+import wretch from 'wretch'
+export default (url, options) => wretch(url, options)
+          `
+        }
+
+        return null
+      },
+    },
     commonjs(),
     nodePolyfills(),
+    svgr({
+      include: '**/*.svg?svgr',
+    }),
     flowPlugin({
       include: /\.(flow|jsx?)$/u,
       flow: {

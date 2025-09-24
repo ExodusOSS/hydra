@@ -1,8 +1,8 @@
 {
   "name": "@exodus/segment-metrics",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "This library allows any app to send events to Segment for metrics analysis.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "main": "index.js",
   "author": "Exodus Movement, Inc.",
   "files": [
@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint . --ignore-path ../../.gitignore",
+    "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
@@ -20,12 +20,12 @@
     "snake-case": "^3.0.4",
     "uuid": "^3.4.0"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/segment-metrics",
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/segment-metrics",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asegment-metrics"
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asegment-metrics"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
   }
 }

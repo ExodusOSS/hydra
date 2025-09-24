@@ -1,6 +1,6 @@
 {
   "name": "@exodus/hardware-wallets",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "An Exodus SDK feature that provides a high level abstraction for interacting with hardware wallet devices",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -20,7 +20,7 @@
     "!**/__tests__/**"
   ],
   "scripts": {
-    "build": "run -T tsc --build tsconfig.build.json",
+    "build": "run -T tsc -p tsconfig.build.json",
     "clean": "run -T tsc --build --clean",
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",

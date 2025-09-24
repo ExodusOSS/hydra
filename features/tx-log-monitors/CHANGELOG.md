@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-log-monitors@2.5.2...@exodus/tx-log-monitors@2.6.0) (2025-08-26)
+
+### Features
+
+- feat: queue refreshes before start (#13687)
+
 ## [2.5.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-log-monitors@2.5.1...@exodus/tx-log-monitors@2.5.2) (2025-06-05)
 
 ### Bug Fixes

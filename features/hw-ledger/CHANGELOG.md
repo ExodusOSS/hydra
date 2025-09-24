@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hw-ledger@3.6.0...@exodus/hw-ledger@3.6.1) (2025-09-01)
+
+### Bug Fixes
+
+- fix: only sign for required wallet policies (#13720)
+
+## [3.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hw-ledger@3.5.0...@exodus/hw-ledger@3.6.0) (2025-07-18)
+
+### Features
+
+- feat: bump bs58check to v3 (#13274)
+
+## [3.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hw-ledger@3.4.3...@exodus/hw-ledger@3.5.0) (2025-05-30)
+
+### Features
+
+- feat: switch hw-ledger from metamask/eth-sig-util to our fixed impl (#12750)
+
+## [3.4.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hw-ledger@3.4.2...@exodus/hw-ledger@3.4.3) (2025-03-05)
+
+### Bug Fixes
+
+- fix: bump bip32 (#11415)
+
+## [3.4.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hw-ledger@3.4.1...@exodus/hw-ledger@3.4.2) (2024-12-20)
+
+### License
+
+- license: re-license under MIT license (#10599)
+
+## [3.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hw-ledger@3.4.0...@exodus/hw-ledger@3.4.1) (2024-10-30)
+
+### Bug Fixes
+
+- bump bip322 to latest ([#10231](https://github.com/ExodusMovement/exodus-hydra/issues/10231)) ([4aacf39](https://github.com/ExodusMovement/exodus-hydra/commit/4aacf399a1e8679d99f08574920463bcab6f07fa))
+
 ## [3.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hw-ledger@3.3.1...@exodus/hw-ledger@3.4.0) (2024-10-30)
 
 ### Features

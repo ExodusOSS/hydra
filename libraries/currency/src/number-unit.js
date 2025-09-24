@@ -1,9 +1,10 @@
-import _isNumberUnit from './is-number-unit.js'
 import conversionByRate from './conversion-by-rate.js'
 import deprecationWarning, { maybeReportDifferentTypesDeprecated } from './deprecation-warning.js'
 import isUnitType from './is-unit-type.js'
 import BigIntWrapper from '@exodus/bigint'
 import { createNumber, stringToNumberFraction } from './number-unit-utils.js'
+import { CurrencyIdSymbol } from './constants.js'
+import _isNumberUnit from './is-number-unit.js'
 
 const TEN = BigIntWrapper.wrap(10)
 
@@ -12,7 +13,35 @@ export default class NumberUnit {
     return new NumberUnit(num, unit)
   }
 
-  // so you don't have to do instanceof and get bit by different included versions
+  static get [CurrencyIdSymbol]() {
+    return 'NumberUnit'
+  }
+
+  static isInstance(instance) {
+    if (!instance?.constructor || Object.hasOwn(instance, 'constructor')) {
+      return false
+    }
+
+    // This is the same as `instance instanceof NumberUnit`, but it avoids triggering
+    // the custom `hasInstance` implementation, preventing infinite recursion.
+    if (Function.prototype[Symbol.hasInstance].call(NumberUnit, instance)) {
+      return true
+    }
+
+    const considerInstance = NumberUnit.name === instance.constructor.name
+
+    return (
+      considerInstance && instance.constructor[CurrencyIdSymbol] === NumberUnit[CurrencyIdSymbol]
+    )
+  }
+
+  static [Symbol.hasInstance](instance) {
+    return this.isInstance(instance)
+  }
+
+  /*
+    Deprecated, use `isInstance` instead.
+   */
   static isNumberUnit = _isNumberUnit
 
   // prop types
@@ -29,7 +58,6 @@ export default class NumberUnit {
     // @deprecated
     this.unit = unit
 
-    // TODO: make these getters
     this.unitType = unit.unitType
     this.baseUnit = unit.unitType.baseUnit
     this.defaultUnit = unit.unitType.defaultUnit
@@ -153,7 +181,6 @@ export default class NumberUnit {
 
   floor() {
     if (this.unit.power === 0) {
-      // TODO: deprecate this usage
       return this
     }
 
@@ -164,7 +191,6 @@ export default class NumberUnit {
 
   round() {
     if (this.unit.power === 0) {
-      // TODO: deprecate this usage
       return this
     }
 
@@ -181,7 +207,6 @@ export default class NumberUnit {
 
   ceil() {
     if (this.unit.power === 0) {
-      // TODO: deprecate this usage
       return this
     }
 
@@ -357,9 +382,7 @@ export default class NumberUnit {
       deprecationWarning(noInstanceWarning)
     }
 
-    let numberUnit
-    if (unit === this.unit) numberUnit = this // eslint-disable-line unicorn/no-this-assignment
-    else numberUnit = this.to(unit)
+    const numberUnit = unit === this.unit ? this : this.to(unit)
 
     // FIXME: we should either
     // - stop accessing the private underlying `_number` instance
@@ -411,7 +434,6 @@ export default class NumberUnit {
     return number
   }
 
-  // TODO: `format` is undocumented, consider if passing `this._number` is correct. Probably should just pass `this`
   toString({ unit = true, format, unitInstance = this.unit } = {}) {
     if (unitInstance) {
       unitInstance = this.unitType.units[unitInstance.toString()]
@@ -438,8 +460,6 @@ export default class NumberUnit {
     return this.toDefaultNumber()
   }
 
-  // NOTE: for debugging, should probably use Chrome Formatter:
-  // https://docs.google.com/document/d/1FTascZXT9cxfetuPRT2eXPQKXui4nWFivUnS_335T3U/preview
   get value() {
     return this.toString()
   }
@@ -459,7 +479,6 @@ export default class NumberUnit {
 
   // convert 'number' / 'string' to NumberUnit
   _coerceToNumberUnit(number) {
-    // force cast for flow
     if (NumberUnit.isNumberUnit(number)) return number
 
     deprecationWarning(

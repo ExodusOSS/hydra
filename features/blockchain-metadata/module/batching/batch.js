@@ -26,6 +26,11 @@ export default class Batch {
     return this
   }
 
+  addTxs({ assetName, walletAccount, txs }) {
+    this.#actions.push({ type: Action.AddTxs, payload: { assetName, walletAccount, txs } })
+    return this
+  }
+
   removeTxs({ assetName, walletAccount, txs }) {
     this.#actions.push({ type: Action.RemoveTxs, payload: { assetName, walletAccount, txs } })
     return this

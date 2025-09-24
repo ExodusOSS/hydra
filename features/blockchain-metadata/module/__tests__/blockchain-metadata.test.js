@@ -6,7 +6,6 @@ import { normalizeTxsJSON, TxSet, WalletAccount } from '@exodus/models'
 import createStorage from '@exodus/storage-memory'
 
 import { accountStatesAtomDefinition, txLogsAtomDefinition } from '../../atoms/index.js'
-import ErrorType from '../error.js'
 import definition from '../index.js'
 import { AccountStates } from './test-utils.js'
 import _fixtures from './tx-log-fixtures.cjs'
@@ -63,6 +62,7 @@ describe('blockchain metadata module', () => {
   let txLogsAtom
   let accountStatesAtom
   let enabledWalletAccountsAtom
+  let errorTracking
 
   beforeEach(async () => {
     const assetsModule = {
@@ -72,6 +72,9 @@ describe('blockchain metadata module', () => {
     enabledWalletAccountsAtom = createInMemoryAtom({ defaultValue: {} })
     txLogsAtom = txLogsAtomDefinition.factory()
     accountStatesAtom = accountStatesAtomDefinition.factory()
+    errorTracking = {
+      track: jest.fn(),
+    }
 
     storage = createStorage()
     blockchainMetadata = createBlockchainMetadata({
@@ -81,6 +84,7 @@ describe('blockchain metadata module', () => {
       txLogsAtom,
       accountStatesAtom,
       logger: { error: jest.fn() },
+      errorTracking,
     })
 
     await blockchainMetadata.load()
@@ -124,6 +128,20 @@ describe('blockchain metadata module', () => {
       walletAccount: 'exodus_0',
       txs: [fixtures.bitcoin[0]],
     }
+
+    test('returns txs set by addTxs', async () => {
+      await loadDefaultWalletAccount()
+      await blockchainMetadata.addTxs(initialPayload)
+
+      const actual = await blockchainMetadata.getLoadedTxLogs()
+      expect(actual).toEqual({
+        exodus_0: expect.objectContaining({
+          bitcoin: TxSet.fromArray([fixtures.bitcoin[0]]),
+        }),
+      })
+
+      await expect(txLogsAtom.get()).resolves.toMatchSnapshot()
+    })
 
     test('returns txs set by updateTxs', async () => {
       await loadDefaultWalletAccount()
@@ -316,18 +334,14 @@ describe('blockchain metadata module', () => {
       const loadWalletAccountsHandler = jest.fn()
       blockchainMetadata.once('load-wallet-accounts', loadWalletAccountsHandler)
 
-      const errHandler = jest.fn()
-      blockchainMetadata.on('error', errHandler)
-
       await loadDefaultWalletAccount()
 
       expect(loadWalletAccountsHandler).toHaveBeenCalledWith({
         walletAccounts: ['exodus_0'],
       })
 
-      expect(errHandler).toHaveBeenCalledWith({
-        data: { assetName: 'bitcoin', walletAccount: 'exodus_0' },
-        type: ErrorType.MalformedTxs,
+      expect(errorTracking.track).toHaveBeenCalledWith({
+        context: { assetName: 'bitcoin', walletAccount: 'exodus_0' },
         error: new Error('normalizeTxJSON: `asset` object and `coinName` are required'),
       })
 

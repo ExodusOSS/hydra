@@ -16,8 +16,8 @@ declare const walletApiDefinition: {
       updateSeed(params: { seedId: SeedId; label: string }): Promise<string>
       removeManySeeds(seedIds: string[]): Promise<void>
       removeSeed(seedId: string): Promise<void>
-      create(opts?: { mnemonic?: string; passphrase?: string }): Promise<SeedId>
-      import(opts?: { mnemonic: string; passphrase?: string }): Promise<SeedId>
+      create(opts?: { mnemonic?: string; passphrase?: string }): Promise<{ seedId: SeedId }>
+      import(opts?: { mnemonic: string; passphrase?: string }): Promise<{ seedId: SeedId }>
       clear(): Promise<void>
       lock(): Promise<void>
       unlock(opts?: { passphrase?: string }): Promise<void>

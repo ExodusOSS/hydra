@@ -1,15 +1,8 @@
-import * as atoms from '@exodus/atoms'
 import { PersonalNoteSet } from '@exodus/models'
 
-const createAtomObserver = jest.fn()
+jest.doMock('@exodus/atoms/factories/observer', () => ({ __esModule: true, default: jest.fn() }))
 
-jest.doMock('@exodus/atoms', () => ({
-  __esModule: true,
-  ...atoms,
-  createAtomObserver,
-}))
-
-const { createInMemoryAtom } = atoms
+const { createAtomObserver, createInMemoryAtom } = await import('@exodus/atoms')
 const { personalNotesPluginDefinition } = await import('../index.js')
 
 describe('personalNotesPlugin', () => {

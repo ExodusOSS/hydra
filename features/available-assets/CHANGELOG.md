@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/available-assets@8.6.0...@exodus/available-assets@8.8.0) (2025-08-22)
+
+### Features
+
+- feat: memoize available asset names atom selector (#10829)
+
+- feat: use atoms v9 (#9651)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
+## [8.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/available-assets@8.6.0...@exodus/available-assets@8.7.0) (2024-11-25)
+
+### Features
+
+- feat: use atoms v9 (#9651)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
 ## [8.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/available-assets@8.5.0...@exodus/available-assets@8.5.1) (2024-09-30)
 
 ### Refactor

@@ -2,13 +2,13 @@ import assetSourcesModuleDefinition from '@exodus/asset-sources/lib/module'
 import { connectAssets } from '@exodus/assets'
 import { createInMemoryAtom } from '@exodus/atoms'
 import { mapValues } from '@exodus/basic-utils'
+import { mnemonicToSeed } from '@exodus/bip39'
 import * as bitcoinPlugin from '@exodus/bitcoin-plugin'
 import { getSeedId } from '@exodus/key-utils'
 import keychainDefinition, { KeyIdentifier } from '@exodus/keychain/module'
 import { WalletAccount } from '@exodus/models'
 import { EXODUS_SRC, SEED_SRC } from '@exodus/models/lib/wallet-account'
 import * as solanaPluginCJS from '@exodus/solana-plugin'
-import { mnemonicToSeedSync } from 'bip39'
 
 import seedSignerDefinition from '../seed-signer.js'
 
@@ -36,8 +36,8 @@ const seedWalletAccount = new WalletAccount({
 })
 
 const mnemonic = 'menu memory fury language physical wonder dog valid smart edge decrease worth'
-const seed = mnemonicToSeedSync(mnemonic)
-const seedId = getSeedId(seed)
+const seed = await mnemonicToSeed({ mnemonic })
+const seedId = await getSeedId(seed)
 const phantomWalletAccount = new WalletAccount({
   index: 1,
   compatibilityMode: 'phantom',
@@ -63,13 +63,10 @@ afterEach(() => {
 })
 
 describe('SeedBasedTransactionSigner', () => {
-  const setup = ({ rpcSigning = false, signWithSigner = false } = {}) => {
+  const setup = async () => {
     const assetClientInterface = { createLogger: () => console }
     const bitcoin = bitcoinPlugin.createAsset({ assetClientInterface })
     const solana = solanaPlugin.createAsset({ assetClientInterface })
-
-    bitcoin.api.features.signWithSigner = signWithSigner
-    solana.api.features.signWithSigner = signWithSigner
 
     const assets = connectAssets({
       bitcoin,
@@ -89,7 +86,7 @@ describe('SeedBasedTransactionSigner', () => {
       logger: console,
     })
 
-    keychain.addSeed(seed)
+    await keychain.addSeed(seed)
 
     const assetSources = assetSourcesModuleDefinition.factory({
       assetsAtom,
@@ -101,7 +98,6 @@ describe('SeedBasedTransactionSigner', () => {
       assetsModule,
       keychain,
       assetSources,
-      walletSdk: rpcSigning ? {} : undefined,
     })
 
     return {
@@ -112,7 +108,7 @@ describe('SeedBasedTransactionSigner', () => {
   }
 
   test('signTx validates "data" to be a Uint8Array for all assets', async () => {
-    const { seedSigner, assets } = setup({ signWithSigner: true })
+    const { seedSigner, assets } = await setup()
     const unsignedTx = { txData: {}, txMeta: {} }
     const walletAccount = walletAccounts[WalletAccount.DEFAULT_NAME]
     for (const assetName of ['bitcoin', 'solana']) {
@@ -134,8 +130,8 @@ describe('SeedBasedTransactionSigner', () => {
     }
   })
 
-  describe('signSchnorr extraEntropy', () => {
-    const { seedSigner, assets } = setup({ signWithSigner: true })
+  describe('signSchnorr extraEntropy', async () => {
+    const { seedSigner, assets } = await setup()
     const unsignedTx = { txData: {}, txMeta: {} }
     const walletAccount = defaultWalletAccount
     const keyId = new KeyIdentifier({
@@ -159,7 +155,7 @@ describe('SeedBasedTransactionSigner', () => {
     }
 
     test('signSchnorr passes through extraEntropy', async () => {
-      const { keychain, seedSigner, assets } = setup({ signWithSigner: true })
+      const { keychain, seedSigner, assets } = await setup()
       jest.spyOn(assets.bitcoin.api, 'signTx').mockImplementationOnce(async ({ signer }: any) => {
         await signer.sign({
           data: bufferToSign,
@@ -208,7 +204,7 @@ describe('SeedBasedTransactionSigner', () => {
   })
 
   test('signTx validates "data" to be 32 bytes for ECDSA', async () => {
-    const { keychain, seedSigner, assets } = setup({ signWithSigner: true })
+    const { keychain, seedSigner, assets } = await setup()
     const assetSignTx = jest.spyOn(assets.bitcoin.api, 'signTx')
     const unsignedTx = { txData: {}, txMeta: {} }
     const walletAccount = walletAccounts[WalletAccount.DEFAULT_NAME]
@@ -246,147 +242,5 @@ describe('SeedBasedTransactionSigner', () => {
     ).resolves.not.toThrow()
 
     expect(keychain.secp256k1.signBuffer).toHaveBeenCalled()
-  })
-
-  test('proxies calls to keychain for multiple address assets', async () => {
-    const { keychain, seedSigner, assets } = setup()
-    const signTxSpy = jest.spyOn(keychain, 'signTx').mockResolvedValue('signedTx')
-    const unsignedTx = { txData: {}, txMeta: {} }
-
-    await seedSigner.signTransaction({
-      walletAccount: new WalletAccount({ index: 1, source: EXODUS_SRC, seedId }),
-      baseAssetName: 'bitcoin',
-      unsignedTx,
-    })
-
-    expect(signTxSpy).toHaveBeenNthCalledWith(1, {
-      seedId,
-      keyIds: [
-        new KeyIdentifier({
-          assetName: 'bitcoin',
-          derivationAlgorithm: 'BIP32',
-          derivationPath: "m/84'/0'/1'",
-          keyType: 'secp256k1',
-        }),
-        new KeyIdentifier({
-          assetName: 'bitcoin',
-          derivationAlgorithm: 'BIP32',
-          derivationPath: "m/86'/0'/1'",
-          keyType: 'secp256k1',
-        }),
-        new KeyIdentifier({
-          assetName: 'bitcoin',
-          derivationAlgorithm: 'BIP32',
-          derivationPath: "m/44'/0'/1'",
-          keyType: 'secp256k1',
-        }),
-      ],
-      signTxCallback: assets.bitcoin.api.signTx,
-      unsignedTx,
-    })
-  })
-
-  test('proxies calls to keychain for single address assets', async () => {
-    const { keychain, seedSigner, assets } = setup()
-    const signTxSpy = jest.spyOn(keychain, 'signTx').mockResolvedValue('signedTx')
-    const unsignedTx = { txData: {}, txMeta: {} }
-
-    await seedSigner.signTransaction({
-      walletAccount: new WalletAccount({ index: 1, source: EXODUS_SRC, seedId }),
-      baseAssetName: 'solana',
-      unsignedTx,
-    })
-
-    expect(signTxSpy).toHaveBeenNthCalledWith(1, {
-      seedId,
-      keyIds: [
-        new KeyIdentifier({
-          assetName: 'solana',
-          derivationAlgorithm: 'BIP32',
-          derivationPath: "m/44'/501'/1'/0/0",
-          keyType: 'nacl',
-        }),
-      ],
-      signTxCallback: assets.solana.api.signTx,
-      unsignedTx,
-    })
-  })
-
-  test('passes baseAssetName to keychain when signing across the wire', async () => {
-    const { keychain, seedSigner } = setup({ rpcSigning: true })
-    const signTx = jest.spyOn(keychain, 'signTx').mockResolvedValue('signedTx')
-    const unsignedTx = { txData: {}, txMeta: {} }
-
-    const baseAssetName = 'solana'
-    await seedSigner.signTransaction({
-      walletAccount: new WalletAccount({ index: 1, source: EXODUS_SRC, seedId }),
-      baseAssetName,
-      unsignedTx,
-    })
-
-    expect(signTx).toHaveBeenNthCalledWith(1, {
-      seedId,
-      keyIds: [
-        new KeyIdentifier({
-          assetName: baseAssetName,
-          derivationAlgorithm: 'BIP32',
-          derivationPath: "m/44'/501'/1'/0/0",
-          keyType: 'nacl',
-        }),
-      ],
-      baseAssetName,
-      unsignedTx,
-    })
-  })
-
-  test('respects compatibilityMode', async () => {
-    const { keychain, seedSigner, assets } = setup()
-    const signTxSpy = jest.spyOn(keychain, 'signTx').mockResolvedValue('signedTx')
-    const unsignedTx = { txData: {}, txMeta: {} }
-
-    await seedSigner.signTransaction({
-      walletAccount: phantomWalletAccount,
-      baseAssetName: 'solana',
-      unsignedTx,
-    })
-
-    expect(signTxSpy).toHaveBeenNthCalledWith(1, {
-      seedId,
-      keyIds: [
-        new KeyIdentifier({
-          assetName: 'solana',
-          derivationAlgorithm: 'SLIP10',
-          derivationPath: "m/44'/501'/1'/0'",
-        }),
-      ],
-      signTxCallback: assets.solana.api.signTx,
-      unsignedTx,
-    })
-  })
-
-  test('respects seed id on wallet account', async () => {
-    const { keychain, seedSigner, assets } = setup()
-    const signTxSpy = jest.spyOn(keychain, 'signTx').mockResolvedValue('signedTx')
-    const unsignedTx = { txData: {}, txMeta: {} }
-
-    await seedSigner.signTransaction({
-      walletAccount: seedWalletAccount,
-      baseAssetName: 'solana',
-      unsignedTx,
-    })
-
-    expect(signTxSpy).toHaveBeenNthCalledWith(1, {
-      seedId: 'wayne-enterprises',
-      keyIds: [
-        new KeyIdentifier({
-          assetName: 'solana',
-          derivationAlgorithm: 'BIP32',
-          derivationPath: "m/44'/501'/1'/0/0",
-          keyType: 'nacl',
-        }),
-      ],
-      signTxCallback: assets.solana.api.signTx,
-      unsignedTx,
-    })
   })
 })

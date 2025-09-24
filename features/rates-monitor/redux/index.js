@@ -12,10 +12,6 @@ const ratesReduxDefinition = {
       loaded: state.loaded || Object.keys(rates).length > 0,
       data: { ...state.data, ...rates },
     }),
-    ratesSimulationEnabled: (state, simulationEnabled) => ({
-      ...state,
-      simulationEnabled,
-    }),
   },
   selectorDefinitions,
 }

@@ -66,8 +66,8 @@ Some hooks receive parameters, if so, they are documented below.
 - `onLoad`: Do NOT use this hook. Its sole purpose is a hack to support the browser extension, where the UI might die and be recreated while the background process is long-lived. In that scenario, `onLoad` is triggered when a new UI is recreated and connects to the background process. Called with the same parameters as `onStart`.
 - `onUnload`: Triggered when the application is unloaded, i.e.,
   the app is closed.
-- `onCreate`: Triggered when a new wallet is created. Called with `{ walletExists, hasPassphraseSet, isLocked, isBackedUp, isRestoring, seedId }`.
-- `onImport`: Triggered when a wallet is imported. Called with `{ seedId, compatibilityMode, backupType }`.
+- `onCreate`: Triggered when a new wallet is created. Called with `{ walletExists, hasPassphraseSet, isLocked, isBackedUp, isRestoring, seedId, createResult }`.
+- `onImport`: Triggered when a wallet is imported. Called with `{ seedId, compatibilityMode, backupType, importResult }`.
 - `onDelete`: Triggered when a wallet is deleted.
 - `onRestore`: Triggered when a wallet (primary seed) restore process starts. Called with `{ backupType }`.
 - `onRestoreCompleted`: Triggered when a wallet seed restore process completes. Called with `{ backupType }`.

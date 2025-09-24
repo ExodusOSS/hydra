@@ -41,6 +41,12 @@ Examples:
 yarn test --scope @exodus/address-provider
 ```
 
+```
+# test one file
+# check exact arguments like "--jest" in corresponding feature
+yarn run -T exodus-test --jest sdks/headless/__tests__/attach.test.js
+```
+
 Update Snapshots:
 
 ```

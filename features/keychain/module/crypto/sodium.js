@@ -1,5 +1,11 @@
 import { mapValues } from '@exodus/basic-utils'
-import * as curve25519 from '@exodus/crypto/curve25519'
+import {
+  signAttached,
+  signOpen,
+  signDetached,
+  verifyDetached,
+  edwardsToPublic,
+} from '@exodus/crypto/ed25519'
 import * as sodium from '@exodus/crypto/sodium-compat'
 
 const cloneBuffer = (buf) => {
@@ -40,19 +46,19 @@ export const create = ({ getPrivateHDKey }) => {
     getSodiumKeysFromSeed: getKeysFromSeed,
     sign: async ({ seedId, keyId, data }) => {
       const { privateKey } = getPrivateHDKey({ seedId, keyId })
-      return curve25519.signAttached({ message: data, privateKey, format: 'buffer' })
+      return signAttached({ message: data, privateKey, format: 'buffer' })
     },
     signOpen: async ({ seedId, keyId, data }) => {
       const { publicKey } = getPrivateHDKey({ seedId, keyId })
-      return curve25519.signOpen({ signed: data, publicKey, format: 'buffer' })
+      return signOpen({ signed: data, publicKey, format: 'buffer' })
     },
     signDetached: async ({ seedId, keyId, data }) => {
       const { privateKey } = getPrivateHDKey({ seedId, keyId })
-      return curve25519.signDetached({ message: data, privateKey, format: 'buffer' })
+      return signDetached({ message: data, privateKey, format: 'buffer' })
     },
     verifyDetached: async ({ seedId, keyId, data, signature }) => {
       const { publicKey } = getPrivateHDKey({ seedId, keyId })
-      return curve25519.verifyDetached({ message: data, signature, publicKey })
+      return verifyDetached({ message: data, signature, publicKey })
     },
     encryptSecretBox: async ({ seedId, keyId, data }) => {
       const { privateKey: sodiumSeed } = getPrivateHDKey({ seedId, keyId })
@@ -91,5 +97,5 @@ export const create = ({ getPrivateHDKey }) => {
 }
 
 export const privToPub = async (sodiumSeed) => {
-  return curve25519.edwardsToPublic({ privateKey: sodiumSeed, format: 'buffer' })
+  return edwardsToPublic({ privateKey: sodiumSeed, format: 'buffer' })
 }

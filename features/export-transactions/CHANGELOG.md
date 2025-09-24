@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.7](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/export-transactions@2.3.6...@exodus/export-transactions@2.3.7) (2025-08-25)
+
+### Bug Fixes
+
+- fix(export-transactions): prevent duplicated addresses in from/to (#13673)
+
+## [2.3.6](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/export-transactions@2.3.5...@exodus/export-transactions@2.3.6) (2025-08-11)
+
+### Bug Fixes
+
+- fix(export-transactions): correct show in and out txs for multiple assets (#13528)
+
+## [2.3.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/export-transactions@2.3.4...@exodus/export-transactions@2.3.5) (2025-08-01)
+
+### Bug Fixes
+
+- fix: staking type for XTZ case (#13442)
+
+## [2.3.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/export-transactions@2.3.3...@exodus/export-transactions@2.3.4) (2025-07-31)
+
+### Bug Fixes
+
+- fix(export-transactions): cardano staking and unstaking amounts and fee (#13411)
+
+## [2.3.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/export-transactions@2.3.2...@exodus/export-transactions@2.3.3) (2025-07-24)
+
+### Bug Fixes
+
+- fix(export-transactions): cardano staking all txs (#13337)
+
 ## [2.3.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/export-transactions@2.3.1...@exodus/export-transactions@2.3.2) (2025-06-26)
 
 ### Bug Fixes

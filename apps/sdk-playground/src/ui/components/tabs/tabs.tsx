@@ -14,7 +14,7 @@ interface TabsProps {
 
 function Tabs({ options, active, className, onChange }: TabsProps) {
   return (
-    <div className={cn('flex w-full flex-row gap-5 border-b border-b-deep-50', className)}>
+    <div className={cn('border-b-deep-50 flex w-full flex-row gap-5 border-b', className)}>
       {options.map((option) => (
         <button
           key={option.id}

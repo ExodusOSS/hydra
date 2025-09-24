@@ -24,10 +24,14 @@
   "scripts": {
     "dev": "yarn build:scripts && vite",
     "build": "yarn build:scripts && NODE_OPTIONS=--max-old-space-size=8192 vite build",
+    "preview": "vite preview",
+    "preview:cf": "wrangler pages dev dist --local",
     "build:scripts": "./scripts/build.sh",
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "test": "run -T exodus-test --jest --esbuild",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@bunchtogether/vite-plugin-flow": "^1.0.2",
@@ -40,6 +44,7 @@
     "@exodus/asset-sources": "workspace:^",
     "@exodus/basic-utils": "^3.0.1",
     "@exodus/bitcoin-plugin": "^1.25.2",
+    "@exodus/combined-assets-meta": "^3.6.0",
     "@exodus/currency": "^5.0.2",
     "@exodus/deferring-storage": "workspace:^",
     "@exodus/ethereum-plugin": "^2.7.3",
@@ -54,10 +59,11 @@
     "@exodus/formatting": "workspace:^",
     "@exodus/fusion-local": "workspace:^",
     "@exodus/headless": "workspace:^",
-    "@exodus/headless-react": "workspace:^",
+    "@exodus/headless-ui": "workspace:^",
     "@exodus/keystore-mobile": "workspace:^",
     "@exodus/local-seed-backups": "workspace:^",
     "@exodus/market-history": "workspace:^",
+    "@exodus/models": "workspace:^",
     "@exodus/optimistic-balances": "workspace:^",
     "@exodus/orders": "workspace:^",
     "@exodus/personal-notes": "workspace:^",
@@ -65,6 +71,7 @@
     "@exodus/prettier": "^1.0.0",
     "@exodus/profile": "workspace:^",
     "@exodus/restore-time": "workspace:^",
+    "@exodus/solana-plugin": "^1.24.0",
     "@exodus/storage-icons-browser": "workspace:^",
     "@exodus/storage-local-storage": "workspace:^",
     "@exodus/sync-time": "workspace:^",
@@ -88,6 +95,7 @@
     "react-dom": "^18.3.1",
     "react-json-tree": "^0.19.0",
     "react-redux": "^9.1.2",
+    "react-scan": "^0.4.3",
     "react-select": "^5.9.0",
     "react-syntax-highlighter": "^15.5.0",
     "redux": "4.0.0",
@@ -101,8 +109,12 @@
   },
   "devDependencies": {
     "@exodus/dependency-types": "workspace:^",
-    "@exodus/models": "workspace:^",
     "@microsoft/tsdoc": "^0.15.0",
+    "@playwright/test": "1.54.1",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.5.2",
     "@types/buffer-json": "^2.0.1",
     "@types/debug": "^4.1.12",
     "@types/lodash": "^4.14.200",
@@ -113,7 +125,9 @@
     "autoprefixer": "^10.4.19",
     "make-concurrent": "^5.4.0",
     "postcss": "^8.4.38",
-    "prettier-plugin-tailwindcss": "^0.5.14"
+    "prettier-plugin-tailwindcss": "^0.5.14",
+    "vite-plugin-svgr": "^4.3.0",
+    "wrangler": "^4.31.0"
   },
   "nx": {
     "targets": {

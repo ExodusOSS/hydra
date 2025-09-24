@@ -229,24 +229,6 @@
     "segwit": true
   },
   {
-    "coin_label": "Monero",
-    "coin_name": "Monero",
-    "name": "Monero",
-    "coin_shortcut": "XMR",
-    "shortcut": "XMR",
-    "exodus_name": "monero",
-    "slip44": 128,
-    "curve_name": "ed25519",
-    "decimals": 12,
-    "support": {
-      "connect": false,
-      "trezor1": false,
-      "trezor2": "2.0.8",
-      "trezor3": "2.6.2",
-      "webwallet": false
-    }
-  },
-  {
     "address_type": 1855,
     "address_type_p2sh": 1818,
     "bip115": false,

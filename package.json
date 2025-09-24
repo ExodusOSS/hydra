@@ -70,7 +70,6 @@
     "@exodus/models": "^12.1.1",
     "@exodus/currency": "5.0.2",
     "@types/react": "^17.0.0",
-    "@exodus/test-bundler/crypto-browserify": "npm:@hydra/you-shall-not-pass.object@workspace:^",
     "@puppeteer/browsers/proxy-agent": "npm:@hydra/you-shall-not-pass.proxy-agent@workspace:^",
     "domain-browser": "npm:@hydra/you-shall-not-pass.object@workspace:^",
     "@docusaurus/types/react-helmet-async": "npm:@hydra/you-shall-not-pass.object@workspace:^",

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/restore-progress-tracker@3.9.0...@exodus/restore-progress-tracker@3.9.1) (2025-07-30)
+
+### Bug Fixes
+
+- fix(restore-progress-tracker): do not mark asset as restored if tick failed (#13401)
+
 ## [3.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/restore-progress-tracker@3.7.3...@exodus/restore-progress-tracker@3.9.0) (2025-06-03)
 
 ### Features

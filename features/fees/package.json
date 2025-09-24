@@ -1,6 +1,6 @@
 {
   "name": "@exodus/fees",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Fees module",
   "type": "module",
   "author": "Exodus Movement, Inc.",
@@ -12,7 +12,7 @@
   "scripts": {
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest --esbuild"
+    "test": "run -T exodus-test --jest"
   },
   "main": "index.js",
   "files": [
@@ -32,7 +32,7 @@
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {
-    "@exodus/assets": "^9.1.1",
+    "@exodus/assets": "^11.0.0",
     "@exodus/atoms": "workspace:^",
     "@exodus/blockchain-metadata": "workspace:^",
     "@exodus/ethereum-meta": "^2.2.1",

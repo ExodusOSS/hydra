@@ -1,6 +1,6 @@
 {
   "name": "@exodus/error-tracking",
-  "version": "3.0.0",
+  "version": "3.1.2",
   "type": "module",
   "description": "A simple error tracking package to let any feature collect errors and create the report",
   "author": "Exodus Movement, Inc.",

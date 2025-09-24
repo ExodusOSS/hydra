@@ -1,57 +1,63 @@
-import {
-  getPublicKey as getCardanoPublicKey,
-  getShelleyAddress as getCardanoAddress,
-} from '@exodus/cardano-lib'
+import { mnemonicToSeed } from '@exodus/bip39'
+import { getShelleyAddress as getCardanoAddress } from '@exodus/cardano-lib'
 import { encodePublic as encodePublicEthereum } from '@exodus/ethereum-lib'
-import { EXODUS_KEY_IDS } from '@exodus/key-ids'
-import { createUnsignedTx } from '@exodus/solana-lib'
-import { mnemonicToSeed } from 'bip39'
-
-import { assets } from './fixtures/assets.js'
-import simpleTx from './fixtures/simple-tx.js'
-
 import KeyIdentifier from '@exodus/key-identifier'
-import keychainDefinition, { Keychain } from '../keychain.js'
+import { EXODUS_KEY_IDS } from '@exodus/key-ids'
+
 import { getSeedId } from '../crypto/seed-id.js'
+import keychainDefinition, { Keychain } from '../keychain.js'
+import { assets } from './fixtures/assets.js'
 
 const { factory: createMultiSeedKeychain } = keychainDefinition
 
-const seed = mnemonicToSeed(
-  'menu memory fury language physical wonder dog valid smart edge decrease worth'
-)
+const seed = await mnemonicToSeed({
+  mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
+})
 
-const secondSeed = mnemonicToSeed(
-  'wine system mean beyond filter human meat rubber episode wash stomach aunt'
-)
+const secondSeed = await mnemonicToSeed({
+  mnemonic: 'wine system mean beyond filter human meat rubber episode wash stomach aunt',
+})
+
+const thirdSeed = await mnemonicToSeed({
+  mnemonic: 'element input zero deny move siege stable screen catch like alley shoot',
+})
+
+const thirdSeedId = getSeedId(thirdSeed)
 
 describe.each([
   // reduce fixtures by switching seeds
   {
     primarySeed: seed,
     secondarySeed: secondSeed,
+    ternarySeed: thirdSeed,
     seedId: getSeedId(seed),
   },
   {
     primarySeed: secondSeed,
     secondarySeed: seed,
+    ternarySeed: thirdSeed,
     seedId: getSeedId(seed),
   },
-])('multi-seed-keychain', ({ primarySeed, secondarySeed, seedId }) => {
+  {
+    primarySeed: thirdSeed,
+    secondarySeed: seed,
+    ternarySeed: thirdSeed,
+    seedId: getSeedId(seed),
+  },
+])('multi-seed-keychain', ({ primarySeed, secondarySeed, ternarySeed, seedId }) => {
   let keychain
 
   it('should construct correctly', () => {
     expect(keychainDefinition.factory()).toBeInstanceOf(Keychain)
   })
 
+  // eslint-disable-next-line jest/prefer-hooks-on-top
   beforeEach(() => {
-    keychain = createMultiSeedKeychain({
-      legacyPrivToPub: {
-        cardano: getCardanoPublicKey,
-      },
-    })
+    keychain = createMultiSeedKeychain()
 
     keychain.addSeed(primarySeed)
     keychain.addSeed(secondarySeed)
+    keychain.addSeed(ternarySeed)
   })
 
   describe('exportKeys', () => {
@@ -159,7 +165,7 @@ describe.each([
 
       for (const { expected, exportOpts } of fixtures) {
         const key = await keychain.exportKey(exportOpts)
-        expect(getCardanoAddress(key.publicKey)).toBe(expected)
+        expect(getCardanoAddress(key.publicKey, true)).toBe(expected)
       }
     })
 
@@ -203,8 +209,6 @@ describe.each([
   })
 
   describe('sign', () => {
-    let unsignedTx
-
     const keyId = new KeyIdentifier({
       assetName: 'solana',
       derivationAlgorithm: 'BIP32',
@@ -212,35 +216,23 @@ describe.each([
       keyType: 'nacl',
     })
 
-    const asset = assets.solana
-
-    beforeAll(async () => {
-      unsignedTx = await createUnsignedTx({
-        asset,
-        from: 'nsn7DmCMsKWGUWcL92XfPKXFbUz7KtFDRa4nnkc3RiF',
-        to: '7SmaJ41gFZ1LPsZJfb57npzdCFuqBRmgj3CScjbmkQwA',
-        amount: asset.currency.SOL('5'),
-        fee: asset.currency.SOL('0.000005'),
-        recentBlockhash: '6yWbfvhoDrgzStVnvpRvib2Q1LpuTYc6TtdMPPofCPh8',
-      })
-    })
-
     it('should sign solana tx', async () => {
-      const result = await keychain.signTx({
-        seedId,
-        keyIds: [keyId],
-        signTxCallback: ({ unsignedTx, hdkeys, privateKey }) => {
-          expect(hdkeys[44].privateKey).toEqual(privateKey)
-          return simpleTx(unsignedTx, privateKey)
-        },
-        unsignedTx,
+      const MESSAGE =
+        '010001033c8939b872876416b1ba97d04c6a31211e39258a82d0fa45542a1cccc2617d2f2c2e85e395109a73ab754dfdad48d2cdefae040d4653228245df6fe6b6d24f7300000000000000000000000000000000000000000000000000000000000000004f968728ba006a647883abdd1b8eabde24e181c8bb8e769256f9a37e73b8727901020200010c02000000b4ebad0200000000'
+      const VALID_SIGNATURE =
+        '810cdc7d804dcfab90147e50c40b0afe1f9d01fa6933739032d761f7fca4226389d348d70478560845ae9e90a940ef4173e17690b9d93122aadd56fa56b8b609'
+
+      const result = await keychain.signBuffer({
+        seedId: thirdSeedId,
+        keyId,
+        signatureType: 'ed25519',
+        data: Buffer.from(MESSAGE, 'hex'),
       })
 
-      expect(result.txId).toBe(
-        'Lj2iFo1MKx3cWTLH1GbvxZjCtNTMBmB2rXR5JV7EFQnPySyxKssAReBJF56e7XzXiAFeYdMCwFvyR3NkFVbh8rS'
-      )
+      expect(result.toString('hex')).toBe(VALID_SIGNATURE)
     })
 
+    // Tests derivation path parsing in keychain.signTx. Remove this test when we remove keychain.signTx.
     it('should pass through all required hdkeys', async () => {
       const keyIds = [
         new KeyIdentifier({

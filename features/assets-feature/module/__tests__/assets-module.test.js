@@ -1,3 +1,5 @@
+/* eslint-disable @exodus/hydra/no-asset-proper */
+
 import { createInMemoryAtom } from '@exodus/atoms'
 import combinedAssetsList from '@exodus/combined-assets-meta'
 import { createNoopLogger } from '@exodus/logger'
@@ -37,7 +39,7 @@ const someAssets = {
 const waynecoin = {
   name: 'waynecoin',
   baseAssetName: 'bitcoin',
-  properName: 'Wayne Coin', // eslint-disable-line @exodus/hydra/no-asset-proper
+  properName: 'Wayne Coin',
   ticker: 'WC',
   units: { WC: 0 },
   assetType: 'THE_TOKEN',
@@ -46,7 +48,6 @@ const waynecoin = {
   // normally the following would be taken from the base asset if not defined on the token:
   chainBadgeColors: ['#EAEAEA', '#FFF'],
   gradientColors: ['#EAEAEA', '#FFF'],
-  gradientCoords: { x1: '0%', y1: '0%', x2: '100%', y2: '100%' },
   primaryColor: '#EAEAEA',
 }
 
@@ -54,8 +55,8 @@ const combinedcoin = {
   name: 'combinedcoin',
   assetName: 'combinedcoin',
   baseAssetName: 'ethereum',
-  properName: 'Combined Coin', // eslint-disable-line @exodus/hydra/no-asset-proper
-  properTicker: 'CC', // eslint-disable-line @exodus/hydra/no-asset-proper
+  properName: 'Combined Coin',
+  properTicker: 'CC',
   ticker: 'CC',
   units: { CC: 0 },
   assetType: 'ETHEREUM_ERC20',
@@ -64,7 +65,6 @@ const combinedcoin = {
   // normally the following would be taken from the base asset if not defined on the token:
   chainBadgeColors: ['#EAEAEA', '#FFF'],
   gradientColors: ['#EAEAEA', '#FFF'],
-  gradientCoords: { x1: '0%', y1: '0%', x2: '100%', y2: '100%' },
   primaryColor: '#EAEAEA',
   parents: ['_invalid', '_usdcoin'],
 }
@@ -80,7 +80,7 @@ const ctrData = {
     lifecycleStatus: 'c',
     pricingAvailable: true,
     displayTicker: 'WC',
-    // eslint-disable-next-line
+
     properTicker: 'WC',
     ticker: 'ED6Bbitcoin3D49BF90',
     version: 1,
@@ -197,12 +197,21 @@ describe('assetsModule', () => {
   describe('with mock CTR', () => {
     const mswServer = setupServer(
       http.post('https://ctr.a.exodus.io/registry/tokens', async ({ request }) => {
-        const { tokenNames } = await request.json()
+        const { tokenNames, assetIds } = await request.json()
 
-        return HttpResponse.json({
-          status: 'OK',
-          tokens: tokenNames.map((tokenName) => ctrData[tokenName]),
-        })
+        if (tokenNames) {
+          return HttpResponse.json({
+            status: 'OK',
+            tokens: tokenNames.map((tokenName) => ctrData[tokenName]),
+          })
+        }
+
+        const ctrTokens = Object.values(ctrData)
+        const tokens = assetIds
+          .map(({ assetId }) => ctrTokens.find((token) => token.assetId === assetId))
+          .filter(Boolean)
+
+        return HttpResponse.json({ status: 'OK', tokens })
       }),
       http.post('https://ctr.a.exodus.io/registry/updates', async ({ request }) => {
         return HttpResponse.json({
@@ -242,6 +251,7 @@ describe('assetsModule', () => {
         expect(value.waynecoin).toMatchObject(waynecoin)
         expect(added).toEqual([expect.objectContaining(waynecoin)])
       })
+
       test('should reject invalid schema token', async () => {
         assetsModule = createAssetModuleForTest({
           assetsAtom,
@@ -361,6 +371,39 @@ describe('assetsModule', () => {
         })
         const icon = await assetsModule.getIcon('searchedtoken')
         expect(icon).toEqual(undefined)
+      })
+    })
+
+    describe('fetchTokens()', () => {
+      test('fetchTokens', async () => {
+        const tokens = await assetsModule.fetchTokens([
+          { assetId: 'foobar', baseAssetName: 'bitcoin' },
+          { assetId: 'other', baseAssetName: 'bitcoin' },
+          { assetId: 'combinedcoin', baseAssetName: 'ethereum' },
+          { assetId: '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9', baseAssetName: 'ethereum' }, // aave - built in token
+        ])
+
+        const waynecoinToken = {
+          ...waynecoin,
+          displayName: waynecoin.properName,
+          displayTicker: waynecoin.properTicker,
+        }
+
+        const aave = assetsModule.getAsset('aave')
+        const bitcoin = assetsModule.getAsset('bitcoin')
+
+        expect(tokens).toHaveLength(3)
+        expect(tokens[0]).toEqual(aave)
+        expect(tokens[1]).toEqual(bitcoin.api.createToken(waynecoinToken))
+        // Comparing tokens here makes Jest complain even though they serialize to the same string
+        expect(tokens[2]).toMatchObject({ name: 'combinedcoin', assetId: 'combinedcoin' })
+
+        // Should cache the token
+        const requestCount = fetch.mock.calls.length
+        const token = await assetsModule.fetchToken('foobar', 'bitcoin')
+
+        expect(token).toEqual(waynecoinToken)
+        expect(fetch.mock.calls.length).toEqual(requestCount)
       })
     })
   })

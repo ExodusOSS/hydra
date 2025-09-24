@@ -1,5 +1,6 @@
-import { bitcoin } from './_fixtures.js'
 import { strict as assert } from 'assert'
+
+import { bitcoin } from './_fixtures.js'
 
 test('floor()', function () {
   const b1 = bitcoin.BTC(1)

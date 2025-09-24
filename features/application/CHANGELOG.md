@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.12.0...@exodus/application@2.12.1) (2025-09-15)
+
+### Bug Fixes
+
+- fix: resolve timeout issues in reporting API (#13822)
+
+## [2.12.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.11.0...@exodus/application@2.12.0) (2025-09-05)
+
+### Features
+
+- feat: update application module according to new wallet.create and import data structure (#13767)
+
+## [2.11.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.10.0...@exodus/application@2.11.0) (2025-08-12)
+
+### Features
+
+- feat: add isDeleting flag to application.willFireClearHook in eventlog (#13541)
+
+## [2.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.9.1...@exodus/application@2.10.0) (2025-07-18)
+
+### Features
+
+- feat: lifecycle hook priority (#13200)
+
 ## [2.9.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.9.0...@exodus/application@2.9.1) (2025-06-27)
 
 ### Bug Fixes

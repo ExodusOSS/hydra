@@ -1,7 +1,7 @@
 {
   "name": "@exodus/remote-config",
   "type": "module",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "Module to provide unified access remote config",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -23,7 +23,7 @@
   ],
   "main": "lib/index.js",
   "scripts": {
-    "build": "run -T tsc --build tsconfig.build.json",
+    "build": "run -T tsc -p tsconfig.build.json",
     "clean": "run -T tsc --build --clean",
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",

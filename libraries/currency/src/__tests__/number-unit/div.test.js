@@ -1,5 +1,6 @@
-import { bitcoin, ethereum } from '../_fixtures.js'
 import assert from 'assert'
+
+import { bitcoin, ethereum } from '../_fixtures.js'
 
 test('div() should return the division', function () {
   expect(bitcoin.BTC(3).div(2).toString()).toBe('1.5 BTC')

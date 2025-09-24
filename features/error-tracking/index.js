@@ -10,6 +10,7 @@ const defaultConfig = {
   maxErrorsCount: 100,
   sentryConfig: undefined,
   remoteErrorTrackingABExperimentId: 'sentry',
+  remoteErrorTrackingFundedWalletsABExperimentId: 'sentry-funded',
   trackWalletsCreatedAfter: new Date('2025-07-21'),
   trackFundedWallets: false,
 }
@@ -18,6 +19,7 @@ const configSchema = {
   maxErrorsCount: (value) => typeof value === 'number' && value > 0 && value <= 9999,
   sentryConfig: '?Object',
   remoteErrorTrackingABExperimentId: '?String',
+  remoteErrorTrackingFundedWalletsABExperimentId: '?String',
   trackWalletsCreatedAfter: '?Date',
   trackFundedWallets: '?Boolean',
 }
@@ -29,6 +31,7 @@ const errorTracking = (config = Object.create(null)) => {
     maxErrorsCount,
     sentryConfig,
     remoteErrorTrackingABExperimentId,
+    remoteErrorTrackingFundedWalletsABExperimentId,
     trackWalletsCreatedAfter,
     trackFundedWallets,
   } = typeforce.parse(configSchema, config, true)
@@ -63,6 +66,7 @@ const errorTracking = (config = Object.create(null)) => {
         definition: errorTrackingPluginDefinition,
         config: {
           remoteErrorTrackingABExperimentId,
+          remoteErrorTrackingFundedWalletsABExperimentId,
           trackWalletsCreatedAfter,
           trackFundedWallets,
         },

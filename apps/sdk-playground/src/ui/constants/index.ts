@@ -26,8 +26,22 @@ export function getFeature(namespace: string) {
 
 export const NAMESPACES = [...new Set(Object.keys(exodus))]
   .filter((namespace) => {
+    // Filter out excluded namespaces
+    if (EXCLUDE.has(namespace)) {
+      return false
+    }
+
+    // Filter out namespaces that have no methods
+    const namespaceApi = API_SPEC[namespace]
+    if (!namespaceApi?.value || Object.keys(namespaceApi.value).length === 0) {
+      // No methods available, don't show in sidebar
+      return false
+    }
+
+    // Filter out namespaces that are not public or have no metadata
     const feature = getFeature(namespace)
-    return (!METADATA[feature] || METADATA[feature].public) && !EXCLUDE.has(namespace)
+    const featureMetadata = METADATA[feature]
+    return !(featureMetadata && !featureMetadata.public)
   })
   .sort((a, b) => a.localeCompare(b))
 

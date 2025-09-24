@@ -1,4 +1,4 @@
-import { getAllowlist, isSafe } from '@exodus/safe-string'
+import { getAllowlist, parseString } from '@exodus/safe-string'
 import assert from 'minimalistic-assert'
 import parseStackTraceNatively, { stackFramesToString } from './stack.js'
 import type { Frame } from './types.js'
@@ -22,6 +22,7 @@ const SAFE_NAMES_SET = makeReadonlySet([
   'UnknownError',
   'SafeErrorFailedToParse',
   'TimeoutError',
+  'SyntaxError',
 ])
 
 function isSafeName(value: string): value is SafeName {
@@ -40,10 +41,6 @@ type StaticAllowlistString = string & { __branded_type: 'StaticAllowlistString' 
 const staticAllowlist = getAllowlist() as StaticAllowlistString[]
 
 type RuntimeSafeString = string & { __branded_type: 'RuntimeSafeString' }
-
-function getSafeString(str: string): RuntimeSafeString | undefined {
-  if (isSafe(str)) return str as RuntimeSafeString
-}
 
 export type SafeName = ReadonlySetValues<typeof SAFE_NAMES_SET>
 export type SafeCode = string & { __branded_type: 'SafeCodeOutcome' }
@@ -71,7 +68,7 @@ export class SafeError {
       const hintCandidates = [hint, message].filter((str) => typeof str === 'string')
       safeHint =
         // chicken sacrifice to TypeScript, otherwise would be hintCandidates.find((str) => isSafe(str))
-        hintCandidates.map((str) => getSafeString(str)).find(Boolean) ||
+        hintCandidates.map((str) => parseString(str) as RuntimeSafeString).find(Boolean) ||
         staticAllowlist.find((safePrefix) =>
           hintCandidates.some((str) => str.startsWith(safePrefix))
         ) ||

@@ -1,31 +1,37 @@
 {
   "name": "@exodus/modular-redux",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "Exodus modular Redux enhancer",
   "author": "Exodus Movement, Inc.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "main": "src/index.js",
-  "homepage": "https://github.com/ExodusMovement/modular-redux#readme",
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/modular-redux",
   "files": [
-    "src"
+    "src",
+    "CHANGELOG.md"
   ],
   "dependencies": {
-    "assert": "1.1.1"
+    "minimalistic-assert": "^1.0.1"
   },
   "peerDependencies": {
     "redux": "*",
     "redux-watch": "*"
   },
+  "scripts": {
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix"
+  },
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Amodular-redux"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
-    "@exodus/eslint-config": "^0.2.6",
-    "@exodus/eslint-plugin-react-hooks": "^2.2.0-exodus2",
-    "@exodus/prettier": "^0.2.5",
-    "eslint": "^7.32.0",
-    "eslint-plugin-react": "^7.25.1",
-    "prettier": "^2.3.2"
-  },
-  "eslintConfig": {
-    "extends": "@exodus/eslint-config/react"
-  },
-  "prettier": "@exodus/prettier"
+    "@types/minimalistic-assert": "^1.0.1"
+  }
 }

@@ -22,7 +22,7 @@
     "!**/*.test.js"
   ],
   "scripts": {
-    "build": "run -T tsc --build tsconfig.build.json",
+    "build": "run -T tsc -p tsconfig.build.json",
     "clean": "run -T tsc --build --clean tsconfig.build.json",
     "watch": "run -T tsc --watch tsconfig.build.json",
     "lint": "run -T eslint .",

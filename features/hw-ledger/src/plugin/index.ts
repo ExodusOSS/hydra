@@ -29,7 +29,7 @@ const createHardwareWalletLedgerPlugin = ({
 
   const stop = () => {
     observers.forEach((observer) => observer.unregister())
-    ledgerDiscovery.stop()
+    void ledgerDiscovery.stop()
   }
 
   const onUnlock = () => {

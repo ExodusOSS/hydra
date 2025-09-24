@@ -59,20 +59,22 @@ const createTransactions = ({
   assetClientInterface,
   assetsModule,
   wallet,
-  walletAccounts,
+  walletAccountsAtom,
   transactionSigner,
 }) => {
-  const createUnsignedTx = (data) => {
+  const createUnsignedTx = async (data) => {
     const { asset, walletAccount } = data
 
     if (!asset.baseAsset.api?.createUnsignedTx) {
       throw new Error(`Cannot make UnsignedTransaction for '${asset.name}' yet`)
     }
 
+    const walletAccountsData = await walletAccountsAtom.get()
+    const accountIndex = walletAccountsData[walletAccount]!.index
     const unsignedTx = asset.baseAsset.api.createUnsignedTx(data)
     unsignedTx.txMeta = {
       walletAccount,
-      accountIndex: walletAccounts.get(walletAccount).index,
+      accountIndex,
       ...unsignedTx.txMeta,
     }
 
@@ -147,7 +149,7 @@ const transactionsDefinition = {
     'assetClientInterface',
     'assetsModule',
     'wallet',
-    'walletAccounts',
+    'walletAccountsAtom',
     'transactionSigner',
   ],
 } as const satisfies Definition

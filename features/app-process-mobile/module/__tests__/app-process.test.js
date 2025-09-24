@@ -2,40 +2,10 @@ import { createInMemoryAtom, waitUntil } from '@exodus/atoms'
 import { createNoopLogger } from '@exodus/logger'
 import { AppState } from 'react-native'
 
-import appProcessDefinition from '../app-process'
+AppState.currentState = 'background' // start from background, this was enforced in mock
 
+const { default: appProcessDefinition } = await import('../app-process.js')
 const { factory: createAppProcess } = appProcessDefinition
-
-jest.mock('@exodus/netinfo', () => ({
-  default: {
-    addEventListener: jest.fn(),
-    getConnectionInfo: jest.fn().mockResolvedValue({ type: 'none' }),
-  },
-  __esModule: true,
-}))
-
-jest.mock('react-native', () => {
-  const { EventEmitter } = jest.requireActual('events')
-
-  const AppState = new EventEmitter()
-  AppState.currentState = 'background'
-  AppState.addEventListener = (event, handler) => {
-    return AppState.on(event, handler)
-  }
-
-  const originalEmit = AppState.emit.bind(AppState)
-  AppState.emit = (event, mode) => {
-    AppState.currentState = mode
-    return originalEmit(event, mode)
-  }
-
-  return {
-    Platform: {
-      OS: 'ios',
-    },
-    AppState,
-  }
-})
 
 describe('AppProcess', () => {
   /** @type {import('../app-process').AppProcess} */
@@ -58,6 +28,12 @@ describe('AppProcess', () => {
       },
     })
   }
+
+  afterEach(() => {
+    if (appProcess) {
+      appProcess.stop()
+    }
+  })
 
   const emitAppState = async (mode) => {
     AppState.emit('change', mode)

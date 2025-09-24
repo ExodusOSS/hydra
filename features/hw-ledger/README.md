@@ -1,29 +1,34 @@
 # @exodus/hw-ledger
 
-```mermaid
-flowchart LR
-    AA[TransportFactory] --> A
-    A[LedgerDiscovery] -->|"list()"| B(HardwareWalletDescriptor)
-    B --> |"get()"| C(LedgerDevice)
-    C --> |"getAddress()"| D{Pick by \nasset}
-    D -->|bitcoin| E[BitcoinHandlers]
-    D -->|ethereum| F[EthereumHandlers]
-    D -->|solana| G[SolanaHandlers]
+This Exodus SDK feature handles all hardware wallet actions that are specific to Ledger and implements and [interface](../../libraries/hw-common/src/types.ts) which is abstracted for all hardware wallet devices.
+
+## Install
+
+```sh
+yarn add @exodus/hw-ledger
 ```
 
 ## Usage
 
+This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/development/using-the-sdk.md).
+
+### API Side
+
 ```typescript
-import createLedgerDiscover from '@exodus/hw-ledger'
+import hardwareWalletLedger from '@exodus/hw-ledger'
 import Transport from '@ledgerhq/hw-transport-node-speculos'
 
-// Initialize transport factories depending on the platform
-const ledgerDiscovery = createLedgerDiscover({
-  logger,
-  transports: {
-    tcp: Transport, // emulator transport over tcp
-  },
-})
+// Add a transportsFactories adapter to hold
+// the factory funcctions that are specific to the platform.
+const transportsFactories = {
+  tcp: Transport,
+}
+
+// Create IoC
+const ioc = createIocContainer({ adapters: { transportsFactories }, config, debug })
+ioc.use(hardwareWalletLedger({ bluetoothScannerTimeout: 60 * 1000 }))
+
+// Retrieve the ledgerDiscovery through dependency injection
 
 const ledgerDescriptors = await ledgerDiscovery.list()
 // [
@@ -51,6 +56,25 @@ if (ledgerDevice) {
   logger.log(`bitcoin address is ${address}`)
   // bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr
 }
+```
+
+### UI Side
+
+This package is not ment to be used directly through the UI. See [using the @exodus/hardware-wallets](../hardware-wallets/README.md) for UI usage.
+
+## Architecture
+
+The discovery provides descriptors which can be used to retrieve device handles.
+
+```mermaid
+flowchart LR
+    AA[TransportFactory] --> A
+    A[LedgerDiscovery] -->|"list()"| B(HardwareWalletDescriptor)
+    B --> |"get()"| C(LedgerDevice)
+    C --> |"getAddress()"| D{Pick by \nasset}
+    D -->|bitcoin| E[BitcoinHandlers]
+    D -->|ethereum| F[EthereumHandlers]
+    D -->|solana| G[SolanaHandlers]
 ```
 
 ## Development

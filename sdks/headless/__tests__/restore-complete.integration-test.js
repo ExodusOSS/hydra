@@ -34,14 +34,28 @@ describe('restore-complete', () => {
       listener(e.payload)
     })
 
+    const restoringAssetsEventOne = expectEvent({
+      port,
+      event: 'restoringAssets',
+      payload: {},
+    })
+
+    const restoringAssetsEventTwo = expectEvent({
+      port,
+      event: 'restoringAssets',
+      payload: {
+        ethereum: true,
+        bitcoin: true,
+      },
+    })
+
     await exodus.application.start()
     await exodus.application.load()
     await exodus.application.import({ passphrase, mnemonic })
     await exodus.application.unlock({ passphrase })
 
-    expect(listener).toBeCalledTimes(2)
-    expect(listener.mock.calls[0][0]).toEqual({})
-    expect(listener.mock.calls[1][0]).toEqual({ ethereum: true, bitcoin: true })
+    await restoringAssetsEventOne
+    await restoringAssetsEventTwo
 
     const expectBitcoinRestored = expectEvent({
       port,

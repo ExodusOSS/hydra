@@ -52,7 +52,6 @@ const walletAccounts = (
       {
         definition: walletAccountsInternalAtomDefinition,
         storage: { namespace: 'walletAccounts' },
-        config: { defaultLabel, defaultColor },
       },
       {
         definition: walletAccountsAtomDefinition,
@@ -71,6 +70,7 @@ const walletAccounts = (
         definition: walletAccountsLifecyclePluginDefinition,
         config: {
           defaultLabel,
+          defaultColor,
         },
       },
       {

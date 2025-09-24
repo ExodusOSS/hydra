@@ -1,6 +1,6 @@
 {
   "name": "@exodus/keychain",
-  "version": "7.10.0",
+  "version": "7.11.1",
   "type": "module",
   "description": "A module designed to work more securely with private key material",
   "author": "Exodus Movement, Inc.",
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@exodus/basic-utils": "^3.0.1",
-    "@exodus/bip32": "^3.3.0",
+    "@exodus/bip32": "^4.0.2",
     "@exodus/crypto": "^1.0.0-rc.26",
     "@exodus/key-identifier": "^1.4.0",
     "@exodus/key-utils": "^3.7.0",
@@ -43,8 +43,10 @@
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {
+    "@exodus/bip39": "workspace:^",
+    "@exodus/cardano-lib": "^3.5.0",
+    "@exodus/ethereum-lib": "^5.13.0",
     "@exodus/key-ids": "^1.0.0",
-    "bip39": "2.6.0",
     "eslint": "^8.44.0",
     "events": "^3.3.0"
   },

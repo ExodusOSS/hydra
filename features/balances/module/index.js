@@ -1,3 +1,4 @@
+import { safeString } from '@exodus/safe-string'
 import { isNumberUnit } from '@exodus/currency'
 import { TxSet } from '@exodus/models'
 import lodash from 'lodash'
@@ -7,12 +8,20 @@ import makeConcurrent from 'make-concurrent'
 import { processAssetBalances, validateBalances } from './balances-utils.js'
 import defaultConfig from '../default-config.js'
 
-const { cloneDeepWith, isEmpty, merge, zipObject } = lodash
+const { isEmpty, merge, zipObject } = lodash
 
-const cloneBalances = (balances) =>
-  cloneDeepWith(balances, (val) => {
-    if (isNumberUnit(val)) return val
-  })
+export const cloneBalances = (balances) => {
+  if (isNumberUnit(balances)) {
+    return balances
+  }
+
+  const cloned = Object.create(Object.getPrototypeOf(balances))
+  for (const key in balances) {
+    cloned[key] = cloneBalances(balances[key])
+  }
+
+  return cloned
+}
 
 const zipNonNull = (keys, values) =>
   zipObject(
@@ -34,10 +43,11 @@ class Balances {
   #balancesAtom
   #accountStatesAtom
   #txLogsAtom
+  #feeDataAtom
   #enabledWalletAccountsAtom
   #loaded = false
   #subscriptions = []
-
+  #errorTracking
   constructor({
     assetsModule,
     availableAssetNamesAtom,
@@ -47,6 +57,8 @@ class Balances {
     balancesAtom,
     txLogsAtom,
     accountStatesAtom,
+    feeDataAtom,
+    errorTracking,
   }) {
     this.#logger = logger
     this.#assetsModule = assetsModule
@@ -56,7 +68,9 @@ class Balances {
     this.#balancesAtom = balancesAtom
     this.#accountStatesAtom = accountStatesAtom
     this.#txLogsAtom = txLogsAtom
+    this.#feeDataAtom = feeDataAtom
     this.#enabledWalletAccountsAtom = enabledWalletAccountsAtom
+    this.#errorTracking = errorTracking
 
     const shareQueue =
       (fn) =>
@@ -67,22 +81,26 @@ class Balances {
       }
 
     const swallowErrors =
-      (fn) =>
+      (fn, method) =>
       async (...args) => {
         try {
           return await fn(...args)
         } catch (error) {
-          this.#logger.error(error)
+          this.#errorTracking.track({ error: new Error(method, { cause: error }) })
         }
       }
 
     // these share a queue
     this.#updateAssetSource = shareQueue(this.#updateAssetSource)
     this.#handleTxLogUpdate = shareQueue(this.#handleTxLogUpdate)
+    this.#handleFeeDataUpdate = shareQueue(this.#handleFeeDataUpdate)
     this.#recompute = shareQueue(this.#recompute)
     this.#onAssetsChanged = shareQueue(this.#onAssetsChanged)
-    this.#getBalancesForAssetSource = swallowErrors(this.#getBalancesForAssetSource)
-    this.#setWalletAccounts = swallowErrors(this.#setWalletAccounts)
+    this.#getBalancesForAssetSource = swallowErrors(
+      this.#getBalancesForAssetSource,
+      safeString`getBalancesForAssetSource`
+    )
+    this.#setWalletAccounts = swallowErrors(this.#setWalletAccounts, safeString`setWalletAccounts`)
   }
 
   load = async () => {
@@ -103,6 +121,17 @@ class Balances {
           this.#handleTxLogUpdate({ walletAccount, assetName, txLog })
         )
       ),
+      this.#feeDataAtom.observe((changes) => {
+        Object.entries(changes).forEach(([assetName, feeData]) => {
+          const asset = this.#getAsset(assetName).baseAsset
+          if (asset.api?.features?.balancesRequireFeeData) {
+            this.#walletAccounts.forEach((walletAccount) => {
+              return this.#handleFeeDataUpdate({ walletAccount, assetName, feeData })
+            })
+          }
+        })
+      }),
+
       getChanges(this.#availableAssetNamesAtom).observe(({ previous = [], current }) => {
         this.#availableAssetNames = current
         const added = difference(current, previous)
@@ -135,6 +164,15 @@ class Balances {
     return this.#updateAssetSource(opts)
   }
 
+  #handleFeeDataUpdate = (opts) => {
+    if (!this.#ready) {
+      this.#logger.log('ignore update from fee-data event.', { isReady: this.#ready })
+      return
+    }
+
+    return this.#updateAssetSource(opts)
+  }
+
   #pushIntoSharedQueue = makeConcurrent((fn) => fn(), { concurrency: 1 })
 
   #reset = ({ walletAccounts = this.#walletAccounts } = {}) => {
@@ -154,7 +192,12 @@ class Balances {
   // It adds both old and new balances to the response.
   // Ideally, selectors should start using the new ones (total, spendable, etc)
 
-  #getBalancesFromBlockchainMetadata = ({ assetNames, accountState, txLogsByAssetName }) => {
+  #getBalancesFromBlockchainMetadata = ({
+    assetNames,
+    accountState,
+    feeData,
+    txLogsByAssetName,
+  }) => {
     // in the future accountState may have all the balances and we won't need to rely on txLog
     // for now, accountState-based balance has both the baseAsset and token balances while txLog is per asset/token
     const getAssetBalances = (assetName) => {
@@ -163,7 +206,7 @@ class Balances {
 
       const zero = asset.currency.ZERO
 
-      const apiBalances = asset.api.getBalances({ asset, accountState, txLog })
+      const apiBalances = asset.api.getBalances({ asset, accountState, txLog, feeData })
       const balances = processAssetBalances({
         balanceFieldsConfig: this.#balanceFieldsConfig,
         balances: apiBalances || Object.create(null),
@@ -251,22 +294,31 @@ class Balances {
   #loadBlockchainMetadataForBalance = async ({
     assetName,
     walletAccount,
+    feeData: providedFeeData, // it's optional, undefined when balancesRequireFeeData is disabled
     accountState: providedAccountState = null,
     txLogsByAssetName: providedTxLogsByAssetName = {},
   }) => {
     const { value: txLogsByAssetSource } = await this.#txLogsAtom.get()
     let accountState = providedAccountState
+
+    const baseAsset = this.#getAsset(assetName).baseAsset
+
     if (!accountState) {
-      const asset = this.#getAsset(assetName).baseAsset
-      const assetNameToUse = asset.name
+      const assetNameToUse = baseAsset.name
       const { value } = await this.#accountStatesAtom.get()
       const cached = value[walletAccount]?.[assetNameToUse]
       if (cached) {
         accountState = cached
       } else {
-        const AccountState = asset.api?.createAccountState?.()
+        const AccountState = baseAsset.api?.createAccountState?.()
         accountState = AccountState?.create()
       }
+    }
+
+    let feeData = providedFeeData
+    if (!feeData && baseAsset.api?.features?.balancesRequireFeeData) {
+      const fees = await this.#feeDataAtom.get()
+      feeData = fees[baseAsset.name]
     }
 
     const assetNames = this.#getRelatedAssetNames(assetName)
@@ -281,6 +333,7 @@ class Balances {
     )
 
     return {
+      feeData,
       accountState,
       txLogsByAssetName,
     }
@@ -291,6 +344,7 @@ class Balances {
     walletAccount,
     accountState: providedAccountState,
     txLog: providedTxLog,
+    feeData: providedFeeData,
   }) => {
     if (!this.#isSupportedAsset(assetName)) return
 
@@ -299,20 +353,23 @@ class Balances {
       return
     }
 
-    const { accountState, txLogsByAssetName } = await this.#loadBlockchainMetadataForBalance({
-      assetName,
-      walletAccount,
-      accountState: providedAccountState,
-      txLogsByAssetName: {
-        [assetName]: providedTxLog,
-      },
-    })
+    const { accountState, txLogsByAssetName, feeData } =
+      await this.#loadBlockchainMetadataForBalance({
+        assetName,
+        walletAccount,
+        feeData: providedFeeData,
+        accountState: providedAccountState,
+        txLogsByAssetName: {
+          [assetName]: providedTxLog,
+        },
+      })
 
     const accountBalances = this.#balances[walletAccount]
     const newBalances = this.#getBalancesFromBlockchainMetadata({
       assetNames: this.#getRelatedAssetNames(assetName),
       accountState,
       txLogsByAssetName,
+      feeData,
     })
 
     const changes = Object.create(null)
@@ -375,6 +432,8 @@ const balancesDefinition = {
     'balancesAtom',
     'txLogsAtom',
     'accountStatesAtom',
+    'feeDataAtom',
+    'errorTracking',
   ],
   public: true,
 }

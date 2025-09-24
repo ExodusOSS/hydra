@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.4.1...@exodus/auth-mobile@6.5.0) (2025-07-18)
+
+### Features
+
+- feat: lifecycle hook priority (#13200)
+
 ## [6.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.4.0...@exodus/auth-mobile@6.4.1) (2025-06-27)
 
 ### Bug Fixes

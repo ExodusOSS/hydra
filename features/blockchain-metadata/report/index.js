@@ -90,6 +90,7 @@ const createblockchainMetadataReport = ({
         sent: z
           .array(z.object({ address: z.string().nullish(), amount: z.string().nullish() }))
           .nullish(),
+        rbfEnabled: z.boolean().nullish(),
       })
       .partial()
       .nullish()

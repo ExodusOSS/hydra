@@ -22,6 +22,8 @@ const jsonTreeTheme = {
   base0F: '#a16946',
 }
 
-export default function JSONTree({ data }) {
-  return <ReactJSONTree data={data} hideRoot theme={jsonTreeTheme} />
+export default function JSONTree({ data, postprocessValue }) {
+  return (
+    <ReactJSONTree data={data} hideRoot theme={jsonTreeTheme} postprocessValue={postprocessValue} />
+  )
 }

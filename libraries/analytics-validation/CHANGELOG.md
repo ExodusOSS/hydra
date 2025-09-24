@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.59.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.58.1...@exodus/analytics-validation@2.59.0) (2025-09-11)
+
+### Features
+
+- feat: trx activation tap event (#13808)
+
+## [2.58.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.58.0...@exodus/analytics-validation@2.58.1) (2025-08-08)
+
+### Bug Fixes
+
+- fix: os version too strict (#13518)
+
 ## [2.58.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.57.0...@exodus/analytics-validation@2.58.0) (2025-06-11)
 
 ### Features

@@ -1,6 +1,7 @@
-import { createInMemoryAtom } from '@exodus/atoms'
 import assetsBase from '@exodus/assets-base'
+import { createInMemoryAtom } from '@exodus/atoms'
 import { when } from 'jest-when'
+
 import { availableAssetNamesWithoutParentCombinedAtomDefinition } from '../index.js'
 
 describe('availableAssetNamesWithoutParentCombinedAtom', () => {

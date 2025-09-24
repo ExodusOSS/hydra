@@ -1,5 +1,5 @@
 import createAvailableAssetNamesWithoutParentCombinedAtom from './available-asset-names-without-parent-combined.js'
-import createAvailableAssetNamesAtom from './available-asset-names.js'
+import createAvailableAssetNamesAtom from './available-asset-names/factory.js'
 import createAvailableAssetAtom from './available-assets.js'
 
 export const availableAssetNamesAtomDefinition = {

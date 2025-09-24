@@ -6,6 +6,8 @@ import { isKeyIdentifierLike } from './util.js'
 
 type AddressMeta = {
   path: string
+  walletAccount?: string
+  multisigDataIndex?: number
   [key: string]: any
 }
 

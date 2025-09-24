@@ -1,37 +1,19 @@
 import { createAtomObserver } from '@exodus/atoms'
 
-const createRatesLifecyclePlugin = ({
-  ratesMonitor,
-  port,
-  ratesAtom,
-  ratesSimulationEnabledAtom,
-}) => {
-  const ratesObserver = createAtomObserver({ port, atom: ratesAtom, event: 'rates' })
-  const simulationEnabledObserver = createAtomObserver({
-    port,
-    atom: ratesSimulationEnabledAtom,
-    event: 'ratesSimulationEnabled',
-  })
-
-  ratesObserver.register()
-  simulationEnabledObserver.register()
-
+const createRatesLifecyclePlugin = ({ ratesMonitor, port, ratesAtom }) => {
+  const observer = createAtomObserver({ port, atom: ratesAtom, event: 'rates' })
+  observer.register()
   const onLoad = () => {
-    ratesMonitor.disableSimulation()
     ratesMonitor.start()
-    ratesObserver.start()
-    simulationEnabledObserver.start()
+    observer.start()
   }
 
   const onStop = () => {
-    ratesObserver.unregister()
-    simulationEnabledObserver.unregister()
+    observer.unregister()
     ratesMonitor.stop()
   }
 
-  const onClear = () => {
-    ratesMonitor.disableSimulation()
-  }
+  const onClear = async () => {}
 
   return { onLoad, onStop, onClear }
 }
@@ -40,7 +22,7 @@ const ratesLifecyclePluginDefinition = {
   id: 'ratesLifecyclePlugin',
   type: 'plugin',
   factory: createRatesLifecyclePlugin,
-  dependencies: ['ratesMonitor', 'port', 'ratesAtom', 'ratesSimulationEnabledAtom'],
+  dependencies: ['ratesMonitor', 'port', 'ratesAtom'],
   public: true,
 }
 

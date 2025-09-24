@@ -1,4 +1,4 @@
-import { bitcoin, usdcoin, usdcoinSolana, usdcoinAlgorand, setup } from '../utils.js'
+import { bitcoin, setup, usdcoin, usdcoinAlgorand, usdcoinSolana } from '../utils.js'
 
 describe('getHasAssetsOnOtherChains', () => {
   it('should return true if there are related assets on other chains', () => {

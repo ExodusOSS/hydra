@@ -5,6 +5,7 @@ type AssetSourceData<T> = { [walletAccount: string]: { [assetName: string]: T } 
 
 export interface BlockchainMetadataApi {
   getTxLog(params: AssetSource): Promise<TxSet>
+  addTxs(params: { txs: Tx[] } & AssetSource): Promise<void>
   updateTxs(params: { txs: Tx[] } & AssetSource): Promise<void>
   removeTxs(params: { txs: Tx[] } & AssetSource): Promise<void>
   overwriteTxs(params: { txs: Tx[]; notifyReceivedTxs?: boolean } & AssetSource): Promise<void>

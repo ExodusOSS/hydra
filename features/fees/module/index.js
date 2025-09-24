@@ -29,7 +29,7 @@ function createFees({
   txLogsAtom,
   assetsModule,
   addressProvider,
-  walletAccounts,
+  walletAccountsAtom,
   logger,
 }) {
   return {
@@ -49,7 +49,8 @@ function createFees({
         return notLoadedYetDefault
       }
 
-      const walletAccountInstance = walletAccounts.get(walletAccount)
+      const walletAccountsData = await walletAccountsAtom.get()
+      const walletAccountInstance = walletAccountsData[walletAccount]
 
       async function resolveFromAddress() {
         if (providedFromAddress) {
@@ -139,7 +140,7 @@ const feesModuleDefinition = {
     'txLogsAtom',
     'assetsModule',
     'addressProvider',
-    'walletAccounts',
+    'walletAccountsAtom',
     'logger',
   ],
   public: true,

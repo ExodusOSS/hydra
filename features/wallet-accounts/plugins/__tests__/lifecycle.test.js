@@ -67,6 +67,7 @@ describe('walletAccounts lifecycle plugin', () => {
       update: jest.fn(),
       create: jest.fn(),
       createMany: jest.fn(),
+      getAll: jest.fn(),
     }
 
     wallet = {
@@ -126,12 +127,6 @@ describe('walletAccounts lifecycle plugin', () => {
     expect(multipleWalletAccountsEnabledAtomObserver.start).toHaveBeenCalled()
   })
 
-  test('should load wallet accounts on load if wallet unlocked', async () => {
-    await plugin.onLoad({ isLocked: false })
-
-    expect(walletAccounts.load).toHaveBeenCalledTimes(1)
-  })
-
   test('should not load wallet accounts on load if wallet locked', async () => {
     await plugin.onLoad({ isLocked: true })
 
@@ -156,7 +151,10 @@ describe('walletAccounts lifecycle plugin', () => {
   test('should reset active wallet account if current one is disabled', async () => {
     await activeWalletAccountAtom.set('exodus_1')
 
-    when(walletAccounts.get).calledWith('exodus_1').mockReturnValue({ enabled: false })
+    when(walletAccounts.get).calledWith('exodus_1').mockResolvedValue({ enabled: false })
+    when(walletAccounts.getAll).mockResolvedValue({
+      exodus_0: new WalletAccount({ ...WalletAccount.DEFAULT, seedId: 'abc' }),
+    })
 
     await plugin.onUnlock()
 
@@ -188,56 +186,54 @@ describe('walletAccounts lifecycle plugin', () => {
 
   test('updates seedId and compatibilityMode after import in onUnlock', async () => {
     await plugin.onImport({ seedId: '42', compatibilityMode: 'wayne' })
-
-    expect(walletAccounts.update).not.toHaveBeenCalled()
-
     await plugin.onUnlock()
 
-    expect(walletAccounts.load).toHaveBeenCalledWith({
-      seedId: '42',
-      compatibilityMode: 'wayne',
-    })
+    expect(walletAccounts.createMany).toHaveBeenCalledWith(
+      [
+        {
+          color: undefined,
+          compatibilityMode: 'wayne',
+          label: 'configDefinedLabel',
+          seedId: '42',
+          source: 'exodus',
+        },
+      ],
+      { useOptimisticWrite: true }
+    )
+
+    await plugin.onUnlock()
   })
 
   test('updates seedId after create in onUnlock', async () => {
     await plugin.onCreate({ seedId: '42' })
-
-    expect(walletAccounts.update).not.toHaveBeenCalled()
+    await plugin.onUnlock()
+    expect(walletAccounts.createMany).toHaveBeenCalledWith(
+      [
+        {
+          color: undefined,
+          compatibilityMode: undefined,
+          label: 'configDefinedLabel',
+          seedId: '42',
+          source: 'exodus',
+        },
+      ],
+      { useOptimisticWrite: true }
+    )
 
     await plugin.onUnlock()
-
-    expect(walletAccounts.load).toHaveBeenCalledWith({
-      seedId: '42',
-    })
   })
 
   test('does not update seedId if already present', async () => {
     await plugin.onImport({ seedId: '42' })
 
     expect(walletAccounts.update).not.toHaveBeenCalled()
-    walletAccounts.get.mockReturnValue(
+    walletAccounts.get.mockResolvedValue(
       new WalletAccount({ ...WalletAccount.DEFAULT, seedId: 'abc' })
     )
 
     await plugin.onUnlock()
 
     expect(walletAccounts.update).not.toHaveBeenCalled()
-  })
-
-  test('does update compatibilityMode even if seedId already present', async () => {
-    await plugin.onImport({ seedId: '42', compatibilityMode: 'wayne' })
-
-    expect(walletAccounts.update).not.toHaveBeenCalled()
-    walletAccounts.get.mockReturnValue(
-      new WalletAccount({ ...WalletAccount.DEFAULT, seedId: '42' })
-    )
-
-    await plugin.onUnlock()
-
-    expect(walletAccounts.load).toHaveBeenCalledWith({
-      seedId: '42',
-      compatibilityMode: 'wayne',
-    })
   })
 
   test('adds the default wallet account when a new seed is added', async () => {

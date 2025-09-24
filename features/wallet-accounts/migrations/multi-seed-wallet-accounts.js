@@ -10,11 +10,15 @@ const createMultiSeedWalletAccountsMigration = async ({ adapters, modules, confi
   const flagsStorage = adapters.unsafeStorage.namespace('flags')
   const compatibilityMode = await flagsStorage.get('compatibilityMode')
 
-  const walletAccounts = (await storage.get('walletAccounts')) ?? {
-    [WalletAccount.DEFAULT_NAME]: {
-      ...WalletAccount.DEFAULT,
-      label: config?.walletAccountsAtom?.defaultLabel || WalletAccount.DEFAULT.label,
-    },
+  const walletAccounts = await storage.get('walletAccounts')
+
+  const onFinish = async () => {
+    await flagsStorage.delete('compatibilityMode')
+  }
+
+  if (!walletAccounts) {
+    await onFinish()
+    return
   }
 
   const migrated = mapValues(walletAccounts, (walletAccount) => {
@@ -30,7 +34,7 @@ const createMultiSeedWalletAccountsMigration = async ({ adapters, modules, confi
   })
 
   await storage.set('walletAccounts', migrated)
-  await flagsStorage.delete('compatibilityMode')
+  await onFinish()
 }
 
 const multiSeedMigration = {

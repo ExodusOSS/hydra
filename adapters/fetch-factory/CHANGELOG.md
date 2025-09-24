@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1](https://github.com/ExodusMovement/hydra/compare/@exodus/fetch-factory@2.3.0...@exodus/fetch-factory@2.3.1) (2025-08-20)
+
+### Bug Fixes
+
+- fix: handle request object (#13627)
+
 ## [2.3.0](https://github.com/ExodusMovement/hydra/compare/@exodus/fetch-factory@2.2.6...@exodus/fetch-factory@2.3.0) (2025-05-23)
 
 ### Features

@@ -13,6 +13,11 @@ export default function conversion(num1, num2) {
       const newNumber = num1.isZero
         ? num1.unitType.ZERO._number
         : normalizeNum._number.mul(num2._number).div(num1._number) // no division by 0, that would crash
+
+      if (!Object.prototype.hasOwnProperty.call(ut2, num2.unitName)) {
+        throw new Error(`"${num2.unitName}" does not exist on UnitType`)
+      }
+
       return ut2[num2.unitName](newNumber).to(num2.unitName)
     }
 
@@ -22,6 +27,11 @@ export default function conversion(num1, num2) {
       const newNumber = num2.isZero
         ? num2.unitType.ZERO._number
         : normalizeNum._number.mul(num1._number).div(num2._number) // no division by 0, that would crash
+
+      if (!Object.prototype.hasOwnProperty.call(ut1, num1.unitName)) {
+        throw new Error(`"${num1.unitName}" does not exist on UnitType`)
+      }
+
       return ut1[num1.unitName](newNumber).to(num1.unitName)
     }
 

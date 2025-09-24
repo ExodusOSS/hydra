@@ -9,4 +9,6 @@ export default async function initialize(exodus: ExodusApi) {
     await exodus.application.import({ mnemonic: DEFAULT_MNEMONIC, passphrase: DEFAULT_PASSPHRASE })
     await exodus.application.unlock({ passphrase: DEFAULT_PASSPHRASE })
   }
+
+  await exodus.walletAccounts.create({ label: 'Savings', index: 1, color: '#008000' } as any)
 }

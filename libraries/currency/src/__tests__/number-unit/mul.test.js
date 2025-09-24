@@ -1,5 +1,6 @@
-import { bitcoin, ethereum } from '../_fixtures.js'
 import assert from 'assert'
+
+import { bitcoin, ethereum } from '../_fixtures.js'
 
 test('mul() should return the product', function () {
   expect(bitcoin.BTC(3).mul(2).toString()).toBe('6 BTC')

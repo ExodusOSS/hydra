@@ -81,10 +81,12 @@ export class HDKey {
   }
 
   get privateExtendedKey() {
-    if (this.#privateKey)
+    if (this.#privateKey) {
       return bs58check.encode(
         this.#serialize(this.versions.private, Buffer.concat([Buffer.alloc(1), this.privateKey]))
       )
+    }
+
     return null
   }
 
@@ -221,7 +223,7 @@ export class HDKey {
     const versions = BITCOIN_VERSIONS
     const hdkey = new HDKey(versions)
 
-    const keyBuffer = bs58check.decode(base58key)
+    const keyBuffer = Buffer.from(bs58check.decode(base58key))
 
     const version = keyBuffer.readUInt32BE(0)
     assert(

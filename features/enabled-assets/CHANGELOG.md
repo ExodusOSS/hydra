@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.10.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/enabled-assets@10.10.2...@exodus/enabled-assets@10.10.3) (2025-08-21)
+
+### Bug Fixes
+
+- fix: add null check for optional nonDustBalanceAssetNamesAtom in auto-enable-assets (#13583)
+
+## [10.10.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/enabled-assets@10.10.1...@exodus/enabled-assets@10.10.2) (2025-07-04)
+
+### Bug Fixes
+
+- fix(EnabledAssets): make onUnlock non-blocking (#12864)
+
 ## [10.10.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/enabled-assets@10.10.0...@exodus/enabled-assets@10.10.1) (2025-06-30)
 
 ### Bug Fixes

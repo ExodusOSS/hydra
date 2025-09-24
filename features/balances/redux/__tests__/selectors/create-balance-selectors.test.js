@@ -43,17 +43,21 @@ describe('createBalanceSelectors', () => {
     })
 
     expect(
-      selectors.balances.createSpendable({
-        assetName: 'bitcoin',
-        walletAccount: 'exodus_0',
-      })(store.getState())
-    ).toEqual(bitcoin.currency.defaultUnit(5))
+      selectors.balances
+        .createSpendable({
+          assetName: 'bitcoin',
+          walletAccount: 'exodus_0',
+        })(store.getState())
+        .equals(bitcoin.currency.defaultUnit(5))
+    ).toEqual(true)
 
     expect(
-      selectors.balances.createUnconfirmedSent({
-        assetName: 'bitcoin',
-        walletAccount: 'exodus_0',
-      })(store.getState())
-    ).toEqual(undefined)
+      selectors.balances
+        .createUnconfirmedSent({
+          assetName: 'bitcoin',
+          walletAccount: 'exodus_0',
+        })(store.getState())
+        .equals(bitcoin.currency.defaultUnit(0))
+    ).toEqual(true)
   })
 })

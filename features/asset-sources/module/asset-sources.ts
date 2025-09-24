@@ -75,8 +75,9 @@ class AssetSources {
     typeforce(types.assetSource, { walletAccount, assetName }, true)
 
     const [defaultPurpose] = await this.getSupportedPurposes({ walletAccount, assetName })
-    if (typeof defaultPurpose !== 'number')
+    if (typeof defaultPurpose !== 'number') {
       throw new UnsupportedAssetSourceError({ walletAccount, assetName })
+    }
 
     return defaultPurpose
   }

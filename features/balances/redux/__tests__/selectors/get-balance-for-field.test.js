@@ -34,20 +34,24 @@ describe('getBalanceForField', () => {
     })
 
     expect(
-      selectors.balances.getBalanceForField(store.getState())({
-        assetName: 'bitcoin',
-        walletAccount: 'exodus_0',
-        field: 'spendable',
-      })
-    ).toEqual(bitcoin.currency.defaultUnit(5))
+      selectors.balances
+        .getBalanceForField(store.getState())({
+          assetName: 'bitcoin',
+          walletAccount: 'exodus_0',
+          field: 'spendable',
+        })
+        .equals(bitcoin.currency.defaultUnit(5))
+    ).toEqual(true)
 
     expect(
-      selectors.balances.getBalanceForField(store.getState())({
-        assetName: 'bitcoin',
-        walletAccount: 'exodus_0',
-        field: 'unconfirmedSent',
-      })
-    ).toEqual(undefined)
+      selectors.balances
+        .getBalanceForField(store.getState())({
+          assetName: 'bitcoin',
+          walletAccount: 'exodus_0',
+          field: 'unconfirmedSent',
+        })
+        .equals(bitcoin.currency.ZERO)
+    ).toEqual(true)
 
     expect(() =>
       selectors.balances.getBalanceForField(store.getState())({

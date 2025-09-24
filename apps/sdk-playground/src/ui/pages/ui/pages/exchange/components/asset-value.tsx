@@ -5,12 +5,12 @@ type AssetValueProps = {
 }
 
 const AssetValue: React.FC<AssetValueProps> = ({ formattedValue, loading, onPress }) => {
-  if (loading) {
-    return <div className="h-4 w-10 self-end rounded-md bg-black/20" />
-  }
-
   return (
-    <button className="text-right text-xs text-white" onClick={() => onPress?.()}>
+    <button
+      className="text-right text-xs text-white disabled:opacity-30"
+      disabled={loading}
+      onClick={() => onPress?.()}
+    >
       {formattedValue}
     </button>
   )

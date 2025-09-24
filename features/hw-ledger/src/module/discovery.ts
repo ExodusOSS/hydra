@@ -66,8 +66,9 @@ export class LedgerDiscovery implements HardwareWalletDiscovery {
             typeof transportFactory.open === 'function'
         )
       )
-    )
+    ) {
       throw new UnknownTransportError()
+    }
 
     if (!Number.isInteger(config.bluetoothScannerTimeout)) {
       throw new TypeError(`Invalid bluetoothScannerTimeout passed through config`)
@@ -125,7 +126,7 @@ export class LedgerDiscovery implements HardwareWalletDiscovery {
         })
 
         // Indicate to the UI that we are in fact scanning.
-        this.#bluetoothScanningAtom.set(true)
+        void this.#bluetoothScanningAtom.set(true)
 
         setTimeout(() => {
           // Stop the scanner after timeout to ensure we don't endlessly scan
@@ -149,7 +150,7 @@ export class LedgerDiscovery implements HardwareWalletDiscovery {
 
     if (this.#scannerBluetooth) {
       // Stops the bluetooth scanner
-      this.#bluetoothScanningAtom.set(false)
+      void this.#bluetoothScanningAtom.set(false)
       this.#scannerBluetooth.unsubscribe()
       this.#scannerBluetooth = undefined
     }

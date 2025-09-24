@@ -14,7 +14,7 @@ function createStorageInternal({ fs, file, createNewFileIfError = false }) {
 
   const initialized = (async function () {
     try {
-      data = await fs.readFile(file)
+      data = await fs.readFile(file, 'utf8')
       data = Object.assign(Object.create(null), JSON.parse(data))
     } catch (err) {
       if (!createNewFileIfError && err.code !== 'ENOENT') throw err
@@ -45,7 +45,7 @@ function createStorageInternal({ fs, file, createNewFileIfError = false }) {
           // only log on retry
           if (writtenContents) console.warn(`unsafe storage write invalid; retrying ${tries}`)
           await fs.outputFile(tmpFile, newData)
-          writtenContents = await fs.readFile(tmpFile)
+          writtenContents = await fs.readFile(tmpFile, 'utf8')
         } while (!checkContents(writtenContents) && ++tries < 5)
 
         // output flag file so we can debug corruption

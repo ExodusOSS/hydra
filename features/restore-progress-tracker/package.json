@@ -1,6 +1,6 @@
 {
   "name": "@exodus/restore-progress-tracker",
-  "version": "3.9.0",
+  "version": "3.9.1",
   "description": "Tracks progress of restoring a wallet's full transaction history across assets",
   "author": "Exodus Movement, Inc.",
   "repository": {

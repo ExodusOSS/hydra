@@ -45,9 +45,5 @@ export function setup({ dependencies = [] } = {}) {
   const emitCurrencyChange = (currency) => handleEvent('currency', currency)
   handleEvent('assets', { assets })
 
-  const setSimulationEnabled = (enabled) => handleEvent('ratesSimulationEnabled', { enabled })
-
-  setSimulationEnabled(false)
-
-  return { ...redux, store, emitRates, emitCurrencyChange, setSimulationEnabled }
+  return { ...redux, store, emitRates, emitCurrencyChange }
 }

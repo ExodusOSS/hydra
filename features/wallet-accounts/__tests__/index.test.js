@@ -10,6 +10,8 @@ import walletAccounts from '../index.js'
 describe('wallet accounts feature', () => {
   let ioc
 
+  const errorTracking = { track: jest.fn() }
+
   const createDefinition = (id, value) => ({
     definition: {
       id,
@@ -34,6 +36,7 @@ describe('wallet accounts feature', () => {
       createDefinition('port', new EventEmitter()),
       createDefinition('logger', createLogger()),
       createDefinition('unsafeStorage', storage),
+      createDefinition('errorTracking', errorTracking),
       createDefinition('config', {}),
       { definition: fusionLocalDefinition },
     ])

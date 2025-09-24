@@ -17,11 +17,13 @@ export const formatPrice = (
     currency = 'USD',
     format,
     maxFraction = 2, // it's added only for formatAssetPrice util
+    formatZeroWithoutDecimals = true,
   }: {
     useGrouping?: boolean
     currency?: string
     format?: string
     maxFraction?: number
+    formatZeroWithoutDecimals?: boolean
   } = {}
 ) => {
   const priceNumber = parseAmount(price)
@@ -35,8 +37,8 @@ export const formatPrice = (
     symbol: currencySymbol,
     useGrouping,
   })
-  // formatted number might be rounded to 0, we don't want to show 0.00 with 2 decimals
-  if (parseFloat(result.replace(currencySymbol || '', '')) === 0) {
+
+  if (formatZeroWithoutDecimals && parseFloat(result.replace(currencySymbol || '', '')) === 0) {
     return formatCurrency(0, {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
@@ -58,15 +60,20 @@ export function formatAssetPrice({
   price,
   currency,
   decimals: decimalsFromProps,
+  formatZeroWithoutDecimals = true,
 }: {
   price: string | number
   currency: string
   decimals?: number
+  formatZeroWithoutDecimals?: boolean
 }) {
+  const maxFraction = decimalsFromProps || getFiatAdaptiveFraction(price)
+
   return formatPrice(price.toString(), {
     currency,
-    maxFraction: decimalsFromProps || getFiatAdaptiveFraction(price),
+    maxFraction,
     useGrouping: true,
+    formatZeroWithoutDecimals,
   })
 }
 

@@ -1,6 +1,6 @@
-import id from './id'
-import { APP_PROCESS_INITIAL_STATE } from '../constants'
-import selectors from './selectors'
+import id from './id.js'
+import { APP_PROCESS_INITIAL_STATE } from '../constants.js'
+import selectors from './selectors/index.js'
 
 const balancesReduxDefinition = {
   id,

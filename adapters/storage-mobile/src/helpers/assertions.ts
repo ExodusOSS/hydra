@@ -15,6 +15,12 @@ export function assertDefined<T>(
   }
 }
 
+export function assertString(value: unknown, message: string): asserts value is string {
+  if (typeof value !== 'string') {
+    throw new TypeError(message)
+  }
+}
+
 export function assertValidIdentifier(identifier: string) {
   if (identifier.includes('!')) {
     throw new Error(`Identifier must not include an exclamation mark (!). Received ${identifier}`)

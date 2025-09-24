@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-ids@1.3.0...@exodus/key-ids@1.4.0) (2025-07-31)
+
+### Features
+
+- feat: support chat key id (#13410)
+
 ## [1.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-ids@1.2.3...@exodus/key-ids@1.3.0) (2025-03-31)
 
 ### Features

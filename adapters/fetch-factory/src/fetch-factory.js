@@ -89,35 +89,65 @@ export class FetchFactory {
     return this
   }
 
-  create() {
-    return (urlOrPath, opts = {}, ...args) => {
-      const headers = new Headers(Object.create(null))
+  #buildHeaders(url, existingHeaders) {
+    const headers = new Headers(Object.create(null))
 
-      // Add headers for the global host
-      Object.entries(this.headerConfigs[GLOBAL_HOST]).forEach(([key, value]) => {
-        headers.set(key, value)
+    Object.entries(this.headerConfigs[GLOBAL_HOST]).forEach(([key, value]) => {
+      headers.set(key, value)
+    })
+
+    const hostname = getUrlHostname(url)
+    if (hostname) {
+      const matchedDomain = Object.keys(this.headerConfigs).find((key) => {
+        return hostname === key || hostname.endsWith(`.${key}`)
       })
 
-      const hostname = getUrlHostname(urlOrPath)
-      if (hostname) {
-        const matchedDomain = Object.keys(this.headerConfigs).find((key) => {
-          return hostname === key || hostname.endsWith(`.${key}`)
+      if (matchedDomain) {
+        Object.entries(this.headerConfigs[matchedDomain]).forEach(([key, value]) => {
+          headers.set(key, value)
+        })
+      }
+    }
+
+    if (existingHeaders) {
+      new Headers(existingHeaders).forEach((value, key) => {
+        headers.set(key, value)
+      })
+    }
+
+    return headers
+  }
+
+  create() {
+    return (urlOrRequest, opts = {}, ...args) => {
+      if (urlOrRequest instanceof Request) {
+        const headers = this.#buildHeaders(urlOrRequest.url)
+
+        urlOrRequest.headers.forEach((value, key) => {
+          headers.set(key, value)
         })
 
-        if (matchedDomain) {
-          Object.entries(this.headerConfigs[matchedDomain]).forEach(([key, value]) => {
+        if (opts.headers) {
+          new Headers(opts.headers).forEach((value, key) => {
             headers.set(key, value)
           })
         }
+
+        const newRequest = new Request(urlOrRequest, { ...opts, headers })
+        return this.fetchFn(newRequest, ...args)
       }
 
-      new Headers(opts.headers ?? Object.create(null)).forEach((value, key) => {
-        headers.set(key, value)
-      })
+      let url
+      if (urlOrRequest instanceof URL) {
+        url = urlOrRequest.href
+      } else {
+        url = urlOrRequest
+      }
 
-      opts = { ...opts, headers }
+      const headers = this.#buildHeaders(url, opts.headers)
+      const options = { ...opts, headers }
 
-      return this.fetchFn(urlOrPath, opts, ...args)
+      return this.fetchFn(url, options, ...args)
     }
   }
 }

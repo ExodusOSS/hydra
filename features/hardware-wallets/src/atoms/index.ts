@@ -16,17 +16,19 @@ export type WalletAccountNameToConnectedAssetNamesMap = Record<WalletAccountName
  * synced. Multiple assets may share the same key identifiers & public keys (EVMs, for example).
  */
 export const createHardwareWalletConnectedAssetNamesAtom = ({
-  assetsModule,
   hardwareWalletPublicKeysAtom,
+  assetsModule,
   walletAccountsAtom,
+  availableAssetNamesAtom,
 }: any) => {
   const selector = memoize(
-    ({ hardwareWalletPublicKeys, walletAccounts }: any) => {
+    ({ hardwareWalletPublicKeys, walletAccounts, availableAssetNames }: any) => {
       const result: WalletAccountNameToConnectedAssetNamesMap = Object.create(null)
 
-      // Retrieve the assets from the assets module
-      // and compute the base assets
       const assets = assetsModule.getAssets()
+      const availableAssets = Object.values(assets).filter((asset: any) =>
+        availableAssetNames.includes(asset.name)
+      )
 
       for (const [walletAccountName, walletAccount] of Object.entries(walletAccounts) as any) {
         // Not a hardware wallet account
@@ -53,7 +55,7 @@ export const createHardwareWalletConnectedAssetNamesAtom = ({
             .filter(Boolean)
         )
 
-        const syncedAssetNames = Object.values(assets)
+        const syncedAssetNames = availableAssets
           .filter((asset: any) => bip44Values.has(String(asset.baseAsset.bip44 - HARDENED_OFFSET)))
           .map((asset: any) => asset.name)
 
@@ -62,13 +64,15 @@ export const createHardwareWalletConnectedAssetNamesAtom = ({
 
       return result
     },
-    (deps: any) => JSON.stringify(deps)
+    ({ hardwareWalletPublicKeys, walletAccounts, availableAssetNames }: any) =>
+      `${JSON.stringify(hardwareWalletPublicKeys)}_${JSON.stringify(walletAccounts)}_${JSON.stringify(availableAssetNames.join(','))}`
   )
 
   return compute({
     atom: combine({
       hardwareWalletPublicKeys: hardwareWalletPublicKeysAtom,
       walletAccounts: walletAccountsAtom,
+      availableAssetNames: availableAssetNamesAtom,
     }),
     selector,
   })
@@ -78,5 +82,10 @@ export const hardwareWalletConnectedAssetNamesAtomDefinition = {
   id: 'hardwareWalletConnectedAssetNamesAtom',
   type: 'atom',
   factory: createHardwareWalletConnectedAssetNamesAtom,
-  dependencies: ['hardwareWalletPublicKeysAtom', 'assetsModule', 'walletAccountsAtom'],
+  dependencies: [
+    'hardwareWalletPublicKeysAtom',
+    'assetsModule',
+    'walletAccountsAtom',
+    'availableAssetNamesAtom',
+  ],
 } as const satisfies Definition

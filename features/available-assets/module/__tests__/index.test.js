@@ -1,7 +1,8 @@
-import availableAssetsDefinition from '../index.js'
-import { availableAssetsAtomDefinition } from '../../atoms/index.js'
-import { enabledAndDisabledAssetsAtomDefinition } from '@exodus/enabled-assets/atoms/index.js'
 import { createInMemoryAtom, waitUntil } from '@exodus/atoms'
+import { enabledAndDisabledAssetsAtomDefinition } from '@exodus/enabled-assets/atoms/index.js'
+
+import { availableAssetsAtomDefinition } from '../../atoms/index.js'
+import availableAssetsDefinition from '../index.js'
 
 const { factory: createAvailableAssets } = availableAssetsDefinition
 const { factory: createEnabledAndDisabledAssetsAtom } = enabledAndDisabledAssetsAtomDefinition

@@ -1,5 +1,3 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
 exports[`blockchain metadata module batch account states should batch updates and emit once 1`] = `
 [
   {
@@ -438,6 +436,108 @@ exports[`blockchain metadata module getLoadedTxLogs returns txs not mutated by c
           "feeCoinName": "bitcoin",
           "to": "1JXm4NRQLFY1PjvHaDHzbQrcQGge4zSKrS",
           "txId": "e5c20d7c4c52d97a8a97950ab7254a159d15909ab807f92b5db7f039b2dc247f",
+          "version": 1,
+        },
+      ],
+      "ethereum": [],
+    },
+  },
+}
+`;
+
+exports[`blockchain metadata module getLoadedTxLogs returns txs set by addTxs 1`] = `
+{
+  "changes": {
+    "exodus_0": {
+      "bitcoin": [
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.00184082 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:25:52.000Z",
+          "dropped": false,
+          "feeAmount": "0.00014238 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "42958c344003c279d823ae73ea1a43f92a15c85df72619d5da524cb7e50794b7",
+          "version": 1,
+        },
+      ],
+    },
+  },
+  "newlyReceivedTxLogs": {
+    "exodus_0": {
+      "bitcoin": [
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.00184082 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:25:52.000Z",
+          "dropped": false,
+          "feeAmount": "0.00014238 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "42958c344003c279d823ae73ea1a43f92a15c85df72619d5da524cb7e50794b7",
+          "version": 1,
+        },
+      ],
+    },
+  },
+  "value": {
+    "exodus_0": {
+      "bitcoin": [
+        {
+          "addresses": [
+            {
+              "address": "bc1qndnv4znc0dnnju2gcwddf4x42yunc4t9s2hna0",
+              "meta": {
+                "path": "m/0/0",
+              },
+            },
+          ],
+          "coinAmount": "0.00184082 BTC",
+          "coinName": "bitcoin",
+          "confirmations": 1,
+          "currencies": {
+            "bitcoin": {
+              "BTC": 8,
+              "bits": 2,
+              "satoshis": 0,
+            },
+          },
+          "date": "2019-07-18T12:25:52.000Z",
+          "dropped": false,
+          "feeAmount": "0.00014238 BTC",
+          "feeCoinName": "bitcoin",
+          "txId": "42958c344003c279d823ae73ea1a43f92a15c85df72619d5da524cb7e50794b7",
           "version": 1,
         },
       ],

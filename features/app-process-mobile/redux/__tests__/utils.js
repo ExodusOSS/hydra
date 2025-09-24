@@ -1,7 +1,7 @@
 import { setupRedux } from '@exodus/redux-dependency-injection'
 import { combineReducers, createStore } from 'redux'
 
-import appProcess from '..'
+import appProcess from '../index.js'
 
 export function setup({ dependencies = [] } = {}) {
   const allDependencies = [...dependencies, appProcess]

@@ -1,6 +1,6 @@
 {
   "name": "@exodus/key-ids",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "type": "module",
   "description": "This package holds key identifiers for Exodus' own BIP43 purpose",
   "author": "Exodus Movement, Inc.",

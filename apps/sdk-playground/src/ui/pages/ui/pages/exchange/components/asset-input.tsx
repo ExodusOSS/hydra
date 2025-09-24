@@ -2,7 +2,8 @@ import type { Asset } from '@exodus/exchange-ui'
 
 type AssetInputProps = {
   asset: Asset
-  loading?: boolean
+  loading: boolean
+  disabled: boolean
   onBlur: () => void
   onChangeText: (value: string) => void
   onFocus: () => void
@@ -19,16 +20,13 @@ const AssetInput: React.FC<AssetInputProps> = ({
   placeholder,
   value,
 }) => {
-  if (loading) {
-    return <div className="mt-1 h-8 w-28 self-end rounded-md bg-black/20" />
-  }
-
   return (
     <input
-      className="w-full border-0 bg-transparent text-right text-2xl outline-none focus:outline-none"
+      className="w-full border-0 bg-transparent px-0 text-right text-2xl ring-0 focus:ring-0 disabled:opacity-30"
       value={value || ''}
       placeholder={placeholder}
       style={{ color: asset.primaryColor }}
+      disabled={loading}
       onChange={(e) => onChangeText(e.target.value)}
       onFocus={onFocus}
       onBlur={onBlur}

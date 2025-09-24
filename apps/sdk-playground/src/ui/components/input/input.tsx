@@ -1,29 +1,61 @@
-import { cn } from '@/ui/utils/classnames'
-import type { ChangeEventHandler } from 'react'
+import { Input as XoInput } from '@/ui/components/xo/input'
+import { forwardRef } from 'react'
 
-type InputProps = {
-  type: string
-  value: any
-  className?: string
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  name?: string
   placeholder?: string
-  required?: boolean
-  onChange?: ChangeEventHandler<HTMLInputElement>
+  hasError?: boolean
+  onFocus?: () => void
+  onBlur?: () => void
 }
 
-const Input = ({ type, value, placeholder, required, className, onChange }: InputProps) => {
-  return (
-    <input
-      className={cn(
-        'text-thin rounded border-none bg-deep-300 px-2 text-sm text-slate-300 focus:outline-none focus:ring-0',
-        className
-      )}
-      type={type}
-      value={value}
-      placeholder={placeholder}
-      required={required}
-      onChange={onChange}
-    />
-  )
-}
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  (
+    {
+      name = '',
+      placeholder = '',
+      type = 'text',
+      hasError,
+      onChange,
+      onFocus,
+      onBlur,
+      value,
+      ...props
+    },
+    ref
+  ) => {
+    // Convert HTML input onChange to XO Input onChange
+    const handleChange = (newValue: string) => {
+      if (onChange) {
+        // Create a synthetic event-like object for backward compatibility
+        const event = {
+          target: { value: newValue },
+          currentTarget: { value: newValue },
+        } as React.ChangeEvent<HTMLInputElement>
+        onChange(event)
+      }
+    }
+
+    // Convert type to XO Input supported types
+    const xoType = type === 'email' ? 'email' : 'text'
+
+    return (
+      <XoInput
+        ref={ref}
+        name={name}
+        placeholder={placeholder}
+        type={xoType}
+        hasError={hasError}
+        onChange={handleChange}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        value={value}
+        {...props}
+      />
+    )
+  }
+)
+
+Input.displayName = 'Input'
 
 export default Input

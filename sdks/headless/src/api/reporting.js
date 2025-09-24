@@ -1,4 +1,5 @@
 import { SafeError } from '@exodus/errors'
+import { safeString } from '@exodus/safe-string'
 import lodash from 'lodash'
 
 import { rejectAfter } from '../utils/promises.js'
@@ -32,7 +33,7 @@ const createReporting = ({ ioc, config: { exportTimeout = 5000 } = {} }) => {
 
     const timeoutPromise = rejectAfter(
       exportTimeout,
-      `Export took longer than the maximum export timeout of ${Math.ceil(exportTimeout / 1000)}s`
+      safeString`Export took longer than the maximum export timeout of ${Math.ceil(exportTimeout / 1000)}s`
     )
 
     const exportReport = async (report) => {

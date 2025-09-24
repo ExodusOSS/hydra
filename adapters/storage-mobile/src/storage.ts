@@ -1,7 +1,7 @@
 import type { AsyncStorageStatic } from '@react-native-async-storage/async-storage/lib/typescript/types'
 import type { Storage } from '@exodus/storage-interface'
 import assert from 'minimalistic-assert'
-import { assertDefined, assertValidIdentifier } from './helpers/assertions.js'
+import { assertDefined, assertString, assertValidIdentifier } from './helpers/assertions.js'
 
 export class StorageMobile<Value> implements Storage<Value> {
   readonly #asyncStorage: AsyncStorageStatic
@@ -19,6 +19,13 @@ export class StorageMobile<Value> implements Storage<Value> {
   set = async (key: string, value: Value) => {
     assertDefined(value, 'Cannot save an undefined value.')
     await this.#asyncStorage.setItem(this.#normalizeKey(key), JSON.stringify(value))
+  }
+
+  setString = async (key: string, value: string) => {
+    // not part of 'Storage' interface -- used to give access to storing already-stringified payloads
+
+    assertString(value, `Cannot save non-string value. Received non-string value for key ${key}`)
+    await this.#asyncStorage.setItem(this.#normalizeKey(key), value)
   }
 
   delete = async (key: string) => {

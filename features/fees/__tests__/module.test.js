@@ -3,7 +3,7 @@ import { createInMemoryAtom } from '@exodus/atoms'
 import {
   accountStatesAtomDefinition,
   txLogsAtomDefinition,
-} from '@exodus/blockchain-metadata/atoms'
+} from '@exodus/blockchain-metadata/atoms/index.js'
 import ethereum from '@exodus/ethereum-meta'
 import { WalletAccount } from '@exodus/models'
 
@@ -55,7 +55,7 @@ describe('fees.getFee', () => {
       assetsModule,
       logger,
       addressProvider,
-      walletAccounts: createInMemoryAtom({ defaultValue: walletAccounts }),
+      walletAccountsAtom: createInMemoryAtom({ defaultValue: walletAccounts }),
     })
   })
 

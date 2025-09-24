@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.13.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/ui-config@3.12.1...@exodus/ui-config@3.13.0) (2024-11-25)
+
+### Features
+
+- feat: use atoms v9 (#9651)
+
+- feat: use formatting v9 (#9903)
+
+### Bug Fixes
+
+- fix: prefer Object.create(null) to {} (#10511)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
 ## [3.12.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/ui-config@3.12.0...@exodus/ui-config@3.12.1) (2024-09-27)
 
 ### Bug Fixes

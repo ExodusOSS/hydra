@@ -2,7 +2,7 @@
   "name": "@exodus/auth-mobile",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
-  "version": "6.4.1",
+  "version": "6.5.0",
   "description": "Module to simplify dealing with mobile device authentication mechanisms",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/auth-mobile",
   "bugs": {

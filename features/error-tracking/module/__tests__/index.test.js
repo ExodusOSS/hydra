@@ -16,6 +16,7 @@ describe('errorTracking module tests', () => {
         track: jest.fn(),
       },
       config: { maxErrorsCount: 10 },
+      logger: console,
     })
 
     expect(module.track).toBeDefined()
@@ -30,6 +31,7 @@ describe('errorTracking module tests', () => {
       remoteErrorTrackingEnabledAtom: createInMemoryAtom({ defaultValue: false }),
       remoteErrorTracking: { track: trackRemoteError },
       config: { maxErrorsCount: 10 },
+      logger: console,
     })
 
     await module.track({
@@ -61,6 +63,7 @@ describe('errorTracking module tests', () => {
       remoteErrorTrackingEnabledAtom: createInMemoryAtom({ defaultValue: false }),
       remoteErrorTracking: { track: trackRemoteError },
       config: { maxErrorsCount: 2 },
+      logger: console,
     })
 
     await module.track({
@@ -93,6 +96,7 @@ describe('errorTracking module tests', () => {
     const module = errorTrackingDefinition.factory({
       errorsAtom,
       config: { maxErrorsCount: 2 },
+      logger: console,
     })
 
     await expect(
@@ -100,6 +104,7 @@ describe('errorTracking module tests', () => {
         error: 'not an error',
         context: {},
         namespace: 'test',
+        silent: false,
       })
     ).rejects.toThrow('error must be an instance of Error')
   })
@@ -114,6 +119,7 @@ test('remote error tracking', async () => {
     remoteErrorTrackingEnabledAtom: createInMemoryAtom({ defaultValue: true }),
     remoteErrorTracking: { track: trackRemoteError },
     config: { maxErrorsCount: 10 },
+    logger: console,
   })
 
   await errorTracking.track({
@@ -124,4 +130,106 @@ test('remote error tracking', async () => {
 
   await new Promise(setImmediate)
   expect(trackRemoteError).toHaveBeenCalledWith({ error: new Error('message1') })
+})
+
+test('error propagation: local error', async () => {
+  const errorsAtom = createErrorsAtom()
+  errorsAtom.set = () => Promise.reject(new Error('local failed'))
+
+  const trackRemoteError = jest.fn()
+  const errorTracking = errorTrackingDefinition.factory({
+    errorsAtom,
+    remoteErrorTrackingEnabledAtom: createInMemoryAtom({ defaultValue: true }),
+    remoteErrorTracking: { track: trackRemoteError },
+    config: { maxErrorsCount: 10 },
+    logger: console,
+  })
+
+  await expect(
+    errorTracking.track({
+      error: new Error('message1'),
+      context: {},
+      namespace: 'test',
+    })
+  ).resolves.not.toThrow()
+
+  await expect(
+    errorTracking.track({
+      error: new Error('message1'),
+      context: {},
+      namespace: 'test',
+      silent: false,
+    })
+  ).rejects.toThrow('local failed')
+})
+
+test('error propagation: remote error', async () => {
+  const errorsAtom = createErrorsAtom()
+  const trackRemoteError = jest.fn().mockRejectedValue(new Error('remote failed'))
+
+  const errorTracking = errorTrackingDefinition.factory({
+    errorsAtom,
+    remoteErrorTrackingEnabledAtom: createInMemoryAtom({ defaultValue: true }),
+    remoteErrorTracking: { track: trackRemoteError },
+    config: { maxErrorsCount: 10 },
+    logger: console,
+  })
+
+  await expect(
+    errorTracking.track({
+      error: new Error('message1'),
+      context: {},
+      namespace: 'test',
+    })
+  ).resolves.not.toThrow()
+
+  await expect(
+    errorTracking.track({
+      error: new Error('message1'),
+      context: {},
+      namespace: 'test',
+      silent: false,
+    })
+  ).rejects.toThrow('remote failed')
+})
+
+test('error propagation: timeout', async () => {
+  jest.useFakeTimers()
+
+  const errorsAtom = createErrorsAtom()
+  const trackRemoteError = jest.fn().mockImplementation(
+    () =>
+      new Promise((resolve) => {
+        // hang
+      })
+  )
+
+  const errorTracking = errorTrackingDefinition.factory({
+    errorsAtom,
+    remoteErrorTrackingEnabledAtom: createInMemoryAtom({ defaultValue: true }),
+    remoteErrorTracking: { track: trackRemoteError },
+    config: { maxErrorsCount: 10 },
+    logger: console,
+  })
+
+  const promise1 = errorTracking.track({
+    error: new Error('message1'),
+    context: {},
+    namespace: 'test',
+  })
+
+  jest.advanceTimersByTime(5000)
+  await expect(promise1).resolves.not.toThrow()
+
+  const promise2 = errorTracking.track({
+    error: new Error('message1'),
+    context: {},
+    namespace: 'test',
+    silent: false,
+  })
+
+  jest.advanceTimersByTime(5000)
+  await expect(promise2).rejects.toThrow('track call timed out')
+
+  jest.useRealTimers()
 })

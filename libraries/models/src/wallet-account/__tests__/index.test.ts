@@ -210,6 +210,23 @@ test('walletAccount', () => {
   ).toEqual(WalletAccount.LABEL_MAX_LENGTH)
 
   expect(WalletAccount.LABEL_MAX_LENGTH).toEqual(LABEL_MAX_LENGTH)
+
+  expect(
+    new WalletAccount({ source: 'passkey', index: 0, seedId: 'some-credential-id' }).toJSON()
+  ).toEqual({
+    color: '#7b39ff',
+    compatibilityMode: undefined,
+    enabled: true,
+    icon: 'exodus',
+    index: 0,
+    is2FA: undefined,
+    isMultisig: false,
+    label: 'Passkey',
+    lastConnected: undefined,
+    model: undefined,
+    seedId: 'some-credential-id',
+    source: 'passkey',
+  })
 })
 
 test('update() should update fields of WalletAccount', () => {
@@ -270,6 +287,15 @@ test('"seed" source should require "seedId"', () => {
       })
   ).toThrow('expected option "seedId"')
 })
+test('"passkey" source should require "seedId"', () => {
+  expect(
+    () =>
+      new WalletAccount({
+        index: 0,
+        source: 'passkey',
+      })
+  ).toThrow('expected option "seedId"')
+})
 
 test('"seed" source should accept "seedId"', () => {
   expect(
@@ -310,6 +336,9 @@ test('isSoftware', () => {
   })
   expect(new WalletAccount({ source: 'exodus', index: 0 }).isSoftware).toEqual(true)
   expect(new WalletAccount({ source: 'seed', index: 0, seedId: '123' }).isSoftware).toEqual(true)
+  expect(
+    new WalletAccount({ source: 'passkey', index: 0, seedId: 'some-credential-id' }).isSoftware
+  ).toEqual(true)
 })
 
 test('defaultWith returns default wallet account with updated field', () => {

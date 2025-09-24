@@ -51,6 +51,12 @@ export const EXODUS_KEY_IDS = Object.freeze({
     derivationPath: `m/${EXO}'/2'/3'`,
     keyType: 'nacl',
   }),
+  SUPPORT_CHAT: new KeyIdentifier({
+    __proto__: null,
+    derivationPath: `m/${EXO}'/4'/0'`,
+    derivationAlgorithm: 'BIP32',
+    keyType: 'secp256k1',
+  }),
   SEEDLESS: new KeyIdentifier({
     __proto__: null,
     derivationAlgorithm: 'SLIP10',

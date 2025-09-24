@@ -13,34 +13,20 @@ import {
   CT_FETCH_CACHE_EXPIRY,
   CT_TIMESTAMP_KEY,
   CT_UPDATE_INTERVAL,
+  CTR_TOKENS_LIMIT,
 } from './constants.js'
-import { getAssetFromAssetId, getFetchErrorMessage, isDisabledCustomToken } from './utils.js'
+import {
+  filterBuiltInProps,
+  getAssetFromAssetId,
+  getFetchErrorMessage,
+  isDisabledCustomToken,
+} from './utils.js'
 import createFetchival from '@exodus/fetch/create-fetchival'
 import { validateCustomToken, isValidCustomToken } from '@exodus/asset-schema-validation'
 import makeConcurrent from 'make-concurrent'
 import oldToNewStyleTokenNames from '@exodus/asset-legacy-token-name-mapping'
 
-const { get, isEmpty, once, uniq } = lodash
-
-const FILTERED_FIELDS = [
-  'assetId',
-  'baseAssetName',
-  'displayName',
-  'displayTicker',
-  'gradientColors',
-  'gradientCoords',
-  'icon', // there is no icon field in built in assets, but there may be for custom tokens (TODO?)
-  'isBuiltIn',
-  'isCustomToken',
-  'lifecycleStatus',
-  'name',
-  'primaryColor',
-  'properName',
-  'properTicker',
-  'ticker',
-]
-
-const filterBuiltInProps = (asset) => ({ ...pick(asset, FILTERED_FIELDS), assetName: asset.name })
+const { get, isEmpty, once, uniq, chunk } = lodash
 
 const getFetchCacheKey = (baseAssetName, assetId) => `${assetId}-${baseAssetName}`
 
@@ -251,6 +237,86 @@ export class AssetsModule {
     return this.#getCache(key)
   }
 
+  #fetchTokens = async (assetDescriptors) => {
+    for (const { baseAssetName } of assetDescriptors) {
+      this.#assertSupportsCustomTokens(baseAssetName)
+    }
+
+    const [builtInDescriptors, customTokensDescriptors] = partition(
+      assetDescriptors,
+      ({ assetId, baseAssetName }) => !!this.#getAssetFromAssetId(assetId, baseAssetName)
+    )
+
+    const getBuiltInDefinitions = (descriptors) =>
+      descriptors.map(({ assetId, baseAssetName }) =>
+        filterBuiltInProps(this.#getAssetFromAssetId(assetId, baseAssetName))
+      )
+
+    const getCustomTokensDefinitions = async (descriptors) => {
+      const _tokens = await this.#fetch(
+        `tokens`,
+        { assetIds: descriptors, lifecycleStatus: ['c', 'v', 'u'] },
+        'tokens'
+      )
+
+      let validTokens = []
+      if (this.#shouldValidateCustomToken) {
+        for (const token of _tokens) {
+          try {
+            validateCustomToken(token)
+            validTokens.push(token)
+          } catch (e) {
+            this.#logger.warn(
+              `Token did not pass validation ${token.baseAssetName} ${token.assetId}. Error: ${e.message}`
+            )
+          }
+        }
+      } else {
+        validTokens = _tokens
+      }
+
+      const tokens = validTokens.map((token) => normalizeToken(token))
+
+      try {
+        await this.#iconsStorage.storeIcons(tokens)
+      } catch (err) {
+        this.#logger.warn(`An error occurred while decoding icons`, err.message)
+      }
+
+      for (const token of tokens) {
+        const key = getFetchCacheKey(token.baseAssetName, token.assetId)
+        this.#setCache(key, token)
+      }
+
+      return tokens
+    }
+
+    const builtInTokens = getBuiltInDefinitions(builtInDescriptors)
+    const customTokens = await getCustomTokensDefinitions(customTokensDescriptors)
+
+    return { builtInTokens, customTokens }
+  }
+
+  fetchTokens = async (assetDescriptors) => {
+    const pages = chunk(assetDescriptors, CTR_TOKENS_LIMIT)
+
+    const builtInTokens = []
+    const customTokens = []
+    for (const page of pages) {
+      const tokens = await this.#fetchTokens(page)
+      builtInTokens.push(...tokens.builtInTokens)
+      customTokens.push(...tokens.customTokens)
+    }
+
+    const builtInAssets = builtInTokens.map(({ name }) => this.getAsset(name))
+    const customTokenAssets = customTokens.map((definition) => {
+      const baseAsset = this.getAsset(definition.baseAssetName)
+      return baseAsset.api.createToken(definition)
+    })
+
+    return [...builtInAssets, ...customTokenAssets]
+  }
+
   addToken = async (assetId, baseAssetName) => {
     this.#assertCustomTokensStorageSupported()
     this.#assertSupportsCustomTokens(baseAssetName)
@@ -329,8 +395,9 @@ export class AssetsModule {
         : []
 
     const validTokens = fetchedTokens.filter(this.#isValidCustomToken).map(normalizeToken)
-    if (validTokens.length !== fetchedTokens.length)
+    if (validTokens.length !== fetchedTokens.length) {
       this.#logger.warn('Invalid Custom Token schema')
+    }
 
     const tokens = tokenNamesToUpdate.map((tokenName) => assets[tokenName])
 
@@ -472,8 +539,9 @@ export class AssetsModule {
         `${endpoint}${testDataParam}`
       ).post(body)
 
-      if (res.status !== 'OK')
+      if (res.status !== 'OK') {
         throw new Error(`Custom tokens registry ${endpoint} ${res.status} ${res.message}`)
+      }
 
       return get(res, resultPath)
     } catch (error) {

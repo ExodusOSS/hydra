@@ -126,10 +126,11 @@ export default class AccountState {
   constructor(props: Props = Object.create(null)) {
     const { defaults } = this.constructor as any
 
-    if (this.constructor === AccountState)
+    if (this.constructor === AccountState) {
       throw new Error(
         'Instantiating the base AccountState class is forbidden, please instantiate a subclass instance'
       )
+    }
 
     // Pick keys in defaults
     const allProps = {

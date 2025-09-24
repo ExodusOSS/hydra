@@ -3,6 +3,84 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0-rc.85](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.84...@exodus/headless@5.0.0-rc.85) (2025-09-23)
+
+### Features
+
+- feat: update wallet accounts in headless (#13904)
+
+## [5.0.0-rc.84](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.83...@exodus/headless@5.0.0-rc.84) (2025-09-12)
+
+### Features
+
+- feat: updated asset-sources in headless (#13816)
+
+## [5.0.0-rc.83](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.82...@exodus/headless@5.0.0-rc.83) (2025-09-05)
+
+**Note:** Version bump only for package @exodus/headless
+
+## [5.0.0-rc.82](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.81...@exodus/headless@5.0.0-rc.82) (2025-09-05)
+
+### Features
+
+- feat: rm unused keys arg to fusion.load (#13732)
+
+## [5.0.0-rc.81](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.80...@exodus/headless@5.0.0-rc.81) (2025-09-04)
+
+**Note:** Version bump only for package @exodus/headless
+
+## [5.0.0-rc.80](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.79...@exodus/headless@5.0.0-rc.80) (2025-09-02)
+
+**Note:** Version bump only for package @exodus/headless
+
+## [5.0.0-rc.79](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.78...@exodus/headless@5.0.0-rc.79) (2025-08-29)
+
+### Features
+
+- feat: update wallet accounts in headless (#13718)
+
+## [5.0.0-rc.78](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.77...@exodus/headless@5.0.0-rc.78) (2025-08-12)
+
+**Note:** Version bump only for package @exodus/headless
+
+## [5.0.0-rc.77](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.76...@exodus/headless@5.0.0-rc.77) (2025-08-08)
+
+### Features
+
+- feat(headless): bump assets feature (#13515)
+
+## [5.0.0-rc.76](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.75...@exodus/headless@5.0.0-rc.76) (2025-07-18)
+
+**Note:** Version bump only for package @exodus/headless
+
+## [5.0.0-rc.75](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.74...@exodus/headless@5.0.0-rc.75) (2025-07-17)
+
+### Features
+
+- feat: lifecycle hook priority (#13200)
+
+### Bug Fixes
+
+- fix: don't require unlock for migrateableStorage (#13258)
+
+## [5.0.0-rc.74](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.73...@exodus/headless@5.0.0-rc.74) (2025-07-11)
+
+### Bug Fixes
+
+- fix: add safe string for timeout error for reporting (#13185)
+
+## [5.0.0-rc.73](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.72...@exodus/headless@5.0.0-rc.73) (2025-07-10)
+
+### Bug Fixes
+
+- fix: network status detection issue when offline to online transition (#13144)
+
+## [5.0.0-rc.72](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.71...@exodus/headless@5.0.0-rc.72) (2025-07-10)
+
+### Bug Fixes
+
+- fix: remove timeout on setup migrations (#13169)
+
 ## [5.0.0-rc.71](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.70...@exodus/headless@5.0.0-rc.71) (2025-07-01)
 
 ### Features

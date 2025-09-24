@@ -114,7 +114,7 @@ const createExodus = (opts) => {
 
     const { storage, migrateableStorage } = ioc.getByType('adapter')
 
-    const { application, wallet, unlockEncryptedStorage } = ioc.getByType('module')
+    const { application, unlockEncryptedStorage } = ioc.getByType('module')
 
     const { migrations } = ioc.getAll()
 
@@ -125,17 +125,7 @@ const createExodus = (opts) => {
 
     application.on('load', (args) => port.emit('load', args))
 
-    application.on('create', async ({ hasPassphraseSet }) => {
-      const isLocked = await wallet.isLocked()
-
-      port.emit('create', {
-        walletExists: true,
-        hasPassphraseSet,
-        isLocked,
-        isBackedUp: false,
-        isRestoring: false,
-      })
-    })
+    application.on('create', async (args) => port.emit('create', args))
 
     application.on('unlock', () => port.emit('unlock'))
 
@@ -164,8 +154,9 @@ const createExodus = (opts) => {
       if (typeof storage.unlock === 'function') unlockEncryptedStorage(storage)
 
       // normally unlocked during migrations, also unlock here just in case
-      if (typeof migrateableStorage.unlock === 'function')
+      if (typeof migrateableStorage.unlock === 'function') {
         unlockEncryptedStorage(migrateableStorage)
+      }
     })
 
     application.on('clear', () => port.emit('clear'))

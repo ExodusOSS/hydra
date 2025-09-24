@@ -4,6 +4,7 @@ import {
   availableAssetsAtomDefinition,
 } from '@exodus/available-assets/atoms/index.js'
 import { difference } from '@exodus/basic-utils'
+import { mnemonicToSeed } from '@exodus/bip39'
 import bip44Constants from '@exodus/bip44-constants/by-ticker.js'
 import {
   accountStatesAtomDefinition,
@@ -22,7 +23,6 @@ import createHardwareWalletPublicKeysAtom from '@exodus/wallet-accounts/atoms/ha
 import { enabledWalletAccountsAtomDefinition } from '@exodus/wallet-accounts/atoms/index.js'
 import createWalletAccountsAtom from '@exodus/wallet-accounts/atoms/wallet-accounts.js'
 import createWalletAccountsInternalAtom from '@exodus/wallet-accounts/atoms/wallet-accounts-internal.js'
-import { mnemonicToSeed } from 'bip39'
 
 import createAssetClientInterface from '../asset-client-interface.js'
 
@@ -335,10 +335,10 @@ describe('aci get account state', () => {
 })
 
 describe('getPublicKey', async () => {
-  const seed = await mnemonicToSeed(
-    'menu memory fury language physical wonder dog valid smart edge decrease worth'
-  )
-  const seedId = getSeedId(seed)
+  const seed = await mnemonicToSeed({
+    mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
+  })
+  const seedId = await getSeedId(seed)
 
   const publicKey = '02b0681b906bdb21cc9ef138491b99ab11721fed0757d8375e98724a5154475390'
   const xpub =
@@ -354,9 +354,9 @@ describe('getPublicKey', async () => {
     [trezorAccount]: trezorAccount,
   }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     const keychain = new Keychain({})
-    keychain.addSeed(seed)
+    await keychain.addSeed(seed)
 
     const mockLogger = { warn: jest.fn() }
     const walletAccountsAtom = createInMemoryAtom({

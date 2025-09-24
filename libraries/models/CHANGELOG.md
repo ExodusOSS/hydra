@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.16.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.15.0...@exodus/models@12.16.0) (2025-08-18)
+
+### Features
+
+- feat: multisigDataIndex in address-provider (#13331)
+
+## [12.15.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.14.0...@exodus/models@12.15.0) (2025-07-25)
+
+### Features
+
+- feat: passkey wallet account (#13319)
+
 ## [12.14.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.13.0...@exodus/models@12.14.0) (2025-06-16)
 
 ### Features

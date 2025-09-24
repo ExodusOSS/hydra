@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.3](https://github.com/ExodusMovement/hydra/compare/@exodus/segment-metrics@4.0.2...@exodus/segment-metrics@4.0.3) (2024-11-01)
+
+Re-licensed under MIT license.
+
 ## [4.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/segment-metrics@4.0.1...@exodus/segment-metrics@4.0.2) (2024-08-22)
 
 ### Bug Fixes

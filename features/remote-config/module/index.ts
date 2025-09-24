@@ -32,6 +32,7 @@ type ConstructorParameters = {
 
 export class RemoteConfig extends EventEmitter implements RemoteConfigType {
   #started = false
+  #isUpdating = false
   #current?: Record<string, any>
   #previous?: Record<string, any>
   #lastModified?: string
@@ -135,7 +136,11 @@ export class RemoteConfig extends EventEmitter implements RemoteConfigType {
   }
 
   update = async () => {
+    if (this.#isUpdating) return { success: true }
+
     try {
+      this.#isUpdating = true
+
       const { config, modified } = await this.#fetchConfig()
       const changes = modified && (!this.#current || !isEqual(config, this.#current))
 
@@ -160,6 +165,8 @@ export class RemoteConfig extends EventEmitter implements RemoteConfigType {
       })
       this.#logger.error(error)
       return { error }
+    } finally {
+      this.#isUpdating = false
     }
   }
 

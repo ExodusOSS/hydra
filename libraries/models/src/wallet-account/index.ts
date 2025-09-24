@@ -26,6 +26,7 @@ export const SEED_SRC = 'seed'
 export const TREZOR_SRC = 'trezor'
 export const LEDGER_SRC = 'ledger'
 export const FTX_SRC = 'ftx'
+export const PASSKEY_SRC = 'passkey'
 
 export type WalletAccountSource =
   | typeof EXODUS_SRC
@@ -33,10 +34,11 @@ export type WalletAccountSource =
   | typeof TREZOR_SRC
   | typeof LEDGER_SRC
   | typeof FTX_SRC
+  | typeof PASSKEY_SRC
 
 export const CUSTODIAL_SOURCES: WalletAccountSource[] = [FTX_SRC]
 export const HARDWARE_SOURCES: WalletAccountSource[] = [TREZOR_SRC, LEDGER_SRC]
-export const SOFTWARE_SEED_SOURCES: WalletAccountSource[] = [EXODUS_SRC, SEED_SRC]
+export const SOFTWARE_SEED_SOURCES: WalletAccountSource[] = [EXODUS_SRC, SEED_SRC, PASSKEY_SRC]
 
 export const DEFAULT_COLORS = Object.freeze({
   exodus: '#7b39ff',
@@ -44,6 +46,7 @@ export const DEFAULT_COLORS = Object.freeze({
   trezor: '#30d968',
   ledger: '#ffffff',
   ftx: '#00b4c2',
+  passkey: '#7b39ff',
 })
 
 export const DEFAULT_ICONS = Object.freeze({
@@ -52,6 +55,7 @@ export const DEFAULT_ICONS = Object.freeze({
   trezor: 'trezor',
   ledger: 'ledger',
   ftx: 'ftx',
+  passkey: 'exodus',
 })
 
 export const LABEL_MAX_LENGTH = 100
@@ -95,6 +99,7 @@ export default class WalletAccount {
   static readonly TREZOR_SRC = TREZOR_SRC
   static readonly LEDGER_SRC = LEDGER_SRC
   static readonly FTX_SRC = FTX_SRC
+  static readonly PASSKEY_SRC = PASSKEY_SRC
 
   source: WalletAccountSource
   index: number | null
@@ -143,6 +148,7 @@ export default class WalletAccount {
     assert(!isSoftware || !model, 'unexpected option "model" for a software wallet account')
     assert(source === EXODUS_SRC || !is2FA, 'is2FA: true is only valid for an exodus walletAccount')
     assert(source !== SEED_SRC || seedId, 'expected option "seedId" for seed wallet account')
+    assert(source !== PASSKEY_SRC || seedId, 'expected option "seedId" for passkey wallet account')
 
     color = color || DEFAULT_COLORS[source]
     icon = icon || DEFAULT_ICONS[source]
@@ -260,6 +266,10 @@ export default class WalletAccount {
 
   get isCustodial() {
     return CUSTODIAL_SOURCES.includes(this.source)
+  }
+
+  get isPasskey() {
+    return this.source === PASSKEY_SRC
   }
 
   static get DEFAULT_NAME() {

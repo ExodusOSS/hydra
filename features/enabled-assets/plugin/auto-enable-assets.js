@@ -20,6 +20,7 @@ class AutoEnableAssets {
   #syncedBalancesAtom
   #availableAssetNamesAtom
   #logger
+  #errorTracking
   #oldToNewStyleTokenNames
 
   #queuedToEnable = new Set()
@@ -39,6 +40,7 @@ class AutoEnableAssets {
     availableAssetNamesAtom,
     config,
     logger,
+    errorTracking,
   }) {
     this.#assetsModule = assetsModule
     this.#enabledAssetsModule = enabledAssets
@@ -54,9 +56,16 @@ class AutoEnableAssets {
     this.#enabledAndDisabledAssetsAtom = enabledAndDisabledAssetsAtom
     this.#flush = throttle(this.#flush, config.throttleInterval, { leading: false })
     this.#logger = logger
+    this.#errorTracking = errorTracking
   }
 
   onAssetsSynced = async () => {
+    this.#handleUnlock().catch((error) => {
+      this.#errorTracking.track({ error })
+    })
+  }
+
+  #handleUnlock = async () => {
     if (this.#loaded) {
       return
     }
@@ -84,12 +93,14 @@ class AutoEnableAssets {
     ].filter(Boolean)
 
     // Process any pending assets that were waiting for restore to complete
-    const currentAssetNames = await this.#nonDustBalanceAssetNamesAtom.get()
-    if (currentAssetNames.length > 0) {
-      if (this.#alwaysAutoEnable) {
-        this.#enqueue(currentAssetNames)
-      } else {
-        this.#maybeAutoEnable(currentAssetNames)
+    if (this.#nonDustBalanceAssetNamesAtom) {
+      const currentAssetNames = await this.#nonDustBalanceAssetNamesAtom.get()
+      if (currentAssetNames.length > 0) {
+        if (this.#alwaysAutoEnable) {
+          this.#enqueue(currentAssetNames)
+        } else {
+          this.#maybeAutoEnable(currentAssetNames)
+        }
       }
     }
   }
@@ -216,6 +227,7 @@ const autoEnableAssetsPluginDefinition = {
     'enabledAssetsAtom',
     'availableAssetNamesAtom',
     'logger',
+    'errorTracking',
     'config',
   ],
   public: true,

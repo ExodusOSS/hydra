@@ -1,7 +1,7 @@
 import './styles/globals.css'
 import './styles/cmdk.css'
 
-import { HeadlessProvider } from '@exodus/headless-react'
+import { Provider as HeadlessProvider } from '@exodus/headless-ui'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import adapters from '@/background/adapters'
@@ -14,10 +14,14 @@ import selectors from './flux/selectors.js'
 
 void initialize(exodus)
 
+const uiAdapters = {
+  storage: adapters.unsafeStorage,
+}
+
 const Main = () => {
   return (
     <Provider store={store}>
-      <HeadlessProvider exodus={exodus} adapters={adapters as any} selectors={selectors}>
+      <HeadlessProvider exodus={exodus} adapters={uiAdapters} selectors={selectors}>
         <Root />
       </HeadlessProvider>
     </Provider>

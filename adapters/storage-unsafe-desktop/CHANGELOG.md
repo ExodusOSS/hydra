@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/ExodusMovement/hydra/compare/@exodus/storage-unsafe-desktop@2.0.0...@exodus/storage-unsafe-desktop@2.0.1) (2025-07-30)
+
+### Bug Fixes
+
+- fix: storage-unsafe-desktop is utf8 json (#13409)
+
 ## [2.0.0](https://github.com/ExodusMovement/hydra/compare/@exodus/storage-unsafe-desktop@1.1.3...@exodus/storage-unsafe-desktop@2.0.0) (2025-06-02)
 
 ### ⚠ BREAKING CHANGES

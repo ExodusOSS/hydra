@@ -1,6 +1,7 @@
 import { createAtomObserver } from '@exodus/atoms'
-import { WalletAccount } from '@exodus/models'
 import { SEED_SRC } from '@exodus/models/lib/wallet-account/index.js'
+import { WalletAccount } from '@exodus/models'
+import { safeString } from '@exodus/safe-string'
 
 const createWalletAccountsPlugin = ({
   port,
@@ -11,7 +12,31 @@ const createWalletAccountsPlugin = ({
   multipleWalletAccountsEnabledAtom,
   walletAccountsAtom,
   wallet,
+  errorTracking,
 }) => {
+  let createAccountParams
+
+  const createAccount = async (params) => {
+    try {
+      const { source, seedId, compatibilityMode } = params
+      await walletAccounts.createMany(
+        [
+          {
+            source: source || WalletAccount.EXODUS_SRC,
+            label: config.defaultLabel,
+            color: config.defaultColor,
+            seedId,
+            compatibilityMode,
+          },
+        ],
+        { useOptimisticWrite: true }
+      )
+    } catch (error) {
+      errorTracking.track({ error, namespace: safeString`wallet-accounts-lifecycle` })
+      throw error
+    }
+  }
+
   const atomObservers = [
     createAtomObserver({
       port,
@@ -41,10 +66,11 @@ const createWalletAccountsPlugin = ({
 
   const ensureActiveAccountEnabled = async () => {
     const activeWalletAccount = await activeWalletAccountAtom.get()
-    const instance = walletAccounts.get(activeWalletAccount)
+    const loadedWalletAccounts = await walletAccountsAtom.get()
+    const instance = loadedWalletAccounts[activeWalletAccount]
 
     if (!instance || !instance.enabled) {
-      await activeWalletAccountAtom.set(WalletAccount.DEFAULT_NAME)
+      await activeWalletAccountAtom.set(Object.keys(loadedWalletAccounts)[0])
     }
   }
 
@@ -70,16 +96,16 @@ const createWalletAccountsPlugin = ({
     if (isLocked) return
 
     atomObservers.forEach((observer) => observer.start())
-    await walletAccounts.load(seedParams)
-    await ensureActiveAccountEnabled()
   }
-
-  let seedParams
 
   const onUnlock = async () => {
     atomObservers.forEach((observer) => observer.start())
-    await walletAccounts.load(seedParams)
-    seedParams = undefined
+    if (createAccountParams) {
+      await createAccount(createAccountParams)
+      createAccountParams = null
+    }
+
+    await walletAccounts.load()
 
     await ensureActiveAccountEnabled()
     ensureEachSeedHasAccount()
@@ -108,11 +134,11 @@ const createWalletAccountsPlugin = ({
   }
 
   const onCreate = async (params) => {
-    seedParams = params
+    createAccountParams = params
   }
 
   const onImport = async (params) => {
-    seedParams = params
+    createAccountParams = params
   }
 
   return { onLoad, onUnlock, onClear, onStart, onStop, onAddSeed, onCreate, onImport }

@@ -26,8 +26,8 @@ export type UnlockWalletParams = {
 }
 
 export type Wallet = {
-  create: (opts?: CreateWalletParams) => Promise<string>
-  import: (opts: CreateWalletParams) => Promise<string>
+  create: (opts?: CreateWalletParams) => Promise<any>
+  import: (opts: CreateWalletParams) => Promise<any>
   addSeed: (opts: AddSeedParams) => Promise<string>
   removeManySeeds: (seedIds: string[]) => Promise<void>
   removeSeed: (seedId: string) => Promise<void>
@@ -54,7 +54,9 @@ export type WalletGetMnemonicParams = {
 
 export type CreateApplicationParams = CreateWalletParams
 export type LifecycleHookName = ValueOf<typeof LifecycleHook>
-export type LifecycleHookListener = (...params: unknown[]) => MaybePromise<unknown>
+export type LifecycleHookListener = ((...params: unknown[]) => MaybePromise<unknown>) & {
+  priority?: number
+}
 
 type BackupType = 'passkeys' | 'seed-phrase'
 

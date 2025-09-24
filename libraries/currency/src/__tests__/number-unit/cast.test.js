@@ -1,5 +1,6 @@
-import { bitcoin, ethereum, dollar } from '../_fixtures.js'
 import BigIntWrapper from '@exodus/bigint'
+
+import { bitcoin, dollar, ethereum } from '../_fixtures.js'
 
 const satoshisNumberUnit = bitcoin.satoshis('12345')
 const bitcoinNU = bitcoin.BTC('1.2345')

@@ -23,13 +23,15 @@ const getSpendableBalance = ({ asset, txLog, balance }) => {
   return balance.sub(unconfirmedTotal)
 }
 
-const getBalances = ({ asset, txLog }) => {
-  const balance = txLog.getMutations().slice(-1)[0]?.balance
+const getBalances = ({ asset, txLog, feeData }) => {
+  const balance = txLog.getMutations().slice(-1)[0]?.balance ?? asset.currency.ZERO
   const spendableBalance = getSpendableBalance({ asset, txLog, balance })
   return balance
     ? {
         balance,
-        spendableBalance,
+        spendableBalance: feeData?.addToSpendableBalance
+          ? spendableBalance.add(asset.currency.baseUnit(feeData?.addToSpendableBalance))
+          : spendableBalance,
       }
     : null
 }
@@ -48,7 +50,11 @@ const accountStateBasedBalanceAsset = {
   }),
   api: {
     hasFeature: (feature) => ({})[feature],
-    getBalances: ({ accountState, txLog, asset }) => {
+    getBalances: ({ accountState, txLog, asset, feeData }) => {
+      if (feeData) {
+        throw new Error('Fee data is not expected here!')
+      }
+
       const { balance } = pick(accountState, ['balance'])
       const spendableBalance = getSpendableBalance({ asset, txLog, balance })
       const unconfirmedSent = UnitType.create({
@@ -58,8 +64,10 @@ const accountStateBasedBalanceAsset = {
 
       const unconfirmedReceived = asset.currency.defaultUnit(-3) // check exception handling
 
-      if (balance && !balance.isZero)
+      if (balance && !balance.isZero) {
         return { balance, spendableBalance, unconfirmedSent, unconfirmedReceived }
+      }
+
       return null
     },
     createAccountState: () => AccountState0,
@@ -90,7 +98,11 @@ const assetMocks = {
     }),
     api: {
       hasFeature: (feature) => ({})[feature],
-      getBalances: ({ asset, txLog, accountState }) => {
+      getBalances: ({ asset, txLog, accountState, feeData }) => {
+        if (feeData) {
+          throw new Error('Fee data is not expected here!')
+        }
+
         const balance = accountState?.tokenBalances?.accountStateBasedBalanceToken
         const spendableBalance = getSpendableBalance({ asset, txLog, balance })
         return balance ? { balance, spendableBalance } : null
@@ -115,10 +127,7 @@ const assetMocks = {
       ETH: 18,
     }),
     api: {
-      hasFeature: (feature) =>
-        ({
-          historyBasedBalance: true,
-        })[feature],
+      features: { historyBasedBalance: true, balancesRequireFeeData: true },
       getBalances,
     },
   },
@@ -135,10 +144,7 @@ const assetMocks = {
       DAI: 18,
     }),
     api: {
-      hasFeature: (feature) =>
-        ({
-          historyBasedBalance: true,
-        })[feature],
+      features: { historyBasedBalance: true },
       getBalances,
     },
   },

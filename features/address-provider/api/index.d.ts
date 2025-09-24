@@ -1,7 +1,7 @@
 import type { Address } from '@exodus/models'
 
 type AssetSource = { walletAccount: string; assetName: string }
-type PathIndex = string | number
+type PathIndex = number
 
 export interface AddressProviderApi {
   getAddress(

@@ -43,8 +43,10 @@ export function createNumber(num, power) {
 
 export function stringToNumberFraction(num, exp, { numberOnly = false } = {}) {
   if (typeof num === 'number') {
-    if (num === Number.POSITIVE_INFINITY || num === Number.NEGATIVE_INFINITY)
+    if (num === Number.POSITIVE_INFINITY || num === Number.NEGATIVE_INFINITY) {
       throw new Error('Infinity is not supported')
+    }
+
     num = num.toString()
   } else if (typeof num === 'string') {
     num = num.toLowerCase()
@@ -60,7 +62,7 @@ export function stringToNumberFraction(num, exp, { numberOnly = false } = {}) {
   if (num.length > 2 && num[0] === '0' && num[1] === 'x') {
     // need validate, because BN do not have it
     num = num.slice(2)
-    if (!/^[\d.a-f]*$/.test(num)) {
+    if (!/^[\d.a-f]*$/u.test(num)) {
       throw new Error(`Invalid hex number: 0x${num}`)
     }
 
@@ -92,7 +94,7 @@ export function stringToNumberFraction(num, exp, { numberOnly = false } = {}) {
   }
 
   // verify that there no extra symbols, only `0-9` and one `.` allowed
-  if (!/^\d*(\.\d*)?$/.test(num)) {
+  if (!/^\d*(\.\d*)?$/u.test(num)) {
     throw new Error(`Not allowed symbol in number: ${num}`)
   }
 

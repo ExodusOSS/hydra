@@ -69,6 +69,7 @@ export type ApplicationParams = {
 
 export class Application extends EventEmitter {
   #hooks: Partial<Record<LifecycleHookName, LifecycleHookListener[]>> = {}
+  #hookNeedsSorting: Partial<Record<LifecycleHookName, boolean>> = {}
   #logger: Logger
   #eventLog: EventLog
   #wallet: Wallet
@@ -134,7 +135,7 @@ export class Application extends EventEmitter {
     if (isImporting || !walletExists) {
       await this.#eventLog.record({
         event: 'application.willFireClearHook',
-        applicationWillFireClearHookOpts: { isImporting, walletExists },
+        applicationWillFireClearHookOpts: { isImporting, isDeleting, walletExists },
       })
 
       await this.fire(Hook.Clear, null, { concurrent: true })
@@ -203,6 +204,7 @@ export class Application extends EventEmitter {
     }
 
     this.#hooks[hookName]!.push(listener)
+    this.#hookNeedsSorting[hookName] = true
   }
 
   private executeHooks = async (hooksFns: HookFn[], concurrent = false) => {
@@ -226,6 +228,11 @@ export class Application extends EventEmitter {
 
     const hooks = this.#hooks[hookName] || []
 
+    if (this.#hookNeedsSorting[hookName]) {
+      hooks.sort((a, b) => (b.priority || 0) - (a.priority || 0))
+      this.#hookNeedsSorting[hookName] = false
+    }
+
     const hookFns = hooks.map((hook) => async () => {
       try {
         await hook(params)
@@ -243,7 +250,7 @@ export class Application extends EventEmitter {
     this.#logger.log('creating wallet')
 
     await this.#applicationStarted
-    const seedId = await this.#wallet.create(opts)
+    const createResult = await this.#wallet.create(opts)
 
     const isLocked = await this.#wallet.isLocked()
 
@@ -253,7 +260,8 @@ export class Application extends EventEmitter {
       isLocked,
       isRestoring: false,
       walletExists: true,
-      seedId,
+      seedId: createResult.seedId, // will be deprecated
+      createResult,
     })
   }
 
@@ -281,8 +289,13 @@ export class Application extends EventEmitter {
       await this.#storage.set('backupType', backupType)
     }
 
-    const seedId = await this.#wallet.import(wallet)
-    const importParams = { seedId, compatibilityMode, backupType }
+    const importResult = await this.#wallet.import(wallet)
+    const importParams = {
+      compatibilityMode,
+      backupType,
+      importResult,
+      seedId: importResult.seedId, // will be deprecated
+    }
 
     if (forceRestart || walletExists) {
       await this.#flagsStorage.set(IMPORT_FLAG, true)

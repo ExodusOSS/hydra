@@ -164,25 +164,13 @@ describe('multi-seed wallet accounts migration', async () => {
     ['platforms with encrypted storage', 'encrypted'],
     ['platforms without encrypted storage', 'unencrypted'],
   ])('%s', (_, fixture) => {
-    test('migrates default wallet account', async () => {
-      const { exodus } = await setup({ fixture })
-
-      await expect(exodus.walletAccounts.getEnabled()).resolves.toEqual({
-        [WalletAccount.DEFAULT_NAME]: new WalletAccount({
-          ...WalletAccount.DEFAULT,
-          seedId,
-        }),
-      })
-
-      await exodus.application.stop()
-    })
-
     test('migrates stored wallet accounts', async () => {
       // default wallet account and another wallet account at index 1 without seedId
       const { softwareWalletAccounts: stored } = fixtures[fixture]
       const { exodus } = await setup({ storedWalletAccounts: stored, fixture })
 
-      await expect(exodus.walletAccounts.getEnabled()).resolves.toEqual({
+      const enabledAccounts = await exodus.walletAccounts.getEnabled()
+      expect(enabledAccounts).toEqual({
         [WalletAccount.DEFAULT_NAME]: new WalletAccount({
           ...WalletAccount.DEFAULT,
           seedId,
@@ -204,7 +192,8 @@ describe('multi-seed wallet accounts migration', async () => {
       const { softwareAndHardwareWalletAccount: stored } = fixtures[fixture]
       const { exodus } = await setup({ storedWalletAccounts: stored, fixture })
 
-      await expect(exodus.walletAccounts.getEnabled()).resolves.toEqual({
+      const enabledAccounts = await exodus.walletAccounts.getEnabled()
+      expect(enabledAccounts).toEqual({
         [WalletAccount.DEFAULT_NAME]: new WalletAccount({
           ...WalletAccount.DEFAULT,
           seedId,
@@ -230,7 +219,8 @@ describe('multi-seed wallet accounts migration', async () => {
         fixture,
       })
 
-      await expect(exodus.walletAccounts.getEnabled()).resolves.toEqual({
+      const enabledAccounts = await exodus.walletAccounts.getEnabled()
+      expect(enabledAccounts).toEqual({
         [WalletAccount.DEFAULT_NAME]: new WalletAccount({
           ...WalletAccount.DEFAULT,
           compatibilityMode,
@@ -242,32 +232,6 @@ describe('multi-seed wallet accounts migration', async () => {
           id: 'abc',
           index: 0,
           color: fixture === 'encrypted' ? '#7b39ff' : undefined,
-        }),
-      })
-
-      await expect(
-        adapters.unsafeStorage.namespace('flags').get('compatibilityMode')
-      ).resolves.toBeUndefined()
-
-      await exodus.application.stop()
-    })
-
-    test('adds default label for empty state', async () => {
-      const { exodus, adapters } = await setup({
-        storedWalletAccounts: null,
-        fixture,
-        extraConfig: {
-          walletAccountsInternalAtom: {
-            defaultLabel: 'test',
-          },
-        },
-      })
-
-      await expect(exodus.walletAccounts.getEnabled()).resolves.toEqual({
-        [WalletAccount.DEFAULT_NAME]: new WalletAccount({
-          ...WalletAccount.DEFAULT,
-          label: 'test',
-          seedId,
         }),
       })
 

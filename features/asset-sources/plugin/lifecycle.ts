@@ -24,7 +24,7 @@ const createAssetSourcesLifecyclePlugin = ({
   }
 
   const onLoad = () => {
-    observer.start()
+    void observer.start()
   }
 
   const onStop = () => {

@@ -15,7 +15,7 @@ function Checkbox({ value, className, onChange }: CheckboxProps) {
       type="checkbox"
       checked={value}
       className={cn(
-        'size-6 rounded border-none bg-deep-300 text-deep-300 outline-none focus:ring-0',
+        'bg-deep-300 text-deep-300 size-6 rounded border-none outline-none focus:ring-0',
         className
       )}
       onChange={onChange}

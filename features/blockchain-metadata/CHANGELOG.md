@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [16.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.14.0...@exodus/blockchain-metadata@16.0.0) (2025-09-01)
+
+### ⚠ BREAKING CHANGES
+
+- replace error event with errorTracking usage (#13730)
+
+### Features
+
+- feat!: replace error event with errorTracking usage (#13730)
+
+## [15.14.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.13.0...@exodus/blockchain-metadata@15.14.0) (2025-07-30)
+
+### Features
+
+- feat(blockchain-metadata): implment addTxs (#13403)
+
+## [15.13.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.12.0...@exodus/blockchain-metadata@15.13.0) (2025-07-30)
+
+### Features
+
+- feat: validate `data.rbfEnabled` (#13413)
+
 ## [15.12.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.11.1...@exodus/blockchain-metadata@15.12.0) (2025-06-16)
 
 ### Features

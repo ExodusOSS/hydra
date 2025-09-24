@@ -46,8 +46,9 @@ describe('wallet', () => {
           value === undefined ||
           id === 'eventLogAtom' ||
           (typeof value === 'function' && value() === undefined)
-        )
+        ) {
           clearedAtoms.push(id)
+        }
 
         return set(value)
       }

@@ -1,6 +1,6 @@
 {
   "name": "@exodus/storage-mobile",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
   "description": "Implementation of storage-spec interface for react-native on mobile",
   "author": "Exodus Movement, Inc.",
@@ -20,7 +20,7 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "run -T tsc --build tsconfig.build.json",
+    "build": "run -T tsc -p tsconfig.build.json",
     "clean": "run -T tsc --build --clean",
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",

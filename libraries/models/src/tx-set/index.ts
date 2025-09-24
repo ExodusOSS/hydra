@@ -161,8 +161,9 @@ class TxSet {
             Math.sign(tx.coinAmount!.toDefaultNumber()) ===
               Math.sign(oldTx.coinAmount!.toDefaultNumber()) && // only use old when signs are the same and there is no fee
             !tx.feeAmount
-          )
+          ) {
             tx.coinAmount = oldTx.coinAmount
+          }
 
           // if old has meta, usually exchange data, like ShapeShift order number
           // TODO: if new has meta, should consider merging old meta and new meta

@@ -92,6 +92,7 @@ declare module '@exodus/currency' {
   class UnitType {
     static create(definitions: Definitions): UnitType
     static equals(a: UnitType, b: UnitType): boolean
+    static isUnitType(param: unknown): param is UnitType
 
     constructor(definitions: Definitions, initSymbol: symbol)
 

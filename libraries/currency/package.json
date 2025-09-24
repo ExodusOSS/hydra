@@ -1,12 +1,12 @@
 {
   "name": "@exodus/currency",
-  "version": "6.0.1",
+  "version": "6.3.0",
   "description": "Currency support.",
   "type": "module",
   "main": "src/index.js",
   "author": "Exodus Movement, Inc.",
-  "license": "UNLICENSED",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/currency",
+  "license": "MIT",
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/currency",
   "files": [
     "src",
     "CHANGELOG.md",
@@ -21,15 +21,18 @@
     "bn.js": "^5.2.1"
   },
   "scripts": {
-    "test": "run -T exodus-test --jest '**/__tests__/**/?(*.)+(spec|test).(t|j)s?(x)'",
+    "test": "run -T exodus-test --jest",
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
   },
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Acurrency"
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Acurrency"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -1,7 +1,8 @@
-const { PsbtV2 } = require('ledger-bitcoin')
-const { Psbt, payments, initEccLib } = require('bitcoinjs-lib')
-const ecc = require('tiny-secp256k1')
-const { ECPairFactory } = require('ecpair')
+import { tiny_secp256k1_compat as ecc } from '@exodus/crypto/secp256k1'
+import { PsbtV2 } from '@exodus/ledger-bitcoin'
+import { initEccLib, payments, Psbt } from 'bitcoinjs-lib'
+import { ECPairFactory } from 'ecpair'
+
 const ECPair = ECPairFactory(ecc)
 initEccLib(ecc)
 

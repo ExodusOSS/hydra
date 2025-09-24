@@ -7,19 +7,25 @@ const createErrorTracking = ({
   config,
   logger,
 }) => {
-  const track = async ({ error, context, namespace }) => {
+  const track = async ({ error, context, namespace, silent = true, timeout = 5000 }) => {
+    const onError = (err) => {
+      logger.error(err)
+      if (!silent) throw err
+    }
+
+    logger.error(error)
+
     if (namespace !== undefined && typeof namespace !== 'string') {
-      throw new Error('namespace must be a string')
+      return onError(new Error('namespace must be a string'))
     }
 
     if (!(error instanceof Error)) {
-      throw new TypeError('error must be an instance of Error')
+      return onError(new TypeError('error must be an instance of Error'))
     }
 
     // TODO: figure out what to do with `context`
-
-    // eventually kill this and only track remote
-    await errorsAtom.set(({ errors }) => {
+    // TODO: eventually kill this and only track remote
+    const localPromise = errorsAtom.set(({ errors }) => {
       return {
         // this array can be big. not sure about prefering spread operator here
         // concat function seems like a better option
@@ -30,13 +36,29 @@ const createErrorTracking = ({
       }
     })
 
-    if (remoteErrorTracking) {
-      remoteErrorTrackingEnabledAtom
-        .get()
-        .then((enabled) => enabled && remoteErrorTracking.track({ error }))
-        .catch((err) => {
-          logger.error('failed to upload error', error, err)
-        })
+    const remotePromise = remoteErrorTracking
+      ? remoteErrorTrackingEnabledAtom
+          .get()
+          .then((enabled) => enabled && remoteErrorTracking.track({ error }))
+      : Promise.resolve()
+
+    let timeoutId
+    const timeoutPromise = new Promise((resolve, reject) => {
+      timeoutId = setTimeout(() => {
+        reject(new Error('track call timed out'))
+      }, timeout)
+    })
+
+    try {
+      await Promise.race([
+        //
+        Promise.all([localPromise, remotePromise]),
+        timeoutPromise,
+      ])
+    } catch (err) {
+      onError(err)
+    } finally {
+      clearTimeout(timeoutId)
     }
   }
 

@@ -31,7 +31,7 @@ describe('SafeError', () => {
   jest.spyOn(Date, 'now').mockImplementation(() => 0)
 
   describe('.from()', () => {
-    for (const [errorIn, safeErrorOut] of [
+    for (const [errorIn, { missingStack, ...safeErrorOut }] of [
       // name assertions
       // -- unknown error names
       [new ReferenceError('random ref error'), { name: 'UnknownError' }],
@@ -112,7 +112,7 @@ describe('SafeError', () => {
         },
       ],
       ...commonErrorCases,
-    ] as const) {
+    ] as typeof commonErrorCases) {
       it(`should convert ${errorIn.name} to ${JSON.stringify(safeErrorOut)}`, () => {
         expect(SafeError.from(errorIn).toJSON()).toEqual({
           stack: expect.any(String),

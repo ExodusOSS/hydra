@@ -30,9 +30,9 @@ const getTrezorMeta = (assets) => {
 
   // Assets supported by specific Trezor models on Exodus.
   const ASSETS_BY_MODEL = {
-    'Safe 5': [...BASE_SUPPORTED_ASSETS, 'cardano', 'monero', 'ripple'].sort(),
-    'Safe 3': [...BASE_SUPPORTED_ASSETS, 'cardano', 'monero', 'ripple'].sort(),
-    T: [...BASE_SUPPORTED_TREZOR_ONE_AND_T, 'cardano', 'monero', 'ripple'].sort(),
+    'Safe 5': [...BASE_SUPPORTED_ASSETS, 'cardano', 'ripple'].sort(),
+    'Safe 3': [...BASE_SUPPORTED_ASSETS, 'cardano', 'ripple'].sort(),
+    T: [...BASE_SUPPORTED_TREZOR_ONE_AND_T, 'cardano', 'ripple'].sort(),
     1: [...BASE_SUPPORTED_TREZOR_ONE_AND_T],
   }
 

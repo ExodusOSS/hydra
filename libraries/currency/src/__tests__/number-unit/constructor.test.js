@@ -1,4 +1,5 @@
 import assert from 'assert'
+
 import NumberUnit from '../../index.js'
 import { bitcoin, ethereum } from '../_fixtures.js'
 

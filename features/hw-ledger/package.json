@@ -1,6 +1,6 @@
 {
   "name": "@exodus/hw-ledger",
-  "version": "3.4.0",
+  "version": "3.6.1",
   "description": "The ledger module",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/hw-ledger",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Ahw-ledger"
   },
@@ -19,50 +19,51 @@
     "./CHANGELOG.md"
   ],
   "scripts": {
-    "build": "run -T tsc --build tsconfig.build.json",
-    "build:watch": "run -T tsc --build tsconfig.build.json && run -T tsc --build -w tsconfig.build.json",
+    "build": "run -T tsc -p tsconfig.build.json",
+    "build:watch": "run -T tsc -w -p tsconfig.build.json",
     "clean": "run -T tsc --build --clean",
-    "test": "RUN_TESTS=unit run -T exodus-test --jest --esbuild",
-    "zemu:install": "docker pull zondax/builder-zemu:speculos-745fe46f81cfc18114b94a37beaefb58a09c0fcd",
-    "test:integration": "yarn zemu:install && RUN_TESTS=integration run -T exodus-test --jest --esbuild",
+    "test": "run -T exodus-test --jest --esbuild",
+    "zemu:install": "docker pull zondax/builder-zemu:speculos-ef9610662dc90a1eeddba7c991e3ef7c53c4e258",
+    "test:integration": "yarn zemu:install && RUN_TESTS=integration run test",
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",
     "prepublishOnly": "yarn run -T build --scope @exodus/hw-ledger"
   },
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
-    "@exodus/bip322-js": "^1.2.1",
+    "@exodus/bip322-js": "^2.0.0",
     "@exodus/bitcoinjs": "^1.1.0",
     "@exodus/crypto": "^1.0.0-rc.14",
+    "@exodus/ethereumjs": "^1.5.0",
     "@exodus/ethersproject-transactions": "^5.4.2-exodus.0",
     "@exodus/hw-common": "^3.1.0",
-    "@exodus/ledger-bitcoin": "^0.2.3-exodus.3",
+    "@exodus/ledger-bitcoin": "^0.2.3-exodus.6",
     "@exodus/ledgerhq-devices": "^8.1.0-exodus.3",
     "@exodus/ledgerhq-hw-app-eth": "^6.33.7-exodus.8",
     "@exodus/redux-dependency-injection": "^4.0.0",
     "@ledgerhq/hw-app-solana": "^7.0.10",
     "@ledgerhq/hw-app-trx": "^6.29.4",
     "@ledgerhq/hw-transport": "^6.28.5",
-    "@metamask/eth-sig-util": "^4.0.1",
     "bs58": "^4.0.0",
-    "bs58check": "^2.1.2",
+    "bs58check": "^3.0.1",
     "minimalistic-assert": "^1.0.1",
     "semver": "^7.3.5"
   },
   "devDependencies": {
-    "@exodus/bip32": "^3.3.0",
+    "@exodus/bip32": "^4.1.0",
     "@exodus/dependency-types": "workspace:^",
-    "@ledgerhq/hw-transport-node-hid": "^6.27.17",
     "@solana/web3.js": "^1.78.0",
     "@types/bs58": "^4.0.1",
     "@types/bs58check": "^2.1.0",
     "@types/minimalistic-assert": "^1.0.1",
     "@types/semver": "^7.3.5",
-    "@zondax/zemu": "^0.43.1",
+    "@zondax/zemu": "^0.51.0",
     "bitcoinjs-lib": "^6.1.3",
     "ecpair": "^2.1.0",
     "p-defer": "^4.0.1",
-    "redux": "^4.2.1",
-    "tiny-secp256k1": "^2.2.3"
+    "redux": "^4.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

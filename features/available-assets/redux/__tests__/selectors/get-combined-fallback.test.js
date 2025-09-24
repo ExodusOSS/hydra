@@ -1,4 +1,4 @@
-import { bitcoin, usdcoin, usdcoinSolana, setup } from '../utils.js'
+import { bitcoin, setup, usdcoin, usdcoinSolana } from '../utils.js'
 
 describe('getCombinedFallback', () => {
   it('should return the first combined asset if present', () => {

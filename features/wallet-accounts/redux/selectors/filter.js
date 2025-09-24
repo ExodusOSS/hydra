@@ -1,5 +1,6 @@
 import lodash from 'lodash'
 import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect'
+import { WalletAccount } from '@exodus/models'
 
 const { isEqual, isMatch, memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
@@ -28,6 +29,8 @@ const selectorFactory = (allWalletAccountInstancesSelector, activeWalletAccountS
               custodial: !!walletAccount.isCustodial,
               readOnly: !!(walletAccount.isHardware || walletAccount.is2FA),
               hardware: !!walletAccount.isHardware,
+              ledger: walletAccount.source === WalletAccount.LEDGER_SRC,
+              trezor: walletAccount.source === WalletAccount.TREZOR_SRC,
               '2FA': !!walletAccount.is2FA,
               active: walletAccount.toString() === activeWalletAccountName,
             }

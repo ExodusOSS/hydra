@@ -46,9 +46,9 @@ Because the keychain supports managing multiple seeds at once, most operations r
 Before you can perform keychain operations, you must provide it one or more `seed`s via `keychain.addSeed(seed)`. Calling `keychain.removeAllSeeds()` will remove all previously added seeds and any derived cryptographic material from its internal fields.
 
 ```js
-const seed = mnemonicToSeed(
-  'menu memory fury language physical wonder dog valid smart edge decrease worth'
-)
+const seed = await mnemonicToSeed({
+  mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
+})
 
 keychain.addSeed(seed)
 keychain.addSeed(secondSeed)
@@ -59,45 +59,32 @@ keychain.removeAllSeeds()
 
 ### Sign a transaction
 
-The function `keychain.signTx(...)` can sign transactions for you for a given key identifier.
+The function `keychain.signTx(...)` is deprecated.
+
+Use `keychain.signBuffer(...)` to sign serialized transactions for a given key identifier.
 
 ```js
-import {
-  signUnsignedTx as signSolanaTx,
-  createUnsignedTx as createUnsignedSolanaTx,
-} from '@exodus/solana-lib'
-import solanaAssets from '@exodus/solana-meta'
-import { connectAssetsList } from '@exodus/assets'
-import { mnemonicToSeed } from 'bip39'
-import assert from 'minimalistic-assert'
+import { mnemonicToSeed } from '@exodus/bip39'
 import keychainDefinition, { KeyIdentifier } from '..'
 
-const { solana: asset } = connectAssetsList(solanaAssets)
-
-const unsignedTx = await createUnsignedSolanaTx({
-  asset,
-  from: 'nsn7DmCMsKWGUWcL92XfPKXFbUz7KtFDRa4nnkc3RiF',
-  to: '7SmaJ41gFZ1LPsZJfb57npzdCFuqBRmgj3CScjbmkQwA',
-  amount: asset.currency.SOL('5'),
-  fee: asset.currency.SOL('0.000005'),
-  recentBlockhash: '6yWbfvhoDrgzStVnvpRvib2Q1LpuTYc6TtdMPPofCPh8',
+const keyId = new KeyIdentifier({
+  assetName: 'solana',
+  derivationAlgorithm: 'BIP32',
+  derivationPath: "m/44'/501'/0'/0/0",
+  keyType: 'nacl',
 })
 
-const signedTx = await keychain.signTx({
+const DATA =
+  '010001033c8939b872876416b1ba97d04c6a31211e39258a82d0fa45542a1cccc2617d2f2c2e85e395109a73ab754dfdad48d2cdefae040d4653228245df6fe6b6d24f7300000000000000000000000000000000000000000000000000000000000000004f968728ba006a647883abdd1b8eabde24e181c8bb8e769256f9a37e73b8727901020200010c02000000b4ebad0200000000'
+
+const result = await keychain.signBuffer({
   seedId,
-  // Note: this is an array as some assets require multiple keys to sign a single transaction,
-  // e.g. bitcoin needs a keyId per UTXO
-  keyIds: [keyId],
-  // in Exodus mobile/desktop/browser-extension clients, this is typically aggregated
-  // for all assets into a single delegator function
-  signTxCallback: ({ unsignedTx, hdkeys, privateKey }) => {
-    assert(unsignedTx.txMeta.assetName === 'solana', `expected "solana" tx`)
-    return signSolanaTx(unsignedTx, privateKey)
-  },
-  unsignedTx,
+  keyId,
+  signatureType: 'ed25519',
+  data: Buffer.from(DATA, 'hex'),
 })
 
-// signedTx.txId === 'Lj2iFo1MKx3cWTLH1GbvxZjCtNTMBmB2rXR5JV7EFQnPySyxKssAReBJF56e7XzXiAFeYdMCwFvyR3NkFVbh8rS'
+// result.toString('hex') === '810cdc7d804dcfab90147e50c40b0afe1f9d01fa6933739032d761f7fca4226389d348d70478560845ae9e90a940ef4173e17690b9d93122aadd56fa56b8b609'
 ```
 
 ### Encrypt/Decrypt Data

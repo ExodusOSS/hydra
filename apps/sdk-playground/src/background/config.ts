@@ -12,7 +12,7 @@ type Config = { exchange: ExchangeConfig } & Record<string, unknown>
 
 const config: Config = {
   availableAssets: {
-    defaultAvailableAssetNames: ['bitcoin', 'ethereum'],
+    defaultAvailableAssetNames: ['bitcoin', 'ethereum', 'solana', '_usdcoin', '_tetherusd'],
   },
   enabledAssets: {
     defaultEnabledAssetsList,

@@ -106,7 +106,7 @@ describe('storage-mobile', () => {
       it('should wait for creation to finish before setting', (done) => {
         delayDirectoryCreation(async (storage, resolveCreated, advanceBy) => {
           const setCallback = jest.fn()
-          storage.set(key, largeVal).then(setCallback)
+          void storage.set(key, largeVal).then(setCallback)
 
           resolveCreated(100)
 
@@ -121,7 +121,7 @@ describe('storage-mobile', () => {
       it('should wait for creation to finish before clearing', (done) => {
         delayDirectoryCreation(async (storage, resolveCreated, advanceBy) => {
           const clearCallback = jest.fn()
-          storage.clear().then(clearCallback)
+          void storage.clear().then(clearCallback)
 
           resolveCreated(100)
 
@@ -134,10 +134,10 @@ describe('storage-mobile', () => {
       })
 
       it('should wait for creation to finish before getting', (done) => {
-        asMock.setItem('something', JSON.stringify(placeholder)).then(() => {
+        void asMock.setItem('something', JSON.stringify(placeholder)).then(() => {
           delayDirectoryCreation(async (storage, resolveCreated, advanceBy) => {
             const getCallback = jest.fn()
-            storage.get('something').then(getCallback)
+            void storage.get('something').then(getCallback)
 
             resolveCreated(100)
 
@@ -153,7 +153,7 @@ describe('storage-mobile', () => {
       it('should wait for creation to finish before deleting', (done) => {
         delayDirectoryCreation(async (storage, resolveCreated, advanceBy) => {
           const deleteCallback = jest.fn()
-          storage.delete('something').then(deleteCallback)
+          void storage.delete('something').then(deleteCallback)
 
           resolveCreated(100)
 

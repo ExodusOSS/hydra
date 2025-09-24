@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-signer@3.0.0...@exodus/tx-signer@3.1.0) (2025-09-09)
+
+### Features
+
+- feat: support passkeys in transaction signer (#13785)
+
+## [3.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-signer@2.10.1...@exodus/tx-signer@3.0.0) (2025-08-15)
+
+### ⚠ BREAKING CHANGES
+
+- remove legacy transaction signing from tx-signer (#13454)
+
+### Features
+
+- feat!: remove legacy transaction signing from tx-signer (#13454)
+
 ## [2.10.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-signer@2.10.0...@exodus/tx-signer@2.10.1) (2025-01-15)
 
 **Note:** Version bump only for package @exodus/tx-signer

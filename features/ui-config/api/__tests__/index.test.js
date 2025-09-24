@@ -1,6 +1,6 @@
-import createUiConfigApiDefinition from '../index.js'
-
 import { createInMemoryAtom } from '@exodus/atoms'
+
+import createUiConfigApiDefinition from '../index.js'
 
 const configValues = [
   {

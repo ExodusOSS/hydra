@@ -3,7 +3,6 @@ import EventEmitter from 'events/events.js'
 import lodash from 'lodash'
 import proxyFreeze from 'proxy-freeze'
 import { Batch, getReducer } from './batching/index.js'
-import ErrorType from './error.js'
 import pDefer from 'p-defer'
 import { flattenToPaths, set } from '@exodus/basic-utils'
 
@@ -49,6 +48,7 @@ class BlockchainMetadata extends EventEmitter {
   #loaded = pDefer()
   #subscriptions = []
   #logger
+  #errorTracking
 
   constructor({
     assetsModule,
@@ -57,6 +57,7 @@ class BlockchainMetadata extends EventEmitter {
     txLogsAtom,
     accountStatesAtom,
     logger,
+    errorTracking,
   }) {
     super()
 
@@ -69,6 +70,7 @@ class BlockchainMetadata extends EventEmitter {
     this.#txsStorage = storage.namespace('txs')
     this.#accountStatesStorage = storage.namespace('states')
     this.#logger = logger
+    this.#errorTracking = errorTracking
   }
 
   emit = (name, ...args) => {
@@ -154,10 +156,9 @@ class BlockchainMetadata extends EventEmitter {
         error
       )
 
-      this.emit('error', {
-        type: ErrorType.MalformedTxs,
-        data: { walletAccount, assetName },
+      this.#errorTracking.track({
         error,
+        context: { walletAccount, assetName },
       })
     }
   }
@@ -181,10 +182,9 @@ class BlockchainMetadata extends EventEmitter {
       const asset = this.#getAsset(assetName)
       AccountState = asset.api.createAccountState()
     } catch (err) {
-      this.emit('error', {
-        type: ErrorType.AccountStateClassCreation,
-        data: { assetName, walletAccount },
+      this.#errorTracking.track({
         error: err,
+        context: { assetName, walletAccount },
       })
 
       return
@@ -194,9 +194,8 @@ class BlockchainMetadata extends EventEmitter {
       // TODO: do not create empty accountState objects, this needs to by dynamic anyway.
       return storedAccountState ? AccountState.fromJSON(storedAccountState) : AccountState?.create()
     } catch (err) {
-      this.emit('error', {
-        type: ErrorType.AccountStateCreation,
-        data: { assetName, walletAccount },
+      this.#errorTracking.track({
+        context: { assetName, walletAccount },
         error: err,
       })
     }
@@ -349,6 +348,10 @@ class BlockchainMetadata extends EventEmitter {
     await this.batch().updateTxs({ assetName, walletAccount, txs }).commit()
   }
 
+  addTxs = async ({ assetName, walletAccount, txs }) => {
+    await this.batch().addTxs({ assetName, walletAccount, txs }).commit()
+  }
+
   removeTxs = async ({ assetName, walletAccount, txs }) => {
     await this.batch().removeTxs({ assetName, walletAccount, txs }).commit()
   }
@@ -447,6 +450,7 @@ const blockchainMetadataDefinition = {
     'txLogsAtom',
     'accountStatesAtom',
     'logger',
+    'errorTracking',
   ],
   public: true,
 }

@@ -1,12 +1,12 @@
-import { mnemonicToSeed } from 'bip39'
-
+import { mnemonicToSeed } from '@exodus/bip39'
 import KeyIdentifier from '@exodus/key-identifier'
-import createKeychain from './create-keychain.js'
-import { getSeedId } from '../crypto/seed-id.js'
 
-const seed = mnemonicToSeed(
-  'menu memory fury language physical wonder dog valid smart edge decrease worth'
-)
+import { getSeedId } from '../crypto/seed-id.js'
+import createKeychain from './create-keychain.js'
+
+const seed = await mnemonicToSeed({
+  mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
+})
 
 const seedId = getSeedId(seed)
 

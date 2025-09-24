@@ -108,6 +108,10 @@ const ethereum = {
         feesApi: true,
         nfts: true,
       })[feature],
+    features: {
+      feesApi: true,
+      nfts: true,
+    },
     createFeeMonitor: () => new DummyFeeMonitor({ assetName: 'ethereum', updateFee: () => {} }),
     getTokens: () => [someCustomToken],
   },
@@ -181,6 +185,10 @@ const solana = {
         feesApi: true,
         nfts: false,
       })[feature],
+    features: {
+      feesApi: true,
+      nfts: false,
+    },
     getFeeData: () => solanaFeeData,
     createFeeMonitor: () => new DummyFeeMonitor({ assetName: 'solana', updateFee: () => {} }),
   },
@@ -211,6 +219,9 @@ const algorand = {
       ({
         feesApi: true,
       })[feature],
+    features: {
+      feesApi: true,
+    },
     getFeeData: () => algorandFeeData,
     createFeeMonitor: () => new DummyFeeMonitor({ assetName: 'algorand', updateFee: () => {} }),
   },

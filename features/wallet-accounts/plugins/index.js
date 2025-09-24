@@ -15,6 +15,7 @@ export const walletAccountsLifecyclePluginDefinition = {
     'enabledWalletAccountsAtom',
     'config',
     'wallet',
+    'errorTracking',
   ],
   public: true,
 }

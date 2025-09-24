@@ -29,6 +29,9 @@ describe('fiat-ramp', () => {
     if (createWallet) {
       await exodus.application.create({ passphrase })
       await exodus.application.unlock({ passphrase })
+
+      const fiatUserAtom = container.get('fiatUserAtom')
+      await fiatUserAtom.set({ authenticated: true, kyc: undefined })
     }
   }
 

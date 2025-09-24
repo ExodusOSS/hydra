@@ -12,8 +12,12 @@ type AssetApi = {
     hardwareWallets?: {
       supportMatrix: HardwareWalletSupportMatrix
     }
+    signMessageWithSigner?: boolean
+    signWithSigner?: boolean
   }
   getSupportedPurposes?: (opts: AssetApiGetSupportedPurposesOpts) => number[]
+  signMessage?: () => void
+  signTx?: () => void
 }
 
 type BaseAsset = {
@@ -29,6 +33,8 @@ export type Asset = {
   name: string
   baseAssetName: string
   baseAsset: BaseAsset
+  isCombined: boolean
+  combinedAssetNames?: string[]
 }
 
 export type AssetSource = {

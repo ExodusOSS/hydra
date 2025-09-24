@@ -18,7 +18,7 @@ describe('wallet-accounts', async () => {
   const mnemonic = 'menu memory fury language physical wonder dog valid smart edge decrease worth'
   const otherMnemonic = 'excuse fly local lyrics tattoo hub way range globe put supreme glass'
   const seed = await mnemonicToSeed({ mnemonic })
-  const seedId = getSeedId(seed)
+  const seedId = await getSeedId(seed)
   const passphrase = 'my-password-manager-generated-this'
 
   const setup = async ({ importWallet = true } = {}) => {
@@ -42,7 +42,8 @@ describe('wallet-accounts', async () => {
   afterEach(() => exodus.application.stop())
 
   test('should default to 1 walletAccount', async () => {
-    await expect(exodus.walletAccounts.getEnabled()).resolves.toEqual({
+    const enabledAccounts = await exodus.walletAccounts.getEnabled()
+    expect(enabledAccounts).toEqual({
       [WalletAccount.DEFAULT_NAME]: new WalletAccount({
         ...WalletAccount.DEFAULT,
         seedId,
@@ -139,7 +140,8 @@ describe('wallet-accounts', async () => {
     exodus.wallet.addSeed({ mnemonic: otherMnemonic, compatibilityMode: 'metamask' })
     await expectEvent({ port, event: 'add-seed' })
 
-    await expect(exodus.walletAccounts.getEnabled()).resolves.toEqual({
+    const enabledAccounts = await exodus.walletAccounts.getEnabled()
+    expect(enabledAccounts).toEqual({
       exodus_0: expect.objectContaining({
         enabled: true,
         index: 0,
@@ -166,7 +168,8 @@ describe('wallet-accounts', async () => {
     await exodus.application.create({ passphrase, mnemonic })
     await exodus.application.unlock({ passphrase })
 
-    await expect(exodus.walletAccounts.getEnabled()).resolves.toEqual({
+    const enabledAccounts = await exodus.walletAccounts.getEnabled()
+    expect(enabledAccounts).toEqual({
       exodus_0: expect.objectContaining({
         seedId: 'c3d6347aa044325cbad76c524f1b3cacda024c3c',
       }),

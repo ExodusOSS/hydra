@@ -5,7 +5,9 @@ import {
   txLogsAtomDefinition,
 } from '@exodus/blockchain-metadata/atoms/index.js'
 import blockchainMetadataDefinition from '@exodus/blockchain-metadata/module/index.js'
+import feeDataAtomDefinition from '@exodus/fee-data-monitors/atoms/fee-data.js'
 import { normalizeTxJSON, TxSet, WalletAccount } from '@exodus/models'
+import { isSafe } from '@exodus/safe-string'
 import createStorage from '@exodus/storage-memory'
 import { enabledWalletAccountsAtomDefinition } from '@exodus/wallet-accounts/atoms/index.js'
 
@@ -43,6 +45,7 @@ let walletAccountsAtom
 let storage
 let balancesAtom
 let txLogsAtom
+let feeDataAtom
 let accountStatesAtom
 let balances
 
@@ -91,6 +94,7 @@ const setupModules = ({ config } = {}) => {
   walletAccountsAtom = createInMemoryAtom({ defaultValue: walletAccountsData })
   enabledWalletAccountsAtom = createEnabledWalletAccountsAtom({ walletAccountsAtom })
   txLogsAtom = txLogsAtomDefinition.factory()
+  feeDataAtom = feeDataAtomDefinition.factory()
   accountStatesAtom = accountStatesAtomDefinition.factory()
 
   blockchainMetadata = createBlockchainMetadata({
@@ -111,6 +115,7 @@ const setupModules = ({ config } = {}) => {
     config,
     balancesAtom,
     txLogsAtom,
+    feeDataAtom,
     accountStatesAtom,
     logger: { log: jest.fn(), warn: jest.fn(), error: jest.fn() },
   })
@@ -144,6 +149,7 @@ describe('balances module', () => {
     enabledWalletAccountsAtom = createEnabledWalletAccountsAtom({ walletAccountsAtom })
     txLogsAtom = txLogsAtomDefinition.factory()
     accountStatesAtom = accountStatesAtomDefinition.factory()
+    feeDataAtom = feeDataAtomDefinition.factory()
 
     blockchainMetadata = createBlockchainMetadata({
       assetsModule,
@@ -165,6 +171,7 @@ describe('balances module', () => {
       config: defaultConfig,
       balancesAtom,
       txLogsAtom,
+      feeDataAtom,
       accountStatesAtom,
       logger: { log: jest.fn(), warn: jest.fn(), error: jest.fn() },
     })
@@ -574,8 +581,9 @@ describe('balances module', () => {
       txs: baseAssetTxLog.toJSON(),
     })
 
-    const txLogBasedAssets = pickBy(assetsModule.getAssets(), (asset) =>
-      asset.api.hasFeature('historyBasedBalance')
+    const txLogBasedAssets = pickBy(
+      assetsModule.getAssets(),
+      (asset) => asset.api?.features?.historyBasedBalance
     )
 
     assetsModule.getAssets = () => txLogBasedAssets
@@ -1028,6 +1036,72 @@ describe('balances module', () => {
     })
   })
 
+  test('should call get balances with fee data', async () => {
+    await initializeModules()
+    const { accountStateBasedBalanceAsset, txLogBasedBalanceAsset } = assets
+
+    const accountStateBalance = accountStateBasedBalanceAsset.currency.baseUnit(100)
+    await blockchainMetadata.updateAccountState({
+      assetName: assets.accountStateBasedBalanceAsset.name,
+      walletAccount: walletAccountNames[0],
+      newData: {
+        balance: accountStateBalance,
+      },
+    })
+
+    await blockchainMetadata.updateTxs({
+      assetName: assets.txLogBasedBalanceAsset.name,
+      walletAccount: walletAccountNames[0],
+      txs: TxSet.fromArray([txLogAssetFixture.baseAssetTxReceivedConfirmed]).toJSON(),
+    })
+
+    await new Promise(setImmediate)
+
+    const txLogBalance = txLogBasedBalanceAsset.currency.defaultUnit(1)
+
+    expectBalances(await balancesAtom.get(), {
+      balances: {
+        [walletAccountNames[0]]: {
+          accountStateBasedBalanceAsset: {
+            balance: accountStateBalance,
+            total: accountStateBalance,
+            spendable: accountStateBalance,
+            spendableBalance: accountStateBalance,
+          },
+          txLogBasedBalanceAsset: {
+            balance: txLogBalance,
+            total: txLogBalance,
+            spendable: txLogBalance,
+            spendableBalance: txLogBalance,
+          },
+        },
+      },
+    })
+
+    await feeDataAtom.set({ accountStateBasedBalanceAsset: { addToSpendableBalance: 546 } }) // ignored
+    await feeDataAtom.set({ txLogBasedBalanceAsset: { addToSpendableBalance: 123 } })
+    await new Promise(setImmediate)
+
+    expectBalances(await balancesAtom.get(), {
+      balances: {
+        [walletAccountNames[0]]: {
+          accountStateBasedBalanceAsset: {
+            balance: accountStateBalance,
+            total: accountStateBalance,
+            spendable: accountStateBalance,
+            spendableBalance: accountStateBalance,
+          },
+          txLogBasedBalanceAsset: {
+            balance: txLogBalance,
+            total: txLogBalance,
+            spendable: txLogBalance.add(txLogBasedBalanceAsset.currency.baseUnit(123)),
+            spendableBalance: txLogBalance.add(txLogBasedBalanceAsset.currency.baseUnit(123)),
+          },
+        },
+      },
+    })
+  })
+
   test('spendableBalance for accountState-based assets with balance fields subset', async () => {
     await initializeModules({ config: { balanceFields: ['total', 'spendable'] } })
     const baseAssetTxLog = TxSet.fromArray([
@@ -1161,6 +1235,7 @@ describe('balances module', () => {
     enabledWalletAccountsAtom = createEnabledWalletAccountsAtom({ walletAccountsAtom })
     txLogsAtom = txLogsAtomDefinition.factory()
     accountStatesAtom = accountStatesAtomDefinition.factory()
+    feeDataAtom = feeDataAtomDefinition.factory()
 
     blockchainMetadata = createBlockchainMetadata({
       assetsModule,
@@ -1175,6 +1250,7 @@ describe('balances module', () => {
     balancesAtom.observe(handler)
 
     const logger = { log: jest.fn(), warn: jest.fn(), error: jest.fn() }
+    const errorTracking = { track: jest.fn() }
 
     const balancesModule = createBalances({
       assetsModule,
@@ -1183,7 +1259,9 @@ describe('balances module', () => {
       blockchainMetadata,
       balancesAtom,
       txLogsAtom,
+      feeDataAtom,
       accountStatesAtom,
+      errorTracking,
       logger,
     })
     balancesModule.load()
@@ -1209,6 +1287,10 @@ describe('balances module', () => {
       },
     })
 
-    expect(logger.error).toHaveBeenCalledWith(new Error('boo!'))
+    expect(errorTracking.track).toHaveBeenCalledWith({
+      error: new Error('getBalancesForAssetSource'),
+    })
+
+    expect(isSafe('getBalancesForAssetSource')).toBe(true)
   })
 })

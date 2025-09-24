@@ -1,8 +1,8 @@
 {
   "name": "@exodus/available-assets",
-  "version": "8.6.0",
-  "description": "Tracks supported/available assets, i.e. assets that the user can potentially enable via the UI",
-  "license": "UNLICENSED",
+  "version": "8.8.0",
+  "description": "This Exodus SDK feature tracks available assets, i.e. assets that the user can potentially enable via the UI.",
+  "license": "MIT",
   "author": "Exodus Movement, Inc.",
   "scripts": {
     "test": "run -T exodus-test --jest",
@@ -31,12 +31,12 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "dependencies": {
-    "@exodus/atoms": "^8.1.0",
+    "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
-    "@exodus/core-selectors": "^3.0.0",
-    "@exodus/trezor-meta": "^3.3.6",
+    "@exodus/core-selectors": "^4.0.0",
     "lodash": "^4.17.21",
     "make-concurrent": "^5.3.0",
+    "memoize-one": "^5.2.1",
     "reselect": "^3.0.1"
   },
   "devDependencies": {
@@ -49,5 +49,8 @@
     "@exodus/redux-dependency-injection": "workspace:^",
     "jest-when": "^3.6.0",
     "redux": "^4.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

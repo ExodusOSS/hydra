@@ -1,6 +1,6 @@
 {
   "name": "@exodus/address-provider",
-  "version": "12.11.0",
+  "version": "12.11.1",
   "description": "Address provider for deriving and tracking used and unused addresses.",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
@@ -65,8 +65,8 @@
     "@exodus/bitcoin-meta": "^2.0.0",
     "@exodus/bitcoin-plugin": "^1.25.2",
     "@exodus/blockchain-metadata": "workspace:^",
-    "@exodus/cardano-lib": "^2.4.0",
-    "@exodus/cardano-plugin": "^1.1.0",
+    "@exodus/cardano-lib": "^3.4.1",
+    "@exodus/cardano-plugin": "^1.3.0",
     "@exodus/dash-plugin": "^1.7.1",
     "@exodus/decred-plugin": "^1.7.1",
     "@exodus/digibyte-plugin": "^1.7.1",

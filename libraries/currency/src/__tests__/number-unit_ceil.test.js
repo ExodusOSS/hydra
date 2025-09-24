@@ -1,4 +1,5 @@
 import { strict as assert } from 'assert'
+
 import { bitcoin } from './_fixtures.js'
 
 test('ceil()', function () {

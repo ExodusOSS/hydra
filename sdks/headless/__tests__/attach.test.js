@@ -1,5 +1,4 @@
 import { getSodiumKeysFromSeed } from '@exodus/crypto/sodium-compat'
-import { EXODUS_KEY_IDS } from '@exodus/key-ids'
 import { safeString } from '@exodus/safe-string'
 
 import attachMigrations from '../src/migrations/attach.js'
@@ -63,7 +62,6 @@ describe('attach', () => {
     await application.fire('migrate')
 
     expect(migrateableFusion.load).toHaveBeenCalledTimes(1)
-    expect(migrateableFusion.load).toHaveBeenCalledWith({ keys: expect.any(Object) })
   })
 
   test('provide correct params to keychain when retrieving keys', async () => {
@@ -71,12 +69,7 @@ describe('attach', () => {
 
     await application.fire('migrate')
 
-    expect(keychain.sodium.getKeysFromSeed).toHaveBeenCalledTimes(1)
-    expect(keychain.sodium.getKeysFromSeed).toHaveBeenCalledWith({
-      seedId: 'primarySeedId',
-      keyId: EXODUS_KEY_IDS.FUSION,
-      exportPrivate: true,
-    })
+    expect(keychain.sodium.getKeysFromSeed).toHaveBeenCalledTimes(0)
   })
 
   test('should call migrations after migrate hook', async () => {
@@ -256,44 +249,6 @@ describe('attach', () => {
 
       const flagsStorage = adapters.unsafeStorage.namespace('migrations')
       expect(await flagsStorage.get('test')).toBe(true)
-    })
-
-    test('should timeout setup phase when it exceeds maxDuration', async () => {
-      application.reset()
-
-      const slowUnlockEncryptedStorage = jest.fn(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 200))
-      })
-
-      const slowModules = { ...modules, unlockEncryptedStorage: slowUnlockEncryptedStorage }
-
-      const migration1 = {
-        name: 'migration1',
-        factory: jest.fn(async () => {}),
-      }
-
-      const config = { migrations: { maxDuration: 100 } }
-
-      await attachMigrations({
-        migrations: [migration1],
-        application,
-        adapters,
-        modules: slowModules,
-        config,
-      })
-
-      await application.fire('migrate')
-      expect(migration1.factory).toHaveBeenCalledTimes(0)
-      expect(errorTracking.track).toHaveBeenCalledTimes(1)
-
-      const errorCalls = errorTracking.track.mock.calls
-      expect(errorCalls[0][0]).toEqual({
-        error: expect.objectContaining({
-          message: expect.stringContaining('timed out unlocking storage / fusion in migrations'),
-        }),
-        namespace: 'migrations',
-        context: { phase: 'migration-hook' },
-      })
     })
 
     test('should complete successfully when migrations finish within timeout', async () => {

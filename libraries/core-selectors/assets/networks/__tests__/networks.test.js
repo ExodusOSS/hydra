@@ -1,6 +1,6 @@
 import lodash from 'lodash'
 
-import assets from '../../../_test/assets.js'
+import assets from '../../../__tests__/assets.js'
 import createParentCombinedNetworkAssetsSelector, {
   createCombinedNetworkChildrenAssetsSelector,
   createCreateCombinedAssetChildrenNamesSelector,
@@ -164,11 +164,7 @@ describe('networks selectors', () => {
   test('networksByAssetSelector with available networks', () => {
     const allAssetsSelectorWithAvailable = () => {
       const combinedAssets = mapValues(keyBy(assets._usdcoin.combinedAssets, 'name'), (asset) => {
-        if (asset.name === 'usdcoin_solana')
-          return {
-            ...asset,
-            available: false,
-          }
+        if (asset.name === 'usdcoin_solana') return { ...asset, available: false }
 
         return {
           ...asset,

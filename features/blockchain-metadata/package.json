@@ -1,6 +1,6 @@
 {
   "name": "@exodus/blockchain-metadata",
-  "version": "15.12.0",
+  "version": "16.0.0",
   "author": "Exodus Movement, Inc.",
   "description": "Manages access to and persistence of blockchain metadata, specifically transaction history and account state.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/blockchain-metadata",

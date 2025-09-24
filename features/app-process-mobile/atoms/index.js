@@ -1,4 +1,4 @@
-import createAppProcessAtom from './app-process'
+import createAppProcessAtom from './app-process.js'
 import { createInMemoryAtom } from '@exodus/atoms'
 
 const appProcessAtomDefinition = {

@@ -1,4 +1,5 @@
 import assert from 'assert'
+
 import { ethereum } from '../_fixtures.js'
 
 test('should convert to a JavaScript string #1', () => {

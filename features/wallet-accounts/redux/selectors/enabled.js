@@ -1,7 +1,4 @@
-import { WalletAccount } from '@exodus/models'
-
-const DEFAULT_WALLET_ACCOUNT = WalletAccount.DEFAULT_NAME
-const DEFAULT_ENABLED = Object.freeze([DEFAULT_WALLET_ACCOUNT])
+const DEFAULT_ENABLED = Object.freeze([])
 
 const resultFunction = (walletAccounts, get, multipleWalletAccountsEnabled) =>
   multipleWalletAccountsEnabled

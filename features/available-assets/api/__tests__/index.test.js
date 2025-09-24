@@ -1,4 +1,5 @@
 import { createInMemoryAtom } from '@exodus/atoms'
+
 import availableAssetsApiDefinition from '../index.js'
 
 describe('availableAssetsApi', () => {

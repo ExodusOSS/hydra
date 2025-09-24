@@ -4,7 +4,7 @@ import Kbd from '../kbd/index.js'
 function Searchbar({ onSearchClick }) {
   return (
     <button
-      className="flex w-full cursor-pointer items-center gap-4 rounded-xl border border-deep-50 p-2 text-slate-500"
+      className="border-deep-50 flex w-full cursor-pointer items-center gap-4 rounded-xl border p-2 text-slate-500"
       onClick={onSearchClick}
     >
       <Icon className="text-white" name="magnifying-glass" size={16} />

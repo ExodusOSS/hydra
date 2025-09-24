@@ -5,7 +5,7 @@ const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-bas
 
 const { balanceFields } = defaultConfig
 
-const resultFunction = (getBalances) =>
+const resultFunction = (assets, getBalances) =>
   memoize(
     ({ assetName, walletAccount, field }) => {
       if (!balanceFields.includes(field)) {
@@ -14,7 +14,7 @@ const resultFunction = (getBalances) =>
         )
       }
 
-      return getBalances({ assetName, walletAccount })?.[field]
+      return getBalances({ assetName, walletAccount })?.[field] ?? assets[assetName]?.currency.ZERO
     },
     ({ assetName, walletAccount, field }) => [assetName, walletAccount, field].join('-')
   )
@@ -22,7 +22,10 @@ const resultFunction = (getBalances) =>
 const getBalanceForFieldSelectorDefinition = {
   id: 'getBalanceForField',
   resultFunction,
-  dependencies: [{ module: 'balances', selector: 'getBalances' }],
+  dependencies: [
+    { module: 'assets', selector: 'all' },
+    { module: 'balances', selector: 'getBalances' },
+  ],
 }
 
 export default getBalanceForFieldSelectorDefinition

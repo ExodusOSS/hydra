@@ -1,6 +1,6 @@
 {
   "name": "@exodus/bip32",
-  "version": "4.0.2",
+  "version": "4.1.0",
   "description": "Exodus BIP32 modules.",
   "type": "module",
   "main": "src/index.js",
@@ -15,7 +15,7 @@
   "dependencies": {
     "@exodus/basic-utils": "^3.0.1",
     "@exodus/crypto": "^1.0.0-rc.11",
-    "bs58check": "^2.1.2",
+    "bs58check": "^3.0.1",
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {

@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.14.6](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.14.5...@exodus/rates-monitor@4.14.6) (2025-09-03)
+
+### Bug Fixes
+
+- fix: monitor all assets for price data to restore UX (#13744)
+
+## [4.14.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.14.4...@exodus/rates-monitor@4.14.5) (2025-09-02)
+
+### Bug Fixes
+
+- fix: improve asset sorting stability during ticker API delays (#13711)
+
+## [4.14.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.14.3...@exodus/rates-monitor@4.14.4) (2025-08-15)
+
+### Bug Fixes
+
+- fix: prevent pricesByAssetNameSelector from warning on non-wallet assets during restore (#13546)
+
+- fix: remove Price Simulation PoC (#13565)
+
 ## [4.14.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.14.2...@exodus/rates-monitor@4.14.3) (2025-06-09)
 
 ### Bug Fixes

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/asset-sources@1.8.0...@exodus/asset-sources@1.8.1) (2025-09-12)
+
+### Bug Fixes
+
+- fix: missing combined assets in passkeys available asset names (#13809)
+
+## [1.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/asset-sources@1.7.4...@exodus/asset-sources@1.8.0) (2025-09-11)
+
+### Features
+
+- feat: available passkeys assets (#13804)
+
 ## [1.7.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/asset-sources@1.7.2...@exodus/asset-sources@1.7.4) (2024-12-05)
 
 ### License

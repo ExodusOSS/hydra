@@ -17,7 +17,7 @@ export const walletAccountsInternalAtomDefinition = {
   id: 'walletAccountsInternalAtom',
   type: 'atom',
   factory: createWalletAccountsInternalAtom,
-  dependencies: ['storage', 'config'],
+  dependencies: ['storage'],
 }
 
 export const enabledWalletAccountsAtomDefinition = {

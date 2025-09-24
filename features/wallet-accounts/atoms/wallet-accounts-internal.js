@@ -5,32 +5,17 @@ import { WalletAccount } from '@exodus/models'
 
 const { isEmpty } = lodash
 
-export default function createWalletAccountsInternalAtom({
-  storage,
-  config = Object.create(null),
-}) {
+export default function createWalletAccountsInternalAtom({ storage }) {
   const atomFactory = createStorageAtomFactory({ storage })
-
-  const initialWalletAccounts = {
-    [WalletAccount.DEFAULT_NAME]: {
-      ...WalletAccount.DEFAULT,
-      label: config.defaultLabel,
-      color: config.defaultColor,
-    },
-  }
 
   const walletAccountsAtom = atomFactory({
     key: 'walletAccounts',
-    defaultValue: initialWalletAccounts,
     isSoleWriter: true,
   })
 
   const deserialize = (input) => {
     if (!input || isEmpty(input)) {
-      console.warn(
-        'WalletAccountAtom: Invalid atom value. Using default, but this should not happen.'
-      )
-      return initialWalletAccounts
+      return
     }
 
     const walletAccounts = mapValues(input, (data) => new WalletAccount(data))

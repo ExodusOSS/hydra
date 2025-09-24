@@ -9,7 +9,7 @@ const createUiConfigApiDefinition = ({ configValues }) => {
         const uiConfig = configValues.reduce((acc, { id, atomId }) => {
           acc[id] = { get: atoms[atomId].get, set: atoms[atomId].set }
           return acc
-        }, {})
+        }, Object.create(null))
 
         return { uiConfig }
       },

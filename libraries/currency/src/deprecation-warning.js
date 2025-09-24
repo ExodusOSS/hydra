@@ -12,10 +12,10 @@ const deprecationWarning = (message) => {
 }
 
 export const maybeReportDifferentTypesDeprecated = (num, otherNum, operation) => {
-  if (!num.unitType.equals(otherNum.unitType)) {
-    const message = `number-unit.${operation} on different NumberUnit types (${num}, ${otherNum}) is not correct and will be removed soon.`
-    if (throwOnDifferentType) throw new Error(message)
-    else deprecationWarning(`DEPRECATION WARNING: ${message}`)
+  if (throwOnDifferentType && !num.unitType.equals(otherNum.unitType)) {
+    throw new Error(
+      `number-unit.${operation} on different NumberUnit types (${num}, ${otherNum}) is not correct and will be removed soon.`
+    )
   }
 }
 

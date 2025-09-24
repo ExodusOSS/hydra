@@ -1,6 +1,6 @@
 {
   "name": "@exodus/personal-notes",
-  "version": "3.8.0",
+  "version": "3.9.0",
   "description": "CRUD interface for personal notes (user-generated off-chain transaction metadata)",
   "author": "Exodus Movement, Inc.",
   "type": "module",
@@ -19,6 +19,7 @@
     "module",
     "plugins",
     "redux",
+    "utils",
     "index.js",
     "CHANGELOG.md",
     "README.md",

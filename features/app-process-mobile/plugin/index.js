@@ -9,13 +9,17 @@ const createAppProcessPlugin = ({ appProcess, appProcessAtom, port }) => {
 
   appProcess.load() // do not move this into start, this has to happen as early as possible
 
+  const onLoad = () => {
+    appProcessAtomObserver.start()
+  }
+
+  const onStop = () => {
+    appProcessAtomObserver.unregister()
+  }
+
   return {
-    onLoad: () => {
-      appProcessAtomObserver.start()
-    },
-    onStop: () => {
-      appProcessAtomObserver.unregister()
-    },
+    onLoad: Object.defineProperty(onLoad, 'priority', { value: 10, writable: false }),
+    onStop,
   }
 }
 

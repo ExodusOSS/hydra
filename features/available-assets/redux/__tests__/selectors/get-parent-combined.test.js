@@ -1,10 +1,10 @@
 import {
   bitcoin,
+  setup,
   usdcoin,
-  usdcoinSolana,
   usdcoinAlgorand,
   usdcoinEthereum,
-  setup,
+  usdcoinSolana,
 } from '../utils.js'
 
 describe('getParentCombinedSelector', () => {

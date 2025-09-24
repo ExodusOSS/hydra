@@ -1,22 +1,32 @@
 import NetInfo from '@exodus/netinfo'
-import { isEqual } from 'lodash'
+import lodash from 'lodash'
 import { AppState, DeviceEventEmitter, Platform } from 'react-native'
-import { APP_PROCESS_INITIAL_STATE } from '../constants'
+import { APP_PROCESS_INITIAL_STATE } from '../constants.js'
 
 import makeConcurrent from 'make-concurrent'
 
+const { isEqual } = lodash
+
 const isAndroid = Platform.OS === 'android'
+
+const INTERVAL_NETWORK_POLLING_INITIAL = 1000
+const INTERVAL_NETWORK_POLLING_MAX = 10_000
+const INTERVAL_NETWORK_POLLING_INCREMENT = 1000
 
 export class AppProcess {
   #appProcessAtom
   #appStateHistoryAtom
   #logger
   #networkState
+  #networkPollInterval = null
+  #networkPollIntervalMs = INTERVAL_NETWORK_POLLING_INITIAL
+  #lastNetworkState = null
   #unsubscribes = []
   #returningFromBackgroundEvent
   #historyLimit
   #lockExtensionDuration
   #canRequestLockTimerExtension
+  #isInForeground = false
 
   constructor({ appProcessAtom, appStateHistoryAtom, logger, config }) {
     this.#appProcessAtom = appProcessAtom
@@ -73,6 +83,26 @@ export class AppProcess {
       return
     }
 
+    const wasActive = this.#isInForeground
+    this.#isInForeground = newMode === 'active'
+
+    if (newMode === 'active' && !wasActive) {
+      this.#networkPollIntervalMs = INTERVAL_NETWORK_POLLING_INITIAL
+
+      try {
+        const isConnected = await NetInfo.isConnected?.fetch?.()
+        const isOffline = !isConnected
+
+        if (isOffline) {
+          this.#startNetworkPolling()
+        }
+      } catch (error) {
+        this.#logger.error('Failed to check network on app active:', error)
+      }
+    } else if ((newMode === 'background' || newMode === 'inactive') && wasActive) {
+      this.#stopNetworkPolling()
+    }
+
     await this.#update({
       mode: newMode,
       timeInBackground: 0,
@@ -81,12 +111,102 @@ export class AppProcess {
   })
 
   #handleConnectionChange = async (state) => {
-    this.#networkState = state
-    await this.#update({ networkType: state.type })
+    const isConnected = await NetInfo.isConnected?.fetch?.()
+    const isOffline = !isConnected
+    const wasOffline = !this.#lastNetworkState?.isConnected
+
+    // Normalize Android network type for consistency across platforms
+    let networkType = state.type
+    if (isAndroid) {
+      if (state.type === 'unknown') {
+        if (isOffline) {
+          networkType = 'none' // Android reports 'unknown' during online transition, default to none
+        }
+      } else if (state.type === 'none' && !isOffline) {
+        networkType = 'unknown' // Android reports 'none' during online transition, default to unknown
+      }
+    }
+
+    if (isOffline !== wasOffline || !this.#lastNetworkState) {
+      this.#networkState = { ...state, isConnected, type: networkType }
+      this.#lastNetworkState = { ...state, isConnected, type: networkType }
+
+      await this.#update({
+        networkType,
+        isOffline,
+        timeLastNetworkChange: Date.now(),
+      })
+    }
+
+    if (isOffline && this.#isInForeground) {
+      this.#startNetworkPolling()
+    } else {
+      this.#stopNetworkPolling()
+    }
+  }
+
+  #startNetworkPolling = () => {
+    if (this.#networkPollInterval) return
+
+    this.#networkPollInterval = setInterval(async () => {
+      try {
+        if (!this.#isInForeground) {
+          this.#stopNetworkPolling()
+          return
+        }
+
+        const isConnected = await NetInfo.isConnected?.fetch?.()
+        const isOffline = !isConnected
+        const wasOffline = !this.#lastNetworkState?.isConnected
+
+        if (isOffline !== wasOffline) {
+          const state = await NetInfo.getConnectionInfo?.()
+          await this.#handleConnectionChange(state)
+        } else if (isOffline) {
+          this.#increasePollingInterval()
+        }
+      } catch (error) {
+        this.#logger.error('Network polling failed:', error)
+      }
+    }, this.#networkPollIntervalMs)
+  }
+
+  #increasePollingInterval = () => {
+    if (this.#networkPollIntervalMs < INTERVAL_NETWORK_POLLING_MAX) {
+      this.#networkPollIntervalMs = Math.min(
+        this.#networkPollIntervalMs + INTERVAL_NETWORK_POLLING_INCREMENT,
+        INTERVAL_NETWORK_POLLING_MAX
+      )
+
+      this.#stopNetworkPolling()
+      this.#startNetworkPolling()
+    }
+  }
+
+  #stopNetworkPolling = () => {
+    if (this.#networkPollInterval) {
+      clearInterval(this.#networkPollInterval)
+      this.#networkPollInterval = null
+    }
   }
 
   #handleBackFromBackground = async ({ timeInBackground }) => {
     this.#logger.debug(this.#returningFromBackgroundEvent, 'timeInBackground:', timeInBackground)
+
+    this.#isInForeground = true
+
+    this.#networkPollIntervalMs = INTERVAL_NETWORK_POLLING_INITIAL
+
+    try {
+      const isConnected = await NetInfo.isConnected?.fetch?.()
+      const isOffline = !isConnected
+
+      if (isOffline) {
+        this.#startNetworkPolling()
+      }
+    } catch (error) {
+      this.#logger.error('Failed to check network on back from background:', error)
+    }
 
     await this.#update({ mode: 'active', timeInBackground })
   }
@@ -121,7 +241,10 @@ export class AppProcess {
       this.#unsubscribes.push(() => deviceEventListener.remove())
     }
 
-    await this.#update({ mode: AppState.currentState })
+    const initialState = AppState.currentState
+    this.#isInForeground = initialState === 'active'
+
+    await this.#update({ mode: initialState })
   }
 
   requestLockTimerExtension = async () => {
@@ -136,6 +259,7 @@ export class AppProcess {
   }
 
   stop = () => {
+    this.#stopNetworkPolling()
     this.#unsubscribes.forEach((unsubscribe) => unsubscribe())
   }
 

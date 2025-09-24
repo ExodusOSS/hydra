@@ -1,6 +1,7 @@
 import { filter } from '@exodus/atoms'
-import { WalletAccount } from '@exodus/models'
 
+// for read-only usage
+// modules like txLogsMonitors should wait atom observer to emit any account before start
 export default function createWalletAccountsAtom({ walletAccountsInternalAtom }) {
-  return filter(walletAccountsInternalAtom, (value) => !!value[WalletAccount.DEFAULT_NAME]?.seedId)
+  return filter(walletAccountsInternalAtom, (value) => !!value)
 }

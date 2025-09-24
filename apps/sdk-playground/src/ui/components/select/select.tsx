@@ -32,15 +32,15 @@ function SelectInput({
       className={cn('w-full', className)}
       classNames={{
         input: () => '[&>input]:!outline-none [&>input]:!ring-0',
-        singleValue: () => '!text-slate-300 !text-sm',
-        placeholder: () => '!text-slate-600 !text-thin !text-sm',
-        control: () => '!bg-deep-300 !border-none !rounded !ring-0',
-        indicatorSeparator: () => '!bg-deep-50 parent:!text-deep-50',
-        menu: () => '!bg-deep-300 !border !border-deep-50 !rounded',
-        noOptionsMessage: () => '!text-slate-600 !text-sm',
+        singleValue: () => '!text-foreground !text-sm',
+        placeholder: () => '!text-muted-foreground !text-thin !text-sm',
+        control: () => '!bg-background !border-none !rounded !ring-0',
+        indicatorSeparator: () => '!bg-border parent:!text-border',
+        menu: () => '!bg-background !border !border-border !rounded',
+        noOptionsMessage: () => '!text-muted-foreground !text-sm',
         menuList: () => '!border-none !p-0',
         option: ({ isSelected }) =>
-          cn('!text-sm !bg-deep-300 !cursor-pointer', isSelected && '!bg-deep-50'),
+          cn('!text-sm !bg-background !cursor-pointer', isSelected && '!bg-accent'),
       }}
       options={options}
       onChange={(option) => onChange?.(option.value)}

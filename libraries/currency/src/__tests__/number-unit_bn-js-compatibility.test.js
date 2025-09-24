@@ -1,5 +1,6 @@
-import { bitcoin } from './_fixtures.js'
 import BN from 'bn.js'
+
+import { bitcoin } from './_fixtures.js'
 
 test('bits factory rejects bn.js', function () {
   const amtBTC = bitcoin.BTC(1.53)

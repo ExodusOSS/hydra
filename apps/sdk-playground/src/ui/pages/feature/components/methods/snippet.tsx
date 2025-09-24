@@ -40,7 +40,7 @@ export default function Snippet({ children }) {
     <div className="group relative flex flex-col  p-4">
       <Button
         type="button"
-        variant="transparent"
+        variant="tertiary"
         className="absolute right-3 top-3 opacity-0 transition-opacity group-hover:opacity-100"
         onClick={() => copy(code)}
       >

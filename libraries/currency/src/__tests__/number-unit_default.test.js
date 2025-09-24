@@ -1,4 +1,5 @@
 import { strict as assert } from 'assert'
+
 import { bitcoin, dollar } from './_fixtures.js'
 
 test('toDefault() should convert to default unit', function () {

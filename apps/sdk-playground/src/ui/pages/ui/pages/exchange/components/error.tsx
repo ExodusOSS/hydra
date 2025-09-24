@@ -10,22 +10,25 @@ const LowAlgorandError = ({ payload = {} }: { payload: any }) => {
       then try again.`
 }
 
-const NotEnoughBalanceError = ({ payload = {} }: { payload: any }) => {
-  const ticker = payload.fromAsset.displayTicker
-  const exchangeableBalance = payload.exchangeableBalance.toDefaultString()
-  return payload.fromAssetBalance.isZero
-    ? `There's no ${ticker} in your wallet. Receive or swap for ${ticker} and try again.`
-    : `Not enough funds for this swap. Your current confirmed balance is ${exchangeableBalance} ${ticker}.`
+const LowSolanaRentExemptAmount = ({ payload = {} }: { payload: any }) => {
+  const ticker = payload.fromAsset?.feeAsset.displayTicker
+  const rentExemptAmount = payload.rentExemptAmount.toDefaultString()
+
+  return `You can either leave a zero balance change, which will close your SOL account, or maintain a minimum balance of ${rentExemptAmount} ${ticker} to keep it active.`
+}
+
+const NotEnoughBalanceError = () => {
+  return `Not enough funds for this swap. `
 }
 
 const LowFromAmountError = ({ payload = {} }: { payload: any }) => {
-  const ticker = payload.fromAsset.displayTicker
+  const ticker = payload.asset.displayTicker
   const limit = payload.limits.min.toDefaultString()
   return `The amount is lower than the swap minimum of ${limit} ${ticker}.`
 }
 
 const HighFromAmountError = ({ payload = {} }: { payload: any }) => {
-  const ticker = payload.fromAsset.displayTicker
+  const ticker = payload.asset.displayTicker
   const limit = payload.limits.max.toDefaultString()
   return `The amount is higher than the swap maximum of ${limit} ${ticker}.`
 }
@@ -57,6 +60,7 @@ const Warning = () => {
 const ERROR_COMPONENTS = {
   MUST_OPT_IN: MustOptInError,
   LOW_ALGORAND_BALANCE: LowAlgorandError,
+  LOW_SOL_RENT_EXEMPT_AMOUNT: LowSolanaRentExemptAmount,
   NOT_ENOUGH_BALANCE: NotEnoughBalanceError,
   LOW_FROM_AMOUNT: LowFromAmountError,
   HIGH_FROM_AMOUNT: HighFromAmountError,

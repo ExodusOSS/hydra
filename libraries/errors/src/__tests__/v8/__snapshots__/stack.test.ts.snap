@@ -40,10 +40,10 @@ exports[`gets stack trace for v8 1`] = `
     "async": true,
     "column": number<>,
     "file": filePath<>,
-    "function": "processPendingSubtests",
+    "function": "startSubtestAfterBootstrap",
     "line": number<>,
-    "method": "processPendingSubtests",
-    "toplevel": false,
+    "method": null,
+    "toplevel": true,
   },
 }
 `;

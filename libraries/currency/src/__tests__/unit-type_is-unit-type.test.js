@@ -1,5 +1,5 @@
-import UnitType from '../unit-type.js'
 import isUnitType from '../is-unit-type.js'
+import UnitType from '../unit-type.js'
 
 describe('isUnitType', () => {
   it.each([

@@ -6,7 +6,7 @@ function SeedModal({ visible, onCancel, onConfirm }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm transition-all">
-      <div className="flex w-80 flex-col gap-4 rounded-lg border border-deep-50 bg-deep-400 p-6 shadow-lg">
+      <div className="border-deep-50 bg-deep-400 flex w-80 flex-col gap-4 rounded-lg border p-6 shadow-lg">
         <Text size={20}>Use default seed?</Text>
 
         <div className="flex justify-end space-x-4">

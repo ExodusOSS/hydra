@@ -11,7 +11,9 @@ test('convert AddressSet to map of pubKeyHash', (t) => {
 
   const set = AddressSet.fromArray([addr1, addr2, addr3])
   for (const addr of set) {
-    bs58check.decode(String(addr)).slice(-20).toString('hex')
+    Buffer.from(bs58check.decode(String(addr)))
+      .subarray(-20)
+      .toString('hex')
   }
 
   t.end()
