@@ -1,5 +1,6 @@
 import NumberUnit, { isNumberUnit } from '@exodus/currency'
 import assert from 'minimalistic-assert'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 import { type StatusByProvider, type Provider, ORDER_TYPES, STATUS_MAP } from './constants.js'
@@ -215,11 +216,17 @@ export default class FiatOrder<P extends Provider = Provider> implements FiatOrd
     return 'FiatOrder'
   }
 
-  static isInstance = createIsInstance(FiatOrder)
-
-  static [Symbol.hasInstance](instance: unknown): instance is FiatOrder {
-    return this.isInstance(instance)
+  // can't assign directly to [Symbol.hasInstance] due to a babel bug
+  // can't use this in static initializers due to another babel bug
+  static _isInstance = createIsInstance(FiatOrder)
+  static [Symbol.hasInstance](x: any) {
+    return this._isInstance(x)
   }
+
+  /**
+   * @deprecated Use `instanceof` instead.
+   */
+  static isInstance = FiatOrder[Symbol.hasInstance]
 
   #matches(fields: Partial<FiatOrderProps>) {
     const props = Object.keys(fields) as (keyof FiatOrderProps)[]

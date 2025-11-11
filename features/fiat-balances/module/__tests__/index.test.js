@@ -86,6 +86,7 @@ let currencyAtom
 let balancesAtom
 let fiatBalancesAtom
 let txLogsAtom
+let feeDataAtom
 let accountStatesAtom
 let balances
 
@@ -110,6 +111,7 @@ const setupModules = async ({ balanceFields, fiatBalanceFields }) => {
   fiatBalancesAtom = createFiatBalancesAtom()
   txLogsAtom = txLogsAtomDefinition.factory()
   accountStatesAtom = accountStatesAtomDefinition.factory()
+  feeDataAtom = createInMemoryAtom({ defaultValue: {} })
 
   walletAccountsAtom = createInMemoryAtom({
     defaultValue: walletAccountsData,
@@ -135,6 +137,7 @@ const setupModules = async ({ balanceFields, fiatBalanceFields }) => {
     config: { balanceFields },
     balancesAtom,
     txLogsAtom,
+    feeDataAtom,
     accountStatesAtom,
     logger: { log: jest.fn(), warn: jest.fn(), error: jest.fn() },
   })

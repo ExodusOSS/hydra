@@ -1,5 +1,6 @@
 import { createStorageAtomFactory, dedupe, withSerialization } from '@exodus/atoms'
 import { mapValues } from '@exodus/basic-utils'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { WalletAccount } from '@exodus/models'
 

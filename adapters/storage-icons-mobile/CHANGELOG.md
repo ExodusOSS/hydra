@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/storage-icons-mobile@1.3.0...@exodus/storage-icons-mobile@1.5.0) (2025-10-09)
+
+### Features
+
+- feat: make storage-icons-mobile ESM (#12286)
+
+### Bug Fixes
+
+- fix: allow long asset name suffixes (#14048)
+
+## [1.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/storage-icons-mobile@1.3.0...@exodus/storage-icons-mobile@1.4.0) (2025-05-09)
+
+### Features
+
+- feat: make storage-icons-mobile ESM (#12286)
+
 ## [1.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/storage-icons-mobile@1.2.1...@exodus/storage-icons-mobile@1.3.0) (2025-04-01)
 
 ### Features

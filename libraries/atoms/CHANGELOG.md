@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/atoms@9.0.3...@exodus/atoms@10.0.0) (2025-10-08)
+
+### ⚠ BREAKING CHANGES
+
+- make `observer.start` a synchronous function (#12186)
+
+### Features
+
+- feat(atom): serialization support async function (#13943)
+
+- feat: export createAtomObserver separately in atoms (#12310)
+
+- feat!: make `observer.start` a synchronous function (#12186)
+
 ## [9.0.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/atoms@9.0.2...@exodus/atoms@9.0.3) (2025-04-30)
 
 ### Bug Fixes

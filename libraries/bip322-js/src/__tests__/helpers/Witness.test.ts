@@ -1,5 +1,5 @@
 // Import module to be tested
-import Witness from '../src/helpers/Witness'
+import Witness from '../src/helpers/Witness.js'
 
 describe('Witness Test', () => {
   // Witness data from test vector listed at https://github.com/bitcoin/bitcoin/blob/29b28d07fa958b89e1c7916fda5d8654474cf495/src/test/util_tests.cpp#L2713

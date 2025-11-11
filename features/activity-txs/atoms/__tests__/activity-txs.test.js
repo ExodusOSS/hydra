@@ -401,6 +401,7 @@ describe('activityTxsAtom', () => {
         .definition.factory({
           errorsAtom,
           config: { maxErrorsCount: 10 },
+          logger: console,
         }),
       logger: console,
       txLogsAtom,

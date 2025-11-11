@@ -248,12 +248,6 @@ export const SERIALIZED_EVENTS = [
                   "#ECECEC",
                   "#B9B9B9"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "Algorand is a high performance blockchain based on next generation technology that implements a Proof of Stake protocol. The project has been called “Blockchain 3.0”, as it is able to solve the well-known problem of scalability found in Bitcoin, while maintaining decentralization and security.",
                   "reddit": "https://www.reddit.com/r/algorand/",
@@ -343,12 +337,6 @@ export const SERIALIZED_EVENTS = [
                   "#474A73",
                   "#8C93AF"
                 ],
-                "gradientCoords": {
-                  "x1": "17.71%",
-                  "y1": "-46.968%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "info": {
                   "description": "AURORA is the governance token for the Aurora protocol, an Ethereum Virtual Machine that runs on the NEAR blockchain. Aurora helps Ethereum projects move to NEAR, plus powers new products with low fees, scalability, and compatibility.",
                   "website": "https://aurora.dev/",
@@ -422,12 +410,6 @@ export const SERIALIZED_EVENTS = [
                   "#E84142",
                   "#FE7C7D"
                 ],
-                "gradientCoords": {
-                  "x1": "-3.98%",
-                  "y1": "1.381%",
-                  "x2": "49.273%",
-                  "y2": "30.414%"
-                },
                 "info": {
                   "description": "Avalanche is an open-source platform for launching decentralized finance applications and enterprise blockchain deployments in one interoperable, highly scalable ecosystem. It is a smart contract-capable blockchain platform focused on transaction speed, low costs, and eco-friendliness.",
                   "reddit": "https://www.reddit.com/r/Avax",
@@ -502,12 +484,6 @@ export const SERIALIZED_EVENTS = [
                   "#474A73",
                   "#8C93AF"
                 ],
-                "gradientCoords": {
-                  "x1": "17.71%",
-                  "y1": "-46.968%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "info": {
                   "description": "Base is an Ethereum Layer 2 (L2) chain that offers a safe, low-cost, developer-friendly way to build on-chain. Base is an L2 built on OP Stack in collaboration with Optimism.",
                   "website": "https://base.org/",
@@ -578,12 +554,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFC82D",
                   "#FE9D39"
                 ],
-                "gradientCoords": {
-                  "x1": "115.077%",
-                  "y1": "77.227%",
-                  "x2": "27.227%",
-                  "y2": "34.923%"
-                },
                 "info": {
                   "description": "The cryptocurrency that started it all, Bitcoin is the first digital currency to solve the “double spending” or counterfeiting problem without the aid of a central authority, such as a bank or a government, making Bitcoin truly peer-to-peer.",
                   "reddit": "https://www.reddit.com/r/Bitcoin/",
@@ -681,12 +651,6 @@ export const SERIALIZED_EVENTS = [
                   "#FE9D39",
                   "#FFC82D"
                 ],
-                "gradientCoords": {
-                  "x1": "115.077%",
-                  "y1": "77.227%",
-                  "x2": "27.227%",
-                  "y2": "34.923%"
-                },
                 "info": {},
                 "name": "bitcoinregtest",
                 "primaryColor": "#FE9D39",
@@ -772,12 +736,6 @@ export const SERIALIZED_EVENTS = [
                   "#FE9D39",
                   "#FFC82D"
                 ],
-                "gradientCoords": {
-                  "x1": "115.077%",
-                  "y1": "77.227%",
-                  "x2": "27.227%",
-                  "y2": "34.923%"
-                },
                 "info": {},
                 "name": "bitcointestnet",
                 "primaryColor": "#FE9D39",
@@ -869,12 +827,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFB700",
                   "#D8AC29"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "BNB Smart Chain (BSC) is an innovative solution to bring programmability and interoperability to Beacon Chain. The BNB Smart Chain also supports EVM-compatible smart contracts and protocols. Cross-chain transfer and other communication are possible due to native support of interoperability. ",
                   "reddit": "https://www.reddit.com/r/binance/",
@@ -962,12 +914,6 @@ export const SERIALIZED_EVENTS = [
                   "#4A6EC3",
                   "#3384BF"
                 ],
-                "gradientCoords": {
-                  "x1": "106.38%",
-                  "y1": "115.934%",
-                  "x2": "-33.63%",
-                  "y2": "-54.191%"
-                },
                 "info": {
                   "description": "Cardano is an open source project and decentralized public blockchain. It is building a smart contract platform and uses a proof of stake algorithm to reach consensus about the network.",
                   "reddit": "https://www.reddit.com/r/cardano/",
@@ -1068,12 +1014,6 @@ export const SERIALIZED_EVENTS = [
                   "#6F7390",
                   "#383C58"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "info": {
                   "description": "Cosmos is an ecosystem of interoperable blockchains. The end goal is to create an Internet of Blockchains, a network of sovereign blockchains able to communicate with each other in a decentralized way.",
                   "reddit": "https://reddit.com/r/cosmosnetwork",
@@ -1185,12 +1125,6 @@ export const SERIALIZED_EVENTS = [
                   "#474A73",
                   "#8C93AF"
                 ],
-                "gradientCoords": {
-                  "x1": "17.71%",
-                  "y1": "-46.968%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "info": {
                   "description": "Ethereum is a decentralized computing platform that runs smart contracts, which are contracts that execute without human intervention. ETH popularized the idea of using the blockchain for programmable transactions instead of only for money transfers. The platform is used for crowdfunding (ICOs), the creation of new digital assets, and more.",
                   "reddit": "https://www.reddit.com/r/ethereum/",
@@ -1282,12 +1216,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF9900",
                   "#FF9900"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "Arbitrum Nova is a layer 2 network designed for ultra-low transaction costs with high security.",
                   "website": "https://nova.arbitrum.io/",
@@ -1360,12 +1288,6 @@ export const SERIALIZED_EVENTS = [
                   "#0A3377",
                   "#339BFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "Arbitrum One is a layer 2 network designed to improve the capabilities of Ethereum.",
                   "website": "https://arbitrum.io/",
@@ -1438,12 +1360,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "ETH testnet asset for the Holesky network.",
                   "website": "https://github.com/eth-clients/holesky/"
@@ -1513,12 +1429,6 @@ export const SERIALIZED_EVENTS = [
                   "#A0E7FF",
                   "#13B5EC"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "info": {
                   "description": "Fantom is a high-performance, scalable, customizable, and secure smart-contract platform. Fantom is permissionless, decentralized, and open-source.",
                   "reddit": "https://reddit.com/r/FantomFoundation",
@@ -1590,12 +1500,6 @@ export const SERIALIZED_EVENTS = [
                   "#E61E57",
                   "#FF5485"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "info": {
                   "description": "FLR is the native token used for payments, transaction fees, governance, and staking on the Flare Network. Flare Network is an EVM-based layer-1 blockchain that helps app developers create bridges between networks.",
                   "website": "https://flare.network/",
@@ -1671,12 +1575,6 @@ export const SERIALIZED_EVENTS = [
                   "#5A63B8",
                   "#C86DD7"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "Polygon (previously Matic Network) is a protocol and a framework for building and connecting Ethereum-compatible blockchain networks. Aggregating scalable solutions on Ethereum supporting a multi-chain Ethereum ecosystem.",
                   "reddit": "https://www.reddit.com/r/0xPolygon/",
@@ -1750,12 +1648,6 @@ export const SERIALIZED_EVENTS = [
                   "#474A73",
                   "#8C93AF"
                 ],
-                "gradientCoords": {
-                  "x1": "17.71%",
-                  "y1": "-46.968%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "info": {
                   "description": "Optimism is a low-cost and lightning-fast Ethereum L2 blockchain.",
                   "website": "https://www.optimism.io/",
@@ -1827,12 +1719,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF9931",
                   "#7CDB9A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "info": {
                   "description": "RBTC is used to pay transaction fees on the Rootstock network, an open-source sidechain that brings Bitcoin and DeFi together with smart contracts. RBTC is pegged 1:1 with Bitcoin.",
                   "website": "https://rootstock.io/",
@@ -1905,12 +1791,6 @@ export const SERIALIZED_EVENTS = [
                   "#14F195",
                   "#9BFFD7"
                 ],
-                "gradientCoords": {
-                  "x1": "12.519%",
-                  "y1": "28.482%",
-                  "x2": "27.289%",
-                  "y2": "11.831%"
-                },
                 "info": {
                   "description": "Solana is a high-performance blockchain, taking on one of tech's biggest challenges: scaling blockchain for global adoption.",
                   "reddit": "https://www.reddit.com/r/solana/",
@@ -2004,12 +1884,6 @@ export const SERIALIZED_EVENTS = [
                   "#6967EA",
                   "#9E9CFC"
                 ],
-                "gradientCoords": {
-                  "x1": "37%",
-                  "y1": "39%",
-                  "x2": "-1.155%",
-                  "y2": "4.909%"
-                },
                 "info": {
                   "description": "Osmosis is a decentralized exchange (DEX) that operates on the Cosmos ecosystem and provides bridged assets from Ethereum and Polkadot. It has greater control over the full blockchain stack, allowing for the development of Superfluid Staking and a transaction mempool that is shielded with threshold encryption. Osmosis aims to build a cross-chain native DEX and trading suite that connects all chains over IBC, and has invited external developers to create a DEX ecosystem with lending, credit, margin, fiat on-ramps, Defi strategy vaults, NFTs, stablecoins, and more.",
                   "reddit": "https://www.reddit.com/r/OsmosisLab/",
@@ -2138,12 +2012,6 @@ export const SERIALIZED_EVENTS = [
                   "#34D3E0",
                   "#7F7BAE"
                 ],
-                "gradientCoords": {
-                  "x1": "86.792%",
-                  "y1": "19.043%",
-                  "x2": "12.879%",
-                  "y2": "81.232%"
-                },
                 "info": {},
                 "primaryColor": "#34D3E0",
                 "properName": "Aave",
@@ -2181,12 +2049,6 @@ export const SERIALIZED_EVENTS = [
                   "#CC0FE0",
                   "#7E1BCC"
                 ],
-                "gradientCoords": {
-                  "x1": "44.5%",
-                  "y1": "40%",
-                  "x2": "-4.548%",
-                  "y2": "4.017%"
-                },
                 "info": {
                   "description": "Audius is a decentralized streaming community for musicians to get discovered, grow, and earn money.",
                   "reddit": "https://reddit.com/r/audius",
@@ -2230,12 +2092,6 @@ export const SERIALIZED_EVENTS = [
                   "#E84142",
                   "#FE7C7D"
                 ],
-                "gradientCoords": {
-                  "x1": "-3.98%",
-                  "y1": "1.381%",
-                  "x2": "49.273%",
-                  "y2": "30.414%"
-                },
                 "info": {
                   "description": "Avalanche is an open-source platform for launching decentralized finance applications and enterprise blockchain deployments in one interoperable, highly scalable ecosystem. It is a smart contract-capable blockchain platform focused on transaction speed, low costs, and eco-friendliness.",
                   "reddit": "https://www.reddit.com/r/Avax",
@@ -2279,12 +2135,6 @@ export const SERIALIZED_EVENTS = [
                   "#0045AD",
                   "#0055D5"
                 ],
-                "gradientCoords": {
-                  "x1": "63.701%",
-                  "y1": "21.261%",
-                  "x2": "17.913%",
-                  "y2": "-17.415%"
-                },
                 "info": {
                   "description": "Axie Infinity is a game where players raise NFT-based creatures called Axies and battle them against other players. Players earn tokens so they partially own and operate the game.",
                   "reddit": "https://reddit.com/r/AxieInfinity",
@@ -2325,12 +2175,6 @@ export const SERIALIZED_EVENTS = [
                   "#787878",
                   "#525252"
                 ],
-                "gradientCoords": {
-                  "x1": "91.53%",
-                  "y1": "101%",
-                  "x2": "10.067%",
-                  "y2": "0%"
-                },
                 "info": {
                   "description": "BitTorrent Token is aiming to tokenize one of the world's largest decentralized networks: BitTorrent, a file sharing protocol responsible for up to 40% of daily Internet traffic. The token will first be used to pay for faster downloads before other use cases like censorship-resistant content distribution, storage, and proxying services are introduced.",
                   "reddit": "https://www.reddit.com/r/BittorrentToken",
@@ -2373,12 +2217,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFB700",
                   "#D8AC29"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "info": {
                   "description": "BNB is the native token of BNB Beacon Chain and the key base asset on the Binance decentralized exchange (DEX). It is used to pay the transaction fees of assets that live on BNB Beacon Chain. Holding BNB gives you the right to make your voice heard and is necessary for participation in BNB Beacon Chain's decentralized on-chain governance.",
                   "reddit": "https://www.reddit.com/r/binance/",
@@ -2422,12 +2260,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFC200",
                   "#CC9B00"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "info": {
                   "description": "Stablecoin, issued in partnership with Binance. BUSD is 100% backed by U.S. dollars held in FDIC-insured U.S. banks.",
                   "twitter": "https://twitter.com/paxosglobal",
@@ -2469,12 +2301,6 @@ export const SERIALIZED_EVENTS = [
                   "#4A6EC3",
                   "#3384BF"
                 ],
-                "gradientCoords": {
-                  "x1": "106.38%",
-                  "y1": "115.934%",
-                  "x2": "-33.63%",
-                  "y2": "-54.191%"
-                },
                 "info": {
                   "description": "Cardano is an open source project and decentralized public blockchain. It is building a smart contract platform and uses a proof of stake algorithm to reach consensus about the network.",
                   "reddit": "https://www.reddit.com/r/cardano/",
@@ -2519,12 +2345,6 @@ export const SERIALIZED_EVENTS = [
                   "#3FA0F1",
                   "#295ADA"
                 ],
-                "gradientCoords": {
-                  "x1": "-22.982%",
-                  "y1": "-43.915%",
-                  "x2": "91.53%",
-                  "y2": "101%"
-                },
                 "info": {
                   "description": "Blockchain-based smart contracts currently can’t connect to the outside world in a decentralized way. Using a network of decentralized data oracles, Chainlink aims to connect smart contracts to real-world data and payment systems.",
                   "reddit": "https://www.reddit.com/r/Chainlink/",
@@ -2570,12 +2390,6 @@ export const SERIALIZED_EVENTS = [
                   "#FBCC5F",
                   "#F9A606"
                 ],
-                "gradientCoords": {
-                  "x1": "3.912%",
-                  "y1": "0%",
-                  "x2": "89.933%",
-                  "y2": "100%"
-                },
                 "info": {
                   "description": "Dai is an Ethereum-based stablecoin issued by MakerDAO the value of which is stable relative to the US Dollar. The value of Dai is stabilized through a system of vaults (where multiple forms of supported collateral are held in smart contracts), autonomous feedback mechanisms, and appropriately incentivized external actors.",
                   "reddit": "https://www.reddit.com/r/MakerDAO/",
@@ -2624,12 +2438,6 @@ export const SERIALIZED_EVENTS = [
                   "#474A73",
                   "#8C93AF"
                 ],
-                "gradientCoords": {
-                  "x1": "17.71%",
-                  "y1": "-46.968%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "info": {
                   "description": "Ethereum is a decentralized computing platform that runs smart contracts, which are contracts that execute without human intervention. ETH popularized the idea of using the blockchain for programmable transactions instead of only for money transfers. The platform is used for crowdfunding (ICOs), the creation of new digital assets, and more.",
                   "reddit": "https://www.reddit.com/r/ethereum/",
@@ -2672,12 +2480,6 @@ export const SERIALIZED_EVENTS = [
                   "#A0E7FF",
                   "#13B5EC"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "info": {
                   "description": "Fantom is a high-performance, scalable, customizable, and secure smart-contract platform. Fantom is permissionless, decentralized, and open-source.",
                   "reddit": "https://reddit.com/r/FantomFoundation",
@@ -2722,12 +2524,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFE5C0",
                   "#E6BC7B"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.5%",
-                  "x2": "41.043%",
-                  "y2": "26.738%"
-                },
                 "info": {
                   "description": "The Green Metaverse Token is used for governance in STEPN, a gamified health app that rewards users for physical movement such as jogging outside.",
                   "reddit": "https://www.reddit.com/r/StepN/",
@@ -2770,12 +2566,6 @@ export const SERIALIZED_EVENTS = [
                   "#D6D6D6",
                   "#777777"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "Litecoin is a cryptocurrency similar to Bitcoin. The goal of Litecoin is to provide fast transaction confirmations. Created by ex-Google employee Charlie Lee, Litecoin is often considered the silver to Bitcoin's gold.",
                   "reddit": "https://www.reddit.com/r/litecoin/",
@@ -2818,12 +2608,6 @@ export const SERIALIZED_EVENTS = [
                   "#2F79EA",
                   "#124282"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "info": {
                   "description": "1Inch is an exchange aggregator, meaning that it scans various decentralized exchanges to locate the lowest crypto price for traders.",
                   "reddit": "https://www.reddit.com/r/1inch/",
@@ -2868,12 +2652,6 @@ export const SERIALIZED_EVENTS = [
                   "#5A63B8",
                   "#C86DD7"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "Polygon (previously Matic Network) is a protocol and a framework for building and connecting Ethereum-compatible blockchain networks. Aggregating scalable solutions on Ethereum supporting a multi-chain Ethereum ecosystem.",
                   "reddit": "https://www.reddit.com/r/0xPolygon/",
@@ -2917,12 +2695,6 @@ export const SERIALIZED_EVENTS = [
                   "#E62249",
                   "#FF5A5A"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.537%",
-                  "y2": "6.714%"
-                },
                 "info": {
                   "description": "Render is an ERC-20 token that creators can pay to node operators to get GPU rendering power for their work on images, animation, and special effects. This saves creators money as it’s cheaper than in-house rendering, and it allows node operators to earn RNDR with their idle GPUs.",
                   "reddit": "https://www.reddit.com/r/RenderToken/",
@@ -2966,12 +2738,6 @@ export const SERIALIZED_EVENTS = [
                   "#0084FF",
                   "#00ADEF"
                 ],
-                "gradientCoords": {
-                  "x1": "9.954%",
-                  "y1": "7.596%",
-                  "x2": "34.509%",
-                  "y2": "31.978%"
-                },
                 "info": {
                   "description": "The Sandbox is an expansive metaverse community where users can be creative and monetize their games, artwork, and more.",
                   "reddit": "https://www.reddit.com/r/TheSandboxGaming/",
@@ -3015,12 +2781,6 @@ export const SERIALIZED_EVENTS = [
                   "#A53803",
                   "#F69C0A"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "info": {
                   "description": "Calling itself “the Dogecoin killer,” SHIB is purely a transferable token named after an adorable breed of dog. ",
                   "reddit": "https://www.reddit.com/r/SHIBArmy/",
@@ -3063,12 +2823,6 @@ export const SERIALIZED_EVENTS = [
                   "#77BAA1",
                   "#B9EFDB"
                 ],
-                "gradientCoords": {
-                  "x1": "-3.98%",
-                  "y1": "1.381%",
-                  "x2": "49.273%",
-                  "y2": "30.414%"
-                },
                 "info": {
                   "description": "Smooth Love Potion (SLP) tokens are digital coins earned by players in Axie Infinity, where creatures (Axies) can be bred using SLP.",
                   "reddit": "https://reddit.com/r/AxieInfinity",
@@ -3112,12 +2866,6 @@ export const SERIALIZED_EVENTS = [
                   "#00CC77",
                   "#049C76"
                 ],
-                "gradientCoords": {
-                  "x1": "100%",
-                  "y1": "100%",
-                  "x2": "0.131%",
-                  "y2": "0.131%"
-                },
                 "info": {
                   "description": "Bet on sports and win! No account setup. Sports are slowly coming back around the world without crowds. SportX has upcoming events listed now with odds to win.",
                   "reddit": "https://www.reddit.com/domain/sportx.bet/",
@@ -3166,12 +2914,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "info": {
                   "description": "Tether is a multi-chain stablecoin. Each USDT token is designed to be backed by a U.S. Dollar held in banking reserves.",
                   "reddit": "https://www.reddit.com/r/Tether/",
@@ -3214,12 +2956,6 @@ export const SERIALIZED_EVENTS = [
                   "#33A0FF",
                   "#5919D9"
                 ],
-                "gradientCoords": {
-                  "x1": "73.306%",
-                  "y1": "69.023%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "info": {
                   "description": "The Graph is an indexing protocol for querying networks like Ethereum and IPFS.",
                   "reddit": "https://reddit.com/r/thegraph",
@@ -3263,12 +2999,6 @@ export const SERIALIZED_EVENTS = [
                   "#FC6CAB",
                   "#FF007A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "214.397%",
-                  "y2": "181.316%"
-                },
                 "info": {
                   "description": "UNI is the governance token of Uniswap, a decentralized protocol for automated liquidity provision on Ethereum.",
                   "reddit": "https://www.reddit.com/r/UniSwap/",
@@ -3318,12 +3048,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "info": {
                   "description": "USD Coin is a token designed as a stablecoin issued by Circle and Coinbase. Each unit of USDC is backed by a unit of US Dollar in audited bank accounts in order to ensure 1 USDC is always equal to 1 USD.",
                   "reddit": "https://www.reddit.com/r/USDC/",
@@ -3366,12 +3090,6 @@ export const SERIALIZED_EVENTS = [
                   "#8958AB",
                   "#3D2F52"
                 ],
-                "gradientCoords": {
-                  "x1": "91.762%",
-                  "y1": "69.532%",
-                  "x2": "4.905%",
-                  "y2": "24.223%"
-                },
                 "info": {
                   "description": "WBTC brings the power of Bitcoin together with the perks of the Ethereum network. Wrapped Bitcoin is backed 1:1 with Bitcoin.",
                   "twitter": "https://twitter.com/WrappedBTC",
@@ -3414,12 +3132,6 @@ export const SERIALIZED_EVENTS = [
                   "#EC9CC6",
                   "#ED1E79"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "info": {
                   "description": "WETH is the wrapped version of ETH that refers to the ERC-20 compatible version of Ether. Wrapping ETH does not affect its value, 1 ETH is always 1 WETH.",
                   "website": "https://weth.io/"
@@ -3450,12 +3162,6 @@ export const SERIALIZED_EVENTS = [
                   "#00bfff",
                   "#6619ff"
                 ],
-                "gradientCoords": {
-                  "x1": "89.933%",
-                  "y1": "100%",
-                  "x2": "10.067%",
-                  "y2": "0%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -3508,12 +3214,6 @@ export const SERIALIZED_EVENTS = [
                   "#00bfff",
                   "#6619ff"
                 ],
-                "gradientCoords": {
-                  "x1": "89.933%",
-                  "y1": "100%",
-                  "x2": "10.067%",
-                  "y2": "0%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -3568,12 +3268,6 @@ export const SERIALIZED_EVENTS = [
                   "#008EF7",
                   "#5FBBFF"
                 ],
-                "gradientCoords": {
-                  "x1": "20.125%",
-                  "y1": "14.449%",
-                  "x2": "20.125%",
-                  "y2": "10.88%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -3626,12 +3320,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF5500",
                   "#FF9B69"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.498%",
-                  "x2": "41.043%",
-                  "y2": "26.736%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -3684,12 +3372,6 @@ export const SERIALIZED_EVENTS = [
                   "#2ADACC",
                   "#21DBCC"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.498%",
-                  "x2": "41.043%",
-                  "y2": "26.736%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -3740,12 +3422,6 @@ export const SERIALIZED_EVENTS = [
                   "#BE9DFF",
                   "#8C52FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -3793,12 +3469,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -3846,12 +3516,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFFFFF",
                   "#00FFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -3899,12 +3563,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -3958,12 +3616,6 @@ export const SERIALIZED_EVENTS = [
                   "#2078E9",
                   "#57A1FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -4016,12 +3668,6 @@ export const SERIALIZED_EVENTS = [
                   "#007EFE",
                   "#5FAEFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -4073,12 +3719,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF9AFB",
                   "#FB3EF3"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -4135,12 +3775,6 @@ export const SERIALIZED_EVENTS = [
                   "#5deb5a",
                   "#8AFF88"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "aurora",
                 "chainBadgeColors": [
                   "#5deb5a",
@@ -4198,12 +3832,6 @@ export const SERIALIZED_EVENTS = [
                   "#60CFC8",
                   "#4312E8"
                 ],
-                "gradientCoords": {
-                  "x1": "11.118%",
-                  "y1": "26.577%",
-                  "x2": "24.212%",
-                  "y2": "18.305%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#60CFC8",
@@ -4261,12 +3889,6 @@ export const SERIALIZED_EVENTS = [
                   "#A24741",
                   "#F2716A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#A24741",
@@ -4324,12 +3946,6 @@ export const SERIALIZED_EVENTS = [
                   "#E1AA00",
                   "#FFC800"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#E1AA00",
@@ -4386,12 +4002,6 @@ export const SERIALIZED_EVENTS = [
                   "#107698",
                   "#00B2ED"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#107698",
@@ -4448,12 +4058,6 @@ export const SERIALIZED_EVENTS = [
                   "#107698",
                   "#00B2ED"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#107698",
@@ -4511,12 +4115,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#53AE94",
@@ -4568,12 +4166,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#3E90E8",
@@ -4632,12 +4224,6 @@ export const SERIALIZED_EVENTS = [
                   "#009393",
                   "#2EC9C9"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#009393",
@@ -4696,12 +4282,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "basemainnet",
                 "chainBadgeColors": [
                   "#3E90E8",
@@ -4760,12 +4340,6 @@ export const SERIALIZED_EVENTS = [
                   "#2F79EA",
                   "#124282"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#2F79EA",
@@ -4824,12 +4398,6 @@ export const SERIALIZED_EVENTS = [
                   "#4A6EC3",
                   "#3384BF"
                 ],
-                "gradientCoords": {
-                  "x1": "106.38%",
-                  "y1": "115.934%",
-                  "x2": "-33.63%",
-                  "y2": "-54.191%"
-                },
                 "tokenType": "BEP20",
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
@@ -4889,12 +4457,6 @@ export const SERIALIZED_EVENTS = [
                   "#F3E9DC",
                   "#F3E9DC"
                 ],
-                "gradientCoords": {
-                  "x1": "29%",
-                  "y1": "34.5%",
-                  "x2": "-1%",
-                  "y2": "-6.5%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#F3E9DC",
@@ -4952,12 +4514,6 @@ export const SERIALIZED_EVENTS = [
                   "#1FA967",
                   "#2DEA8F"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#1FA967",
@@ -5017,12 +4573,6 @@ export const SERIALIZED_EVENTS = [
                   "#E84142",
                   "#FE7C7D"
                 ],
-                "gradientCoords": {
-                  "x1": "-3.98%",
-                  "y1": "1.381%",
-                  "x2": "49.273%",
-                  "y2": "30.414%"
-                },
                 "tokenType": "BEP20",
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
@@ -5081,12 +4631,6 @@ export const SERIALIZED_EVENTS = [
                   "#F6465D",
                   "#F15F40"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#F6465D",
@@ -5145,12 +4689,6 @@ export const SERIALIZED_EVENTS = [
                   "#7E0BE8",
                   "#AC53FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#7E0BE8",
@@ -5208,12 +4746,6 @@ export const SERIALIZED_EVENTS = [
                   "#1263F1",
                   "#5895FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#1263F1",
@@ -5271,12 +4803,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -5334,12 +4860,6 @@ export const SERIALIZED_EVENTS = [
                   "#C8C8C8",
                   "#FFFFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#C8C8C8",
@@ -5399,12 +4919,6 @@ export const SERIALIZED_EVENTS = [
                   "#CB92F0",
                   "#EAC9FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#CB92F0",
@@ -5463,12 +4977,6 @@ export const SERIALIZED_EVENTS = [
                   "#FBCC5F",
                   "#FBF35F"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#FBCC5F",
@@ -5527,12 +5035,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFE804",
                   "#FFF590"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#FFE804",
@@ -5591,12 +5093,6 @@ export const SERIALIZED_EVENTS = [
                   "#474A73",
                   "#8C93AF"
                 ],
-                "gradientCoords": {
-                  "x1": "17.71%",
-                  "y1": "-46.968%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#474A73",
@@ -5655,12 +5151,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF4D00",
                   "#FFAA5C"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#FF4D00",
@@ -5719,12 +5209,6 @@ export const SERIALIZED_EVENTS = [
                   "#2B61D1",
                   "#437DF4"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#2B61D1",
@@ -5783,12 +5267,6 @@ export const SERIALIZED_EVENTS = [
                   "#3671FF",
                   "#3C49FF"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "5.5%",
-                  "x2": "31%",
-                  "y2": "36.5%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#3671FF",
@@ -5848,12 +5326,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFE5C0",
                   "#E6BC7B"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.5%",
-                  "x2": "41.043%",
-                  "y2": "26.738%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#FFE5C0",
@@ -5913,12 +5385,6 @@ export const SERIALIZED_EVENTS = [
                   "#ABA3B1",
                   "#ECE1F2"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.498%",
-                  "x2": "41.043%",
-                  "y2": "26.736%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#ABA3B1",
@@ -5977,12 +5443,6 @@ export const SERIALIZED_EVENTS = [
                   "#30A6FC",
                   "#00F2FE"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#30A6FC",
@@ -6041,12 +5501,6 @@ export const SERIALIZED_EVENTS = [
                   "#0082FA",
                   "#01B8FC"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#0082FA",
@@ -6105,12 +5559,6 @@ export const SERIALIZED_EVENTS = [
                   "#0DA89F",
                   "#00E0CA"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.4%",
-                  "x2": "41.04%",
-                  "y2": "26.7%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#0DA89F",
@@ -6170,12 +5618,6 @@ export const SERIALIZED_EVENTS = [
                   "#2ABC80",
                   "#44FFB2"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.4%",
-                  "x2": "41.04%",
-                  "y2": "26.7%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#2ABC80",
@@ -6234,12 +5676,6 @@ export const SERIALIZED_EVENTS = [
                   "#1A38F8",
                   "#5067FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#1A38F8",
@@ -6297,12 +5733,6 @@ export const SERIALIZED_EVENTS = [
                   "#D6D6D6",
                   "#777777"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "tokenType": "BEP20",
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
@@ -6362,12 +5792,6 @@ export const SERIALIZED_EVENTS = [
                   "#5A63B8",
                   "#C86DD7"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "tokenType": "BEP20",
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
@@ -6426,12 +5850,6 @@ export const SERIALIZED_EVENTS = [
                   "#1949C6",
                   "#4676F3"
                 ],
-                "gradientCoords": {
-                  "x1": "-5%",
-                  "y1": "1%",
-                  "x2": "48.2%",
-                  "y2": "30.3%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#1949C6",
@@ -6489,12 +5907,6 @@ export const SERIALIZED_EVENTS = [
                   "#2F7CA7",
                   "#4CA9DC"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#2F7CA7",
@@ -6553,12 +5965,6 @@ export const SERIALIZED_EVENTS = [
                   "#698BF2",
                   "#B9CAFD"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.4%",
-                  "x2": "41.04%",
-                  "y2": "26.7%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#698BF2",
@@ -6617,12 +6023,6 @@ export const SERIALIZED_EVENTS = [
                   "#6FF5FF",
                   "#1FC7D4"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#6FF5FF",
@@ -6683,12 +6083,6 @@ export const SERIALIZED_EVENTS = [
                   "#681CFF",
                   "#9560FF"
                 ],
-                "gradientCoords": {
-                  "x1": "29%",
-                  "y1": "34.5%",
-                  "x2": "-1%",
-                  "y2": "-6.5%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#681CFF",
@@ -6741,12 +6135,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -6805,12 +6193,6 @@ export const SERIALIZED_EVENTS = [
                   "#EACB7D",
                   "#FFEDBF"
                 ],
-                "gradientCoords": {
-                  "x1": "29%",
-                  "y1": "34.5%",
-                  "x2": "-1%",
-                  "y2": "-6.5%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#EACB7D",
@@ -6869,12 +6251,6 @@ export const SERIALIZED_EVENTS = [
                   "#0088CC",
                   "#1AB3FF"
                 ],
-                "gradientCoords": {
-                  "x1": "29%",
-                  "y1": "34.5%",
-                  "x2": "-1%",
-                  "y2": "-6.5%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#0088CC",
@@ -6932,12 +6308,6 @@ export const SERIALIZED_EVENTS = [
                   "#FC6CAB",
                   "#FF007A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "214.397%",
-                  "y2": "181.316%"
-                },
                 "tokenType": "BEP20",
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
@@ -6991,12 +6361,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -7050,12 +6414,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#53AE94",
@@ -7114,12 +6472,6 @@ export const SERIALIZED_EVENTS = [
                   "#3A78FF",
                   "#739FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#3A78FF",
@@ -7176,12 +6528,6 @@ export const SERIALIZED_EVENTS = [
                   "#00E1FF",
                   "#A6F4FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "assetType": "CARDANO_TOKEN",
                 "baseAssetName": "cardano",
                 "chainBadgeColors": [
@@ -7231,12 +6577,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF9AFB",
                   "#FB3EF3"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "assetType": "CARDANO_TOKEN",
                 "baseAssetName": "cardano",
                 "chainBadgeColors": [
@@ -7292,12 +6632,6 @@ export const SERIALIZED_EVENTS = [
                   "#4A148C",
                   "#B441CE"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "assetType": "CARDANO_TOKEN",
                 "baseAssetName": "cardano",
                 "chainBadgeColors": [
@@ -7345,12 +6679,6 @@ export const SERIALIZED_EVENTS = [
                   "#34D3E0",
                   "#7F7BAE"
                 ],
-                "gradientCoords": {
-                  "x1": "86.792%",
-                  "y1": "19.043%",
-                  "x2": "12.879%",
-                  "y2": "81.232%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#34D3E0",
@@ -7410,12 +6738,6 @@ export const SERIALIZED_EVENTS = [
                   "#0D48EA",
                   "#4471ED"
                 ],
-                "gradientCoords": {
-                  "x1": "86.792%",
-                  "y1": "19.043%",
-                  "x2": "12.879%",
-                  "y2": "81.232%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0D48EA",
@@ -7474,12 +6796,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -7538,12 +6854,6 @@ export const SERIALIZED_EVENTS = [
                   "#7F1BA4",
                   "#A72DD4"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#7F1BA4",
@@ -7595,12 +6905,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -7660,12 +6964,6 @@ export const SERIALIZED_EVENTS = [
                   "#00A2FF",
                   "#002AFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00A2FF",
@@ -7724,12 +7022,6 @@ export const SERIALIZED_EVENTS = [
                   "#29ABE2",
                   "#77D7FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#29ABE2",
@@ -7786,12 +7078,6 @@ export const SERIALIZED_EVENTS = [
                   "#B98863",
                   "#F5C099"
                 ],
-                "gradientCoords": {
-                  "x1": "10.5%",
-                  "y1": "3.5%",
-                  "x2": "38.5%",
-                  "y2": "53.5%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#B98863",
@@ -7849,12 +7135,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF6FBB",
                   "#D9327C"
                 ],
-                "gradientCoords": {
-                  "x1": "100%",
-                  "y1": "100%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FF6FBB",
@@ -7912,12 +7192,6 @@ export const SERIALIZED_EVENTS = [
                   "#0B39B0",
                   "#396FF9"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0B39B0",
@@ -7975,12 +7249,6 @@ export const SERIALIZED_EVENTS = [
                   "#024AD7",
                   "#3274F5"
                 ],
-                "gradientCoords": {
-                  "x1": "-5%",
-                  "y1": "1%",
-                  "x2": "48.253%",
-                  "y2": "30.034%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#024AD7",
@@ -8039,12 +7307,6 @@ export const SERIALIZED_EVENTS = [
                   "#5BAB98",
                   "#7CE3CB"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "4%",
-                  "x2": "36%",
-                  "y2": "35.5%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#5BAB98",
@@ -8104,12 +7366,6 @@ export const SERIALIZED_EVENTS = [
                   "#00E9E3",
                   "#04B2CA"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00E9E3",
@@ -8168,12 +7424,6 @@ export const SERIALIZED_EVENTS = [
                   "#01E8F7",
                   "#00C2FF"
                 ],
-                "gradientCoords": {
-                  "x1": "50.108%",
-                  "y1": "28.284%",
-                  "x2": "53.524%",
-                  "y2": "115.891%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#01E8F7",
@@ -8232,12 +7482,6 @@ export const SERIALIZED_EVENTS = [
                   "#CC0FE0",
                   "#7E1BCC"
                 ],
-                "gradientCoords": {
-                  "x1": "44.5%",
-                  "y1": "40%",
-                  "x2": "-4.548%",
-                  "y2": "4.017%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#CC0FE0",
@@ -8301,12 +7545,6 @@ export const SERIALIZED_EVENTS = [
                   "#C27ED5",
                   "#602A52"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#C27ED5",
@@ -8366,12 +7604,6 @@ export const SERIALIZED_EVENTS = [
                   "#2AE7A8",
                   "#009966"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "99.757%",
-                  "y2": "99.757%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#2AE7A8",
@@ -8431,12 +7663,6 @@ export const SERIALIZED_EVENTS = [
                   "#0045AD",
                   "#0055D5"
                 ],
-                "gradientCoords": {
-                  "x1": "63.701%",
-                  "y1": "21.261%",
-                  "x2": "17.913%",
-                  "y2": "-17.415%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0045AD",
@@ -8493,12 +7719,6 @@ export const SERIALIZED_EVENTS = [
                   "#536DF9",
                   "#3957F9"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "99.612%",
-                  "y2": "78.958%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#536DF9",
@@ -8557,12 +7777,6 @@ export const SERIALIZED_EVENTS = [
                   "#3464A5",
                   "#22416B"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#3464A5",
@@ -8622,12 +7836,6 @@ export const SERIALIZED_EVENTS = [
                   "#562FFF",
                   "#A08AFF"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.4%",
-                  "x2": "41.04%",
-                  "y2": "26.7%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#562FFF",
@@ -8685,12 +7893,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF3B00",
                   "#9F2B65"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FF3B00",
@@ -8748,12 +7950,6 @@ export const SERIALIZED_EVENTS = [
                   "#ADFF00",
                   "#CBFF5C"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#ADFF00",
@@ -8810,12 +8006,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF8700",
                   "#FFAD33"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FF8700",
@@ -8871,12 +8061,6 @@ export const SERIALIZED_EVENTS = [
                   "#9869A4",
                   "#6C2A7E"
                 ],
-                "gradientCoords": {
-                  "x1": "-22.982%",
-                  "y1": "-43.915%",
-                  "x2": "90.237%",
-                  "y2": "99.363%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#9869A4",
@@ -8938,12 +8122,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -9001,12 +8179,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF4D00",
                   "#FFA409"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FF4D00",
@@ -9062,12 +8234,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFC200",
                   "#CC9B00"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FFC200",
@@ -9125,12 +8291,6 @@ export const SERIALIZED_EVENTS = [
                   "#0052FF",
                   "#3E7CFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0052FF",
@@ -9181,12 +8341,6 @@ export const SERIALIZED_EVENTS = [
                   "#6D62FC",
                   "#00D9A6"
                 ],
-                "gradientCoords": {
-                  "x1": "24.15%",
-                  "y1": "7.483%",
-                  "x2": "78.462%",
-                  "y2": "88.983%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#6D62FC",
@@ -9247,12 +8401,6 @@ export const SERIALIZED_EVENTS = [
                   "#2E73FE",
                   "#6A9CFF"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.4%",
-                  "x2": "41.04%",
-                  "y2": "26.7%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#2E73FE",
@@ -9310,12 +8458,6 @@ export const SERIALIZED_EVENTS = [
                   "#3FA0F1",
                   "#295ADA"
                 ],
-                "gradientCoords": {
-                  "x1": "-22.982%",
-                  "y1": "-43.915%",
-                  "x2": "91.53%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#3FA0F1",
@@ -9373,12 +8515,6 @@ export const SERIALIZED_EVENTS = [
                   "#A31A41",
                   "#F82965"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#A31A41",
@@ -9437,12 +8573,6 @@ export const SERIALIZED_EVENTS = [
                   "#06DA30",
                   "#00B424"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#06DA30",
@@ -9499,12 +8629,6 @@ export const SERIALIZED_EVENTS = [
                   "#00D395",
                   "#00A171"
                 ],
-                "gradientCoords": {
-                  "x1": "91.53%",
-                  "y1": "101%",
-                  "x2": "10.484%",
-                  "y2": "0.517%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00D395",
@@ -9563,12 +8687,6 @@ export const SERIALIZED_EVENTS = [
                   "#1B58B3",
                   "#28ACD7"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "4%",
-                  "x2": "36%",
-                  "y2": "35.5%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1B58B3",
@@ -9627,12 +8745,6 @@ export const SERIALIZED_EVENTS = [
                   "#1E73B8",
                   "#134A76"
                 ],
-                "gradientCoords": {
-                  "x1": "-10.499%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1E73B8",
@@ -9690,12 +8802,6 @@ export const SERIALIZED_EVENTS = [
                   "#1C66A5",
                   "#2CFFCA"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "99.612%",
-                  "y2": "78.958%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1C66A5",
@@ -9753,12 +8859,6 @@ export const SERIALIZED_EVENTS = [
                   "#61AAFF",
                   "#1682FE"
                 ],
-                "gradientCoords": {
-                  "x1": "54.64%",
-                  "y1": "20%",
-                  "x2": "16.1%",
-                  "y2": "14.4%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#61AAFF",
@@ -9816,12 +8916,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF2D55",
                   "#FFBC5B"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FF2D55",
@@ -9873,12 +8967,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFFFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -9938,12 +9026,6 @@ export const SERIALIZED_EVENTS = [
                   "#141414",
                   "#525252"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#141414",
@@ -10001,12 +9083,6 @@ export const SERIALIZED_EVENTS = [
                   "#D8A24A",
                   "#724A0A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#D8A24A",
@@ -10064,12 +9140,6 @@ export const SERIALIZED_EVENTS = [
                   "#7373FF",
                   "#5555BF"
                 ],
-                "gradientCoords": {
-                  "x1": "100%",
-                  "y1": "100%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#7373FF",
@@ -10128,12 +9198,6 @@ export const SERIALIZED_EVENTS = [
                   "#7866D5",
                   "#B5A7FF"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#7866D5",
@@ -10190,12 +9254,6 @@ export const SERIALIZED_EVENTS = [
                   "#9FBBFF",
                   "#5284FF"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.537%",
-                  "y2": "6.714%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#9FBBFF",
@@ -10253,12 +9311,6 @@ export const SERIALIZED_EVENTS = [
                   "#A0E7FF",
                   "#13B5EC"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#A0E7FF",
@@ -10318,12 +9370,6 @@ export const SERIALIZED_EVENTS = [
                   "#2463EB",
                   "#3D81F6"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#2463EB",
@@ -10380,12 +9426,6 @@ export const SERIALIZED_EVENTS = [
                   "#5A56D6",
                   "#8D8AF3"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.49%",
-                  "x2": "41.043%",
-                  "y2": "26.73%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#5A56D6",
@@ -10443,12 +9483,6 @@ export const SERIALIZED_EVENTS = [
                   "#245AE5",
                   "#245AE5"
                 ],
-                "gradientCoords": {
-                  "x1": "91.53%",
-                  "y1": "101%",
-                  "x2": "10.067%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#245AE5",
@@ -10506,12 +9540,6 @@ export const SERIALIZED_EVENTS = [
                   "#838383",
                   "#D4D4D4"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "4%",
-                  "x2": "36%",
-                  "y2": "35.5%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#838383",
@@ -10569,12 +9597,6 @@ export const SERIALIZED_EVENTS = [
                   "#838383",
                   "#D4D4D4"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "4%",
-                  "x2": "36%",
-                  "y2": "35.5%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#838383",
@@ -10632,12 +9654,6 @@ export const SERIALIZED_EVENTS = [
                   "#EC1966",
                   "#E96C99"
                 ],
-                "gradientCoords": {
-                  "x1": "100%",
-                  "y1": "100%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EC1966",
@@ -10695,12 +9711,6 @@ export const SERIALIZED_EVENTS = [
                   "#88C3FF",
                   "#268AEF"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.537%",
-                  "y2": "6.714%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#88C3FF",
@@ -10757,12 +9767,6 @@ export const SERIALIZED_EVENTS = [
                   "#00DCFA",
                   "#177EB7"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00DCFA",
@@ -10820,12 +9824,6 @@ export const SERIALIZED_EVENTS = [
                   "#00A8C8",
                   "#146B7B"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00A8C8",
@@ -10884,12 +9882,6 @@ export const SERIALIZED_EVENTS = [
                   "#04CBDA",
                   "#024776"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "97.922%",
-                  "y2": "150.802%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#04CBDA",
@@ -10947,12 +9939,6 @@ export const SERIALIZED_EVENTS = [
                   "#0B81FF",
                   "#0B41D3"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0B81FF",
@@ -11011,12 +9997,6 @@ export const SERIALIZED_EVENTS = [
                   "#00454A",
                   "#00A4AF"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00454A",
@@ -11074,12 +10054,6 @@ export const SERIALIZED_EVENTS = [
                   "#1B2143",
                   "#2CA6E0"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1B2143",
@@ -11134,12 +10108,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -11199,12 +10167,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFE900",
                   "#FDC800"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FFE900",
@@ -11262,12 +10224,6 @@ export const SERIALIZED_EVENTS = [
                   "#4B4B75",
                   "#7474AA"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.5%",
-                  "y2": "6.7%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#4B4B75",
@@ -11326,12 +10282,6 @@ export const SERIALIZED_EVENTS = [
                   "#ADF5FF",
                   "#24D1E9"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.53%",
-                  "y2": "6.714%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#ADF5FF",
@@ -11390,12 +10340,6 @@ export const SERIALIZED_EVENTS = [
                   "#F6941D",
                   "#FFB545"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#F6941D",
@@ -11453,12 +10397,6 @@ export const SERIALIZED_EVENTS = [
                   "#158866",
                   "#31CB9E"
                 ],
-                "gradientCoords": {
-                  "x1": "108.594%",
-                  "y1": "100%",
-                  "x2": "-19.892%",
-                  "y2": "-20.421%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#158866",
@@ -11518,12 +10456,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF4D00",
                   "#FFA409"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FF4D00",
@@ -11574,12 +10506,6 @@ export const SERIALIZED_EVENTS = [
                   "#F3F3F3",
                   "#FFFFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#F3F3F3",
@@ -11639,12 +10565,6 @@ export const SERIALIZED_EVENTS = [
                   "#F3827B",
                   "#EAEBA1"
                 ],
-                "gradientCoords": {
-                  "x1": "20%",
-                  "y1": "-3.5%",
-                  "x2": "25.256%",
-                  "y2": "43.411%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#F3827B",
@@ -11703,12 +10623,6 @@ export const SERIALIZED_EVENTS = [
                   "#00EB88",
                   "#70F4BD"
                 ],
-                "gradientCoords": {
-                  "x1": "2.681%",
-                  "y1": "19.977%",
-                  "x2": "37.32%",
-                  "y2": "19.977%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00EB88",
@@ -11766,12 +10680,6 @@ export const SERIALIZED_EVENTS = [
                   "#0BC355",
                   "#56EF93"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.49%",
-                  "x2": "41.043%",
-                  "y2": "26.73%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0BC355",
@@ -11829,12 +10737,6 @@ export const SERIALIZED_EVENTS = [
                   "#4BC0C8",
                   "#02819B"
                 ],
-                "gradientCoords": {
-                  "x1": "100%",
-                  "y1": "100%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#4BC0C8",
@@ -11893,12 +10795,6 @@ export const SERIALIZED_EVENTS = [
                   "#1C42FF",
                   "#589BFF"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.53%",
-                  "y2": "6.714%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1C42FF",
@@ -11956,12 +10852,6 @@ export const SERIALIZED_EVENTS = [
                   "#745DDF",
                   "#9E8AFE"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#745DDF",
@@ -12020,12 +10910,6 @@ export const SERIALIZED_EVENTS = [
                   "#DF9D93",
                   "#56379C"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#DF9D93",
@@ -12083,12 +10967,6 @@ export const SERIALIZED_EVENTS = [
                   "#1ABC9C",
                   "#546979"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1ABC9C",
@@ -12148,12 +11026,6 @@ export const SERIALIZED_EVENTS = [
                   "#1C68F3",
                   "#0403BA"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1C68F3",
@@ -12211,12 +11083,6 @@ export const SERIALIZED_EVENTS = [
                   "#FBCC5F",
                   "#F9A606"
                 ],
-                "gradientCoords": {
-                  "x1": "3.912%",
-                  "y1": "0%",
-                  "x2": "89.933%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FBCC5F",
@@ -12276,12 +11142,6 @@ export const SERIALIZED_EVENTS = [
                   "#4187F7",
                   "#8ACAFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#4187F7",
@@ -12339,12 +11199,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFFFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -12403,12 +11257,6 @@ export const SERIALIZED_EVENTS = [
                   "#17978D",
                   "#2ADACC"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.4%",
-                  "x2": "41.04%",
-                  "y2": "26.7%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#17978D",
@@ -12467,12 +11315,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -12532,12 +11374,6 @@ export const SERIALIZED_EVENTS = [
                   "#3CA9E5",
                   "#1A4199"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#3CA9E5",
@@ -12595,12 +11431,6 @@ export const SERIALIZED_EVENTS = [
                   "#6300FF",
                   "#8000FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#6300FF",
@@ -12658,12 +11488,6 @@ export const SERIALIZED_EVENTS = [
                   "#0AFA99",
                   "#E1E64E"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0AFA99",
@@ -12723,12 +11547,6 @@ export const SERIALIZED_EVENTS = [
                   "#7B1173",
                   "#FF4092"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.4%",
-                  "x2": "41.04%",
-                  "y2": "26.7%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#7B1173",
@@ -12786,12 +11604,6 @@ export const SERIALIZED_EVENTS = [
                   "#1A82FF",
                   "#71B1FF"
                 ],
-                "gradientCoords": {
-                  "x1": "2.68%",
-                  "y1": "0.61%",
-                  "x2": "41.19%",
-                  "y2": "35.03%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1A82FF",
@@ -12849,12 +11661,6 @@ export const SERIALIZED_EVENTS = [
                   "#788299",
                   "#ADB8D3"
                 ],
-                "gradientCoords": {
-                  "x1": "9.954%",
-                  "y1": "7.596%",
-                  "x2": "34.509%",
-                  "y2": "31.978%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#788299",
@@ -12913,12 +11719,6 @@ export const SERIALIZED_EVENTS = [
                   "#4947FF",
                   "#3248B3"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#4947FF",
@@ -12977,12 +11777,6 @@ export const SERIALIZED_EVENTS = [
                   "#2F79EA",
                   "#124282"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#2F79EA",
@@ -13041,12 +11835,6 @@ export const SERIALIZED_EVENTS = [
                   "#1A82FF",
                   "#71B1FF"
                 ],
-                "gradientCoords": {
-                  "x1": "25.38%",
-                  "y1": "15.89%",
-                  "x2": "27.48%",
-                  "y2": "24.56%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1A82FF",
@@ -13102,12 +11890,6 @@ export const SERIALIZED_EVENTS = [
                   "#DEC21C",
                   "#EFE812"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#DEC21C",
@@ -13166,12 +11948,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAE522",
                   "#EAD422"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAE522",
@@ -13228,12 +12004,6 @@ export const SERIALIZED_EVENTS = [
                   "#0052FF",
                   "#3E7CFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0052FF",
@@ -13291,12 +12061,6 @@ export const SERIALIZED_EVENTS = [
                   "#5E924B",
                   "#7DBE65"
                 ],
-                "gradientCoords": {
-                  "x1": "4%",
-                  "y1": "9%",
-                  "x2": "39.09%",
-                  "y2": "27.54%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#5E924B",
@@ -13347,12 +12111,6 @@ export const SERIALIZED_EVENTS = [
                   "#0793C2",
                   "#00BFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0793C2",
@@ -13412,12 +12170,6 @@ export const SERIALIZED_EVENTS = [
                   "#5A63B8",
                   "#C86DD7"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#5A63B8",
@@ -13477,12 +12229,6 @@ export const SERIALIZED_EVENTS = [
                   "#5CA0F6",
                   "#3F6299"
                 ],
-                "gradientCoords": {
-                  "x1": "-62.728%",
-                  "y1": "-45.557%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#5CA0F6",
@@ -13541,12 +12287,6 @@ export const SERIALIZED_EVENTS = [
                   "#05BCA9",
                   "#2F4B77"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#05BCA9",
@@ -13602,12 +12342,6 @@ export const SERIALIZED_EVENTS = [
                   "#0071F3",
                   "#338EF8"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0071F3",
@@ -13662,12 +12396,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -13727,12 +12455,6 @@ export const SERIALIZED_EVENTS = [
                   "#D72D2F",
                   "#EF4F1F"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#D72D2F",
@@ -13791,12 +12513,6 @@ export const SERIALIZED_EVENTS = [
                   "#337A8D",
                   "#0F3653"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "-14.319%",
-                  "x2": "105.928%",
-                  "y2": "129.347%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#337A8D",
@@ -13853,12 +12569,6 @@ export const SERIALIZED_EVENTS = [
                   "#006CFF",
                   "#4694FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#006CFF",
@@ -13915,12 +12625,6 @@ export const SERIALIZED_EVENTS = [
                   "#0180FF",
                   "#013CFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0180FF",
@@ -13979,12 +12683,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFFFFF",
                   "#EBEBEB"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "99.12%",
-                  "y2": "78.676%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FFFFFF",
@@ -14043,12 +12741,6 @@ export const SERIALIZED_EVENTS = [
                   "#E62249",
                   "#FF5A5A"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.537%",
-                  "y2": "6.714%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#E62249",
@@ -14107,12 +12799,6 @@ export const SERIALIZED_EVENTS = [
                   "#5A89F9",
                   "#6CFDCC"
                 ],
-                "gradientCoords": {
-                  "x1": "-28.432%",
-                  "y1": "0%",
-                  "x2": "-28.432%",
-                  "y2": "99.999%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#5A89F9",
@@ -14171,12 +12857,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAB308",
                   "#FEF08A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAB308",
@@ -14240,12 +12920,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -14305,12 +12979,6 @@ export const SERIALIZED_EVENTS = [
                   "#693AC1",
                   "#4281FF"
                 ],
-                "gradientCoords": {
-                  "x1": "53.598%",
-                  "y1": "83.623%",
-                  "x2": "46.36%",
-                  "y2": "15.984%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#693AC1",
@@ -14369,12 +13037,6 @@ export const SERIALIZED_EVENTS = [
                   "#314EFF",
                   "#2033A5"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#314EFF",
@@ -14432,12 +13094,6 @@ export const SERIALIZED_EVENTS = [
                   "#FEA101",
                   "#FFB941"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FEA101",
@@ -14495,12 +13151,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAB308",
                   "#FEF08A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAB308",
@@ -14558,12 +13208,6 @@ export const SERIALIZED_EVENTS = [
                   "#D6D6D6",
                   "#F6F6F6"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#D6D6D6",
@@ -14620,12 +13264,6 @@ export const SERIALIZED_EVENTS = [
                   "#00BDBF",
                   "#5F727D"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00BDBF",
@@ -14684,12 +13322,6 @@ export const SERIALIZED_EVENTS = [
                   "#0084FF",
                   "#00ADEF"
                 ],
-                "gradientCoords": {
-                  "x1": "9.954%",
-                  "y1": "7.596%",
-                  "x2": "34.509%",
-                  "y2": "31.978%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0084FF",
@@ -14747,12 +13379,6 @@ export const SERIALIZED_EVENTS = [
                   "#0FAE91",
                   "#D020D6"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0FAE91",
@@ -14809,12 +13435,6 @@ export const SERIALIZED_EVENTS = [
                   "#A53803",
                   "#F69C0A"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#A53803",
@@ -14873,12 +13493,6 @@ export const SERIALIZED_EVENTS = [
                   "#77BAA1",
                   "#B9EFDB"
                 ],
-                "gradientCoords": {
-                  "x1": "-3.98%",
-                  "y1": "1.381%",
-                  "x2": "49.273%",
-                  "y2": "30.414%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#77BAA1",
@@ -14938,12 +13552,6 @@ export const SERIALIZED_EVENTS = [
                   "#00D1FF",
                   "#005466"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "99.12%",
-                  "y2": "78.676%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00D1FF",
@@ -15001,12 +13609,6 @@ export const SERIALIZED_EVENTS = [
                   "#00CC77",
                   "#049C76"
                 ],
-                "gradientCoords": {
-                  "x1": "100%",
-                  "y1": "100%",
-                  "x2": "0.131%",
-                  "y2": "0.131%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00CC77",
@@ -15064,12 +13666,6 @@ export const SERIALIZED_EVENTS = [
                   "#5B67C3",
                   "#3B4382"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#5B67C3",
@@ -15128,12 +13724,6 @@ export const SERIALIZED_EVENTS = [
                   "#00A3FF",
                   "#3ADCFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00A3FF",
@@ -15190,12 +13780,6 @@ export const SERIALIZED_EVENTS = [
                   "#0081FF",
                   "#15528E"
                 ],
-                "gradientCoords": {
-                  "x1": "25.019%",
-                  "y1": "-6.467%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0081FF",
@@ -15254,12 +13838,6 @@ export const SERIALIZED_EVENTS = [
                   "#0081FF",
                   "#15528E"
                 ],
-                "gradientCoords": {
-                  "x1": "25.019%",
-                  "y1": "-6.467%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0081FF",
@@ -15318,12 +13896,6 @@ export const SERIALIZED_EVENTS = [
                   "#7D52FF",
                   "#6028CC"
                 ],
-                "gradientCoords": {
-                  "x1": "10.067%",
-                  "y1": "0%",
-                  "x2": "89.933%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#7D52FF",
@@ -15375,12 +13947,6 @@ export const SERIALIZED_EVENTS = [
                   "#FC53A2",
                   "#B074BA"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "-0.006%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FC53A2",
@@ -15440,12 +14006,6 @@ export const SERIALIZED_EVENTS = [
                   "#F506FA",
                   "#FD89FF"
                 ],
-                "gradientCoords": {
-                  "x1": "8.49%",
-                  "y1": "6%",
-                  "x2": "32%",
-                  "y2": "32.86%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#F506FA",
@@ -15503,12 +14063,6 @@ export const SERIALIZED_EVENTS = [
                   "#14C8FF",
                   "#8EE5FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#14C8FF",
@@ -15565,12 +14119,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFFFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -15628,12 +14176,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#53AE94",
@@ -15692,12 +14234,6 @@ export const SERIALIZED_EVENTS = [
                   "#33A0FF",
                   "#5919D9"
                 ],
-                "gradientCoords": {
-                  "x1": "73.306%",
-                  "y1": "69.023%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#33A0FF",
@@ -15756,12 +14292,6 @@ export const SERIALIZED_EVENTS = [
                   "#1A5AFF",
                   "#6691FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1A5AFF",
@@ -15819,12 +14349,6 @@ export const SERIALIZED_EVENTS = [
                   "#23F08F",
                   "#72FFBC"
                 ],
-                "gradientCoords": {
-                  "x1": "-4.68%",
-                  "y1": "1.381%",
-                  "x2": "48.573%",
-                  "y2": "30.414%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#23F08F",
@@ -15885,12 +14409,6 @@ export const SERIALIZED_EVENTS = [
                   "#1A59FE",
                   "#5C89FF"
                 ],
-                "gradientCoords": {
-                  "x1": "-4.68%",
-                  "y1": "1.381%",
-                  "x2": "48.573%",
-                  "y2": "30.414%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1A59FE",
@@ -15947,12 +14465,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF4A4A",
                   "#CC3B3B"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "99.881%",
-                  "y2": "99.881%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FF4A4A",
@@ -16010,12 +14522,6 @@ export const SERIALIZED_EVENTS = [
                   "#FC6CAB",
                   "#FF007A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "214.397%",
-                  "y2": "181.316%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FC6CAB",
@@ -16073,12 +14579,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#3E90E8",
@@ -16137,12 +14637,6 @@ export const SERIALIZED_EVENTS = [
                   "#CA2258",
                   "#FE3E7C"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "4%",
-                  "x2": "36%",
-                  "y2": "35.5%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#CA2258",
@@ -16201,12 +14695,6 @@ export const SERIALIZED_EVENTS = [
                   "#BB3A4F",
                   "#FF1F43"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#BB3A4F",
@@ -16266,12 +14754,6 @@ export const SERIALIZED_EVENTS = [
                   "#3831AB",
                   "#403B89"
                 ],
-                "gradientCoords": {
-                  "x1": "-.001%",
-                  "y1": "0%",
-                  "x2": "100.001%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#3831AB",
@@ -16330,12 +14812,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -16392,12 +14868,6 @@ export const SERIALIZED_EVENTS = [
                   "#8958AB",
                   "#3D2F52"
                 ],
-                "gradientCoords": {
-                  "x1": "91.762%",
-                  "y1": "69.532%",
-                  "x2": "4.905%",
-                  "y2": "24.223%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#8958AB",
@@ -16453,12 +14923,6 @@ export const SERIALIZED_EVENTS = [
                   "#EC9CC6",
                   "#ED1E79"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EC9CC6",
@@ -16516,12 +14980,6 @@ export const SERIALIZED_EVENTS = [
                   "#1EAB89",
                   "#3ADFB7"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.49%",
-                  "x2": "41.043%",
-                  "y2": "26.73%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1EAB89",
@@ -16579,12 +15037,6 @@ export const SERIALIZED_EVENTS = [
                   "#39E6D7",
                   "#40FF80"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#39E6D7",
@@ -16641,12 +15093,6 @@ export const SERIALIZED_EVENTS = [
                   "#0076FC",
                   "#0052B0"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "99.12%",
-                  "y2": "78.676%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0076FC",
@@ -16703,12 +15149,6 @@ export const SERIALIZED_EVENTS = [
                   "#2856A6",
                   "#518BEF"
                 ],
-                "gradientCoords": {
-                  "x1": "12.8%",
-                  "y1": "14%",
-                  "x2": "27.91%",
-                  "y2": "25.4%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#2856A6",
@@ -16766,12 +15206,6 @@ export const SERIALIZED_EVENTS = [
                   "#C8C8C8",
                   "#979797"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#C8C8C8",
@@ -16828,12 +15262,6 @@ export const SERIALIZED_EVENTS = [
                   "#0D70CC",
                   "#12AAFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#0D70CC",
@@ -16889,12 +15317,6 @@ export const SERIALIZED_EVENTS = [
                   "#E03C3C",
                   "#E76767"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#E03C3C",
@@ -16953,12 +15375,6 @@ export const SERIALIZED_EVENTS = [
                   "#3FA0F1",
                   "#295ADA"
                 ],
-                "gradientCoords": {
-                  "x1": "-22.982%",
-                  "y1": "-43.915%",
-                  "x2": "91.53%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#3FA0F1",
@@ -17016,12 +15432,6 @@ export const SERIALIZED_EVENTS = [
                   "#60CFC8",
                   "#4312E8"
                 ],
-                "gradientCoords": {
-                  "x1": "11.118%",
-                  "y1": "26.577%",
-                  "x2": "24.212%",
-                  "y2": "18.305%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#60CFC8",
@@ -17077,12 +15487,6 @@ export const SERIALIZED_EVENTS = [
                   "#EC9CC6",
                   "#ED1E79"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#EC9CC6",
@@ -17140,12 +15544,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#3E90E8",
@@ -17203,12 +15601,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#53AE94",
@@ -17266,12 +15658,6 @@ export const SERIALIZED_EVENTS = [
                   "#472FCF",
                   "#7159FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#472FCF",
@@ -17329,12 +15715,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "fantommainnet",
                 "chainBadgeColors": [
                   "#53AE94",
@@ -17386,12 +15766,6 @@ export const SERIALIZED_EVENTS = [
                   "#34D3E0",
                   "#7F7BAE"
                 ],
-                "gradientCoords": {
-                  "x1": "86.792%",
-                  "y1": "19.043%",
-                  "x2": "12.879%",
-                  "y2": "81.232%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#34D3E0",
@@ -17451,12 +15825,6 @@ export const SERIALIZED_EVENTS = [
                   "#AC18AC",
                   "#FF47FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#AC18AC",
@@ -17508,12 +15876,6 @@ export const SERIALIZED_EVENTS = [
                   "#FBCC5F",
                   "#F9A606"
                 ],
-                "gradientCoords": {
-                  "x1": "3.912%",
-                  "y1": "0%",
-                  "x2": "89.933%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#FBCC5F",
@@ -17573,12 +15935,6 @@ export const SERIALIZED_EVENTS = [
                   "#FA34F3",
                   "#8F17F9"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.5%",
-                  "x2": "41.044%",
-                  "y2": "23.738%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#FA34F3",
@@ -17636,12 +15992,6 @@ export const SERIALIZED_EVENTS = [
                   "#37BE96",
                   "#4DFC8D"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#37BE96",
@@ -17693,12 +16043,6 @@ export const SERIALIZED_EVENTS = [
                   "#3FA0F1",
                   "#295ADA"
                 ],
-                "gradientCoords": {
-                  "x1": "-22.982%",
-                  "y1": "-43.915%",
-                  "x2": "91.53%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#3FA0F1",
@@ -17756,12 +16100,6 @@ export const SERIALIZED_EVENTS = [
                   "#625CF4",
                   "#9A96FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#625CF4",
@@ -17813,12 +16151,6 @@ export const SERIALIZED_EVENTS = [
                   "#0084FF",
                   "#00ADEF"
                 ],
-                "gradientCoords": {
-                  "x1": "9.954%",
-                  "y1": "7.596%",
-                  "x2": "34.509%",
-                  "y2": "31.978%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#0084FF",
@@ -17871,12 +16203,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -17934,12 +16260,6 @@ export const SERIALIZED_EVENTS = [
                   "#00BAFF",
                   "#3ADCFF"
                 ],
-                "gradientCoords": {
-                  "x1": "30%",
-                  "y1": "-13.503%",
-                  "x2": "-1.873%",
-                  "y2": "-7.408%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#00BAFF",
@@ -17991,12 +16311,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#53AE94",
@@ -18055,12 +16369,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#3E90E8",
@@ -18112,12 +16420,6 @@ export const SERIALIZED_EVENTS = [
                   "#8958AB",
                   "#3D2F52"
                 ],
-                "gradientCoords": {
-                  "x1": "91.762%",
-                  "y1": "69.532%",
-                  "x2": "4.905%",
-                  "y2": "24.223%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#8958AB",
@@ -18170,12 +16472,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -18235,12 +16531,6 @@ export const SERIALIZED_EVENTS = [
                   "#FBCC5F",
                   "#FBF35F"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "baseAssetName": "optimism",
                 "chainBadgeColors": [
                   "#FBCC5F",
@@ -18297,12 +16587,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF0420",
                   "#A10013"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "optimism",
                 "chainBadgeColors": [
                   "#FF0420",
@@ -18360,12 +16644,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "optimism",
                 "chainBadgeColors": [
                   "#3E90E8",
@@ -18423,12 +16701,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "optimism",
                 "chainBadgeColors": [
                   "#53AE94",
@@ -18486,12 +16758,6 @@ export const SERIALIZED_EVENTS = [
                   "#D5D5D5",
                   "#FFFFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "baseAssetName": "optimism",
                 "chainBadgeColors": [
                   "#D5D5D5",
@@ -18543,12 +16809,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFFFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "rootstock",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -18607,12 +16867,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF5800",
                   "#FF9056"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "rootstock",
                 "chainBadgeColors": [
                   "#FF5800",
@@ -18668,12 +16922,6 @@ export const SERIALIZED_EVENTS = [
                   "#00A3FF",
                   "#3ADCFF"
                 ],
-                "gradientCoords": {
-                  "x1": "29.931%",
-                  "y1": "11.994%",
-                  "x2": "10.494%",
-                  "y2": "28.187%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -18719,12 +16967,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFE5C0",
                   "#E6BC7B"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.5%",
-                  "x2": "41.043%",
-                  "y2": "26.738%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -18776,12 +17018,6 @@ export const SERIALIZED_EVENTS = [
                   "#44b6BB",
                   "#77B0DD"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -18827,12 +17063,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -18885,12 +17115,6 @@ export const SERIALIZED_EVENTS = [
                   "#8312AC",
                   "#B53BE1"
                 ],
-                "gradientCoords": {
-                  "x1": "22.6%",
-                  "y1": "7.867%",
-                  "x2": "22.426%",
-                  "y2": "30.81%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -18941,12 +17165,6 @@ export const SERIALIZED_EVENTS = [
                   "#A0A0FF",
                   "#6868FC"
                 ],
-                "gradientCoords": {
-                  "x1": "-4.68%",
-                  "y1": "1.381%",
-                  "x2": "48.573%",
-                  "y2": "30.414%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -18996,12 +17214,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFFFFF",
                   "#DBDBDB"
                 ],
-                "gradientCoords": {
-                  "x1": "-4.68%",
-                  "y1": "1.381%",
-                  "x2": "48.573%",
-                  "y2": "30.414%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19051,12 +17263,6 @@ export const SERIALIZED_EVENTS = [
                   "#A0A0FF",
                   "#6868FC"
                 ],
-                "gradientCoords": {
-                  "x1": "-4.68%",
-                  "y1": "1.381%",
-                  "x2": "48.573%",
-                  "y2": "30.414%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19108,12 +17314,6 @@ export const SERIALIZED_EVENTS = [
                   "#00AE89",
                   "#00FFC8"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19164,12 +17364,6 @@ export const SERIALIZED_EVENTS = [
                   "#98C158",
                   "#C7F284"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19222,12 +17416,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19278,12 +17466,6 @@ export const SERIALIZED_EVENTS = [
                   "#E54033",
                   "#EEB91B"
                 ],
-                "gradientCoords": {
-                  "x1": "61.5%",
-                  "y1": "7.3%",
-                  "x2": "47.7%",
-                  "y2": "-6.5%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19334,12 +17516,6 @@ export const SERIALIZED_EVENTS = [
                   "#B7011C",
                   "#FF4F4F"
                 ],
-                "gradientCoords": {
-                  "x1": "10.5%",
-                  "y1": "3.5%",
-                  "x2": "38.5%",
-                  "y2": "53.5%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19390,12 +17566,6 @@ export const SERIALIZED_EVENTS = [
                   "#308DBA",
                   "#C8ECE1"
                 ],
-                "gradientCoords": {
-                  "x1": "-3.5%",
-                  "y1": "3.5%",
-                  "x2": "48.05%",
-                  "y2": "30.724%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19448,12 +17618,6 @@ export const SERIALIZED_EVENTS = [
                   "#1D257A",
                   "#5969DB"
                 ],
-                "gradientCoords": {
-                  "x1": "44.5%",
-                  "y1": "40%",
-                  "x2": "-4.548%",
-                  "y2": "4.017%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19505,12 +17669,6 @@ export const SERIALIZED_EVENTS = [
                   "#32FFFF",
                   "#EDFEFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19561,12 +17719,6 @@ export const SERIALIZED_EVENTS = [
                   "#3772FF",
                   "#C200FB"
                 ],
-                "gradientCoords": {
-                  "x1": "99.911%",
-                  "y1": "25.033%",
-                  "x2": "-6.116%",
-                  "y2": "61.756%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19620,12 +17772,6 @@ export const SERIALIZED_EVENTS = [
                   "#E62249",
                   "#FF5A5A"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.537%",
-                  "y2": "6.714%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19676,12 +17822,6 @@ export const SERIALIZED_EVENTS = [
                   "#71E0EC",
                   "#05AAC5"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "-.006%",
-                  "x2": "99.694%",
-                  "y2": "99.694%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19728,12 +17868,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19787,12 +17921,6 @@ export const SERIALIZED_EVENTS = [
                   "#32FFFF",
                   "#EDFEFF"
                 ],
-                "gradientCoords": {
-                  "x1": "44.5%",
-                  "y1": "40%",
-                  "x2": "-4.548%",
-                  "y2": "4.017%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19838,12 +17966,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19890,12 +18012,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19948,12 +18064,6 @@ export const SERIALIZED_EVENTS = [
                   "#2BD9B9",
                   "#D141E9"
                 ],
-                "gradientCoords": {
-                  "x1": "44.5%",
-                  "y1": "40%",
-                  "x2": "-4.548%",
-                  "y2": "4.017%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -19999,12 +18109,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -20082,12 +18186,6 @@ export const SERIALIZED_EVENTS = [
                 ],
                 "displayNetworkName": "Ethereum",
                 "displayNetworkTicker": "ETH",
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "address": {
                   "validate": null
                 },
@@ -20147,12 +18245,6 @@ export const SERIALIZED_EVENTS = [
                 ],
                 "displayNetworkName": "Ethereum",
                 "displayNetworkTicker": "ETH",
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "address": {
                   "validate": null
                 },
@@ -20213,12 +18305,6 @@ export const SERIALIZED_EVENTS = [
                 ],
                 "displayNetworkName": "Ethereum",
                 "displayNetworkTicker": "ETH",
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "address": {
                   "validate": null
                 },
@@ -20281,12 +18367,6 @@ export const SERIALIZED_EVENTS = [
                 ],
                 "displayNetworkName": "Ethereum",
                 "displayNetworkTicker": "ETH",
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "address": {
                   "validate": null
                 },
@@ -24789,50 +22869,6 @@ export const SERIALIZED_EVENTS = [
                       }
                     }
                   },
-                  "riskMetrics": {
-                    "t": "object",
-                    "v": {
-                      "requiredMetrics": {
-                        "t": "array",
-                        "v": [
-                          "restrictedLanguage"
-                        ]
-                      },
-                      "minimumWalletAgeInDays": 2,
-                      "permittedTimeZones": {
-                        "t": "array",
-                        "v": [
-                          "America/New_York",
-                          "America/Chicago",
-                          "America/Denver",
-                          "America/Los_Angeles",
-                          "America/Anchorage",
-                          "Pacific/Honolulu"
-                        ]
-                      },
-                      "permittedLanguages": {
-                        "t": "array",
-                        "v": [
-                          "en"
-                        ]
-                      },
-                      "hasBalancePoint": 1,
-                      "walletAgePointPerMonth": 0.1,
-                      "restrictedManufacturers": {
-                        "t": "array",
-                        "v": [
-                          "Tecno Mobile"
-                        ]
-                      },
-                      "minimumAndroidVersion": "30",
-                      "minimumIosVersion": "13",
-                      "txHistoryPointPerTx": 0.1,
-                      "assetsHeldPointPerAsset": 0.05,
-                      "fiatPurchasePoint": 5,
-                      "swappedPointPerTx": 0.1,
-                      "stakingPoint": 5
-                    }
-                  }
                 }
               },
               "exodex": {
@@ -25868,17 +23904,6 @@ export const SERIALIZED_EVENTS = [
     "t": "object",
     "v": {
       "jsonrpc": "2.0",
-      "method": "riskMetrics",
-      "params": {
-        "t": "object",
-        "v": {}
-      }
-    }
-  },
-  {
-    "t": "object",
-    "v": {
-      "jsonrpc": "2.0",
       "method": "acceptedTerms"
     }
   },
@@ -26412,25 +24437,6 @@ export const SERIALIZED_EVENTS = [
     "t": "object",
     "v": {
       "jsonrpc": "2.0",
-      "error": {
-        "t": "object",
-        "v": {
-          "code": -32601,
-          "message": "Method not found",
-          "data": {
-            "t": "object",
-            "v": {
-              "methodName": "riskMetrics"
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    "t": "object",
-    "v": {
-      "jsonrpc": "2.0",
       "method": "pre-load",
       "params": {
         "t": "object",
@@ -26507,12 +24513,6 @@ export const SERIALIZED_EVENTS = [
                   "#ECECEC",
                   "#B9B9B9"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "Algorand is a high performance blockchain based on next generation technology that implements a Proof of Stake protocol. The project has been called “Blockchain 3.0”, as it is able to solve the well-known problem of scalability found in Bitcoin, while maintaining decentralization and security.",
                   "reddit": "https://www.reddit.com/r/algorand/",
@@ -26602,12 +24602,6 @@ export const SERIALIZED_EVENTS = [
                   "#474A73",
                   "#8C93AF"
                 ],
-                "gradientCoords": {
-                  "x1": "17.71%",
-                  "y1": "-46.968%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "info": {
                   "description": "AURORA is the governance token for the Aurora protocol, an Ethereum Virtual Machine that runs on the NEAR blockchain. Aurora helps Ethereum projects move to NEAR, plus powers new products with low fees, scalability, and compatibility.",
                   "website": "https://aurora.dev/",
@@ -26681,12 +24675,6 @@ export const SERIALIZED_EVENTS = [
                   "#E84142",
                   "#FE7C7D"
                 ],
-                "gradientCoords": {
-                  "x1": "-3.98%",
-                  "y1": "1.381%",
-                  "x2": "49.273%",
-                  "y2": "30.414%"
-                },
                 "info": {
                   "description": "Avalanche is an open-source platform for launching decentralized finance applications and enterprise blockchain deployments in one interoperable, highly scalable ecosystem. It is a smart contract-capable blockchain platform focused on transaction speed, low costs, and eco-friendliness.",
                   "reddit": "https://www.reddit.com/r/Avax",
@@ -26761,12 +24749,6 @@ export const SERIALIZED_EVENTS = [
                   "#474A73",
                   "#8C93AF"
                 ],
-                "gradientCoords": {
-                  "x1": "17.71%",
-                  "y1": "-46.968%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "info": {
                   "description": "Base is an Ethereum Layer 2 (L2) chain that offers a safe, low-cost, developer-friendly way to build on-chain. Base is an L2 built on OP Stack in collaboration with Optimism.",
                   "website": "https://base.org/",
@@ -26837,12 +24819,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFC82D",
                   "#FE9D39"
                 ],
-                "gradientCoords": {
-                  "x1": "115.077%",
-                  "y1": "77.227%",
-                  "x2": "27.227%",
-                  "y2": "34.923%"
-                },
                 "info": {
                   "description": "The cryptocurrency that started it all, Bitcoin is the first digital currency to solve the “double spending” or counterfeiting problem without the aid of a central authority, such as a bank or a government, making Bitcoin truly peer-to-peer.",
                   "reddit": "https://www.reddit.com/r/Bitcoin/",
@@ -26940,12 +24916,6 @@ export const SERIALIZED_EVENTS = [
                   "#FE9D39",
                   "#FFC82D"
                 ],
-                "gradientCoords": {
-                  "x1": "115.077%",
-                  "y1": "77.227%",
-                  "x2": "27.227%",
-                  "y2": "34.923%"
-                },
                 "info": {},
                 "name": "bitcoinregtest",
                 "primaryColor": "#FE9D39",
@@ -27031,12 +25001,6 @@ export const SERIALIZED_EVENTS = [
                   "#FE9D39",
                   "#FFC82D"
                 ],
-                "gradientCoords": {
-                  "x1": "115.077%",
-                  "y1": "77.227%",
-                  "x2": "27.227%",
-                  "y2": "34.923%"
-                },
                 "info": {},
                 "name": "bitcointestnet",
                 "primaryColor": "#FE9D39",
@@ -27128,12 +25092,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFB700",
                   "#D8AC29"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "BNB Smart Chain (BSC) is an innovative solution to bring programmability and interoperability to Beacon Chain. The BNB Smart Chain also supports EVM-compatible smart contracts and protocols. Cross-chain transfer and other communication are possible due to native support of interoperability. ",
                   "reddit": "https://www.reddit.com/r/binance/",
@@ -27221,12 +25179,6 @@ export const SERIALIZED_EVENTS = [
                   "#4A6EC3",
                   "#3384BF"
                 ],
-                "gradientCoords": {
-                  "x1": "106.38%",
-                  "y1": "115.934%",
-                  "x2": "-33.63%",
-                  "y2": "-54.191%"
-                },
                 "info": {
                   "description": "Cardano is an open source project and decentralized public blockchain. It is building a smart contract platform and uses a proof of stake algorithm to reach consensus about the network.",
                   "reddit": "https://www.reddit.com/r/cardano/",
@@ -27327,12 +25279,6 @@ export const SERIALIZED_EVENTS = [
                   "#6F7390",
                   "#383C58"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "info": {
                   "description": "Cosmos is an ecosystem of interoperable blockchains. The end goal is to create an Internet of Blockchains, a network of sovereign blockchains able to communicate with each other in a decentralized way.",
                   "reddit": "https://reddit.com/r/cosmosnetwork",
@@ -27444,12 +25390,6 @@ export const SERIALIZED_EVENTS = [
                   "#474A73",
                   "#8C93AF"
                 ],
-                "gradientCoords": {
-                  "x1": "17.71%",
-                  "y1": "-46.968%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "info": {
                   "description": "Ethereum is a decentralized computing platform that runs smart contracts, which are contracts that execute without human intervention. ETH popularized the idea of using the blockchain for programmable transactions instead of only for money transfers. The platform is used for crowdfunding (ICOs), the creation of new digital assets, and more.",
                   "reddit": "https://www.reddit.com/r/ethereum/",
@@ -27541,12 +25481,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF9900",
                   "#FF9900"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "Arbitrum Nova is a layer 2 network designed for ultra-low transaction costs with high security.",
                   "website": "https://nova.arbitrum.io/",
@@ -27619,12 +25553,6 @@ export const SERIALIZED_EVENTS = [
                   "#0A3377",
                   "#339BFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "Arbitrum One is a layer 2 network designed to improve the capabilities of Ethereum.",
                   "website": "https://arbitrum.io/",
@@ -27697,12 +25625,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "ETH testnet asset for the Holesky network.",
                   "website": "https://github.com/eth-clients/holesky/"
@@ -27772,12 +25694,6 @@ export const SERIALIZED_EVENTS = [
                   "#A0E7FF",
                   "#13B5EC"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "info": {
                   "description": "Fantom is a high-performance, scalable, customizable, and secure smart-contract platform. Fantom is permissionless, decentralized, and open-source.",
                   "reddit": "https://reddit.com/r/FantomFoundation",
@@ -27849,12 +25765,6 @@ export const SERIALIZED_EVENTS = [
                   "#E61E57",
                   "#FF5485"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "info": {
                   "description": "FLR is the native token used for payments, transaction fees, governance, and staking on the Flare Network. Flare Network is an EVM-based layer-1 blockchain that helps app developers create bridges between networks.",
                   "website": "https://flare.network/",
@@ -27930,12 +25840,6 @@ export const SERIALIZED_EVENTS = [
                   "#5A63B8",
                   "#C86DD7"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "Polygon (previously Matic Network) is a protocol and a framework for building and connecting Ethereum-compatible blockchain networks. Aggregating scalable solutions on Ethereum supporting a multi-chain Ethereum ecosystem.",
                   "reddit": "https://www.reddit.com/r/0xPolygon/",
@@ -28009,12 +25913,6 @@ export const SERIALIZED_EVENTS = [
                   "#474A73",
                   "#8C93AF"
                 ],
-                "gradientCoords": {
-                  "x1": "17.71%",
-                  "y1": "-46.968%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "info": {
                   "description": "Optimism is a low-cost and lightning-fast Ethereum L2 blockchain.",
                   "website": "https://www.optimism.io/",
@@ -28086,12 +25984,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF9931",
                   "#7CDB9A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "info": {
                   "description": "RBTC is used to pay transaction fees on the Rootstock network, an open-source sidechain that brings Bitcoin and DeFi together with smart contracts. RBTC is pegged 1:1 with Bitcoin.",
                   "website": "https://rootstock.io/",
@@ -28164,12 +26056,6 @@ export const SERIALIZED_EVENTS = [
                   "#14F195",
                   "#9BFFD7"
                 ],
-                "gradientCoords": {
-                  "x1": "12.519%",
-                  "y1": "28.482%",
-                  "x2": "27.289%",
-                  "y2": "11.831%"
-                },
                 "info": {
                   "description": "Solana is a high-performance blockchain, taking on one of tech's biggest challenges: scaling blockchain for global adoption.",
                   "reddit": "https://www.reddit.com/r/solana/",
@@ -28263,12 +26149,6 @@ export const SERIALIZED_EVENTS = [
                   "#6967EA",
                   "#9E9CFC"
                 ],
-                "gradientCoords": {
-                  "x1": "37%",
-                  "y1": "39%",
-                  "x2": "-1.155%",
-                  "y2": "4.909%"
-                },
                 "info": {
                   "description": "Osmosis is a decentralized exchange (DEX) that operates on the Cosmos ecosystem and provides bridged assets from Ethereum and Polkadot. It has greater control over the full blockchain stack, allowing for the development of Superfluid Staking and a transaction mempool that is shielded with threshold encryption. Osmosis aims to build a cross-chain native DEX and trading suite that connects all chains over IBC, and has invited external developers to create a DEX ecosystem with lending, credit, margin, fiat on-ramps, Defi strategy vaults, NFTs, stablecoins, and more.",
                   "reddit": "https://www.reddit.com/r/OsmosisLab/",
@@ -28397,12 +26277,6 @@ export const SERIALIZED_EVENTS = [
                   "#34D3E0",
                   "#7F7BAE"
                 ],
-                "gradientCoords": {
-                  "x1": "86.792%",
-                  "y1": "19.043%",
-                  "x2": "12.879%",
-                  "y2": "81.232%"
-                },
                 "info": {},
                 "primaryColor": "#34D3E0",
                 "properName": "Aave",
@@ -28440,12 +26314,6 @@ export const SERIALIZED_EVENTS = [
                   "#CC0FE0",
                   "#7E1BCC"
                 ],
-                "gradientCoords": {
-                  "x1": "44.5%",
-                  "y1": "40%",
-                  "x2": "-4.548%",
-                  "y2": "4.017%"
-                },
                 "info": {
                   "description": "Audius is a decentralized streaming community for musicians to get discovered, grow, and earn money.",
                   "reddit": "https://reddit.com/r/audius",
@@ -28489,12 +26357,6 @@ export const SERIALIZED_EVENTS = [
                   "#E84142",
                   "#FE7C7D"
                 ],
-                "gradientCoords": {
-                  "x1": "-3.98%",
-                  "y1": "1.381%",
-                  "x2": "49.273%",
-                  "y2": "30.414%"
-                },
                 "info": {
                   "description": "Avalanche is an open-source platform for launching decentralized finance applications and enterprise blockchain deployments in one interoperable, highly scalable ecosystem. It is a smart contract-capable blockchain platform focused on transaction speed, low costs, and eco-friendliness.",
                   "reddit": "https://www.reddit.com/r/Avax",
@@ -28538,12 +26400,6 @@ export const SERIALIZED_EVENTS = [
                   "#0045AD",
                   "#0055D5"
                 ],
-                "gradientCoords": {
-                  "x1": "63.701%",
-                  "y1": "21.261%",
-                  "x2": "17.913%",
-                  "y2": "-17.415%"
-                },
                 "info": {
                   "description": "Axie Infinity is a game where players raise NFT-based creatures called Axies and battle them against other players. Players earn tokens so they partially own and operate the game.",
                   "reddit": "https://reddit.com/r/AxieInfinity",
@@ -28584,12 +26440,6 @@ export const SERIALIZED_EVENTS = [
                   "#787878",
                   "#525252"
                 ],
-                "gradientCoords": {
-                  "x1": "91.53%",
-                  "y1": "101%",
-                  "x2": "10.067%",
-                  "y2": "0%"
-                },
                 "info": {
                   "description": "BitTorrent Token is aiming to tokenize one of the world's largest decentralized networks: BitTorrent, a file sharing protocol responsible for up to 40% of daily Internet traffic. The token will first be used to pay for faster downloads before other use cases like censorship-resistant content distribution, storage, and proxying services are introduced.",
                   "reddit": "https://www.reddit.com/r/BittorrentToken",
@@ -28632,12 +26482,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFB700",
                   "#D8AC29"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "info": {
                   "description": "BNB is the native token of BNB Beacon Chain and the key base asset on the Binance decentralized exchange (DEX). It is used to pay the transaction fees of assets that live on BNB Beacon Chain. Holding BNB gives you the right to make your voice heard and is necessary for participation in BNB Beacon Chain's decentralized on-chain governance.",
                   "reddit": "https://www.reddit.com/r/binance/",
@@ -28681,12 +26525,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFC200",
                   "#CC9B00"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "info": {
                   "description": "Stablecoin, issued in partnership with Binance. BUSD is 100% backed by U.S. dollars held in FDIC-insured U.S. banks.",
                   "twitter": "https://twitter.com/paxosglobal",
@@ -28728,12 +26566,6 @@ export const SERIALIZED_EVENTS = [
                   "#4A6EC3",
                   "#3384BF"
                 ],
-                "gradientCoords": {
-                  "x1": "106.38%",
-                  "y1": "115.934%",
-                  "x2": "-33.63%",
-                  "y2": "-54.191%"
-                },
                 "info": {
                   "description": "Cardano is an open source project and decentralized public blockchain. It is building a smart contract platform and uses a proof of stake algorithm to reach consensus about the network.",
                   "reddit": "https://www.reddit.com/r/cardano/",
@@ -28778,12 +26610,6 @@ export const SERIALIZED_EVENTS = [
                   "#3FA0F1",
                   "#295ADA"
                 ],
-                "gradientCoords": {
-                  "x1": "-22.982%",
-                  "y1": "-43.915%",
-                  "x2": "91.53%",
-                  "y2": "101%"
-                },
                 "info": {
                   "description": "Blockchain-based smart contracts currently can’t connect to the outside world in a decentralized way. Using a network of decentralized data oracles, Chainlink aims to connect smart contracts to real-world data and payment systems.",
                   "reddit": "https://www.reddit.com/r/Chainlink/",
@@ -28829,12 +26655,6 @@ export const SERIALIZED_EVENTS = [
                   "#FBCC5F",
                   "#F9A606"
                 ],
-                "gradientCoords": {
-                  "x1": "3.912%",
-                  "y1": "0%",
-                  "x2": "89.933%",
-                  "y2": "100%"
-                },
                 "info": {
                   "description": "Dai is an Ethereum-based stablecoin issued by MakerDAO the value of which is stable relative to the US Dollar. The value of Dai is stabilized through a system of vaults (where multiple forms of supported collateral are held in smart contracts), autonomous feedback mechanisms, and appropriately incentivized external actors.",
                   "reddit": "https://www.reddit.com/r/MakerDAO/",
@@ -28883,12 +26703,6 @@ export const SERIALIZED_EVENTS = [
                   "#474A73",
                   "#8C93AF"
                 ],
-                "gradientCoords": {
-                  "x1": "17.71%",
-                  "y1": "-46.968%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "info": {
                   "description": "Ethereum is a decentralized computing platform that runs smart contracts, which are contracts that execute without human intervention. ETH popularized the idea of using the blockchain for programmable transactions instead of only for money transfers. The platform is used for crowdfunding (ICOs), the creation of new digital assets, and more.",
                   "reddit": "https://www.reddit.com/r/ethereum/",
@@ -28931,12 +26745,6 @@ export const SERIALIZED_EVENTS = [
                   "#A0E7FF",
                   "#13B5EC"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "info": {
                   "description": "Fantom is a high-performance, scalable, customizable, and secure smart-contract platform. Fantom is permissionless, decentralized, and open-source.",
                   "reddit": "https://reddit.com/r/FantomFoundation",
@@ -28981,12 +26789,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFE5C0",
                   "#E6BC7B"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.5%",
-                  "x2": "41.043%",
-                  "y2": "26.738%"
-                },
                 "info": {
                   "description": "The Green Metaverse Token is used for governance in STEPN, a gamified health app that rewards users for physical movement such as jogging outside.",
                   "reddit": "https://www.reddit.com/r/StepN/",
@@ -29029,12 +26831,6 @@ export const SERIALIZED_EVENTS = [
                   "#D6D6D6",
                   "#777777"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "Litecoin is a cryptocurrency similar to Bitcoin. The goal of Litecoin is to provide fast transaction confirmations. Created by ex-Google employee Charlie Lee, Litecoin is often considered the silver to Bitcoin's gold.",
                   "reddit": "https://www.reddit.com/r/litecoin/",
@@ -29077,12 +26873,6 @@ export const SERIALIZED_EVENTS = [
                   "#2F79EA",
                   "#124282"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "info": {
                   "description": "1Inch is an exchange aggregator, meaning that it scans various decentralized exchanges to locate the lowest crypto price for traders.",
                   "reddit": "https://www.reddit.com/r/1inch/",
@@ -29127,12 +26917,6 @@ export const SERIALIZED_EVENTS = [
                   "#5A63B8",
                   "#C86DD7"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "info": {
                   "description": "Polygon (previously Matic Network) is a protocol and a framework for building and connecting Ethereum-compatible blockchain networks. Aggregating scalable solutions on Ethereum supporting a multi-chain Ethereum ecosystem.",
                   "reddit": "https://www.reddit.com/r/0xPolygon/",
@@ -29176,12 +26960,6 @@ export const SERIALIZED_EVENTS = [
                   "#E62249",
                   "#FF5A5A"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.537%",
-                  "y2": "6.714%"
-                },
                 "info": {
                   "description": "Render is an ERC-20 token that creators can pay to node operators to get GPU rendering power for their work on images, animation, and special effects. This saves creators money as it’s cheaper than in-house rendering, and it allows node operators to earn RNDR with their idle GPUs.",
                   "reddit": "https://www.reddit.com/r/RenderToken/",
@@ -29225,12 +27003,6 @@ export const SERIALIZED_EVENTS = [
                   "#0084FF",
                   "#00ADEF"
                 ],
-                "gradientCoords": {
-                  "x1": "9.954%",
-                  "y1": "7.596%",
-                  "x2": "34.509%",
-                  "y2": "31.978%"
-                },
                 "info": {
                   "description": "The Sandbox is an expansive metaverse community where users can be creative and monetize their games, artwork, and more.",
                   "reddit": "https://www.reddit.com/r/TheSandboxGaming/",
@@ -29274,12 +27046,6 @@ export const SERIALIZED_EVENTS = [
                   "#A53803",
                   "#F69C0A"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "info": {
                   "description": "Calling itself “the Dogecoin killer,” SHIB is purely a transferable token named after an adorable breed of dog. ",
                   "reddit": "https://www.reddit.com/r/SHIBArmy/",
@@ -29322,12 +27088,6 @@ export const SERIALIZED_EVENTS = [
                   "#77BAA1",
                   "#B9EFDB"
                 ],
-                "gradientCoords": {
-                  "x1": "-3.98%",
-                  "y1": "1.381%",
-                  "x2": "49.273%",
-                  "y2": "30.414%"
-                },
                 "info": {
                   "description": "Smooth Love Potion (SLP) tokens are digital coins earned by players in Axie Infinity, where creatures (Axies) can be bred using SLP.",
                   "reddit": "https://reddit.com/r/AxieInfinity",
@@ -29371,12 +27131,6 @@ export const SERIALIZED_EVENTS = [
                   "#00CC77",
                   "#049C76"
                 ],
-                "gradientCoords": {
-                  "x1": "100%",
-                  "y1": "100%",
-                  "x2": "0.131%",
-                  "y2": "0.131%"
-                },
                 "info": {
                   "description": "Bet on sports and win! No account setup. Sports are slowly coming back around the world without crowds. SportX has upcoming events listed now with odds to win.",
                   "reddit": "https://www.reddit.com/domain/sportx.bet/",
@@ -29425,12 +27179,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "info": {
                   "description": "Tether is a multi-chain stablecoin. Each USDT token is designed to be backed by a U.S. Dollar held in banking reserves.",
                   "reddit": "https://www.reddit.com/r/Tether/",
@@ -29473,12 +27221,6 @@ export const SERIALIZED_EVENTS = [
                   "#33A0FF",
                   "#5919D9"
                 ],
-                "gradientCoords": {
-                  "x1": "73.306%",
-                  "y1": "69.023%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "info": {
                   "description": "The Graph is an indexing protocol for querying networks like Ethereum and IPFS.",
                   "reddit": "https://reddit.com/r/thegraph",
@@ -29522,12 +27264,6 @@ export const SERIALIZED_EVENTS = [
                   "#FC6CAB",
                   "#FF007A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "214.397%",
-                  "y2": "181.316%"
-                },
                 "info": {
                   "description": "UNI is the governance token of Uniswap, a decentralized protocol for automated liquidity provision on Ethereum.",
                   "reddit": "https://www.reddit.com/r/UniSwap/",
@@ -29577,12 +27313,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "info": {
                   "description": "USD Coin is a token designed as a stablecoin issued by Circle and Coinbase. Each unit of USDC is backed by a unit of US Dollar in audited bank accounts in order to ensure 1 USDC is always equal to 1 USD.",
                   "reddit": "https://www.reddit.com/r/USDC/",
@@ -29625,12 +27355,6 @@ export const SERIALIZED_EVENTS = [
                   "#8958AB",
                   "#3D2F52"
                 ],
-                "gradientCoords": {
-                  "x1": "91.762%",
-                  "y1": "69.532%",
-                  "x2": "4.905%",
-                  "y2": "24.223%"
-                },
                 "info": {
                   "description": "WBTC brings the power of Bitcoin together with the perks of the Ethereum network. Wrapped Bitcoin is backed 1:1 with Bitcoin.",
                   "twitter": "https://twitter.com/WrappedBTC",
@@ -29673,12 +27397,6 @@ export const SERIALIZED_EVENTS = [
                   "#EC9CC6",
                   "#ED1E79"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "info": {
                   "description": "WETH is the wrapped version of ETH that refers to the ERC-20 compatible version of Ether. Wrapping ETH does not affect its value, 1 ETH is always 1 WETH.",
                   "website": "https://weth.io/"
@@ -29709,12 +27427,6 @@ export const SERIALIZED_EVENTS = [
                   "#00bfff",
                   "#6619ff"
                 ],
-                "gradientCoords": {
-                  "x1": "89.933%",
-                  "y1": "100%",
-                  "x2": "10.067%",
-                  "y2": "0%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -29767,12 +27479,6 @@ export const SERIALIZED_EVENTS = [
                   "#00bfff",
                   "#6619ff"
                 ],
-                "gradientCoords": {
-                  "x1": "89.933%",
-                  "y1": "100%",
-                  "x2": "10.067%",
-                  "y2": "0%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -29827,12 +27533,6 @@ export const SERIALIZED_EVENTS = [
                   "#008EF7",
                   "#5FBBFF"
                 ],
-                "gradientCoords": {
-                  "x1": "20.125%",
-                  "y1": "14.449%",
-                  "x2": "20.125%",
-                  "y2": "10.88%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -29885,12 +27585,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF5500",
                   "#FF9B69"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.498%",
-                  "x2": "41.043%",
-                  "y2": "26.736%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -29943,12 +27637,6 @@ export const SERIALIZED_EVENTS = [
                   "#2ADACC",
                   "#21DBCC"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.498%",
-                  "x2": "41.043%",
-                  "y2": "26.736%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -29999,12 +27687,6 @@ export const SERIALIZED_EVENTS = [
                   "#BE9DFF",
                   "#8C52FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -30052,12 +27734,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -30105,12 +27781,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFFFFF",
                   "#00FFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -30158,12 +27828,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -30217,12 +27881,6 @@ export const SERIALIZED_EVENTS = [
                   "#2078E9",
                   "#57A1FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -30275,12 +27933,6 @@ export const SERIALIZED_EVENTS = [
                   "#007EFE",
                   "#5FAEFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -30332,12 +27984,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF9AFB",
                   "#FB3EF3"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "assetType": "ALGORAND_TOKEN",
                 "baseAssetName": "algorand",
                 "chainBadgeColors": [
@@ -30394,12 +28040,6 @@ export const SERIALIZED_EVENTS = [
                   "#5deb5a",
                   "#8AFF88"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "aurora",
                 "chainBadgeColors": [
                   "#5deb5a",
@@ -30457,12 +28097,6 @@ export const SERIALIZED_EVENTS = [
                   "#60CFC8",
                   "#4312E8"
                 ],
-                "gradientCoords": {
-                  "x1": "11.118%",
-                  "y1": "26.577%",
-                  "x2": "24.212%",
-                  "y2": "18.305%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#60CFC8",
@@ -30520,12 +28154,6 @@ export const SERIALIZED_EVENTS = [
                   "#A24741",
                   "#F2716A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#A24741",
@@ -30583,12 +28211,6 @@ export const SERIALIZED_EVENTS = [
                   "#E1AA00",
                   "#FFC800"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#E1AA00",
@@ -30645,12 +28267,6 @@ export const SERIALIZED_EVENTS = [
                   "#107698",
                   "#00B2ED"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#107698",
@@ -30707,12 +28323,6 @@ export const SERIALIZED_EVENTS = [
                   "#107698",
                   "#00B2ED"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#107698",
@@ -30770,12 +28380,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#53AE94",
@@ -30827,12 +28431,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#3E90E8",
@@ -30891,12 +28489,6 @@ export const SERIALIZED_EVENTS = [
                   "#009393",
                   "#2EC9C9"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "avalanchec",
                 "chainBadgeColors": [
                   "#009393",
@@ -30955,12 +28547,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "basemainnet",
                 "chainBadgeColors": [
                   "#3E90E8",
@@ -31019,12 +28605,6 @@ export const SERIALIZED_EVENTS = [
                   "#2F79EA",
                   "#124282"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#2F79EA",
@@ -31083,12 +28663,6 @@ export const SERIALIZED_EVENTS = [
                   "#4A6EC3",
                   "#3384BF"
                 ],
-                "gradientCoords": {
-                  "x1": "106.38%",
-                  "y1": "115.934%",
-                  "x2": "-33.63%",
-                  "y2": "-54.191%"
-                },
                 "tokenType": "BEP20",
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
@@ -31148,12 +28722,6 @@ export const SERIALIZED_EVENTS = [
                   "#F3E9DC",
                   "#F3E9DC"
                 ],
-                "gradientCoords": {
-                  "x1": "29%",
-                  "y1": "34.5%",
-                  "x2": "-1%",
-                  "y2": "-6.5%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#F3E9DC",
@@ -31211,12 +28779,6 @@ export const SERIALIZED_EVENTS = [
                   "#1FA967",
                   "#2DEA8F"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#1FA967",
@@ -31276,12 +28838,6 @@ export const SERIALIZED_EVENTS = [
                   "#E84142",
                   "#FE7C7D"
                 ],
-                "gradientCoords": {
-                  "x1": "-3.98%",
-                  "y1": "1.381%",
-                  "x2": "49.273%",
-                  "y2": "30.414%"
-                },
                 "tokenType": "BEP20",
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
@@ -31340,12 +28896,6 @@ export const SERIALIZED_EVENTS = [
                   "#F6465D",
                   "#F15F40"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#F6465D",
@@ -31404,12 +28954,6 @@ export const SERIALIZED_EVENTS = [
                   "#7E0BE8",
                   "#AC53FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#7E0BE8",
@@ -31467,12 +29011,6 @@ export const SERIALIZED_EVENTS = [
                   "#1263F1",
                   "#5895FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#1263F1",
@@ -31530,12 +29068,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -31593,12 +29125,6 @@ export const SERIALIZED_EVENTS = [
                   "#C8C8C8",
                   "#FFFFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#C8C8C8",
@@ -31658,12 +29184,6 @@ export const SERIALIZED_EVENTS = [
                   "#CB92F0",
                   "#EAC9FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#CB92F0",
@@ -31722,12 +29242,6 @@ export const SERIALIZED_EVENTS = [
                   "#FBCC5F",
                   "#FBF35F"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#FBCC5F",
@@ -31786,12 +29300,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFE804",
                   "#FFF590"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#FFE804",
@@ -31850,12 +29358,6 @@ export const SERIALIZED_EVENTS = [
                   "#474A73",
                   "#8C93AF"
                 ],
-                "gradientCoords": {
-                  "x1": "17.71%",
-                  "y1": "-46.968%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#474A73",
@@ -31914,12 +29416,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF4D00",
                   "#FFAA5C"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#FF4D00",
@@ -31978,12 +29474,6 @@ export const SERIALIZED_EVENTS = [
                   "#2B61D1",
                   "#437DF4"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#2B61D1",
@@ -32042,12 +29532,6 @@ export const SERIALIZED_EVENTS = [
                   "#3671FF",
                   "#3C49FF"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "5.5%",
-                  "x2": "31%",
-                  "y2": "36.5%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#3671FF",
@@ -32107,12 +29591,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFE5C0",
                   "#E6BC7B"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.5%",
-                  "x2": "41.043%",
-                  "y2": "26.738%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#FFE5C0",
@@ -32172,12 +29650,6 @@ export const SERIALIZED_EVENTS = [
                   "#ABA3B1",
                   "#ECE1F2"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.498%",
-                  "x2": "41.043%",
-                  "y2": "26.736%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#ABA3B1",
@@ -32236,12 +29708,6 @@ export const SERIALIZED_EVENTS = [
                   "#30A6FC",
                   "#00F2FE"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#30A6FC",
@@ -32300,12 +29766,6 @@ export const SERIALIZED_EVENTS = [
                   "#0082FA",
                   "#01B8FC"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#0082FA",
@@ -32364,12 +29824,6 @@ export const SERIALIZED_EVENTS = [
                   "#0DA89F",
                   "#00E0CA"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.4%",
-                  "x2": "41.04%",
-                  "y2": "26.7%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#0DA89F",
@@ -32429,12 +29883,6 @@ export const SERIALIZED_EVENTS = [
                   "#2ABC80",
                   "#44FFB2"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.4%",
-                  "x2": "41.04%",
-                  "y2": "26.7%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#2ABC80",
@@ -32493,12 +29941,6 @@ export const SERIALIZED_EVENTS = [
                   "#1A38F8",
                   "#5067FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#1A38F8",
@@ -32556,12 +29998,6 @@ export const SERIALIZED_EVENTS = [
                   "#D6D6D6",
                   "#777777"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "tokenType": "BEP20",
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
@@ -32621,12 +30057,6 @@ export const SERIALIZED_EVENTS = [
                   "#5A63B8",
                   "#C86DD7"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "tokenType": "BEP20",
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
@@ -32685,12 +30115,6 @@ export const SERIALIZED_EVENTS = [
                   "#1949C6",
                   "#4676F3"
                 ],
-                "gradientCoords": {
-                  "x1": "-5%",
-                  "y1": "1%",
-                  "x2": "48.2%",
-                  "y2": "30.3%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#1949C6",
@@ -32748,12 +30172,6 @@ export const SERIALIZED_EVENTS = [
                   "#2F7CA7",
                   "#4CA9DC"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#2F7CA7",
@@ -32812,12 +30230,6 @@ export const SERIALIZED_EVENTS = [
                   "#698BF2",
                   "#B9CAFD"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.4%",
-                  "x2": "41.04%",
-                  "y2": "26.7%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#698BF2",
@@ -32876,12 +30288,6 @@ export const SERIALIZED_EVENTS = [
                   "#6FF5FF",
                   "#1FC7D4"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#6FF5FF",
@@ -32942,12 +30348,6 @@ export const SERIALIZED_EVENTS = [
                   "#681CFF",
                   "#9560FF"
                 ],
-                "gradientCoords": {
-                  "x1": "29%",
-                  "y1": "34.5%",
-                  "x2": "-1%",
-                  "y2": "-6.5%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#681CFF",
@@ -33000,12 +30400,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -33064,12 +30458,6 @@ export const SERIALIZED_EVENTS = [
                   "#EACB7D",
                   "#FFEDBF"
                 ],
-                "gradientCoords": {
-                  "x1": "29%",
-                  "y1": "34.5%",
-                  "x2": "-1%",
-                  "y2": "-6.5%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#EACB7D",
@@ -33128,12 +30516,6 @@ export const SERIALIZED_EVENTS = [
                   "#0088CC",
                   "#1AB3FF"
                 ],
-                "gradientCoords": {
-                  "x1": "29%",
-                  "y1": "34.5%",
-                  "x2": "-1%",
-                  "y2": "-6.5%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#0088CC",
@@ -33191,12 +30573,6 @@ export const SERIALIZED_EVENTS = [
                   "#FC6CAB",
                   "#FF007A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "214.397%",
-                  "y2": "181.316%"
-                },
                 "tokenType": "BEP20",
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
@@ -33250,12 +30626,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -33309,12 +30679,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#53AE94",
@@ -33373,12 +30737,6 @@ export const SERIALIZED_EVENTS = [
                   "#3A78FF",
                   "#739FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "bsc",
                 "chainBadgeColors": [
                   "#3A78FF",
@@ -33435,12 +30793,6 @@ export const SERIALIZED_EVENTS = [
                   "#00E1FF",
                   "#A6F4FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "assetType": "CARDANO_TOKEN",
                 "baseAssetName": "cardano",
                 "chainBadgeColors": [
@@ -33490,12 +30842,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF9AFB",
                   "#FB3EF3"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "assetType": "CARDANO_TOKEN",
                 "baseAssetName": "cardano",
                 "chainBadgeColors": [
@@ -33551,12 +30897,6 @@ export const SERIALIZED_EVENTS = [
                   "#4A148C",
                   "#B441CE"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "assetType": "CARDANO_TOKEN",
                 "baseAssetName": "cardano",
                 "chainBadgeColors": [
@@ -33604,12 +30944,6 @@ export const SERIALIZED_EVENTS = [
                   "#34D3E0",
                   "#7F7BAE"
                 ],
-                "gradientCoords": {
-                  "x1": "86.792%",
-                  "y1": "19.043%",
-                  "x2": "12.879%",
-                  "y2": "81.232%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#34D3E0",
@@ -33669,12 +31003,6 @@ export const SERIALIZED_EVENTS = [
                   "#0D48EA",
                   "#4471ED"
                 ],
-                "gradientCoords": {
-                  "x1": "86.792%",
-                  "y1": "19.043%",
-                  "x2": "12.879%",
-                  "y2": "81.232%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0D48EA",
@@ -33733,12 +31061,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -33797,12 +31119,6 @@ export const SERIALIZED_EVENTS = [
                   "#7F1BA4",
                   "#A72DD4"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#7F1BA4",
@@ -33854,12 +31170,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -33919,12 +31229,6 @@ export const SERIALIZED_EVENTS = [
                   "#00A2FF",
                   "#002AFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00A2FF",
@@ -33983,12 +31287,6 @@ export const SERIALIZED_EVENTS = [
                   "#29ABE2",
                   "#77D7FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#29ABE2",
@@ -34045,12 +31343,6 @@ export const SERIALIZED_EVENTS = [
                   "#B98863",
                   "#F5C099"
                 ],
-                "gradientCoords": {
-                  "x1": "10.5%",
-                  "y1": "3.5%",
-                  "x2": "38.5%",
-                  "y2": "53.5%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#B98863",
@@ -34108,12 +31400,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF6FBB",
                   "#D9327C"
                 ],
-                "gradientCoords": {
-                  "x1": "100%",
-                  "y1": "100%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FF6FBB",
@@ -34171,12 +31457,6 @@ export const SERIALIZED_EVENTS = [
                   "#0B39B0",
                   "#396FF9"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0B39B0",
@@ -34234,12 +31514,6 @@ export const SERIALIZED_EVENTS = [
                   "#024AD7",
                   "#3274F5"
                 ],
-                "gradientCoords": {
-                  "x1": "-5%",
-                  "y1": "1%",
-                  "x2": "48.253%",
-                  "y2": "30.034%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#024AD7",
@@ -34298,12 +31572,6 @@ export const SERIALIZED_EVENTS = [
                   "#5BAB98",
                   "#7CE3CB"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "4%",
-                  "x2": "36%",
-                  "y2": "35.5%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#5BAB98",
@@ -34363,12 +31631,6 @@ export const SERIALIZED_EVENTS = [
                   "#00E9E3",
                   "#04B2CA"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00E9E3",
@@ -34427,12 +31689,6 @@ export const SERIALIZED_EVENTS = [
                   "#01E8F7",
                   "#00C2FF"
                 ],
-                "gradientCoords": {
-                  "x1": "50.108%",
-                  "y1": "28.284%",
-                  "x2": "53.524%",
-                  "y2": "115.891%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#01E8F7",
@@ -34491,12 +31747,6 @@ export const SERIALIZED_EVENTS = [
                   "#CC0FE0",
                   "#7E1BCC"
                 ],
-                "gradientCoords": {
-                  "x1": "44.5%",
-                  "y1": "40%",
-                  "x2": "-4.548%",
-                  "y2": "4.017%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#CC0FE0",
@@ -34560,12 +31810,6 @@ export const SERIALIZED_EVENTS = [
                   "#C27ED5",
                   "#602A52"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#C27ED5",
@@ -34625,12 +31869,6 @@ export const SERIALIZED_EVENTS = [
                   "#2AE7A8",
                   "#009966"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "99.757%",
-                  "y2": "99.757%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#2AE7A8",
@@ -34690,12 +31928,6 @@ export const SERIALIZED_EVENTS = [
                   "#0045AD",
                   "#0055D5"
                 ],
-                "gradientCoords": {
-                  "x1": "63.701%",
-                  "y1": "21.261%",
-                  "x2": "17.913%",
-                  "y2": "-17.415%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0045AD",
@@ -34752,12 +31984,6 @@ export const SERIALIZED_EVENTS = [
                   "#536DF9",
                   "#3957F9"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "99.612%",
-                  "y2": "78.958%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#536DF9",
@@ -34816,12 +32042,6 @@ export const SERIALIZED_EVENTS = [
                   "#3464A5",
                   "#22416B"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#3464A5",
@@ -34881,12 +32101,6 @@ export const SERIALIZED_EVENTS = [
                   "#562FFF",
                   "#A08AFF"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.4%",
-                  "x2": "41.04%",
-                  "y2": "26.7%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#562FFF",
@@ -34944,12 +32158,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF3B00",
                   "#9F2B65"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FF3B00",
@@ -35007,12 +32215,6 @@ export const SERIALIZED_EVENTS = [
                   "#ADFF00",
                   "#CBFF5C"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#ADFF00",
@@ -35069,12 +32271,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF8700",
                   "#FFAD33"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FF8700",
@@ -35130,12 +32326,6 @@ export const SERIALIZED_EVENTS = [
                   "#9869A4",
                   "#6C2A7E"
                 ],
-                "gradientCoords": {
-                  "x1": "-22.982%",
-                  "y1": "-43.915%",
-                  "x2": "90.237%",
-                  "y2": "99.363%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#9869A4",
@@ -35197,12 +32387,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -35260,12 +32444,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF4D00",
                   "#FFA409"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FF4D00",
@@ -35321,12 +32499,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFC200",
                   "#CC9B00"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FFC200",
@@ -35384,12 +32556,6 @@ export const SERIALIZED_EVENTS = [
                   "#0052FF",
                   "#3E7CFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0052FF",
@@ -35440,12 +32606,6 @@ export const SERIALIZED_EVENTS = [
                   "#6D62FC",
                   "#00D9A6"
                 ],
-                "gradientCoords": {
-                  "x1": "24.15%",
-                  "y1": "7.483%",
-                  "x2": "78.462%",
-                  "y2": "88.983%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#6D62FC",
@@ -35506,12 +32666,6 @@ export const SERIALIZED_EVENTS = [
                   "#2E73FE",
                   "#6A9CFF"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.4%",
-                  "x2": "41.04%",
-                  "y2": "26.7%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#2E73FE",
@@ -35569,12 +32723,6 @@ export const SERIALIZED_EVENTS = [
                   "#3FA0F1",
                   "#295ADA"
                 ],
-                "gradientCoords": {
-                  "x1": "-22.982%",
-                  "y1": "-43.915%",
-                  "x2": "91.53%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#3FA0F1",
@@ -35632,12 +32780,6 @@ export const SERIALIZED_EVENTS = [
                   "#A31A41",
                   "#F82965"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#A31A41",
@@ -35696,12 +32838,6 @@ export const SERIALIZED_EVENTS = [
                   "#06DA30",
                   "#00B424"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#06DA30",
@@ -35758,12 +32894,6 @@ export const SERIALIZED_EVENTS = [
                   "#00D395",
                   "#00A171"
                 ],
-                "gradientCoords": {
-                  "x1": "91.53%",
-                  "y1": "101%",
-                  "x2": "10.484%",
-                  "y2": "0.517%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00D395",
@@ -35822,12 +32952,6 @@ export const SERIALIZED_EVENTS = [
                   "#1B58B3",
                   "#28ACD7"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "4%",
-                  "x2": "36%",
-                  "y2": "35.5%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1B58B3",
@@ -35886,12 +33010,6 @@ export const SERIALIZED_EVENTS = [
                   "#1E73B8",
                   "#134A76"
                 ],
-                "gradientCoords": {
-                  "x1": "-10.499%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1E73B8",
@@ -35949,12 +33067,6 @@ export const SERIALIZED_EVENTS = [
                   "#1C66A5",
                   "#2CFFCA"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "99.612%",
-                  "y2": "78.958%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1C66A5",
@@ -36012,12 +33124,6 @@ export const SERIALIZED_EVENTS = [
                   "#61AAFF",
                   "#1682FE"
                 ],
-                "gradientCoords": {
-                  "x1": "54.64%",
-                  "y1": "20%",
-                  "x2": "16.1%",
-                  "y2": "14.4%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#61AAFF",
@@ -36075,12 +33181,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF2D55",
                   "#FFBC5B"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FF2D55",
@@ -36132,12 +33232,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFFFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -36197,12 +33291,6 @@ export const SERIALIZED_EVENTS = [
                   "#141414",
                   "#525252"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#141414",
@@ -36260,12 +33348,6 @@ export const SERIALIZED_EVENTS = [
                   "#D8A24A",
                   "#724A0A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#D8A24A",
@@ -36323,12 +33405,6 @@ export const SERIALIZED_EVENTS = [
                   "#7373FF",
                   "#5555BF"
                 ],
-                "gradientCoords": {
-                  "x1": "100%",
-                  "y1": "100%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#7373FF",
@@ -36387,12 +33463,6 @@ export const SERIALIZED_EVENTS = [
                   "#7866D5",
                   "#B5A7FF"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#7866D5",
@@ -36449,12 +33519,6 @@ export const SERIALIZED_EVENTS = [
                   "#9FBBFF",
                   "#5284FF"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.537%",
-                  "y2": "6.714%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#9FBBFF",
@@ -36512,12 +33576,6 @@ export const SERIALIZED_EVENTS = [
                   "#A0E7FF",
                   "#13B5EC"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#A0E7FF",
@@ -36577,12 +33635,6 @@ export const SERIALIZED_EVENTS = [
                   "#2463EB",
                   "#3D81F6"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#2463EB",
@@ -36639,12 +33691,6 @@ export const SERIALIZED_EVENTS = [
                   "#5A56D6",
                   "#8D8AF3"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.49%",
-                  "x2": "41.043%",
-                  "y2": "26.73%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#5A56D6",
@@ -36702,12 +33748,6 @@ export const SERIALIZED_EVENTS = [
                   "#245AE5",
                   "#245AE5"
                 ],
-                "gradientCoords": {
-                  "x1": "91.53%",
-                  "y1": "101%",
-                  "x2": "10.067%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#245AE5",
@@ -36765,12 +33805,6 @@ export const SERIALIZED_EVENTS = [
                   "#838383",
                   "#D4D4D4"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "4%",
-                  "x2": "36%",
-                  "y2": "35.5%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#838383",
@@ -36828,12 +33862,6 @@ export const SERIALIZED_EVENTS = [
                   "#838383",
                   "#D4D4D4"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "4%",
-                  "x2": "36%",
-                  "y2": "35.5%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#838383",
@@ -36891,12 +33919,6 @@ export const SERIALIZED_EVENTS = [
                   "#EC1966",
                   "#E96C99"
                 ],
-                "gradientCoords": {
-                  "x1": "100%",
-                  "y1": "100%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EC1966",
@@ -36954,12 +33976,6 @@ export const SERIALIZED_EVENTS = [
                   "#88C3FF",
                   "#268AEF"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.537%",
-                  "y2": "6.714%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#88C3FF",
@@ -37016,12 +34032,6 @@ export const SERIALIZED_EVENTS = [
                   "#00DCFA",
                   "#177EB7"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00DCFA",
@@ -37079,12 +34089,6 @@ export const SERIALIZED_EVENTS = [
                   "#00A8C8",
                   "#146B7B"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00A8C8",
@@ -37143,12 +34147,6 @@ export const SERIALIZED_EVENTS = [
                   "#04CBDA",
                   "#024776"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "97.922%",
-                  "y2": "150.802%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#04CBDA",
@@ -37206,12 +34204,6 @@ export const SERIALIZED_EVENTS = [
                   "#0B81FF",
                   "#0B41D3"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0B81FF",
@@ -37270,12 +34262,6 @@ export const SERIALIZED_EVENTS = [
                   "#00454A",
                   "#00A4AF"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00454A",
@@ -37333,12 +34319,6 @@ export const SERIALIZED_EVENTS = [
                   "#1B2143",
                   "#2CA6E0"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1B2143",
@@ -37393,12 +34373,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -37458,12 +34432,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFE900",
                   "#FDC800"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FFE900",
@@ -37521,12 +34489,6 @@ export const SERIALIZED_EVENTS = [
                   "#4B4B75",
                   "#7474AA"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.5%",
-                  "y2": "6.7%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#4B4B75",
@@ -37585,12 +34547,6 @@ export const SERIALIZED_EVENTS = [
                   "#ADF5FF",
                   "#24D1E9"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.53%",
-                  "y2": "6.714%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#ADF5FF",
@@ -37649,12 +34605,6 @@ export const SERIALIZED_EVENTS = [
                   "#F6941D",
                   "#FFB545"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#F6941D",
@@ -37712,12 +34662,6 @@ export const SERIALIZED_EVENTS = [
                   "#158866",
                   "#31CB9E"
                 ],
-                "gradientCoords": {
-                  "x1": "108.594%",
-                  "y1": "100%",
-                  "x2": "-19.892%",
-                  "y2": "-20.421%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#158866",
@@ -37777,12 +34721,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF4D00",
                   "#FFA409"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FF4D00",
@@ -37833,12 +34771,6 @@ export const SERIALIZED_EVENTS = [
                   "#F3F3F3",
                   "#FFFFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#F3F3F3",
@@ -37898,12 +34830,6 @@ export const SERIALIZED_EVENTS = [
                   "#F3827B",
                   "#EAEBA1"
                 ],
-                "gradientCoords": {
-                  "x1": "20%",
-                  "y1": "-3.5%",
-                  "x2": "25.256%",
-                  "y2": "43.411%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#F3827B",
@@ -37962,12 +34888,6 @@ export const SERIALIZED_EVENTS = [
                   "#00EB88",
                   "#70F4BD"
                 ],
-                "gradientCoords": {
-                  "x1": "2.681%",
-                  "y1": "19.977%",
-                  "x2": "37.32%",
-                  "y2": "19.977%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00EB88",
@@ -38025,12 +34945,6 @@ export const SERIALIZED_EVENTS = [
                   "#0BC355",
                   "#56EF93"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.49%",
-                  "x2": "41.043%",
-                  "y2": "26.73%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0BC355",
@@ -38088,12 +35002,6 @@ export const SERIALIZED_EVENTS = [
                   "#4BC0C8",
                   "#02819B"
                 ],
-                "gradientCoords": {
-                  "x1": "100%",
-                  "y1": "100%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#4BC0C8",
@@ -38152,12 +35060,6 @@ export const SERIALIZED_EVENTS = [
                   "#1C42FF",
                   "#589BFF"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.53%",
-                  "y2": "6.714%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1C42FF",
@@ -38215,12 +35117,6 @@ export const SERIALIZED_EVENTS = [
                   "#745DDF",
                   "#9E8AFE"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#745DDF",
@@ -38279,12 +35175,6 @@ export const SERIALIZED_EVENTS = [
                   "#DF9D93",
                   "#56379C"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#DF9D93",
@@ -38342,12 +35232,6 @@ export const SERIALIZED_EVENTS = [
                   "#1ABC9C",
                   "#546979"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1ABC9C",
@@ -38407,12 +35291,6 @@ export const SERIALIZED_EVENTS = [
                   "#1C68F3",
                   "#0403BA"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1C68F3",
@@ -38470,12 +35348,6 @@ export const SERIALIZED_EVENTS = [
                   "#FBCC5F",
                   "#F9A606"
                 ],
-                "gradientCoords": {
-                  "x1": "3.912%",
-                  "y1": "0%",
-                  "x2": "89.933%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FBCC5F",
@@ -38535,12 +35407,6 @@ export const SERIALIZED_EVENTS = [
                   "#4187F7",
                   "#8ACAFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#4187F7",
@@ -38598,12 +35464,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFFFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -38662,12 +35522,6 @@ export const SERIALIZED_EVENTS = [
                   "#17978D",
                   "#2ADACC"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.4%",
-                  "x2": "41.04%",
-                  "y2": "26.7%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#17978D",
@@ -38726,12 +35580,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -38791,12 +35639,6 @@ export const SERIALIZED_EVENTS = [
                   "#3CA9E5",
                   "#1A4199"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#3CA9E5",
@@ -38854,12 +35696,6 @@ export const SERIALIZED_EVENTS = [
                   "#6300FF",
                   "#8000FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#6300FF",
@@ -38917,12 +35753,6 @@ export const SERIALIZED_EVENTS = [
                   "#0AFA99",
                   "#E1E64E"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0AFA99",
@@ -38982,12 +35812,6 @@ export const SERIALIZED_EVENTS = [
                   "#7B1173",
                   "#FF4092"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.4%",
-                  "x2": "41.04%",
-                  "y2": "26.7%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#7B1173",
@@ -39045,12 +35869,6 @@ export const SERIALIZED_EVENTS = [
                   "#1A82FF",
                   "#71B1FF"
                 ],
-                "gradientCoords": {
-                  "x1": "2.68%",
-                  "y1": "0.61%",
-                  "x2": "41.19%",
-                  "y2": "35.03%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1A82FF",
@@ -39108,12 +35926,6 @@ export const SERIALIZED_EVENTS = [
                   "#788299",
                   "#ADB8D3"
                 ],
-                "gradientCoords": {
-                  "x1": "9.954%",
-                  "y1": "7.596%",
-                  "x2": "34.509%",
-                  "y2": "31.978%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#788299",
@@ -39172,12 +35984,6 @@ export const SERIALIZED_EVENTS = [
                   "#4947FF",
                   "#3248B3"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#4947FF",
@@ -39236,12 +36042,6 @@ export const SERIALIZED_EVENTS = [
                   "#2F79EA",
                   "#124282"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#2F79EA",
@@ -39300,12 +36100,6 @@ export const SERIALIZED_EVENTS = [
                   "#1A82FF",
                   "#71B1FF"
                 ],
-                "gradientCoords": {
-                  "x1": "25.38%",
-                  "y1": "15.89%",
-                  "x2": "27.48%",
-                  "y2": "24.56%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1A82FF",
@@ -39361,12 +36155,6 @@ export const SERIALIZED_EVENTS = [
                   "#DEC21C",
                   "#EFE812"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#DEC21C",
@@ -39425,12 +36213,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAE522",
                   "#EAD422"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAE522",
@@ -39487,12 +36269,6 @@ export const SERIALIZED_EVENTS = [
                   "#0052FF",
                   "#3E7CFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0052FF",
@@ -39550,12 +36326,6 @@ export const SERIALIZED_EVENTS = [
                   "#5E924B",
                   "#7DBE65"
                 ],
-                "gradientCoords": {
-                  "x1": "4%",
-                  "y1": "9%",
-                  "x2": "39.09%",
-                  "y2": "27.54%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#5E924B",
@@ -39606,12 +36376,6 @@ export const SERIALIZED_EVENTS = [
                   "#0793C2",
                   "#00BFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0793C2",
@@ -39671,12 +36435,6 @@ export const SERIALIZED_EVENTS = [
                   "#5A63B8",
                   "#C86DD7"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#5A63B8",
@@ -39736,12 +36494,6 @@ export const SERIALIZED_EVENTS = [
                   "#5CA0F6",
                   "#3F6299"
                 ],
-                "gradientCoords": {
-                  "x1": "-62.728%",
-                  "y1": "-45.557%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#5CA0F6",
@@ -39800,12 +36552,6 @@ export const SERIALIZED_EVENTS = [
                   "#05BCA9",
                   "#2F4B77"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#05BCA9",
@@ -39861,12 +36607,6 @@ export const SERIALIZED_EVENTS = [
                   "#0071F3",
                   "#338EF8"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0071F3",
@@ -39921,12 +36661,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -39986,12 +36720,6 @@ export const SERIALIZED_EVENTS = [
                   "#D72D2F",
                   "#EF4F1F"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#D72D2F",
@@ -40050,12 +36778,6 @@ export const SERIALIZED_EVENTS = [
                   "#337A8D",
                   "#0F3653"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "-14.319%",
-                  "x2": "105.928%",
-                  "y2": "129.347%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#337A8D",
@@ -40112,12 +36834,6 @@ export const SERIALIZED_EVENTS = [
                   "#006CFF",
                   "#4694FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#006CFF",
@@ -40174,12 +36890,6 @@ export const SERIALIZED_EVENTS = [
                   "#0180FF",
                   "#013CFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0180FF",
@@ -40238,12 +36948,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFFFFF",
                   "#EBEBEB"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "99.12%",
-                  "y2": "78.676%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FFFFFF",
@@ -40302,12 +37006,6 @@ export const SERIALIZED_EVENTS = [
                   "#E62249",
                   "#FF5A5A"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.537%",
-                  "y2": "6.714%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#E62249",
@@ -40366,12 +37064,6 @@ export const SERIALIZED_EVENTS = [
                   "#5A89F9",
                   "#6CFDCC"
                 ],
-                "gradientCoords": {
-                  "x1": "-28.432%",
-                  "y1": "0%",
-                  "x2": "-28.432%",
-                  "y2": "99.999%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#5A89F9",
@@ -40430,12 +37122,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAB308",
                   "#FEF08A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAB308",
@@ -40499,12 +37185,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -40564,12 +37244,6 @@ export const SERIALIZED_EVENTS = [
                   "#693AC1",
                   "#4281FF"
                 ],
-                "gradientCoords": {
-                  "x1": "53.598%",
-                  "y1": "83.623%",
-                  "x2": "46.36%",
-                  "y2": "15.984%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#693AC1",
@@ -40628,12 +37302,6 @@ export const SERIALIZED_EVENTS = [
                   "#314EFF",
                   "#2033A5"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#314EFF",
@@ -40691,12 +37359,6 @@ export const SERIALIZED_EVENTS = [
                   "#FEA101",
                   "#FFB941"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FEA101",
@@ -40754,12 +37416,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAB308",
                   "#FEF08A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAB308",
@@ -40817,12 +37473,6 @@ export const SERIALIZED_EVENTS = [
                   "#D6D6D6",
                   "#F6F6F6"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#D6D6D6",
@@ -40879,12 +37529,6 @@ export const SERIALIZED_EVENTS = [
                   "#00BDBF",
                   "#5F727D"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00BDBF",
@@ -40943,12 +37587,6 @@ export const SERIALIZED_EVENTS = [
                   "#0084FF",
                   "#00ADEF"
                 ],
-                "gradientCoords": {
-                  "x1": "9.954%",
-                  "y1": "7.596%",
-                  "x2": "34.509%",
-                  "y2": "31.978%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0084FF",
@@ -41006,12 +37644,6 @@ export const SERIALIZED_EVENTS = [
                   "#0FAE91",
                   "#D020D6"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0FAE91",
@@ -41068,12 +37700,6 @@ export const SERIALIZED_EVENTS = [
                   "#A53803",
                   "#F69C0A"
                 ],
-                "gradientCoords": {
-                  "x1": "119.625%",
-                  "y1": "113.067%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#A53803",
@@ -41132,12 +37758,6 @@ export const SERIALIZED_EVENTS = [
                   "#77BAA1",
                   "#B9EFDB"
                 ],
-                "gradientCoords": {
-                  "x1": "-3.98%",
-                  "y1": "1.381%",
-                  "x2": "49.273%",
-                  "y2": "30.414%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#77BAA1",
@@ -41197,12 +37817,6 @@ export const SERIALIZED_EVENTS = [
                   "#00D1FF",
                   "#005466"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "99.12%",
-                  "y2": "78.676%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00D1FF",
@@ -41260,12 +37874,6 @@ export const SERIALIZED_EVENTS = [
                   "#00CC77",
                   "#049C76"
                 ],
-                "gradientCoords": {
-                  "x1": "100%",
-                  "y1": "100%",
-                  "x2": "0.131%",
-                  "y2": "0.131%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00CC77",
@@ -41323,12 +37931,6 @@ export const SERIALIZED_EVENTS = [
                   "#5B67C3",
                   "#3B4382"
                 ],
-                "gradientCoords": {
-                  "x1": "22.351%",
-                  "y1": "-12.223%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#5B67C3",
@@ -41387,12 +37989,6 @@ export const SERIALIZED_EVENTS = [
                   "#00A3FF",
                   "#3ADCFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#00A3FF",
@@ -41449,12 +38045,6 @@ export const SERIALIZED_EVENTS = [
                   "#0081FF",
                   "#15528E"
                 ],
-                "gradientCoords": {
-                  "x1": "25.019%",
-                  "y1": "-6.467%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0081FF",
@@ -41513,12 +38103,6 @@ export const SERIALIZED_EVENTS = [
                   "#0081FF",
                   "#15528E"
                 ],
-                "gradientCoords": {
-                  "x1": "25.019%",
-                  "y1": "-6.467%",
-                  "x2": "98.837%",
-                  "y2": "152.777%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0081FF",
@@ -41577,12 +38161,6 @@ export const SERIALIZED_EVENTS = [
                   "#7D52FF",
                   "#6028CC"
                 ],
-                "gradientCoords": {
-                  "x1": "10.067%",
-                  "y1": "0%",
-                  "x2": "89.933%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#7D52FF",
@@ -41634,12 +38212,6 @@ export const SERIALIZED_EVENTS = [
                   "#FC53A2",
                   "#B074BA"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "-0.006%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FC53A2",
@@ -41699,12 +38271,6 @@ export const SERIALIZED_EVENTS = [
                   "#F506FA",
                   "#FD89FF"
                 ],
-                "gradientCoords": {
-                  "x1": "8.49%",
-                  "y1": "6%",
-                  "x2": "32%",
-                  "y2": "32.86%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#F506FA",
@@ -41762,12 +38328,6 @@ export const SERIALIZED_EVENTS = [
                   "#14C8FF",
                   "#8EE5FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#14C8FF",
@@ -41824,12 +38384,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFFFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -41887,12 +38441,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#53AE94",
@@ -41951,12 +38499,6 @@ export const SERIALIZED_EVENTS = [
                   "#33A0FF",
                   "#5919D9"
                 ],
-                "gradientCoords": {
-                  "x1": "73.306%",
-                  "y1": "69.023%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#33A0FF",
@@ -42015,12 +38557,6 @@ export const SERIALIZED_EVENTS = [
                   "#1A5AFF",
                   "#6691FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1A5AFF",
@@ -42078,12 +38614,6 @@ export const SERIALIZED_EVENTS = [
                   "#23F08F",
                   "#72FFBC"
                 ],
-                "gradientCoords": {
-                  "x1": "-4.68%",
-                  "y1": "1.381%",
-                  "x2": "48.573%",
-                  "y2": "30.414%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#23F08F",
@@ -42144,12 +38674,6 @@ export const SERIALIZED_EVENTS = [
                   "#1A59FE",
                   "#5C89FF"
                 ],
-                "gradientCoords": {
-                  "x1": "-4.68%",
-                  "y1": "1.381%",
-                  "x2": "48.573%",
-                  "y2": "30.414%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1A59FE",
@@ -42206,12 +38730,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF4A4A",
                   "#CC3B3B"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "99.881%",
-                  "y2": "99.881%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FF4A4A",
@@ -42269,12 +38787,6 @@ export const SERIALIZED_EVENTS = [
                   "#FC6CAB",
                   "#FF007A"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "214.397%",
-                  "y2": "181.316%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#FC6CAB",
@@ -42332,12 +38844,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#3E90E8",
@@ -42396,12 +38902,6 @@ export const SERIALIZED_EVENTS = [
                   "#CA2258",
                   "#FE3E7C"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "4%",
-                  "x2": "36%",
-                  "y2": "35.5%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#CA2258",
@@ -42460,12 +38960,6 @@ export const SERIALIZED_EVENTS = [
                   "#BB3A4F",
                   "#FF1F43"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#BB3A4F",
@@ -42525,12 +39019,6 @@ export const SERIALIZED_EVENTS = [
                   "#3831AB",
                   "#403B89"
                 ],
-                "gradientCoords": {
-                  "x1": "-.001%",
-                  "y1": "0%",
-                  "x2": "100.001%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#3831AB",
@@ -42589,12 +39077,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -42651,12 +39133,6 @@ export const SERIALIZED_EVENTS = [
                   "#8958AB",
                   "#3D2F52"
                 ],
-                "gradientCoords": {
-                  "x1": "91.762%",
-                  "y1": "69.532%",
-                  "x2": "4.905%",
-                  "y2": "24.223%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#8958AB",
@@ -42712,12 +39188,6 @@ export const SERIALIZED_EVENTS = [
                   "#EC9CC6",
                   "#ED1E79"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#EC9CC6",
@@ -42775,12 +39245,6 @@ export const SERIALIZED_EVENTS = [
                   "#1EAB89",
                   "#3ADFB7"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.49%",
-                  "x2": "41.043%",
-                  "y2": "26.73%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#1EAB89",
@@ -42838,12 +39302,6 @@ export const SERIALIZED_EVENTS = [
                   "#39E6D7",
                   "#40FF80"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#39E6D7",
@@ -42900,12 +39358,6 @@ export const SERIALIZED_EVENTS = [
                   "#0076FC",
                   "#0052B0"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "21.958%",
-                  "x2": "99.12%",
-                  "y2": "78.676%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#0076FC",
@@ -42962,12 +39414,6 @@ export const SERIALIZED_EVENTS = [
                   "#2856A6",
                   "#518BEF"
                 ],
-                "gradientCoords": {
-                  "x1": "12.8%",
-                  "y1": "14%",
-                  "x2": "27.91%",
-                  "y2": "25.4%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#2856A6",
@@ -43025,12 +39471,6 @@ export const SERIALIZED_EVENTS = [
                   "#C8C8C8",
                   "#979797"
                 ],
-                "gradientCoords": {
-                  "x1": "11.224%",
-                  "y1": "-66.682%",
-                  "x2": "141.81%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "ethereum",
                 "chainBadgeColors": [
                   "#C8C8C8",
@@ -43087,12 +39527,6 @@ export const SERIALIZED_EVENTS = [
                   "#0D70CC",
                   "#12AAFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#0D70CC",
@@ -43148,12 +39582,6 @@ export const SERIALIZED_EVENTS = [
                   "#E03C3C",
                   "#E76767"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#E03C3C",
@@ -43212,12 +39640,6 @@ export const SERIALIZED_EVENTS = [
                   "#3FA0F1",
                   "#295ADA"
                 ],
-                "gradientCoords": {
-                  "x1": "-22.982%",
-                  "y1": "-43.915%",
-                  "x2": "91.53%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#3FA0F1",
@@ -43275,12 +39697,6 @@ export const SERIALIZED_EVENTS = [
                   "#60CFC8",
                   "#4312E8"
                 ],
-                "gradientCoords": {
-                  "x1": "11.118%",
-                  "y1": "26.577%",
-                  "x2": "24.212%",
-                  "y2": "18.305%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#60CFC8",
@@ -43336,12 +39752,6 @@ export const SERIALIZED_EVENTS = [
                   "#EC9CC6",
                   "#ED1E79"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#EC9CC6",
@@ -43399,12 +39809,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#3E90E8",
@@ -43462,12 +39866,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#53AE94",
@@ -43525,12 +39923,6 @@ export const SERIALIZED_EVENTS = [
                   "#472FCF",
                   "#7159FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "ethereumarbone",
                 "chainBadgeColors": [
                   "#472FCF",
@@ -43588,12 +39980,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "fantommainnet",
                 "chainBadgeColors": [
                   "#53AE94",
@@ -43645,12 +40031,6 @@ export const SERIALIZED_EVENTS = [
                   "#34D3E0",
                   "#7F7BAE"
                 ],
-                "gradientCoords": {
-                  "x1": "86.792%",
-                  "y1": "19.043%",
-                  "x2": "12.879%",
-                  "y2": "81.232%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#34D3E0",
@@ -43710,12 +40090,6 @@ export const SERIALIZED_EVENTS = [
                   "#AC18AC",
                   "#FF47FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#AC18AC",
@@ -43767,12 +40141,6 @@ export const SERIALIZED_EVENTS = [
                   "#FBCC5F",
                   "#F9A606"
                 ],
-                "gradientCoords": {
-                  "x1": "3.912%",
-                  "y1": "0%",
-                  "x2": "89.933%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#FBCC5F",
@@ -43832,12 +40200,6 @@ export const SERIALIZED_EVENTS = [
                   "#FA34F3",
                   "#8F17F9"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.5%",
-                  "x2": "41.044%",
-                  "y2": "23.738%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#FA34F3",
@@ -43895,12 +40257,6 @@ export const SERIALIZED_EVENTS = [
                   "#37BE96",
                   "#4DFC8D"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#37BE96",
@@ -43952,12 +40308,6 @@ export const SERIALIZED_EVENTS = [
                   "#3FA0F1",
                   "#295ADA"
                 ],
-                "gradientCoords": {
-                  "x1": "-22.982%",
-                  "y1": "-43.915%",
-                  "x2": "91.53%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#3FA0F1",
@@ -44015,12 +40365,6 @@ export const SERIALIZED_EVENTS = [
                   "#625CF4",
                   "#9A96FF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#625CF4",
@@ -44072,12 +40416,6 @@ export const SERIALIZED_EVENTS = [
                   "#0084FF",
                   "#00ADEF"
                 ],
-                "gradientCoords": {
-                  "x1": "9.954%",
-                  "y1": "7.596%",
-                  "x2": "34.509%",
-                  "y2": "31.978%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#0084FF",
@@ -44130,12 +40468,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -44193,12 +40525,6 @@ export const SERIALIZED_EVENTS = [
                   "#00BAFF",
                   "#3ADCFF"
                 ],
-                "gradientCoords": {
-                  "x1": "30%",
-                  "y1": "-13.503%",
-                  "x2": "-1.873%",
-                  "y2": "-7.408%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#00BAFF",
@@ -44250,12 +40576,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#53AE94",
@@ -44314,12 +40634,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#3E90E8",
@@ -44371,12 +40685,6 @@ export const SERIALIZED_EVENTS = [
                   "#8958AB",
                   "#3D2F52"
                 ],
-                "gradientCoords": {
-                  "x1": "91.762%",
-                  "y1": "69.532%",
-                  "x2": "4.905%",
-                  "y2": "24.223%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#8958AB",
@@ -44429,12 +40737,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "matic",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -44494,12 +40796,6 @@ export const SERIALIZED_EVENTS = [
                   "#FBCC5F",
                   "#FBF35F"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "baseAssetName": "optimism",
                 "chainBadgeColors": [
                   "#FBCC5F",
@@ -44556,12 +40852,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF0420",
                   "#A10013"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "baseAssetName": "optimism",
                 "chainBadgeColors": [
                   "#FF0420",
@@ -44619,12 +40909,6 @@ export const SERIALIZED_EVENTS = [
                   "#3E90E8",
                   "#2775CA"
                 ],
-                "gradientCoords": {
-                  "x1": "102%",
-                  "y1": "101%",
-                  "x2": "0%",
-                  "y2": "0%"
-                },
                 "baseAssetName": "optimism",
                 "chainBadgeColors": [
                   "#3E90E8",
@@ -44682,12 +40966,6 @@ export const SERIALIZED_EVENTS = [
                   "#53AE94",
                   "#2E9175"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "102%",
-                  "y2": "101%"
-                },
                 "baseAssetName": "optimism",
                 "chainBadgeColors": [
                   "#53AE94",
@@ -44745,12 +41023,6 @@ export const SERIALIZED_EVENTS = [
                   "#D5D5D5",
                   "#FFFFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "20%",
-                  "y2": "20%"
-                },
                 "baseAssetName": "optimism",
                 "chainBadgeColors": [
                   "#D5D5D5",
@@ -44802,12 +41074,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFFFFF"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "rootstock",
                 "chainBadgeColors": [
                   "#EAEAEA",
@@ -44866,12 +41132,6 @@ export const SERIALIZED_EVENTS = [
                   "#FF5800",
                   "#FF9056"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "baseAssetName": "rootstock",
                 "chainBadgeColors": [
                   "#FF5800",
@@ -44927,12 +41187,6 @@ export const SERIALIZED_EVENTS = [
                   "#00A3FF",
                   "#3ADCFF"
                 ],
-                "gradientCoords": {
-                  "x1": "29.931%",
-                  "y1": "11.994%",
-                  "x2": "10.494%",
-                  "y2": "28.187%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -44978,12 +41232,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFE5C0",
                   "#E6BC7B"
                 ],
-                "gradientCoords": {
-                  "x1": "3%",
-                  "y1": "8.5%",
-                  "x2": "41.043%",
-                  "y2": "26.738%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45035,12 +41283,6 @@ export const SERIALIZED_EVENTS = [
                   "#44b6BB",
                   "#77B0DD"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45086,12 +41328,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45144,12 +41380,6 @@ export const SERIALIZED_EVENTS = [
                   "#8312AC",
                   "#B53BE1"
                 ],
-                "gradientCoords": {
-                  "x1": "22.6%",
-                  "y1": "7.867%",
-                  "x2": "22.426%",
-                  "y2": "30.81%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45200,12 +41430,6 @@ export const SERIALIZED_EVENTS = [
                   "#A0A0FF",
                   "#6868FC"
                 ],
-                "gradientCoords": {
-                  "x1": "-4.68%",
-                  "y1": "1.381%",
-                  "x2": "48.573%",
-                  "y2": "30.414%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45255,12 +41479,6 @@ export const SERIALIZED_EVENTS = [
                   "#FFFFFF",
                   "#DBDBDB"
                 ],
-                "gradientCoords": {
-                  "x1": "-4.68%",
-                  "y1": "1.381%",
-                  "x2": "48.573%",
-                  "y2": "30.414%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45310,12 +41528,6 @@ export const SERIALIZED_EVENTS = [
                   "#A0A0FF",
                   "#6868FC"
                 ],
-                "gradientCoords": {
-                  "x1": "-4.68%",
-                  "y1": "1.381%",
-                  "x2": "48.573%",
-                  "y2": "30.414%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45367,12 +41579,6 @@ export const SERIALIZED_EVENTS = [
                   "#00AE89",
                   "#00FFC8"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45423,12 +41629,6 @@ export const SERIALIZED_EVENTS = [
                   "#98C158",
                   "#C7F284"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45481,12 +41681,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45537,12 +41731,6 @@ export const SERIALIZED_EVENTS = [
                   "#E54033",
                   "#EEB91B"
                 ],
-                "gradientCoords": {
-                  "x1": "61.5%",
-                  "y1": "7.3%",
-                  "x2": "47.7%",
-                  "y2": "-6.5%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45593,12 +41781,6 @@ export const SERIALIZED_EVENTS = [
                   "#B7011C",
                   "#FF4F4F"
                 ],
-                "gradientCoords": {
-                  "x1": "10.5%",
-                  "y1": "3.5%",
-                  "x2": "38.5%",
-                  "y2": "53.5%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45649,12 +41831,6 @@ export const SERIALIZED_EVENTS = [
                   "#308DBA",
                   "#C8ECE1"
                 ],
-                "gradientCoords": {
-                  "x1": "-3.5%",
-                  "y1": "3.5%",
-                  "x2": "48.05%",
-                  "y2": "30.724%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45707,12 +41883,6 @@ export const SERIALIZED_EVENTS = [
                   "#1D257A",
                   "#5969DB"
                 ],
-                "gradientCoords": {
-                  "x1": "44.5%",
-                  "y1": "40%",
-                  "x2": "-4.548%",
-                  "y2": "4.017%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45764,12 +41934,6 @@ export const SERIALIZED_EVENTS = [
                   "#32FFFF",
                   "#EDFEFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45820,12 +41984,6 @@ export const SERIALIZED_EVENTS = [
                   "#3772FF",
                   "#C200FB"
                 ],
-                "gradientCoords": {
-                  "x1": "99.911%",
-                  "y1": "25.033%",
-                  "x2": "-6.116%",
-                  "y2": "61.756%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45879,12 +42037,6 @@ export const SERIALIZED_EVENTS = [
                   "#E62249",
                   "#FF5A5A"
                 ],
-                "gradientCoords": {
-                  "x1": "38%",
-                  "y1": "37.5%",
-                  "x2": "0.537%",
-                  "y2": "6.714%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45935,12 +42087,6 @@ export const SERIALIZED_EVENTS = [
                   "#71E0EC",
                   "#05AAC5"
                 ],
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "-.006%",
-                  "x2": "99.694%",
-                  "y2": "99.694%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -45987,12 +42133,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -46046,12 +42186,6 @@ export const SERIALIZED_EVENTS = [
                   "#32FFFF",
                   "#EDFEFF"
                 ],
-                "gradientCoords": {
-                  "x1": "44.5%",
-                  "y1": "40%",
-                  "x2": "-4.548%",
-                  "y2": "4.017%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -46097,12 +42231,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -46149,12 +42277,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -46207,12 +42329,6 @@ export const SERIALIZED_EVENTS = [
                   "#2BD9B9",
                   "#D141E9"
                 ],
-                "gradientCoords": {
-                  "x1": "44.5%",
-                  "y1": "40%",
-                  "x2": "-4.548%",
-                  "y2": "4.017%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -46258,12 +42374,6 @@ export const SERIALIZED_EVENTS = [
                   "#EAEAEA",
                   "#FFF"
                 ],
-                "gradientCoords": {
-                  "x1": "19.031%",
-                  "y1": "-66.682%",
-                  "x2": "123.324%",
-                  "y2": "91.487%"
-                },
                 "assetType": "SOLANA_TOKEN",
                 "baseAssetName": "solana",
                 "chainBadgeColors": [
@@ -46341,12 +42451,6 @@ export const SERIALIZED_EVENTS = [
                 ],
                 "displayNetworkName": "Ethereum",
                 "displayNetworkTicker": "ETH",
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "address": {
                   "validate": null
                 },
@@ -46406,12 +42510,6 @@ export const SERIALIZED_EVENTS = [
                 ],
                 "displayNetworkName": "Ethereum",
                 "displayNetworkTicker": "ETH",
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "address": {
                   "validate": null
                 },
@@ -46472,12 +42570,6 @@ export const SERIALIZED_EVENTS = [
                 ],
                 "displayNetworkName": "Ethereum",
                 "displayNetworkTicker": "ETH",
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "address": {
                   "validate": null
                 },
@@ -46540,12 +42632,6 @@ export const SERIALIZED_EVENTS = [
                 ],
                 "displayNetworkName": "Ethereum",
                 "displayNetworkTicker": "ETH",
-                "gradientCoords": {
-                  "x1": "0%",
-                  "y1": "0%",
-                  "x2": "100%",
-                  "y2": "100%"
-                },
                 "address": {
                   "validate": null
                 },
@@ -50998,50 +47084,6 @@ export const SERIALIZED_EVENTS = [
                       }
                     }
                   },
-                  "riskMetrics": {
-                    "t": "object",
-                    "v": {
-                      "requiredMetrics": {
-                        "t": "array",
-                        "v": [
-                          "restrictedLanguage"
-                        ]
-                      },
-                      "minimumWalletAgeInDays": 2,
-                      "permittedTimeZones": {
-                        "t": "array",
-                        "v": [
-                          "America/New_York",
-                          "America/Chicago",
-                          "America/Denver",
-                          "America/Los_Angeles",
-                          "America/Anchorage",
-                          "Pacific/Honolulu"
-                        ]
-                      },
-                      "permittedLanguages": {
-                        "t": "array",
-                        "v": [
-                          "en"
-                        ]
-                      },
-                      "hasBalancePoint": 1,
-                      "walletAgePointPerMonth": 0.1,
-                      "restrictedManufacturers": {
-                        "t": "array",
-                        "v": [
-                          "Tecno Mobile"
-                        ]
-                      },
-                      "minimumAndroidVersion": "30",
-                      "minimumIosVersion": "13",
-                      "txHistoryPointPerTx": 0.1,
-                      "assetsHeldPointPerAsset": 0.05,
-                      "fiatPurchasePoint": 5,
-                      "swappedPointPerTx": 0.1,
-                      "stakingPoint": 5
-                    }
-                  }
                 }
               },
               "exodex": {
@@ -52268,17 +48310,6 @@ export const SERIALIZED_EVENTS = [
     "t": "object",
     "v": {
       "jsonrpc": "2.0",
-      "method": "riskMetrics",
-      "params": {
-        "t": "object",
-        "v": {}
-      }
-    }
-  },
-  {
-    "t": "object",
-    "v": {
-      "jsonrpc": "2.0",
       "method": "exchangeStatus",
       "params": null
     }
@@ -52850,25 +48881,6 @@ export const SERIALIZED_EVENTS = [
             "t": "object",
             "v": {
               "methodName": "apyRates"
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    "t": "object",
-    "v": {
-      "jsonrpc": "2.0",
-      "error": {
-        "t": "object",
-        "v": {
-          "code": -32601,
-          "message": "Method not found",
-          "data": {
-            "t": "object",
-            "v": {
-              "methodName": "riskMetrics"
             }
           }
         }
@@ -57223,50 +53235,6 @@ export const SERIALIZED_EVENTS = [
                       }
                     }
                   },
-                  "riskMetrics": {
-                    "t": "object",
-                    "v": {
-                      "requiredMetrics": {
-                        "t": "array",
-                        "v": [
-                          "restrictedLanguage"
-                        ]
-                      },
-                      "minimumWalletAgeInDays": 2,
-                      "permittedTimeZones": {
-                        "t": "array",
-                        "v": [
-                          "America/New_York",
-                          "America/Chicago",
-                          "America/Denver",
-                          "America/Los_Angeles",
-                          "America/Anchorage",
-                          "Pacific/Honolulu"
-                        ]
-                      },
-                      "permittedLanguages": {
-                        "t": "array",
-                        "v": [
-                          "en"
-                        ]
-                      },
-                      "hasBalancePoint": 1,
-                      "walletAgePointPerMonth": 0.1,
-                      "restrictedManufacturers": {
-                        "t": "array",
-                        "v": [
-                          "Tecno Mobile"
-                        ]
-                      },
-                      "minimumAndroidVersion": "30",
-                      "minimumIosVersion": "13",
-                      "txHistoryPointPerTx": 0.1,
-                      "assetsHeldPointPerAsset": 0.05,
-                      "fiatPurchasePoint": 5,
-                      "swappedPointPerTx": 0.1,
-                      "stakingPoint": 5
-                    }
-                  }
                 }
               },
               "exodex": {
@@ -63520,50 +59488,6 @@ export const SERIALIZED_EVENTS = [
               }
             }
           },
-          "riskMetrics": {
-            "t": "object",
-            "v": {
-              "requiredMetrics": {
-                "t": "array",
-                "v": [
-                  "restrictedLanguage"
-                ]
-              },
-              "minimumWalletAgeInDays": 2,
-              "permittedTimeZones": {
-                "t": "array",
-                "v": [
-                  "America/New_York",
-                  "America/Chicago",
-                  "America/Denver",
-                  "America/Los_Angeles",
-                  "America/Anchorage",
-                  "Pacific/Honolulu"
-                ]
-              },
-              "permittedLanguages": {
-                "t": "array",
-                "v": [
-                  "en"
-                ]
-              },
-              "hasBalancePoint": 1,
-              "walletAgePointPerMonth": 0.1,
-              "restrictedManufacturers": {
-                "t": "array",
-                "v": [
-                  "Tecno Mobile"
-                ]
-              },
-              "minimumAndroidVersion": "30",
-              "minimumIosVersion": "13",
-              "txHistoryPointPerTx": 0.1,
-              "assetsHeldPointPerAsset": 0.05,
-              "fiatPurchasePoint": 5,
-              "swappedPointPerTx": 0.1,
-              "stakingPoint": 5
-            }
-          }
         }
       }
     }

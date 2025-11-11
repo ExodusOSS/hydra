@@ -29,11 +29,17 @@ export default class Address {
     return 'Address'
   }
 
-  static isInstance = createIsInstance(Address)
-
-  static [Symbol.hasInstance](instance: unknown): instance is Address {
-    return this.isInstance(instance)
+  // can't assign directly to [Symbol.hasInstance] due to a babel bug
+  // can't use this in static initializers due to another babel bug
+  static _isInstance = createIsInstance(Address)
+  static [Symbol.hasInstance](x: any) {
+    return this._isInstance(x)
   }
+
+  /**
+   * @deprecated Use `instanceof` instead.
+   */
+  static isInstance = Address[Symbol.hasInstance]
 
   static create(address: string, meta?: AddressMeta) {
     return Object.freeze(new Address(address, meta))
@@ -92,7 +98,7 @@ export default class Address {
   }
 
   /**
-   * @deprecated This does not truly determine whether address is an instance of Address. Use Address.isInstance.
+   * @deprecated This does not truly determine whether address is an instance of Address. Use instanceof Address.
    */
   static isAddress(address: unknown): address is Address {
     if (address instanceof Address) return true

@@ -77,7 +77,7 @@ exports[`createFullActivity should add nfts, fiat, connections to props 1`] = `
       "toWalletAccount": "exodus_0",
       "txId": "buy-order-tx",
     },
-    "id": "ethereum.buy-order-tx",
+    "id": "ethereum.buy-order-tx.buy-order",
     "pending": false,
     "personalNote": undefined,
     "received": true,

@@ -1,5 +1,5 @@
 // Import module to be tested
-import BIP137 from '../src/helpers/BIP137'
+import BIP137 from '../src/helpers/BIP137.js'
 
 describe('BIP137 Test', () => {
   it('Can distinguish between BIP-137 and BIP-322 signature', () => {

@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect'
 import { WalletAccount } from '@exodus/models'

@@ -6,6 +6,8 @@ import { omitUndefined } from './utils.js'
 import type { CommonErrorString } from './common-errors.js'
 import { toCommonErrorMessage } from './common-errors.js'
 
+export const MAX_LINKED_ERRORS_DEPTH = 5
+
 type ReadonlySetValues<S> = S extends ReadonlySet<infer T> ? T : never
 
 function makeReadonlySet<const T>(values: T[]): ReadonlySet<T> {
@@ -46,20 +48,31 @@ export type SafeName = ReadonlySetValues<typeof SAFE_NAMES_SET>
 export type SafeCode = string & { __branded_type: 'SafeCodeOutcome' }
 export type SafeString = CommonErrorString | StaticAllowlistString | RuntimeSafeString
 
+export type SafeErrorJSON = {
+  name: SafeName
+  code?: SafeCode
+  hint?: SafeString
+  stack?: string
+  linkedErrors?: SafeErrorJSON[]
+  timestamp: number
+}
+
 type UnknownError = Error & {
   hint?: unknown
   code?: unknown
+  cause?: unknown
 }
 
 const FACTORY_SYMBOL = Symbol('SafeError')
 
 export class SafeError {
-  static from<T extends UnknownError>(err: T): SafeError {
+  static from<T extends UnknownError>(err: T, depth = 0): SafeError {
     let safeName
     let safeCode
     let safeHint: SafeString | undefined
+    let linkedSafeErrors: SafeError[] | undefined
     try {
-      const { name, message, hint, code } = err
+      const { name, message, hint, code, cause } = err
 
       safeName = isSafeName(name) ? name : 'UnknownError'
 
@@ -76,11 +89,27 @@ export class SafeError {
 
       const safeStack: Frame[] | undefined = parseStackTraceNatively(err)
 
+      if (cause instanceof Error && depth === 0) {
+        linkedSafeErrors = []
+        let currentCause: unknown = cause
+
+        while (currentCause instanceof Error && ++depth <= MAX_LINKED_ERRORS_DEPTH) {
+          try {
+            linkedSafeErrors.push(SafeError.from(currentCause as UnknownError, depth))
+          } catch {
+            linkedSafeErrors.push(FAILED_TO_PARSE_ERROR)
+          } finally {
+            currentCause = currentCause.cause
+          }
+        }
+      }
+
       return new SafeError({
         name: safeName,
         code: safeCode,
         hint: safeHint,
         stack: safeStack,
+        linkedErrors: linkedSafeErrors,
         initSymbol: FACTORY_SYMBOL,
       })
     } catch {
@@ -90,6 +119,7 @@ export class SafeError {
               name: safeName,
               code: safeCode,
               hint: safeHint,
+              linkedErrors: linkedSafeErrors,
               initSymbol: FACTORY_SYMBOL,
             })
           : FAILED_TO_PARSE_ERROR
@@ -103,6 +133,7 @@ export class SafeError {
   readonly #code?: SafeCode
   readonly #hint?: SafeString
   readonly #stackFrames?: Frame[]
+  readonly #linkedErrors?: SafeError[]
   readonly #timestamp: number
 
   get name() {
@@ -128,25 +159,24 @@ export class SafeError {
       : undefined
   }
 
+  get linkedErrors() {
+    return this.#linkedErrors
+  }
+
   get timestamp() {
     return this.#timestamp
   }
 
-  toJSON() {
+  toJSON(): SafeErrorJSON {
     return omitUndefined({
       __proto__: null,
       name: this.name,
       code: this.code,
       hint: this.hint,
       stack: this.stack,
+      linkedErrors: this.linkedErrors?.map((linkedError) => linkedError.toJSON()),
       timestamp: this.timestamp,
-    }) as {
-      name: SafeName
-      code?: SafeCode
-      hint?: SafeString
-      stack?: string
-      timestamp: number
-    }
+    }) as SafeErrorJSON
   }
 
   constructor({
@@ -154,12 +184,14 @@ export class SafeError {
     code,
     hint,
     stack,
+    linkedErrors,
     initSymbol,
   }: {
     name: SafeName
     code?: SafeCode
     hint?: SafeString
     stack?: Frame[]
+    linkedErrors?: SafeError[]
     initSymbol: typeof FACTORY_SYMBOL
   }) {
     assert(initSymbol === FACTORY_SYMBOL, 'SafeError: use SafeError.from()')
@@ -168,6 +200,7 @@ export class SafeError {
     this.#code = code
     this.#hint = hint
     this.#stackFrames = stack?.map((frame) => ({ ...frame }))
+    this.#linkedErrors = linkedErrors
     this.#timestamp = Date.now()
   }
 }

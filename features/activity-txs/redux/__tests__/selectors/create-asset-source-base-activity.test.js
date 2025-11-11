@@ -674,4 +674,124 @@ describe('createAssetSourceBaseActivity', () => {
     expect(result.length).toEqual(1)
     expect(result).toMatchSnapshot()
   })
+
+  test('should not treat base asset gas fee tx as swap activity', () => {
+    const { store, selectors, handleEvent, assets } = setup()
+
+    // Simulate ALGO -> FLR swap on Ethereum (using ETH for gas)
+    // In a real-world scenario, this simulates token swaps like USDT -> USDC where ETH pays gas
+    const ALGO_FLR_ORDER = {
+      orderId: 'algo-flr-swap',
+      fromAsset: 'algorand',
+      toAsset: 'flare',
+      txIds: [{ txId: 'swap-tx-id' }],
+      date: '2025-10-01T13:54:28.000Z',
+      fromWalletAccount: 'exodus_0',
+      toWalletAccount: 'exodus_0',
+      fromAmount: assets.algorand.currency.defaultUnit(100),
+      toAmount: assets.flare.currency.defaultUnit(1000),
+      svc: 'cn',
+      synced: true,
+      region: 'INTL',
+      displaySvc: 'cn',
+      potentialToTxIds: [],
+      _version: 1,
+    }
+
+    const txLogFixtures = {
+      // ETH transaction that only pays gas fee - should NOT be treated as swap
+      ethereum: [
+        {
+          txId: 'swap-tx-id',
+          error: null,
+          date: '2025-10-01T13:54:28.000Z',
+          confirmations: 1,
+          meta: {},
+          token: null,
+          dropped: false,
+          coinAmount: '0 ETH', // No ETH amount, only gas fee
+          coinName: 'ethereum',
+          feeCoinName: 'ethereum',
+          feeAmount: '0.002 ETH',
+          currencies: { ethereum: assets.ethereum.currency },
+        },
+      ],
+      // ALGO transaction - should be treated as swap
+      algorand: [
+        {
+          txId: 'swap-tx-id',
+          error: null,
+          date: '2025-10-01T13:54:28.000Z',
+          confirmations: 1,
+          meta: {},
+          token: null,
+          dropped: false,
+          coinAmount: '-100 ALGO',
+          coinName: 'algorand',
+          feeCoinName: 'algorand',
+          feeAmount: '0.001 ALGO',
+          currencies: { algorand: assets.algorand.currency },
+        },
+      ],
+      // FLR transaction - should be treated as swap
+      flare: [
+        {
+          txId: 'swap-tx-id',
+          error: null,
+          date: '2025-10-01T13:54:28.000Z',
+          confirmations: 1,
+          meta: {},
+          token: null,
+          dropped: false,
+          coinAmount: '1000 FLR',
+          coinName: 'flare',
+          feeCoinName: 'flare',
+          feeAmount: '0 FLR',
+          currencies: { flare: assets.flare.currency },
+        },
+      ],
+    }
+
+    handleEvent('activityTxs', {
+      exodus_0: {
+        ethereum: txLogFixtures.ethereum.map((tx) => Tx.fromJSON(tx)),
+        algorand: txLogFixtures.algorand.map((tx) => Tx.fromJSON(tx)),
+        flare: txLogFixtures.flare.map((tx) => Tx.fromJSON(tx)),
+      },
+    })
+    handleEvent('orders', OrderSet.fromArray([ALGO_FLR_ORDER]))
+
+    // Check ETH activity - should be treated as normal tx, not swap
+    const ethSelector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'ethereum',
+      walletAccount: 'exodus_0',
+    })
+    const ethResult = ethSelector(store.getState())
+
+    expect(ethResult.length).toEqual(1)
+    expect(ethResult[0].type).not.toEqual('exchange')
+    expect(ethResult[0].id).toEqual('ethereum.swap-tx-id')
+
+    // Check ALGO activity - should be treated as swap
+    const algoSelector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'algorand',
+      walletAccount: 'exodus_0',
+    })
+    const algoResult = algoSelector(store.getState())
+
+    expect(algoResult.length).toEqual(1)
+    expect(algoResult[0].type).toEqual('exchange')
+    expect(algoResult[0].id).toEqual('swap.algorand.algo-flr-swap')
+
+    // Check FLR activity - should be treated as swap
+    const flrSelector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'flare',
+      walletAccount: 'exodus_0',
+    })
+    const flrResult = flrSelector(store.getState())
+
+    expect(flrResult.length).toEqual(1)
+    expect(flrResult[0].type).toEqual('exchange')
+    expect(flrResult[0].id).toEqual('swap.flare.algo-flr-swap')
+  })
 })

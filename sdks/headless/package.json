@@ -1,6 +1,6 @@
 {
   "name": "@exodus/headless",
-  "version": "5.0.0-rc.85",
+  "version": "5.0.0-rc.88",
   "description": "The platform-agnostic Exodus wallet SDK",
   "author": "Exodus Movement, Inc.",
   "type": "module",
@@ -54,7 +54,7 @@
     "@exodus/key-viewer": "^1.1.5",
     "@exodus/keychain": "^7.8.0",
     "@exodus/locale": "^2.3.0",
-    "@exodus/message-signer": "^1.4.2",
+    "@exodus/message-signer": "^3.0.0",
     "@exodus/pricing": "^1.10.0",
     "@exodus/public-key-provider": "^4.1.1",
     "@exodus/rates-monitor": "^4.14.3",
@@ -135,6 +135,7 @@
     }
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

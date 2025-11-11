@@ -1,4 +1,5 @@
 import { pickBy, filterAsync } from '@exodus/basic-utils'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import assert from 'minimalistic-assert'
 
@@ -17,6 +18,7 @@ class AssetClientInterface {
   #publicKeyProvider
   #transactionSigner
   #walletAccountsAtom
+  #multisigAtom
 
   constructor({
     addressProvider,
@@ -31,6 +33,7 @@ class AssetClientInterface {
     publicKeyProvider,
     transactionSigner,
     walletAccountsAtom,
+    multisigAtom,
   }) {
     this.#addressProvider = addressProvider
     this.#assetsModule = assetsModule
@@ -44,6 +47,7 @@ class AssetClientInterface {
     this.#publicKeyProvider = publicKeyProvider
     this.#transactionSigner = transactionSigner
     this.#walletAccountsAtom = walletAccountsAtom
+    this.#multisigAtom = multisigAtom
 
     assetsModule.initialize({ assetClientInterface: this })
   }
@@ -184,6 +188,11 @@ class AssetClientInterface {
       this.#config?.compatibilityModeMultiAddressMode?.[walletAccountInstance.compatibilityMode]
     if (typeof multiAddressMode === 'boolean') {
       out.multiAddressMode = multiAddressMode
+    }
+
+    if (this.#multisigAtom) {
+      const multisigWallets = await this.#multisigAtom.get()
+      out.multisigDataLength = multisigWallets[walletAccount]?.data?.length
     }
 
     return out

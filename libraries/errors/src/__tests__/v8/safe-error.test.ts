@@ -1,6 +1,6 @@
 import { AssertionError } from 'assert'
 
-import { SafeError } from '../../index.js'
+import { MAX_LINKED_ERRORS_DEPTH, SafeError } from '../../safe-error.js'
 import { commonErrorCases } from '../fixtures/common-errors.js'
 
 class CustomizableTestError extends Error {
@@ -183,6 +183,50 @@ describe('SafeError', () => {
       expect(safeError.stack).toMatch(
         /UnknownError: unknownHint\n +at doStuff \(.*safe-error\.test\.ts:\d+:\d+\)\n +at innerFunction \(.*safe-error\.test\.ts:\d+:\d+\)\n +at anotherUsefulFunction \(.*safe-error\.test\.ts:\d+:\d+\)\n +at usefulFunction \(.*safe-error\.test\.ts:\d:\d+\)\n[\S\s]*/
       )
+    })
+
+    describe('"cause" errors handling', () => {
+      it('should handle error with single cause', () => {
+        const causeError = new Error('Cause error')
+        const mainError = Object.assign(new Error('Main error'), { cause: causeError })
+
+        const safeError = SafeError.from(mainError)
+
+        expect(safeError.linkedErrors).toHaveLength(1)
+        expect(safeError.linkedErrors![0]).toEqual(SafeError.from(causeError))
+      })
+
+      it('should handle nested cause chain', () => {
+        const error3 = new Error('Error 3')
+        const error2 = Object.assign(new Error('Error 2'), { cause: error3 })
+        const error1 = Object.assign(new Error('Error 1'), { cause: error2 })
+
+        const safeError = SafeError.from(error1)
+
+        expect(safeError.linkedErrors).toHaveLength(2)
+
+        expect(safeError.linkedErrors![0]).toEqual(SafeError.from(error2))
+        expect(safeError.linkedErrors![1]).toEqual(SafeError.from(error3))
+      })
+
+      it('should cap linkedErrors at MAX_LINKED_ERRORS_DEPTH errors maximum', () => {
+        let currentError = new Error('Test error')
+        for (let i = MAX_LINKED_ERRORS_DEPTH * 100; i >= 1; i--) {
+          currentError = Object.assign(new Error(`Test error ${i}`), { cause: currentError })
+        }
+
+        const safeError = SafeError.from(currentError)
+
+        expect(safeError.linkedErrors).toHaveLength(MAX_LINKED_ERRORS_DEPTH)
+      })
+
+      it('should handle non-Error cause gracefully', () => {
+        const mainError = Object.assign(new Error('Main error'), { cause: 'string cause' })
+
+        const safeError = SafeError.from(mainError)
+
+        expect(safeError.linkedErrors).toBeUndefined()
+      })
     })
   })
 

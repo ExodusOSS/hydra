@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/ExodusMovement/hydra/compare/@exodus/retry@1.2.0...@exodus/retry@1.2.1) (2024-11-01)
+
+Re-licensed under MIT license.
+
+## [1.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/retry@1.1.0...@exodus/retry@1.2.0) (2024-08-20)
+
+### Features
+
+- label 4 ESM packages as type=module ([#7619](https://github.com/ExodusMovement/exodus-hydra/issues/7619)) ([367a88a](https://github.com/ExodusMovement/exodus-hydra/commit/367a88a6adb4f7d497fe2303cc165af0e2374762))
+
 ## 1.1.0 (2023-04-27)
 
 ### Features

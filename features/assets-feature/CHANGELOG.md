@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.7.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.7.0...@exodus/assets-feature@8.7.1) (2025-10-03)
+
+### Bug Fixes
+
+- fix: loading custom tokens when base asset doesn't exist (#13998)
+
+## [8.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.6.0...@exodus/assets-feature@8.7.0) (2025-09-24)
+
+### Features
+
+- feat: filter out invalid custom token names in addRemoteTokens (#13839)
+
+## [8.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.5.0...@exodus/assets-feature@8.6.0) (2025-09-19)
+
+### Features
+
+- feat: batch addRemoteTokens requests by 50 (#13858)
+
+## [8.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.4.0...@exodus/assets-feature@8.5.0) (2025-09-18)
+
+### Features
+
+- feat: support passing lifecycleStatus in addRemoteTokens (#13844)
+
+## [8.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.3.0...@exodus/assets-feature@8.4.0) (2025-08-18)
+
+### Features
+
+- feat: multisigDataIndex in address-provider (#13331)
+
 ## [8.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.2.0...@exodus/assets-feature@8.3.0) (2025-08-11)
 
 ### Features

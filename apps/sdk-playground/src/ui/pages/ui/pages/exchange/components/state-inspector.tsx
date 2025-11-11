@@ -32,7 +32,6 @@ const StateInspector = () => {
   const prefillId = useAtomValue(atoms.prefillIdAtom)
   const config = useAtomValue(atoms.configAtom)
   const prefills = useAtomValue(loadable(atoms.prefillsAtom))
-  const lastKnownPrefills = useAtomValue(atoms.lastKnownPrefillsAtom)
   const limits = useAtomValue(loadable(atoms.limitsAtom))
   const feeAmount = useAtomValue(atoms.feeAmountAtom)
   const feeFiatAmount = useAtomValue(atoms.feeFiatAmountAtom)
@@ -40,6 +39,7 @@ const StateInspector = () => {
   const minQuote = useAtomValue(loadable(atoms.minQuoteAtom))
   const maxQuote = useAtomValue(loadable(atoms.maxQuoteAtom))
   const fromTotalBalance = useAtomValue(atoms.fromTotalBalanceAtom)
+  const error = useAtomValue(atoms.errorAtom)
 
   return (
     <div className="flex-1">
@@ -64,12 +64,12 @@ const StateInspector = () => {
           spread,
           prefillId,
           prefills,
-          lastKnownPrefills,
           limits,
           feeAmount,
           feeFiatAmount,
           fromTotalBalance,
           config,
+          error,
         }}
       />
     </div>

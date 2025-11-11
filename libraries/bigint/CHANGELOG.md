@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.0](https://github.com/ExodusMovement/hydra/compare/@exodus/bigint@3.0.1...@exodus/bigint@4.0.0) (2025-10-21)
+
+### ⚠ BREAKING CHANGES
+
+- remove /bn.js export (#14160)
+
+### Features
+
+- feat!: remove /bn.js export (#14160)
+
 ## [3.0.1](https://github.com/ExodusMovement/hydra/compare/@exodus/bigint@3.0.0...@exodus/bigint@3.0.1) (2024-11-01)
 
 Re-licensed under MIT license.

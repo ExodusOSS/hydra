@@ -1,17 +1,19 @@
-import { WalletAccount } from '@exodus/models'
+const isReadOnlySelectorFactory =
+  ({ readOnlyHardwareModels = [] }) =>
+  (getWalletAccount) =>
+  (name) => {
+    const walletAccount = getWalletAccount(name)
 
-const resultFunction = (getWalletAccount) => (name) => {
-  const walletAccount = getWalletAccount(name)
-  return walletAccount?.source === WalletAccount.TREZOR_SRC
-}
+    return readOnlyHardwareModels.includes(walletAccount?.model)
+  }
 
-const isReadOnlySelector = {
+const createIsReadOnlySelectorDefinition = (config) => ({
   id: 'isReadOnly',
-  resultFunction,
+  resultFunction: isReadOnlySelectorFactory(config),
   dependencies: [
     //
     { selector: 'get' },
   ],
-}
+})
 
-export default isReadOnlySelector
+export default createIsReadOnlySelectorDefinition

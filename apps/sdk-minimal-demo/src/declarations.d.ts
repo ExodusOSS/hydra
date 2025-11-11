@@ -1,5 +1,4 @@
 declare module '@exodus/basic-utils'
-declare module '@exodus/fetch'
 declare module '@exodus/bitcoin-plugin'
 declare module '@exodus/ethereum-plugin'
 declare module '@exodus/sync-time'

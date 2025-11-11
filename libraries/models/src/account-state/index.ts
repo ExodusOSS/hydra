@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { serialize, deserialize } from './serialization.js'
 import { ModelIdSymbol } from '../constants.js'
@@ -73,11 +74,17 @@ export default class AccountState {
 
   [key: string]: any
 
-  static isInstance = createIsInstance(AccountState)
-
-  static [Symbol.hasInstance](instance: unknown): instance is AccountState {
-    return this.isInstance(instance)
+  // can't assign directly to [Symbol.hasInstance] due to a babel bug
+  // can't use this in static initializers due to another babel bug
+  static _isInstance = createIsInstance(AccountState)
+  static [Symbol.hasInstance](x: any) {
+    return this._isInstance(x)
   }
+
+  /**
+   * @deprecated Use `instanceof` instead.
+   */
+  static isInstance = AccountState[Symbol.hasInstance]
 
   static _getAllFieldNames() {
     if (!this._allFieldNames) {

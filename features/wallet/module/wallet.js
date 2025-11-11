@@ -1,4 +1,5 @@
 import { generateMnemonic, mnemonicToSeed } from '@exodus/bip39'
+import { safeString } from '@exodus/safe-string'
 import { EXODUS_KEY_IDS } from '@exodus/key-ids'
 import { getSeedId } from '@exodus/key-utils'
 import assert from 'minimalistic-assert'
@@ -106,6 +107,10 @@ class Wallet {
     }
 
     await this.walletStorage.set(SEED_KEY, seed, { passphrase })
+    // Restoring a seedless backup restarts the app immediately.
+    // Wait a bit longer to ensure the data is fully stored before restarting.
+    const storedSeed = await this.walletStorage.get(SEED_KEY, { passphrase })
+    assert(storedSeed.seed.equals(seed.seed), safeString`setSeed failed`)
   }
 
   #getGeneratedPassphrase = async () => this.walletStorage.get(GENERATED_PASSPHRASE_KEY)

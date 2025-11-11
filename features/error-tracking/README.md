@@ -23,8 +23,13 @@ This feature is designed to be used together with `@exodus/headless`. See [using
 See [using the sdk](../../docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK and the API interface in the [type declaration](./api/index.d.ts).
 
 ```ts
-await exodus.errors.track({ namespace, error, context: {} })
-await exodus.errors.trackRemote({ error })
+import type { SafeContextType } from '@exodus/errors'
+
+// Track error with optional context (see SafeContextType for available properties).
+const context: SafeContextType = {
+  /* ... */
+}
+await exodus.errors.track({ namespace: 'wallet', error, context })
 ```
 
 If you're building a feature and like to use error tracking inside that feature, you can depend on `errorTracking` and will receive the module with a track method that is auto-namespaced to your feature id.

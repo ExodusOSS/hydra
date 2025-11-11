@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [16.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@16.0.0...@exodus/wallet@16.0.1) (2025-10-22)
+
+### Bug Fixes
+
+- fix(wallet): make sure setSeed worked even app restart immediately (#14180)
+
 ## [16.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@15.4.0...@exodus/wallet@16.0.0) (2025-09-05)
 
 ### ⚠ BREAKING CHANGES

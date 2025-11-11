@@ -1,4 +1,5 @@
 import proxyFreeze from 'proxy-freeze'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import assert from 'minimalistic-assert'
 import { ModelIdSymbol } from '../constants.js'
@@ -72,7 +73,7 @@ export const getDefaultLabel = ({
 
 const isColor = (str: unknown) => typeof str === 'string' && /^#[\dA-Fa-f]{3,6}$/u.test(str)
 
-const IMMUTABLE_PROPERTIES = ['id', 'source', 'index', 'isMultisig']
+const IMMUTABLE_PROPERTIES = ['id', 'source', 'index', 'isMultisig', 'delegated']
 
 export type WalletAccountParams = {
   source: WalletAccountSource
@@ -88,6 +89,7 @@ export type WalletAccountParams = {
   seedId?: string
   compatibilityMode?: string
   isMultisig?: boolean
+  delegated?: boolean
 }
 
 export default class WalletAccount {
@@ -114,6 +116,7 @@ export default class WalletAccount {
   seedId?: string
   compatibilityMode?: string
   isMultisig?: boolean
+  delegated?: boolean
 
   constructor({
     source,
@@ -129,6 +132,7 @@ export default class WalletAccount {
     seedId,
     enabled = true,
     isMultisig = false,
+    delegated,
   }: WalletAccountParams) {
     const isCustodial = CUSTODIAL_SOURCES.includes(source)
     const isSoftware = SOFTWARE_SEED_SOURCES.includes(source)
@@ -149,6 +153,10 @@ export default class WalletAccount {
     assert(source === EXODUS_SRC || !is2FA, 'is2FA: true is only valid for an exodus walletAccount')
     assert(source !== SEED_SRC || seedId, 'expected option "seedId" for seed wallet account')
     assert(source !== PASSKEY_SRC || seedId, 'expected option "seedId" for passkey wallet account')
+    assert(
+      delegated === undefined || typeof delegated === 'boolean',
+      'if option "delegated" is provided it must be a boolean'
+    )
 
     color = color || DEFAULT_COLORS[source]
     icon = icon || DEFAULT_ICONS[source]
@@ -179,6 +187,7 @@ export default class WalletAccount {
     this.enabled = enabled
     this.compatibilityMode = compatibilityMode ?? (this.isHardware ? this.source : undefined)
     this.isMultisig = isMultisig
+    this.delegated = delegated
     return proxyFreeze(this)
   }
 
@@ -186,11 +195,17 @@ export default class WalletAccount {
     return 'WalletAccount'
   }
 
-  static isInstance = createIsInstance(WalletAccount)
-
-  static [Symbol.hasInstance](instance: unknown): instance is WalletAccount {
-    return this.isInstance(instance)
+  // can't assign directly to [Symbol.hasInstance] due to a babel bug
+  // can't use this in static initializers due to another babel bug
+  static _isInstance = createIsInstance(WalletAccount)
+  static [Symbol.hasInstance](x: any) {
+    return this._isInstance(x)
   }
+
+  /**
+   * @deprecated Use `instanceof` instead.
+   */
+  static isInstance = WalletAccount[Symbol.hasInstance]
 
   toString() {
     return [
@@ -216,6 +231,7 @@ export default class WalletAccount {
       compatibilityMode: this.compatibilityMode,
       seedId: this.seedId,
       isMultisig: this.isMultisig,
+      delegated: this.delegated,
       ...(this.id != null && { id: this.id }),
     }
   }
@@ -231,6 +247,9 @@ export default class WalletAccount {
       compatibilityMode: this.compatibilityMode,
       seedId: this.seedId,
       isMultisig: this.isMultisig,
+      delegated: this.delegated,
+      color: this.color,
+      icon: this.icon,
     })
   }
 

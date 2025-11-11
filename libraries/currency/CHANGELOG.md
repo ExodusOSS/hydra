@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.3.1](https://github.com/ExodusMovement/hydra/compare/@exodus/currency@6.3.0...@exodus/currency@6.3.1) (2025-10-21)
+
+### Bug Fixes
+
+- fix: upgrade version of @exodus/bigint used in @exodus/currency (#14175)
+
 ## [6.3.0](https://github.com/ExodusMovement/hydra/compare/@exodus/currency@6.2.1...@exodus/currency@6.3.0) (2025-07-24)
 
 ### Features

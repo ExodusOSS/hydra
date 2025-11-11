@@ -1,7 +1,15 @@
-import { ECPair } from '@exodus/bitcoinjs'
+import * as secp256k1 from '@exodus/crypto/secp256k1'
+import wif from 'wif'
 
 // Import module to be tested
-import Address from '../../src/Address'
+import Address from '../../Address.js'
+
+function fromWIF(wifString: string) {
+  const { version, privateKey, compressed } = wif.decode(wifString)
+  if (version !== 0x80) throw new Error('Invalid network version') // Bitcoin
+  const publicKey = secp256k1.privateKeyToPublicKey({ privateKey, compressed, format: 'buffer' })
+  return { version, privateKey, publicKey, compressed }
+}
 
 describe('Address Test', () => {
   describe('Address Recognition Functions', () => {
@@ -371,8 +379,7 @@ describe('Address Test', () => {
       // Arrange
       // Extract public key from private key
       const privateKey = 'L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k'
-      const signer = ECPair.fromWIF(privateKey)
-      const publicKey = signer.publicKey
+      const { publicKey } = fromWIF(privateKey)
       // Expected address for the private key L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k
       const p2pkhAddress = '14vV3aCHBeStb5bkenkNHbe2YAFinYdXgc'
       const p2pkhAddressTestnet = 'mjSSLdHFzft9NC5NNMik7WrMQ9rRhMhNpT'
@@ -410,11 +417,9 @@ describe('Address Test', () => {
       // Arrange
       // Extract public key from private key
       const privateKey = 'L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k'
-      const signer = ECPair.fromWIF(privateKey)
-      const publicKey = signer.publicKey
+      const { publicKey } = fromWIF(privateKey)
 
       // Act
-      // @ts-ignore
       const p2wtfAddress = Address.convertPubKeyIntoAddress.bind(publicKey, 'p2wtf')
 
       // Assert

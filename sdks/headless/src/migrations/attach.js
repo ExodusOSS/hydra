@@ -72,7 +72,14 @@ const attachMigrations = ({ migrations = [], application, modules, adapters, con
         await unlockEncryptedStorage(migrateableStorage)
       }
 
-      await migrateableFusion.load()
+      void migrateableFusion.load().catch((error) => {
+        logger.error(`fusion.load() failed during migrate hook: ${error.stack}`)
+        errorTracking.track({
+          error,
+          namespace: safeString`migrations`,
+          context: { phase: 'migration-hook:fusion-load' },
+        })
+      })
 
       const migrationNames = migrations.map((migration) => migration.name)
       const migrationFlags = await migrationFlagsStorage.batchGet(migrationNames)

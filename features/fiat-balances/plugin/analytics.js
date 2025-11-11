@@ -4,16 +4,25 @@ const createFiatBalancesAnalyticsPlugin = ({
   config: { assetsToTrackForBalances },
 }) => {
   let subscriptions = []
+
+  const setBalanceProperties = (balances) => {
+    const assetFiatBalances = assetsToTrackForBalances.reduce((acc, obj) => {
+      // Always set a value, default to 0 if balance doesn't exist
+      acc[obj.analyticsName] = balances?.byAsset[obj.assetName]?.balance.toDefaultNumber() ?? 0
+      return acc
+    }, Object.create(null))
+    analytics.setDefaultEventProperties({
+      ...assetFiatBalances,
+      // Always set totalBalanceUsd, default to 0 if not available
+      totalBalanceUsd: balances?.totals?.balance?.toDefaultNumber() ?? 0,
+    })
+  }
+
   const onStart = () => {
+    setBalanceProperties(undefined)
+
     const unsubscribeBalancesAtom = fiatBalancesAtom.observe(({ balances }) => {
-      const assetFiatBalances = assetsToTrackForBalances.reduce((acc, obj) => {
-        acc[obj.analyticsName] = balances?.byAsset[obj.assetName]?.balance.toDefaultNumber()
-        return acc
-      }, Object.create(null))
-      analytics.setDefaultEventProperties({
-        ...assetFiatBalances,
-        totalBalanceUsd: balances?.totals?.balance?.toDefaultNumber(),
-      })
+      setBalanceProperties(balances)
     })
 
     subscriptions = [unsubscribeBalancesAtom]

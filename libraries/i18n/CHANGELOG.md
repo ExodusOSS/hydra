@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.2.0...@exodus/i18n@5.2.1) (2025-10-08)
+
+### Bug Fixes
+
+- fix(i18n): add transform-export-namespace-from babel plugin to extractor (#14038)
+
+## [5.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.1.7...@exodus/i18n@5.2.0) (2025-05-15)
+
+### Features
+
+- feat: filter out empty duplicates when merging (#12450)
+
+## [5.1.7](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.1.6...@exodus/i18n@5.1.7) (2025-03-07)
+
+### Bug Fixes
+
+- fix: update lokalize download script to use computed ids (#11622)
+
 ## [5.1.6](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.1.5...@exodus/i18n@5.1.6) (2025-02-21)
 
 ### Performance

@@ -1,4 +1,5 @@
 import assert from 'minimalistic-assert'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import type NumberUnit from '@exodus/currency'
 import { isNumberUnit } from '@exodus/currency'
@@ -11,7 +12,7 @@ import { createIsInstance, omitUndefined } from '../utils.js'
 const { get, isPlainObject, isString } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
 function coerceToObject(obj: Order | Partial<OrderProps> | Partial<SerializedOrder>) {
-  return Order.isInstance(obj) ? obj.toJSON() : obj
+  return obj instanceof Order ? obj.toJSON() : obj
 }
 
 const ERROR_STATUSES = {
@@ -184,11 +185,17 @@ export default class Order implements OrderProps {
     return 'Order'
   }
 
-  static isInstance = createIsInstance(Order)
-
-  static [Symbol.hasInstance](instance: unknown): instance is Order {
-    return this.isInstance(instance)
+  // can't assign directly to [Symbol.hasInstance] due to a babel bug
+  // can't use this in static initializers due to another babel bug
+  static _isInstance = createIsInstance(Order)
+  static [Symbol.hasInstance](x: any) {
+    return this._isInstance(x)
   }
+
+  /**
+   * @deprecated Use `instanceof` instead.
+   */
+  static isInstance = Order[Symbol.hasInstance]
 
   static fromJSON(json: string | DenormalizedOrder | SerializedOrder) {
     assert(

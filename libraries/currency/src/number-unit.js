@@ -17,7 +17,14 @@ export default class NumberUnit {
     return 'NumberUnit'
   }
 
+  /**
+   * @deprecated Use `instanceof` instead.
+   */
   static isInstance(instance) {
+    return this[Symbol.hasInstance](instance)
+  }
+
+  static [Symbol.hasInstance](instance) {
     if (!instance?.constructor || Object.hasOwn(instance, 'constructor')) {
       return false
     }
@@ -35,12 +42,8 @@ export default class NumberUnit {
     )
   }
 
-  static [Symbol.hasInstance](instance) {
-    return this.isInstance(instance)
-  }
-
   /*
-    Deprecated, use `isInstance` instead.
+    Deprecated, use `instanceof` instead.
    */
   static isNumberUnit = _isNumberUnit
 

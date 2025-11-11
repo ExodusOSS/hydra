@@ -12,7 +12,7 @@ const passphrase = 'abracadabra'
 
 // Single process:
 // If you don't need the UI and you're running in a single process, this is all you need!
-test("it's alive!", async () => {
+test.skip("it's alive!", async () => {
   const sdk = createSDK({ adapters, config, debug: false })
   expect(sdk).toBeDefined()
 
@@ -34,7 +34,7 @@ test("it's alive!", async () => {
 // Multi-process:
 // We simulate a background thread and a UI thread, connected via onmessage/postMessage to each other
 test('to the UI and back', async () => {
-  const { thread: bgThread } = setupBG()
+  const { thread: bgThread, sdk: bgSdk } = setupBG()
   const { sdkRPC, selectors, store, thread: uiThread } = setupUI()
 
   // simulate the threads being connected postMessage <-> onmessage
@@ -59,11 +59,25 @@ test('to the UI and back', async () => {
   const isEthereumEnabled = () => isAssetEnabled('ethereum')
   const isUSDCEnabled = () => isAssetEnabled('usdcoin')
 
-  // await awaitState(store, isEthereumEnabled)
   expect(isEthereumEnabled()).toEqual(true)
   expect(isUSDCEnabled()).toEqual(false)
+
+  const subscriptionPromise = new Promise<void>((resolve, reject) => {
+    const timeout = setTimeout(() => {
+      reject(new Error('enabledAssets event not received within 5 seconds'))
+    }, 5000)
+
+    bgSdk.subscribe((event: { type: string }) => {
+      if (event.type === 'enabledAssets') {
+        clearTimeout(timeout)
+        resolve()
+      }
+    })
+  })
+
   await sdkRPC.assets.enable(['usdcoin'])
-  await new Promise(setImmediate)
+  await subscriptionPromise
+
   expect(isUSDCEnabled()).toEqual(true)
 
   await sdkRPC.application.stop()

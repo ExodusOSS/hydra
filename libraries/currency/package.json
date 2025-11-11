@@ -1,6 +1,6 @@
 {
   "name": "@exodus/currency",
-  "version": "6.3.0",
+  "version": "6.3.1",
   "description": "Currency support.",
   "type": "module",
   "main": "src/index.js",
@@ -13,7 +13,7 @@
     "!**/__tests__/**"
   ],
   "dependencies": {
-    "@exodus/bigint": "^3.0.0",
+    "@exodus/bigint": "^4.0.0",
     "lodash": "^4.17.11",
     "minimalistic-assert": "^1.0.1"
   },
@@ -33,6 +33,7 @@
     "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Acurrency"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

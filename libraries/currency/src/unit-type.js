@@ -1,4 +1,5 @@
 import assert from 'minimalistic-assert'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { create as createUnit } from './unit.js'
 import isUnitType from './is-unit-type.js'

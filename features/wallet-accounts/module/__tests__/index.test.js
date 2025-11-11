@@ -14,24 +14,34 @@ describe('WalletAccounts', () => {
   const primarySeedId = 'aGkgbWFyaw=='
   const stored = {
     exodus_0: {
+      delegated: undefined,
       color: '#ff3974',
+      compatibilityMode: undefined,
       enabled: true,
       icon: 'exodus',
       index: 0,
-      label: 'Exodus',
-      source: 'exodus',
-      seedId: primarySeedId,
+      is2FA: undefined,
       isMultisig: false,
+      label: 'Exodus',
+      lastConnected: undefined,
+      model: undefined,
+      seedId: primarySeedId,
+      source: 'exodus',
     },
     exodus_1: {
+      delegated: undefined,
       color: '#30d968',
+      compatibilityMode: undefined,
       enabled: true,
       icon: 'trezor',
       index: 1,
-      label: 'asdf',
-      source: 'exodus',
-      seedId: primarySeedId,
+      is2FA: undefined,
       isMultisig: false,
+      label: 'asdf',
+      lastConnected: undefined,
+      model: undefined,
+      seedId: primarySeedId,
+      source: 'exodus',
     },
   }
 
@@ -1137,6 +1147,31 @@ describe('WalletAccounts', () => {
     it('should debounce atom writes', async () => {
       const { walletAccountsInternalAtom } = await batchWrite()
       expect(walletAccountsInternalAtom.set).toHaveBeenCalledTimes(3)
+    })
+
+    it('should handle concurrent create calls without losing data', async () => {
+      const { walletAccounts } = await prepare()
+
+      const names = ['Account 1', 'Account 2', 'Account 3']
+
+      await Promise.all(
+        names.map(async (label) => {
+          return walletAccounts.create({
+            label,
+            color: '#ff0000',
+            icon: 'exodus',
+          })
+        })
+      )
+
+      const all = await walletAccounts.getAll()
+      expect(all).toMatchObject({
+        exodus_0: stored.exodus_0,
+        exodus_1: stored.exodus_1,
+        exodus_2: { label: 'Account 1', index: 2 },
+        exodus_3: { label: 'Account 2', index: 3 },
+        exodus_4: { label: 'Account 3', index: 4 },
+      })
     })
   })
 

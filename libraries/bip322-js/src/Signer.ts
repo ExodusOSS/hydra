@@ -3,7 +3,10 @@ import BIP322 from './BIP322.js'
 import type { SignerAsync } from '@exodus/bitcoinjs'
 import * as bitcoin from '@exodus/bitcoinjs'
 import * as bitcoinMessage from '@exodus/bitcoinjs/message'
+import * as secp256k1 from '@exodus/crypto/secp256k1'
+import { hash } from '@exodus/crypto/hash'
 import assert from 'minimalistic-assert'
+import wif from 'wif'
 import type { Signer as AssetSigner } from '@exodus/asset-types/src/signer'
 
 type ToAsyncSignerParams = {
@@ -13,19 +16,62 @@ type ToAsyncSignerParams = {
   signer: AssetSigner
 }
 
-const createAsyncSigner = ({ signer, publicKey, tweak }: ToAsyncSignerParams): SignerAsync => {
-  return {
-    publicKey,
-    getPublicKey: () => publicKey,
-    sign: async (data: Buffer) => signer.sign({ signatureType: 'ecdsa', data, enc: 'sig' }),
-    signSchnorr: async (hash: Buffer) =>
-      signer.sign({
-        signatureType: 'schnorr',
-        data: hash,
-        tweak,
-      }),
+// Create AssetSigner from a private key buffer or wif
+// Only supports usage from this file
+// Exported for testing only, not present in index.js
+export const createSigner = (encodedKey: string | Buffer, network: bitcoin.Network) => {
+  let decoded
+  if (typeof encodedKey === 'string') {
+    decoded = wif.decode(encodedKey)
+    const version = decoded.version
+    if (version !== network.wif) throw new Error('Invalid network version')
+  } else {
+    decoded = { privateKey: encodedKey, compressed: true }
   }
+
+  const { privateKey, compressed } = decoded // privateKey might be Uint8Array, that is fine
+  const publicKey = secp256k1.privateKeyToPublicKey({ privateKey, compressed, format: 'buffer' })
+
+  const tweakPrivateKey = (tweak) =>
+    secp256k1.privateKeyTweakAdd({
+      privateKey: publicKey[0] === 3 ? secp256k1.privateKeyTweakNegate({ privateKey }) : privateKey,
+      tweak,
+    })
+
+  const signer = {
+    getPublicKey: async () => publicKey,
+    sign: async ({ data, signatureType, enc, tweak, extraEntropy = null }) => {
+      if (signatureType === 'schnorr') {
+        return secp256k1.schnorrSign({
+          data,
+          privateKey: tweak ? tweakPrivateKey(tweak) : privateKey,
+          extraEntropy,
+          format: 'buffer',
+        })
+      }
+
+      assert(signatureType === 'ecdsa')
+      assert(enc === 'sig' || enc === 'sig,rec')
+      return secp256k1.ecdsaSignHash({
+        hash: data,
+        privateKey,
+        extraEntropy,
+        recovery: enc !== 'sig',
+        format: 'buffer',
+      })
+    },
+  }
+
+  return { signer, compressed }
 }
+
+// Convert AssetSigner to PSBT/bitcoinMessage async signer
+const createAsyncSigner = ({ signer, publicKey, tweak }: ToAsyncSignerParams): SignerAsync => ({
+  publicKey,
+  getPublicKey: () => publicKey,
+  sign: async (data: Buffer) => signer.sign({ signatureType: 'ecdsa', data, enc: 'sig' }),
+  signSchnorr: async (hash: Buffer) => signer.sign({ signatureType: 'schnorr', data: hash, tweak }),
+})
 
 /**
  * Class that signs BIP-322 signature using a private key.
@@ -34,83 +80,33 @@ const createAsyncSigner = ({ signer, publicKey, tweak }: ToAsyncSignerParams): S
 class Signer {
   /**
    * Sign a BIP-322 signature from P2WPKH, P2SH-P2WPKH, and single-key-spend P2TR address and its corresponding private key.
-   * @param privateKeyOrWIF
+   * @param signerOrKey
    * @param address Address to be signing the message
    * @param message message_challenge to be signed by the address
    * @param network Network that the address is located, defaults to the Bitcoin mainnet
    * @returns BIP-322 simple signature, encoded in base-64
    */
-  public static sign(
-    privateKeyOrWIF: string | Buffer,
+  public static async signAsync(
+    signerOrKey: string | Buffer | AssetSigner,
     address: string,
     message: string,
     network: bitcoin.Network = bitcoin.networks.bitcoin
   ) {
-    // Initialize private key used to sign the transaction
-
-    // @ts-expect-error we know that ECPair exists
-    const ECPair = bitcoin.ECPair
-    let signer = Buffer.isBuffer(privateKeyOrWIF)
-      ? ECPair.fromPrivateKey(privateKeyOrWIF)
-      : ECPair.fromWIF(privateKeyOrWIF, network)
-    // Check if the private key can sign message for the given address
-    if (!this.checkPubKeyCorrespondToAddress(signer.publicKey, address)) {
-      throw new Error(`Invalid private key provided for signing message for ${address}.`)
+    if (typeof signerOrKey === 'string' || Buffer.isBuffer(signerOrKey)) {
+      const { signer, compressed } = createSigner(signerOrKey, network)
+      return this.#signAsyncInternal(signer as AssetSigner, address, message, network, compressed)
     }
 
-    // Handle legacy P2PKH signature
-    if (Address.isP2PKH(address)) {
-      // For P2PKH address, sign a legacy signature
-      // Reference: https://github.com/bitcoinjs/bitcoinjs-message/blob/c43430f4c03c292c719e7801e425d887cbdf7464/README.md?plain=1#L21
-      return bitcoinMessage.signSync(message, signer.privateKey, signer.compressed)
-    }
-
-    // Convert address into corresponding script pubkey
-    const scriptPubKey = Address.convertAdressToScriptPubkey(address)
-    // Draft corresponding toSpend using the message and script pubkey
-    const toSpendTx = BIP322.buildToSpendTx(message, scriptPubKey)
-    // Draft corresponding toSign transaction based on the address type
-    let toSignTx: bitcoin.Psbt
-    if (Address.isP2SH(address)) {
-      // P2SH-P2WPKH signing path
-      // Derive the P2SH-P2WPKH redeemScript from the corresponding hashed public key
-      const redeemScript = bitcoin.payments.p2wpkh({
-        hash: bitcoin.crypto.hash160(signer.publicKey),
-        network,
-      }).output as Buffer
-      toSignTx = BIP322.buildToSignTx(toSpendTx.getId(), redeemScript, true)
-    } else if (Address.isP2WPKH(address)) {
-      // P2WPKH signing path
-      toSignTx = BIP322.buildToSignTx(toSpendTx.getId(), scriptPubKey)
-    } else {
-      // P2TR signing path
-      // Extract the taproot internal public key
-      const internalPublicKey = signer.publicKey.subarray(1, 33)
-      // Tweak the private key for signing, since the output and address uses tweaked key
-      // Reference: https://github.com/bitcoinjs/bitcoinjs-lib/blob/1a9119b53bcea4b83a6aa8b948f0e6370209b1b4/test/integration/taproot.spec.ts#L55
-      signer = signer.tweak(bitcoin.crypto.taggedHash('TapTweak', signer.publicKey.subarray(1, 33)))
-      // Draft a toSign transaction that spends toSpend transaction
-      toSignTx = BIP322.buildToSignTx(toSpendTx.getId(), scriptPubKey, false, internalPublicKey)
-    }
-
-    // Sign the toSign transaction
-    const toSignTxSigned = toSignTx
-      .signAllInputs(signer, [bitcoin.Transaction.SIGHASH_ALL, bitcoin.Transaction.SIGHASH_DEFAULT])
-      .finalizeAllInputs()
-    // Extract and return the signature
-    return BIP322.encodeWitness(toSignTxSigned)
+    return this.#signAsyncInternal(signerOrKey, address, message, network, true)
   }
 
-  public static async signAsync(
-    signer: string | Buffer | AssetSigner,
+  static async #signAsyncInternal(
+    signer: AssetSigner,
     address: string,
     message: string,
-    network: bitcoin.Network = bitcoin.networks.bitcoin
+    network: bitcoin.Network = bitcoin.networks.bitcoin,
+    compressed: boolean
   ) {
-    if (typeof signer === 'string' || Buffer.isBuffer(signer)) {
-      return this.sign(signer, address, message, network)
-    }
-
     const publicKey = await signer.getPublicKey()
 
     assert(
@@ -133,7 +129,7 @@ class Signer {
         },
       }
 
-      return bitcoinMessage.signAsync(message, asyncSigner, true)
+      return bitcoinMessage.signAsync(message, asyncSigner, compressed)
     }
 
     const scriptPubKey = Address.convertAdressToScriptPubkey(address)
@@ -143,7 +139,7 @@ class Signer {
 
     if (Address.isP2SH(address)) {
       const redeemScript = bitcoin.payments.p2wpkh({
-        hash: bitcoin.crypto.hash160(publicKey),
+        hash: await hash('hash160', publicKey, 'buffer'),
         network,
       }).output as Buffer
       toSignTx = BIP322.buildToSignTx(toSpendTx.getId(), redeemScript, true)

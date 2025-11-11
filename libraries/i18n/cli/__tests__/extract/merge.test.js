@@ -80,7 +80,7 @@ describe('merge', () => {
         id: 'Book {number}',
         references: ['fixtures/everything.js:6'],
         value: 'Libro {number}',
-        uniqueId: 'Book {number}',
+        uniqueId: 'Book {}',
       },
     ]
 
@@ -97,7 +97,7 @@ describe('merge', () => {
         id: 'Book {number}',
         references: ['fixtures/everything.js:7'],
         value: 'Libro {number}',
-        uniqueId: 'Book {number}',
+        uniqueId: 'Book {}',
       },
     ])
   })
@@ -110,7 +110,7 @@ describe('merge', () => {
         id: 'Book {number}',
         references: ['fixtures/everything.js:7'],
         value: 'Libro {number}',
-        uniqueId: 'Book {number}',
+        uniqueId: 'Book {}',
       },
     ]
 
@@ -130,7 +130,7 @@ describe('merge', () => {
         id: 'Book {number}',
         references: ['fixtures/everything.js:7', 'fixtures/hogwarts.js:42'],
         value: 'Libro {number}',
-        uniqueId: 'Book {number}',
+        uniqueId: 'Book {}',
       },
     ])
   })

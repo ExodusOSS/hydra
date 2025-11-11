@@ -28,11 +28,17 @@ class PersonalNoteSet {
     return 'PersonalNoteSet'
   }
 
-  static isInstance = createIsInstance(PersonalNoteSet)
-
-  static [Symbol.hasInstance](instance: unknown): instance is PersonalNoteSet {
-    return this.isInstance(instance)
+  // can't assign directly to [Symbol.hasInstance] due to a babel bug
+  // can't use this in static initializers due to another babel bug
+  static _isInstance = createIsInstance(PersonalNoteSet)
+  static [Symbol.hasInstance](x: any) {
+    return this._isInstance(x)
   }
+
+  /**
+   * @deprecated Use `instanceof` instead.
+   */
+  static isInstance = PersonalNoteSet[Symbol.hasInstance]
 
   static EMPTY = new PersonalNoteSet()
 

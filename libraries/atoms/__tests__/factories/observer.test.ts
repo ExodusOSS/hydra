@@ -82,19 +82,6 @@ describe('createAtomObserver', () => {
     expect(port.emit).toHaveBeenCalledWith(event, newData)
   })
 
-  it('should reject observe start when atom has issues', async () => {
-    const error = new Error('Error getting data')
-
-    const { observer } = setup({
-      beforeObserverCreation: ({ atom }) => {
-        jest.spyOn(atom, 'get').mockRejectedValueOnce(error)
-      },
-      immediateRegister: false,
-    })
-
-    await expect(observer.start()).rejects.toEqual(error)
-  })
-
   it('should make it possible to stop observing', async () => {
     const { port, atom, observer } = setup()
     const newData = { test: false }

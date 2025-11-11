@@ -1,4 +1,4 @@
-import { wrap } from '../src'
+import { wrap } from '../src/index.js'
 
 describe('wrap', () => {
   test('should run normally function if does not throw', async () => {

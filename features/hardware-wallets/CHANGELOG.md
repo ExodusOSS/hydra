@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@3.0.2...@exodus/hardware-wallets@3.1.0) (2025-10-01)
+
+### Features
+
+- feat(hardware-wallets): add baseAssetName to signRequest (#13962)
+
 ## [3.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@3.0.1...@exodus/hardware-wallets@3.0.2) (2025-08-08)
 
 ### Bug Fixes

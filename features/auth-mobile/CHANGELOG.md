@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.5.1...@exodus/auth-mobile@6.6.0) (2025-10-21)
+
+### Features
+
+- feat: replace react-native-touch-id with react-native-biometrics (#14169)
+
+## [6.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.5.0...@exodus/auth-mobile@6.5.1) (2025-10-20)
+
+### Bug Fixes
+
+- fix: biometrics on Android can be bypassed by pressing cancel (#14132)
+
 ## [6.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.4.1...@exodus/auth-mobile@6.5.0) (2025-07-18)
 
 ### Features

@@ -1,14 +1,15 @@
 import { getDefaultPathIndexes } from '@exodus/asset-lib'
 import assert from 'minimalistic-assert'
 import KeyIdentifier from '@exodus/key-identifier'
-
 import type {
-  AddressProvider,
+  KeychainSignerParams,
+  AssetSources,
   AssetsModule,
   InternalSigner,
   InternalSignMessageParams,
 } from './interfaces.js'
 
+import type { WalletAccount } from '@exodus/models'
 import type { Keychain } from '@exodus/keychain/module'
 import type { Definition } from '@exodus/dependency-types'
 
@@ -17,18 +18,18 @@ const MODULE_ID = 'seedBasedMessageSigner'
 type Dependencies = {
   assetsModule: AssetsModule
   keychain: Keychain
-  addressProvider: AddressProvider
+  assetSources: AssetSources
 }
 
 class SeedBasedMessageSigner implements InternalSigner {
   readonly #assetsModule
   readonly #keychain
-  readonly #addressProvider
+  readonly #assetSources
 
-  constructor({ assetsModule, keychain, addressProvider }: Dependencies) {
+  constructor({ assetsModule, keychain, assetSources }: Dependencies) {
     this.#assetsModule = assetsModule
     this.#keychain = keychain
-    this.#addressProvider = addressProvider
+    this.#assetSources = assetSources
   }
 
   #getKeyId = async (opts: InternalSignMessageParams) => {
@@ -43,9 +44,9 @@ class SeedBasedMessageSigner implements InternalSigner {
     const baseAsset = this.#assetsModule.getAsset(opts.baseAssetName)
     const compatibilityMode = walletAccount.compatibilityMode
 
-    const purposes = await this.#addressProvider.getSupportedPurposes({
+    const purposes = await this.#assetSources.getSupportedPurposes({
       assetName: baseAssetName,
-      walletAccount,
+      walletAccount: walletAccount.toString(),
     })
     const defaultPurpose: number = purposes[0]!
 
@@ -68,23 +69,43 @@ class SeedBasedMessageSigner implements InternalSigner {
     return new KeyIdentifier(keyId)
   }
 
+  #getSigner = ({ keyId, seedId }: { keyId: KeyIdentifier; seedId: WalletAccount['seedId'] }) => {
+    return {
+      getPublicKey: async () => this.#keychain.getPublicKey({ seedId, keyId }),
+
+      sign: async ({
+        data,
+        signatureType,
+        enc,
+        tweak,
+        extraEntropy,
+      }: KeychainSignerParams): Promise<Buffer> =>
+        this.#keychain.signBuffer({
+          seedId,
+          keyId,
+          data,
+          signatureType,
+          enc,
+          tweak,
+          extraEntropy,
+        }),
+    }
+  }
+
   signMessage = async (opts: InternalSignMessageParams) => {
     const { baseAssetName, message, walletAccount } = opts
     const baseAsset = this.#assetsModule.getAsset(baseAssetName)
 
     assert(baseAsset, `baseAsset not found`)
-    assert(baseAsset.api.signMessage, `message signing not supported by asset ${baseAssetName}`)
+    assert(
+      baseAsset.api.features.signMessageWithSigner,
+      `asset ${baseAssetName} does not support message signing`
+    )
 
     const keyId = await this.#getKeyId(opts)
 
-    const { privateKey } = await this.#keychain.exportKey({
-      seedId: walletAccount.seedId,
-      keyId,
-      exportPrivate: true,
-    })
-
-    return baseAsset.api.signMessage({
-      privateKey,
+    return baseAsset.api.signMessage!({
+      signer: this.#getSigner({ keyId, seedId: walletAccount.seedId }),
       message,
     })
   }
@@ -96,7 +117,7 @@ const seedBasedMessageSignerDefinition = {
   id: MODULE_ID,
   type: 'module',
   factory: createSeedBasedMessageSigner,
-  dependencies: ['assetsModule', 'keychain', 'addressProvider'],
+  dependencies: ['assetsModule', 'keychain', 'assetSources'],
 } as const satisfies Definition
 
 export default seedBasedMessageSignerDefinition

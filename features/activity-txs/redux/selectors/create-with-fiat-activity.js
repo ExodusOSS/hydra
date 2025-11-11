@@ -27,15 +27,19 @@ const selectorFactory =
 
             const resultActivity = []
             for (const activityItem of activity) {
-              const fiatOrder = fiatOrders.getByTxId(activityItem.txId)
+              const fiatOrdersByTx = fiatOrders.getAllByTxId(activityItem.txId)
 
-              if (fiatOrder) {
+              if (fiatOrdersByTx.length > 0) {
                 hasChanges = true
-                resultActivity.push({
-                  ...activityItem,
-                  fiatOrder,
-                  type: TX_TYPES.FIAT,
-                })
+
+                for (const fiatOrder of fiatOrdersByTx) {
+                  resultActivity.push({
+                    ...activityItem,
+                    fiatOrder,
+                    id: `${activityItem.id}.${fiatOrder.orderId}`,
+                    type: TX_TYPES.FIAT,
+                  })
+                }
               } else {
                 resultActivity.push(activityItem)
               }

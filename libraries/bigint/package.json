@@ -1,7 +1,7 @@
 {
   "name": "@exodus/bigint",
-  "version": "3.0.1",
-  "description": "bigint wrappers for native BigUnt, bn.js and others",
+  "version": "4.0.0",
+  "description": "bigint wrapper for native BigInt",
   "type": "module",
   "main": "src/index.js",
   "author": "Exodus Movement, Inc.",
@@ -14,7 +14,6 @@
     "README.md"
   ],
   "dependencies": {
-    "bn.js": "^4.11.0",
     "minimalistic-assert": "^1.0.1"
   },
   "scripts": {
@@ -28,5 +27,8 @@
   },
   "bugs": {
     "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abigint"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

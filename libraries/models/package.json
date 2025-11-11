@@ -1,6 +1,6 @@
 {
   "name": "@exodus/models",
-  "version": "12.16.0",
+  "version": "12.18.0",
   "description": "Containers for common business objects in the wild world of Exodus wallets",
   "type": "module",
   "main": "lib/index.js",
@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "@exodus/currency": "^5.0.1",
-    "@exodus/serialization": "^1.2.1",
+    "@exodus/serialization": "^2.1.0",
     "bip32-path": "^0.4.2",
     "lodash": "^4.17.11",
     "minimalistic-assert": "^1.0.1",
@@ -41,6 +41,7 @@
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Amodels"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

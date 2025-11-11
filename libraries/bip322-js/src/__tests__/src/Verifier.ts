@@ -1,10 +1,10 @@
-import ecc from '@exodus/bitcoinerlab-secp256k1'
 import * as bitcoin from '@exodus/bitcoinjs'
-import * as bitcoinMessage from 'bitcoinjs-message'
+import { ecdsaVerifyHashSync, schnorrVerifySync } from '@exodus/crypto/secp256k1'
 
-import Address from '../../src/Address.js'
-import BIP322 from '../../src/BIP322.js'
+import Address from '../../Address.js'
+import BIP322 from '../../BIP322.js'
 import { decodeScriptSignature } from './bitcoinjs/DecodeScriptSignature.js'
+import * as bitcoinMessage from './bitcoinjs-message-verify.js'
 import BIP137 from './helpers/BIP137.js'
 
 /**
@@ -75,7 +75,7 @@ class Verifier {
       }
 
       // Computing OP_CHECKSIG in Javascript
-      return ecc.verify(hashToSign, publicKey, signature)
+      return ecdsaVerifyHashSync({ hash: hashToSign, publicKey, signature })
     }
 
     if (Address.isP2TR(signerAddress)) {
@@ -106,7 +106,7 @@ class Verifier {
       }
 
       // Computing OP_CHECKSIG in Javascript
-      return ecc.verifySchnorr(hashToSign, publicKey, signature)
+      return schnorrVerifySync({ data: hashToSign, xOnly: publicKey, signature })
     }
 
     throw new Error(

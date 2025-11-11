@@ -144,6 +144,7 @@ describe('assetsModule', () => {
     }
 
     fetch = jest.spyOn(globalThis, 'fetch')
+
     assetsModule = createAssetModuleForTest({
       assetsAtom,
       fetch,
@@ -371,6 +372,61 @@ describe('assetsModule', () => {
         })
         const icon = await assetsModule.getIcon('searchedtoken')
         expect(icon).toEqual(undefined)
+      })
+    })
+
+    describe('addRemoteTokens with batching', () => {
+      test('addRemoteTokens with more than 50 tokenNames should batch requests', async () => {
+        // Generate 75 token names to test batching
+
+        assetsModule = createAssetModuleForTest({
+          assetsAtom,
+          fetch,
+          storage,
+          iconsStorage,
+          config: { shouldValidateCustomToken: false },
+        })
+
+        const tokenNames = Array.from({ length: 75 }, (_, i) => `token${i}`)
+
+        // Reset fetch mock
+        fetch.mockReset()
+
+        // Mock the server to track how many requests are made
+        let requestCount = 0
+        fetch.mockImplementation(() => {
+          requestCount++
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            json: jest.fn().mockResolvedValue({
+              status: 'OK',
+              tokens: Array.from({ length: 50 }, (_, i) => ({
+                name: `token${i + (requestCount - 1) * 50}`,
+                assetName: `token${i + (requestCount - 1) * 50}`,
+                baseAssetName: 'ethereum',
+                assetId: `0x${i + (requestCount - 1) * 50}`,
+                lifecycleStatus: 'v',
+              })),
+            }),
+          })
+        })
+
+        await assetsModule.addRemoteTokens({ tokenNames })
+
+        // Should make 2 requests: first 50 tokens, then remaining 25 tokens
+        expect(requestCount).toBe(2)
+
+        // Verify the requests were made with correct batching
+        const firstCallBody = JSON.parse(fetch.mock.calls[0][1].body)
+        const secondCallBody = JSON.parse(fetch.mock.calls[1][1].body)
+
+        expect(firstCallBody.tokenNames).toHaveLength(50)
+        expect(secondCallBody.tokenNames).toHaveLength(25)
+        expect(firstCallBody.tokenNames).toEqual(tokenNames.slice(0, 50))
+        expect(secondCallBody.tokenNames).toEqual(tokenNames.slice(50, 75))
+
+        fetch.mockRestore()
       })
     })
 

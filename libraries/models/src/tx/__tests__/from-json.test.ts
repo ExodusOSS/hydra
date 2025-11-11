@@ -1,5 +1,6 @@
 import { connectAssets } from '@exodus/assets'
 import assert from 'assert'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 import test from '../../__tests__/_test.js'

@@ -20,11 +20,14 @@ describe('createWithFiatActivity', () => {
 
   test('should add fiatOrder to activity props', () => {
     const { store, selectors, handleEvent, assets } = setup()
+    const firstOrderId = 'first-order'
+    const secondOrderId = 'second-order'
+    const txId = 'buy-order-tx'
 
     const txLogFixtures = {
       ethereum: [
         {
-          txId: 'buy-order-tx',
+          txId,
           error: null,
           date: '2019-07-22T13:54:28.000Z',
           confirmations: 1,
@@ -40,7 +43,13 @@ describe('createWithFiatActivity', () => {
       ],
     }
 
-    handleEvent('fiatOrders', FiatOrderSet.fromArray([{ ...BUY_ORDER, toAsset: 'ethereum' }]))
+    handleEvent(
+      'fiatOrders',
+      FiatOrderSet.fromArray([
+        { ...BUY_ORDER, toAsset: 'ethereum', orderId: firstOrderId },
+        { ...BUY_ORDER, toAsset: 'ethereum', orderId: secondOrderId, fromAmount: 84 },
+      ])
+    )
 
     handleEvent('activityTxs', {
       exodus_0: {
@@ -59,28 +68,18 @@ describe('createWithFiatActivity', () => {
 
     const result = selector(store.getState())
 
-    expect(result.length).toEqual(1)
-    expect(result[0].id).toEqual('ethereum.buy-order-tx')
-    expect(result[0].type).toEqual('fiat')
-    expect(result[0].fiatOrder.toJSON()).toEqual({
-      date: '2023-07-11T15:10:42.226Z',
-      exodusRate: 35,
-      fiatValue: 22,
-      fromAddress: null,
-      fromAmount: 42,
-      fromAsset: 'USD',
-      fromWalletAccount: null,
-      orderId: 'buy-order',
-      orderType: 'buy',
-      provider: 'ramp',
-      providerRate: 32,
-      status: '',
-      toAddress: 'toAddress',
-      toAmount: 42,
-      toAsset: 'ethereum',
-      toWalletAccount: 'exodus_0',
-      txId: 'buy-order-tx',
-    })
+    expect(result.length).toEqual(2)
+
+    const sortedOrders = result.sort((a, b) => a.fiatOrder.orderId - b.fiatOrder.orderId)
+
+    expect(sortedOrders[0].id).toEqual(`ethereum.${txId}.${firstOrderId}`)
+    expect(sortedOrders[0].type).toEqual('fiat')
+    expect(sortedOrders[0].fiatOrder.orderId).toEqual(firstOrderId)
+    expect(sortedOrders[0].fiatOrder.fromAmount).toEqual(42)
+    expect(sortedOrders[1].id).toEqual(`ethereum.${txId}.${secondOrderId}`)
+    expect(sortedOrders[1].type).toEqual('fiat')
+    expect(sortedOrders[1].fiatOrder.orderId).toEqual(secondOrderId)
+    expect(sortedOrders[1].fiatOrder.fromAmount).toEqual(84)
   })
 
   test('should return same activity if no fiat orders added', () => {

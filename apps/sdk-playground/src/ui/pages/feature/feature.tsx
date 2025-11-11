@@ -1,4 +1,5 @@
 import { useParams } from 'wouter'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 import exodus from '@/ui/exodus'

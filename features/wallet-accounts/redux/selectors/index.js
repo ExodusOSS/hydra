@@ -48,7 +48,7 @@ const createSelectorDefinitions = (config) => [
   getPathFriendlyNameSelector,
   getExportPathNameSelector,
   isFTXSelector,
-  isReadOnlySelector,
+  isReadOnlySelector(config),
   isReadOnlyActiveSelector,
   isLedgerSelector,
   isLedgerActiveSelector,

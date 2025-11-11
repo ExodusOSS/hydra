@@ -1,6 +1,6 @@
 {
   "name": "@exodus/hardware-wallets",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "description": "An Exodus SDK feature that provides a high level abstraction for interacting with hardware wallet devices",
   "author": "Exodus Movement, Inc.",
   "repository": {

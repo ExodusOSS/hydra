@@ -1,6 +1,6 @@
 {
   "name": "@exodus/message-signer",
-  "version": "1.4.2",
+  "version": "3.0.0",
   "description": "a module to sign asset-related messages",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -20,7 +20,7 @@
     "!**/__tests__/**"
   ],
   "scripts": {
-    "build": "run -T tsc --build tsconfig.build.json",
+    "build": "run -T tsc -p tsconfig.build.json",
     "clean": "run -T tsc --build --clean",
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",
@@ -33,16 +33,22 @@
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {
+    "@exodus/algorand-lib": "^3.0.0",
     "@exodus/atoms": "workspace:^",
+    "@exodus/bip39": "workspace:^",
+    "@exodus/bip44-constants": "workspace:^",
+    "@exodus/bitcoin-api": "^4.1.0",
+    "@exodus/cardano-lib": "^4.0.0",
     "@exodus/dependency-types": "workspace:^",
+    "@exodus/ethereum-lib": "^5.17.2",
     "@exodus/hw-common": "workspace:^",
+    "@exodus/key-utils": "workspace:^",
     "@exodus/keychain": "^7.3.0",
     "@exodus/models": "workspace:^",
-    "bip39": "^3.1.0",
-    "ts-jest": "^29.0.3"
+    "@exodus/solana-lib": "^3.11.2"
   },
   "peerDependencies": {
-    "@exodus/address-provider": "^12.0.0"
+    "@exodus/asset-sources": "^1.7.4"
   },
   "publishConfig": {
     "access": "public"

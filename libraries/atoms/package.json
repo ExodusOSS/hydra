@@ -1,13 +1,16 @@
 {
   "name": "@exodus/atoms",
-  "version": "9.0.3",
+  "version": "10.0.0",
   "description": "Abstraction for encapsulating a piece of data behind a simple unified interface: get, set, observe",
   "type": "module",
   "main": "lib/index.js",
-  "exports": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./factories/observer": "./lib/factories/observer.js"
+  },
   "author": "Exodus Movement, Inc.",
   "scripts": {
-    "build": "run -T tsc --build tsconfig.build.json",
+    "build": "run -T tsc -p tsconfig.build.json",
     "clean": "run -T tsc --build --clean",
     "test": "run -T exodus-test --jest --esbuild",
     "lint": "run -T eslint .",
@@ -28,7 +31,6 @@
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aatoms"
   },
   "dependencies": {
-    "@exodus/basic-utils": "^3.2.0",
     "@exodus/storage-interface": "^1.0.0",
     "delay": "^5.0.0",
     "eventemitter3": "^4.0.7",
@@ -49,5 +51,8 @@
     "@types/lodash": "^4.14.200",
     "@types/minimalistic-assert": "^1.0.2",
     "events": "^3.3.0"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

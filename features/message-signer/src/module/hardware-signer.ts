@@ -3,7 +3,7 @@ import assert from 'minimalistic-assert'
 import KeyIdentifier from '@exodus/key-identifier'
 
 import type {
-  AddressProvider,
+  AssetSources,
   AssetsModule,
   InternalSigner,
   HardwareSignerProvider,
@@ -16,18 +16,18 @@ const MODULE_ID = 'hardwareMessageSigner'
 type Dependencies = {
   assetsModule: AssetsModule
   hardwareWallets?: HardwareSignerProvider
-  addressProvider: AddressProvider
+  assetSources: AssetSources
 }
 
 class HardwareMessageSigner implements InternalSigner {
   readonly #assetsModule
   readonly #hardwareWallets
-  readonly #addressProvider
+  readonly #assetSources
 
-  constructor({ assetsModule, hardwareWallets, addressProvider }: Dependencies) {
+  constructor({ assetsModule, hardwareWallets, assetSources }: Dependencies) {
     this.#assetsModule = assetsModule
     this.#hardwareWallets = hardwareWallets
-    this.#addressProvider = addressProvider
+    this.#assetSources = assetSources
   }
 
   // where does this belong? We'll need to reuse it for the message signer
@@ -43,9 +43,9 @@ class HardwareMessageSigner implements InternalSigner {
     const baseAsset = this.#assetsModule.getAsset(opts.baseAssetName)
     const compatibilityMode = walletAccount.compatibilityMode
 
-    const purposes = await this.#addressProvider.getSupportedPurposes({
+    const purposes = await this.#assetSources.getSupportedPurposes({
       assetName: baseAssetName,
-      walletAccount,
+      walletAccount: walletAccount.toString(),
     })
     assert(typeof purposes[0] === 'number', `no purposes returned by getSupportedPurposes`)
     const defaultPurpose: number = purposes[0]
@@ -95,7 +95,7 @@ const hardwareMessageSignerDefinition = {
   id: MODULE_ID,
   type: 'module',
   factory: createHardwareMessageSigner,
-  dependencies: ['assetsModule', 'addressProvider', 'hardwareWallets?'],
+  dependencies: ['assetsModule', 'assetSources', 'hardwareWallets?'],
 } as const satisfies Definition
 
 export default hardwareMessageSignerDefinition

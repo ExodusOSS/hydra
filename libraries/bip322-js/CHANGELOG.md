@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/bip322-js@3.0.0...@exodus/bip322-js@3.1.0) (2025-09-16)
+
+### Features
+
+- feat: update bip322-js and bitcoinjs (#13812)
+
+## [3.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/bip322-js@2.2.0...@exodus/bip322-js@3.0.0) (2025-09-10)
+
+### ⚠ BREAKING CHANGES
+
+- drop sign() in favor of signAsync() (#13794)
+
+### Features
+
+- feat!: drop sign() in favor of signAsync() (#13794)
+
+## [2.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/bip322-js@2.1.0...@exodus/bip322-js@2.2.0) (2025-09-09)
+
+### Features
+
+- feat: do not use ECPair from bitcoinjs (#13791)
+
 ## [2.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/bip322-js@2.0.2...@exodus/bip322-js@2.1.0) (2025-04-01)
 
 ### Features

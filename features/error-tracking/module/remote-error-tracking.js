@@ -1,19 +1,16 @@
 import createSentryClient from '@exodus/sentry-client'
-import createFetchival from '@exodus/fetch/create-fetchival'
 
 export const remoteErrorTrackingDefinition = {
   id: 'remoteErrorTracking',
   type: 'module',
-  factory: ({ config, fetch }) => {
-    const fetchival = createFetchival({ fetch })
+  factory: ({ config }) => {
     const client = createSentryClient({
       config,
-      fetchival,
     })
 
     return {
-      track: ({ error }) => client.captureError({ error }),
+      track: ({ error, context }) => client.captureError({ error, context }),
     }
   },
-  dependencies: ['config', 'fetch'],
+  dependencies: ['config'],
 }

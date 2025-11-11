@@ -47,7 +47,6 @@ const config = [
   },
   {
     files: ['**/*.{js,ts,jsx,tsx,mjs,mts,cjs,cts}'],
-    languageOptions: { globals: { fetch: 'off' } },
     settings: {
       'import/ignore': ['react-native'],
       'import/parsers': {
@@ -67,9 +66,12 @@ const config = [
       'no-restricted-imports': [
         'error',
         {
-          name: '@exodus/fetch',
-          message:
-            'Do not use directly. Please inject and consume "fetch" and "fetchival" through the IOC',
+          patterns: [
+            {
+              group: ['lodash', 'lodash/*', 'lodash.*', 'lodash-es'],
+              message: 'Prefer @exodus/basic-utils to lodash, if possible',
+            },
+          ],
         },
       ],
     },

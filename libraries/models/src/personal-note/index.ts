@@ -3,6 +3,7 @@
 // general gist, it is far easier to e2e sync them as a separate model than if they were part of the tx
 
 import assert from 'minimalistic-assert'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { ModelIdSymbol } from '../constants.js'
 import { createIsInstance, omitUndefined } from '../utils.js'
@@ -56,11 +57,17 @@ export default class PersonalNote implements PersonalNoteProps {
     return 'PersonalNote'
   }
 
-  static isInstance = createIsInstance(PersonalNote)
-
-  static [Symbol.hasInstance](instance: unknown): instance is PersonalNote {
-    return this.isInstance(instance)
+  // can't assign directly to [Symbol.hasInstance] due to a babel bug
+  // can't use this in static initializers due to another babel bug
+  static _isInstance = createIsInstance(PersonalNote)
+  static [Symbol.hasInstance](x: any) {
+    return this._isInstance(x)
   }
+
+  /**
+   * @deprecated Use `instanceof` instead.
+   */
+  static isInstance = PersonalNote[Symbol.hasInstance]
 
   static fromJSON(json: string | PersonalNoteProps) {
     return new PersonalNote(typeof json === 'string' ? JSON.parse(json) : json)

@@ -14,11 +14,11 @@ type AssetInputProps = {
 const AssetInput: React.FC<AssetInputProps> = ({
   asset,
   loading,
+  placeholder,
+  value,
   onBlur,
   onChangeText,
   onFocus,
-  placeholder,
-  value,
 }) => {
   return (
     <input

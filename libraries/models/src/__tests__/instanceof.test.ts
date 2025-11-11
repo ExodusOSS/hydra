@@ -119,7 +119,6 @@ describe('instanceof / isInstance', () => {
     const DifferentModel = name === 'Address' ? Tx : Address
 
     describe.each([
-      { name: 'isInstance', isInstance: (clazz: any, instance: any) => clazz.isInstance(instance) },
       { name: 'instanceof', isInstance: (clazz: any, instance: any) => instance instanceof clazz },
     ])('$name', ({ isInstance }) => {
       it('returns true for same model and same import', async () => {

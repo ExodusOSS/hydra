@@ -1,5 +1,6 @@
 import assert from 'minimalistic-assert'
 import proxyFreeze from 'proxy-freeze'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import type NumberUnit from '@exodus/currency'
 import { isNumberUnit, UnitType } from '@exodus/currency'
@@ -153,11 +154,17 @@ export default class Tx {
     return 'Tx'
   }
 
-  static isInstance = createIsInstance(Tx)
-
-  static [Symbol.hasInstance](instance: unknown): instance is Tx {
-    return this.isInstance(instance)
+  // can't assign directly to [Symbol.hasInstance] due to a babel bug
+  // can't use this in static initializers due to another babel bug
+  static _isInstance = createIsInstance(Tx)
+  static [Symbol.hasInstance](x: any) {
+    return this._isInstance(x)
   }
+
+  /**
+   * @deprecated Use `instanceof` instead.
+   */
+  static isInstance = Tx[Symbol.hasInstance]
 
   static fromJSON(jsonOrString: string | TxProps) {
     const json = typeof jsonOrString === 'string' ? JSON.parse(jsonOrString) : jsonOrString

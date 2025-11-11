@@ -18,6 +18,7 @@ const assetsClientInterfaceDefinition = {
     'transactionSigner',
     'wallet',
     'walletAccountsAtom',
+    'multisigAtom?',
   ],
   public: true,
 }

@@ -1,4 +1,5 @@
 import { isNumberUnit } from '@exodus/currency'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 import {
@@ -38,15 +39,15 @@ test('is instance', () => {
   const as2 = HelloAccountState.create({ trx: tronmainnet.defaultUnit(1) })
   const as3 = ByeAccountState.create()
 
-  expect(AccountState.isInstance(as1)).toBe(true)
-  expect(AccountState.isInstance(as2)).toBe(true)
-  expect(AccountState.isInstance(as3)).toBe(true)
-  expect(HelloAccountState.isInstance(as1)).toBe(true)
-  expect(HelloAccountState.isInstance(as2)).toBe(true)
-  expect(HelloAccountState.isInstance(as3)).toBe(false)
-  expect(ByeAccountState.isInstance(as1)).toBe(false)
-  expect(ByeAccountState.isInstance(as2)).toBe(false)
-  expect(ByeAccountState.isInstance(as3)).toBe(true)
+  expect(as1 instanceof AccountState).toBe(true)
+  expect(as2 instanceof AccountState).toBe(true)
+  expect(as3 instanceof AccountState).toBe(true)
+  expect(as1 instanceof HelloAccountState).toBe(true)
+  expect(as2 instanceof HelloAccountState).toBe(true)
+  expect(as3 instanceof HelloAccountState).toBe(false)
+  expect(as1 instanceof ByeAccountState).toBe(false)
+  expect(as2 instanceof ByeAccountState).toBe(false)
+  expect(as3 instanceof ByeAccountState).toBe(true)
 })
 
 test('create with empty data', () => {

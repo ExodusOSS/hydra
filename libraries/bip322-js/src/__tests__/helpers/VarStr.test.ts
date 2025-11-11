@@ -1,5 +1,5 @@
 // Import module to be tested
-import VarStr from '../src/helpers/VarStr'
+import VarStr from '../src/helpers/VarStr.js'
 
 describe('VarStr Test', () => {
   it('Encode and decode VarStr correctly', () => {

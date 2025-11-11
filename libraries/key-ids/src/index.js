@@ -69,4 +69,10 @@ export const EXODUS_KEY_IDS = Object.freeze({
     derivationPath: `m/${EXO}'/7'/0'`,
     keyType: 'nacl',
   }),
+  PAY: new KeyIdentifier({
+    __proto__: null,
+    derivationAlgorithm: 'BIP32',
+    derivationPath: `m/${EXO}'/8'/0'`,
+    keyType: 'nacl',
+  }),
 })

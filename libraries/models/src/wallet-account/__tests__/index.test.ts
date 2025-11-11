@@ -34,6 +34,7 @@ test('walletAccount', () => {
     icon: DEFAULT_ICONS.exodus,
     enabled: true,
     isMultisig: false,
+    delegated: undefined,
   })
 
   expect(new WalletAccount({ source: 'exodus', index: 1 })).toEqual({
@@ -46,6 +47,7 @@ test('walletAccount', () => {
     icon: DEFAULT_ICONS.exodus,
     enabled: true,
     isMultisig: false,
+    delegated: undefined,
   })
 
   expect(
@@ -69,6 +71,7 @@ test('walletAccount', () => {
     color: DEFAULT_COLORS.trezor,
     enabled: true,
     isMultisig: false,
+    delegated: undefined,
   })
 
   expect(
@@ -89,6 +92,7 @@ test('walletAccount', () => {
     icon: DEFAULT_ICONS.exodus,
     enabled: true,
     isMultisig: false,
+    delegated: undefined,
   })
 
   expect(new WalletAccount({ source: 'exodus', index: 0, isMultisig: true })).toEqual({
@@ -101,6 +105,7 @@ test('walletAccount', () => {
     icon: DEFAULT_ICONS.exodus,
     enabled: true,
     isMultisig: true,
+    delegated: undefined,
   })
 
   expect(new WalletAccount({ source: 'trezor', index: 0, id: 1 }).isHardware).toEqual(true)
@@ -226,6 +231,7 @@ test('walletAccount', () => {
     model: undefined,
     seedId: 'some-credential-id',
     source: 'passkey',
+    delegated: undefined,
   })
 })
 
@@ -243,6 +249,7 @@ test('update() should update fields of WalletAccount', () => {
     icon: DEFAULT_ICONS.exodus,
     enabled: true,
     isMultisig: false,
+    delegated: undefined,
   })
 
   // accept WalletAccount instance
@@ -260,6 +267,7 @@ test('update() should update fields of WalletAccount', () => {
     icon: DEFAULT_ICONS.exodus,
     enabled: true,
     isMultisig: false,
+    delegated: undefined,
   })
 
   expect(() => new WalletAccount({ source: 'exodus', index: 0 }).update({ index: 1 })).toThrow(
@@ -349,13 +357,16 @@ test('defaultWith returns default wallet account with updated field', () => {
   })
 })
 
-test('toRedactedJSON omits label, color, and icon', () => {
+test('toRedactedJSON omits label', () => {
   expect(WalletAccount.defaultWith({ seedId: 'A' }).toRedactedJSON()).toEqual({
     source: WalletAccount.DEFAULT.source,
     index: WalletAccount.DEFAULT.index,
     seedId: 'A',
     enabled: true,
     isMultisig: false,
+    delegated: undefined,
+    color: DEFAULT_COLORS.exodus,
+    icon: DEFAULT_ICONS.exodus,
   })
 })
 
@@ -404,5 +415,35 @@ describe('compatibilityMode', () => {
     expect(walletAccount.toJSON()).toMatchObject({
       compatibilityMode: 'metamask',
     })
+  })
+})
+
+describe('delegated', () => {
+  test('defaults to undefined', () => {
+    const account = new WalletAccount({ source: 'exodus', index: 0 })
+    expect(account.delegated).toBe(undefined)
+  })
+
+  test('can be set to true', () => {
+    const account = new WalletAccount({ source: 'exodus', index: 0, delegated: true })
+    expect(account.delegated).toBe(true)
+  })
+
+  test('is immutable', () => {
+    const account = new WalletAccount({ source: 'exodus', index: 0 })
+    expect(() => account.update({ delegated: true })).toThrow(/immutable/)
+  })
+
+  test('is included in toJSON', () => {
+    const standardAccount = new WalletAccount({ source: 'exodus', index: 0 })
+    const delegatedAccount = new WalletAccount({ source: 'exodus', index: 1, delegated: true })
+
+    expect(standardAccount.toJSON().delegated).toBe(undefined)
+    expect(delegatedAccount.toJSON().delegated).toBe(true)
+  })
+
+  test('is included in toRedactedJSON', () => {
+    const delegatedAccount = new WalletAccount({ source: 'exodus', index: 0, delegated: true })
+    expect(delegatedAccount.toRedactedJSON().delegated).toBe(true)
   })
 })

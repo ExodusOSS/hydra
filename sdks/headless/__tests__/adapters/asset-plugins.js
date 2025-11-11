@@ -3,7 +3,7 @@ import { algorand as algorandFeeData } from '@exodus/algorand-lib/src/fee-data/i
 import { asset as algorandMeta } from '@exodus/algorand-meta'
 import { createAsset as createBitcoinAsset } from '@exodus/bitcoin-plugin'
 import { encodePublic as encodePublicEthereum } from '@exodus/ethereum-lib'
-import { signMessage } from '@exodus/ethereum-lib/src/sign-message.js'
+import { signMessageWithSigner as signMessage } from '@exodus/ethereum-lib/src/sign-message.js'
 import { asset as ethereumMeta } from '@exodus/ethereum-meta'
 import { createNoopLogger } from '@exodus/logger'
 import { AccountState } from '@exodus/models'
@@ -111,6 +111,7 @@ const ethereum = {
     features: {
       feesApi: true,
       nfts: true,
+      signMessageWithSigner: true,
     },
     createFeeMonitor: () => new DummyFeeMonitor({ assetName: 'ethereum', updateFee: () => {} }),
     getTokens: () => [someCustomToken],
@@ -188,6 +189,7 @@ const solana = {
     features: {
       feesApi: true,
       nfts: false,
+      signMessageWithSigner: true,
     },
     getFeeData: () => solanaFeeData,
     createFeeMonitor: () => new DummyFeeMonitor({ assetName: 'solana', updateFee: () => {} }),
@@ -221,6 +223,7 @@ const algorand = {
       })[feature],
     features: {
       feesApi: true,
+      signMessageWithSigner: true,
     },
     getFeeData: () => algorandFeeData,
     createFeeMonitor: () => new DummyFeeMonitor({ assetName: 'algorand', updateFee: () => {} }),

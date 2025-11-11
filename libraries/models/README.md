@@ -23,7 +23,7 @@ const investments = new WalletAccount({
 
 const updatedInvestments = investments.update({ label: 'Still not investment advice' })
 investments.equals(updatedInvestments) // false
-WalletAccount.isInstance(investments) // true
+investments instanceof WalletAccount // true
 
 investments.toJSON() // serialize for storage
 WalletAccount.fromJSON(investments.toJSON()) // deserialize from storage
@@ -48,7 +48,7 @@ See more examples in model-specific tests.
 
 ## Shared Interfaces
 
-All models have a static method `.isInstance(obj)` which returns `true` if `obj` is an instance of the model. This check returns `true` even if the instance is of a model from a different version of the `@exodus/models` package, and should be preferred to the `instanceof` operator.
+All models have a static method `.[Symbol.hasInstance](obj)` which returns `true` if `obj` is an instance of the model. This makes `instanceof` check return `true` even if the instance is of a model from a different version of the `@exodus/models` package.
 
 ### [`AccountState`](./src/account-state/index.ts)
 

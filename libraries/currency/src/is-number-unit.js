@@ -1,5 +1,5 @@
 /**
- * @deprecated This does not truly determine whether and object is an instant of NumberUnit. Use NumberUnit.isInstance.
+ * @deprecated This does not truly determine whether and object is an instant of NumberUnit. Use instanceof NumberUnit.
  */
 export default function isNumberUnit(obj) {
   if (obj == null) return false

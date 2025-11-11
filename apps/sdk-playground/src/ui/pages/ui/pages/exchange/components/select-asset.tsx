@@ -68,7 +68,7 @@ const SelectAsset = ({
               </div>
 
               <div className="text-right opacity-50">
-                {option.amount} {option.displayTicker}
+                {option.amount.toFixed(5)} {option.displayTicker}
               </div>
             </button>
           ))}

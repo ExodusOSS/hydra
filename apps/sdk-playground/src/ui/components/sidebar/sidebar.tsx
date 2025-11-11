@@ -1,5 +1,6 @@
 import { useParams } from 'wouter'
 import Section, { type Item } from './section.js'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 import Scrollable from './scrollable.js'

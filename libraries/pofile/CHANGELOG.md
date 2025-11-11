@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/pofile@3.3.0...@exodus/pofile@3.3.1) (2025-03-07)
+
+### Bug Fixes
+
+- fix: update lokalize download script to use computed ids (#11622)
+
 ## [3.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/pofile@3.2.3...@exodus/pofile@3.3.0) (2025-02-17)
 
 ### Features

@@ -36,7 +36,7 @@ const setup = () => {
   const hardwareMessageSigner = hardwareSignerDefinition.factory({
     assetsModule: assetsModule as never,
     hardwareWallets: mockHardwareWallets as never,
-    addressProvider: {
+    assetSources: {
       getSupportedPurposes: async () => [44],
     },
   })

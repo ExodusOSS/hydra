@@ -110,7 +110,7 @@ describe('createFullActivity', () => {
       txId: 'received-tx',
     })
 
-    expect(result[1].id).toEqual('ethereum.buy-order-tx')
+    expect(result[1].id).toEqual('ethereum.buy-order-tx.buy-order')
     expect(result[1].fiatOrder.toJSON()).toEqual({
       date: '2023-07-11T15:10:42.226Z',
       exodusRate: 35,

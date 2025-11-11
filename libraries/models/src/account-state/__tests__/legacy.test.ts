@@ -1,5 +1,6 @@
 import type NumberUnit from '@exodus/currency'
 import { isNumberUnit } from '@exodus/currency'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 import { assets } from '../../__tests__/_fixtures-assets.js'

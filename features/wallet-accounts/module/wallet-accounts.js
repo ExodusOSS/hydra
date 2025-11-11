@@ -1,4 +1,5 @@
 import { WalletAccount, WalletAccountSet } from '@exodus/models'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import makeConcurrent from 'make-concurrent'
 import assert from 'minimalistic-assert'
@@ -293,67 +294,70 @@ class WalletAccounts {
     return created[0]
   }
 
-  createMany = async (walletAccountsData, options) => {
-    const currentWalletAccounts = await this.#getInternalWalletAccountsWithFallback()
-    const walletAccounts = { ...currentWalletAccounts }
-    const primarySeedId = await this.#wallet.getPrimarySeedId()
+  createMany = makeConcurrent(
+    async (walletAccountsData, options) => {
+      const currentWalletAccounts = await this.#getInternalWalletAccountsWithFallback()
+      const walletAccounts = { ...currentWalletAccounts }
+      const primarySeedId = await this.#wallet.getPrimarySeedId()
 
-    const byUniqueFields = groupBy(walletAccounts, getUniqueTagForWalletAccount)
+      const byUniqueFields = groupBy(walletAccounts, getUniqueTagForWalletAccount)
 
-    const created = walletAccountsData.map((_data) => {
-      const data = { ..._data }
-      if (!data.source) data.source = WalletAccount.EXODUS_SRC
+      const created = walletAccountsData.map((_data) => {
+        const data = { ..._data }
+        if (!data.source) data.source = WalletAccount.EXODUS_SRC
 
-      if (data.source === WalletAccount.EXODUS_SRC) {
-        assert(
-          !data.seedId || data.seedId === primarySeedId,
-          'expected seedId to be the primarySeedId for "exodus" accounts'
-        )
-
-        data.seedId = primarySeedId
-        // mirror compatibilityMode from default account unless we create it
-        data.compatibilityMode = walletAccounts[WalletAccount.DEFAULT_NAME]
-          ? walletAccounts[WalletAccount.DEFAULT_NAME].compatibilityMode
-          : data.compatibilityMode
-      }
-
-      if (shouldDeriveIndex(data)) {
-        data.index = getNextIndex({
-          walletAccounts,
-          seedId: data.seedId,
-          source: data.source,
-          compatibilityMode: data.compatibilityMode,
-          fillIndexGapsOnCreation: this.#fillIndexGapsOnCreation,
-        })
-      }
-
-      const walletAccount = new WalletAccount(data)
-      const exists = Boolean(walletAccounts[walletAccount.toString()])
-      if (exists && !this.#fillIndexGapsOnCreation) {
-        throw new Error(`WalletAccount already exists: ${walletAccount.toString()}`)
-      }
-
-      // allow updating existing ones
-      if (!exists) {
-        const tag = getUniqueTagForWalletAccount(walletAccount)
-        const match = byUniqueFields[tag]?.[0]
-        if (match) {
-          throw new Error(
-            `Already have walletAccount with same .source, .id, .seedId, and .index: ${JSON.stringify(
-              match.toJSON()
-            )}`
+        if (data.source === WalletAccount.EXODUS_SRC) {
+          assert(
+            !data.seedId || data.seedId === primarySeedId,
+            'expected seedId to be the primarySeedId for "exodus" accounts'
           )
+
+          data.seedId = primarySeedId
+          // mirror compatibilityMode from default account unless we create it
+          data.compatibilityMode = walletAccounts[WalletAccount.DEFAULT_NAME]
+            ? walletAccounts[WalletAccount.DEFAULT_NAME].compatibilityMode
+            : data.compatibilityMode
         }
-      }
 
-      walletAccounts[walletAccount.toString()] = walletAccount
-      return walletAccount
-    })
+        if (shouldDeriveIndex(data)) {
+          data.index = getNextIndex({
+            walletAccounts,
+            seedId: data.seedId,
+            source: data.source,
+            compatibilityMode: data.compatibilityMode,
+            fillIndexGapsOnCreation: this.#fillIndexGapsOnCreation,
+          })
+        }
 
-    await this.#persistWalletAccounts(walletAccounts, options)
+        const walletAccount = new WalletAccount(data)
+        const exists = Boolean(walletAccounts[walletAccount.toString()])
+        if (exists && !this.#fillIndexGapsOnCreation) {
+          throw new Error(`WalletAccount already exists: ${walletAccount.toString()}`)
+        }
 
-    return created
-  }
+        // allow updating existing ones
+        if (!exists) {
+          const tag = getUniqueTagForWalletAccount(walletAccount)
+          const match = byUniqueFields[tag]?.[0]
+          if (match) {
+            throw new Error(
+              `Already have walletAccount with same .source, .id, .seedId, and .index: ${JSON.stringify(
+                match.toJSON()
+              )}`
+            )
+          }
+        }
+
+        walletAccounts[walletAccount.toString()] = walletAccount
+        return walletAccount
+      })
+
+      await this.#persistWalletAccounts(walletAccounts, options)
+
+      return created
+    },
+    { concurrency: 1 }
+  )
 
   disable = async (name) => {
     await this.disableMany([name])

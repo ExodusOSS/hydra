@@ -1,9 +1,6 @@
 import { isNumberUnit } from '@exodus/currency'
 import type { Definition } from '@exodus/dependency-types'
-import { formatAssetAmount } from '@exodus/formatting/lib/asset'
 import assert from 'minimalistic-assert'
-
-import createAssetClientInterfaceWithCustomSigner from './asset-client-interface.js'
 
 const toNumberUnit = ({ value, currency }) => {
   assert(value, 'value is required')
@@ -55,32 +52,7 @@ type SendOptions = {
   keepTxInput?: boolean
 }
 
-const createTransactions = ({
-  assetClientInterface,
-  assetsModule,
-  wallet,
-  walletAccountsAtom,
-  transactionSigner,
-}) => {
-  const createUnsignedTx = async (data) => {
-    const { asset, walletAccount } = data
-
-    if (!asset.baseAsset.api?.createUnsignedTx) {
-      throw new Error(`Cannot make UnsignedTransaction for '${asset.name}' yet`)
-    }
-
-    const walletAccountsData = await walletAccountsAtom.get()
-    const accountIndex = walletAccountsData[walletAccount]!.index
-    const unsignedTx = asset.baseAsset.api.createUnsignedTx(data)
-    unsignedTx.txMeta = {
-      walletAccount,
-      accountIndex,
-      ...unsignedTx.txMeta,
-    }
-
-    return unsignedTx
-  }
-
+const createTransactions = ({ assetsModule }) => {
   const send = async ({ assetName, ...options }: SendOptions): Promise<SendResult> => {
     const asset = assetsModule.getAsset(assetName)
 
@@ -92,25 +64,8 @@ const createTransactions = ({
 
     const sendParams = resolveSendParams(assetName, asset, options)
 
-    const assetClientInterfaceWithPasskeySigner = createAssetClientInterfaceWithCustomSigner({
-      assetClientInterface,
-      signTransaction: transactionSigner.createAmountlessSignTransaction({
-        amount: `${formatAssetAmount(options.receiver.amount)} ${asset.displayTicker}`,
-        feeAmount: options.feeAmount
-          ? `${formatAssetAmount(options.feeAmount)} ${asset.feeAsset.displayTicker}`
-          : null,
-      }),
-    })
-
-    // TODO: remove direct reliance on `wallet`, use `assetClientInterface` for signing instead of passing createUnsignedTx
-    // second param dependencies should be installed/injected on plugin construction
-    // this file should only provide sendParams, no infrastructure deps
     try {
-      return await baseAsset.api.sendTx(sendParams, {
-        assetClientInterface: assetClientInterfaceWithPasskeySigner,
-        wallet,
-        createUnsignedTx,
-      })
+      return await baseAsset.api.sendTx(sendParams)
     } catch (error: any) {
       console.error(`Cannot send tx for asset '${assetName}'. Error ${error.message}`, error)
       throw error
@@ -144,14 +99,7 @@ const transactionsDefinition = {
   id: 'transactions',
   type: 'module',
   factory: createTransactions,
-  dependencies: [
-    //
-    'assetClientInterface',
-    'assetsModule',
-    'wallet',
-    'walletAccountsAtom',
-    'transactionSigner',
-  ],
+  dependencies: ['assetsModule'],
 } as const satisfies Definition
 
 export default transactionsDefinition

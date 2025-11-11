@@ -1,6 +1,6 @@
 {
   "name": "@exodus/activity-txs",
-  "version": "5.0.0",
+  "version": "5.0.2",
   "description": "The activity-txs feature",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -61,6 +61,7 @@
     "redux": "^4.2.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

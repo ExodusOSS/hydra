@@ -22,7 +22,7 @@ class POEntry {
   }
 
   get uniqueId() {
-    return createEntryId({ id: this.#msgid, context: this.#msgctxt })
+    return POEntry.computeId(createEntryId({ id: this.#msgid, context: this.#msgctxt }))
   }
 
   get value() {

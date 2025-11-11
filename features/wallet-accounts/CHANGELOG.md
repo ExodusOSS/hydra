@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [20.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.2.0...@exodus/wallet-accounts@20.2.1) (2025-10-30)
+
+### Bug Fixes
+
+- fix(wallet-accounts): unable to swap trezor portfolios on desktop (#14228)
+
+## [20.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.1.0...@exodus/wallet-accounts@20.2.0) (2025-10-27)
+
+### Features
+
+- feat: add delegated field on WalletAccount (#14195)
+
+- feat: bump atoms for importers of observer factory (#14057)
+
+## [20.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.0.4...@exodus/wallet-accounts@20.1.0) (2025-10-09)
+
+### Features
+
+- feat: add trezor safe 7 support (#13965)
+
+## [20.0.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.0.2...@exodus/wallet-accounts@20.0.4) (2025-10-06)
+
+### Bug Fixes
+
+- fix: try disabling provenance (#14023)
+
+- fix(wallet-accounts): data lost on concurrent create calls (#13994)
+
+## [20.0.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.0.2...@exodus/wallet-accounts@20.0.3) (2025-10-06)
+
+### Bug Fixes
+
+- fix(wallet-accounts): data lost on concurrent create calls (#13994)
+
+## [20.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.0.1...@exodus/wallet-accounts@20.0.2) (2025-09-16)
+
+### Bug Fixes
+
+- fix(models): wallet-accounts add fields to redacted json (#13860)
+
+## [20.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.0.0...@exodus/wallet-accounts@20.0.1) (2025-09-24)
+
+### Bug Fixes
+
+- fix: enabled accounts selector (#13914)
+
 ## [20.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@19.1.0...@exodus/wallet-accounts@20.0.0) (2025-09-16)
 
 ### ⚠ BREAKING CHANGES

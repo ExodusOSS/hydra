@@ -1,7 +1,11 @@
 import * as bitcoin from '@exodus/bitcoinjs'
+import { tiny_secp256k1_compat as ecc } from '@exodus/crypto/secp256k1'
+import { ECPairFactory } from 'ecpair'
 
 // Import module to be tested
-import BIP322 from '../src/BIP322'
+import BIP322 from '../BIP322.js'
+
+const ECPair = ECPairFactory(ecc)
 
 // Tests
 describe('BIP322 Test', () => {
@@ -51,9 +55,7 @@ describe('BIP322 Test', () => {
       address: 'bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l',
     }).output
     // Initialize private key used to sign the transaction
-    const testPrivateKey = bitcoin.ECPair.fromWIF(
-      'L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k'
-    )
+    const testPrivateKey = ECPair.fromWIF('L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k')
     const emptyStringToSpendTxId =
       'c5680aa69bb8d860bf82d4e9cd3504b55dde018de765a91bb566283c545a99a7'
     const helloWorldToSpendTxId = 'b79d196740ad5217771c1098fc4a4b51e0535c32236c71f1ea4d61a2d603352b'
@@ -91,9 +93,7 @@ describe('BIP322 Test', () => {
       address: 'bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l',
     }).output
     // Initialize private key used to sign the transaction
-    const testPrivateKey = bitcoin.ECPair.fromWIF(
-      'L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k'
-    )
+    const testPrivateKey = ECPair.fromWIF('L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k')
     // Draft and sign a toSign transaction with Hello World
     const toSpendTxId = 'b79d196740ad5217771c1098fc4a4b51e0535c32236c71f1ea4d61a2d603352b'
     const toSignTx = BIP322.buildToSignTx(toSpendTxId, scriptPubKey)

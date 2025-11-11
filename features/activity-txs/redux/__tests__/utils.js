@@ -6,6 +6,7 @@ import { keyBy } from '@exodus/basic-utils'
 import connectedOriginsReduxDefinition from '@exodus/connected-origins/redux/index.js'
 import { GEOLOCATION } from '@exodus/fiat-ramp/redux/__tests__/fixture.js'
 import fiatReduxDefinition from '@exodus/fiat-ramp/redux/index.js'
+import { WalletAccount } from '@exodus/models'
 import nftsReduxDefinition from '@exodus/nfts/redux/index.js'
 import ordersRedux from '@exodus/orders/redux/index.js'
 import personalNotesRedux from '@exodus/personal-notes/redux/index.js'
@@ -20,6 +21,15 @@ export const { bitcoin, ethereum, algorand, flare } = assets
 const isRestoringSelectorDefinition = {
   id: 'application.selectors.isRestoring',
   factory: () => () => false,
+}
+
+export const WALLET_ACCOUNTS_STATE = {
+  [WalletAccount.DEFAULT_NAME]: WalletAccount.DEFAULT,
+  exodus_1: new WalletAccount({
+    source: 'exodus',
+    index: 1,
+    enabled: true,
+  }),
 }
 
 export function setup({ withPersonalNotes = true, withOrders = true } = {}) {
@@ -58,9 +68,12 @@ export function setup({ withPersonalNotes = true, withOrders = true } = {}) {
   const store = createStore(reducers, initialState, enhancers)
 
   const handleEvent = createHandleEvent(store)
+  handleEvent('walletAccounts', WALLET_ACCOUNTS_STATE)
+  handleEvent('multipleWalletAccountsEnabled', true)
   handleEvent('assets', {
     assets: keyBy([bitcoin, ethereum, flare, algorand], 'name'),
   })
   handleEvent('availableAssetNames', ['bitcoin', 'ethereum', 'algorand', 'flare'])
+
   return { ...redux, store, handleEvent, assets }
 }

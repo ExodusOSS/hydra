@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
 import { isMultiNetworkAsset } from '../utils.js'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 const { groupBy } = lodash

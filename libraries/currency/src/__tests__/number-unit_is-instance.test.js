@@ -9,7 +9,7 @@ const btcUnit = UnitType.create({
 })
 const notNumberUnits = [34, '1 Bitcoin', {}, btcUnit, function noop() {}, () => {}]
 
-describe('number-unit: isInstance()', function () {
+describe('number-unit: instanceof', function () {
   let V1, V2
   beforeEach(async () => {
     ;({ default: V1 } = await import(`${path}?version=v1`))
@@ -17,16 +17,16 @@ describe('number-unit: isInstance()', function () {
   })
 
   it('returns true for same import', async () => {
-    expect(V1.isInstance(new V1(1, btcUnit.BTC))).toBe(true)
+    expect(new V1(1, btcUnit.BTC) instanceof V1).toBe(true)
   })
 
   it('returns true for different imports', async () => {
-    expect(V1.isInstance(new V2(1, btcUnit.BTC))).toBe(true)
+    expect(new V2(1, btcUnit.BTC) instanceof V1).toBe(true)
   })
 
   notNumberUnits.forEach((obj) => {
     it('should not be a NumberUnit instance', () => {
-      expect(NumberUnit.isInstance(obj)).toBeFalsy()
+      expect(obj instanceof NumberUnit).toBeFalsy()
     })
   })
 })

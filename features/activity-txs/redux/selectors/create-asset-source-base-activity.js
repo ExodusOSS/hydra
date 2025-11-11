@@ -10,6 +10,19 @@ const groupTxsWithSameOrder = ({ txs, orderSet, isIndexless }) => {
 
   const getOrder = (tx) => {
     const foundOrder = orderSet.getByTxId(tx.txId)
+
+    // If this is a base asset (fee-only tx), don't attach the order
+    // Base asset is not involved in the swap itself (not fromAsset or toAsset)
+    if (foundOrder) {
+      const isFromAsset = tx.coinName === foundOrder.fromAsset
+      const isToAsset = tx.coinName === foundOrder.toAsset
+
+      // Base asset transactions should be treated as normal txs, not swaps
+      if (!isFromAsset && !isToAsset) {
+        return
+      }
+    }
+
     const isBatchedTx = tx.coinName === 'bitcoin' && tx.data.sent?.[tx.data.sentIndex]
     const isValidTx =
       isBatchedTx && foundOrder?.fromAmount

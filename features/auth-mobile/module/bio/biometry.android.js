@@ -1,4 +1,4 @@
-import RNTouchId from '@exodus/react-native-touch-id'
+import RNBiometrics from '@exodus/react-native-biometrics'
 
 const TOUCH_ID = 'Fingerprint'
 
@@ -11,7 +11,7 @@ class Biometry {
 
   get = async () => {
     try {
-      if (await RNTouchId.isSupported()) {
+      if (await RNBiometrics.isSupported()) {
         return TOUCH_ID
       }
     } catch (err) {

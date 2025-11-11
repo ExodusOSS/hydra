@@ -1,4 +1,3 @@
-import { fetch as originalFetch } from '@exodus/fetch' // eslint-disable-line no-restricted-imports
 import buildMetadata from '../../constants/build-metadata.js'
 
 const DEFAULT_HEADERS_URL_PATTERN = /^(https?:\/\/)?([\w-]+\.)*exodus\.io/u
@@ -16,7 +15,7 @@ const customFetch = (url: string, opts: any = {}) => {
 
   const newOptions = { ...opts, headers }
 
-  return originalFetch(url, newOptions)
+  return fetch(url, newOptions)
 }
 
 const setDefaultHeader = (key: string, value: string) => {

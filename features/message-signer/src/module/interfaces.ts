@@ -40,7 +40,6 @@ export interface SignMessageParams {
 
 interface Asset {
   name: string
-  useMultipleAddresses?: boolean
   api: {
     features: { [x: string]: boolean }
     getKeyIdentifier: (options: {
@@ -50,7 +49,11 @@ interface Asset {
       chainIndex?: number
       compatibilityMode?: string
     }) => KeyIdentifier
-    signMessage?: (options: { privateKey: Bytes; message: IUnsignedMessage }) => ISignedMessage
+    signMessage?: (options: {
+      privateKey?: Bytes
+      message: IUnsignedMessage
+      signer?: { sign: (params: KeychainSignerParams) => Promise<Buffer> }
+    }) => ISignedMessage
   }
 }
 
@@ -58,9 +61,15 @@ export interface AssetsModule {
   getAsset: (assetName: string) => Asset
 }
 
-export interface AddressProvider {
-  getSupportedPurposes(params: {
-    assetName: string
-    walletAccount: WalletAccount
-  }): Promise<number[]>
+export interface AssetSources {
+  getSupportedPurposes(params: { assetName: string; walletAccount: string }): Promise<number[]>
+}
+
+export interface KeychainSignerParams {
+  data: Buffer
+  enc?: string
+  keyId?: KeyIdentifier
+  signatureType?: string
+  tweak?: Buffer
+  extraEntropy?: Buffer
 }

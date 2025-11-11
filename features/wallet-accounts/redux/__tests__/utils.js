@@ -16,6 +16,7 @@ export const WALLET_ACCOUNTS_STATE = {
     source: WalletAccount.TREZOR_SRC,
     index: 2,
     enabled: true,
+    model: 'T',
   }),
   ftx_0: new WalletAccount({
     id: 'abc',
@@ -31,7 +32,7 @@ export const WALLET_ACCOUNTS_STATE = {
   }),
 }
 
-export function setup({ config, dependencies = [] } = {}) {
+export function setup({ config = { readOnlyHardwareModels: ['T'] }, dependencies = [] } = {}) {
   const allDependencies = [...dependencies, walletAccountsReduxModule(config)]
   const enhancers = (createStore) => (reducers, initialState, enhancer) => {
     const reducer = combineReducers(reducers)

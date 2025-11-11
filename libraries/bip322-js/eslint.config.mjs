@@ -22,7 +22,7 @@ const config = [
   {
     files: ['**/*.[tj]s'],
     rules: {
-      'sonarjs/prefer-string-starts-ends-with': 'off',
+      'unicorn/prefer-string-starts-ends-with': 'off',
     },
   },
 ]

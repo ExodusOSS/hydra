@@ -12,8 +12,8 @@ class BioAuth {
 
   authenticate = async ({ title, subtitle, cancelButtonText }) => {
     try {
-      await RNBiometrics.authenticate({ title, subtitle, cancelButtonText })
-      return true
+      // explicitly awaits the promise to catch errors
+      return await RNBiometrics.authenticate({ title, subtitle, cancelButtonText })
     } catch (err) {
       this.#logger.warn('bioauth failed', getErrorProps(err))
       return false

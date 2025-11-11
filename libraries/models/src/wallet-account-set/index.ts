@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import type { WalletAccountParams } from '../wallet-account/index.js'
 import WalletAccount from '../wallet-account/index.js'
@@ -21,11 +22,17 @@ class WalletAccountSet {
     return 'WalletAccountSet'
   }
 
-  static isInstance = createIsInstance(WalletAccountSet)
-
-  static [Symbol.hasInstance](instance: unknown): instance is WalletAccountSet {
-    return this.isInstance(instance)
+  // can't assign directly to [Symbol.hasInstance] due to a babel bug
+  // can't use this in static initializers due to another babel bug
+  static _isInstance = createIsInstance(WalletAccountSet)
+  static [Symbol.hasInstance](x: any) {
+    return this._isInstance(x)
   }
+
+  /**
+   * @deprecated Use `instanceof` instead.
+   */
+  static isInstance = WalletAccountSet[Symbol.hasInstance]
 
   static readonly EMPTY = new WalletAccountSet()
 

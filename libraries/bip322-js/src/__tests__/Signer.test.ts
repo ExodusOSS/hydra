@@ -1,54 +1,16 @@
 import * as bitcoin from '@exodus/bitcoinjs'
-import * as secp256k1 from '@exodus/crypto/secp256k1'
-import * as bitcoinMessage from 'bitcoinjs-message'
 
 // Import module to be tested
-import Signer from '../src/Signer'
+import Signer, { createSigner as createSignerStruct } from '../Signer.js'
+import * as bitcoinMessage from './src/bitcoinjs-message-verify.js'
 
 const createSigner = (encodedKey, network) => {
-  const signer = bitcoin.ECPair.fromWIF(encodedKey, network)
-  const { privateKey, publicKey } = signer
-
-  const tweakPrivateKey = (tweak) => {
-    const tweakedPrivateKey =
-      publicKey[0] === 3 ? secp256k1.privateKeyTweakNegate({ privateKey }) : privateKey
-
-    return secp256k1.privateKeyTweakAdd({ privateKey: tweakedPrivateKey, tweak, format: 'buffer' })
-  }
-
-  return {
-    getPublicKey: async () => publicKey,
-    sign: async ({
-      data,
-      signatureType = 'ecdsa',
-      enc = 'sig|rec',
-      tweak,
-      extraEntropy = null,
-    }) => {
-      if (signatureType === 'schnorr') {
-        const tweakedPrivateKey = tweak ? tweakPrivateKey(tweak) : privateKey
-        return secp256k1.schnorrSign({
-          data,
-          privateKey: tweakedPrivateKey,
-          extraEntropy,
-          format: 'buffer',
-        })
-      }
-
-      return secp256k1.ecdsaSignHash({
-        hash: data,
-        privateKey,
-        extraEntropy,
-        der: enc === 'der',
-        recovery: enc !== 'der' && enc !== 'sig',
-        format: 'buffer',
-      })
-    },
-  }
+  const { signer } = createSignerStruct(encodedKey, network)
+  return signer
 }
 
 describe('Signer Test', () => {
-  it('Can sign legacy P2PKH signature', () => {
+  it('Can sign legacy P2PKH signature', async () => {
     // Arrange
     const privateKey = 'L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k'
     const privateKeyTestnet = 'cTrF79uahxMC7bQGWh2931vepWPWqS8KtF8EkqgWwv3KMGZNJ2yP' // Equivalent to L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k
@@ -57,8 +19,8 @@ describe('Signer Test', () => {
     const message = 'Hello World'
 
     // Act
-    const signature = Signer.sign(privateKey, address, message)
-    const signatureTestnet = Signer.sign(
+    const signature = await Signer.signAsync(privateKey, address, message)
+    const signatureTestnet = await Signer.signAsync(
       privateKeyTestnet,
       addressTestnet,
       message,
@@ -96,7 +58,7 @@ describe('Signer Test', () => {
     expect(bitcoinMessage.verify(message, addressTestnet, signatureTestnet)).toBeTruthy()
   })
 
-  it('Can sign BIP-322 signature using nested segwit address', () => {
+  it('Can sign BIP-322 signature using nested segwit address', async () => {
     // Arrange
     const privateKey = 'KwTbAxmBXjoZM3bzbXixEr9nxLhyYSM4vp2swet58i19bw9sqk5z' // Private key of "3HSVzEhCFuH9Z3wvoWTexy7BMVVp3PjS6f"
     const privateKeyTestnet = 'cMpadsm2xoVpWV5FywY5cAeraa1PCtSkzrBM45Ladpf9rgDu6cMz' // Equivalent to 'KwTbAxmBXjoZM3bzbXixEr9nxLhyYSM4vp2swet58i19bw9sqk5z'
@@ -107,8 +69,8 @@ describe('Signer Test', () => {
       'AkgwRQIhAMd2wZSY3x0V9Kr/NClochoTXcgDaGl3OObOR17yx3QQAiBVWxqNSS+CKen7bmJTG6YfJjsggQ4Fa2RHKgBKrdQQ+gEhAxa5UDdQCHSQHfKQv14ybcYm1C9y6b12xAuukWzSnS+w'
 
     // Act
-    const signature = Signer.sign(privateKey, address, message)
-    const signatureTestnet = Signer.sign(
+    const signature = await Signer.signAsync(privateKey, address, message)
+    const signatureTestnet = await Signer.signAsync(
       privateKeyTestnet,
       addressTestnet,
       message,
@@ -148,7 +110,7 @@ describe('Signer Test', () => {
     expect(signatureTestnet).toBe(expectedSignature)
   })
 
-  it('Can sign BIP-322 signature using native segwit address', () => {
+  it('Can sign BIP-322 signature using native segwit address', async () => {
     // Arrange
     // Test vector listed at https://github.com/bitcoin/bitcoin/blob/29b28d07fa958b89e1c7916fda5d8654474cf495/src/test/util_tests.cpp#L2713
     const privateKey = 'L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k'
@@ -160,8 +122,8 @@ describe('Signer Test', () => {
       'AkgwRQIhAOzyynlqt93lOKJr+wmmxIens//zPzl9tqIOua93wO6MAiBi5n5EyAcPScOjf1lAqIUIQtr3zKNeavYabHyR8eGhowEhAsfxIAMZZEKUPYWI4BruhAQjzFT8FSFSajuFwrDL1Yhy'
 
     // Act
-    const signature = Signer.sign(privateKey, address, message)
-    const signatureTestnet = Signer.sign(
+    const signature = await Signer.signAsync(privateKey, address, message)
+    const signatureTestnet = await Signer.signAsync(
       privateKeyTestnet,
       addressTestnet,
       message,
@@ -204,7 +166,7 @@ describe('Signer Test', () => {
   })
 
   // Skipping intentionally due to switching to `SIGHASH_DEFAULT` in Signer.ts
-  it.skip('Can sign BIP-322 using single-key-spend taproot address', () => {
+  it.skip('Can sign BIP-322 using single-key-spend taproot address', async () => {
     // Arrange
     // Test vector listed at https://github.com/bitcoin/bitcoin/blob/29b28d07fa958b89e1c7916fda5d8654474cf495/src/test/util_tests.cpp#L2747
     const privateKey = 'L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k'
@@ -216,8 +178,8 @@ describe('Signer Test', () => {
       'AUHd69PrJQEv+oKTfZ8l+WROBHuy9HKrbFCJu7U1iK2iiEy1vMU5EfMtjc+VSHM7aU0SDbak5IUZRVno2P5mjSafAQ=='
 
     // Act
-    const signature = Signer.sign(privateKey, address, message)
-    const signatureTestnet = Signer.sign(
+    const signature = await Signer.signAsync(privateKey, address, message)
+    const signatureTestnet = await Signer.signAsync(
       privateKeyTestnet,
       addressTestnet,
       message,
@@ -229,7 +191,7 @@ describe('Signer Test', () => {
     expect(signatureTestnet).toEqual(expectedSignature)
   })
 
-  it('Throw when the provided private key cannot derive the given signing address', () => {
+  it('Throw when the provided private key cannot derive the given signing address', async () => {
     // Arrange
     const privateKey = 'L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k'
     const p2pkhAddressWrong = '1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2'
@@ -239,36 +201,30 @@ describe('Signer Test', () => {
     const message = 'Hello World'
 
     // Act
-    const signP2PKH = Signer.sign.bind(Signer, privateKey, p2pkhAddressWrong, message)
-    const signP2SH = Signer.sign.bind(Signer, privateKey, p2shAddressWrong, message)
-    const signP2WPKH = Signer.sign.bind(Signer, privateKey, p2wpkhAddressWrong, message)
-    const signP2TR = Signer.sign.bind(Signer, privateKey, p2trAddressWrong, message)
+    const signP2PKH = Signer.signAsync(privateKey, p2pkhAddressWrong, message)
+    const signP2SH = Signer.signAsync(privateKey, p2shAddressWrong, message)
+    const signP2WPKH = Signer.signAsync(privateKey, p2wpkhAddressWrong, message)
+    const signP2TR = Signer.signAsync(privateKey, p2trAddressWrong, message)
 
     // Assert
-    expect(signP2PKH).toThrow(
-      `Invalid private key provided for signing message for ${p2pkhAddressWrong}.`
-    )
-    expect(signP2SH).toThrow(
-      `Invalid private key provided for signing message for ${p2shAddressWrong}.`
-    )
-    expect(signP2WPKH).toThrow(
-      `Invalid private key provided for signing message for ${p2wpkhAddressWrong}.`
-    )
-    expect(signP2TR).toThrow(
-      `Invalid private key provided for signing message for ${p2trAddressWrong}.`
-    )
+    await expect(signP2PKH).rejects.toThrow(`Invalid signer for address "${p2pkhAddressWrong}".`)
+    await expect(signP2SH).rejects.toThrow(`Invalid signer for address "${p2shAddressWrong}".`)
+    await expect(signP2WPKH).rejects.toThrow(`Invalid signer for address "${p2wpkhAddressWrong}".`)
+    await expect(signP2TR).rejects.toThrow(`Invalid signer for address "${p2trAddressWrong}".`)
   })
 
-  it('Throw when attempting to sign BIP-322 signature using unsupported address type', () => {
+  it('Throw when attempting to sign BIP-322 signature using unsupported address type', async () => {
     // Arrange
     const privateKey = 'L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k'
     const p2wshAddress = 'bc1qeklep85ntjz4605drds6aww9u0qr46qzrv5xswd35uhjuj8ahfcqgf6hak'
     const message = 'Hello World'
 
     // Act
-    const signP2WSH = Signer.sign.bind(Signer, privateKey, p2wshAddress, message)
+    const signP2WSH = Signer.signAsync(privateKey, p2wshAddress, message)
 
     // Assert
-    expect(signP2WSH).toThrow('Unable to sign BIP-322 message for unsupported address type.')
+    await expect(signP2WSH).rejects.toThrow(
+      'Unable to sign BIP-322 message for unsupported address type.'
+    )
   })
 })

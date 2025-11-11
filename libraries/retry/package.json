@@ -1,33 +1,30 @@
 {
   "name": "@exodus/retry",
-  "version": "1.1.0",
-  "description": "The retry library",
-  "author": "Exodus Movement Inc",
+  "version": "1.2.1",
+  "description": "Utility for wrapping async functions with retry logic",
+  "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/retry",
-  "license": "UNLICENSED",
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/retry",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aretry"
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aretry"
   },
-  "main": "./src/index.js",
+  "type": "module",
+  "main": "src/index.js",
   "files": [
     "src",
     "README.md",
     "CHANGELOG.md"
   ],
   "scripts": {
-    "lint": "eslint . --ignore-path ../../.gitignore",
+    "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",
-    "test": "jest"
+    "test": "run -T exodus-test --jest"
   },
   "dependencies": {
-    "p-retry": "1.0.0"
-  },
-  "devDependencies": {
-    "eslint": "^8.33.0",
-    "jest": "^29.1.2"
+    "p-retry": "^1.0.0"
   }
 }

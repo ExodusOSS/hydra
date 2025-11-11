@@ -17,11 +17,17 @@ export default class AddressSet {
     return 'AddressSet'
   }
 
-  static isInstance = createIsInstance(AddressSet)
-
-  static [Symbol.hasInstance](instance: unknown): instance is AddressSet {
-    return this.isInstance(instance)
+  // can't assign directly to [Symbol.hasInstance] due to a babel bug
+  // can't use this in static initializers due to another babel bug
+  static _isInstance = createIsInstance(AddressSet)
+  static [Symbol.hasInstance](x: any) {
+    return this._isInstance(x)
   }
+
+  /**
+   * @deprecated Use `instanceof` instead.
+   */
+  static isInstance = AddressSet[Symbol.hasInstance]
 
   static EMPTY = AddressSet.fromArray([])
 

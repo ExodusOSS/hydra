@@ -185,6 +185,7 @@ export class HardwareWallets implements HardwareSignerProvider {
         id,
         scenario: 'error',
         error: _error,
+        baseAssetName: this.#signingRequest.baseAssetName,
       })
     }
   }
@@ -227,6 +228,7 @@ export class HardwareWallets implements HardwareSignerProvider {
       // so the UI can retry & cancel if needed.
       this.#signingRequest = {
         id,
+        baseAssetName,
         sign: async ({ device }) => {
           // Kick off the signing request to the UI
           await this.#updateSigningRequest({

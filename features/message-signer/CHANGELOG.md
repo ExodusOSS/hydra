@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/message-signer@2.0.0...@exodus/message-signer@3.0.0) (2025-09-26)
+
+### ⚠ BREAKING CHANGES
+
+- migrate to buffer message signing (#13835)
+
+### Features
+
+- feat!: migrate to buffer message signing (#13835)
+
+## [2.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/message-signer@1.4.2...@exodus/message-signer@2.0.0) (2025-03-31)
+
+### ⚠ BREAKING CHANGES
+
+- use asset sources in message signer (#11890)
+
+### Bug Fixes
+
+- fix: optimize keychain operations (#11081)
+
+- refactor!: use asset sources in message signer (#11890)
+
 ## [1.4.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/message-signer@1.4.1...@exodus/message-signer@1.4.2) (2024-12-06)
 
 ### License

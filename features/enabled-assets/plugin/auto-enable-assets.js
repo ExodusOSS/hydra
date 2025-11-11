@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { filterAsync } from '@exodus/basic-utils'
 import oldToNewStyleTokenNames from '@exodus/asset-legacy-token-name-mapping'
@@ -175,15 +176,20 @@ class AutoEnableAssets {
     const newTokenNamesToEnable = Object.keys(value.disabled)
       .map((assetName) => {
         const newStyleTokenName = this.#oldToNewStyleTokenNames[assetName]
+        if (!newStyleTokenName) return // undefined
+
         const asset = this.#assetsModule.getAsset(assetName)
         const newAsset = this.#assetsModule.getAsset(newStyleTokenName)
         const assetDisabledInConfig = value.disabled[assetName] === true
         const newAssetDisabledInConfig = value.disabled[newStyleTokenName] === true
-        return assetDisabledInConfig || newAssetDisabledInConfig || !!asset || !!newAsset
-          ? undefined
-          : newStyleTokenName
+
+        if (!assetDisabledInConfig && !newAssetDisabledInConfig && !asset && !newAsset) {
+          return newStyleTokenName
+        }
+
+        // undefined
       })
-      .filter((assetName) => !!assetName)
+      .filter(Boolean)
 
     this.#enqueue(newTokenNamesToEnable)
   }

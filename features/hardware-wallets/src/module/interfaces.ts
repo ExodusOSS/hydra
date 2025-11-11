@@ -117,6 +117,7 @@ export interface SigningRequestState {
 
 export interface SigningRequest {
   id: string
+  baseAssetName?: string
   sign: GenericSignCallback
   resolve: (result: any) => void
   reject: (error: Error) => void

@@ -1,5 +1,6 @@
 import { set } from '@exodus/basic-utils'
 import { isNumberUnit } from '@exodus/currency'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import fiatCurrencies from '@exodus/fiat-currencies'
 import { combine } from '@exodus/atoms'

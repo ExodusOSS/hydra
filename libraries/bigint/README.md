@@ -1,6 +1,9 @@
 # @exodus/bigint
 
-Immutable API wrapper for big integers, using BigInt if available in the JS environment and falling back to bn.js if it isn't
+Immutable API wrapper for BigInt numbers.
+
+> ⚠️ Warning:
+> These days you should probably just use BigInt directly.
 
 ## Usage
 

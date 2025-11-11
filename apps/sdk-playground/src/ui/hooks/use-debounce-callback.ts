@@ -1,5 +1,5 @@
 // Source: https://usehooks-ts.com/react-hook/use-debounce-callback.
-
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { useEffect, useMemo, useRef } from 'react'
 

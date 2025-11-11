@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import type { Atom, Listener, Setter } from '../utils/types.js'
 import { isSetter } from '../utils/guards.js'

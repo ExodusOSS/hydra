@@ -1,10 +1,15 @@
 import RNFS from '@exodus/react-native-fs'
 import { cleanup as cleanupSVG, validate as validateSVG } from '@exodus/svg-safe'
-import { isNull } from 'lodash'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
+import lodash from 'lodash'
 import assert from 'minimalistic-assert'
-import { ungzip } from 'pako'
+import pako from 'pako'
+import { assetName } from '@exodus/asset-schema-validation'
 
-const iconNameRegex = new RegExp('^[a-z0-9]{1,10}_[a-z0-9]+_[0-9a-f]{8}$', 'u')
+const { isNull } = lodash
+const { ungzip } = pako
+
+const iconNameRegex = new RegExp(assetName.pattern, 'u')
 
 class IconsStorage {
   #logger

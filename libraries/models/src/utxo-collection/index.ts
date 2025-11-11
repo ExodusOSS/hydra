@@ -4,6 +4,7 @@ import AddressSet from '../address-set/index.js'
 import type { UnitType } from '@exodus/currency'
 import type NumberUnit from '@exodus/currency'
 import { isNumberUnit } from '@exodus/currency'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { ModelIdSymbol } from '../constants.js'
 import type Tx from '../tx/index.js'
@@ -60,11 +61,17 @@ export default class UtxoCollection {
     return 'UtxoCollection'
   }
 
-  static isInstance = createIsInstance(UtxoCollection)
-
-  static [Symbol.hasInstance](instance: unknown): instance is UtxoCollection {
-    return this.isInstance(instance)
+  // can't assign directly to [Symbol.hasInstance] due to a babel bug
+  // can't use this in static initializers due to another babel bug
+  static _isInstance = createIsInstance(UtxoCollection)
+  static [Symbol.hasInstance](x: any) {
+    return this._isInstance(x)
   }
+
+  /**
+   * @deprecated Use `instanceof` instead.
+   */
+  static isInstance = UtxoCollection[Symbol.hasInstance]
 
   static createEmpty(
     options: ConstructorParams & { addressMap?: AddressMap } = Object.create(null)

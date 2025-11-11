@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0-rc.88](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.87...@exodus/headless@5.0.0-rc.88) (2025-10-24)
+
+### Bug Fixes
+
+- fix(headless): track and log error on migrateableFusion.load (#14211)
+
+## [5.0.0-rc.87](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.86...@exodus/headless@5.0.0-rc.87) (2025-10-23)
+
+### Bug Fixes
+
+- fix(headless): dont wait fusion.load during migration (#14196)
+
+## [5.0.0-rc.86](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.85...@exodus/headless@5.0.0-rc.86) (2025-09-26)
+
+### ⚠ BREAKING CHANGES
+
+- bump `@exodus/message-signer` to v3 (#13936)
+
+### Features
+
+- feat!: bump `@exodus/message-signer` to v3 (#13936)
+
 ## [5.0.0-rc.85](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.84...@exodus/headless@5.0.0-rc.85) (2025-09-23)
 
 ### Features

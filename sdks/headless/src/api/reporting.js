@@ -1,5 +1,6 @@
 import { SafeError } from '@exodus/errors'
 import { safeString } from '@exodus/safe-string'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 import { rejectAfter } from '../utils/promises.js'

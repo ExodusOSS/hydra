@@ -1,5 +1,6 @@
 import { CT_STATUS as STATUS } from '@exodus/assets'
 import { pick } from '@exodus/basic-utils'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import assert from 'minimalistic-assert'
 

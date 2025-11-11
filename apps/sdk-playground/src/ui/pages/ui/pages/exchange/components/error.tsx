@@ -17,14 +17,23 @@ const LowSolanaRentExemptAmount = ({ payload = {} }: { payload: any }) => {
   return `You can either leave a zero balance change, which will close your SOL account, or maintain a minimum balance of ${rentExemptAmount} ${ticker} to keep it active.`
 }
 
-const NotEnoughBalanceError = () => {
-  return `Not enough funds for this swap. `
+const ZeroBalanceError = ({ payload = {} }: { payload: any }) => {
+  const ticker = payload.asset.displayTicker
+  return `Balance too low. Add ${ticker} to continue.`
+}
+
+const NotEnoughBalanceError = ({ payload = {} }: { payload: any }) => {
+  const ticker = payload.asset.displayTicker
+  const prefillId = payload.prefillId
+
+  return !prefillId || prefillId === 'min'
+    ? `Balance too low. Add more ${ticker} to continue.`
+    : `Minimum swap is currently ${payload.min.toDefaultString()}. Add more ${ticker} to continue.`
 }
 
 const LowFromAmountError = ({ payload = {} }: { payload: any }) => {
   const ticker = payload.asset.displayTicker
-  const limit = payload.limits.min.toDefaultString()
-  return `The amount is lower than the swap minimum of ${limit} ${ticker}.`
+  return `Minimum swap is currently ${payload.min.toDefaultString()}. Add more ${ticker} to continue.`
 }
 
 const HighFromAmountError = ({ payload = {} }: { payload: any }) => {
@@ -61,6 +70,7 @@ const ERROR_COMPONENTS = {
   MUST_OPT_IN: MustOptInError,
   LOW_ALGORAND_BALANCE: LowAlgorandError,
   LOW_SOL_RENT_EXEMPT_AMOUNT: LowSolanaRentExemptAmount,
+  ZERO_BALANCE: ZeroBalanceError,
   NOT_ENOUGH_BALANCE: NotEnoughBalanceError,
   LOW_FROM_AMOUNT: LowFromAmountError,
   HIGH_FROM_AMOUNT: HighFromAmountError,

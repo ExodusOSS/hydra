@@ -13,6 +13,7 @@ import {
 } from '@babel/types'
 import { transformFileSync } from '@babel/core'
 import traverseCJS from '@babel/traverse'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 import transformPlugin from '@exodus/i18n-babel-webpack/babel/plugin-transform-t.js'
@@ -45,7 +46,11 @@ const isTJSXElement = (node) => {
   return isJSXElement(node) && isJSXIdentifier(node.openingElement.name, { name: 'T' })
 }
 
-const BABEL_PLUGINS = ['proposal-decorators', 'proposal-export-default-from']
+const BABEL_PLUGINS = [
+  'proposal-decorators',
+  'proposal-export-default-from',
+  'transform-export-namespace-from',
+]
 
 const getNodeId = (node) => {
   if (isStringLiteral(node)) return node.value

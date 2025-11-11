@@ -1,40 +1,27 @@
-import BN from 'bn.js'
+import Wrapper from '../native-bigint.js'
 
-import BNWrapper from '../bn.js'
-import FeatureDetectedWrapper from '../index.js'
-import NativeBigIntWrapper from '../native-bigint.js'
-
-describe.each([
-  {
-    name: 'native-bigint',
-    fromNumber: BigInt,
-    Wrapper: NativeBigIntWrapper,
-    isUnwrappedValueEqual: (a, b) => a === b,
-  },
-  {
-    name: 'bn',
-    fromNumber: (num) => new BN(num, 10),
-    Wrapper: BNWrapper,
-    isUnwrappedValueEqual: (a, b) => a.eq(b),
-  },
-])('$name', ({ Wrapper, fromNumber, isUnwrappedValueEqual }) => {
+describe('@exodus/bigint', () => {
   const zero = Wrapper.wrap(0)
   const three = Wrapper.wrap(3)
   const five = Wrapper.wrap(5)
 
   const assertOriginalsNotMutated = () => {
-    expect(isUnwrappedValueEqual(three.unwrap(), fromNumber(3))).toEqual(true)
-    expect(isUnwrappedValueEqual(five.unwrap(), fromNumber(5))).toEqual(true)
+    expect(three.unwrap()).toEqual(BigInt(3))
+    expect(five.unwrap()).toEqual(BigInt(5))
   }
 
   describe('wrap()', () => {
     it('should wrap a number', () => {
-      expect(isUnwrappedValueEqual(five.unwrap(), fromNumber(5))).toEqual(true)
+      expect(five.unwrap()).toEqual(BigInt(5))
+    })
+
+    it('should wrap a BigInt', () => {
+      expect(Wrapper.wrap(5n).unwrap()).toEqual(BigInt(5))
     })
 
     it('should wrap a hexadecimal string with base 16', () => {
       const wrapped = Wrapper.wrap('a', 16)
-      expect(isUnwrappedValueEqual(wrapped.unwrap(), fromNumber(10))).toEqual(true)
+      expect(wrapped.unwrap()).toEqual(BigInt(10))
     })
 
     it('should throw for unsupported types', () => {
@@ -48,7 +35,7 @@ describe.each([
 
   describe('add()', () => {
     it('should add two Wrapper instances', () => {
-      expect(isUnwrappedValueEqual(five.add(three).unwrap(), fromNumber(8))).toEqual(true)
+      expect(five.add(three).unwrap()).toEqual(BigInt(8))
       assertOriginalsNotMutated()
     })
   })
@@ -57,13 +44,13 @@ describe.each([
     it('should add to current wrapped value', () => {
       const a = Wrapper.wrap(5)
       a.mutateAdd(Wrapper.wrap(3))
-      expect(isUnwrappedValueEqual(a.unwrap(), fromNumber(8))).toEqual(true)
+      expect(a.unwrap()).toEqual(BigInt(8))
     })
   })
 
   describe('sub()', () => {
     it('should subtract one Wrapper from another', () => {
-      expect(isUnwrappedValueEqual(five.sub(three).unwrap(), fromNumber(2))).toEqual(true)
+      expect(five.sub(three).unwrap()).toEqual(BigInt(2))
       assertOriginalsNotMutated()
     })
   })
@@ -80,7 +67,7 @@ describe.each([
 
   describe('mul()', () => {
     it('should multiply two Wrapper instances', () => {
-      expect(isUnwrappedValueEqual(five.mul(three).unwrap(), fromNumber(15))).toEqual(true)
+      expect(five.mul(three).unwrap()).toEqual(BigInt(15))
       assertOriginalsNotMutated()
     })
   })
@@ -89,22 +76,18 @@ describe.each([
     it('should multiply to the current wrapped value', () => {
       const a = Wrapper.wrap(5)
       a.mutateMul(Wrapper.wrap(3))
-      expect(isUnwrappedValueEqual(a.unwrap(), fromNumber(15))).toEqual(true)
+      expect(a.unwrap()).toEqual(BigInt(15))
     })
   })
 
   describe('div()', () => {
     it('should divide two Wrapper instances', () => {
-      expect(isUnwrappedValueEqual(Wrapper.wrap(15).div(three).unwrap(), fromNumber(5))).toEqual(
-        true
-      )
+      expect(Wrapper.wrap(15).div(three).unwrap()).toEqual(BigInt(5))
       assertOriginalsNotMutated()
     })
 
     it('should divide two Wrapper instances and discard the remainder', () => {
-      expect(
-        isUnwrappedValueEqual(Wrapper.wrap(15).div(Wrapper.wrap(4)).unwrap(), fromNumber(3))
-      ).toEqual(true)
+      expect(Wrapper.wrap(15).div(Wrapper.wrap(4)).unwrap()).toEqual(BigInt(3))
       assertOriginalsNotMutated()
     })
   })
@@ -113,41 +96,35 @@ describe.each([
     it('should mutate to quotient', () => {
       const a = Wrapper.wrap(6)
       a.mutateDiv(Wrapper.wrap(3))
-      expect(isUnwrappedValueEqual(a.unwrap(), fromNumber(2))).toEqual(true)
+      expect(a.unwrap()).toEqual(BigInt(2))
     })
 
     it('should discard the remainder', () => {
       const a = Wrapper.wrap(7)
       a.mutateDiv(Wrapper.wrap(3))
-      expect(isUnwrappedValueEqual(a.unwrap(), fromNumber(2))).toEqual(true)
+      expect(a.unwrap()).toEqual(BigInt(2))
     })
   })
 
   describe('mod()', () => {
     it('should get the modulus of two Wrapper instances', () => {
-      expect(
-        isUnwrappedValueEqual(Wrapper.wrap(6).mod(Wrapper.wrap(3)).unwrap(), fromNumber(0))
-      ).toEqual(true)
-      expect(
-        isUnwrappedValueEqual(Wrapper.wrap(7).mod(Wrapper.wrap(3)).unwrap(), fromNumber(1))
-      ).toEqual(true)
+      expect(Wrapper.wrap(6).mod(Wrapper.wrap(3)).unwrap()).toEqual(BigInt(0))
+      expect(Wrapper.wrap(7).mod(Wrapper.wrap(3)).unwrap()).toEqual(BigInt(1))
       assertOriginalsNotMutated()
     })
   })
 
   describe('pow()', () => {
     it('should raise a Wrapper instance to the power of another', () => {
-      expect(
-        isUnwrappedValueEqual(Wrapper.wrap(2).pow(Wrapper.wrap(3)).unwrap(), fromNumber(8))
-      ).toEqual(true)
+      expect(Wrapper.wrap(2).pow(Wrapper.wrap(3)).unwrap()).toEqual(BigInt(8))
       assertOriginalsNotMutated()
     })
   })
 
   describe('negate()', () => {
     it('should negate the value of a Wrapper instance', () => {
-      expect(isUnwrappedValueEqual(five.negate().unwrap(), fromNumber(-5))).toEqual(true)
-      expect(isUnwrappedValueEqual(Wrapper.wrap(-5).negate().unwrap(), fromNumber(5))).toEqual(true)
+      expect(five.negate().unwrap()).toEqual(BigInt(-5))
+      expect(Wrapper.wrap(-5).negate().unwrap()).toEqual(BigInt(5))
       assertOriginalsNotMutated()
     })
   })
@@ -156,18 +133,18 @@ describe.each([
     it('should negate the value of a Wrapper instance', () => {
       const a = Wrapper.wrap(5)
       a.mutateNegate()
-      expect(isUnwrappedValueEqual(a.unwrap(), fromNumber(-5))).toEqual(true)
+      expect(a.unwrap()).toEqual(BigInt(-5))
 
       const b = Wrapper.wrap(-5)
       b.mutateNegate()
-      expect(isUnwrappedValueEqual(b.unwrap(), fromNumber(5))).toEqual(true)
+      expect(b.unwrap()).toEqual(BigInt(5))
     })
   })
 
   describe('abs()', () => {
     it('should return the absolute value of a Wrapper instance', () => {
-      expect(isUnwrappedValueEqual(Wrapper.wrap(-5).abs().unwrap(), fromNumber(5))).toEqual(true)
-      expect(isUnwrappedValueEqual(five.abs().unwrap(), fromNumber(5))).toEqual(true)
+      expect(Wrapper.wrap(-5).abs().unwrap()).toEqual(BigInt(5))
+      expect(five.abs().unwrap()).toEqual(BigInt(5))
       assertOriginalsNotMutated()
     })
   })
@@ -176,11 +153,11 @@ describe.each([
     it('should return the absolute value of a Wrapper instance', () => {
       const a = Wrapper.wrap(-5)
       a.mutateAbs()
-      expect(isUnwrappedValueEqual(a.unwrap(), fromNumber(5))).toEqual(true)
+      expect(a.unwrap()).toEqual(BigInt(5))
 
       const b = Wrapper.wrap(5)
       b.mutateAbs()
-      expect(isUnwrappedValueEqual(b.unwrap(), fromNumber(5))).toEqual(true)
+      expect(b.unwrap()).toEqual(BigInt(5))
     })
   })
 
@@ -283,21 +260,5 @@ describe.each([
     it('should return true', () => {
       expect(Wrapper.wrap(0).isBigIntWrapper()).toEqual(true)
     })
-  })
-})
-
-describe('native-bigint specifics', () => {
-  it('should wrap a BigInt', () => {
-    expect(NativeBigIntWrapper.wrap(5n).unwrap()).toEqual(BigInt(5))
-  })
-})
-
-describe('feature detection', () => {
-  it('should return the correct BigInt implementation', () => {
-    if (typeof BigInt === 'function') {
-      expect(FeatureDetectedWrapper).toEqual(NativeBigIntWrapper)
-    } else {
-      expect(FeatureDetectedWrapper).toEqual(BNWrapper)
-    }
   })
 })

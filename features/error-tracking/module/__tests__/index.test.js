@@ -129,7 +129,7 @@ test('remote error tracking', async () => {
   })
 
   await new Promise(setImmediate)
-  expect(trackRemoteError).toHaveBeenCalledWith({ error: new Error('message1') })
+  expect(trackRemoteError).toHaveBeenCalledWith({ error: new Error('message1'), context: {} })
 })
 
 test('error propagation: local error', async () => {

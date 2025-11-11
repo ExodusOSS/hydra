@@ -1,6 +1,6 @@
 {
   "name": "@exodus/bip322-js",
-  "version": "2.1.0",
+  "version": "3.1.0",
   "description": "A Javascript library that provides utility functions related to the BIP-322 signature scheme",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,14 +10,14 @@
   },
   "files": [
     "dist",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "!**/__tests__/**"
   ],
   "scripts": {
-    "build": "tsc --build tsconfig.build.json",
+    "build": "run -T tsc -p tsconfig.build.json",
     "lint": "run -T eslint",
     "lint:fix": "yarn lint --fix",
     "doc": "typedoc src/index.ts",
-    "prepack": "npm run build",
     "test": "run -T exodus-test --jest --esbuild",
     "prepublishOnly": "yarn run -T build --scope @exodus/bip322-js"
   },
@@ -35,19 +35,23 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@exodus/bitcoinerlab-secp256k1": "^1.0.5-exodus.1",
-    "@exodus/secp256k1": "^4.0.2-exodus.0",
+    "@noble/secp256k1": "^1.7.1",
     "@types/minimalistic-assert": "^1.0.1",
     "@types/node": "^20.2.5",
-    "bitcoinjs-message": "^2.2.0",
+    "bech32": "^1.1.3",
+    "bs58check": "^3.0.1",
+    "buffer-equals": "^1.0.3",
+    "ecpair": "^2.0.1",
     "typedoc": "^0.24.8",
-    "typescript": "^5.1.3"
+    "typescript": "^5.1.3",
+    "varuint-bitcoin": "^1.0.1"
   },
   "dependencies": {
     "@exodus/asset-types": "^0.3.0",
-    "@exodus/bitcoinjs": "^1.4.0",
+    "@exodus/bitcoinjs": "^2.0.0",
     "@exodus/crypto": "^1.0.0-rc.14",
-    "minimalistic-assert": "^1.0.1"
+    "minimalistic-assert": "^1.0.1",
+    "wif": "^4.0.0"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/bip322-js",
   "bugs": {

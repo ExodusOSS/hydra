@@ -1,7 +1,7 @@
 {
   "name": "@exodus/errors",
   "type": "module",
-  "version": "3.3.0",
+  "version": "3.5.0",
   "description": "Utilities for error handling in client code, such as sanitization",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -34,7 +34,9 @@
     "test:hermes": "EXODUS_TEST_COVERAGE=0 run -T exodus-test --engine hermes:bundle --esbuild --jest src/__tests__/hermes/*.test.ts src/__tests__/engine-agnostic/*.test.ts"
   },
   "dependencies": {
+    "@exodus/basic-utils": "^3.0.1",
     "@exodus/safe-string": "^1.2.0",
+    "@exodus/zod": "^3.24.2",
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {
@@ -42,6 +44,7 @@
     "@types/minimalistic-assert": "^1.0.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

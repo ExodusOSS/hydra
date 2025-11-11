@@ -5,6 +5,7 @@ import Button from '@/ui/components/button'
 
 import Argument from './argument.js'
 import Value from '@/ui/components/value'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import Snippet from './snippet.js'
 

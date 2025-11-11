@@ -1,7 +1,7 @@
 // Import test data
 // Import module to be tested
-import { decodeScriptSignature } from '../src/bitcoinjs/DecodeScriptSignature'
-import * as fixtures from './signature.json'
+import { decodeScriptSignature } from '../src/bitcoinjs/DecodeScriptSignature.js'
+import fixtures from './signature.cjs'
 
 // Test copied from https://github.com/bitcoinjs/bitcoinjs-lib/blob/5d2ff1c61165932e2814d5f37630e6720168561c/test/script_signature.spec.ts
 describe('Decode Script Signatures', () => {

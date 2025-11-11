@@ -10,7 +10,7 @@ const createOrderSet = ({ items }: { items: Map<string, Order> }) =>
   new OrderSet({ items, initSymbol: FACTORY_SYMBOL })
 
 function isObjectOrConvert(obj: Order | OrderProps | DenormalizedOrder): Order {
-  if (Order.isInstance(obj)) return obj
+  if (obj instanceof Order) return obj
   return Order.fromJSON(obj)
 }
 
@@ -60,11 +60,17 @@ class OrderSet {
     return 'OrderSet'
   }
 
-  static isInstance = createIsInstance(OrderSet)
-
-  static [Symbol.hasInstance](instance: unknown): instance is OrderSet {
-    return this.isInstance(instance)
+  // can't assign directly to [Symbol.hasInstance] due to a babel bug
+  // can't use this in static initializers due to another babel bug
+  static _isInstance = createIsInstance(OrderSet)
+  static [Symbol.hasInstance](x: any) {
+    return this._isInstance(x)
   }
+
+  /**
+   * @deprecated Use `instanceof` instead.
+   */
+  static isInstance = OrderSet[Symbol.hasInstance]
 
   static EMPTY = new OrderSet({ items: new Map(), initSymbol: FACTORY_SYMBOL })
 

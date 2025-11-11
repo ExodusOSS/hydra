@@ -57,7 +57,7 @@ const createExodus = ({ adapters = createAdapters(), config = defaultConfig, deb
       type: 'module',
       id: 'migrateableFusion',
       factory: () => ({
-        load: () => {},
+        load: () => Promise.resolve(),
       }),
       public: true,
     },

@@ -1,35 +1,38 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "npmScope": "@exodus",
   "tasksRunnerOptions": {
     "default": {
-      "options": {
-        "cacheDirectory": ".cache/nx",
-        "cacheableOperations": ["build", "test", "lint", "lint:fix", "test:integration"]
-      }
+      "options": {}
     }
   },
   "targetDefaults": {
     "test": {
       "inputs": ["^production", "test"],
       "dependsOn": ["^build", "^prepack"],
-      "outputs": ["{projectRoot}/coverage"]
+      "outputs": ["{projectRoot}/coverage"],
+      "cache": true
     },
     "test:integration": {
       "dependsOn": ["^build", "^prepack"],
-      "outputs": ["{projectRoot}/coverage"]
+      "outputs": ["{projectRoot}/coverage"],
+      "cache": true
     },
     "build": {
       "dependsOn": ["^build", "^prepack"],
       "inputs": ["production", "^production"],
-      "outputs": ["{projectRoot}/dist", "{projectRoot}/lib", "{projectRoot}/build"]
+      "outputs": ["{projectRoot}/dist", "{projectRoot}/lib", "{projectRoot}/build"],
+      "cache": true
     },
     "prepack": {
       "dependsOn": ["build"]
     },
     "lint": {
       "inputs": ["^production", "lint"],
-      "dependsOn": ["^build", "^prepack"]
+      "dependsOn": ["^build", "^prepack"],
+      "cache": true
+    },
+    "lint:fix": {
+      "cache": true
     }
   },
   "workspaceLayout": {
@@ -52,5 +55,6 @@
       "!{projectRoot}/tsconfig.(spec|test).json",
       "!{projectRoot}/jest.(config|setup).[jt]s"
     ]
-  }
+  },
+  "cacheDirectory": ".cache/nx"
 }

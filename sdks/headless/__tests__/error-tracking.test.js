@@ -1,4 +1,5 @@
 import { SafeError } from '@exodus/errors'
+import { safeString } from '@exodus/safe-string'
 
 import createAdapters from './adapters/index.js'
 import config from './config.js'
@@ -26,7 +27,12 @@ describe('error-tracking preprocessors', () => {
         type: 'module',
         namespace: 'voldie',
         factory: ({ errorTracking }) => {
-          errorTracking.track({ error: new Error('error0'), context: {} })
+          errorTracking.track({
+            error: new Error('error0'),
+            context: {
+              navigation: { currentRouteName: safeString`voldie screen` },
+            },
+          })
           return { v: () => 'voldie' }
         },
         dependencies: ['errorTracking'],
@@ -40,7 +46,10 @@ describe('error-tracking preprocessors', () => {
         type: 'module',
         namespace: 'harry',
         factory: ({ errorTracking }) => {
-          errorTracking.track({ error: new Error('error1'), context: {} })
+          errorTracking.track({
+            error: new Error('error1'),
+            context: { traceId: safeString`harry-trace-id` },
+          })
           return { v: () => 'harry' }
         },
         dependencies: ['errorTracking', 'voldieModule'],
@@ -72,11 +81,13 @@ describe('error-tracking preprocessors', () => {
           namespace: 'harry',
           error: expect.any(SafeError),
           time,
+          context: { traceId: 'harry-trace-id' },
         },
         {
           namespace: 'voldie',
           error: expect.any(SafeError),
           time,
+          context: { navigation: { currentRouteName: 'voldie screen' } },
         },
       ],
     })

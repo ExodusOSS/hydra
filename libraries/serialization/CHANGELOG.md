@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/serialization@2.2.0...@exodus/serialization@2.3.0) (2025-10-24)
+
+### Features
+
+- feat: add functionsAsObjects serialization option (#14008)
+
+## [2.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/serialization@2.1.0...@exodus/serialization@2.2.0) (2025-10-03)
+
+### Features
+
+- feat: use exodus/bytes in serialization (#13995)
+
+## [2.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/serialization@2.0.0...@exodus/serialization@2.1.0) (2025-09-03)
+
+### Features
+
+- feat: some custom types are plain objects (#13725)
+
+## [2.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/serialization@1.3.0...@exodus/serialization@2.0.0) (2025-08-29)
+
+### ⚠ BREAKING CHANGES
+
+- rewrite serialization for perf, support undefined attributes (#13584)
+- don't use lodash for serialization (#13576)
+
+### Features
+
+- feat!: rewrite serialization for perf, support undefined attributes (#13584)
+
+### Bug Fixes
+
+- fix!: don't use lodash for serialization (#13576)
+
+- fix: remove gradientCoords (#13023)
+
+## [1.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/serialization@1.2.1...@exodus/serialization@1.3.0) (2025-05-30)
+
+### Features
+
+- feat(fiat-ramp): remove risk-metrics (#12708)
+
 ## [1.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/serialization@1.2.0...@exodus/serialization@1.2.1) (2024-12-06)
 
 ### License

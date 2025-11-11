@@ -1,6 +1,7 @@
 import { combine, compute, createStorageAtomFactory } from '@exodus/atoms'
 import { omitBy } from '@exodus/basic-utils'
 import { createFusionAtom } from '@exodus/fusion-atoms'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 const { isUndefined } = lodash

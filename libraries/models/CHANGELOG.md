@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.18.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.17.1...@exodus/models@12.18.0) (2025-10-27)
+
+### Features
+
+- feat: add delegated field on WalletAccount (#14195)
+
+## [12.17.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.17.0...@exodus/models@12.17.1) (2025-09-30)
+
+### Bug Fixes
+
+- fix: work-around babel bugs (#13958)
+
+## [12.17.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.16.0...@exodus/models@12.17.0) (2025-09-22)
+
+### Features
+
+- feat: update exodus/serialization to 2.1.0 (#13723)
+
+### Bug Fixes
+
+- fix(models): wallet-accounts add fields to redacted json (#13860)
+
 ## [12.16.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.15.0...@exodus/models@12.16.0) (2025-08-18)
 
 ### Features

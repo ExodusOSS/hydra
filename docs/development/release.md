@@ -15,7 +15,9 @@ All of these derive version bumps from the conventional commit history and creat
 All packages that received a version bump in the previous step are automatically published to npm after merging
 the release PR. The tags listed in the PR body will be added to the merge commit.
 
-Initial versions can be published by manually executing the publish workflow. All packages with versions not currently present in the registry will be published.
+### Initial Release
+
+When you add a new package, you must initially publish it manually. After it is published, ping an npm admin to set up OIDC automated publishing and lock down package access.
 
 ## Dependency Management
 

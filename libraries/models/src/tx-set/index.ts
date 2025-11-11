@@ -44,11 +44,17 @@ class TxSet {
     return 'TxSet'
   }
 
-  static isInstance = createIsInstance(TxSet)
-
-  static [Symbol.hasInstance](instance: unknown): instance is TxSet {
-    return this.isInstance(instance)
+  // can't assign directly to [Symbol.hasInstance] due to a babel bug
+  // can't use this in static initializers due to another babel bug
+  static _isInstance = createIsInstance(TxSet)
+  static [Symbol.hasInstance](x: any) {
+    return this._isInstance(x)
   }
+
+  /**
+   * @deprecated Use `instanceof` instead.
+   */
+  static isInstance = TxSet[Symbol.hasInstance]
 
   static EMPTY = new TxSet({ txs: new Map(), initSymbol: FACTORY_SYMBOL })
 

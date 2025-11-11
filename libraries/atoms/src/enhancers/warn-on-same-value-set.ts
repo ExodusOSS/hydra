@@ -1,5 +1,6 @@
 import assert from 'minimalistic-assert'
 
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import stringify from 'json-stringify-safe'
 

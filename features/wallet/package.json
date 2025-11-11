@@ -1,6 +1,6 @@
 {
   "name": "@exodus/wallet",
-  "version": "16.0.0",
+  "version": "16.0.1",
   "description": "Primary module for managing bip39 mnemonic(s) for a single-seed or multi-seed wallet.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/wallet",
   "license": "MIT",
@@ -36,6 +36,7 @@
     "@exodus/crypto": "^1.0.0-rc.18",
     "@exodus/key-ids": "^1.2.3",
     "@exodus/key-utils": "^3.2.0",
+    "@exodus/safe-string": "^1.1.0",
     "make-concurrent": "^4.0.0",
     "minimalistic-assert": "^1.0.1"
   },
@@ -46,6 +47,7 @@
     "buffer-json": "^2.0.0"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

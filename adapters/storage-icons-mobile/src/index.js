@@ -1,1 +1,1 @@
-export { default } from './icons-storage'
+export { default } from './icons-storage.js'

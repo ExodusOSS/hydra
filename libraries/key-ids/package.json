@@ -1,6 +1,6 @@
 {
   "name": "@exodus/key-ids",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "type": "module",
   "description": "This package holds key identifiers for Exodus' own BIP43 purpose",
   "author": "Exodus Movement, Inc.",
@@ -31,6 +31,7 @@
     "@types/minimalistic-assert": "^1.0.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

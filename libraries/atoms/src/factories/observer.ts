@@ -29,11 +29,16 @@ const createAtomObserver = <T>({ port, atom, event, immediateRegister = true }: 
     emitting = false
   }
 
-  const start = async () => {
+  const emitWhenReady = async () => {
     emitting = true
     const startTime = Date.now()
     const value = await atom.get()
     if (startTime > lastMessage) port.emit(event, value)
+  }
+
+  const start = () => {
+    // Awaiting the atom.get() promise might delay the lifecycle hooks, so we don't do that.
+    void emitWhenReady()
   }
 
   if (immediateRegister) {

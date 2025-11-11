@@ -1,6 +1,7 @@
 import exodus from '@/ui/exodus'
 
 import apiSpec from '../../../api.json'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import METADATA from '../../../metadata.json'
 

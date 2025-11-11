@@ -1,9 +1,8 @@
-const DEFAULT_ENABLED = Object.freeze([])
+const resultFunction = (walletAccounts, get, multipleWalletAccountsEnabled) => {
+  const enabledAccounts = walletAccounts.filter((walletAccount) => get(walletAccount).enabled)
 
-const resultFunction = (walletAccounts, get, multipleWalletAccountsEnabled) =>
-  multipleWalletAccountsEnabled
-    ? walletAccounts.filter((walletAccount) => get(walletAccount).enabled)
-    : DEFAULT_ENABLED
+  return multipleWalletAccountsEnabled ? enabledAccounts : enabledAccounts.slice(0, 1)
+}
 
 // eslint-disable-next-line @exodus/export-default/named
 export default {

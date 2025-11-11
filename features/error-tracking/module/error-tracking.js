@@ -23,7 +23,6 @@ const createErrorTracking = ({
       return onError(new TypeError('error must be an instance of Error'))
     }
 
-    // TODO: figure out what to do with `context`
     // TODO: eventually kill this and only track remote
     const localPromise = errorsAtom.set(({ errors }) => {
       return {
@@ -39,7 +38,7 @@ const createErrorTracking = ({
     const remotePromise = remoteErrorTracking
       ? remoteErrorTrackingEnabledAtom
           .get()
-          .then((enabled) => enabled && remoteErrorTracking.track({ error }))
+          .then((enabled) => enabled && remoteErrorTracking.track({ error, context }))
       : Promise.resolve()
 
     let timeoutId

@@ -1,5 +1,5 @@
 import * as bitcoinMessage from '@exodus/bitcoinjs/message'
-import secp256k1 from '@exodus/secp256k1'
+import { recoverPublicKey } from '@noble/secp256k1'
 
 /**
  * Class that implement BIP137-related utility functions.
@@ -28,10 +28,10 @@ class BIP137 {
     // Decode the provided BIP-137 signature
     const signatureDecoded = this.decodeSignature(Buffer.from(signature, 'base64'))
     // Recover the public key
-    const recoveredPublicKey = secp256k1.ecdsaRecover(
+    const recoveredPublicKey = recoverPublicKey(
+      messageHash,
       signatureDecoded.signature,
       signatureDecoded.recovery,
-      messageHash,
       signatureDecoded.compressed
     )
     return Buffer.from(recoveredPublicKey)

@@ -39,11 +39,15 @@ function decode2(buffer: Buffer) {
   if (lenS === 0) throw new Error('S length is zero')
   if (6 + lenR + lenS !== buffer.length) throw new Error('S length is invalid')
   if (buffer[4]! & 0x80) throw new Error('R value is negative')
-  if (lenR > 1 && buffer[4] === 0x00 && !(buffer[5]! & 0x80))
+  if (lenR > 1 && buffer[4] === 0x00 && !(buffer[5]! & 0x80)) {
     throw new Error('R value excessively padded')
+  }
+
   if (buffer[lenR + 6]! & 0x80) throw new Error('S value is negative')
-  if (lenS > 1 && buffer[lenR + 6] === 0x00 && !(buffer[lenR + 7]! & 0x80))
+  if (lenS > 1 && buffer[lenR + 6] === 0x00 && !(buffer[lenR + 7]! & 0x80)) {
     throw new Error('S value excessively padded')
+  }
+
   // non-BIP66 - extract R, S values
   return {
     r: buffer.slice(4, 4 + lenR),

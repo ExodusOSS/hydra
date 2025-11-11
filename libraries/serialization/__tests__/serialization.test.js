@@ -15,8 +15,9 @@ const date2 = new Date(2)
 
 const dateMatcher = (v, d) => v instanceof Date && d.getTime() === v.getTime()
 
-const { serialize, deserialize } = createSerializeDeserialize()
 describe('without custom types', () => {
+  const { serialize, deserialize } = createSerializeDeserialize({ skipUndefinedProperties: true })
+
   test.each([
     { name: 'boolean', value: true },
     { name: 'number', value: 42 },
@@ -89,18 +90,37 @@ describe('without custom types', () => {
         prop: undefined,
       },
     })
+    expect(deserialize(serialized)).toStrictEqual({ prop: undefined })
+  })
+})
+
+describe('without skipUndefinedProperties', () => {
+  const { serialize, deserialize } = createSerializeDeserialize()
+
+  test('serializes undefined properties', () => {
+    const serialized = serialize({ prop: undefined })
+
+    expect('prop' in serialized).toBe(false)
+    expect(serialized).toStrictEqual({
+      t: 'object',
+      v: {
+        prop: { t: 'undef' },
+      },
+    })
+    expect(deserialize(serialized)).toStrictEqual({ prop: undefined })
   })
 })
 
 describe('custom types', () => {
-  const { serialize, deserialize } = createSerializeDeserialize([
+  const typeDefinitions = [
     {
       type: 'person',
-      test: (v) => v instanceof Person,
+      class: Person,
       serialize: (v) => v.toJSON(),
       deserialize: (v) => new Person(v.firstName, v.lastName),
     },
-  ])
+  ]
+  const { serialize, deserialize } = createSerializeDeserialize({ typeDefinitions })
   const johnDoe = new Person('John', 'Doe')
   test('Person', () => {
     const serialized = serialize(johnDoe)

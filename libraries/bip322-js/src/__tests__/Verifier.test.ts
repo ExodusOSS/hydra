@@ -1,9 +1,13 @@
 import * as bitcoin from '@exodus/bitcoinjs'
+import { tiny_secp256k1_compat as ecc } from '@exodus/crypto/secp256k1'
+import { ECPairFactory } from 'ecpair'
 
-import BIP322 from '../src/BIP322'
-import Witness from './src/helpers/Witness'
+import BIP322 from '../BIP322.js'
+import Witness from './src/helpers/Witness.js'
 // Import module to be tested
-import Verifier from './src/Verifier'
+import Verifier from './src/Verifier.js'
+
+const ECPair = ECPairFactory(ecc)
 
 // Tests
 describe('Verifier Test', () => {
@@ -171,7 +175,7 @@ describe('Verifier Test', () => {
     const messageWrong = ''
     const messageHelloWorld = 'Hello World'
     // Initialize private key used to sign the transaction
-    const testPrivateKey = bitcoin.ECPair.fromWIF(privateKey)
+    const testPrivateKey = ECPair.fromWIF(privateKey)
     // Obtain the script public key
     const scriptPubKey = bitcoin.payments.p2sh({
       address,
@@ -378,7 +382,7 @@ describe('Verifier Test', () => {
     const messageWrong = ''
     const messageHelloWorld = 'Hello World'
     // Initialize private key used to sign the transaction
-    const testPrivateKey = bitcoin.ECPair.fromWIF(privateKey)
+    const testPrivateKey = ECPair.fromWIF(privateKey)
     // Extract the taproot internal public key
     const internalPublicKey = testPrivateKey.publicKey.subarray(1, 33)
     // Tweak the private key for signing, since the output and address uses tweaked key
@@ -544,7 +548,7 @@ describe('Verifier Test', () => {
     const address = 'bc1ppv609nr0vr25u07u95waq5lucwfm6tde4nydujnu8npg4q75mr5sxq8lt3'
     const messageHelloWorld = 'Hello World'
     // Initialize private key used to sign the transaction
-    const testPrivateKey = bitcoin.ECPair.fromWIF(privateKey)
+    const testPrivateKey = ECPair.fromWIF(privateKey)
     // Extract the taproot internal public key
     const internalPublicKey = testPrivateKey.publicKey.subarray(1, 33)
     // Tweak the private key for signing, since the output and address uses tweaked key

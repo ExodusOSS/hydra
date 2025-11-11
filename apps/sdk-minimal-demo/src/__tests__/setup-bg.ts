@@ -11,7 +11,7 @@ const setupBG = () => {
   rpc.exposeMethods(sdk)
   // when the SDK emits an event, broadcast it over RPC to the UI thread
   sdk.subscribe(({ type, payload }: { type: string; payload: any }) => rpc.notify(type, payload))
-  return { thread }
+  return { sdk, thread }
 }
 
 export default setupBG

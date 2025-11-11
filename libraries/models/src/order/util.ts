@@ -1,4 +1,5 @@
 import assert from 'minimalistic-assert'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import type NumberUnit from '@exodus/currency'
 import { isNumberUnit } from '@exodus/currency'
@@ -30,7 +31,7 @@ export const orderFromJSONLegacy = (json: any, { assets }: { assets: Assets }) =
 }
 
 export const orderToJSONLegacy = (order: Order) => {
-  assert(order && Order.isInstance(order), 'toJSONLegacy: requires an Order')
+  assert(order && order instanceof Order, 'toJSONLegacy: requires an Order')
 
   const obj: Record<string, any> = { ...order.toJSON(), date: order.date.toISOString() }
 

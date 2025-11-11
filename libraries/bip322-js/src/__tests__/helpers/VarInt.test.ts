@@ -1,5 +1,5 @@
 // Import module to be tested
-import VarInt from '../src/helpers/VarInt'
+import VarInt from '../src/helpers/VarInt.js'
 
 describe('VarInt Test', () => {
   it('Encode numebr into VarInt correctly', () => {

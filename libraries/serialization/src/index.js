@@ -1,66 +1,103 @@
-import lodash from 'lodash'
+import { toBase64, fromBase64 } from '@exodus/bytes/base64.js'
 
-const { isArray, isObject, mapValues } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const mapValues = (o, f) => Object.fromEntries(Object.keys(o).map((k) => [k, f(o[k])]))
+const isPlainObject = (o) => o && [null, Object.prototype].includes(Object.getPrototypeOf(o))
 
-const UNDEF = { t: 'undef' }
+const { Buffer } = globalThis // not required
 
-export default function createSerializeDeserialize(userTypes = []) {
-  const typeDefinitions = [
-    ...userTypes,
-    {
-      type: 'date',
-      test: (v) => v instanceof Date,
-      serialize: (v) => v.toJSON(),
-      deserialize: (v) => new Date(v),
-    },
-    {
-      type: 'buffer',
-      test: (v) => v instanceof Buffer,
-      serialize: (v) => v.toString('base64'),
-      deserialize: (v) => Buffer.from(v, 'base64'),
-    },
-    {
-      type: 'uint8array',
-      test: (v) => v instanceof Uint8Array,
-      serialize: (v) => Buffer.from(v).toString('base64'),
-      deserialize: (v) => {
-        const buf = Buffer.from(v, 'base64')
-        const arr = new Uint8Array(buf.length)
-        arr.set(buf)
-        return arr
-      },
-    },
-    {
-      type: 'bigint',
-      test: (v) => typeof v === 'bigint',
-      serialize: (v) => v.toString(),
-      deserialize: BigInt,
-    },
-    {
-      type: 'array',
-      test: isArray,
-      serialize: (v) => v.map((o) => (o === undefined ? UNDEF : serialize(o))),
-      deserialize: (v) => v.map((o) => (o?.t === UNDEF.t ? undefined : deserialize(o))),
-    },
-    {
-      type: 'object',
-      test: isObject,
-      serialize: (v) => mapValues(v, (o) => serialize(o)),
-      deserialize: (v) => mapValues(v, (o) => deserialize(o)),
-    },
-  ]
+export default function createSerializeDeserialize({
+  typeDefinitions = [],
+  skipUndefinedProperties = false,
+  functionsAsObjects = false,
+  unknownClassesAsObjects = false,
+  unknownNonObjectsPassthrough = false,
+} = {}) {
+  const demap = new Map(typeDefinitions.map((def) => [def.type, def.deserialize]))
 
-  const typeNames = new Set(typeDefinitions.map((def) => def.type))
-
-  const serialize = (value) => {
-    const typeDef = typeDefinitions.find((def) => def.test(value))
-    return typeDef ? { t: typeDef.type, v: typeDef.serialize(value) } : value
+  for (const def of typeDefinitions) {
+    if (def.class && def.test) throw new Error('Only one of .class or .test can be specified')
   }
 
-  const deserialize = (value) =>
-    isObject(value) && Object.keys(value).length === 2 && 'v' in value && typeNames.has(value.t)
-      ? typeDefinitions.find((def) => def.type === value.t).deserialize(value.v)
-      : value
+  const classDefitions = typeDefinitions.filter((t) => t.class)
+  const testDefinitions = typeDefinitions.filter((t) => t.test)
+
+  const serialize = (v) => {
+    if (v === undefined) return { t: 'undef' }
+
+    // Primitives
+    if (v === null) return v
+    if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') return v
+    if (typeof v === 'bigint') return { t: 'bigint', v: v.toString() }
+
+    // Fast path
+    if (v instanceof Date) return { t: 'date', v: v.toJSON() }
+    if (v instanceof Uint8Array) {
+      return { t: Buffer?.isBuffer(v) ? 'buffer' : 'uint8array', v: toBase64(v) }
+    }
+
+    // Fast path: empty object / empty array
+    const isPlain = isPlainObject(v)
+    if (isPlain && Object.keys(v).length === 0) return { t: 'object', v: {} }
+    const isArray = Array.isArray(v)
+    if (isArray && v.length === 0) return { t: 'array', v: [] }
+
+    // Custom types, non-classes
+    for (const def of testDefinitions) {
+      if (def.test(v)) return { t: def.type, v: def.serialize(v) }
+    }
+
+    // Some custom types are arrays or plain objects, so this must be below them
+    // This is unfortunately bad for perf
+    if (isPlain) return { t: 'object', v: mapValues(v, (o) => serializeProp(o)) }
+    if (isArray) return { t: 'array', v: v.map((o) => serialize(o)) }
+
+    // Custom types, classes
+    for (const def of classDefitions) {
+      if (v instanceof def.class) return { t: def.type, v: def.serialize(v) }
+    }
+
+    if (functionsAsObjects && typeof v === 'function') {
+      return { t: 'object', v: mapValues(v, (o) => serializeProp(o)) }
+    }
+
+    if (typeof v === 'object') {
+      // Fallback for generic objects
+      if (unknownClassesAsObjects) return { t: 'object', v: mapValues(v, (o) => serializeProp(o)) }
+      throw new Error('Can not serialize unknown object')
+    }
+
+    // function, symbol
+    if (unknownNonObjectsPassthrough) return v
+    throw new Error('Can not serialize value of unsupported type')
+  }
+
+  const serializeProp = skipUndefinedProperties
+    ? (v) => (v === undefined ? v : serialize(v))
+    : serialize
+
+  const deserialize = (value) => {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return value
+    const keys = Object.keys(value)
+    if (
+      keys.length === 2 &&
+      ((keys[0] === 't' && keys[1] === 'v') || (keys[1] === 'v' && keys[0] === 't'))
+    ) {
+      const { t, v } = value
+      // Fast path
+      if (t === 'object') return mapValues(v, (o) => deserialize(o))
+      if (t === 'array') return v.map((o) => deserialize(o))
+      if (t === 'bigint') return BigInt(v) // primitive
+      if (t === 'date') return new Date(v)
+      if (t === 'buffer') return fromBase64(v, 'buffer')
+      if (t === 'uint8array') return fromBase64(v)
+
+      const de = demap.get(t)
+      return de ? de(v) : value
+    }
+
+    if (keys.length === 1 && keys[0] === 't' && value.t === 'undef') return // { t: 'undef' } is undefined
+    return value
+  }
 
   return { serialize, deserialize }
 }

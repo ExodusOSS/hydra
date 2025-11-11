@@ -4,8 +4,9 @@ const createCountdownLock = (keys: string[]) => {
   if (!Array.isArray(keys)) throw new TypeError('lock keys must be an array')
 
   for (const key of keys) {
-    if (typeof key !== 'string')
+    if (typeof key !== 'string') {
       throw new TypeError(`lock keys must be all strings. Invalid ${key}`)
+    }
   }
 
   const deferred = pDefer()

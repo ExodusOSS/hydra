@@ -1,4 +1,5 @@
 import type { ErrorsAtom } from '../atoms/index.js'
+import type { SafeContextType } from '@exodus/errors'
 
 export interface ErrorTrackingModule {
   /**
@@ -12,7 +13,7 @@ export interface ErrorTrackingModule {
    * })
    * ```
    */
-  track(params: { error: Error; namespace: string; context?: any }): Promise<void>
+  track(params: { error: Error; namespace: string; context?: SafeContextType }): Promise<void>
 }
 
 declare const errorTrackingModuleDefinition: {

@@ -12,7 +12,7 @@ const unlockEncryptedStorage = jest
   )
 
 const bytes = Buffer.from('9b438ad44f1c770e29588e476d57b5901e1f7a738f329ef30b6d4792c6674d50', 'hex')
-const migrateableFusion = { load: jest.fn() }
+const migrateableFusion = { load: jest.fn().mockResolvedValue() }
 const analytics = { track: jest.fn() }
 const errorTracking = { track: jest.fn() }
 const keychain = {
