@@ -1,6 +1,6 @@
 {
   "name": "@exodus/fiat-balances",
-  "version": "13.6.2",
+  "version": "13.6.3",
   "description": "Track asset and portfolio fiat balances based on changes in crypto balances and the user's preferred fiat currency",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@4.2.2...@exodus/basic-utils@4.3.0) (2025-07-10)
+
+### Features
+
+- feat: clone-deep-with (#13173)
+
 ## [4.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@4.2.1...@exodus/basic-utils@4.2.2) (2025-03-31)
 
 ### License

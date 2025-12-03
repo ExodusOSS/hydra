@@ -1,5 +1,6 @@
 import ms from 'ms'
 import delay from 'delay'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import EventEmitter from 'eventemitter3'
 import type { Atom } from '@exodus/atoms'
@@ -11,6 +12,7 @@ import type { Definition } from '@exodus/dependency-types'
 import type { Logger } from '@exodus/logger'
 
 import generateRemoteConfigUrl from './generate-remote-config-url.js'
+import { safeString } from '@exodus/safe-string'
 
 const { get, isEqual } = lodash
 
@@ -161,7 +163,7 @@ export class RemoteConfig extends EventEmitter implements RemoteConfigType {
     } catch (error: unknown) {
       void this.#errorTracking.track({
         error: error as Error,
-        namespace: 'remoteConfig',
+        namespace: safeString`remoteConfig`,
       })
       this.#logger.error(error)
       return { error }

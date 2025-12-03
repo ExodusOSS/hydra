@@ -1,7 +1,7 @@
 {
   "name": "@exodus/remote-config",
   "type": "module",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Module to provide unified access remote config",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -42,6 +42,7 @@
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
+    "@exodus/safe-string": "^1.2.1",
     "@exodus/typeforce": "^1.18.0",
     "@exodus/zod": "^3.24.3",
     "delay": "^5.0.0",
@@ -51,6 +52,7 @@
     "reselect": "^3.0.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

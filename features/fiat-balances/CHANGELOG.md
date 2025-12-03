@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.6.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.6.2...@exodus/fiat-balances@13.6.3) (2025-11-24)
+
+### Bug Fixes
+
+- fix(fiat-balances): convert analytic values in other currencies to USD before reporting (#14437)
+
 ## [13.6.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.6.1...@exodus/fiat-balances@13.6.2) (2025-10-27)
 
 **Note:** Version bump only for package @exodus/fiat-balances

@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
 import test from '@exodus/test/tape'
 
 import cleanInput from '../clean-input.js'

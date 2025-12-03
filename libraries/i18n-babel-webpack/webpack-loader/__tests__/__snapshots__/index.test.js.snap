@@ -1,0 +1,23 @@
+exports[`i18n po loader should parse comments 1`] = `
+"module.exports={"Select Language":[{"type":"text","value":"Selecciona el idioma"}]};"
+`;
+
+exports[`i18n po loader should parse dynamic values 1`] = `
+"module.exports={"Your {} Address":[{"type":"text","value":"Su dirección de "},{"type":"arg","name":"asset.properName","position":0}]};"
+`;
+
+exports[`i18n po loader should parse fiat subtype 1`] = `
+"module.exports={"Your portfolio balance is {}":[{"type":"text","value":"El valor de su portafolio es "},{"type":"arg","name":"n","position":0,"format":"number","subType":"currency"}]};"
+`;
+
+exports[`i18n po loader should parse multiple entries 1`] = `
+"module.exports={"Your {} Address":[{"type":"text","value":"Su dirección de "},{"type":"arg","name":"asset.properName","position":0}],"Copy":[{"type":"text","value":"Copiar"}],"Copied":[{"type":"text","value":"Copiado"}]};"
+`;
+
+exports[`i18n po loader should parse numeric values 1`] = `
+"module.exports={"Progress of {}%":[{"type":"text","value":"Progreso de "},{"type":"arg","name":"n","position":0,"format":"number"},{"type":"text","value":"%"}],"You have {}":[{"type":"text","value":"Tienes "},{"type":"arg","name":"n","position":0,"format":"amount"}]};"
+`;
+
+exports[`i18n po loader should parse simple po entry 1`] = `
+"module.exports={"Select Language":[{"type":"text","value":"Selecciona el idioma"}]};"
+`;

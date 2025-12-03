@@ -1,0 +1,36 @@
+exports[`formatStackTrace (node) 1`] = `
+[
+  {
+    "async": true,
+    "colno": Any<Number>,
+    "filename": "app:///harness",
+    "function": "startSubtestAfterBootstrap",
+    "lineno": Any<Number>,
+    "method": undefined,
+  },
+  {
+    "async": false,
+    "colno": Any<Number>,
+    "filename": "app:///test",
+    "function": "run",
+    "lineno": Any<Number>,
+    "method": "run",
+  },
+  {
+    "async": false,
+    "colno": Any<Number>,
+    "filename": "app:///node:async_hooks",
+    "function": "runInAsyncScope",
+    "lineno": Any<Number>,
+    "method": "runInAsyncScope",
+  },
+  {
+    "async": false,
+    "colno": Any<Number>,
+    "filename": "app:///format-stack.unit.test.ts",
+    "function": "?",
+    "lineno": Any<Number>,
+    "method": undefined,
+  },
+]
+`;

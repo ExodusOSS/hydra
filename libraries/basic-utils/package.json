@@ -1,6 +1,6 @@
 {
   "name": "@exodus/basic-utils",
-  "version": "4.2.2",
+  "version": "4.3.0",
   "description": "Lightweight lodash-like utils.",
   "type": "module",
   "main": "src/index.js",
@@ -30,6 +30,7 @@
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abasic-utils"
   },
   "devDependencies": {
+    "@exodus/test": "^1.0.0-rc.76",
     "@types/lodash": "^4.17.7",
     "lodash": "^4.17.21"
   },

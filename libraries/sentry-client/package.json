@@ -1,0 +1,42 @@
+{
+  "name": "@exodus/sentry-client",
+  "version": "6.2.0",
+  "description": "API client for sanitizing and sending errors to Sentry.io",
+  "author": "Exodus Movement, Inc.",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/sentry-client",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asentry-client"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --esbuild --jest",
+    "test:integration": "RUN_TESTS=integration run test",
+    "build": "run -T tsc -p tsconfig.build.json",
+    "prepublishOnly": "yarn run -T build --scope @exodus/sentry-client"
+  },
+  "devDependencies": {
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/safe-string": "workspace:^"
+  },
+  "dependencies": {
+    "@exodus/crypto": "^1.0.0-rc.16",
+    "@exodus/errors": "^3.4.0",
+    "@exodus/typeforce": "^1.18.0"
+  },
+  "publishConfig": {
+    "provenance": false
+  }
+}

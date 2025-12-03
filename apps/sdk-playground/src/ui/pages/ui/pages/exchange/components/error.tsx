@@ -31,6 +31,12 @@ const NotEnoughBalanceError = ({ payload = {} }: { payload: any }) => {
     : `Minimum swap is currently ${payload.min.toDefaultString()}. Add more ${ticker} to continue.`
 }
 
+const ExactOutQuoteError = ({ payload = {} }: { payload: any }) => {
+  const ticker = payload.fromAsset.displayTicker
+
+  return `Please enter the amount of ${ticker} you'd like to swap to continue.`
+}
+
 const LowFromAmountError = ({ payload = {} }: { payload: any }) => {
   const ticker = payload.asset.displayTicker
   return `Minimum swap is currently ${payload.min.toDefaultString()}. Add more ${ticker} to continue.`
@@ -72,6 +78,7 @@ const ERROR_COMPONENTS = {
   LOW_SOL_RENT_EXEMPT_AMOUNT: LowSolanaRentExemptAmount,
   ZERO_BALANCE: ZeroBalanceError,
   NOT_ENOUGH_BALANCE: NotEnoughBalanceError,
+  EXACT_OUT_QUOTE: ExactOutQuoteError,
   LOW_FROM_AMOUNT: LowFromAmountError,
   HIGH_FROM_AMOUNT: HighFromAmountError,
   NOT_ENOUGH_FEE_BALANCE: NotEnoughFeeBalanceError,

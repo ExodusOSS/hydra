@@ -1,0 +1,50 @@
+{
+  "name": "@exodus/i18n-babel-webpack",
+  "version": "1.1.3",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/i18n-babel-webpack",
+  "description": "i18n webpack-loader & babel plugins",
+  "license": "UNLICENSED",
+  "author": "Exodus Movement, Inc.",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Ai18n-babel-webpack"
+  },
+  "files": [
+    "babel",
+    "icu",
+    "webpack-loader",
+    "webpack5-loader",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/generator": "^7.0.0",
+    "@babel/traverse": "^7.0.0",
+    "@babel/types": "^7.0.0",
+    "webpack": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "webpack": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@exodus/pofile": "^3.2.3",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.9",
+    "@types/jest-when": "^3.5.2",
+    "jest-when": "^3.5.2"
+  },
+  "scripts": {
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest"
+  }
+}

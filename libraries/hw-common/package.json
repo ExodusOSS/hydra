@@ -1,16 +1,16 @@
 {
   "name": "@exodus/hw-common",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "The hardware wallet commons",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/hw-common",
-  "license": "UNLICENSED",
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/hw-common",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Ahw-common"
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Ahw-common"
   },
   "type": "module",
   "main": "lib/index.js",
@@ -21,10 +21,16 @@
   ],
   "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "run -T tsc --build tsconfig.build.json",
+    "build": "run -T tsc -p tsconfig.build.json",
     "clean": "run -T tsc --build --clean",
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",
     "prepublishOnly": "yarn run -T build --scope @exodus/hw-common"
+  },
+  "devDependencies": {
+    "@types/w3c-web-usb": "^1.0.10"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

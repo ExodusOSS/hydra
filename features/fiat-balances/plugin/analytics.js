@@ -1,31 +1,48 @@
 const createFiatBalancesAnalyticsPlugin = ({
   analytics,
-  fiatBalancesAtom,
+  assetsTotalWalletAmountsAtom,
+  fiatRateConverter,
   config: { assetsToTrackForBalances },
 }) => {
   let subscriptions = []
 
-  const setBalanceProperties = (balances) => {
-    const assetFiatBalances = assetsToTrackForBalances.reduce((acc, obj) => {
-      // Always set a value, default to 0 if balance doesn't exist
-      acc[obj.analyticsName] = balances?.byAsset[obj.assetName]?.balance.toDefaultNumber() ?? 0
-      return acc
-    }, Object.create(null))
+  const setBalanceProperties = async (cryptoBalancesByAsset) => {
+    if (!cryptoBalancesByAsset) {
+      return
+    }
+
+    // Convert each asset's total crypto balance to USD
+    const assetFiatBalances = Object.fromEntries(
+      await Promise.all(
+        assetsToTrackForBalances.map(async ({ assetName, analyticsName }) => {
+          const cryptoBalance = cryptoBalancesByAsset.get(assetName)
+          if (cryptoBalance) {
+            const balanceUSD = await fiatRateConverter.toFiatCurrency({
+              amount: cryptoBalance,
+              currency: 'USD',
+            })
+            return [analyticsName, balanceUSD.toDefaultNumber()]
+          }
+
+          return [analyticsName, 0]
+        })
+      )
+    )
+
+    const totalBalanceUsd = Object.values(assetFiatBalances).reduce((sum, value) => sum + value, 0)
+
     analytics.setDefaultEventProperties({
       ...assetFiatBalances,
-      // Always set totalBalanceUsd, default to 0 if not available
-      totalBalanceUsd: balances?.totals?.balance?.toDefaultNumber() ?? 0,
+      totalBalanceUsd,
     })
   }
 
   const onStart = () => {
-    setBalanceProperties(undefined)
-
-    const unsubscribeBalancesAtom = fiatBalancesAtom.observe(({ balances }) => {
-      setBalanceProperties(balances)
+    const unsubscribe = assetsTotalWalletAmountsAtom.observe((cryptoBalancesByAsset) => {
+      setBalanceProperties(cryptoBalancesByAsset)
     })
 
-    subscriptions = [unsubscribeBalancesAtom]
+    subscriptions = [unsubscribe]
   }
 
   const onStop = () => {
@@ -39,7 +56,7 @@ const fiatBalancesAnalyticsPluginDefinition = {
   id: 'fiatBalancesAnalyticsPlugin',
   type: 'plugin',
   factory: createFiatBalancesAnalyticsPlugin,
-  dependencies: ['analytics', 'fiatBalancesAtom', 'config?'],
+  dependencies: ['analytics', 'assetsTotalWalletAmountsAtom', 'fiatRateConverter', 'config?'],
   public: true,
 }
 

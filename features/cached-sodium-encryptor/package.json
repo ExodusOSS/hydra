@@ -1,0 +1,52 @@
+{
+  "name": "@exodus/cached-sodium-encryptor",
+  "version": "1.4.0",
+  "description": "Derives & caches keys for sodium encryptor for encryption/decryption in features that operate regardless of lock (after initial unlock)",
+  "author": "Exodus Movement, Inc.",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/cached-sodium-encryptor",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Acached-sodium-encryptor"
+  },
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./api": "./lib/api/index.js",
+    "./api/*.js": "./lib/api/*.js",
+    "./module": "./lib/module/index.js"
+  },
+  "files": [
+    "lib",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "run -T tsc -p tsconfig.build.json",
+    "build:watch": "concurrently 'run -T tsc -w -p tsconfig.build.json' 'run -T tsc-alias -w -p tsconfig.build.json'",
+    "clean": "run -T tsc --clean",
+    "lint": "run -T eslint",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --esbuild",
+    "prepublishOnly": "yarn run -T build --scope @exodus/cached-sodium-encryptor",
+    "sync:mobile": "concurrently 'run -T sync:mobile @exodus/cached-sodium-encryptor' yarn:build:watch"
+  },
+  "dependencies": {
+    "@exodus/basic-utils": "^4.0.0",
+    "@exodus/crypto": "^1.0.0-rc.22",
+    "@exodus/key-identifier": "^1.3.1",
+    "@exodus/zod": "^3.24.2",
+    "make-concurrent": "^5.4.0",
+    "minimalistic-assert": "^1.0.1"
+  },
+  "devDependencies": {
+    "@exodus/argo": "workspace:^",
+    "@exodus/key-ids": "workspace:^",
+    "@exodus/keychain": "^7.8.0",
+    "@exodus/logger": "workspace:^",
+    "@types/minimalistic-assert": "^1.0.1"
+  }
+}

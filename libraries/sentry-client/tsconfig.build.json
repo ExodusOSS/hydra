@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "./lib",
+    "removeComments": false
+  },
+  "exclude": ["lib", "src/**/*.{test,spec}.ts", "test", "**/__tests__"]
+}

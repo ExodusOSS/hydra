@@ -39,6 +39,13 @@ export class XPubUnsupportedError extends HardwareWalletError {
   }
 }
 
+export class SignMessageUnsupportedError extends HardwareWalletError {
+  name = 'SignMessageUnsupportedError'
+  constructor() {
+    super('Sign message is unsupported on this device')
+  }
+}
+
 export class UserRefusedError extends HardwareWalletError {
   name = 'UserRefusedError'
   onDevice: boolean

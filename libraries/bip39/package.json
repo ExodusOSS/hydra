@@ -1,0 +1,39 @@
+{
+  "name": "@exodus/bip39",
+  "version": "1.0.3",
+  "description": "Exodus BIP39 module",
+  "type": "module",
+  "main": "src/index.js",
+  "author": "Exodus Movement, Inc.",
+  "license": "MIT",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/bip39",
+  "exports": {
+    ".": "./src/index.js",
+    "./wordlists/english": "./wordlists/english.js"
+  },
+  "files": [
+    "src",
+    "wordlists",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
+  ],
+  "dependencies": {
+    "@exodus/crypto": "^1.0.0-rc.26",
+    "minimalistic-assert": "^1.0.1"
+  },
+  "devDependencies": {
+    "@exodus/test": "^1.0.0-rc.76"
+  },
+  "scripts": {
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abip39"
+  }
+}

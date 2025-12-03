@@ -1,0 +1,398 @@
+exports[`captureError hermes: safe vs dangerous captureError omits error message 1`] = `
+{
+  "dist": "some-build-id",
+  "environment": "staging",
+  "event_id": "da30f8c1ed49494bbc5a5b3c160081fe",
+  "exception": {
+    "values": [
+      {
+        "stacktrace": {
+          "frames": [
+            {
+              "async": true,
+              "colno": Any<Number>,
+              "filename": "app:///test",
+              "function": "processPendingSubtests",
+              "lineno": Any<Number>,
+              "method": "processPendingSubtests",
+            },
+            {
+              "async": true,
+              "colno": Any<Number>,
+              "filename": "app:///test",
+              "function": "run",
+              "lineno": Any<Number>,
+              "method": "run",
+            },
+            {
+              "async": true,
+              "colno": undefined,
+              "filename": "app:///client.unit.test.ts",
+              "function": "all",
+              "lineno": undefined,
+              "method": "all",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///test",
+              "function": "run",
+              "lineno": Any<Number>,
+              "method": "run",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///node:async_hooks",
+              "function": "runInAsyncScope",
+              "lineno": Any<Number>,
+              "method": "runInAsyncScope",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///client.unit.test.ts",
+              "function": "?",
+              "lineno": Any<Number>,
+            },
+          ],
+        },
+        "type": "Error",
+      },
+    ],
+  },
+  "level": "error",
+  "platform": "javascript",
+  "release": "testapp@4.5.6",
+  "tags": {
+    "appVersion": "4.5.6",
+    "os": "testos",
+    "osVersion": "1.2.3",
+    "platform": "testplatform",
+  },
+  "timestamp": Any<Number>,
+}
+`;
+
+exports[`captureError sends error 1`] = `
+{
+  "dist": "some-build-id",
+  "environment": "staging",
+  "event_id": "da30f8c1ed49494bbc5a5b3c160081fe",
+  "exception": {
+    "values": [
+      {
+        "stacktrace": {
+          "frames": [
+            {
+              "async": true,
+              "colno": Any<Number>,
+              "filename": "app:///test",
+              "function": "processPendingSubtests",
+              "lineno": Any<Number>,
+              "method": "processPendingSubtests",
+            },
+            {
+              "async": true,
+              "colno": Any<Number>,
+              "filename": "app:///test",
+              "function": "run",
+              "lineno": Any<Number>,
+              "method": "run",
+            },
+            {
+              "async": true,
+              "colno": undefined,
+              "filename": "app:///client.unit.test.ts",
+              "function": "all",
+              "lineno": undefined,
+              "method": "all",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///test",
+              "function": "run",
+              "lineno": Any<Number>,
+              "method": "run",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///node:async_hooks",
+              "function": "runInAsyncScope",
+              "lineno": Any<Number>,
+              "method": "runInAsyncScope",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///client.unit.test.ts",
+              "function": "?",
+              "lineno": Any<Number>,
+            },
+          ],
+        },
+        "type": "Error",
+      },
+    ],
+  },
+  "level": "error",
+  "platform": "javascript",
+  "release": "testapp@4.5.6",
+  "tags": {
+    "appVersion": "4.5.6",
+    "os": "testos",
+    "osVersion": "1.2.3",
+    "platform": "testplatform",
+  },
+  "timestamp": Any<Number>,
+}
+`;
+
+exports[`captureError sends error with safe string 1`] = `
+{
+  "dist": "some-build-id",
+  "environment": "staging",
+  "event_id": "da30f8c1ed49494bbc5a5b3c160081fe",
+  "exception": {
+    "values": [
+      {
+        "stacktrace": {
+          "frames": [
+            {
+              "async": true,
+              "colno": Any<Number>,
+              "filename": "app:///test",
+              "function": "processPendingSubtests",
+              "lineno": Any<Number>,
+              "method": "processPendingSubtests",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///test",
+              "function": "run",
+              "lineno": Any<Number>,
+              "method": "run",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///node:async_hooks",
+              "function": "runInAsyncScope",
+              "lineno": Any<Number>,
+              "method": "runInAsyncScope",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///client.unit.test.ts",
+              "function": "?",
+              "lineno": Any<Number>,
+            },
+          ],
+        },
+        "type": "Error",
+        "value": "My seed phrase is <redacted>",
+      },
+    ],
+  },
+  "level": "error",
+  "platform": "javascript",
+  "release": "testapp@4.5.6",
+  "tags": {
+    "appVersion": "4.5.6",
+    "os": "testos",
+    "osVersion": "1.2.3",
+    "platform": "testplatform",
+  },
+  "timestamp": Any<Number>,
+}
+`;
+
+exports[`captureError sets custom context 1`] = `
+{
+  "contexts": {
+    "navigation": {
+      "currentRouteName": "home",
+      "previousRouteName": "login",
+    },
+  },
+  "dist": "some-build-id",
+  "environment": "staging",
+  "event_id": "da30f8c1ed49494bbc5a5b3c160081fe",
+  "exception": {
+    "values": [
+      {
+        "stacktrace": {
+          "frames": [
+            {
+              "async": true,
+              "colno": Any<Number>,
+              "filename": "app:///test",
+              "function": "processPendingSubtests",
+              "lineno": Any<Number>,
+              "method": "processPendingSubtests",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///test",
+              "function": "run",
+              "lineno": Any<Number>,
+              "method": "run",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///node:async_hooks",
+              "function": "runInAsyncScope",
+              "lineno": Any<Number>,
+              "method": "runInAsyncScope",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///client.unit.test.ts",
+              "function": "?",
+              "lineno": Any<Number>,
+            },
+          ],
+        },
+        "type": "Error",
+      },
+    ],
+  },
+  "level": "error",
+  "platform": "javascript",
+  "release": "testapp@4.5.6",
+  "tags": {
+    "appVersion": "4.5.6",
+    "os": "testos",
+    "osVersion": "1.2.3",
+    "platform": "testplatform",
+  },
+  "timestamp": Any<Number>,
+}
+`;
+
+exports[`captureError sets custom tags and metadata 1`] = `
+{
+  "dist": "some-build-id",
+  "environment": "staging",
+  "event_id": "da30f8c1ed49494bbc5a5b3c160081fe",
+  "exception": {
+    "values": [
+      {
+        "stacktrace": {
+          "frames": [
+            {
+              "async": true,
+              "colno": Any<Number>,
+              "filename": "app:///test",
+              "function": "processPendingSubtests",
+              "lineno": Any<Number>,
+              "method": "processPendingSubtests",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///test",
+              "function": "run",
+              "lineno": Any<Number>,
+              "method": "run",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///node:async_hooks",
+              "function": "runInAsyncScope",
+              "lineno": Any<Number>,
+              "method": "runInAsyncScope",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///client.unit.test.ts",
+              "function": "?",
+              "lineno": Any<Number>,
+            },
+          ],
+        },
+        "type": "Error",
+      },
+    ],
+  },
+  "level": "error",
+  "platform": "javascript",
+  "release": "testapp@4.5.6",
+  "tags": {
+    "appVersion": "4.5.6",
+    "os": "testos",
+    "osVersion": "1.2.3",
+    "platform": "testplatform",
+  },
+  "timestamp": Any<Number>,
+}
+`;
+
+exports[`captureError sets os/platform metadata 1`] = `
+{
+  "dist": "some-build-id",
+  "environment": "staging",
+  "event_id": "da30f8c1ed49494bbc5a5b3c160081fe",
+  "exception": {
+    "values": [
+      {
+        "stacktrace": {
+          "frames": [
+            {
+              "async": true,
+              "colno": Any<Number>,
+              "filename": "app:///test",
+              "function": "processPendingSubtests",
+              "lineno": Any<Number>,
+              "method": "processPendingSubtests",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///test",
+              "function": "run",
+              "lineno": Any<Number>,
+              "method": "run",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///node:async_hooks",
+              "function": "runInAsyncScope",
+              "lineno": Any<Number>,
+              "method": "runInAsyncScope",
+            },
+            {
+              "async": false,
+              "colno": Any<Number>,
+              "filename": "app:///client.unit.test.ts",
+              "function": "?",
+              "lineno": Any<Number>,
+            },
+          ],
+        },
+        "type": "Error",
+      },
+    ],
+  },
+  "level": "error",
+  "platform": "javascript",
+  "release": "testapp@4.5.6",
+  "tags": {
+    "appVersion": "4.5.6",
+    "os": "testos",
+    "osVersion": "1.2.3",
+    "platform": "testplatform",
+  },
+  "timestamp": Any<Number>,
+}
+`;

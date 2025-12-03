@@ -1,3 +1,5 @@
+/// <reference types="w3c-web-usb" />
+
 export type Bytes = Readonly<Uint8Array>
 
 /**
@@ -13,7 +15,7 @@ export type HardwareWalletManufacturer = LedgerManufacturer | TrezorManufacturer
  */
 
 export type LedgerModels = 'blue' | 'nanoS' | 'nanoSP' | 'nanoX' | 'stax' | 'europa'
-export type TrezorModels = 't' | '1' | 'Safe 3' | 'Safe 5'
+export type TrezorModels = 't' | '1' | 'Safe 3' | 'Safe 5' | 'Safe 7'
 export type HardwareWalletDeviceModels = LedgerModels | TrezorModels | 'unknown'
 
 /**
@@ -61,7 +63,7 @@ export interface HardwareWalletDescriptor {
   internalDescriptor: InternalDescriptor
 }
 
-export type TransportTypes = 'usb' | 'bluetooth' | 'tcp'
+export type TransportTypes = 'usb' | 'bluetooth' | 'tcp' | 'udp' | 'bridge'
 
 /**
  * HardwareWalletAssetHandler

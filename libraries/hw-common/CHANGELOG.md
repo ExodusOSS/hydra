@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.0](https://github.com/ExodusMovement/hydra/compare/@exodus/hw-common@3.1.1...@exodus/hw-common@3.2.0) (2025-10-15)
+
+### Features
+
+- feat: add trezor safe 7 support (#13965)
+
+## [3.1.1](https://github.com/ExodusMovement/hydra/compare/@exodus/hw-common@3.1.0...@exodus/hw-common@3.1.1) (2024-11-01)
+
+Re-licensed under MIT license.
+
 ## [3.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hw-common@3.0.0...@exodus/hw-common@3.1.0) (2024-10-22)
 
 ### Features
