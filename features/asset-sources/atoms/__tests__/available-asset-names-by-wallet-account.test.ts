@@ -1,6 +1,7 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 import { WalletAccount } from '@exodus/models'
 
+import defaultConfig from '../../../asset-sources/default-config.js'
 import type { Assets } from '../../types.js'
 import { availableAssetNamesByWalletAccountAtomDefinition } from '../available-asset-names-by-wallet-account.js'
 import { createAssetsForTesting } from './test-utils.js'
@@ -34,6 +35,7 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
           defaultValue: ['bitcoin', 'dogecoin', 'ethereum', 'litecoin', 'solana', 'stellar'],
         }),
         enabledWalletAccountsAtom,
+        config: defaultConfig,
       })
 
       const result = await atom.get()
@@ -63,6 +65,7 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
           defaultValue: ['bitcoin', 'ethereum', 'litecoin'],
         }),
         enabledWalletAccountsAtom,
+        config: defaultConfig,
       })
 
       const result = await atom.get()
@@ -93,6 +96,7 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
           defaultValue: ['bitcoin', 'dogecoin', 'ethereum', 'litecoin', 'solana', 'stellar'],
         }),
         enabledWalletAccountsAtom,
+        config: defaultConfig,
       })
 
       const result = await atom.get()
@@ -122,6 +126,7 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
           defaultValue: ['bitcoin', 'dogecoin', 'ethereum', 'litecoin', 'solana', 'stellar'],
         }),
         enabledWalletAccountsAtom,
+        config: defaultConfig,
       })
 
       const result = await atom.get()
@@ -152,6 +157,7 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
           defaultValue: ['bitcoin', 'dogecoin', 'ethereum', 'litecoin', 'solana', 'stellar'],
         }),
         enabledWalletAccountsAtom,
+        config: defaultConfig,
       })
 
       const result = await atom.get()
@@ -182,6 +188,7 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
           defaultValue: availableAssetNames,
         }),
         enabledWalletAccountsAtom,
+        config: defaultConfig,
       })
 
       const result = await atom.get()
@@ -234,6 +241,7 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
           defaultValue: ['bitcoin', 'dogecoin', 'ethereum', 'litecoin', 'solana', 'stellar'],
         }),
         enabledWalletAccountsAtom,
+        config: defaultConfig,
       })
 
       const result = await atom.get()
@@ -275,6 +283,7 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
           defaultValue: ['bitcoin', 'ethereum'],
         }),
         enabledWalletAccountsAtom,
+        config: defaultConfig,
       })
 
       const result1 = await atom.get()
@@ -304,6 +313,7 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
         assetsAtom: createInMemoryAtom({ defaultValue: { value: assets } }),
         availableAssetNamesAtom,
         enabledWalletAccountsAtom,
+        config: defaultConfig,
       })
 
       const initialResult = await atom.get()
@@ -336,6 +346,7 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
           defaultValue: ['bitcoin', 'ethereum'],
         }),
         enabledWalletAccountsAtom,
+        config: defaultConfig,
       })
 
       const result = await atom.get()
@@ -362,6 +373,7 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
           defaultValue: [],
         }),
         enabledWalletAccountsAtom,
+        config: defaultConfig,
       })
 
       const result = await atom.get()
@@ -388,6 +400,7 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
           defaultValue: ['bitcoin', 'ethereum'],
         }),
         enabledWalletAccountsAtom,
+        config: defaultConfig,
       })
 
       const result = await atom.get()
@@ -423,6 +436,7 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
           ],
         }),
         enabledWalletAccountsAtom,
+        config: defaultConfig,
       })
 
       const result = await atom.get()
@@ -491,6 +505,7 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
           defaultValue: ['testcoin', '_testcoin'],
         }),
         enabledWalletAccountsAtom,
+        config: defaultConfig,
       })
 
       const result = await atom.get()
@@ -498,6 +513,128 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
 
       expect(passkeyAssets).not.toContain('testcoin')
       expect(passkeyAssets).not.toContain('_testcoin')
+    })
+  })
+
+  describe('Delegated wallet accounts', () => {
+    it('should return only SOL and USDC for delegated accounts', async () => {
+      const delegatedAccount = new WalletAccount({
+        source: WalletAccount.EXODUS_SRC,
+        index: 0,
+        delegated: true,
+      })
+
+      const enabledWalletAccountsAtom = createInMemoryAtom({
+        defaultValue: {
+          [delegatedAccount.toString()]: delegatedAccount,
+        },
+      })
+
+      const atom = availableAssetNamesByWalletAccountAtomDefinition.factory({
+        assetsAtom: createInMemoryAtom({ defaultValue: { value: assets } }),
+        availableAssetNamesAtom: createInMemoryAtom({
+          defaultValue: ['bitcoin', 'ethereum', 'solana', 'usdcoin_solana', 'cardano'],
+        }),
+        enabledWalletAccountsAtom,
+        config: defaultConfig,
+      })
+
+      const result = await atom.get()
+      const delegatedAssets = result[delegatedAccount.toString()]
+
+      expect(delegatedAssets).toEqual(['solana', 'usdcoin_solana'])
+      expect(delegatedAssets).not.toContain('bitcoin')
+      expect(delegatedAssets).not.toContain('ethereum')
+      expect(delegatedAssets).not.toContain('cardano')
+    })
+
+    it('should filter from available assets for delegated accounts', async () => {
+      const delegatedAccount = new WalletAccount({
+        source: WalletAccount.EXODUS_SRC,
+        index: 1,
+        delegated: true,
+      })
+
+      const enabledWalletAccountsAtom = createInMemoryAtom({
+        defaultValue: {
+          [delegatedAccount.toString()]: delegatedAccount,
+        },
+      })
+
+      const atom = availableAssetNamesByWalletAccountAtomDefinition.factory({
+        assetsAtom: createInMemoryAtom({ defaultValue: { value: assets } }),
+        availableAssetNamesAtom: createInMemoryAtom({
+          defaultValue: ['solana'], // Only SOL is available, USDC is not
+        }),
+        enabledWalletAccountsAtom,
+        config: defaultConfig,
+      })
+
+      const result = await atom.get()
+      const delegatedAssets = result[delegatedAccount.toString()]
+
+      expect(delegatedAssets).toEqual(['solana'])
+      expect(delegatedAssets).not.toContain('usdcoin_solana')
+    })
+
+    it('should return empty array if neither SOL nor USDC are available for delegated accounts', async () => {
+      const delegatedAccount = new WalletAccount({
+        source: WalletAccount.EXODUS_SRC,
+        index: 2,
+        delegated: true,
+      })
+
+      const enabledWalletAccountsAtom = createInMemoryAtom({
+        defaultValue: {
+          [delegatedAccount.toString()]: delegatedAccount,
+        },
+      })
+
+      const atom = availableAssetNamesByWalletAccountAtomDefinition.factory({
+        assetsAtom: createInMemoryAtom({ defaultValue: { value: assets } }),
+        availableAssetNamesAtom: createInMemoryAtom({
+          defaultValue: ['bitcoin', 'ethereum'], // Neither SOL nor USDC available
+        }),
+        enabledWalletAccountsAtom,
+        config: defaultConfig,
+      })
+
+      const result = await atom.get()
+      const delegatedAssets = result[delegatedAccount.toString()]
+
+      expect(delegatedAssets).toEqual([])
+    })
+
+    it('should respect custom delegatedAllowedAssetNames configuration', async () => {
+      const delegatedAccount = new WalletAccount({
+        source: WalletAccount.EXODUS_SRC,
+        index: 3,
+        delegated: true,
+      })
+
+      const enabledWalletAccountsAtom = createInMemoryAtom({
+        defaultValue: {
+          [delegatedAccount.toString()]: delegatedAccount,
+        },
+      })
+
+      const atom = availableAssetNamesByWalletAccountAtomDefinition.factory({
+        assetsAtom: createInMemoryAtom({ defaultValue: { value: assets } }),
+        availableAssetNamesAtom: createInMemoryAtom({
+          defaultValue: ['bitcoin', 'ethereum', 'solana', 'cardano'],
+        }),
+        enabledWalletAccountsAtom,
+        config: {
+          delegatedAllowedAssetNames: ['bitcoin', 'ethereum'],
+        },
+      })
+
+      const result = await atom.get()
+      const delegatedAssets = result[delegatedAccount.toString()]
+
+      expect(delegatedAssets).toEqual(['bitcoin', 'ethereum'])
+      expect(delegatedAssets).not.toContain('solana')
+      expect(delegatedAssets).not.toContain('cardano')
     })
   })
 })

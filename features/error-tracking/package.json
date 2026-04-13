@@ -1,6 +1,6 @@
 {
   "name": "@exodus/error-tracking",
-  "version": "3.2.0",
+  "version": "3.3.2",
   "type": "module",
   "description": "A simple error tracking package to let any feature collect errors and create the report",
   "author": "Exodus Movement, Inc.",
@@ -34,10 +34,14 @@
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
-    "@exodus/errors": "^3.4.0",
+    "@exodus/errors": "^3.7.0",
+    "@exodus/safe-string": "^1.4.0",
     "@exodus/sentry-client": "^6.2.0",
     "@exodus/typeforce": "^1.19.0",
     "@exodus/zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@exodus/traceparent": "^2.0.0"
   },
   "publishConfig": {
     "access": "public",

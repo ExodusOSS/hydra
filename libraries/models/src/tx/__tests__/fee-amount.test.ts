@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 import test from '../../__tests__/_test.js'
@@ -13,12 +12,12 @@ const getCurrencies = (assetNames: string[]) =>
 test('should parse ERC20 fees as ETH ', (t) => {
   const tx = Tx.fromJSON({
     txId: 'txid',
-    coinAmount: '-0.001 OMG',
+    coinAmount: '-0.001 USDC',
     date: '2019-08-08T14:00:00.000Z',
-    coinName: 'omisego',
+    coinName: 'usdcoin',
     feeAmount: '0.0001 ETH',
     feeCoinName: 'ethereum',
-    currencies: getCurrencies(['ethereum', 'omisego']),
+    currencies: getCurrencies(['ethereum', 'usdcoin']),
   })
 
   t.is(tx.feeAmount.defaultUnit.unitName, 'ETH')
@@ -29,12 +28,12 @@ test('should parse ERC20 fees as ETH ', (t) => {
 test('should parse ERC20 fees as ETH even if they were stored as base unit', (t) => {
   const tx = Tx.fromJSON({
     txId: 'txid',
-    coinAmount: '-0.001 OMG',
+    coinAmount: '-0.001 USDC',
     date: '2019-08-08T14:00:00.000Z',
-    coinName: 'omisego',
+    coinName: 'usdcoin',
     feeAmount: '120 wei',
     feeCoinName: 'ethereum',
-    currencies: getCurrencies(['ethereum', 'omisego']),
+    currencies: getCurrencies(['ethereum', 'usdcoin']),
   })
 
   t.is(tx.feeAmount.defaultUnit.unitName, 'ETH')

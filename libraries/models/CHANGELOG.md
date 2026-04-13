@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@13.0.0...@exodus/models@13.1.0) (2026-03-24)
+
+### Features
+
+- feat(prediction): add external wallet address support (#15615)
+
+## [13.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.19.1...@exodus/models@13.0.0) (2026-03-06)
+
+### ⚠ BREAKING CHANGES
+
+- **models:** add new Fiat order statuses (#15424)
+
+### Features
+
+- feat(models)!: add new Fiat order statuses (#15424)
+
+## [12.19.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.19.0...@exodus/models@12.19.1) (2026-02-23)
+
+### Bug Fixes
+
+- fix(exchange): store toAddress in Order for third-party withdrawals (#15330)
+
+## [12.19.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.18.0...@exodus/models@12.19.0) (2026-01-29)
+
+### Features
+
+- feat(models): make fiat-order have exodus status (#14990)
+
 ## [12.18.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@12.17.1...@exodus/models@12.18.0) (2025-10-27)
 
 ### Features

@@ -3,10 +3,7 @@ import { createInMemoryAtom, waitUntil } from '@exodus/atoms'
 import createBalancesAtom from '@exodus/balances/atoms/balances.js'
 import balancesDefinition from '@exodus/balances/module/index.js'
 import { keyBy, omit, pick } from '@exodus/basic-utils'
-import {
-  accountStatesAtomDefinition,
-  txLogsAtomDefinition,
-} from '@exodus/blockchain-metadata/atoms/index.js'
+import { blockchainMetadataAtomDefinition } from '@exodus/blockchain-metadata/atoms/index.js'
 import blockchainMetadataDefinition from '@exodus/blockchain-metadata/module/index.js'
 import { AccountState, WalletAccount } from '@exodus/models'
 import assetsList from '@exodus/solana-meta'
@@ -85,9 +82,8 @@ let ratesAtom
 let currencyAtom
 let balancesAtom
 let fiatBalancesAtom
-let txLogsAtom
 let feeDataAtom
-let accountStatesAtom
+let blockchainMetadataAtom
 let balances
 
 const defaultRates = {
@@ -109,8 +105,7 @@ const setupModules = async ({ balanceFields, fiatBalanceFields }) => {
   const storage = createStorage()
   assetsModule = createAssetsModule()
   fiatBalancesAtom = createFiatBalancesAtom()
-  txLogsAtom = txLogsAtomDefinition.factory()
-  accountStatesAtom = accountStatesAtomDefinition.factory()
+  blockchainMetadataAtom = blockchainMetadataAtomDefinition.factory()
   feeDataAtom = createInMemoryAtom({ defaultValue: {} })
 
   walletAccountsAtom = createInMemoryAtom({
@@ -123,8 +118,7 @@ const setupModules = async ({ balanceFields, fiatBalanceFields }) => {
     assetsModule,
     enabledWalletAccountsAtom,
     storage: storage.namespace('blockchain-metadata'),
-    txLogsAtom,
-    accountStatesAtom,
+    blockchainMetadataAtom,
   })
 
   blockchainMetadata.load()
@@ -136,9 +130,8 @@ const setupModules = async ({ balanceFields, fiatBalanceFields }) => {
     blockchainMetadata,
     config: { balanceFields },
     balancesAtom,
-    txLogsAtom,
+    blockchainMetadataAtom,
     feeDataAtom,
-    accountStatesAtom,
     logger: { log: jest.fn(), warn: jest.fn(), error: jest.fn() },
   })
   await balances.load()
@@ -181,7 +174,7 @@ const checkSnapshot = async () => {
 
 describe('fiat-balances', () => {
   test('balance updates on asset source accountState update', async () => {
-    init({
+    await init({
       balanceFields: ['balance'],
       fiatBalanceFields: ['balance'],
     })
@@ -207,7 +200,7 @@ describe('fiat-balances', () => {
   })
 
   test('balance updates across portfolios', async () => {
-    init({
+    await init({
       balanceFields: ['balance'],
       fiatBalanceFields: ['balance'],
     })
@@ -233,7 +226,7 @@ describe('fiat-balances', () => {
   })
 
   test('balance updates on changes to walletAccounts', async () => {
-    init({
+    await init({
       balanceFields: ['balance'],
       fiatBalanceFields: ['balance'],
     })
@@ -265,7 +258,7 @@ describe('fiat-balances', () => {
   })
 
   test('balance updates on change in rates', async () => {
-    init({
+    await init({
       balanceFields: ['balance'],
       fiatBalanceFields: ['balance'],
     })
@@ -486,5 +479,53 @@ describe('fiat-balances', () => {
     await fiatBalancesModule.load()
 
     await checkSnapshot()
+  })
+
+  test('does not recompute when all rates are invalid', async () => {
+    await init({ balanceFields: ['balance'], fiatBalanceFields: ['balance'] })
+
+    await balancesAtom.set({
+      balances: {
+        exodus_0: {
+          solana: { balance: assets.solana.currency.defaultUnit(1) },
+        },
+      },
+    })
+
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    const before = await fiatBalancesAtom.get()
+
+    await ratesAtom.set({
+      USD: {
+        SOL: { price: 0, priceUSD: 0, invalid: true },
+        RAY: { price: 0, priceUSD: 0, invalid: true },
+      },
+    })
+
+    await balancesAtom.set({
+      balances: {
+        exodus_0: {
+          solana: { balance: assets.solana.currency.defaultUnit(2) },
+        },
+      },
+      changes: {
+        exodus_0: {
+          solana: {
+            balance: {
+              from: assets.solana.currency.defaultUnit(1),
+              to: assets.solana.currency.defaultUnit(2),
+            },
+          },
+        },
+      },
+    })
+
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    const after = await fiatBalancesAtom.get()
+    expect(after).toEqual(before)
+
+    await ratesAtom.set(initialRates)
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(await fiatBalancesAtom.get()).not.toEqual(before)
   })
 })

@@ -7,9 +7,10 @@ const index = typeforce.anyOf('Number', (value) => HARDENED_INDEX_REGEX.test(val
 export const types = {
   purpose: 'Number',
   assetName: 'String',
-  walletAccount: (value) => WalletAccount.isInstance(value),
+  walletAccount: (value) => value instanceof WalletAccount,
   chainIndex: index,
   addressIndex: index,
+  multisigDataIndex: 'Number',
   nonEmptyString: (it) => typeof it === 'string' && it !== '',
 }
 

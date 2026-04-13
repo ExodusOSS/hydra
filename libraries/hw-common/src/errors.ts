@@ -54,3 +54,35 @@ export class UserRefusedError extends HardwareWalletError {
     this.onDevice = onDevice
   }
 }
+
+export class DeviceUninitializedError extends HardwareWalletError {
+  name = 'DeviceUninitializedError'
+  constructor() {
+    super('Device is not initialized. Please set up your device first.')
+  }
+}
+
+export class WrongWalletSelectedError extends HardwareWalletError {
+  name = 'WrongWalletSelectedError'
+  constructor() {
+    super('Wrong wallet selected')
+  }
+}
+
+export class HardwareWalletManufacturerMismatchError extends HardwareWalletError {
+  name = 'HardwareWalletManufacturerMismatchError'
+  expected: string
+  actual: string
+  constructor({ expected, actual }: { expected: string; actual: string }) {
+    super('Unexpected hardware wallet manufacturer')
+    this.expected = expected
+    this.actual = actual
+  }
+}
+
+export class PassphraseProtectionEnableFailedError extends HardwareWalletError {
+  name = 'PassphraseProtectionEnableFailedError'
+  constructor() {
+    super('Failed to enable passphrase protection')
+  }
+}

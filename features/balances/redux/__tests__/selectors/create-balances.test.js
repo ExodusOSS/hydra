@@ -37,11 +37,27 @@ describe('createBalances', () => {
       assetName: 'bitcoin',
       walletAccount: 'exodus_0',
     })(store.getState())
+
     expect(result).toEqual({
       balance: bitcoin.currency.defaultUnit(10),
       total: bitcoin.currency.defaultUnit(10),
       spendableBalance: bitcoin.currency.defaultUnit(5),
       spendable: bitcoin.currency.defaultUnit(5),
     })
+  })
+
+  test('returns empty object for non-existent asset balances', () => {
+    emitBalances({
+      balances: {
+        exodus_0: {},
+      },
+    })
+
+    const result = selectors.balances.createBalances({
+      assetName: 'bitcoin',
+      walletAccount: 'exodus_0',
+    })(store.getState())
+
+    expect(result).toEqual({})
   })
 })

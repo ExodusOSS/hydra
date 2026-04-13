@@ -1,6 +1,6 @@
 {
   "name": "@exodus/fetch-factory",
-  "version": "2.3.1",
+  "version": "2.4.1",
   "type": "module",
   "description": "Factory to create fetch instances with custom headers and options",
   "author": "Exodus Movement, Inc.",
@@ -23,5 +23,8 @@
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",
     "test": "run -T exodus-test --jest"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

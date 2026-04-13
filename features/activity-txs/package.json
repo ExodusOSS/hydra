@@ -1,6 +1,6 @@
 {
   "name": "@exodus/activity-txs",
-  "version": "5.0.2",
+  "version": "6.1.1",
   "description": "The activity-txs feature",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -33,10 +33,11 @@
   },
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/basic-utils": "^3.7.3",
     "@exodus/core-selectors": "^4.0.0",
     "@exodus/models": "^12.0.1",
     "@exodus/multi-account-redux": "^2.0.1",
+    "@exodus/safe-string": "^1.3.0",
     "@exodus/typeforce": "^1.19.0",
     "lodash": "^4.17.21",
     "minimalistic-assert": "^1.0.1",
@@ -47,7 +48,7 @@
     "@exodus/assets-base": "^10.0.0",
     "@exodus/assets-feature": "workspace:^",
     "@exodus/available-assets": "workspace:^",
-    "@exodus/bitcoin-plugin": "^1.4.2",
+    "@exodus/bitcoin-plugin": "^2.0.0",
     "@exodus/connected-origins": "workspace:^",
     "@exodus/error-tracking": "workspace:^",
     "@exodus/fiat-ramp": "workspace:^",

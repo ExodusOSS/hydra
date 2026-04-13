@@ -1,6 +1,6 @@
 {
   "name": "@exodus/address-provider",
-  "version": "12.11.1",
+  "version": "12.14.1",
   "description": "Address provider for deriving and tracking used and unused addresses.",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
@@ -41,7 +41,7 @@
     "@exodus/errors": "^3.0.0",
     "@exodus/key-identifier": "^1.2.1",
     "@exodus/key-utils": "^3.7.1",
-    "@exodus/models": "^12.2.0",
+    "@exodus/models": "^12.16.0",
     "@exodus/trezor-meta": "^3.2.13",
     "@exodus/typeforce": "^1.18.0",
     "@exodus/zod": "^3.24.2",
@@ -91,6 +91,7 @@
     "jest-when": "^3.6.0"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

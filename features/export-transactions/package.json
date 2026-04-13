@@ -1,6 +1,6 @@
 {
   "name": "@exodus/export-transactions",
-  "version": "2.3.7",
+  "version": "2.4.1",
   "description": "Library that helps to export transactions with any associated metadata, such as orders and personal notes.",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -41,6 +41,7 @@
     "events": "^3.3.0"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

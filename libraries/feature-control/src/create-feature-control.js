@@ -12,12 +12,18 @@ const modules = {
 }
 
 const _getEnabledStatus = (featureConfig, opts, enabledModules) => {
-  if (enabledModules.shutdownSemver && _isShutDown(featureConfig, opts))
+  if (enabledModules.shutdownSemver && _isShutDown(featureConfig, opts)) {
     return { isOn: false, module: modules.SHUT_DOWN_SEMVER }
-  if (enabledModules.geolocation && !_isEnabledInGeolocation(featureConfig, opts))
+  }
+
+  if (enabledModules.geolocation && !_isEnabledInGeolocation(featureConfig, opts)) {
     return { isOn: false, module: modules.GEOLOCATION }
-  if (enabledModules.enabledOverride && typeof featureConfig?.enabled === 'boolean')
+  }
+
+  if (enabledModules.enabledOverride && typeof featureConfig?.enabled === 'boolean') {
     return { isOn: featureConfig.enabled, module: modules.ENABLED_OVERRIDE }
+  }
+
   return { isOn: opts.enabled }
 }
 
@@ -37,13 +43,16 @@ const validateOpts = (opts, enabledModules) => {
 
   assert(typeof ready === 'boolean', 'ready must be a boolean')
   assert(typeof enabled === 'boolean', 'enabled must be a boolean')
-  if (enabledModules.shutdownSemver)
+  if (enabledModules.shutdownSemver) {
     assert(
       typeof versionSemver === 'string' && semver.valid(versionSemver),
       'versionSemver must be a valid semver'
     )
-  if (enabledModules.geolocation)
+  }
+
+  if (enabledModules.geolocation) {
     assert(typeof geolocation === 'object', 'geolocation must be an object')
+  }
 }
 
 const availableModules = new Set(['shutdownSemver', 'geolocation', 'enabledOverride'])

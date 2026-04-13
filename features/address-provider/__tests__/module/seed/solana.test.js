@@ -7,7 +7,7 @@ const expectedSolanaAddress = solanaFixture.chains[0].addresses[0].address
 let addressProvider
 
 beforeEach(async () => {
-  ;({ addressProvider } = setup())
+  ;({ addressProvider } = await setup())
 })
 
 test('getReceiveAddress() should return the same address for solana base asset and solana token from cache', async () => {

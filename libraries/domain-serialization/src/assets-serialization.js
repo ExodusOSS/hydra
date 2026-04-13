@@ -1,29 +1,38 @@
-import { mapValues, pick } from '@exodus/basic-utils'
+import { mapValues, pick, pickBy } from '@exodus/basic-utils'
 import NumberUnit, { UnitType } from '@exodus/currency'
 import assert from 'minimalistic-assert'
 import { createBasicDomainSerialization } from './domain-serialization.js'
 
 // This is for optimizing deserialization, so that we do not attempt it on fields that are known to not need it.
 const SERIALIZABLE_PROPS = new Set([
+  'assetId',
+  'assetIndex',
   'assetType',
   'baseAssetName',
   'bip44',
   'chainBadgeColors',
+  'chainId',
+  'combinedAssetNames',
+  'decimals',
   'displayName',
   'displayNetworkName',
   'displayNetworkTicker',
   'displayTicker',
   'gradientColors',
-  'gradientCoords',
   'info',
   'isBuiltIn',
+  'isCombined',
   'isCustomToken',
+  'mintAddress',
   'name',
   'primaryColor',
   'properName',
   'properTicker',
   'ticker',
   'units',
+  'useBip84',
+  'useBip86',
+  'useMultipleAddresses',
 ])
 
 const { deserialize: deserializeArg, serialize: serializeArg } = createBasicDomainSerialization()
@@ -108,7 +117,6 @@ const deserializePassTwo = (asset, _assets) => {
   asset.feeAsset = getAsset(asset.feeAssetName)
 
   if (asset.isCombined) {
-    // TODO: handle case when there are no assets to combine
     // eslint-disable-next-line @exodus/mutable/no-param-reassign-prop-only
     asset.combinedAssetNames = asset.combinedAssetNames.filter((assetName) => _assets[assetName])
     // eslint-disable-next-line @exodus/mutable/no-param-reassign-prop-only
@@ -120,19 +128,17 @@ const deserializePassTwo = (asset, _assets) => {
 
 export const serializeAsset = ({
   address,
-  contract,
-  currency,
   keys,
   api,
   baseAsset,
   feeAsset,
-  combinedAssets,
   blockExplorer,
-  server, // skip serialization, backend only complex object.
-  insightClient, // skip serialization, backend only complex object.
   ...asset
 }) => ({
-  ...mapValues(asset, (v) => (NumberUnit.isNumberUnit(v) ? serializeArg(v) : v)),
+  ...mapValues(
+    pickBy(asset, (v, k) => SERIALIZABLE_PROPS.has(k) || v instanceof NumberUnit),
+    (v) => (v instanceof NumberUnit ? serializeArg(v) : v)
+  ),
   ...serializeApis({ address, keys, api, blockExplorer }),
   baseAssetName: baseAsset.name,
   feeAssetName: feeAsset.name,

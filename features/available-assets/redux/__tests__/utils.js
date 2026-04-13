@@ -16,7 +16,6 @@ export const {
   usdcoin: usdcoinEthereum,
   usdcoin_solana: usdcoinSolana,
   usdcoin_algorand: usdcoinAlgorand,
-  usdcoin_ftx: usdcoinFtx,
 } = connectAssets({
   ...combinedAssets,
   ...assetsBase,
@@ -49,9 +48,7 @@ export function setup({ dependencies = [] } = {}) {
   const emitAvailableAssetNamesByWalletAccount = (value) =>
     handleEvent('availableAssetNamesByWalletAccount', value)
 
-  emitAssets(
-    keyBy([bitcoin, ethereum, usdcoin, usdcoinSolana, usdcoinAlgorand, usdcoinFtx], 'name')
-  )
+  emitAssets(keyBy([bitcoin, ethereum, usdcoin, usdcoinSolana, usdcoinAlgorand], 'name'))
   emitAvailableAssetNames(new Set())
 
   return { ...redux, store, emitAvailableAssetNames, emitAvailableAssetNamesByWalletAccount }

@@ -1,10 +1,8 @@
 import lodash from 'lodash'
 import { enforceObservableRules } from '@exodus/atoms'
 
-const { get: getValueAtPath, isEqual } = lodash
+const { get: getValueAtPath, set: setValueAtPath, isEqual } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 // lodash uses Object prototype for set, while basic-utils uses null prototype, which trips up fusion-merge
-// eslint-disable-next-line @exodus/restricted-imports/prefer-basic-utils
-const { set: setValueAtPath } = lodash
 
 export const createFusionAtom = ({ fusion, logger, online, path, defaultValue }) => {
   let prevValue

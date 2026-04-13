@@ -1,4 +1,4 @@
-import { SafeError } from '@exodus/errors'
+import { SafeError, SafeContext } from '@exodus/errors'
 import { memoize } from '@exodus/basic-utils'
 import { z } from '@exodus/zod'
 
@@ -14,6 +14,7 @@ const errorTrackingReportDefinition = {
           namespace,
           error: SafeError.from(error),
           time,
+          context,
         })),
       }
     },
@@ -26,6 +27,7 @@ const errorTrackingReportDefinition = {
                 namespace: z.string(),
                 error: z.instanceof(SafeError),
                 time: z.number(),
+                context: SafeContext.getSchema(),
               })
               .strict()
           ),

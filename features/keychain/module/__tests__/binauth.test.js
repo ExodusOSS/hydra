@@ -8,14 +8,16 @@ const seed = await mnemonicToSeed({
   mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
 })
 
-const seedId = getSeedId(seed)
+const seedId = await getSeedId(seed)
 
 describe('binauth', () => {
   it('should create binauth key', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
 
     // Getting the public key to use as identifier
-    const sodiumEncryptor = await keychain.createSodiumEncryptor(EXODUS_KEY_IDS.TELEMETRY)
+    const sodiumEncryptor = await keychain.sodium.createEncryptor({
+      keyId: EXODUS_KEY_IDS.TELEMETRY,
+    })
     const {
       sign: { publicKey },
     } = await sodiumEncryptor.getSodiumKeysFromSeed({ seedId })
@@ -39,7 +41,7 @@ describe('binauth', () => {
   })
 
   it('should create binauth key (using sodium instance)', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
 
     // Getting the public key to use as identifier
     const keyId = EXODUS_KEY_IDS.TELEMETRY

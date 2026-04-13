@@ -3,15 +3,24 @@ import type { Atom } from '@exodus/atoms'
 import { z } from '@exodus/zod'
 import { memoize } from '@exodus/basic-utils'
 
-import type { RemoteConfigStatus } from '../atoms/index.js'
+import type { RemoteConfigData } from '../types/index.js'
+
+export type RemoteConfigReportData = {
+  remoteConfigUrl?: string | null
+  loaded: boolean
+  gitHash?: string | null
+}
 
 const createRemoteConfigReport = ({
-  remoteConfigStatusAtom,
+  remoteConfigAtom,
 }: {
-  remoteConfigStatusAtom: Atom<RemoteConfigStatus>
+  remoteConfigAtom: Atom<RemoteConfigData>
 }) => ({
   namespace: 'remoteConfig',
-  export: async (): Promise<RemoteConfigStatus> => remoteConfigStatusAtom.get(),
+  export: async (): Promise<RemoteConfigReportData> => {
+    const { remoteConfigUrl, config } = await remoteConfigAtom.get()
+    return { loaded: Boolean(config), remoteConfigUrl, gitHash: config?.meta?.gitHash }
+  },
   getSchema: memoize(() =>
     z
       .object({
@@ -30,7 +39,7 @@ const remoteConfigReportDefinition = {
   id: 'remoteConfigReport',
   type: 'report',
   factory: createRemoteConfigReport,
-  dependencies: ['remoteConfigStatusAtom'],
+  dependencies: ['remoteConfigAtom'],
   public: true,
 } as const satisfies Definition
 

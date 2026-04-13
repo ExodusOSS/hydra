@@ -1,6 +1,6 @@
 {
   "name": "@exodus/atoms",
-  "version": "10.0.0",
+  "version": "10.2.0",
   "description": "Abstraction for encapsulating a piece of data behind a simple unified interface: get, set, observe",
   "type": "module",
   "main": "lib/index.js",
@@ -12,7 +12,8 @@
   "scripts": {
     "build": "run -T tsc -p tsconfig.build.json",
     "clean": "run -T tsc --build --clean",
-    "test": "run -T exodus-test --jest --esbuild",
+    "test": "run -T exodus-test --jest --esbuild && run test:types",
+    "test:types": "tsc -p tsconfig.json --noEmit",
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",
     "prepublishOnly": "yarn run -T build --scope @exodus/atoms"

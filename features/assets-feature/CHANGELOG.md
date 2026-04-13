@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@9.0.0...@exodus/assets-feature@9.0.1) (2026-02-20)
+
+### Bug Fixes
+
+- fix(assets-feature): skip gap limit scanning for freshly created wallets (#15311)
+
+## [9.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.8.0...@exodus/assets-feature@9.0.0) (2026-02-16)
+
+### Features
+
+- **assets-feature:** add remote config support for asset initialization ([#15016](https://github.com/ExodusMovement/exodus-hydra/issues/15016)) ([15c5857](https://github.com/ExodusMovement/exodus-hydra/commit/15c5857a5e8229c7f25fad4b532718791a503d84))
+- **assets-feature:** call start on plugin startup ([#15042](https://github.com/ExodusMovement/exodus-hydra/issues/15042)) ([81759e5](https://github.com/ExodusMovement/exodus-hydra/commit/81759e5640c57100a343448a0104f90ce558fa6b))
+
+## [8.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.7.1...@exodus/assets-feature@8.8.0) (2026-01-21)
+
+### Features
+
+- feat: filter out combined assets without members (#14961)
+
+### Bug Fixes
+
+- fix: consistenly handle storeIcons errors (#14556)
+
+## [8.7.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.7.1...@exodus/assets-feature@8.7.2) (2025-12-04)
+
+### Bug Fixes
+
+- fix: consistenly handle storeIcons errors (#14556)
+
 ## [8.7.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@8.7.0...@exodus/assets-feature@8.7.1) (2025-10-03)
 
 ### Bug Fixes

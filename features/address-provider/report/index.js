@@ -41,8 +41,9 @@ const createAddressProviderReport = ({
     const getExtendedKeys = async ({ assetName, walletAccount, address }) => {
       const { keyIdentifier, purpose } = address.meta
 
-      if (keyIdentifier.derivationAlgorithm !== 'BIP32' || keyIdentifier.keyType !== 'secp256k1')
+      if (keyIdentifier.derivationAlgorithm !== 'BIP32' || keyIdentifier.keyType !== 'secp256k1') {
         return
+      }
 
       const parts = keyIdentifier.derivationPath.split('/')
       const xpubKeyIdentifier = new KeyIdentifier({

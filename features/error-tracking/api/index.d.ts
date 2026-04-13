@@ -1,16 +1,20 @@
+import type { SafeString } from '@exodus/safe-string'
+
 export interface ErrorTrackingApi {
   /**
    * Track an error
    * @example
    * ```typescript
+   * import { safeString } from '@exodus/safe-string'
+   *
    * exodus.errors.track({
-   *   namespace: 'balances',
+   *   namespace: safeString`balances`,
    *   error: new Error('Encountered an issue when computing total balances'),
    *   context: {},
    * })
    * ```
    */
-  track(params: { error: Error; namespace: string; context?: any }): Promise<void>
+  track(params: { error: Error; namespace: SafeString; context?: any }): Promise<void>
 }
 
 declare const errorTrackingApiDefinition: {

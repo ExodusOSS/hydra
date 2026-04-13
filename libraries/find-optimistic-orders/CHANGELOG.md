@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/find-optimistic-orders@3.1.0...@exodus/find-optimistic-orders@3.1.1) (2026-01-30)
+
+### Bug Fixes
+
+- fix(find-optimistic-orders): use originalIndex when marking first sorted order as potential (#15115)
+
 ## [3.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/find-optimistic-orders@3.0.0...@exodus/find-optimistic-orders@3.1.0) (2025-02-13)
 
 ### Features

@@ -3,7 +3,12 @@ import { WalletAccount } from '@exodus/models'
 import Emitter from '@exodus/wild-emitter'
 import { randomBytes } from '@exodus/crypto/randomBytes'
 import delay from 'delay'
-import { NoDeviceFoundError, UserRefusedError } from '@exodus/hw-common'
+import {
+  DeviceUninitializedError,
+  NoDeviceFoundError,
+  HardwareWalletManufacturerMismatchError,
+  UserRefusedError,
+} from '@exodus/hw-common'
 import restrictConcurrency from 'make-concurrent'
 
 import type {
@@ -16,7 +21,6 @@ import type {
   SyncParams,
   GetFirstNAddressesParams,
   GetFirstNAddressesResult,
-  EnsureApplicationIsOpenedParams,
   SignTransactionParams,
   FetchBalanceResult,
   FetchBalanceParams,
@@ -29,17 +33,20 @@ import type {
   GetAddressParams,
   GenericSignCallback,
   GenericSignParams,
+  SignMessageParams,
   SyncedKeysData,
   KeyToSyncData,
-  RequireDeviceForParams,
+  ProcessPairingCodeParams,
   SigningRequest,
   SigningRequestState,
+  SetPassphraseModeParams,
 } from './interfaces.js'
 import type { Definition } from '@exodus/dependency-types'
 import type {
+  HardwareWalletDescriptor,
   HardwareWalletDevice,
   HardwareWalletDiscovery,
-  SignMessageParams,
+  HardwareWalletManufacturer,
 } from '@exodus/hw-common'
 import type { Atom } from '@exodus/atoms'
 import type { IPublicKeyStore } from '@exodus/public-key-provider/lib/module/store/types'
@@ -49,6 +56,11 @@ import pDefer from 'p-defer'
 export type Dependencies = {
   assetsModule: any
   ledgerDiscovery: HardwareWalletDiscovery
+  trezorDiscovery: HardwareWalletDiscovery & {
+    connected: boolean
+    submitPairingCode: (code: string) => Promise<any>
+    clearPairingPrompt: () => Promise<void>
+  }
   logger: Logger
   hardwareWalletSigningRequestsAtom: Atom<SigningRequestState>
   publicKeyStore: IPublicKeyStore
@@ -57,17 +69,27 @@ export type Dependencies = {
   walletAccounts: any
   txLogMonitors: any
   restoreProgressTracker: any
+  enabledAssets: any
+  availableAssetNamesAtom: Atom<string[]>
 }
 
 export class HardwareWallets implements HardwareSignerProvider {
   readonly #assetsModule: any
   readonly #ledgerDiscovery: HardwareWalletDiscovery
+  readonly #trezorDiscovery: HardwareWalletDiscovery & {
+    connected: boolean
+    submitPairingCode: (code: string) => Promise<any>
+    clearPairingPrompt: () => Promise<void>
+  }
+
   readonly #logger: Logger
   readonly #publicKeyStore: any
   readonly #signingRequestAtom: Atom<SigningRequestState>
   readonly #wallet: any
   readonly #walletAccountsAtom: Atom<WalletAccount>
   readonly #walletAccounts: any
+  readonly #enabledAssets: any
+  readonly #availableAssetNamesAtom: Atom<string[]>
   // readonly #txLogMonitors: any
   // readonly #restoreProgressTracker: any
 
@@ -77,36 +99,93 @@ export class HardwareWallets implements HardwareSignerProvider {
   /** The currently active signing request */
   #signingRequest: SigningRequest | undefined
 
+  /** Flag to prevent concurrent retry attempts */
+  #isRetrying = false
+
   readonly events = new Emitter()
+
+  #requireTrezorDevice = (device: HardwareWalletDevice) => {
+    if (device.descriptor.manufacturer !== WalletAccount.TREZOR_SRC) {
+      throw new HardwareWalletManufacturerMismatchError({
+        expected: WalletAccount.TREZOR_SRC,
+        actual: String(device.descriptor.manufacturer),
+      })
+    }
+
+    return device as unknown as HardwareWalletDevice & {
+      setPassphraseMode: (mode: 'standard' | 'hidden') => void
+    }
+  }
 
   constructor({
     assetsModule,
     ledgerDiscovery,
+    trezorDiscovery,
     logger,
     hardwareWalletSigningRequestsAtom,
     publicKeyStore,
     wallet,
     walletAccountsAtom,
     walletAccounts,
+    enabledAssets,
+    availableAssetNamesAtom,
     // txLogMonitors,
     // restoreProgressTracker,
   }: Dependencies) {
     this.#assetsModule = assetsModule
     this.#ledgerDiscovery = ledgerDiscovery
+    this.#trezorDiscovery = trezorDiscovery
     this.#logger = logger
     this.#publicKeyStore = publicKeyStore
     this.#signingRequestAtom = hardwareWalletSigningRequestsAtom
     this.#wallet = wallet
     this.#walletAccountsAtom = walletAccountsAtom
     this.#walletAccounts = walletAccounts
+    this.#enabledAssets = enabledAssets
+    this.#availableAssetNamesAtom = availableAssetNamesAtom
     // this.#txLogMonitors = txLogMonitors
     // this.#restoreProgressTracker = restoreProgressTracker
   }
 
-  #getSelectedDevice = async (): Promise<{
+  #listTrezorDevicesOrEmpty = async (): Promise<HardwareWalletDescriptor[]> => {
+    try {
+      return await this.#trezorDiscovery.list()
+    } catch (error) {
+      if (error instanceof DeviceUninitializedError) {
+        throw error
+      }
+
+      return []
+    }
+  }
+
+  #listLedgerDevicesOrEmpty = async (): Promise<HardwareWalletDescriptor[]> => {
+    try {
+      return await this.#ledgerDiscovery.list()
+    } catch {
+      return []
+    }
+  }
+
+  #getSelectedDevice = async (
+    walletAccount?: WalletAccount
+  ): Promise<{
     device: HardwareWalletDevice
   }> => {
-    const descriptors = await this.#ledgerDiscovery.list()
+    let descriptors: HardwareWalletDescriptor[]
+    const manufacturer = walletAccount?.source as HardwareWalletManufacturer | undefined
+
+    if (manufacturer === 'ledger') {
+      descriptors = await this.#listLedgerDevicesOrEmpty()
+    } else if (manufacturer === 'trezor') {
+      descriptors = await this.#listTrezorDevicesOrEmpty()
+    } else {
+      const [trezors, ledgers] = await Promise.all([
+        this.#listTrezorDevicesOrEmpty(),
+        this.#listLedgerDevicesOrEmpty(),
+      ])
+      descriptors = [...trezors, ...ledgers]
+    }
 
     if (descriptors[0]) {
       return { device: await descriptors[0].get() }
@@ -143,9 +222,16 @@ export class HardwareWallets implements HardwareSignerProvider {
       return
     }
 
+    if (this.#isRetrying) {
+      this.#logger.debug(`Retry already in progress for id: ${id}, ignoring duplicate call`)
+      return
+    }
+
+    this.#isRetrying = true
+
     try {
       this.#logger.debug(`Attempting to get selected device for signing request with id: ${id}`)
-      const { device } = await this.#getSelectedDevice()
+      const { device } = await this.#getSelectedDevice(request.walletAccount)
       this.#logger.debug(`Attempting to sign for signing request with id: ${id}`)
       const result = await request.sign({ device })
       await this.#deleteSigningRequest(id)
@@ -169,6 +255,7 @@ export class HardwareWallets implements HardwareSignerProvider {
         )
         await delay(300)
 
+        this.#isRetrying = false
         await this.retrySigningRequest(id) // Retry the signing request
         return
       }
@@ -187,6 +274,8 @@ export class HardwareWallets implements HardwareSignerProvider {
         error: _error,
         baseAssetName: this.#signingRequest.baseAssetName,
       })
+    } finally {
+      this.#isRetrying = false
     }
   }
 
@@ -204,7 +293,7 @@ export class HardwareWallets implements HardwareSignerProvider {
     if (fromUI) {
       this.#logger.debug(`Cancelling signing request on device for id: ${id}`)
       try {
-        const { device } = await this.#getSelectedDevice()
+        const { device } = await this.#getSelectedDevice(request.walletAccount)
         await device.cancelAction()
         this.#logger.debug(`Succesfully cancelled signing request on device for id: ${id}`)
       } catch (error: any) {
@@ -217,7 +306,7 @@ export class HardwareWallets implements HardwareSignerProvider {
   }
 
   #signGeneric = restrictConcurrency(
-    async ({ baseAssetName, scenario, sign }: GenericSignParams) => {
+    async ({ baseAssetName, scenario, sign, walletAccount }: GenericSignParams) => {
       const id = randomBytes(16).toString('hex')
       this.#logger.debug(
         `Starting signing request for ${baseAssetName} with scenario: ${scenario} and id: ${id}`
@@ -229,6 +318,7 @@ export class HardwareWallets implements HardwareSignerProvider {
       this.#signingRequest = {
         id,
         baseAssetName,
+        walletAccount,
         sign: async ({ device }) => {
           // Kick off the signing request to the UI
           await this.#updateSigningRequest({
@@ -237,7 +327,7 @@ export class HardwareWallets implements HardwareSignerProvider {
             scenario,
           })
 
-          await device.ensureApplicationIsOpened(baseAssetName)
+          await device.ensureDeviceReady({ baseAssetName, walletAccount })
           return sign({ device })
         },
         resolve: deferred.resolve,
@@ -270,10 +360,20 @@ export class HardwareWallets implements HardwareSignerProvider {
       })
     }
 
-    return this.#signGeneric({ baseAssetName, scenario: 'signTransaction', sign })
+    return this.#signGeneric({
+      baseAssetName,
+      scenario: 'signTransaction',
+      sign,
+      walletAccount,
+    })
   }
 
-  signMessage = async ({ assetName, derivationPath, message }: SignMessageParams) => {
+  signMessage = async ({
+    assetName,
+    derivationPath,
+    message,
+    walletAccount,
+  }: SignMessageParams) => {
     const baseAssetName = this.#assetsModule.getAsset(assetName).baseAsset.name
 
     const sign: GenericSignCallback = async ({ device }) => {
@@ -284,7 +384,7 @@ export class HardwareWallets implements HardwareSignerProvider {
       })
     }
 
-    return this.#signGeneric({ baseAssetName, scenario: 'signMessage', sign })
+    return this.#signGeneric({ baseAssetName, scenario: 'signMessage', sign, walletAccount })
   }
 
   /**
@@ -292,6 +392,17 @@ export class HardwareWallets implements HardwareSignerProvider {
    * @returns {Promise<boolean>} connection status
    */
   isDeviceConnected = async (): Promise<boolean> => {
+    try {
+      const devices = await this.#trezorDiscovery.list()
+      if (devices.length > 0) {
+        return true
+      }
+    } catch (error) {
+      if (error instanceof DeviceUninitializedError) {
+        throw error
+      }
+    }
+
     try {
       const devices = await this.#ledgerDiscovery.list()
       return devices.length > 0
@@ -302,13 +413,19 @@ export class HardwareWallets implements HardwareSignerProvider {
 
   /**
    * Starts a scan for devices on the hardware wallet discovery services.
+   * @param deviceType - 'ledger' or 'trezor'
    * @returns
    */
-  scanForDevices = async () => {
-    // Stop any previous scan & clear all known devices.
+  scanForDevices = async (deviceType?: HardwareWalletManufacturer) => {
+    // Stop all scans first
+    this.#trezorDiscovery.stopScan(true)
     this.#ledgerDiscovery.stopScan(true)
-    // Start a new scan
-    return this.#ledgerDiscovery.scan()
+
+    if (!deviceType || deviceType === 'ledger') {
+      await this.#ledgerDiscovery.scan()
+    } else {
+      await this.#trezorDiscovery.scan()
+    }
   }
 
   /**
@@ -316,8 +433,12 @@ export class HardwareWallets implements HardwareSignerProvider {
    * @returns {Promise<any>}
    */
   getAvailableDevices = async () => {
-    const devices = await this.#ledgerDiscovery.list()
-    return devices.map((device) => ({
+    const [ledgers, trezors] = await Promise.all([
+      this.#listLedgerDevicesOrEmpty(),
+      this.#listTrezorDevicesOrEmpty(),
+    ])
+
+    return [...ledgers, ...trezors].map((device) => ({
       model: device.model,
       name: device.name,
     }))
@@ -348,30 +469,6 @@ export class HardwareWallets implements HardwareSignerProvider {
     return device.listUseableAssetNames()
   }
 
-  /**
-   * Ensures the asset is useable or throws error.
-   * @param {EnsureApplicationIsOpenedParams} params
-   * @param {string} params.assetName - the asset name to check.
-   */
-  ensureApplicationIsOpened = async ({ assetName }: EnsureApplicationIsOpenedParams) => {
-    const asset = this.#assetsModule.getAsset(assetName)
-
-    let i = 0
-    while (i < 3) {
-      try {
-        const { device } = await this.#getSelectedDevice()
-        await device.ensureApplicationIsOpened(asset.baseAsset.name)
-      } catch (error) {
-        this.#logger.log(error)
-      } finally {
-        // Sleep for a second to give the OS a chance to recover
-        // from any USB resets that may occur when switching app contexts
-        await delay(1000)
-        i++
-      }
-    }
-  }
-
   getAddress = async ({
     assetName,
     accountIndex,
@@ -380,20 +477,20 @@ export class HardwareWallets implements HardwareSignerProvider {
     displayOnDevice,
   }: GetAddressParams) => {
     const asset = this.#assetsModule.getAsset(assetName)
+    const { device } = await this.#getSelectedDevice()
 
-    const supportedPurposes = asset.baseAsset.api.getSupportedPurposes({
-      compatibilityMode: 'ledger',
+    const supportedPurposes = asset.baseAsset.api.getSupportedPurposes?.({
+      compatibilityMode: device.descriptor.manufacturer,
       isMultisig: !!multisigData,
-    })
+    }) ?? [44]
     const { derivationPath } = asset.baseAsset.api.getKeyIdentifier({
-      compatibilityMode: 'ledger',
+      compatibilityMode: device.descriptor.manufacturer,
       purpose: supportedPurposes[0], // TODO: how to deal with multiple purpose assets like bitcoin?
       accountIndex,
       chainIndex: 0,
       addressIndex,
     })
 
-    const { device } = await this.#getSelectedDevice()
     return device.getAddress({
       assetName,
       derivationPath,
@@ -410,7 +507,7 @@ export class HardwareWallets implements HardwareSignerProvider {
   }: GetXPUBParams): Promise<GetXPUBResult | null> => {
     try {
       const keyIdentifier = baseAsset.api.getKeyIdentifier({
-        compatibilityMode: 'ledger',
+        compatibilityMode: device.descriptor.manufacturer,
         purpose,
         accountIndex,
         // These values must be undefined to retrieve the XPUBs.
@@ -433,7 +530,8 @@ export class HardwareWallets implements HardwareSignerProvider {
     } catch (error: any) {
       if (
         error.name === 'XPubUnsupportedError' ||
-        error.message.includes(`XPUB derivation is not allowed`)
+        error.message.includes(`XPUB derivation is not allowed`) ||
+        error.message.includes('getXPub not supported')
       ) {
         this.#logger.warn(`Retrieving XPUBs for ${baseAsset.name} is not supported`, error)
         return null
@@ -450,7 +548,7 @@ export class HardwareWallets implements HardwareSignerProvider {
     accountIndex,
   }: GetPublicKeyParams): Promise<GetPublicKeyResult> => {
     const keyIdentifier = baseAsset.api.getKeyIdentifier({
-      compatibilityMode: 'ledger',
+      compatibilityMode: device.descriptor.manufacturer,
       purpose,
       accountIndex,
     })
@@ -526,11 +624,13 @@ export class HardwareWallets implements HardwareSignerProvider {
     addressLimit = 2,
     addressOffset = 0,
   }: ScanParams): Promise<ScanResult> => {
+    const { device } = await this.#getSelectedDevice()
+    const source = device.descriptor.manufacturer
     let usedAccountIndexes: number[] = []
     if (await this.#wallet.exists()) {
       const walletAccounts = Object.values(await this.#walletAccountsAtom.get())
       usedAccountIndexes = walletAccounts
-        .filter(({ source }) => source === WalletAccount.LEDGER_SRC)
+        .filter(({ source: s }) => source === s)
         .map(({ index }) => index)
     }
 
@@ -572,8 +672,14 @@ export class HardwareWallets implements HardwareSignerProvider {
 
     // Retrieve the public keys from the device to our wallet
     const { device } = await this.#getSelectedDevice()
-    const accountIndex =
-      index ?? this.#walletAccounts.getNextIndex({ source: WalletAccount.LEDGER_SRC })
+    const source = device.descriptor.manufacturer
+    const accountIndex = index ?? this.#walletAccounts.getNextIndex({ source })
+    // Compute the walletId fingerprint in the currently selected session context.
+    // The caller is responsible for putting the device in the desired context
+    // (standard/hidden) prior to calling sync (e.g. via setPassphraseMode()).
+    // Fallback to randomly generated id, since Ledger doesn't support this..
+    const walletId = (await device.getWalletId?.()) ?? randomBytes(32).toString('hex')
+
     const useableAssetNames = new Set(await device.listUseableAssetNames())
     for (const assetName of useableAssetNames) {
       const asset = this.#assetsModule.getAsset(assetName)
@@ -583,10 +689,10 @@ export class HardwareWallets implements HardwareSignerProvider {
       }
 
       const baseAsset = asset.baseAsset
-      const supportedPurposes = baseAsset.api.getSupportedPurposes({
-        compatibilityMode: 'ledger',
+      const supportedPurposes = baseAsset.api.getSupportedPurposes?.({
+        compatibilityMode: source,
         isMultisig,
-      })
+      }) ?? [44]
       for (const purpose of supportedPurposes) {
         const {
           keyIdentifier,
@@ -608,6 +714,7 @@ export class HardwareWallets implements HardwareSignerProvider {
       model: device.descriptor.model,
       assetNames: useableAssetNames,
       keysToSync,
+      walletId,
     })
 
     return id
@@ -633,6 +740,12 @@ export class HardwareWallets implements HardwareSignerProvider {
       const { xpub, publicKey } = keys
       await this.#publicKeyStore.add({ walletAccount, keyIdentifier, xpub, publicKey })
     }
+
+    const availableAssetNames = await this.#availableAssetNamesAtom.get()
+    const assetNamesToEnable = [...assetNames].filter((assetName) =>
+      availableAssetNames.includes(assetName)
+    )
+    await this.#enabledAssets.enable(assetNamesToEnable)
 
     this.events.emit('syncAssets', { assetNames })
     // for (const assetName of assetNames) {
@@ -663,16 +776,19 @@ export class HardwareWallets implements HardwareSignerProvider {
       `no synchronized keys found for id ${syncedKeysId}`
     )
 
-    const { accountIndex, model } = this.#syncedKeysMap.get(syncedKeysId)!
+    const { device } = await this.#getSelectedDevice()
+    const source = device.descriptor.manufacturer
+    const label = source === WalletAccount.LEDGER_SRC ? 'Ledger' : 'Trezor'
+    const { accountIndex, model, walletId } = this.#syncedKeysMap.get(syncedKeysId)!
+
     // Create a new wallet account
     const walletAccount = new WalletAccount({
-      label: `Ledger${accountIndex === 0 ? '' : ' ' + accountIndex}`,
-      icon: 'ledger',
-      source: WalletAccount.LEDGER_SRC,
+      label: `${label}${accountIndex === 0 ? '' : '_' + accountIndex}`,
+      icon: source,
+      source,
       model,
       index: accountIndex,
-      // We're unable to derive a unique ID for the Ledger.
-      id: randomBytes(32).toString('hex'),
+      id: walletId,
       isMultisig: !!isMultisig,
     })
     const walletAccountName = walletAccount.toString()
@@ -684,11 +800,43 @@ export class HardwareWallets implements HardwareSignerProvider {
     return walletAccount
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  requireDeviceFor = async ({ walletAccount }: RequireDeviceForParams) => {
+  /**
+   * Clear the pairing request state.
+   */
+  clearPairingRequest = async () => {
+    await this.#trezorDiscovery.clearPairingPrompt()
+  }
+
+  /**
+   * Submit a pairing code for Trezor device pairing
+   * @param {ProcessPairingCodeParams} params
+   * @param {string} params.code - 6-digit pairing code
+   */
+  submitPairingCode = async ({ code }: ProcessPairingCodeParams) => {
+    return this.#trezorDiscovery.submitPairingCode(code)
+  }
+
+  setPassphraseMode = async ({ enabled }: SetPassphraseModeParams): Promise<void> => {
+    const { device } = await this.#getSelectedDevice()
+
+    const trezorDevice = this.#requireTrezorDevice(device)
+    trezorDevice.setPassphraseMode(enabled ? 'hidden' : 'standard')
+  }
+
+  requireDeviceFor = async (walletAccount: WalletAccount) => {
     return {
-      signTransaction: this.signTransaction,
-      signMessage: this.signMessage,
+      signTransaction: ({
+        baseAssetName,
+        unsignedTx,
+        multisigData,
+      }: Omit<SignTransactionParams, 'walletAccount'> & { walletAccount?: WalletAccount }) =>
+        this.signTransaction({ baseAssetName, unsignedTx, multisigData, walletAccount }),
+      signMessage: ({
+        assetName,
+        derivationPath,
+        message,
+      }: Omit<SignMessageParams, 'walletAccount'>) =>
+        this.signMessage({ assetName, derivationPath, message, walletAccount }),
     }
   }
 }
@@ -703,11 +851,14 @@ const hardwareWalletsModuleDefinition = {
     'assetsModule',
     'logger',
     'ledgerDiscovery',
+    'trezorDiscovery',
     'publicKeyStore',
     'hardwareWalletSigningRequestsAtom',
     'wallet',
     'walletAccountsAtom',
     'walletAccounts',
+    'enabledAssets',
+    'availableAssetNamesAtom',
   ],
   public: true,
 } as const satisfies Definition

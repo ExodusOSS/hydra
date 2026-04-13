@@ -37,6 +37,27 @@ describe('FetchFactory', () => {
     expect(globalHeadersResult2).toEqual({})
   })
 
+  test('setDefaultExodusIdentifierHeaders should set exodus headers and not override existing headers', async () => {
+    const fetchFactory = new FetchFactory(fetchFn)
+
+    fetchFactory.setHeaders({ 'x-custom-header': 'custom-value' }, [hosts.EXODUS_HOST])
+
+    fetchFactory.setDefaultExodusIdentifierHeaders({
+      appId: 'custom-id',
+      appVersion: '0.0.1',
+      appBuild: 'custom-build',
+    })
+
+    const exodusHeadersResult = await fetchFactory.create()('https://exodus.io')
+
+    expect(exodusHeadersResult).toEqual({
+      'x-custom-header': 'custom-value',
+      'x-exodus-app-id': 'custom-id',
+      'x-exodus-version': '0.0.1',
+      'x-requested-with': 'custom-id 0.0.1 custom-build',
+    })
+  })
+
   test('set exodus headers', async () => {
     const fetchFactory = new FetchFactory(fetchFn)
 
@@ -120,21 +141,21 @@ describe('FetchFactory', () => {
 
     expect(() => {
       fetchFactory.setHeaders({ 'x-custom-header': 'custom-value' }, ['invalid_domain'])
-    }).toThrow('Invalid domain: invalid_domain')
+    }).toThrow('Not a domain or IPv4 address: invalid_domain')
 
     const invalidDomainHeadersResult = await fetchFactory.create()('https://invalid_domain')
     expect(invalidDomainHeadersResult).toEqual({})
 
     expect(() => {
       fetchFactory.setHeaders({ 'x-custom-header': 'custom-value' }, ['example..com'])
-    }).toThrow('Invalid domain: example..com')
+    }).toThrow('Not a domain or IPv4 address: example..com')
 
     const invalidDomainHeadersResult2 = await fetchFactory.create()('https://example..com')
     expect(invalidDomainHeadersResult2).toEqual({})
 
     expect(() => {
       fetchFactory.setHeaders({ 'x-custom-header': 'custom-value' }, ['-example.com'])
-    }).toThrow('Invalid domain: -example.com')
+    }).toThrow('Not a domain or IPv4 address: -example.com')
 
     const invalidDomainHeadersResult3 = await fetchFactory.create()('https://-example.com')
     expect(invalidDomainHeadersResult3).toEqual({})
@@ -245,5 +266,39 @@ describe('FetchFactory', () => {
     expect(specificHeadersResult).toEqual({
       'x-specific-header': 'specific-value',
     })
+  })
+
+  test('set hostname-specific headers for localhost', async () => {
+    const fetchFactory = new FetchFactory(fetchFn)
+
+    fetchFactory.setHeaders({ 'x-custom-header': 'custom-value' }, ['localhost'])
+
+    const localhost = await fetchFactory.create()('http://localhost')
+    const localhostWithPort = await fetchFactory.create()('http://localhost:3000')
+    const localhostHttps = await fetchFactory.create()('https://localhost:3000')
+
+    expect(localhost).toEqual({
+      'x-custom-header': 'custom-value',
+    })
+
+    expect(localhostWithPort).toEqual({
+      'x-custom-header': 'custom-value',
+    })
+
+    expect(localhostHttps).toEqual({
+      'x-custom-header': 'custom-value',
+    })
+  })
+
+  test('set hostname-specific headers for IPv4 addresses', async () => {
+    const fetchFactory = new FetchFactory(fetchFn)
+
+    fetchFactory.setHeaders({ 'x-ipv4-header': 'v4' }, ['127.0.0.1'])
+
+    const ipv4NoPort = await fetchFactory.create()('http://127.0.0.1')
+    const ipv4WithPort = await fetchFactory.create()('http://127.0.0.1:3000')
+
+    expect(ipv4NoPort).toEqual({ 'x-ipv4-header': 'v4' })
+    expect(ipv4WithPort).toEqual({ 'x-ipv4-header': 'v4' })
   })
 })

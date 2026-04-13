@@ -9,3 +9,5 @@ export const TELEMETRY_OPT_OUT_COUNTRIES = new Set([
   'ZA', // south africa
   'CH', // switzerland
 ])
+
+export const DEFAULT_FLUSH_TIMEOUT = 30_000

@@ -15,8 +15,7 @@ const createConversionsSelectorDefinition = {
   id: 'createConversions',
   selectorFactory,
   dependencies: [
-    //
-    { module: 'assets', selector: 'all' },
+    { module: 'availableAssets', selector: 'all' },
     { module: 'rates', selector: 'data' },
   ],
 }

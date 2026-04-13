@@ -1,4 +1,5 @@
-import bs58check from 'bs58check'
+import { fromBase58checkSync } from '@exodus/bytes/base58check.js'
+import { toHex } from '@exodus/bytes/hex.js'
 
 import test from '../../__tests__/_test.js'
 import Address from '../../address/index.js'
@@ -11,9 +12,7 @@ test('convert AddressSet to map of pubKeyHash', (t) => {
 
   const set = AddressSet.fromArray([addr1, addr2, addr3])
   for (const addr of set) {
-    Buffer.from(bs58check.decode(String(addr)))
-      .subarray(-20)
-      .toString('hex')
+    toHex(fromBase58checkSync(String(addr)).subarray(-20))
   }
 
   t.end()

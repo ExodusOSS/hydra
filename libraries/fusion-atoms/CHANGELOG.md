@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fusion-atoms@1.3.1...@exodus/fusion-atoms@1.4.0) (2024-11-25)
+
+### Features
+
+- feat: use atoms v9 (#9651)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
 ## [1.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fusion-atoms@1.3.0...@exodus/fusion-atoms@1.3.1) (2024-08-14)
 
 ### Bug Fixes

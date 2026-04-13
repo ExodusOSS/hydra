@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@6.1.0...@exodus/activity-txs@6.1.1) (2026-03-24)
+
+### Bug Fixes
+
+- fix(activity-txs): avoid crashes for incomplete unindexed swap orders (#15662)
+
+## [6.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@6.0.0...@exodus/activity-txs@6.1.0) (2026-02-05)
+
+### Features
+
+- feat: improve activity calculation (#15119)
+
+## [6.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@5.0.2...@exodus/activity-txs@6.0.0) (2026-01-26)
+
+### ⚠ BREAKING CHANGES
+
+- **orders:** use typescript (#14786)
+
+### Features
+
+- feat: update all consumers to use safe strings for error namespaces (#14429)
+
+### Bug Fixes
+
+- fix(activity-txs): fiat order duplicates wallet order (#14959)
+
+- fix: update NFT transaction sent status calculation (#14359)
+
+- refactor(orders)!: use typescript (#14786)
+
+## [5.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@5.0.2...@exodus/activity-txs@5.1.0) (2025-11-19)
+
+### Features
+
+- feat: update all consumers to use safe strings for error namespaces (#14429)
+
+### Bug Fixes
+
+- fix: update NFT transaction sent status calculation (#14359)
+
 ## [5.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@5.0.1...@exodus/activity-txs@5.0.2) (2025-11-05)
 
 ### Bug Fixes

@@ -1,4 +1,5 @@
 import { Address, AddressSet } from '@exodus/models'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import assert from 'minimalistic-assert'
 import BipPath from 'bip32-path'
@@ -45,13 +46,23 @@ export const resolvePurpose = ({ asset, address }) => {
 }
 
 export const getAddressesFromTxLog = ({ asset, txLog, walletAccount }) => {
+  const internalOutputAddresses = AddressSet.fromArray(
+    [...txLog]
+      .flatMap((tx) => tx.data?.internalOutputs || [])
+      .map((output) => output?.address)
+      .filter(Boolean)
+  )
+
   const changeAddresses = AddressSet.fromArray(
     [...txLog].map((tx) => tx.data?.changeAddress).filter(Boolean)
   )
     .toArray()
     .filter((address) => address.pathArray[0] === 1) // changeAddress may contain receive address
 
-  const allAddresses = txLog.addresses.union(changeAddresses).sort(AddressSet.PATH_SORTER)
+  const allAddresses = txLog.addresses
+    .union(internalOutputAddresses)
+    .union(changeAddresses)
+    .sort(AddressSet.PATH_SORTER)
 
   return [...allAddresses].map((address) => {
     const purpose = resolvePurpose({ asset, address })

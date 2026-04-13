@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/startup-counter@1.1.0...@exodus/startup-counter@1.2.0) (2024-11-25)
+
+### Features
+
+- feat: use atoms v9 (#9651)
+
+### License
+
+- license: re-license under MIT license (#10580)
+
 ## [1.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/startup-counter@1.0.4...@exodus/startup-counter@1.1.0) (2024-09-30)
 
 ### Features

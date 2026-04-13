@@ -52,6 +52,7 @@ export default function createSerializeDeserialize({
     if (isArray) return { t: 'array', v: v.map((o) => serialize(o)) }
 
     // Custom types, classes
+    // Note: not necessary of 'object' type, can be used to serialize functions
     for (const def of classDefitions) {
       if (v instanceof def.class) return { t: def.type, v: def.serialize(v) }
     }

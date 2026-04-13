@@ -12,7 +12,7 @@ const conversionsSelectorDefinition = {
   dependencies: [
     //
     { selector: 'currencyUnitType', module: 'locale' },
-    { selector: 'all', module: 'assets' },
+    { selector: 'all', module: 'availableAssets' },
     { selector: 'fiatRates', module: 'rates' },
   ],
 }

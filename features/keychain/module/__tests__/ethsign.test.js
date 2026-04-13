@@ -53,24 +53,20 @@ describe('ETH Signer', () => {
       const secp256k1Signer = create({ getPrivateHDKey })
 
       const ethSigner = async (buffer) => {
-        const sig = await secp256k1Signer.signBuffer({
+        return secp256k1Signer.signBuffer({
           data: Buffer.from(buffer, 'hex'),
           keyId: new KeyIdentifier({
             keyType: 'secp256k1',
             derivationPath: 'm/0', // doesn't matter in this fixture as we don't use it
             derivationAlgorithm: 'BIP32',
           }),
-          enc: 'raw',
+          enc: 'sig,rec',
         })
-        const signature = new Uint8Array(64)
-        signature.set(sig.r.toArrayLike(Uint8Array, 'be', 32), 0)
-        signature.set(sig.s.toArrayLike(Uint8Array, 'be', 32), 32)
-        return { signature, recid: sig.recoveryParam }
       }
 
-      const { signature, recid } = await ethSigner(fixture.buffer)
+      const { signature, recovery } = await ethSigner(fixture.buffer)
 
-      expect(recid).toBe(fixture.recid)
+      expect(recovery).toBe(fixture.recid)
       expect(Buffer.from(signature).toString('hex')).toBe(fixture.signature)
     }
   })

@@ -16,7 +16,15 @@ const assetsModule = {
 }
 
 const ledgerDiscovery = {
-  list: jest.fn(),
+  list: jest.fn().mockResolvedValue([]),
+}
+
+const trezorDiscovery = {
+  list: jest.fn().mockResolvedValue([]),
+  scan: jest.fn(),
+  stopScan: jest.fn(),
+  connected: false,
+  submitPairingCode: jest.fn(),
 }
 
 const publicKeyStore = {
@@ -44,6 +52,30 @@ const walletAccounts = {
   setActive: jest.fn(),
 }
 
+const hardwareWalletThpCredentialsAtom = {
+  get: jest.fn(),
+  set: jest.fn(),
+  delete: jest.fn(),
+  clear: jest.fn(),
+  reset: jest.fn(),
+}
+
+const enabledAssets = {
+  enable: jest.fn(),
+}
+
+const availableAssetNamesAtom = {
+  get: jest.fn().mockResolvedValue(['bitcoin', 'ethereum']),
+}
+
+const platformInfo = {
+  get: jest.fn().mockResolvedValue({
+    device: {
+      manufacturer: 'Test Device',
+    },
+  }),
+}
+
 // const txLogMonitors = {
 //   update: jest.fn(),
 // }
@@ -65,16 +97,22 @@ describe('HardwareWallets', () => {
     hardwareWallets = hardwareWalletsModuleDefinition.factory({
       assetsModule,
       ledgerDiscovery,
+      trezorDiscovery,
       logger: console,
       publicKeyStore,
       hardwareWalletSigningRequestsAtom,
+      hardwareWalletThpCredentialsAtom,
       wallet,
       walletAccountsAtom,
       walletAccounts,
+      platformInfo,
+      enabledAssets,
+      availableAssetNamesAtom,
       // txLogMonitors,
       // restoreProgressTracker,
     })
     jest.resetAllMocks()
+    availableAssetNamesAtom.get.mockResolvedValue(['bitcoin', 'ethereum'])
   })
 
   describe('constructor', () => {
@@ -103,29 +141,16 @@ describe('HardwareWallets', () => {
       const mockDevice = {
         listUseableAssetNames: mockResolvedPromise(assetNames),
       }
-      const mockDescriptor = { get: () => mockDevice }
+      const mockDescriptor = {
+        manufacturer: 'ledger',
+        get: () => mockDevice,
+      }
+      // Mock Trezor to return empty array so it falls back to Ledger
+      trezorDiscovery.list.mockResolvedValue([])
       ledgerDiscovery.list.mockResolvedValue([mockDescriptor])
 
       const result = await hardwareWallets.listUseableAssetNames()
       expect(result).toEqual(assetNames)
-    })
-  })
-
-  describe('ensureApplicationIsOpened', () => {
-    const assetName = 'assetName'
-
-    it('should ensure application is opened', async () => {
-      const baseAsset = { name: 'baseAssetName' }
-      const mockDevice = {
-        ensureApplicationIsOpened: jest.fn(),
-      }
-      const mockDescriptor = { get: () => mockDevice }
-      assetsModule.getAsset.mockReturnValue({ baseAsset })
-
-      ledgerDiscovery.list.mockResolvedValue([mockDescriptor])
-
-      await hardwareWallets.ensureApplicationIsOpened({ assetName })
-      expect(ledgerDiscovery.list).toHaveBeenCalledTimes(3)
     })
   })
 
@@ -140,8 +165,13 @@ describe('HardwareWallets', () => {
       const mockDevice = {
         listUseableAssetNames: mockResolvedPromise([baseAsset.name]),
       }
-      const mockDescriptor = { get: () => mockDevice }
+      const mockDescriptor = {
+        manufacturer: 'ledger',
+        get: () => mockDevice,
+      }
       assetsModule.getAsset.mockReturnValueOnce({ baseAsset })
+      // Mock Trezor to return empty array so it falls back to Ledger
+      trezorDiscovery.list.mockResolvedValueOnce([])
       ledgerDiscovery.list.mockResolvedValueOnce([mockDescriptor])
 
       const result = await hardwareWallets.canAccessAsset({ assetName })
@@ -155,9 +185,14 @@ describe('HardwareWallets', () => {
       const mockDevice = {
         listUseableAssetNames: mockResolvedPromise([]),
       }
-      const mockDescriptor = { get: () => mockDevice }
+      const mockDescriptor = {
+        manufacturer: 'ledger',
+        get: () => mockDevice,
+      }
 
       assetsModule.getAsset.mockReturnValueOnce({ baseAsset })
+      // Mock Trezor to return empty array so it falls back to Ledger
+      trezorDiscovery.list.mockResolvedValueOnce([])
       ledgerDiscovery.list.mockResolvedValueOnce([mockDescriptor])
 
       const result = await hardwareWallets.canAccessAsset({ assetName })
@@ -185,13 +220,19 @@ describe('HardwareWallets', () => {
       mockAsset.baseAsset = mockAsset
       assetsModule.getAsset.mockReturnValue(mockAsset)
 
+      const mockDescriptor = {
+        manufacturer: 'ledger',
+        get: () => mockDevice,
+      }
+
       const mockDevice = {
+        descriptor: mockDescriptor,
         getAddress: jest.fn().mockImplementation(({ derivationPath }) => {
           return 'address_' + derivationPath
         }),
       }
-
-      const mockDescriptor = { get: () => mockDevice }
+      // Mock Trezor to return empty array so it falls back to Ledger
+      trezorDiscovery.list.mockResolvedValue([])
       ledgerDiscovery.list.mockResolvedValue([mockDescriptor])
 
       wallet.exists.mockResolvedValue(true)
@@ -267,7 +308,10 @@ describe('HardwareWallets', () => {
       getPublicKey: jest.fn().mockResolvedValue('publicKey'),
     }
 
-    const mockDescriptor = { get: () => mockDevice }
+    const mockDescriptor = {
+      manufacturer: 'ledger',
+      get: () => mockDevice,
+    }
 
     beforeEach(() => {
       mockDevice.listUseableAssetNames.mockResolvedValue([assetName])
@@ -278,6 +322,8 @@ describe('HardwareWallets', () => {
         }
       })
       assetsModule.getAsset.mockReturnValue(mockAsset)
+      // Mock Trezor to return empty array so it falls back to Ledger
+      trezorDiscovery.list.mockResolvedValue([])
       ledgerDiscovery.list.mockResolvedValue([mockDescriptor])
       randomBytes.mockReturnValue(Buffer.from(syncedKeysId, 'hex'))
     })
@@ -376,6 +422,7 @@ describe('HardwareWallets', () => {
       }
 
       const mockDescriptor = {
+        manufacturer: 'ledger',
         get: () => ({
           descriptor: mockDescriptor,
           ...mockDevice,
@@ -389,8 +436,15 @@ describe('HardwareWallets', () => {
         }
       })
       assetsModule.getAsset.mockReturnValue(mockAsset)
+      // Mock Trezor to return empty array so it falls back to Ledger
+      trezorDiscovery.list.mockResolvedValue([])
       ledgerDiscovery.list.mockResolvedValue([mockDescriptor])
 
+      // walletId randomness (called first in sync() since getWalletId is undefined for Ledger)
+      const walletIdRandomness = 'a96474a689c625e6a7ac5c6013ad3d187f93c37b0dca6a1c8b0052de95e18aed'
+      randomBytes.mockReturnValueOnce(Buffer.from(walletIdRandomness, 'hex'))
+
+      // synced keys id randomness
       const randomness = 'deadbeefdeadbeef'
       randomBytes.mockReturnValueOnce(Buffer.from(randomness, 'hex'))
 
@@ -436,6 +490,7 @@ describe('HardwareWallets', () => {
       }
 
       const mockDescriptor = {
+        manufacturer: 'ledger',
         model: 'nanoS',
         get: () => ({
           descriptor: mockDescriptor,
@@ -450,19 +505,22 @@ describe('HardwareWallets', () => {
         }
       })
       assetsModule.getAsset.mockReturnValue(mockAsset)
+      // Mock Trezor to return empty array so it falls back to Ledger
+      trezorDiscovery.list.mockResolvedValue([])
       ledgerDiscovery.list.mockResolvedValue([mockDescriptor])
+
+      // walletId randomness (called first in sync() since getWalletId is undefined for Ledger)
+      randomBytes.mockReturnValueOnce(Buffer.from(id, 'hex'))
 
       // synced keys id randomness
       const randomness = 'deadbeefdeadbeef'
       randomBytes.mockReturnValueOnce(Buffer.from(randomness, 'hex'))
 
-      // wallet account id randomness
-      randomBytes.mockReturnValueOnce(Buffer.from(id, 'hex'))
-
       const syncedKeysId = await hardwareWallets.sync({ accountIndex })
       await hardwareWallets.create({ syncedKeysId })
 
       expect(walletAccounts.create).toHaveBeenCalledWith({
+        delegated: undefined,
         color: '#ffffff',
         compatibilityMode: 'ledger',
         enabled: true,
@@ -495,9 +553,10 @@ describe('HardwareWallets', () => {
       }
 
       const mockDevice = {
-        ensureApplicationIsOpened: jest.fn(),
+        ensureDeviceReady: jest.fn(),
       }
       const mockDescriptor = {
+        manufacturer: 'ledger',
         model: 'nanoS',
         get: () => ({
           descriptor: mockDescriptor,
@@ -506,6 +565,8 @@ describe('HardwareWallets', () => {
       }
 
       assetsModule.getAsset.mockReturnValue(baseAsset)
+      // Mock Trezor to return empty array so it falls back to Ledger
+      trezorDiscovery.list.mockResolvedValue([])
       ledgerDiscovery.list.mockResolvedValue([mockDescriptor])
       randomBytes.mockReturnValueOnce(Buffer.from('deadbeefdeadbeef', 'hex'))
 
@@ -521,7 +582,7 @@ describe('HardwareWallets', () => {
       }
 
       const mockDevice = {
-        ensureApplicationIsOpened: jest.fn(),
+        ensureDeviceReady: jest.fn(),
       }
 
       const mockDescriptor = {
@@ -531,6 +592,8 @@ describe('HardwareWallets', () => {
         }),
       }
       assetsModule.getAsset.mockReturnValue(baseAsset)
+      // Mock Trezor to return empty array so it falls back to Ledger
+      trezorDiscovery.list.mockResolvedValue([])
       ledgerDiscovery.list.mockResolvedValue([mockDescriptor])
       randomBytes.mockReturnValueOnce(Buffer.from('deadbeefdeadbeef', 'hex'))
       await expect(hardwareWallets.signTransaction(signTransactionParams)).rejects.toThrow(
@@ -543,7 +606,8 @@ describe('HardwareWallets', () => {
     const assetName = 'assetName'
     const derivationPath = 'derivationPath'
     const message = 'message'
-    const signMessageParams = { assetName, derivationPath, message }
+    const walletAccount = { index: 0 }
+    const signMessageParams = { assetName, derivationPath, message, walletAccount }
 
     it('should sign a message successfully', async () => {
       const baseAsset = {
@@ -552,10 +616,11 @@ describe('HardwareWallets', () => {
       }
 
       const mockDevice = {
-        ensureApplicationIsOpened: jest.fn(),
+        ensureDeviceReady: jest.fn(),
         signMessage: mockResolvedPromise('signedMessage'),
       }
       const mockDescriptor = {
+        manufacturer: 'ledger',
         model: 'nanoS',
         get: () => ({
           descriptor: mockDescriptor,
@@ -564,6 +629,8 @@ describe('HardwareWallets', () => {
       }
 
       assetsModule.getAsset.mockReturnValue({ baseAsset })
+      // Mock Trezor to return empty array so it falls back to Ledger
+      trezorDiscovery.list.mockResolvedValue([])
       ledgerDiscovery.list.mockResolvedValue([mockDescriptor])
       randomBytes.mockReturnValueOnce(Buffer.from('deadbeefdeadbeef', 'hex'))
 
@@ -578,10 +645,11 @@ describe('HardwareWallets', () => {
       }
 
       const mockDevice = {
-        ensureApplicationIsOpened: jest.fn(),
+        ensureDeviceReady: jest.fn(),
         signMessage: mockRejectedPromise(new Error('timeout')),
       }
       const mockDescriptor = {
+        manufacturer: 'ledger',
         model: 'nanoS',
         get: () => ({
           descriptor: mockDescriptor,
@@ -589,6 +657,8 @@ describe('HardwareWallets', () => {
         }),
       }
       assetsModule.getAsset.mockReturnValue({ baseAsset })
+      // Mock Trezor to return empty array so it falls back to Ledger
+      trezorDiscovery.list.mockResolvedValue([])
       ledgerDiscovery.list.mockResolvedValue([mockDescriptor])
       randomBytes.mockReturnValueOnce(Buffer.from('deadbeefdeadbeef', 'hex'))
 

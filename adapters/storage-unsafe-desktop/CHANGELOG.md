@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/ExodusMovement/hydra/compare/@exodus/storage-unsafe-desktop@2.0.1...@exodus/storage-unsafe-desktop@2.0.2) (2026-03-12)
+
+- use `flush: true` instead of retry loop (#15549)
+
 ## [2.0.1](https://github.com/ExodusMovement/hydra/compare/@exodus/storage-unsafe-desktop@2.0.0...@exodus/storage-unsafe-desktop@2.0.1) (2025-07-30)
 
 ### Bug Fixes

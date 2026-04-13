@@ -76,6 +76,24 @@
         },
         "order_id": {
           "type": "string"
+        },
+        "create_order": {
+          "type": "number"
+        },
+        "update_order": {
+          "type": "number"
+        },
+        "simulating_tx": {
+          "type": "number"
+        },
+        "revoke_tokens": {
+          "type": "number"
+        },
+        "create_tx_bundle": {
+          "type": "number"
+        },
+        "send_tx_bundle": {
+          "type": "number"
         }
       },
       "unevaluatedProperties": false

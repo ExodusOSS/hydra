@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayProfileSettingsThemeChange"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "new_theme_name": {
+          "type": "string",
+          "enum": ["Gold", "Cash"]
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

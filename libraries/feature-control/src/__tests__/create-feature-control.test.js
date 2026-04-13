@@ -197,6 +197,8 @@ describe('createFeatureControl', () => {
         geolocation: {
           countryCode: 'US',
           regionCode: 'TX',
+          regionName: 'Texas',
+          regionCity: 'Austin',
         },
       },
       {
@@ -261,6 +263,12 @@ describe('createFeatureControl', () => {
     ).toBe(false)
 
     expect(
+      featureControl.getIsOn({
+        geolocation: { countries: 'all', disabledRegions: { US: { Austin: 'Austin' } } },
+      })
+    ).toBe(false)
+
+    expect(
       featureControl.getUnavailableReason({
         geolocation: { countries: 'all', disabledRegions: { US: { NY: 'New York' } } },
       })
@@ -277,6 +285,106 @@ describe('createFeatureControl', () => {
         geolocation: { countries: 'all', disabledCountries: { US: 'United States of America ' } },
       })
     ).toBe('geolocation')
+
+    expect(
+      featureControl.getIsOn({
+        geolocation: {
+          countries: 'all',
+          enabledRegions: { US: { TX: 'Texas' } },
+        },
+      })
+    ).toBe(true)
+
+    expect(
+      featureControl.getIsOn({
+        geolocation: {
+          countries: 'all',
+          enabledRegions: { US: { Austin: 'Austin' } },
+        },
+      })
+    ).toBe(true)
+
+    expect(
+      featureControl.getIsOn({
+        geolocation: {
+          countries: 'all',
+          enabledRegions: { US: { TX: 'Texas' } },
+          disabledRegions: { US: { TX: 'Texas' } },
+        },
+      })
+    ).toBe(false)
+
+    expect(
+      featureControl.getIsOn({
+        geolocation: {
+          countries: 'all',
+          enabledRegions: { US: { NY: 'New York' } },
+        },
+      })
+    ).toBe(false)
+
+    expect(
+      featureControl.getIsOn({
+        geolocation: {
+          countries: { US: 'United States of America' },
+          enabledRegions: { US: { TX: 'Texas' } },
+        },
+      })
+    ).toBe(true)
+
+    const featureControlNoRegionCode = createFeatureControl(
+      {
+        enabled: true,
+        ready: true,
+        geolocation: {
+          countryCode: 'US',
+          regionName: 'Texas',
+        },
+      },
+      {
+        geolocation: true,
+      }
+    )
+
+    expect(
+      featureControlNoRegionCode.getIsOn({
+        geolocation: { countries: 'all', disabledRegions: { US: { TX: 'Texas' } } },
+      })
+    ).toBe(false)
+
+    const featureControlBrazil = createFeatureControl(
+      {
+        enabled: true,
+        ready: true,
+        geolocation: {
+          countryCode: 'BR',
+          countryName: 'Brazil',
+          regionCode: 'SC',
+          regionName: 'Santa Catarina',
+        },
+      },
+      {
+        geolocation: true,
+      }
+    )
+
+    expect(
+      featureControlBrazil.getIsOn({
+        geolocation: {
+          countries: { BR: 'Brazil' },
+          enabledRegions: { BR: { SC: 'Santa Catarina' } },
+        },
+      })
+    ).toBe(true)
+
+    expect(
+      featureControlBrazil.getIsOn({
+        geolocation: {
+          countries: { BR: 'Brazil' },
+          enabledRegions: { BR: { RJ: 'Rio de Janeiro' } },
+        },
+      })
+    ).toBe(false)
   })
 })
 

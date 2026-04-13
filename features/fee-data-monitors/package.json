@@ -1,6 +1,6 @@
 {
   "name": "@exodus/fee-data-monitors",
-  "version": "5.0.4",
+  "version": "5.0.5",
   "description": "Fee monitor scheduler",
   "author": "Exodus Movement, Inc.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/fee-data-monitors",
@@ -45,6 +45,7 @@
     "redux": "^4.0.0"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

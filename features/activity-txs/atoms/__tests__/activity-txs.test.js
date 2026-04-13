@@ -114,6 +114,7 @@ describe('activityTxsAtom', () => {
           },
         },
         data: {
+          activityIndex: 1,
           sent: [
             {
               address: 'btc-address-1',
@@ -156,6 +157,7 @@ describe('activityTxsAtom', () => {
           },
         },
         data: {
+          activityIndex: 0,
           sent: [
             {
               address: 'btc-address-1',
@@ -200,6 +202,57 @@ describe('activityTxsAtom', () => {
     })
     await advance()
     expect(handler.mock.calls.length).toEqual(1)
+  })
+
+  test('reuses unchanged wallet object reference', async () => {
+    const handler = jest.fn()
+    const txLogsAtom = createInMemoryAtom({})
+    const accountStatesAtom = createInMemoryAtom({})
+    const atom = activityTxsAtomDefinition.factory({
+      txLogsAtom,
+      accountStatesAtom,
+      assetsModule: {
+        getAsset: (assetName) => assets[assetName],
+      },
+    })
+
+    const stableWallet0Txs = TxSet.fromArray(fixtures.bitcoin)
+    const wallet1TxsA = TxSet.fromArray(fixtures.bitcoin)
+    const wallet1TxsB = TxSet.fromArray(fixtures.bitcoin.slice(0, 1))
+
+    atom.observe(handler)
+    await txLogsAtom.set({
+      value: {
+        exodus_0: { bitcoin: stableWallet0Txs },
+        exodus_1: { bitcoin: wallet1TxsA },
+      },
+    })
+    await accountStatesAtom.set({
+      value: {
+        exodus_0: {},
+        exodus_1: {},
+      },
+    })
+    await advance()
+    expect(handler.mock.calls.length).toEqual(1)
+
+    const first = handler.mock.calls[0][0]
+    const wallet0First = first.exodus_0
+    const wallet1First = first.exodus_1
+
+    await txLogsAtom.set({
+      value: {
+        exodus_0: { bitcoin: stableWallet0Txs },
+        exodus_1: { bitcoin: wallet1TxsB },
+      },
+    })
+    await advance()
+    expect(handler.mock.calls.length).toEqual(2)
+
+    const second = handler.mock.calls[1][0]
+    expect(second).not.toBe(first)
+    expect(second.exodus_0).toBe(wallet0First)
+    expect(second.exodus_1).not.toBe(wallet1First)
   })
 
   test('returns txs for asset with noHistory feature', async () => {
@@ -466,12 +519,15 @@ describe('activityTxsAtom', () => {
         },
       },
     })
+    const errorPromise = new Promise((resolve) =>
+      errorsAtom.observe((errors) => errors.errors.length > 0 && resolve(errors))
+    )
+
     await advance()
-    const errors = await errorsAtom.get()
+    const errors = await errorPromise
     expect(handler.mock.calls.length).toEqual(1)
     expect(handler.mock.calls[0][0].exodus_0.eosio.map((tx) => tx.toJSON())).toEqual([])
     expect(errors.errors[0].context).toEqual({ assetName: 'eosio' })
     expect(errors.errors[0].error.toString()).toEqual('Error: bug in implementation')
-    expect(errors.errors[0].namespace).toEqual('activityTxs')
   })
 })

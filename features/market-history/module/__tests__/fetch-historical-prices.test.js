@@ -245,18 +245,8 @@ describe('fetchHistoricalPrices', () => {
       [
         'BTC_USD_day',
         [
-          [
-            now - day,
-            {
-              close: 69,
-            },
-          ],
-          [
-            now,
-            {
-              close: 70,
-            },
-          ],
+          [now - day, { close: 69 }],
+          [now, { close: 70 }],
         ],
       ],
     ])
@@ -309,5 +299,52 @@ describe('fetchHistoricalPrices', () => {
       getCurrentTime: () => now,
     })
     expect(runtimeCache.has(cacheKey)).toBe(true)
+  })
+
+  it('subsequent fetch does not mutate previous runtimeCache entry', async () => {
+    const cacheKey = 'BTC_USD_day'
+    let callCount = 0
+    const api = () => {
+      callCount++
+      return {
+        BTC: {
+          USD: [
+            {
+              time: (now - day * (callCount + 1)) / 1000,
+              close: 100 + callCount,
+              open: 99 + callCount,
+            },
+          ],
+        },
+      }
+    }
+
+    const runtimeCache = new Map()
+    const getCacheFromStorage = () => []
+
+    await fetchHistoricalPrices({
+      api,
+      assetTickers: ['BTC'],
+      fiatTicker: 'USD',
+      granularity: 'day',
+      getCacheFromStorage,
+      runtimeCache,
+      getCurrentTime: () => now,
+    })
+
+    const firstEntry = runtimeCache.get(cacheKey)
+    const firstEntrySnapshot = [...firstEntry]
+
+    await fetchHistoricalPrices({
+      api,
+      assetTickers: ['BTC'],
+      fiatTicker: 'USD',
+      granularity: 'day',
+      getCacheFromStorage,
+      runtimeCache,
+      getCurrentTime: () => now,
+    })
+
+    expect(firstEntry).toEqual(firstEntrySnapshot)
   })
 })

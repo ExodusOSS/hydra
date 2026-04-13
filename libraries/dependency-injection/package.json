@@ -1,6 +1,6 @@
 {
   "name": "@exodus/dependency-injection",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "A simple dependency injection and inversion of container",
   "author": "Exodus Movement, Inc.",
   "type": "module",
@@ -20,11 +20,11 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "run -T tsc --build tsconfig.build.json",
+    "build": "run -T tsc -p tsconfig.build.json",
     "clean": "run -T tsc --build --clean",
     "lint": "run -T eslint",
     "lint:fix": "yarn lint --fix",
-    "test": "run -T tsc --build && run -T exodus-test --jest --esbuild",
+    "test": "run -T exodus-test --jest --esbuild",
     "prepublishOnly": "yarn run -T build --scope @exodus/dependency-injection"
   },
   "devDependencies": {

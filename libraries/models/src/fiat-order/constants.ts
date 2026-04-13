@@ -11,9 +11,15 @@ export type OrderType = Values<typeof ORDER_TYPES>
 
 export const ORDER_STATUS = {
   __proto__: null,
+  action_required: 'action-required',
   complete: 'complete',
+  error: 'error',
+  expired: 'expired',
   failed: 'failed',
+  info: 'info',
   in_progress: 'in-progress',
+  refunded: 'refunded',
+  refunding: 'refunding',
 } as const
 
 export type OrderStatus = Values<typeof ORDER_STATUS>
@@ -63,14 +69,14 @@ export const MOONPAY_ORDER_STATUS = {
 
 export const ORDER_STATUS_TO_MOONPAY_STATUS = {
   __proto__: null,
-  [ORDER_STATUS.complete]: [MOONPAY_ORDER_STATUS.completed],
-  [ORDER_STATUS.failed]: [MOONPAY_ORDER_STATUS.failed],
-  [ORDER_STATUS.in_progress]: [
+  [ORDER_STATUS.action_required]: [
     MOONPAY_ORDER_STATUS.waiting_payment,
-    MOONPAY_ORDER_STATUS.pending,
     MOONPAY_ORDER_STATUS.waiting_authorization,
     MOONPAY_ORDER_STATUS.waiting_deposit,
   ],
+  [ORDER_STATUS.complete]: [MOONPAY_ORDER_STATUS.completed],
+  [ORDER_STATUS.failed]: [MOONPAY_ORDER_STATUS.failed],
+  [ORDER_STATUS.in_progress]: [],
 } as const
 
 export const PAYPAL_ORDER_STATUS = {
@@ -83,7 +89,9 @@ export const PAYPAL_ORDER_STATUS = {
 
 export const ORDER_STATUS_TO_PAYPAL_STATUS = {
   __proto__: null,
+  [ORDER_STATUS.action_required]: [],
   [ORDER_STATUS.complete]: [PAYPAL_ORDER_STATUS.completed],
+  [ORDER_STATUS.expired]: [],
   [ORDER_STATUS.failed]: [PAYPAL_ORDER_STATUS.failed],
   [ORDER_STATUS.in_progress]: [PAYPAL_ORDER_STATUS.initiated, PAYPAL_ORDER_STATUS.pending],
 } as const
@@ -106,10 +114,11 @@ export const RAMP_ORDER_STATUS = {
 
 export const ORDER_STATUS_TO_RAMP_STATUS = {
   __proto__: null,
+  [ORDER_STATUS.action_required]: [],
   [ORDER_STATUS.complete]: [RAMP_ORDER_STATUS.released],
+  [ORDER_STATUS.expired]: [RAMP_ORDER_STATUS.expired],
   [ORDER_STATUS.failed]: [
     RAMP_ORDER_STATUS.cancelled,
-    RAMP_ORDER_STATUS.expired,
     RAMP_ORDER_STATUS.payment_failed,
     RAMP_ORDER_STATUS.review_rejected,
   ],
@@ -136,8 +145,10 @@ export const SARDINE_ORDER_STATUS = {
 
 export const ORDER_STATUS_TO_SARDINE_STATUS = {
   __proto__: null,
+  [ORDER_STATUS.action_required]: [],
   [ORDER_STATUS.complete]: [SARDINE_ORDER_STATUS.complete],
-  [ORDER_STATUS.failed]: [SARDINE_ORDER_STATUS.declined, SARDINE_ORDER_STATUS.expired],
+  [ORDER_STATUS.expired]: [SARDINE_ORDER_STATUS.expired],
+  [ORDER_STATUS.failed]: [SARDINE_ORDER_STATUS.declined],
   [ORDER_STATUS.in_progress]: [
     SARDINE_ORDER_STATUS.draft,
     SARDINE_ORDER_STATUS.user_custody,
@@ -155,7 +166,9 @@ export const BLOCKCHAIN_ORDER_STATUS = {
 
 export const ORDER_STATUS_TO_BLOCKCHAIN_STATUS = {
   __proto__: null,
+  [ORDER_STATUS.action_required]: [],
   [ORDER_STATUS.complete]: [BLOCKCHAIN_ORDER_STATUS.completed],
+  [ORDER_STATUS.expired]: [],
   [ORDER_STATUS.failed]: [BLOCKCHAIN_ORDER_STATUS.failed],
   [ORDER_STATUS.in_progress]: [
     BLOCKCHAIN_ORDER_STATUS.pending,
@@ -205,7 +218,9 @@ export type StatusByProvider = {
 
 export const ORDER_STATUS_TO_ONRAMPER_STATUS = {
   __proto__: null,
+  [ORDER_STATUS.action_required]: [],
   [ORDER_STATUS.complete]: [ONRAMPER_ORDER_STATUS.completed],
+  [ORDER_STATUS.expired]: [],
   [ORDER_STATUS.failed]: [ONRAMPER_ORDER_STATUS.failed, ONRAMPER_ORDER_STATUS.canceled],
   [ORDER_STATUS.in_progress]: [
     ONRAMPER_ORDER_STATUS.new,
@@ -224,7 +239,9 @@ export const XOPAY_ORDER_STATUS = {
 
 export const ORDER_STATUS_TO_XOPAY_STATUS = {
   __proto__: null,
+  [ORDER_STATUS.action_required]: [],
   [ORDER_STATUS.complete]: [XOPAY_ORDER_STATUS.completed],
+  [ORDER_STATUS.expired]: [],
   [ORDER_STATUS.failed]: [XOPAY_ORDER_STATUS.error, XOPAY_ORDER_STATUS.failed],
   [ORDER_STATUS.in_progress]: [XOPAY_ORDER_STATUS.in_progress],
 } as const

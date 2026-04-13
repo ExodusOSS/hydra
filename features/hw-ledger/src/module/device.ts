@@ -15,6 +15,7 @@ import { createApplicationManager as applicationFactory } from './management/app
 import { UnsupportedVersionError, ApplicationNotFoundError } from './errors'
 
 import type {
+  EnsureDeviceReadyParams,
   GetAddressParams,
   GetPublicKeyParams,
   GetXPubParams,
@@ -116,7 +117,7 @@ export class LedgerDevice implements HardwareWalletDevice {
     }
   }
 
-  ensureApplicationIsOpened = async (baseAssetName: string) => {
+  #ensureApplicationIsOpened = async (baseAssetName: string) => {
     const { applications } = this.#getAssetApplication(baseAssetName)
     const supportedApplicationNames = applications.map(({ applicationName }) => applicationName)
 
@@ -167,6 +168,17 @@ export class LedgerDevice implements HardwareWalletDevice {
     }
   }
 
+  /**
+   * @deprecated Use ensureDeviceReady instead
+   */
+  ensureApplicationIsOpened = async (baseAssetName: string) => {
+    await this.#ensureApplicationIsOpened(baseAssetName)
+  }
+
+  ensureDeviceReady = async ({ baseAssetName }: EnsureDeviceReadyParams) => {
+    await this.#ensureApplicationIsOpened(baseAssetName)
+  }
+
   listSupportedAssetNames = async () => {
     return supportedBaseAssetNames
   }
@@ -198,7 +210,7 @@ export class LedgerDevice implements HardwareWalletDevice {
   }
 
   getAddress = async (params: GetAddressParams) => {
-    await this.ensureApplicationIsOpened(params.assetName)
+    await this.#ensureApplicationIsOpened(params.assetName)
     return this.#runInSession(async (transport) => {
       const handler = await this.#getAssetApplication(params.assetName).handler(
         transport,
@@ -209,7 +221,7 @@ export class LedgerDevice implements HardwareWalletDevice {
   }
 
   getXPub = async (params: GetXPubParams) => {
-    await this.ensureApplicationIsOpened(params.assetName)
+    await this.#ensureApplicationIsOpened(params.assetName)
     return this.#runInSession(async (transport) => {
       const handler = await this.#getAssetApplication(params.assetName).handler(transport)
       return handler.getXPub(params)
@@ -217,7 +229,7 @@ export class LedgerDevice implements HardwareWalletDevice {
   }
 
   getPublicKey = async (params: GetPublicKeyParams) => {
-    await this.ensureApplicationIsOpened(params.assetName)
+    await this.#ensureApplicationIsOpened(params.assetName)
     return this.#runInSession(async (transport) => {
       const handler = await this.#getAssetApplication(params.assetName).handler(transport)
       return handler.getPublicKey(params)
@@ -225,7 +237,7 @@ export class LedgerDevice implements HardwareWalletDevice {
   }
 
   signTransaction = async (params: SignTransactionParams) => {
-    await this.ensureApplicationIsOpened(params.assetName)
+    await this.#ensureApplicationIsOpened(params.assetName)
     return this.#runInSession(async (transport) => {
       const handler = await this.#getAssetApplication(params.assetName).handler(
         transport,
@@ -236,7 +248,7 @@ export class LedgerDevice implements HardwareWalletDevice {
   }
 
   signMessage = async (params: SignMessageParams) => {
-    await this.ensureApplicationIsOpened(params.assetName)
+    await this.#ensureApplicationIsOpened(params.assetName)
     return this.#runInSession(async (transport) => {
       const handler = await this.#getAssetApplication(params.assetName).handler(transport)
       return handler.signMessage(params)

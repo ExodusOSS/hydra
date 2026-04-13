@@ -7,18 +7,19 @@ import { createFiatNumberUnit, setup } from '../../utils.js'
 const assets = connectAssets(_assets)
 
 describe('sortedAssetsWithoutParentCombinedInActiveAccount', () => {
-  const assetsList = ['ethereum', 'leo', 'exit', 'usdcoin']
+  const assetsList = ['ethereum', 'aave', 'exit', 'usdcoin']
   const waynecoin = {
     name: 'waynecoin',
     isCombined: true,
     baseAsset: { name: 'waynecoin' },
     combinedAssets: [{ name: 'batcoin' }, { name: 'jokercoin' }],
+    combinedAssetNames: ['batcoin', 'jokercoin'],
   }
 
   const balances = {
     exodus_0: {
       ethereum: { total: assets.ethereum.currency.defaultUnit(1) },
-      leo: { total: assets.leo.currency.defaultUnit(1) },
+      aave: { total: assets.aave.currency.defaultUnit(1) },
       exit: { total: assets.exit.currency.defaultUnit(1) },
       usdcoin: { total: assets.usdcoin.currency.defaultUnit(0) },
     },
@@ -28,7 +29,7 @@ describe('sortedAssetsWithoutParentCombinedInActiveAccount', () => {
     byAssetSource: {
       exodus_0: {
         ethereum: createFiatNumberUnit(100),
-        leo: createFiatNumberUnit(99),
+        aave: createFiatNumberUnit(99),
         exit: createFiatNumberUnit(5),
         usdcoin: createFiatNumberUnit(0),
       },
@@ -40,7 +41,7 @@ describe('sortedAssetsWithoutParentCombinedInActiveAccount', () => {
       [assets.ethereum.ticker]: {
         cap: 999,
       },
-      [assets.leo.ticker]: {
+      [assets.aave.ticker]: {
         cap: 99,
       },
       [assets.exit.ticker]: {
@@ -68,7 +69,7 @@ describe('sortedAssetsWithoutParentCombinedInActiveAccount', () => {
 
     emitBalances(balances)
     emitFiatBalances(fiatBalances)
-    emitFavoriteAssets({ leo: true, zerox: true })
+    emitFavoriteAssets({ aave: true, zerox: true })
     emitRates(rates)
     emitAssets({
       ...pick(assets, assetsList),
@@ -77,6 +78,6 @@ describe('sortedAssetsWithoutParentCombinedInActiveAccount', () => {
 
     const result = sortedAssetsSelector(store.getState())
 
-    expect(result.map((a) => a.name)).toEqual(['leo', 'ethereum', 'exit', 'usdcoin'])
+    expect(result.map((a) => a.name)).toEqual(['aave', 'ethereum', 'exit', 'usdcoin'])
   })
 })

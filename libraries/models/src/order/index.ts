@@ -69,6 +69,7 @@ export type OrderProps = {
   toAsset?: string | Asset
   fromWalletAccount?: string
   toWalletAccount?: string
+  toAddress?: string
   svc?: string
   displaySvc?: string
   svcOptions?: Record<string, any>
@@ -114,6 +115,7 @@ export default class Order implements OrderProps {
   toAmount?: NumberUnit
   fromWalletAccount?: string
   toWalletAccount?: string
+  toAddress?: string
   svc: string
   displaySvc?: string
   svcOptions?: Record<string, any>
@@ -156,7 +158,11 @@ export default class Order implements OrderProps {
     if (props.toAmount) this.toAmount = props.toAmount
 
     this.fromWalletAccount = props.fromWalletAccount || WalletAccount.DEFAULT_NAME
+    // TODO: Ideally remove DEFAULT_NAME fallback for toWalletAccount when toAddress is set,
+    // but removing toWalletAccount may break some UI
     this.toWalletAccount = props.toWalletAccount || WalletAccount.DEFAULT_NAME
+    // Third-party swap withdraws: stores the external address when user swaps to a non-wallet address
+    if (props.toAddress) this.toAddress = props.toAddress
 
     // service provider:
     if (!props.svc) console.log(`${props.orderId} has no 'svc' field set.`)
@@ -243,6 +249,7 @@ export default class Order implements OrderProps {
       status: this.status,
       svc: this.svc,
       synced: this.synced,
+      toAddress: this.toAddress,
       toAmount,
       toAsset: this.toAsset,
       toWalletAccount: this.toWalletAccount,

@@ -1,5 +1,4 @@
 import { mapValues } from '@exodus/basic-utils'
-import isEmpty from 'lodash/isEmpty'
 import assert from 'minimalistic-assert'
 import { deserializeAssets, serializeAsset } from './assets-serialization.js'
 import { createBasicDomainSerialization } from './domain-serialization.js'
@@ -8,24 +7,12 @@ function isAsset(v) {
   return v && v.name && v.currency && v.assetType // if it quacks like and asset, it must be an asset
 }
 
-/**
- * @typedef {*} Asset
- */
-
-/**
- * Create serialization functions for a wide range of domain and native objects
- * @param {object} [deps]
- * @param {(asset: Asset) => object} [deps.serializeAsset]
- * @param {(asset: object) => Asset} [deps.deserializeAsset]
- * @param {(assets: object[]) => Asset[]} [deps.deserializeAssets]
- * @param {object} [deps.excludeSerialization]
- * @returns {{serialize: (payload: object) => string, deserialize: (payload: string) => object}}
- */
 const createDomainSerialization = ({
   serializeAsset,
   deserializeAsset,
   deserializeAssets, // optional
   excludeSerialization,
+  extraTypeDefinitions = [],
 } = {}) => {
   const assetTypeDefinitions = []
 
@@ -41,14 +28,17 @@ const createDomainSerialization = ({
       },
       {
         type: 'assetsList',
-        test: (list) => list && Array.isArray(list) && !isEmpty(list) && list.every(isAsset),
+        test: (list) => list && Array.isArray(list) && list.length > 0 && list.every(isAsset),
         serialize: (list) => list.map(serializeAsset),
         deserialize: resolvedDeserializeAssets,
       },
       {
         type: 'assetsMap',
         test: (obj) =>
-          obj && typeof obj === 'object' && !isEmpty(obj) && Object.values(obj).every(isAsset),
+          obj &&
+          typeof obj === 'object' &&
+          Object.keys(obj).length > 0 &&
+          Object.values(obj).every(isAsset),
         serialize: (obj) => mapValues(obj, serializeAsset),
         deserialize: (obj) => {
           const list = Object.values(obj)
@@ -60,7 +50,7 @@ const createDomainSerialization = ({
   }
 
   const serializer = createBasicDomainSerialization({
-    extraTypeDefinitions: assetTypeDefinitions,
+    extraTypeDefinitions: [...assetTypeDefinitions, ...extraTypeDefinitions],
     excludeSerialization,
   })
 
@@ -92,10 +82,6 @@ export {
   deserializeAssets,
 } from './assets-serialization.js'
 
-/**
- * It creates a domain serialization target to UI wallet processes.
- * @returns {{serialize: (payload: object) => string, deserialize: (payload: string) => object}}
- */
 export const createUIDomainSerialization = ({ getStoredAssets, proxyFunction }) => {
   assert(getStoredAssets, 'getStoredAssets is required')
   assert(proxyFunction, 'proxyFunction is required')
@@ -120,10 +106,6 @@ export const createUIDomainSerialization = ({ getStoredAssets, proxyFunction }) 
   })
 }
 
-/**
- * It creates a domain serialization targeted to backend wallet processes
- * @returns {{serialize: (payload: object) => string, deserialize: (payload: string) => object}}
- */
 export const createBackendDomainSerialization = () => {
   return createDomainSerialization({
     serializeAsset,

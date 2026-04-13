@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/ExodusMovement/hydra/compare/@exodus/dayjs@1.1.0...@exodus/dayjs@1.1.1) (2024-11-25)
+
+### License
+
+- license: re-license under MIT license (#10339)
+
 ## [1.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/dayjs@1.0.2...@exodus/dayjs@1.1.0) (2024-08-13)
 
 ### Features

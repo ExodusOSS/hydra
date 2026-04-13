@@ -4,8 +4,8 @@ describe('hedera', () => {
   let addressProvider
   let accountStatesAtom
 
-  beforeEach(() => {
-    ;({ addressProvider, accountStatesAtom } = setup())
+  beforeEach(async () => {
+    ;({ addressProvider, accountStatesAtom } = await setup())
   })
 
   describe('getReceiveAddress', () => {

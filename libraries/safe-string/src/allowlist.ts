@@ -10,5 +10,6 @@ export default [
   'estimateGas',
   'getNonce',
   'failed to parse error',
+  'failed with error code:',
   ...seedlessErrors,
 ]

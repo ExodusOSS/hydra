@@ -1,6 +1,6 @@
 {
   "name": "@exodus/available-assets",
-  "version": "8.8.0",
+  "version": "8.11.0",
   "description": "This Exodus SDK feature tracks available assets, i.e. assets that the user can potentially enable via the UI.",
   "license": "MIT",
   "author": "Exodus Movement, Inc.",
@@ -31,7 +31,7 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
+    "@exodus/atoms": "^10.0.0",
     "@exodus/basic-utils": "^3.0.1",
     "@exodus/core-selectors": "^4.0.0",
     "lodash": "^4.17.21",
@@ -51,6 +51,7 @@
     "redux": "^4.2.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

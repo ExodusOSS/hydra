@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.14.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.14.0...@exodus/address-provider@12.14.1) (2026-02-06)
+
+### Bug Fixes
+
+- fix(address-provider): fix getReceiveAddress return type and add getReceiveAddressObject (#15205)
+
+## [12.14.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.13.0...@exodus/address-provider@12.14.0) (2026-02-05)
+
+### Features
+
+- feat(Pay): check with simulateTranactions before signing a tx (#14411)
+
+### Bug Fixes
+
+- fix: Include internal outputs in known addresses for utxo coins (#15199)
+
+## [12.13.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.12.0...@exodus/address-provider@12.13.0) (2025-09-16)
+
+### Features
+
+- feat: add address-cache loaded api (#13828)
+
+## [12.12.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.11.2...@exodus/address-provider@12.12.0) (2025-08-18)
+
+### Features
+
+- feat: multisigDataIndex in address-provider (#13331)
+
+## [12.11.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.11.1...@exodus/address-provider@12.11.2) (2025-08-12)
+
+**Note:** Version bump only for package @exodus/address-provider
+
 ## [12.11.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.11.0...@exodus/address-provider@12.11.1) (2025-07-02)
 
 ### Bug Fixes

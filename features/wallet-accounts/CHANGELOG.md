@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [20.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.3.0...@exodus/wallet-accounts@20.4.0) (2026-03-24)
+
+### Features
+
+- feat(prediction): add external wallet address support (#15615)
+
+## [20.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.2.1...@exodus/wallet-accounts@20.3.0) (2026-03-17)
+
+### Features
+
+- feat: convert wallet-accounts feature to TypeScript (#15556)
+
+### Bug Fixes
+
+- fix: align storage-memory generics and move published-API type deps to dependencies (#15602)
+
 ## [20.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.2.0...@exodus/wallet-accounts@20.2.1) (2025-10-30)
 
 ### Bug Fixes

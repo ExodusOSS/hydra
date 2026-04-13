@@ -5,7 +5,11 @@ import { asset as ethereumMeta } from '@exodus/ethereum-meta'
 import { normalizeTxsJSON, TxSet, WalletAccount } from '@exodus/models'
 import createStorage from '@exodus/storage-memory'
 
-import { accountStatesAtomDefinition, txLogsAtomDefinition } from '../../atoms/index.js'
+import {
+  accountStatesAtomDefinition,
+  blockchainMetadataAtomDefinition,
+  txLogsAtomDefinition,
+} from '../../atoms/index.js'
 import definition from '../index.js'
 import { AccountStates } from './test-utils.js'
 import _fixtures from './tx-log-fixtures.cjs'
@@ -61,6 +65,7 @@ describe('blockchain metadata module', () => {
   let blockchainMetadata
   let txLogsAtom
   let accountStatesAtom
+  let blockchainMetadataAtom
   let enabledWalletAccountsAtom
   let errorTracking
 
@@ -70,8 +75,9 @@ describe('blockchain metadata module', () => {
       getAssets: () => assets,
     }
     enabledWalletAccountsAtom = createInMemoryAtom({ defaultValue: {} })
-    txLogsAtom = txLogsAtomDefinition.factory()
-    accountStatesAtom = accountStatesAtomDefinition.factory()
+    blockchainMetadataAtom = blockchainMetadataAtomDefinition.factory()
+    txLogsAtom = txLogsAtomDefinition.factory({ blockchainMetadataAtom })
+    accountStatesAtom = accountStatesAtomDefinition.factory({ blockchainMetadataAtom })
     errorTracking = {
       track: jest.fn(),
     }
@@ -83,6 +89,7 @@ describe('blockchain metadata module', () => {
       enabledWalletAccountsAtom,
       txLogsAtom,
       accountStatesAtom,
+      blockchainMetadataAtom,
       logger: { error: jest.fn() },
       errorTracking,
     })
@@ -90,14 +97,6 @@ describe('blockchain metadata module', () => {
     await blockchainMetadata.load()
     await flushPendingPromises()
   })
-
-  function txLogsEvent({ assetName = 'bitcoin', walletAccount = 'exodus_0', txLog }) {
-    return { [walletAccount]: { [assetName]: txLog } }
-  }
-
-  function accountStatesEvent({ assetName = 'bitcoin', walletAccount = 'exodus_0', accountState }) {
-    return { [walletAccount]: { [assetName]: accountState } }
-  }
 
   async function loadDefaultWalletAccount() {
     await enabledWalletAccountsAtom.set({ exodus_0: WalletAccount.DEFAULT })
@@ -395,17 +394,12 @@ describe('blockchain metadata module', () => {
 
   describe('updateTxs', () => {
     test('emits tx event for asset source', async () => {
-      const handler = jest.fn()
-      blockchainMetadata.on('tx-logs-update', handler)
-
       await blockchainMetadata.updateTxs({
         assetName: 'bitcoin',
         walletAccount: 'exodus_0',
         txs: fixtures.bitcoin,
       })
 
-      expect(handler).toHaveBeenCalledTimes(1)
-      expect(handler).toHaveBeenCalledWith(txLogsEvent({ txLog: createTxSet(fixtures.bitcoin) }))
       await expect(txLogsAtom.get()).resolves.toMatchSnapshot()
     })
 
@@ -413,11 +407,6 @@ describe('blockchain metadata module', () => {
       const namespace = storage.namespace('txs')
       await namespace.set('exodus_0:bitcoin', fixtures.bitcoin)
       await loadDefaultWalletAccount()
-
-      const handler = jest.fn()
-      const handlerForReceivedTxs = jest.fn()
-      blockchainMetadata.on('tx-logs-update', handler)
-      blockchainMetadata.on('received-tx-logs-update', handlerForReceivedTxs)
 
       const observer = jest.fn()
       txLogsAtom.observe(observer)
@@ -428,8 +417,6 @@ describe('blockchain metadata module', () => {
         txs: fixtures.bitcoin,
       })
 
-      expect(handler).not.toHaveBeenCalled()
-      expect(handlerForReceivedTxs).not.toHaveBeenCalled()
       expect(observer).toHaveBeenCalledTimes(1)
     })
 
@@ -446,12 +433,7 @@ describe('blockchain metadata module', () => {
     })
 
     test('updates tx properties', async () => {
-      const handler = jest.fn()
-      const receivedTxLogsHandler = jest.fn()
       const tx = fixtures.bitcoin[0]
-
-      blockchainMetadata.on('tx-logs-update', handler)
-      blockchainMetadata.on('received-tx-logs-update', receivedTxLogsHandler)
 
       await blockchainMetadata.updateTxs({
         assetName: 'bitcoin',
@@ -473,17 +455,6 @@ describe('blockchain metadata module', () => {
         txs: updatedTxs,
       })
 
-      const expected = {
-        asymmetricMatch: ({ exodus_0: { bitcoin: txLog } }) => txLog.getAt(0).confirmations === 2,
-      }
-      const expectedReceived = {
-        asymmetricMatch: ({ exodus_0: { bitcoin: txLog } }) => txLog.getAt(0).confirmations === 1,
-      }
-
-      expect(handler).toHaveBeenCalledTimes(2)
-      expect(handler).toHaveBeenLastCalledWith(expected)
-      expect(receivedTxLogsHandler).toHaveBeenLastCalledWith(expectedReceived)
-
       // atom
       ;({ value, changes, newlyReceivedTxLogs } = await txLogsAtom.get())
       expect(newlyReceivedTxLogs).toEqual(undefined)
@@ -499,11 +470,9 @@ describe('blockchain metadata module', () => {
 
   describe('updateAccountState', () => {
     test('emits account-state changes per asset-source', async () => {
-      const handler = jest.fn()
       const observer = jest.fn()
       const accountState = { cursor: 'some-cursor' }
 
-      blockchainMetadata.on('account-states-update', handler)
       accountStatesAtom.observe(observer)
 
       await blockchainMetadata.updateAccountState({
@@ -512,10 +481,6 @@ describe('blockchain metadata module', () => {
         newData: { cursor: 'some-cursor' },
       })
 
-      expect(handler).toHaveBeenCalledTimes(1)
-      expect(handler).toHaveBeenCalledWith(
-        accountStatesEvent({ accountState: AccountStates.bitcoin.deserialize(accountState) })
-      )
       expect(observer).toHaveBeenLastCalledWith(
         expect.objectContaining({
           changes: {
@@ -535,9 +500,6 @@ describe('blockchain metadata module', () => {
 
       await loadDefaultWalletAccount()
 
-      const handler = jest.fn()
-      blockchainMetadata.on('account-states-update', handler)
-
       const observer = jest.fn()
       accountStatesAtom.observe(observer)
 
@@ -547,14 +509,10 @@ describe('blockchain metadata module', () => {
         newData: accountState,
       })
 
-      expect(handler).not.toHaveBeenCalled()
       expect(observer).toHaveBeenCalledTimes(1)
     })
 
     test('updates existing state', async () => {
-      const handler = jest.fn()
-      blockchainMetadata.on('account-states-update', handler)
-
       const observer = jest.fn()
       accountStatesAtom.observe(observer)
 
@@ -571,11 +529,6 @@ describe('blockchain metadata module', () => {
       })
 
       const accountState = { cursor: 'some-cursor', balance: '1 BTC' }
-      expect(handler).toHaveBeenCalledTimes(2)
-      expect(handler).toHaveBeenNthCalledWith(
-        2,
-        accountStatesEvent({ accountState: AccountStates.bitcoin.deserialize(accountState) })
-      )
 
       expect(observer).toHaveBeenLastCalledWith(
         expect.objectContaining({
@@ -589,9 +542,6 @@ describe('blockchain metadata module', () => {
     })
 
     test('does not fire event when no-op merge', async () => {
-      const handler = jest.fn()
-      blockchainMetadata.on('account-states-update', handler)
-
       const observer = jest.fn()
 
       accountStatesAtom.observe(observer)
@@ -602,7 +552,6 @@ describe('blockchain metadata module', () => {
         newData: { balance: '0 BTC' },
       })
 
-      expect(handler).not.toHaveBeenCalled()
       expect(observer).toHaveBeenCalledTimes(1) // initial value
     })
 
@@ -635,9 +584,6 @@ describe('blockchain metadata module', () => {
     })
 
     test('emits tx event for asset source', async () => {
-      const handler = jest.fn()
-      blockchainMetadata.on('tx-logs-update', handler)
-
       const observer = jest.fn()
       txLogsAtom.observe(observer)
 
@@ -647,7 +593,6 @@ describe('blockchain metadata module', () => {
         txs: fixtures.bitcoin,
       })
 
-      expect(handler).toHaveBeenCalledWith(txLogsEvent({ txLog: createTxSet([]) }))
       expect(observer).toHaveBeenLastCalledWith(
         expect.objectContaining({
           changes: {
@@ -671,11 +616,6 @@ describe('blockchain metadata module', () => {
     })
 
     test('replaces existing txs', async () => {
-      const handler = jest.fn()
-      const receivedTxsHandler = jest.fn()
-      blockchainMetadata.on('tx-logs-update', handler)
-      blockchainMetadata.on('received-tx-logs-update', receivedTxsHandler)
-
       const observer = jest.fn()
       txLogsAtom.observe(observer)
 
@@ -691,19 +631,10 @@ describe('blockchain metadata module', () => {
       const loadedTxs = await blockchainMetadata.getLoadedTxLogs()
 
       expect(loadedTxs['exodus_1']['bitcoin'].toJSON()).toEqual(newTxSet.toJSON())
-      expect(handler).toHaveBeenCalledWith(
-        txLogsEvent({ walletAccount: 'exodus_1', txLog: newTxSet })
-      )
-      expect(receivedTxsHandler).not.toHaveBeenCalled()
       expect(getLastCallArgs(observer)).toMatchSnapshot()
     })
 
     test('replaces existing txs with notifying about received txs', async () => {
-      const handler = jest.fn()
-      const receivedTxsHandler = jest.fn()
-      blockchainMetadata.on('tx-logs-update', handler)
-      blockchainMetadata.on('received-tx-logs-update', receivedTxsHandler)
-
       const observer = jest.fn()
       txLogsAtom.observe(observer)
 
@@ -728,10 +659,6 @@ describe('blockchain metadata module', () => {
       const loadedTxs = await blockchainMetadata.getLoadedTxLogs()
 
       expect(loadedTxs['exodus_1']['bitcoin'].toJSON()).toEqual(newTxSet.toJSON())
-      expect(handler).toHaveBeenCalledWith(
-        txLogsEvent({ walletAccount: 'exodus_1', txLog: newTxSet })
-      )
-      expect(receivedTxsHandler).toHaveBeenCalled()
       expect(getLastCallArgs(observer)).toMatchSnapshot()
     })
   })
@@ -747,9 +674,6 @@ describe('blockchain metadata module', () => {
     })
 
     test('removes existing txs', async () => {
-      const handler = jest.fn()
-      blockchainMetadata.on('tx-logs-update', handler)
-
       const observer = jest.fn()
       txLogsAtom.observe(observer)
 
@@ -761,9 +685,6 @@ describe('blockchain metadata module', () => {
       const loadedTxs = await blockchainMetadata.getLoadedTxLogs()
 
       expect(loadedTxs['exodus_0']['bitcoin'].toJSON()).toEqual(TxSet.EMPTY.toJSON())
-      expect(handler).toHaveBeenCalledWith(
-        txLogsEvent({ walletAccount: 'exodus_0', txLog: TxSet.EMPTY })
-      )
       expect(getLastCallArgs(observer)).toMatchSnapshot()
     })
   })
@@ -790,9 +711,6 @@ describe('blockchain metadata module', () => {
     })
 
     test('emits account-states-update event for asset source', async () => {
-      const handler = jest.fn()
-      blockchainMetadata.once('account-states-update', handler)
-
       const observer = jest.fn()
       accountStatesAtom.observe(observer)
       await blockchainMetadata.removeAccountState({
@@ -800,9 +718,6 @@ describe('blockchain metadata module', () => {
         walletAccount: 'exodus_0',
       })
 
-      expect(handler).toHaveBeenCalledWith(
-        accountStatesEvent({ accountState: AccountStates.bitcoin.create() })
-      )
       expect(getLastCallArgs(observer)).toMatchSnapshot()
     })
 
@@ -865,9 +780,6 @@ describe('blockchain metadata module', () => {
 
     describe('txs', () => {
       it('should batch updates and emit once', async () => {
-        const handler = jest.fn()
-        blockchainMetadata.on('tx-logs-update', handler)
-
         const observer = jest.fn()
         txLogsAtom.observe(observer)
 
@@ -890,8 +802,6 @@ describe('blockchain metadata module', () => {
             txs: transactions2,
           })
           .commit()
-
-        expect(handler).toHaveBeenCalledTimes(1)
 
         const expectTransactions = (transactions) => ({
           asymmetricMatch: (payload) => {
@@ -919,7 +829,6 @@ describe('blockchain metadata module', () => {
           },
         ])
 
-        expect(handler).toHaveBeenCalledWith(expectedTransactions)
         expect(observer).toHaveBeenLastCalledWith(expectedTransactions)
 
         await expect(blockchainMetadata.getLoadedTxLogs()).resolves.toEqual({
@@ -934,9 +843,6 @@ describe('blockchain metadata module', () => {
       })
 
       it('should dedupe on remove of same asset source', async () => {
-        const handler = jest.fn()
-        blockchainMetadata.on('tx-logs-update', handler)
-
         const observer = jest.fn()
         txLogsAtom.observe(observer)
 
@@ -954,21 +860,11 @@ describe('blockchain metadata module', () => {
           })
           .commit()
 
-        expect(handler).toHaveBeenCalledTimes(1)
-        expect(handler).toHaveBeenCalledWith({
-          exodus_0: {
-            bitcoin: TxSet.EMPTY,
-          },
-        })
-
         expect(observer).toHaveBeenCalledTimes(2) // initial + update
         expect(getLastCallArgs(observer)).toMatchSnapshot()
       })
 
       it('should dedupe on update of the same asset source', async () => {
-        const handler = jest.fn()
-        blockchainMetadata.on('tx-logs-update', handler)
-
         const observer = jest.fn()
         txLogsAtom.observe(observer)
 
@@ -988,8 +884,6 @@ describe('blockchain metadata module', () => {
           })
           .commit()
 
-        expect(handler).toHaveBeenCalledTimes(1)
-
         const expected = {
           asymmetricMatch: (payload) => {
             if (payload.value) payload = payload.value // atom vs event
@@ -999,7 +893,6 @@ describe('blockchain metadata module', () => {
           },
         }
 
-        expect(handler).toHaveBeenCalledWith(expected)
         expect(observer).toHaveBeenCalledTimes(2) // initial + update
         expect(observer).toHaveBeenLastCalledWith(expected)
       })
@@ -1011,9 +904,6 @@ describe('blockchain metadata module', () => {
           walletAccount: 'exodus_0',
           newData: { cursor: '', balance: '2 BTC' },
         })
-
-        const handler = jest.fn()
-        blockchainMetadata.on('account-states-update', handler)
 
         const observer = jest.fn()
         accountStatesAtom.observe(observer)
@@ -1031,21 +921,11 @@ describe('blockchain metadata module', () => {
           })
           .commit()
 
-        expect(handler).toHaveBeenCalledTimes(1)
-        expect(handler).toHaveBeenCalledWith({
-          exodus_0: {
-            bitcoin: AccountStates.bitcoin.create(),
-          },
-        })
-
         expect(observer).toHaveBeenCalledTimes(2) // initial + update
         expect(getLastCallArgs(observer)).toMatchSnapshot()
       })
 
       it('should dedupe on update of the same asset source', async () => {
-        const handler = jest.fn()
-        blockchainMetadata.on('account-states-update', handler)
-
         const observer = jest.fn()
         accountStatesAtom.observe(observer)
 
@@ -1063,20 +943,11 @@ describe('blockchain metadata module', () => {
           })
           .commit()
 
-        expect(handler).toHaveBeenCalledTimes(1)
-        expect(handler).toHaveBeenCalledWith({
-          exodus_0: {
-            bitcoin: AccountStates.bitcoin.deserialize(accountState1),
-          },
-        })
         expect(observer).toHaveBeenCalledTimes(2) // initial + update
         expect(getLastCallArgs(observer)).toMatchSnapshot()
       })
 
       it('should batch updates and emit once', async () => {
-        const handler = jest.fn()
-        blockchainMetadata.on('account-states-update', handler)
-
         const observer = jest.fn()
         accountStatesAtom.observe(observer)
 
@@ -1095,16 +966,6 @@ describe('blockchain metadata module', () => {
           .commit()
 
         await expect(blockchainMetadata.getLoadedAccountStates()).resolves.toEqual({
-          exodus_0: {
-            bitcoin: AccountStates.bitcoin.deserialize(accountState0),
-          },
-          exodus_1: {
-            bitcoin: AccountStates.bitcoin.deserialize(accountState1),
-          },
-        })
-
-        expect(handler).toHaveBeenCalledTimes(1)
-        expect(handler).toHaveBeenCalledWith({
           exodus_0: {
             bitcoin: AccountStates.bitcoin.deserialize(accountState0),
           },

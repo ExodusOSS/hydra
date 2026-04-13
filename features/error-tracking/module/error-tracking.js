@@ -1,3 +1,6 @@
+import { isSafe } from '@exodus/safe-string'
+import { captureStackTrace } from '@exodus/errors'
+
 const MODULE_ID = 'errorTracking'
 
 const createErrorTracking = ({
@@ -13,14 +16,24 @@ const createErrorTracking = ({
       if (!silent) throw err
     }
 
+    if (error instanceof Error) {
+      captureStackTrace(error)
+    } else {
+      return onError(new TypeError('error must be an instance of Error'))
+    }
+
     logger.error(error)
 
     if (namespace !== undefined && typeof namespace !== 'string') {
-      return onError(new Error('namespace must be a string'))
+      return onError(new TypeError('namespace must be a string'))
     }
 
-    if (!(error instanceof Error)) {
-      return onError(new TypeError('error must be an instance of Error'))
+    if (namespace !== undefined && !isSafe(namespace)) {
+      return onError(
+        new TypeError(
+          'namespace must be a safe string. Use safeString`your-namespace` from @exodus/safe-string'
+        )
+      )
     }
 
     // TODO: eventually kill this and only track remote

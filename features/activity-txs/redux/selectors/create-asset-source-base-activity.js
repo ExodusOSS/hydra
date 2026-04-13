@@ -69,7 +69,7 @@ const noop = () => null
 const createAssetSourceBaseActivitySelectorDefinition = {
   id: 'createAssetSourceBaseActivity',
   selectorFactory: (
-    assetsSelector,
+    getAssetSelector,
     createBatchedAssetSourceSelector,
     createOrdersInAccountSelector,
     getPersonalNoteByTxIdSelector
@@ -85,13 +85,14 @@ const createAssetSourceBaseActivitySelectorDefinition = {
           ? noop
           : createOrdersInAccountSelector(walletAccount)
         return createSelector(
-          assetsSelector,
+          getAssetSelector,
           batchedTxsSelector,
           orderSelector,
           getPersonalNoteByTxIdSelector,
-          (assets, txs = EMPTY, orderSet, getPersonalNoteByTxId) => {
+          (getAsset, txs = EMPTY, orderSet, getPersonalNoteByTxId) => {
             const activityResult = []
-            const isIndexless = assets[assetName]?.baseAsset?.api?.features?.noHistory
+            const isIndexless =
+              assetName && getAsset(assetName)?.baseAsset?.api?.features?.noHistory
             const groupedTxs = groupTxsWithSameOrder({ txs, orderSet, isIndexless })
 
             if (groupedTxs) {
@@ -101,11 +102,12 @@ const createAssetSourceBaseActivitySelectorDefinition = {
                   ? getPersonalNoteByTxId(tx.txId)
                   : undefined
                 const formattedTx = formattersByType.get(formatterType)({
-                  asset: assets[tx.coinName],
+                  asset: getAsset(tx.coinName),
                   order,
                   tx,
                   personalNote,
                 })
+                if (!formattedTx) continue
 
                 activityResult.push({ ...formattedTx, walletAccount })
               }
@@ -130,8 +132,11 @@ const createAssetSourceBaseActivitySelectorDefinition = {
                 // Prevent dups by checking if this order already exists.
                 if (orderIdsFromActivity.has(order.orderId)) return
 
+                const formattedOrder = formatUnindexedOrder({ assetName, order })
+                if (!formattedOrder) return
+
                 activityResult.push({
-                  ...formatUnindexedOrder({ assetName, assets, order }),
+                  ...formattedOrder,
                   walletAccount,
                 })
               })
@@ -147,7 +152,7 @@ const createAssetSourceBaseActivitySelectorDefinition = {
         `${assetName}_${walletAccount}_${JSON.stringify(rest)}`
     ),
   dependencies: [
-    { module: 'assets', selector: 'all' },
+    { module: 'assets', selector: 'getAsset' },
     { selector: 'createBatchedAssetSourceSelector' },
     { module: 'orders', selector: 'createOrdersInAccount', optional: true },
     { module: 'personalNotes', selector: 'get', optional: true },

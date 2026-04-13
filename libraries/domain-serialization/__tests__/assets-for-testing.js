@@ -1,4 +1,4 @@
-import assetsModuleDefinition from '@exodus/assets-feature/module'
+import assetsModuleDefinition from '@exodus/assets-feature/module/index.js'
 import { createInMemoryAtom } from '@exodus/atoms'
 import * as bitcoin from '@exodus/bitcoin-plugin'
 import ethereum from '@exodus/ethereum-plugin'

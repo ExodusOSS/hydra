@@ -1,4 +1,4 @@
-import bs58check from 'bs58check'
+import { toBase58checkSync } from '@exodus/bytes/base58check.js'
 
 export function buildFauxXPUB(publicKey: Buffer, chainCode: Buffer) {
   // => version(4) || depth(1) || fingerprint(4) || index(4) || chain(32) || key(33)
@@ -19,5 +19,5 @@ export function buildFauxXPUB(publicKey: Buffer, chainCode: Buffer) {
   chainCode.copy(buffer, 13)
   publicKey.copy(buffer, 45)
 
-  return bs58check.encode(buffer)
+  return toBase58checkSync(buffer)
 }

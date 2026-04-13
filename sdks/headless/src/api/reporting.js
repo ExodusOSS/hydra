@@ -15,8 +15,9 @@ const reportCustomizer = (value) => {
   }
 
   // Lodash issue: https://github.com/lodash/lodash/issues/5247
-  // Avoid cloning SafeError instances to prevent losing private class fields, which are used during JSON serialization.
-  if (value instanceof SafeError) {
+  // Skip cloning objects with custom toJSON - cloning can lose private fields needed for serialization.
+  // Cloning is only needed for Error coercion above.
+  if (typeof value?.toJSON === 'function') {
     return value
   }
 }

@@ -13,7 +13,10 @@ export type Bip44PathArrayNumber = [number, number, number, number, number]
 
 export function assertBip44Path(parts: string[]): asserts parts is Bip44PathArray {
   assert(parts.length === 5, 'invalid bip44 derivation path: length must be 5')
-  assert(parts.every((part) => typeof part === 'string'))
+  assert(
+    parts.every((part) => typeof part === 'string'),
+    'Invalid parts'
+  )
 }
 
 export function splitBip44DerivationPath(derivationPath: string): Bip44PathArray {
@@ -31,7 +34,10 @@ export function assertBip44PathNumber(
   parts: readonly number[]
 ): asserts parts is Bip44PathArrayNumber {
   assert(parts.length === 5, 'invalid bip44 derivation path: length must be 5')
-  assert(parts.every((part) => typeof part === 'number'))
+  assert(
+    parts.every((part) => typeof part === 'number'),
+    'Invalid parts'
+  )
 }
 
 export function buildBip44PathFromNumber(parts: Bip44PathArrayNumber) {

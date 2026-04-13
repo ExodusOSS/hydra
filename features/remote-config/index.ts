@@ -5,7 +5,7 @@ import remoteConfigModuleDefinition from './module/index.js'
 import remoteConfigApiDefinition from './api/index.js'
 import remoteConfigPluginDefinition from './plugin/index.js'
 import remoteConfigReportDefinition from './report/index.js'
-import remoteConfigStatusAtomDefinition from './atoms/index.js'
+import remoteConfigAtomDefinition from './atoms/remote-config.js'
 
 const configSchema = {
   remoteConfigUrl: '?String',
@@ -27,14 +27,25 @@ const remoteConfig = (config = Object.create(null)) => {
     id: 'remoteConfig',
     definitions: [
       { definition: remoteConfigModuleDefinition, config },
-      { definition: remoteConfigStatusAtomDefinition },
       { definition: remoteConfigPluginDefinition },
       { definition: remoteConfigApiDefinition },
       { definition: remoteConfigReportDefinition },
+      {
+        definition: remoteConfigAtomDefinition,
+        storage: { namespace: 'remoteConfig' },
+        aliases: [{ implementationId: 'unsafeStorage', interfaceId: 'storage' }],
+      },
     ],
   } as const
 }
 
-export * from './types/index.js'
+export {
+  Fetch,
+  GetBuildMetadata,
+  RemoteConfigData,
+  RemoteConfigType,
+  Port,
+  Freeze,
+} from './types/index.js'
 
 export default remoteConfig

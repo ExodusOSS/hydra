@@ -1,3 +1,4 @@
+import { safeString } from '@exodus/safe-string'
 import { AssertionError } from 'assert'
 
 import { MAX_LINKED_ERRORS_DEPTH, SafeError } from '../../safe-error.js'
@@ -41,6 +42,7 @@ describe('SafeError', () => {
       [new Error('generic error'), { name: 'Error' }],
       [new TypeError('not number!'), { name: 'TypeError' }],
       [new RangeError('out of bound'), { name: 'RangeError' }],
+      [new CustomizableTestError({ name: safeString`EthLikeError` }), { name: 'EthLikeError' }],
 
       // code assertions
       // -- unsafe codes

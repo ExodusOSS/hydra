@@ -1,4 +1,5 @@
 import dayjs from '@exodus/dayjs'
+import { mapToArray } from '../utils.js'
 import prepareFetchInstructions from './prepare-fetch-instructions.js'
 import fetchAndProcessTickers from './fetch-and-process-tickers.js'
 
@@ -30,6 +31,13 @@ export default async function fetchHistoricalPrices({
   const fetchedPricesMap = new Map()
 
   const tickerSymbols = Array.isArray(assetTickers) ? assetTickers : [assetTickers]
+
+  if (tickerSymbols.length === 0) {
+    return {
+      historicalPricesMap,
+      fetchedPricesMap,
+    }
+  }
 
   const instructions = await Promise.all(
     tickerSymbols.map((tickerSymbol) =>
@@ -76,8 +84,12 @@ export default async function fetchHistoricalPrices({
       granularity,
     })
     const history = historicalPricesMap.get(tickerSymbol)
-    if (history && history.size > 0) {
-      runtimeCache.set(runtimeCacheKey, [...history])
+    if (
+      history &&
+      history.size > 0 &&
+      (fetchedPricesMap.has(tickerSymbol) || !runtimeCache.has(runtimeCacheKey))
+    ) {
+      runtimeCache.set(runtimeCacheKey, mapToArray(history))
     }
   }
 

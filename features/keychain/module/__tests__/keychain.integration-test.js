@@ -1,12 +1,12 @@
 import { mnemonicToSeed } from '@exodus/bip39'
 import { getShelleyAddress as getCardanoAddress } from '@exodus/cardano-lib'
 import { encodePublic as encodePublicEthereum } from '@exodus/ethereum-lib'
+import { getAddressFromPublicKey as encodePublicSolana } from '@exodus/solana-lib'
 import KeyIdentifier from '@exodus/key-identifier'
 import { EXODUS_KEY_IDS } from '@exodus/key-ids'
 
 import { getSeedId } from '../crypto/seed-id.js'
 import keychainDefinition, { Keychain } from '../keychain.js'
-import { assets } from './fixtures/assets.js'
 
 const { factory: createMultiSeedKeychain } = keychainDefinition
 
@@ -22,7 +22,7 @@ const thirdSeed = await mnemonicToSeed({
   mnemonic: 'element input zero deny move siege stable screen catch like alley shoot',
 })
 
-const thirdSeedId = getSeedId(thirdSeed)
+const thirdSeedId = await getSeedId(thirdSeed)
 
 describe.each([
   // reduce fixtures by switching seeds
@@ -30,19 +30,19 @@ describe.each([
     primarySeed: seed,
     secondarySeed: secondSeed,
     ternarySeed: thirdSeed,
-    seedId: getSeedId(seed),
+    seedId: await getSeedId(seed),
   },
   {
     primarySeed: secondSeed,
     secondarySeed: seed,
     ternarySeed: thirdSeed,
-    seedId: getSeedId(seed),
+    seedId: await getSeedId(seed),
   },
   {
     primarySeed: thirdSeed,
     secondarySeed: seed,
     ternarySeed: thirdSeed,
-    seedId: getSeedId(seed),
+    seedId: await getSeedId(seed),
   },
 ])('multi-seed-keychain', ({ primarySeed, secondarySeed, ternarySeed, seedId }) => {
   let keychain
@@ -52,12 +52,12 @@ describe.each([
   })
 
   // eslint-disable-next-line jest/prefer-hooks-on-top
-  beforeEach(() => {
+  beforeEach(async () => {
     keychain = createMultiSeedKeychain()
 
-    keychain.addSeed(primarySeed)
-    keychain.addSeed(secondarySeed)
-    keychain.addSeed(ternarySeed)
+    await keychain.addSeed(primarySeed)
+    await keychain.addSeed(secondarySeed)
+    await keychain.addSeed(ternarySeed)
   })
 
   describe('exportKeys', () => {
@@ -96,10 +96,9 @@ describe.each([
         },
       ]
 
-      const encodePublic = assets.solana.keys.encodePublic
       for (const { expected, exportOpts } of successes) {
         const key = await keychain.exportKey(exportOpts)
-        expect(encodePublic(key.publicKey)).toBe(expected)
+        expect(encodePublicSolana(key.publicKey)).toBe(expected)
       }
     })
 
@@ -231,36 +230,6 @@ describe.each([
 
       expect(result.toString('hex')).toBe(VALID_SIGNATURE)
     })
-
-    // Tests derivation path parsing in keychain.signTx. Remove this test when we remove keychain.signTx.
-    it('should pass through all required hdkeys', async () => {
-      const keyIds = [
-        new KeyIdentifier({
-          assetName: 'solana',
-          derivationAlgorithm: 'BIP32',
-          derivationPath: "m/44'/0'/0'/0/0",
-          keyType: 'secp256k1',
-        }),
-        new KeyIdentifier({
-          assetName: 'solana',
-          derivationAlgorithm: 'BIP32',
-          derivationPath: "m/84'/0'/0'/0/0",
-          keyType: 'secp256k1',
-        }),
-      ]
-
-      await keychain.signTx({
-        seedId,
-        keyIds,
-        signTxCallback: ({ hdkeys, privateKey }) => {
-          expect(privateKey).not.toBeDefined()
-          expect(hdkeys[44].privateKey).toBeDefined()
-          expect(hdkeys[84].privateKey).toBeDefined()
-          return null
-        },
-        unsignedTx: Object.create(null),
-      })
-    })
   })
 
   describe('clone', () => {
@@ -280,7 +249,7 @@ describe.each([
 
     it('should return locked instance', async () => {
       const keychain = createMultiSeedKeychain()
-      keychain.addSeed(seed)
+      await keychain.addSeed(seed)
       const clone = keychain.clone()
 
       await expect(
@@ -304,7 +273,7 @@ describe.each([
       const keychain = createMultiSeedKeychain({ legacyPrivToPub })
 
       const clone = keychain.clone()
-      clone.addSeed(seed)
+      await clone.addSeed(seed)
 
       await clone.exportKey({
         seedId,

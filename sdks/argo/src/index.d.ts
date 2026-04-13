@@ -5,9 +5,8 @@ export * from '@exodus/dependency-types'
 type IsAny<T> = 0 extends 1 & T ? true : false
 
 // helper to make sure that registration of untyped features don't break type inference
-type UpdatedArgo<Current extends Definition, New extends Definition> = IsAny<New> extends true
-  ? Argo<Current>
-  : Argo<Current | New>
+type UpdatedArgo<Current extends Definition, New extends Definition> =
+  IsAny<New> extends true ? Argo<Current> : Argo<Current | New>
 
 export type InstanceById<D extends Definition> = {
   [Def in D as Def['id']]: ReturnType<Def['factory']>

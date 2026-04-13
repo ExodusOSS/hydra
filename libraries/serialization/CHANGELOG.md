@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/serialization@2.3.0...@exodus/serialization@2.3.1) (2026-02-18)
+
+### Bug Fixes
+
+- fix: update stale displayTicker values in serialization benchmark fixture (#15293)
+
 ## [2.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/serialization@2.2.0...@exodus/serialization@2.3.0) (2025-10-24)
 
 ### Features

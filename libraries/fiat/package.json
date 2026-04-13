@@ -1,22 +1,30 @@
 {
   "name": "@exodus/fiat",
-  "version": "2.3.0",
-  "description": "Units (fiats) available in Exodus products.",
-  "main": "lib/index.js",
+  "version": "3.2.0",
+  "description": "Fiat currency metadata.",
+  "type": "module",
+  "main": "src/index.js",
   "author": "Exodus Movement, Inc.",
-  "license": "UNLICENSED",
-  "homepage": "https://github.com/ExodusMovement/exodus-core#readme",
+  "license": "MIT",
+  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/fiat",
   "files": [
-    "lib"
+    "src",
+    "CHANGELOG.md",
+    "!**/__tests__/**"
   ],
-  "devDependencies": {
-    "jest": "^29.3.1"
-  },
   "scripts": {
-    "build": "yarn build:clean && babel src --out-dir lib --config-file ../../babel.config.js",
-    "build:clean": "rm -rf lib",
-    "test": "jest",
-    "lint": "eslint . --ignore-path ../../.gitignore",
+    "test": "run -T exodus-test --jest",
+    "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/hydra.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afiat"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

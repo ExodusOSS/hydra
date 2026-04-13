@@ -1,6 +1,5 @@
 import { FeeData } from '@exodus/asset-lib'
 import { createInMemoryAtom } from '@exodus/atoms'
-import EventEmitter from 'events' // eslint-disable-line @exodus/restricted-imports/no-node-core-events
 
 import feeMonitorsDefinition from '../index.js'
 
@@ -10,13 +9,7 @@ const defaultAvailableAssetNames = ['bitcoin', 'ethereum', 'solana']
 
 const defaultFeeData = new FeeData({ config: { value: 1 }, currency: {} })
 
-const dummyRemoteConfig = () => {
-  const emitter = new EventEmitter()
-  return {
-    on: (...args) => emitter.on(...args),
-    sync: (feeData) => emitter.emit('sync', { current: { assets: { solana: { feeData } } } }),
-  }
-}
+const createRemoteConfigData = (feeData) => ({ config: { assets: { solana: { feeData } } } })
 
 class DummyFeeMonitor {
   constructor({ assetName, updateFee }) {
@@ -33,7 +26,7 @@ class DummyFeeMonitor {
 
 describe('createFeeMonitors', () => {
   let assetsModule
-  let remoteConfig
+  let remoteConfigAtom
   let solanaMonitor
   let createFeeMonitor
   let feeDataAtom
@@ -72,15 +65,15 @@ describe('createFeeMonitors', () => {
 
     const assets = { solana }
     assetsModule = { getAssets: () => assets, getAsset: (name) => assets[name] }
-    remoteConfig = dummyRemoteConfig()
-
+    remoteConfigAtom = createInMemoryAtom({ defaultValue: createRemoteConfigData({}) })
     feeDataAtom = createInMemoryAtom({ defaultValue: {} })
     availableAssetNamesAtom = createInMemoryAtom({ defaultValue: defaultAvailableAssetNames })
     logger = { error: jest.fn() }
+
     monitors = createFeeMonitors({
       assetsModule,
       feeDataAtom,
-      remoteConfig,
+      remoteConfigAtom,
       availableAssetNamesAtom,
       baseAssetNamesToMonitorAtom,
       logger,
@@ -131,7 +124,7 @@ describe('createFeeMonitors', () => {
     expect(await monitors.getFeeData({ assetName: 'solana' })).toEqual({ value: 2, foo: 42 })
 
     // remote config override
-    await remoteConfig.sync({ value: 3 })
+    await remoteConfigAtom.set(createRemoteConfigData({ value: 3 }))
     expect(await monitors.getFeeData({ assetName: 'solana' })).toEqual({ value: 3, foo: 42 })
 
     // monitor update ignored becuase of remote override
@@ -139,7 +132,7 @@ describe('createFeeMonitors', () => {
     expect(await monitors.getFeeData({ assetName: 'solana' })).toEqual({ value: 3, foo: 42 })
 
     // cancel override, revert to last monitor update (if any)
-    await remoteConfig.sync({})
+    await remoteConfigAtom.set(createRemoteConfigData({}))
     expect(await monitors.getFeeData({ assetName: 'solana' })).toEqual({ value: 3, foo: 42 })
 
     // monitor updates register again

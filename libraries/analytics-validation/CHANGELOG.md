@@ -3,6 +3,92 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.66.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.66.0...@exodus/analytics-validation@2.66.1) (2026-03-26)
+
+### Bug Fixes
+
+- fix: onboarding event (#15709)
+
+## [2.66.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.65.3...@exodus/analytics-validation@2.66.0) (2026-03-12)
+
+### Features
+
+- feat(analytics-validation): add schema and tests for WalletAssetSendQrScan event validation (#15547)
+
+## [2.65.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.65.2...@exodus/analytics-validation@2.65.3) (2026-03-02)
+
+### Bug Fixes
+
+- fix(analytics-validation): add 'has-backup' to SecurityBackupVaultView screen_type enum (#15418)
+
+## [2.65.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.65.1...@exodus/analytics-validation@2.65.2) (2026-02-12)
+
+### Bug Fixes
+
+- fix: event names (#15259)
+
+## [2.65.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.65.0...@exodus/analytics-validation@2.65.1) (2026-02-09)
+
+### Bug Fixes
+
+- fix(analytics-validation): missing trezor events (#15153)
+
+## [2.65.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.64.0...@exodus/analytics-validation@2.65.0) (2026-01-26)
+
+### Features
+
+- feat: pay is available property (#15022)
+
+## [2.64.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.62.1...@exodus/analytics-validation@2.64.0) (2026-01-20)
+
+### Features
+
+- feat(analytics-validation): add account_compatibility_mode_model to default props (#14950)
+
+- feat(kyc): extract kyc from user (#14960)
+
+## [2.63.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.62.1...@exodus/analytics-validation@2.63.0) (2026-01-19)
+
+### Features
+
+- feat(analytics-validation): add account_compatibility_mode_model to default props (#14950)
+
+## [2.62.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.62.0...@exodus/analytics-validation@2.62.1) (2026-01-09)
+
+### Bug Fixes
+
+- fix(analytics-validation): add missing properties to ExchangeTimeTrace (#14881)
+
+## [2.62.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.61.0...@exodus/analytics-validation@2.62.0) (2025-12-23)
+
+### Features
+
+- feat: update super props (#14744)
+
+## [2.61.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.59.2...@exodus/analytics-validation@2.61.0) (2025-12-22)
+
+### Features
+
+- feat(analytics-validation): add schema for `NotificationSend` event (#14479)
+
+- feat: pay schema (#14692)
+
+## [2.60.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.59.2...@exodus/analytics-validation@2.60.0) (2025-11-27)
+
+### Features
+
+- feat(analytics-validation): add schema for `NotificationSend` event (#14479)
+
+## [2.59.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.59.1...@exodus/analytics-validation@2.59.2) (2025-11-19)
+
+### Bug Fixes
+
+- fix: update device manufacturer schema (#14428)
+
+## [2.59.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.59.0...@exodus/analytics-validation@2.59.1) (2025-09-11)
+
+**Note:** Version bump only for package @exodus/analytics-validation
+
 ## [2.59.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.58.1...@exodus/analytics-validation@2.59.0) (2025-09-11)
 
 ### Features

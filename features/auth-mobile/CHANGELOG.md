@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.7.0...@exodus/auth-mobile@6.8.0) (2026-01-15)
+
+### Features
+
+- feat: expose can use device auth (#14931)
+
+## [6.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.6.1...@exodus/auth-mobile@6.7.0) (2026-01-15)
+
+### Features
+
+- feat: support fallback to device code in bio auth (#14688)
+
+## [6.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.6.0...@exodus/auth-mobile@6.6.1) (2025-12-31)
+
+### Bug Fixes
+
+- fix(mobile-auth,application): rename auth.removePin, auth.clear, application.import event logs (#14777)
+
 ## [6.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.5.1...@exodus/auth-mobile@6.6.0) (2025-10-21)
 
 ### Features

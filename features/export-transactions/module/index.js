@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 import { TX_EXPORT_FIELDS } from './constants.js'
@@ -155,8 +156,24 @@ class ExportTransactions {
       }
 
       case 'cosmos': {
+        if (tx.data.delegate) {
+          coinAmount = asset.currency.baseUnit(tx.data.delegate)
+        }
+
         if (tx.data.undelegate) {
           coinAmount = asset.currency.baseUnit(tx.data.undelegate)
+        }
+
+        break
+      }
+
+      case 'ethereum': {
+        if (tx.data.delegate) {
+          coinAmount = asset.currency.defaultUnit(tx.data.delegate)
+        }
+
+        if (tx.data.claimUndelegate) {
+          coinAmount = asset.currency.defaultUnit(tx.data.claimUndelegate)
         }
 
         break
@@ -291,7 +308,9 @@ class ExportTransactions {
 
     const txLogs = await this.#blockchainMetadata.getLoadedTxLogs()
 
-    const txs = Object.values(get(txLogs, walletAccount)).flatMap((txLog) => [...txLog])
+    const txs = Object.values(get(txLogs, walletAccount))
+      .flatMap((txLog) => [...txLog])
+      .filter((tx) => !tx.dropped)
 
     txs.sort((a, b) => a.date - b.date)
 

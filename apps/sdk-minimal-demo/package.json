@@ -38,7 +38,7 @@
     "@exodus/fusion-local": "workspace:^",
     "@exodus/headless": "workspace:^",
     "@exodus/logger": "workspace:^",
-    "@exodus/models": "^12.0.1",
+    "@exodus/models": "^13.0.0",
     "@exodus/prettier": "^1.0.0",
     "@exodus/sdk-rpc": "workspace:^",
     "@exodus/storage-memory": "workspace:^",

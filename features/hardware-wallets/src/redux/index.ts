@@ -16,6 +16,10 @@ const hardwareWalletsReduxDefinition = {
       ...state,
       signingRequests: payload,
     }),
+    hardwareWalletPairingPrompt: (state: HardwareWalletsState, payload: boolean) => ({
+      ...state,
+      pairingPrompt: payload,
+    }),
   },
   selectorDefinitions,
 } as const

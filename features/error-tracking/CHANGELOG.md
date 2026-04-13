@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@3.3.1...@exodus/error-tracking@3.3.2) (2026-02-12)
+
+### Bug Fixes
+
+- fix(error-tracking): capture stack before logging it (#15184)
+
+## [3.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@3.3.0...@exodus/error-tracking@3.3.1) (2026-02-10)
+
+**Note:** Version bump only for package @exodus/error-tracking
+
+## [3.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@3.2.0...@exodus/error-tracking@3.3.0) (2025-11-20)
+
+### Features
+
+- feat: allow exporting `traceId` in errors context (#14099)
+
 ## [3.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@3.1.2...@exodus/error-tracking@3.2.0) (2025-10-14)
 
 ### Features

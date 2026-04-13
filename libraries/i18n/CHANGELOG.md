@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.2.1...@exodus/i18n@5.3.0) (2026-03-30)
+
+### Features
+
+- feat(i18n): add option to filter lang extraction by folder (#15695)
+
 ## [5.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.2.0...@exodus/i18n@5.2.1) (2025-10-08)
 
 ### Bug Fixes

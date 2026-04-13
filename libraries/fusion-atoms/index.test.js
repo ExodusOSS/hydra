@@ -1,5 +1,6 @@
 import atomTests from '@exodus/atom-tests'
 import { set as setValueAtPath } from '@exodus/basic-utils'
+
 import { createFusionAtom } from './index.js'
 
 const path = 'a.b.c'

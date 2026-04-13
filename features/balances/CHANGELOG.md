@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.15.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.15.1...@exodus/balances@13.15.2) (2026-03-03)
+
+### Bug Fixes
+
+- fix(balances): return empty object instead of undefined from createBalances selector (#15366)
+
+## [13.15.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.15.0...@exodus/balances@13.15.1) (2026-02-02)
+
+**Note:** Version bump only for package @exodus/balances
+
+## [13.15.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.13.1...@exodus/balances@13.15.0) (2026-01-29)
+
+### Features
+
+- feat: bump atoms for importers of observer factory (#14057)
+
+- feat: introduce blockChainMetadataAtom (#14470)
+
+- feat: update all consumers to use safe strings for error namespaces (#14429)
+
+### Bug Fixes
+
+- fix(balances): default undefined balance fields to ZERO in createBalances (#15068)
+
+## [13.14.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.13.1...@exodus/balances@13.14.0) (2025-11-27)
+
+### Features
+
+- feat: bump atoms for importers of observer factory (#14057)
+
+- feat: introduce blockChainMetadataAtom (#14470)
+
+- feat: update all consumers to use safe strings for error namespaces (#14429)
+
 ## [13.13.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.13.0...@exodus/balances@13.13.1) (2025-08-22)
 
 **Note:** Version bump only for package @exodus/balances

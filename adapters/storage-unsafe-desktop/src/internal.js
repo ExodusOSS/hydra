@@ -1,14 +1,11 @@
 const makeConcurrent = require('make-concurrent')
 const delay = require('delay')
-const { getLockFile, getTmpFile, getFlagFile } = require('./utils')
-
-const checkContents = (writtenContents) => writtenContents.length > 0
+const { getLockFile, getTmpFile } = require('./utils')
 
 // fs must provide fs-extra compatible { readFile, outputFile, ensureFile, move, remove }
 function createStorageInternal({ fs, file, createNewFileIfError = false }) {
   const lockFile = getLockFile(file)
   const tmpFile = getTmpFile(file)
-  const flagFile = getFlagFile(file)
 
   let data
 
@@ -37,20 +34,7 @@ function createStorageInternal({ fs, file, createNewFileIfError = false }) {
 
         needsFlush = false
 
-        // Windows sometimes writes out empty files, so we write to a tmp file first, check it, then move it into place
-        // if the check fails, we log and try writing again
-        let writtenContents
-        let tries = 0
-        do {
-          // only log on retry
-          if (writtenContents) console.warn(`unsafe storage write invalid; retrying ${tries}`)
-          await fs.outputFile(tmpFile, newData)
-          writtenContents = await fs.readFile(tmpFile, 'utf8')
-        } while (!checkContents(writtenContents) && ++tries < 5)
-
-        // output flag file so we can debug corruption
-        if (tries === 5) await fs.ensureFile(flagFile)
-
+        await fs.outputFile(tmpFile, newData, { flush: true })
         await fs.move(tmpFile, file, { overwrite: true })
       } finally {
         // Only remove lockFile if there's been no calls to writeToDisk since we wrote

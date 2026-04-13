@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@17.0.0...@exodus/blockchain-metadata@17.1.0) (2025-11-27)
+
+### Features
+
+- feat: introduce blockChainMetadataAtom (#14470)
+
+## [17.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@16.0.0...@exodus/blockchain-metadata@17.0.0) (2025-11-26)
+
+### ⚠ BREAKING CHANGES
+
+- remove unused BlockchainMetadata events (#14472)
+
+### Features
+
+- feat: update all consumers to use safe strings for error namespaces (#14429)
+
+- refactor!: remove unused BlockchainMetadata events (#14472)
+
 ## [16.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@15.14.0...@exodus/blockchain-metadata@16.0.0) (2025-09-01)
 
 ### ⚠ BREAKING CHANGES

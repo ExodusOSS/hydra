@@ -15,7 +15,7 @@ let addressProviderMock
 let unsafeStorage
 let expectAddress
 
-const setup = (opts) => {
+const setup = async (opts) => {
   const {
     assetsModule,
     publicKeyProvider,
@@ -24,7 +24,7 @@ const setup = (opts) => {
     assetSources,
     enabledWalletAccountsAtom,
     ...rest
-  } = _setup(opts)
+  } = await _setup(opts)
   const addressProviderMock = createMockableAddressProvider({
     assetsModule,
     publicKeyProvider,
@@ -49,7 +49,7 @@ const setup = (opts) => {
 
 beforeEach(async () => {
   unsafeStorage = createInMemoryStorage()
-  ;({ addressProvider: addressesProviderReal, addressProviderMock } = setup())
+  ;({ addressProvider: addressesProviderReal, addressProviderMock } = await setup())
   expectAddress = async (opts, address) => {
     const result = await addressProviderMock.getAddress(opts)
     expect(result.address).toBe(address)
@@ -110,7 +110,7 @@ test('getReceiveAddress() should return a real address if mock config is for dif
 })
 
 test('mockAddress() should set a new mock address', async () => {
-  const { addressProviderMock } = setup()
+  const { addressProviderMock } = await setup()
   await addressProviderMock.mockAddress({
     walletAccount,
     assetName: 'solana',
@@ -328,7 +328,7 @@ test('importReport', async () => {
     availableAssetNamesByWalletAccountAtom,
     addressProvider,
     addressProviderMock,
-  } = setup()
+  } = await setup()
 
   const reportNode = reportDefinition.factory({
     assetsModule,

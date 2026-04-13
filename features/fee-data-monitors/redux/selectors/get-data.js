@@ -1,22 +1,24 @@
-export const _resultFunction = ({ feeData, assets, assetName }) => {
-  if (!assets[assetName]) {
-    console.warn(`${assetName} is not present in assets`)
-    return
-  }
-
-  const { baseAsset } = assets[assetName]
+export const _resultFunction = ({ feeData, asset }) => {
+  const { baseAsset } = asset
 
   const data = feeData[baseAsset.name]
 
   if (!data) {
-    console.warn(`${assetName} (baseAssetName: ${baseAsset.name}) does not have feeData`)
+    console.warn(`${asset.name} (baseAssetName: ${baseAsset.name}) does not have feeData`)
   }
 
   return data
 }
 
-const resultFunction = (feeData, assets) => (assetName) =>
-  _resultFunction({ feeData, assets, assetName })
+const resultFunction = (feeData, getAsset) => (assetName) => {
+  const asset = getAsset(assetName)
+  if (!asset) {
+    console.warn(`"${assetName}" is not present in assets`)
+    return
+  }
+
+  return _resultFunction({ feeData, asset })
+}
 
 const getDataSelectorDefinition = {
   id: 'getData',
@@ -24,7 +26,7 @@ const getDataSelectorDefinition = {
   dependencies: [
     //
     { selector: 'data' },
-    { selector: 'all', module: 'assets' },
+    { selector: 'getAsset', module: 'assets' },
   ],
 }
 

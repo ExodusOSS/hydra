@@ -1,7 +1,6 @@
 import assert from 'minimalistic-assert'
 import * as secp256k1 from '@exodus/crypto/secp256k1'
 import { mapValues } from '@exodus/basic-utils'
-import BN from 'bn.js'
 
 import { tweakPrivateKey } from './tweak.js'
 import { schnorrZ } from './schnorr-z.js'
@@ -15,7 +14,7 @@ export const create = ({ getPrivateHDKey }) => {
       )
       if (enc === 'binary') enc = 'sig|rec'
       assert(
-        ['der', 'raw', 'sig', 'sig|rec', 'rec|sig', 'sig,rec'].includes(enc),
+        ['der', 'sig', 'sig|rec', 'rec|sig', 'sig,rec'].includes(enc),
         'signBuffer: invalid enc'
       )
       const { privateKey } = getPrivateHDKey({ seedId, keyId })
@@ -29,18 +28,8 @@ export const create = ({ getPrivateHDKey }) => {
       })
       if (enc === 'der' || enc === 'sig' || enc === 'sig,rec') return res
       const { signature, recovery } = res
-      if (enc === 'sig|rec') return Buffer.concat([signature, new Uint8Array([recovery])])
-      if (enc === 'rec|sig') return Buffer.concat([new Uint8Array([recovery]), signature])
-      if (enc === 'raw') {
-        // Deprecated, compatibility mode with manual signature encoding
-        // TODO: remove in next semver-major together with bn.js dep, see https://github.com/ExodusMovement/exodus-oss/pull/159
-        return {
-          r: new BN(signature.subarray(0, signature.length / 2)),
-          s: new BN(signature.subarray(signature.length / 2)),
-          recoveryParam: recovery,
-        }
-      }
-
+      if (enc === 'sig|rec') return Buffer.concat([signature, Uint8Array.of(recovery)])
+      if (enc === 'rec|sig') return Buffer.concat([Uint8Array.of(recovery), signature])
       throw new Error('Unreachable')
     },
     signSchnorr: async ({ seedId, keyId, data, tweak, extraEntropy }) => {

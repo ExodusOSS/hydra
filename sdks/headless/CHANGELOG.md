@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0-rc.91](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.90...@exodus/headless@5.0.0-rc.91) (2026-02-12)
+
+### Bug Fixes
+
+- fix headless tests for TraceId validation feature (#15185) (#15240)
+
+## [5.0.0-rc.90](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.89...@exodus/headless@5.0.0-rc.90) (2026-02-04)
+
+### Bug Fixes
+
+- fix: clarify async behavior in Promise.all usage (#15059)
+
+- fix: extend private fields fix to all toJSON objects (#15179)
+
+- fix(ui-config): sync atoms in plugin instead of in atom definition (#14908)
+
+## [5.0.0-rc.89](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.88...@exodus/headless@5.0.0-rc.89) (2025-12-02)
+
+### Features
+
+- feat: update all consumers to use safe strings for error namespaces (#14429)
+
+### Bug Fixes
+
+- fix(analytics): support both camelCase & kebab_case on `requireDefaultEventProperties` (#14494)
+
+- fix: update NFT transaction sent status calculation (#14359)
+
 ## [5.0.0-rc.88](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.87...@exodus/headless@5.0.0-rc.88) (2025-10-24)
 
 ### Bug Fixes

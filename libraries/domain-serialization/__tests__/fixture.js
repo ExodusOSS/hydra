@@ -9,6 +9,7 @@ import {
   Tx,
   TxSet,
   UtxoCollection,
+  WalletAccount,
 } from '@exodus/models'
 
 import createAssetsForTesting from './assets-for-testing.js'
@@ -162,6 +163,13 @@ export const keyIdentifier = new KeyIdentifier({
   derivationPath: "m/44'/60'/0'",
   derivationAlgorithm: 'BIP32',
   keyType: 'secp256k1',
+})
+
+export const walletAccount = new WalletAccount({
+  index: 1,
+  compatibilityMode: 'phantom',
+  source: 'exodus',
+  seedId: 'abc',
 })
 
 export class SomeAccountState extends AccountState {

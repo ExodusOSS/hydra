@@ -10,9 +10,9 @@ describe('createSortAssetsSelectorFactory', () => {
     'bitcoin',
     'tetherusd',
     'ethereum',
-    'leo',
+    'aave',
     'oneinch',
-    'zerox',
+    'polygon',
     'exit',
     'usdcoin',
     'busd',
@@ -23,9 +23,9 @@ describe('createSortAssetsSelectorFactory', () => {
     exodus_0: {
       ethereum: { balance: assets.ethereum.currency.defaultUnit(1) },
       bitcoin: { balance: assets.bitcoin.currency.defaultUnit(0) },
-      leo: { balance: assets.leo.currency.defaultUnit(1) },
+      aave: { balance: assets.aave.currency.defaultUnit(1) },
       oneinch: { balance: assets.oneinch.currency.defaultUnit(1) },
-      zerox: { balance: assets.zerox.currency.defaultUnit(1) },
+      polygon: { balance: assets.polygon.currency.defaultUnit(1) },
       exit: { balance: assets.exit.currency.defaultUnit(1) },
       usdcoin: { balance: assets.usdcoin.currency.defaultUnit(3) },
       busd: { balance: assets.busd.currency.defaultUnit(0) },
@@ -38,9 +38,9 @@ describe('createSortAssetsSelectorFactory', () => {
       exodus_0: {
         ethereum: { balance: createFiatNumberUnit(100) },
         bitcoin: { balance: createFiatNumberUnit(0) },
-        leo: { balance: createFiatNumberUnit(99) },
+        aave: { balance: createFiatNumberUnit(99) },
         oneinch: { balance: createFiatNumberUnit(98) },
-        zerox: { balance: createFiatNumberUnit(5) },
+        polygon: { balance: createFiatNumberUnit(5) },
         exit: { balance: createFiatNumberUnit(5) },
         usdcoin: { balance: createFiatNumberUnit(3) },
         busd: { balance: createFiatNumberUnit(0) },
@@ -57,13 +57,13 @@ describe('createSortAssetsSelectorFactory', () => {
       [assets.bitcoin.ticker]: {
         cap: 99_999,
       },
-      [assets.leo.ticker]: {
+      [assets.aave.ticker]: {
         cap: 99,
       },
       [assets.oneinch.ticker]: {
         cap: 50,
       },
-      [assets.zerox.ticker]: {
+      [assets.polygon.ticker]: {
         cap: 50,
       },
       [assets.exit.ticker]: {
@@ -91,14 +91,14 @@ describe('createSortAssetsSelectorFactory', () => {
 
     emitBalances(balances)
     emitFiatBalances(fiatBalances)
-    emitFavoriteAssets({ leo: true, zerox: true })
+    emitFavoriteAssets({ aave: true, polygon: true })
     emitRates(rates)
 
     const result = sortedAssetsSelector(store.getState())
 
     expect(result.map((a) => a.name)).toEqual([
-      'leo',
-      'zerox',
+      'aave',
+      'polygon',
       'ethereum',
       'oneinch',
       'exit',
@@ -120,7 +120,7 @@ describe('createSortAssetsSelectorFactory', () => {
 
     emitBalances(balances)
     emitFiatBalances(fiatBalances)
-    emitFavoriteAssets({ leo: true, zerox: true })
+    emitFavoriteAssets({ aave: true, polygon: true })
     emitRates(rates)
 
     const result1 = sortedAssetsSelector(store.getState())

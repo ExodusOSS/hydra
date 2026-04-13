@@ -11,6 +11,17 @@ export const getAssetFromTicker = (assets, ticker) => {
   })
 }
 
+export const mapToArray = (map) => {
+  // eslint-disable-next-line unicorn/no-new-array -- new Array(n) is O(1) vs Array.from which is O(n); see https://jsperf.app/cixame/2
+  const arr = new Array(map.size)
+  let i = 0
+  for (const entry of map) {
+    arr[i++] = entry
+  }
+
+  return arr
+}
+
 export const parseGranularity = (granularity) => {
   switch (granularity) {
     case 'day':

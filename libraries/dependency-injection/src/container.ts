@@ -19,6 +19,8 @@ type ConstructorParams = {
 }
 
 export class Container<D extends Definition> {
+  // leaving for easier debugging
+  // eslint-disable-next-line no-unused-private-class-members
   readonly #logger: Logger
   readonly #injectDependenciesAsPositionalArguments: boolean
   #registry = new Registry()
@@ -44,8 +46,9 @@ export class Container<D extends Definition> {
     if (this.#isResolved) throw new AlreadyResolvedError()
 
     if (!id) throw new InvalidDependencyError('expected "id"')
-    if (typeof factory !== 'function')
+    if (typeof factory !== 'function') {
       throw new InvalidDependencyError(`expected function "factory" for dependency "${id}"`)
+    }
 
     if (!Array.isArray(dependencies) || dependencies.some((dep) => typeof dep !== 'string')) {
       throw new InvalidDependencyError(`expected string[] "dependencies" for dependency "${id}"`)
@@ -66,10 +69,6 @@ export class Container<D extends Definition> {
       override,
       entry,
     })
-
-    const hasDependencies = dependencies.length > 0
-    const logSuffix = hasDependencies ? ` with dependencies: ${dependencies.join(', ')}` : ''
-    this.#logger.debug(`registered module ${id}${logSuffix}`)
 
     return this as Container<D | R>
   }
@@ -133,8 +132,9 @@ export class Container<D extends Definition> {
           ? factory(...Object.values(depInstances))
           : factory(depInstances)
 
-        if (!instance)
+        if (!instance) {
           throw new InvalidDependencyError(`expected factory to return an instance: ${id}`)
+        }
 
         this.#registry.setInstance({ id, instance })
       }

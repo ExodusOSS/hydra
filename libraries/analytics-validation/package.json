@@ -1,6 +1,6 @@
 {
   "name": "@exodus/analytics-validation",
-  "version": "2.59.0",
+  "version": "2.66.1",
   "description": "JSON schemas for analytics events, to prevent sensitive data from being sent up to the infamous cloud",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -40,6 +40,7 @@
     }
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

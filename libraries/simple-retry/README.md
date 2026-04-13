@@ -1,9 +1,9 @@
-# Simple Retry [![Build Status](https://travis-ci.com/ExodusMovement/simple-retry.svg?token=4LdsYhfLJBfrCJSUBSTg&branch=master)](https://travis-ci.com/ExodusMovement/simple-retry)
+# @exodus/simple-retry
 
-## Getting Started
+## Install
 
 ```sh
-yarn
+yarn add @exodus/simple-retry
 ```
 
 ## Usage
@@ -30,23 +30,3 @@ const broadcastTxWithRetry = retry(
   { delayTimesMs: ['10s'] }
 )
 ```
-
-## Tests
-
-```sh
-yarn test
-yarn test --watch
-```
-
-## Publish
-
-To publish, first set the `private` flag to false and edit the version number in `package.json`.
-
-```sh
-yarn build
-NPM_CONFIG_OTP=123456 yarn release
-NPM_CONFIG_OTP=123456 yarn release from-package # if 2FA token timeout, re-publish with current version in package.json
-NPM_CONFIG_OTP=775106 npm publish --registry=https://registry.npmjs.org
-```
-
-After sucessfully publishing, reset the `private` flag to true and commit the version change.

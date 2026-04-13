@@ -11,9 +11,9 @@ const ASSET_PRIV_TO_PUB = Object.assign(Object.create(null), {
 })
 
 // We create a keychain with the legacy priv to pub mappers
-export const createKeychain = ({ seed }) => {
+export const createKeychain = async ({ seed }) => {
   const keychain = keychainDefinition.factory({ legacyPrivToPub: ASSET_PRIV_TO_PUB })
-  keychain.addSeed(seed)
+  await keychain.addSeed(seed)
 
   return keychain
 }

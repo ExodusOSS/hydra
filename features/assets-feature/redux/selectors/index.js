@@ -1,4 +1,4 @@
-import { keyBy } from '@exodus/basic-utils'
+import { keyBy, pickBy } from '@exodus/basic-utils'
 import { createSelector } from 'reselect'
 
 // eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
@@ -6,10 +6,10 @@ import lodash from 'lodash'
 
 const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
-// just a semantic alias for `data`
 const allAssetsSelectorDefinition = {
   id: 'all',
-  resultFunction: (data) => data,
+  resultFunction: (data) =>
+    pickBy(data, (asset) => !asset.isCombined || asset.combinedAssetNames.length > 0),
   dependencies: [{ selector: 'data' }],
 }
 
@@ -23,30 +23,26 @@ const createAssetSelectorDefinition = {
   id: 'createAssetSelector',
   selectorFactory: (dataSelector) =>
     memoize((assetName) => createSelector(dataSelector, (data) => data[assetName])),
-  dependencies: [{ selector: 'data' }],
+  dependencies: [{ selector: 'all' }],
 }
 
 const createBaseAssetSelectorDefinition = {
   id: 'createBaseAssetSelector',
   selectorFactory: (dataSelector) =>
     memoize((assetName) => createSelector(dataSelector, (data) => data[assetName].baseAsset)),
-  dependencies: [{ selector: 'data' }],
+  dependencies: [{ selector: 'all' }],
 }
 
 const createFeeAssetSelectorDefinition = {
   id: 'createFeeAssetSelector',
   selectorFactory: (dataSelector) =>
     memoize((assetName) => createSelector(dataSelector, (data) => data[assetName].feeAsset)),
-  dependencies: [{ selector: 'data' }],
+  dependencies: [{ selector: 'all' }],
 }
 
 const getAssetSelectorDefinition = {
   id: 'getAsset',
-  resultFunction: (assets) =>
-    memoize((assetName) => {
-      if (!assetName) throw new Error('expected assetName')
-      return assets[assetName]
-    }),
+  resultFunction: (assets) => (assetName) => assets[assetName],
   dependencies: [{ selector: 'all' }],
 }
 

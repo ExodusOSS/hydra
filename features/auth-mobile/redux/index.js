@@ -4,6 +4,7 @@ const initialState = {
   loading: true,
   hasPin: false,
   hasBioAuth: false,
+  hasDeviceAuth: false,
   biometry: null,
 }
 

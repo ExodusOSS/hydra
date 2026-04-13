@@ -1,4 +1,9 @@
 import restrictConcurrency from 'make-concurrent'
+// eslint-disable-next-line no-restricted-imports
+import lodash from 'lodash'
+
+const TOKEN_NAME_RE = /^[^_]+_([^_]+)_([^_]+)$/u
+const { once } = lodash
 
 class AvailableAssets {
   #logger
@@ -60,22 +65,46 @@ class AvailableAssets {
         if (value?.disabled) {
           const availableAssetsNamesSet = await this.#getAvailableAssetsSet()
           const unavailableTokenNames = Object.keys(value.disabled).filter((assetName) => {
-            const token = this.#assetsModule.getAsset(assetName)
+            const { baseAssetName, token } = this.#resolveBaseAssetName(assetName)
             return (
+              baseAssetName &&
+              assetName !== baseAssetName &&
+              availableAssetsNamesSet.has(baseAssetName) &&
               !availableAssetsNamesSet.has(assetName) &&
-              (!token ||
-                (token.name !== token.baseAsset.name &&
-                  availableAssetsNamesSet.has(token.baseAsset.name)))
+              !token
             )
           })
           if (unavailableTokenNames.length > 0) {
             this.#assetsModule
-              .addRemoteTokens({ tokenNames: unavailableTokenNames })
+              .addRemoteTokens({ tokenNames: unavailableTokenNames, allowedStatusList: ['c', 'v'] })
               .catch((err) => this.#logger.error(err))
           }
         }
       })
     )
+  }
+
+  load = once(async () => {
+    const missingTokenNames = this.#defaultAvailableAssetNames.filter(
+      (name) => TOKEN_NAME_RE.test(name) && !this.#assetsModule.getAsset(name)
+    )
+
+    if (missingTokenNames.length > 0) {
+      await this.#assetsModule.addRemoteTokens({
+        tokenNames: missingTokenNames,
+        allowedStatusList: ['c'],
+      })
+    }
+  })
+
+  #resolveBaseAssetName = (assetName) => {
+    if (!assetName) return {}
+
+    const token = this.#assetsModule.getAsset(assetName)
+    if (token) return { baseAssetName: token.baseAsset.name, token }
+
+    const result = TOKEN_NAME_RE.exec(assetName)
+    return { baseAssetName: result?.[1] }
   }
 
   #getAvailableAssetsSet = async () => {

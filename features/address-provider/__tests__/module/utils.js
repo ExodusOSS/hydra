@@ -14,7 +14,7 @@ import { wallets } from './seed/fixtures/index.js'
 import { createKeychain } from './seed/keychain.js'
 
 export const seed = BJSON.parse(JSON.stringify(wallets.valid[0].masterSeed))
-export const seedId = getSeedId(seed)
+export const seedId = await getSeedId(seed)
 
 export const walletAccount = new WalletAccount({ ...WalletAccount.DEFAULT, seedId })
 export const walletAccount2 = new WalletAccount({ ...WalletAccount.DEFAULT, index: 1, seedId })
@@ -28,7 +28,7 @@ export const trezorAccount = new WalletAccount({
   index: 0,
 })
 
-export const setup = (overrides = {}) => {
+export const setup = async (overrides = {}) => {
   const walletAccounts = overrides.walletAccounts || {
     [walletAccount]: walletAccount,
     [walletAccount2]: walletAccount2,
@@ -61,7 +61,7 @@ export const setup = (overrides = {}) => {
       walletAccountsAtom,
     })
 
-  const keychain = overrides.keychain || createKeychain({ seed })
+  const keychain = overrides.keychain || (await createKeychain({ seed }))
 
   const publicKeyProvider =
     overrides.publicKeyProvider ||

@@ -1,23 +1,17 @@
-# Exodus Units
+# @exodus/fiat
 
-[![npm][npm-image]][npm-url]
-[npm-image]: https://img.shields.io/npm/v/@exodus/fiat.svg?style=flat-square
-[npm-url]: https://www.npmjs.com/package/@exodus/fiat
-
-This package provides the units (fiat currency) support for
-**pricing server**. It is intended to also be used in other projects
-that Exodus provides, but we are starting here first.
+Fiat currency metadata. You should probably consume this through the [@exodus/fiat-currencies](../fiat-currencies) package, which exports [@exodus/currency](../currency) instances for each fiat currency and enables you do unit-aware financial calculations safely.
 
 ## Install
 
-yarn add @exodus/units
+yarn add @exodus/fiat
 
 ## Usage
 
 ```js
-const units = require('units')
+const fiatCurrencies = require('@exodus/fiat')
 
-console.log(units)
+console.log(fiatCurrencies)
 // Sample output:
 //
 //  ...
@@ -35,7 +29,7 @@ console.log(units)
 //  },
 //  ...
 
-console.log(Object.keys(units))
+console.log(Object.keys(fiatCurrencies))
 // Sample output:
 //
 // ['AUD', 'BRL', 'CAD', 'CHF', ... ]

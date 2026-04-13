@@ -15,6 +15,7 @@ const createAvailableAssetsPlugin = ({ port, availableAssetNamesAtom, availableA
 
   const onLoad = () => {
     observers.forEach((observer) => observer.start())
+    availableAssets.load()
   }
 
   const onStop = () => {

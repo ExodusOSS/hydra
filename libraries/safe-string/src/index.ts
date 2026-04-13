@@ -1,4 +1,7 @@
 import indexToSafeArg from './allowlist.js'
+import { isTraceId } from './capture-trace-id.js'
+
+import type { SafeString } from './types.js'
 
 const safeArgAllowlist = new Map(indexToSafeArg.map((v, i) => [v, i]))
 
@@ -8,7 +11,7 @@ const safeArgsInfix = ' ; SafeArgs: '
 
 const MAX_INTERPOLATED_VALUES = 2
 
-export function safeString(strings: TemplateStringsArray, ...values: unknown[]) {
+export function safeString(strings: TemplateStringsArray, ...values: unknown[]): SafeString {
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!strings.raw) {
     throw new TypeError(
@@ -25,7 +28,7 @@ export function safeString(strings: TemplateStringsArray, ...values: unknown[]) 
     // for `prefix ${'value1'} infix ${'value2'} suffix`
     // strings is ['prefix ', ' infix ', ' suffix']
     // values is ['value1', 'value2']
-    return [strings[0], ...values.flatMap((arg, i) => [arg, strings[i + 1]])].join('')
+    return [strings[0], ...values.flatMap((arg, i) => [arg, strings[i + 1]])].join('') as SafeString
   }
 
   const templatePart = strings.join('<redacted>')
@@ -43,11 +46,13 @@ export function safeString(strings: TemplateStringsArray, ...values: unknown[]) 
     nonInterpolableAllowlist.add(templatePart)
   }
 
-  return values.length > 0
-    ? templatePart +
+  return (
+    values.length > 0
+      ? templatePart +
         safeArgsInfix +
         JSON.stringify(values.map((value) => safeArgAllowlist.get(String(value)) ?? -1))
-    : templatePart
+      : templatePart
+  ) as SafeString
 }
 
 export function parseString(value: string) {
@@ -77,9 +82,13 @@ export function isSafe(value: string) {
     return true
   }
 
-  return safeArgAllowlist.has(value) || nonInterpolableAllowlist.has(value)
+  return safeArgAllowlist.has(value) || nonInterpolableAllowlist.has(value) || isTraceId(value)
 }
 
 export function getAllowlist() {
   return [...indexToSafeArg, ...nonInterpolableAllowlist]
 }
+
+export { captureTraceId } from './capture-trace-id.js'
+
+export type { SafeString } from './types.js'

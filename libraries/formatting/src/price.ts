@@ -16,22 +16,26 @@ export const formatPrice = (
     useGrouping = true,
     currency = 'USD',
     format,
+    minimumFractionDigits,
     maxFraction = 2, // it's added only for formatAssetPrice util
     formatZeroWithoutDecimals = true,
-  }: {
-    useGrouping?: boolean
-    currency?: string
-    format?: string
-    maxFraction?: number
-    formatZeroWithoutDecimals?: boolean
-  } = {}
+  }: FormatPriceOptions = {}
 ) => {
   const priceNumber = parseAmount(price)
   const currencySymbol = getCurrencySymbol(currency)
   const currencyFormat = format || getCurrencyFormat(currency)
 
+  if (minimumFractionDigits && minimumFractionDigits > maxFraction) {
+    throw new Error('minimumFractionDigits cannot be greater than maxFraction')
+  }
+
   const result = formatCurrency(priceNumber, {
-    minimumFractionDigits: priceNumber === 0 ? 0 : Math.min(maxFraction, 2),
+    minimumFractionDigits:
+      priceNumber === 0
+        ? 0
+        : minimumFractionDigits === undefined
+          ? Math.min(maxFraction, 2)
+          : minimumFractionDigits,
     maximumFractionDigits: priceNumber === 0 ? 0 : maxFraction,
     format: currencyFormat,
     symbol: currencySymbol,
@@ -51,7 +55,7 @@ export const formatPrice = (
   return result
 }
 
-export function formatPriceUSD(price: string) {
+export function formatPriceUSD(price: string | number) {
   return formatPrice(price)
 }
 
@@ -80,4 +84,21 @@ export function formatAssetPrice({
 export const getFiatAdaptiveFraction = (price: string | number) => {
   price = Number(price)
   return price === 0 ? 2 : price >= 1 ? 2 : price >= 0.0001 ? 4 : 6
+}
+
+// overrides minimumFractionDigits to 0
+export const formatAmount = (
+  amount: string | number,
+  { minimumFractionDigits = 0, ...rest }: FormatPriceOptions = {}
+) => {
+  return formatPrice(amount, { minimumFractionDigits, ...rest })
+}
+
+type FormatPriceOptions = {
+  useGrouping?: boolean
+  currency?: string
+  format?: string
+  minimumFractionDigits?: number
+  maxFraction?: number
+  formatZeroWithoutDecimals?: boolean
 }

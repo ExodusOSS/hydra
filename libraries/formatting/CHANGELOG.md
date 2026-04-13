@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/formatting@9.3.0...@exodus/formatting@9.3.1) (2026-04-06)
+
+### Bug Fixes
+
+- fix(formatting): widen formatPriceUSD price param to string | number (#15881)
+
+## [9.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/formatting@9.1.0...@exodus/formatting@9.3.0) (2025-12-11)
+
+### Features
+
+- feat(formatting): add formatAmount util (#14565)
+
+### Bug Fixes
+
+- fix(formatting): validate minimumFractionDigits (#14612)
+
+## [9.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/formatting@9.1.0...@exodus/formatting@9.2.0) (2025-12-08)
+
+### Features
+
+- feat(formatting): add formatAmount util (#14565)
+
 ## [9.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/formatting@9.0.4...@exodus/formatting@9.1.0) (2025-08-04)
 
 ### Features

@@ -15,6 +15,7 @@ describe('assetsPlugin', () => {
   let legacyAddressModeAtom
   let taprootAddressModeAtom
   let assetsAtom
+  let remoteConfigAtom
 
   const waynecoin = {
     name: 'waynecoin',
@@ -28,6 +29,7 @@ describe('assetsPlugin', () => {
       getAssets: () => ({ waynecoin }),
       load: jest.fn(),
       clear: jest.fn(),
+      initialize: jest.fn(),
     })
 
     disabledPurposesAtom = createInMemoryAtom({ defaultValue: {} })
@@ -35,14 +37,17 @@ describe('assetsPlugin', () => {
     multiAddressModeAtom = createInMemoryAtom({ defaultValue: {} })
     legacyAddressModeAtom = createInMemoryAtom({ defaultValue: {} })
     taprootAddressModeAtom = createInMemoryAtom({ defaultValue: {} })
+    remoteConfigAtom = createInMemoryAtom({ defaultValue: {} })
 
     plugin = createAssetsPlugin({
       assetsModule,
       assetsAtom,
+      assetClientInterface: { setFreshlyCreated: jest.fn() },
       disabledPurposesAtom,
       multiAddressModeAtom,
       legacyAddressModeAtom,
       taprootAddressModeAtom,
+      remoteConfigAtom,
       port,
     })
   })
@@ -51,6 +56,35 @@ describe('assetsPlugin', () => {
     await plugin.onClear()
 
     expect(assetsModule.clear).toHaveBeenCalledTimes(1)
+  })
+
+  describe('freshlyCreated flag', () => {
+    let assetClientInterface
+
+    beforeEach(() => {
+      assetClientInterface = { setFreshlyCreated: jest.fn() }
+      plugin = createAssetsPlugin({
+        assetsModule,
+        assetsAtom,
+        assetClientInterface,
+        disabledPurposesAtom,
+        multiAddressModeAtom,
+        legacyAddressModeAtom,
+        taprootAddressModeAtom,
+        remoteConfigAtom,
+        port,
+      })
+    })
+
+    it('should mark as freshly created on onCreate', () => {
+      plugin.onCreate()
+      expect(assetClientInterface.setFreshlyCreated).toHaveBeenCalledWith(true)
+    })
+
+    it('should clear freshly created flag on onImport', async () => {
+      await plugin.onImport()
+      expect(assetClientInterface.setFreshlyCreated).toHaveBeenCalledWith(false)
+    })
   })
 
   describe('assetsAtom', () => {

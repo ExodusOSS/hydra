@@ -3,9 +3,9 @@ import { Address, WalletAccount } from '@exodus/models'
 
 import { setup, walletAccount as defaultWalletAccount } from '../utils.js'
 
-const suiteGenerator = (compatibilityMode) => {
+const suiteGenerator = async (compatibilityMode) => {
   const walletAccount = new WalletAccount({ ...defaultWalletAccount, compatibilityMode })
-  const { addressProvider } = setup({
+  const { addressProvider } = await setup({
     walletAccounts: { [walletAccount]: walletAccount },
   })
 
@@ -15,8 +15,8 @@ const suiteGenerator = (compatibilityMode) => {
   }
 }
 
-describe('exodus mode', () => {
-  const { addressProvider, walletAccount } = suiteGenerator()
+describe('exodus mode', async () => {
+  const { addressProvider, walletAccount } = await suiteGenerator()
   test('getReceiveAddress()', async () => {
     const address = await addressProvider.getReceiveAddress({
       walletAccount,
@@ -81,8 +81,8 @@ describe('exodus mode', () => {
   })
 })
 
-describe('ordinals84 mode', () => {
-  const { addressProvider, walletAccount } = suiteGenerator('ordinals84')
+describe('ordinals84 mode', async () => {
+  const { addressProvider, walletAccount } = await suiteGenerator('ordinals84')
   test('getReceiveAddress()', async () => {
     const address = await addressProvider.getReceiveAddress({
       walletAccount,
@@ -148,8 +148,8 @@ describe('ordinals84 mode', () => {
   })
 })
 
-describe('ordinals86 mode', () => {
-  const { addressProvider, walletAccount } = suiteGenerator('ordinals86')
+describe('ordinals86 mode', async () => {
+  const { addressProvider, walletAccount } = await suiteGenerator('ordinals86')
   test('getReceiveAddress()', async () => {
     const address = await addressProvider.getReceiveAddress({
       walletAccount,
@@ -215,8 +215,8 @@ describe('ordinals86 mode', () => {
   })
 })
 
-describe('xverse49 mode', () => {
-  const { addressProvider, walletAccount } = suiteGenerator('xverse49')
+describe('xverse49 mode', async () => {
+  const { addressProvider, walletAccount } = await suiteGenerator('xverse49')
   test('getReceiveAddress()', async () => {
     const address = await addressProvider.getReceiveAddress({
       walletAccount,
@@ -282,8 +282,8 @@ describe('xverse49 mode', () => {
   })
 })
 
-describe('xverse49NotMerged mode', () => {
-  const { addressProvider, walletAccount } = suiteGenerator('xverse49NotMerged')
+describe('xverse49NotMerged mode', async () => {
+  const { addressProvider, walletAccount } = await suiteGenerator('xverse49NotMerged')
   test('getReceiveAddress()', async () => {
     const address = await addressProvider.getReceiveAddress({
       walletAccount,

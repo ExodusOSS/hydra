@@ -104,7 +104,7 @@ export function setupRedux<P extends Params>(
 type Action<T = any> = (payload: T) => State
 type ActionDictionary<T = any> = Record<string, Action<T>>
 type SetupActionsParams<T = any> = {
-  actions: ActionDictionary<T>
+  actions?: ActionDictionary<T>
   ioc: any
 }
 

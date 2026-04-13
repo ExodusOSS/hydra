@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayHomeCardTap"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "home_card_name": {
+          "type": "string",
+          "enum": ["unlock-reward", "verify", "add-friends", "secure", "notifications"]
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

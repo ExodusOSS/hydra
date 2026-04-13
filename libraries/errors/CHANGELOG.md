@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/errors@3.7.1...@exodus/errors@3.8.0) (2026-02-24)
+
+### Features
+
+- feat: bump `@exodus/traceparent` to v3 (#15347)
+
+## [3.7.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/errors@3.7.0...@exodus/errors@3.7.1) (2026-02-17)
+
+### Bug Fixes
+
+- fix(errors): preserve HttpError name and hint in SafeError telemetry (#15280)
+
+## [3.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/errors@3.6.0...@exodus/errors@3.7.0) (2026-02-12)
+
+### Features
+
+- feat(errors): validate traceId with TraceId.isTraceId() in context schema (#15183)
+
+## [3.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/errors@3.5.0...@exodus/errors@3.6.0) (2026-02-02)
+
+### Features
+
+- feat(errors): support custom error name and extend context (#15103)
+
 ## [3.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/errors@3.4.0...@exodus/errors@3.5.0) (2025-11-04)
 
 ### Features

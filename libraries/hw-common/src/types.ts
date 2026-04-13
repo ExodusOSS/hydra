@@ -99,17 +99,39 @@ export interface HardwareWalletDevice<IMessage = Message>
   listInstalledAssetNames: () => Promise<string[]>
   // All assets supported by our implementation, installed on this device AND opened on the device (ledger).
   listUseableAssetNames: () => Promise<string[]>
-  // Ensures that the device is in a state where  the asset (by assetName) is usable
+  // Ensures that the device is in a state where the asset (by assetName) is usable
   // e.g for assetName Polygon, the Ethereum or Polygon app should be open on the Ledger
-  ensureApplicationIsOpened: (assetName: EnsureApplicationIsOpenedParams) => Promise<void>
+  /**
+   * @deprecated Use ensureDeviceReady instead
+   */
+  ensureApplicationIsOpened?: (assetName: EnsureApplicationIsOpenedParams) => Promise<void>
+  // Ensures the device is ready for operations on a specific asset and wallet account.
+  // - For Ledger: ensures the correct application is open
+  // - For Trezor: ensures the correct wallet context (passphrase) is active
+  ensureDeviceReady: (params: EnsureDeviceReadyParams) => Promise<void>
   // Forcibly cancels the pending operation on the device
   cancelAction: () => Promise<void>
+  // Returns a unique wallet identifier (fingerprint) for the device.
+  // For Trezor: derived from the device's master key in the current session context.
+  getWalletId?: () => Promise<string>
 }
 
 /**
  * ensureApplicationIsOpened(assetName)
+ * @deprecated Use ensureDeviceReady instead
  */
 export type EnsureApplicationIsOpenedParams = string
+
+/**
+ * ensureDeviceReady(params)
+ * Ensures the device is ready for operations on a specific asset.
+ * - For Ledger: ensures the correct application is open
+ * - For Trezor: ensures the correct wallet context (passphrase) is active
+ */
+export interface EnsureDeviceReadyParams {
+  baseAssetName: string
+  walletAccount: { id?: string | number }
+}
 
 export interface MultisigData {
   xpubs: string[]
@@ -144,6 +166,16 @@ export interface GetPublicKeyParams {
 }
 
 /**
+ * Token account info for Solana hardware wallet signing (Trezor).
+ */
+export interface TokenAccountInfo {
+  baseAddress: string
+  tokenProgram: string
+  tokenMint: string
+  tokenAccount: string
+}
+
+/**
  * signTransaction(...)
  */
 export interface SignTransactionParams {
@@ -152,6 +184,8 @@ export interface SignTransactionParams {
   derivationPathsMap?: Record<string, string>
   signableTransaction: SignableTransaction
   multisigData?: MultisigData
+  /** Token account info for Solana token transfers (Trezor) */
+  tokenAccountsInfos?: TokenAccountInfo[]
 }
 
 /**

@@ -1,11 +1,10 @@
 import type { Atom } from '@exodus/atoms'
+import { createInMemoryAtom } from '@exodus/atoms'
 import errorTracking, { type ErrorsAtom, type ErrorTrackingModule } from '@exodus/error-tracking'
 import type { Logger } from '@exodus/logger'
 import lodash from 'lodash'
 
-import type { RemoteConfigStatus } from '../atoms/index.js'
-import remoteConfigStatusAtomDefinition from '../atoms/index.js'
-import type { Fetch, Freeze } from '../types/index.js'
+import type { Fetch, Freeze, RemoteConfigData } from '../types/index.js'
 import generateRemoteConfigUrl from './generate-remote-config-url.js'
 import type { RemoteConfig } from './index.js'
 import remoteConfigDefinition from './index.js'
@@ -44,7 +43,7 @@ describe('createRemoteConfig', () => {
 
   let config: Record<string, any>
 
-  let remoteConfigStatusAtom: Atom<RemoteConfigStatus>
+  let remoteConfigAtom: Atom<RemoteConfigData>
 
   beforeEach(() => {
     errorsAtom = (createErrorAtom as any)()
@@ -57,9 +56,10 @@ describe('createRemoteConfig', () => {
     logger = { debug: jest.fn(), error: jest.fn() } as never as Logger
     fetch = jest.fn()
     config = {}
-    remoteConfigStatusAtom = remoteConfigStatusAtomDefinition.factory()
+    remoteConfigAtom = createInMemoryAtom<RemoteConfigData>({ defaultValue: {} })
     ;(fetch as jest.Mock).mockImplementation(() =>
       Promise.resolve({
+        ok: true,
         headers: {
           get: () => new Date().toUTCString(),
         },
@@ -91,7 +91,7 @@ describe('createRemoteConfig', () => {
         fetchInterval: 10,
       },
       getBuildMetadata,
-      remoteConfigStatusAtom,
+      remoteConfigAtom,
     })
 
     void remoteConfig.load()
@@ -102,7 +102,7 @@ describe('createRemoteConfig', () => {
     })
   })
 
-  it('should update remoteConfigStatusAtom', async () => {
+  it('should update remoteConfigAtom', async () => {
     config = sampleConfig
 
     remoteConfig = createRemoteConfig({
@@ -115,17 +115,17 @@ describe('createRemoteConfig', () => {
         fetchInterval: 10,
       },
       getBuildMetadata,
-      remoteConfigStatusAtom,
+      remoteConfigAtom,
     })
 
     void remoteConfig.load()
     await remoteConfig.getAll()
 
-    const state = await remoteConfigStatusAtom.get()
+    const state = await remoteConfigAtom.get()
     expect(state).toEqual({
       remoteConfigUrl,
-      loaded: true,
-      gitHash: null,
+      config: expect.any(Object),
+      lastModified: expect.any(String),
     })
   })
 
@@ -138,18 +138,18 @@ describe('createRemoteConfig', () => {
       logger,
       fetch,
       getBuildMetadata,
-      remoteConfigStatusAtom,
+      remoteConfigAtom,
     })
 
     void remoteConfig.load()
     await remoteConfig.getAll()
 
     const remoteConfigUrl = await generateRemoteConfigUrl(getBuildMetadata)
-    const state = await remoteConfigStatusAtom.get()
+    const state = await remoteConfigAtom.get()
     expect(state).toEqual({
       remoteConfigUrl,
-      loaded: true,
-      gitHash: null,
+      config: expect.any(Object),
+      lastModified: expect.any(String),
     })
   })
 
@@ -166,7 +166,7 @@ describe('createRemoteConfig', () => {
         fetchInterval: 10,
       },
       getBuildMetadata,
-      remoteConfigStatusAtom,
+      remoteConfigAtom,
     })
 
     void remoteConfig.load()
@@ -177,14 +177,15 @@ describe('createRemoteConfig', () => {
     })
   })
 
-  it('should capture the error on failing loading remote config', async () => {
+  it('should capture the error on failing loading remote config with invalid JSON', async () => {
     ;(fetch as jest.Mock).mockImplementation(() =>
       Promise.resolve({
+        ok: true,
         headers: {
           get: () => new Date().toUTCString(),
         },
         json: async () => {
-          throw new Error('failed')
+          throw new Error('Unexpected end of input')
         },
       })
     )
@@ -199,7 +200,7 @@ describe('createRemoteConfig', () => {
         fetchInterval: 1,
       },
       getBuildMetadata,
-      remoteConfigStatusAtom,
+      remoteConfigAtom,
     })
 
     void remoteConfig.load()
@@ -210,10 +211,48 @@ describe('createRemoteConfig', () => {
     const trackedError = errors.errors[0]!
 
     expect(trackedError.namespace).toEqual('remoteConfig')
-    expect((trackedError.error as Error).message).toEqual('failed')
+    expect((trackedError.error as Error).message).toEqual(
+      'Failed to parse remote config: invalid JSON'
+    )
   })
 
-  it('should emit sync event', (done) => {
+  it('should capture the error when response.ok is false', async () => {
+    ;(fetch as jest.Mock).mockImplementation(() =>
+      Promise.resolve({
+        ok: false,
+        status: 500,
+        headers: {
+          get: () => new Date().toUTCString(),
+        },
+        json: async () => ({ data: {} }),
+      })
+    )
+
+    remoteConfig = createRemoteConfig({
+      errorTracking,
+      freeze,
+      logger,
+      fetch,
+      config: {
+        remoteConfigUrl,
+        fetchInterval: 1,
+      },
+      getBuildMetadata,
+      remoteConfigAtom,
+    })
+
+    void remoteConfig.load()
+
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    const errors = await errorsAtom.get()
+
+    const trackedError = errors.errors[0]!
+
+    expect(trackedError.namespace).toEqual('remoteConfig')
+    expect((trackedError.error as Error).message).toEqual('Failed to fetch remote config: HTTP 500')
+  })
+
+  it('should trigger atom observer', (done) => {
     remoteConfig = createRemoteConfig({
       errorTracking,
       freeze,
@@ -224,13 +263,13 @@ describe('createRemoteConfig', () => {
         fetchInterval: 10,
       },
       getBuildMetadata,
-      remoteConfigStatusAtom,
+      remoteConfigAtom,
     })
     void remoteConfig.load()
 
-    remoteConfig.on('sync', ({ current }) => {
-      if (!isEmpty(current)) {
-        expect(isEqual(current, sampleConfig)).toBeTruthy()
+    remoteConfigAtom.observe(({ config }) => {
+      if (!isEmpty(config)) {
+        expect(isEqual(config, sampleConfig)).toBeTruthy()
         done()
       }
     })
@@ -238,7 +277,7 @@ describe('createRemoteConfig', () => {
     config = sampleConfig
   })
 
-  it('should sync only when there are changes', (done) => {
+  it('should trigger observer only when there are changes', (done) => {
     remoteConfig = createRemoteConfig({
       errorTracking,
       freeze,
@@ -249,13 +288,13 @@ describe('createRemoteConfig', () => {
         fetchInterval: 10,
       },
       getBuildMetadata,
-      remoteConfigStatusAtom,
+      remoteConfigAtom,
     })
     void remoteConfig.load()
 
     let syncEvents = 0
-    remoteConfig.on('sync', () => {
-      syncEvents++
+    remoteConfigAtom.observe(({ config }) => {
+      if (!isEmpty(config)) syncEvents++
     })
 
     config = sampleConfig

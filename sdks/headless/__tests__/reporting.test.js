@@ -1,4 +1,5 @@
 import { SafeError } from '@exodus/errors'
+import { TraceId } from '@exodus/traceparent'
 import { z } from '@exodus/zod'
 
 import createAdapters from './adapters/index.js'
@@ -200,9 +201,12 @@ describe('reporting', () => {
     await exodus.application.stop()
   })
 
-  it('reports with SafeErrors should be serializable with JSON.stringify', async () => {
+  it('reports with different class instances should be serializable with JSON.stringify', async () => {
     const safeError = SafeError.from(new TypeError('Something went wrong.'))
-    const wayneCorpData = { count: 3, safeError }
+    const traceId = TraceId.fromRawTraceparent(
+      '00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01'
+    )
+    const wayneCorpData = { count: 3, safeError, traceId }
 
     const exodus = await setup([
       report(
@@ -211,6 +215,7 @@ describe('reporting', () => {
         z.object({
           count: z.number(),
           safeError: z.instanceof(SafeError),
+          traceId: z.instanceof(TraceId),
         })
       ),
     ])

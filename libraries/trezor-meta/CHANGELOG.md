@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.0](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.8.0...@exodus/trezor-meta@3.9.0) (2025-12-11)
+
+### Features
+
+- feat: support XRP in hw-trezor and hw-ledger (#14600)
+
+### Bug Fixes
+
+- fix: remove all but btc, eth, and sol from ts7 (#14554)
+
+- fix: remove cardano, ripple, stellar from TS7 (#14534)
+
+- fix: various trezor and hardware-wallets fixes (#14502)
+
+## [3.8.3](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.8.0...@exodus/trezor-meta@3.8.3) (2025-12-04)
+
+### Bug Fixes
+
+- fix: remove all but btc, eth, and sol from ts7 (#14554)
+
+- fix: remove cardano, ripple, stellar from TS7 (#14534)
+
+- fix: various trezor and hardware-wallets fixes (#14502)
+
+## [3.8.2](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.8.0...@exodus/trezor-meta@3.8.2) (2025-12-02)
+
+### Bug Fixes
+
+- fix: remove cardano, ripple, stellar from TS7 (#14534)
+
+- fix: various trezor and hardware-wallets fixes (#14502)
+
+## [3.8.1](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.8.0...@exodus/trezor-meta@3.8.1) (2025-11-28)
+
+### Bug Fixes
+
+- fix: various trezor and hardware-wallets fixes (#14502)
+
+## [3.8.0](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.7.0...@exodus/trezor-meta@3.8.0) (2025-09-30)
+
+### Features
+
+- feat: add Safe 7, solana, and bitcoinregtest to trezor (#13950)
+
 ## [3.7.0](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.6.1...@exodus/trezor-meta@3.7.0) (2025-08-14)
 
 ### Features

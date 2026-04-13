@@ -6,8 +6,8 @@ describe('eosio', () => {
   let accountStatesAtom
   let setMainAccountName
 
-  beforeEach(() => {
-    ;({ addressProvider, addressCache, accountStatesAtom } = setup())
+  beforeEach(async () => {
+    ;({ addressProvider, addressCache, accountStatesAtom } = await setup())
 
     setMainAccountName = async (mainAccountName) => {
       await accountStatesAtom.set({

@@ -1,5 +1,6 @@
 import assert from 'assert'
-import units from '../'
+
+import units from '../index.js'
 
 test('All fiats', () => {
   assert.strictEqual(units.EUR.label, 'Euro')

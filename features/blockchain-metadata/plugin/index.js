@@ -6,7 +6,7 @@ export const blockchainMetadataPluginDefinition = {
   id: 'blockchainLifecyclePlugin',
   type: 'plugin',
   factory: createBlockchainLifecyclePlugin,
-  dependencies: ['blockchainMetadata', 'txLogsAtom', 'accountStatesAtom', 'port'],
+  dependencies: ['blockchainMetadata', 'blockchainMetadataAtom', 'port'],
   public: true,
 }
 

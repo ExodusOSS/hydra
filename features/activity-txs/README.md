@@ -4,7 +4,7 @@ This feature generates user-friendly activity from transactions, orders, fiat or
 
 ## How it works
 
-Each asset’s activity consists of a set of transactions transformed using `asset.api.getActivityTxs`, which returns an array of Tx [models](https://github.com/ExodusMovement/exodus-core/blob/cdff25bb962b2301613588c615c5ac09b05f260a/packages/models/src/tx/index.js#L10): `[Tx, Tx, Tx]`.
+Each asset’s activity consists of a set of transactions transformed using `asset.api.getActivityTxs`, which returns an array of Tx [models](https://github.com/ExodusOSS/hydra/blob/7743f4ffcbdb0605deb4943a90ef2e718776c3bf/libraries/models/src/tx/index.ts#L60): `[Tx, Tx, Tx]`.
 
 **Most assets don't have this API and simply return the original transactions.**
 

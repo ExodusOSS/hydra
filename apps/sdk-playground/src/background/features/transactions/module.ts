@@ -1,38 +1,5 @@
-import { isNumberUnit } from '@exodus/currency'
+import { omit } from '@exodus/basic-utils'
 import type { Definition } from '@exodus/dependency-types'
-import assert from 'minimalistic-assert'
-
-const toNumberUnit = ({ value, currency }) => {
-  assert(value, 'value is required')
-  assert(currency, 'currency is required')
-  if (isNumberUnit(value)) {
-    return value
-  }
-
-  return currency.parse(value)
-}
-
-/* eslint-disable @exodus/mutable/no-param-reassign-prop-only */
-const resolveSendParams = (assetName, asset, options) => {
-  const { currency, baseAsset } = asset
-
-  if (options.receiver.amount) {
-    options.receiver.amount = toNumberUnit({
-      value: options.receiver.amount,
-      currency,
-    })
-  }
-
-  return {
-    ...options,
-    ...options.receiver,
-    assetName,
-    asset,
-    baseAsset,
-    options,
-  }
-}
-/* eslint-enable @exodus/mutable/no-param-reassign-prop-only */
 
 export type SendResult = {
   txId: string
@@ -43,10 +10,8 @@ type SendOptions = {
   // wallet account identifier
   walletAccount: string
   feeAmount: string
-  receiver: {
-    address: string
-    amount: string
-  }
+  address: string
+  amount: string
   customGasLimit?: string
   txInput?: string
   keepTxInput?: boolean
@@ -62,7 +27,12 @@ const createTransactions = ({ assetsModule }) => {
       throw new Error(`Cannot find 'sendTx' function for '${asset.name}'`)
     }
 
-    const sendParams = resolveSendParams(assetName, asset, options)
+    // see https://github.com/ExodusMovement/exodus-mobile/blob/fd908397067740a410ad9a505bce98bcc7b3b11f/src/_local_modules/simple-tx/tx-send.js#L24
+    const sendParams = {
+      ...omit(options, ['receiver', 'feeOpts']),
+      ...omit(options.feeOpts, ['unsignedTx']),
+      asset,
+    }
 
     try {
       return await baseAsset.api.sendTx(sendParams)

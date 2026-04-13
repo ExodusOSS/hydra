@@ -24,6 +24,6 @@ export const TEST_NFTS = [
 ]
 
 export const TEST_TXS = [
-  { id: 1, ownerAddress: ADDRESS },
-  { id: 2, ownerAddress: ADDRESS },
+  { id: 1, ownerAddress: ADDRESS, sent: false },
+  { id: 2, ownerAddress: ADDRESS, sent: false },
 ]

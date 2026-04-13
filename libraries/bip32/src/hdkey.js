@@ -1,7 +1,7 @@
 import assert from 'minimalistic-assert'
 import bs58check from 'bs58check'
-import { hashSync } from '@exodus/crypto/hash'
-import { hmacSync } from '@exodus/crypto/hmac'
+import { hash, hashSync } from '@exodus/crypto/hash'
+import { hmac, hmacSync } from '@exodus/crypto/hmac'
 import { randomBytes } from '@exodus/crypto/randomBytes'
 import * as secp256k1 from '@exodus/crypto/secp256k1'
 
@@ -11,6 +11,15 @@ const LEN = 78
 
 // Bitcoin hardcoded by default, can use package `coininfo` for others
 const BITCOIN_VERSIONS = { private: 0x04_88_ad_e4, public: 0x04_88_b2_1e }
+
+// bip32 master
+export async function getSeedId(seed) {
+  if (!(seed instanceof Uint8Array)) throw new Error('seed must be an Uint8Array instance')
+  const vector = await hmac('sha512', MASTER_SECRET, seed, 'uint8') // const I from fromMasterSeed()
+  const privateKey = vector.subarray(0, 32)
+  const publicKey = secp256k1.privateKeyToPublicKey({ privateKey })
+  return hash('hash160', publicKey, 'hex')
+}
 
 export class HDKey {
   depth = 0

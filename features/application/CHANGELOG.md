@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.15.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.14.0...@exodus/application@2.15.0) (2026-03-04)
+
+### Features
+
+- feat: add 'v3' backup type to application import options and local seed backups (#15458)
+
+### Bug Fixes
+
+- fix(local-seed-backups): back up previous mnemonic on import restart (#15227)
+
+## [2.14.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.12.2...@exodus/application@2.14.0) (2025-12-31)
+
+### Features
+
+- feat(application): expose method for restarting the app (#14075)
+
+### Bug Fixes
+
+- fix(mobile-auth,application): rename auth.removePin, auth.clear, application.import event logs (#14777)
+
+## [2.13.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.12.2...@exodus/application@2.13.0) (2025-10-13)
+
+### Features
+
+- feat(application): expose method for restarting the app (#14075)
+
+## [2.12.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.12.1...@exodus/application@2.12.2) (2025-09-25)
+
+### Bug Fixes
+
+- fix: pass `forgotPassphrase` incoming parameter (#13927)
+
 ## [2.12.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.12.0...@exodus/application@2.12.1) (2025-09-15)
 
 ### Bug Fixes

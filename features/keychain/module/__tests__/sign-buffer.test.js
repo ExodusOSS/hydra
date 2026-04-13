@@ -9,11 +9,11 @@ const seed = await mnemonicToSeed({
   mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
 })
 const entropy = '0000000000000000000000000000000000000000000000000000000000000000'
-const seedId = getSeedId(seed)
+const seedId = await getSeedId(seed)
 const data = await hash('sha256', Buffer.from('I really love keychains'))
 
-describe('keychain.signBuffer', () => {
-  const keychain = createKeychain({ seed })
+describe('keychain.signBuffer', async () => {
+  const keychain = await createKeychain({ seed })
 
   it('signatureType "ecdsa" with "der" encoding', async () => {
     const keyId = new KeyIdentifier({

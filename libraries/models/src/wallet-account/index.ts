@@ -28,6 +28,7 @@ export const TREZOR_SRC = 'trezor'
 export const LEDGER_SRC = 'ledger'
 export const FTX_SRC = 'ftx'
 export const PASSKEY_SRC = 'passkey'
+export const POLYMARKET_SRC = 'polymarket'
 
 export type WalletAccountSource =
   | typeof EXODUS_SRC
@@ -36,10 +37,12 @@ export type WalletAccountSource =
   | typeof LEDGER_SRC
   | typeof FTX_SRC
   | typeof PASSKEY_SRC
+  | typeof POLYMARKET_SRC
 
 export const CUSTODIAL_SOURCES: WalletAccountSource[] = [FTX_SRC]
 export const HARDWARE_SOURCES: WalletAccountSource[] = [TREZOR_SRC, LEDGER_SRC]
 export const SOFTWARE_SEED_SOURCES: WalletAccountSource[] = [EXODUS_SRC, SEED_SRC, PASSKEY_SRC]
+export const EXTERNAL_SOURCES: WalletAccountSource[] = [POLYMARKET_SRC]
 
 export const DEFAULT_COLORS = Object.freeze({
   exodus: '#7b39ff',
@@ -48,6 +51,7 @@ export const DEFAULT_COLORS = Object.freeze({
   ledger: '#ffffff',
   ftx: '#00b4c2',
   passkey: '#7b39ff',
+  polymarket: '#7b39ff',
 })
 
 export const DEFAULT_ICONS = Object.freeze({
@@ -57,6 +61,7 @@ export const DEFAULT_ICONS = Object.freeze({
   ledger: 'ledger',
   ftx: 'ftx',
   passkey: 'exodus',
+  polymarket: 'exodus',
 })
 
 export const LABEL_MAX_LENGTH = 100
@@ -102,6 +107,7 @@ export default class WalletAccount {
   static readonly LEDGER_SRC = LEDGER_SRC
   static readonly FTX_SRC = FTX_SRC
   static readonly PASSKEY_SRC = PASSKEY_SRC
+  static readonly POLYMARKET_SRC = POLYMARKET_SRC
 
   source: WalletAccountSource
   index: number | null
@@ -136,10 +142,11 @@ export default class WalletAccount {
   }: WalletAccountParams) {
     const isCustodial = CUSTODIAL_SOURCES.includes(source)
     const isSoftware = SOFTWARE_SEED_SOURCES.includes(source)
+    const isExternal = EXTERNAL_SOURCES.includes(source)
 
     assert(source, 'expected "source" for a wallet account')
     assert(!(index == null && !isCustodial), 'expected "index" for a wallet account')
-    assert(id || isSoftware, 'expected option "id" for a non-software wallet account')
+    assert(id || isSoftware || isExternal, 'expected option "id" for a non-software wallet account')
     assert(!isSoftware || !id, 'unexpected option "id" for a software wallet account')
     assert(
       !(isSoftware && lastConnected),
@@ -291,6 +298,10 @@ export default class WalletAccount {
     return this.source === PASSKEY_SRC
   }
 
+  get isExternal() {
+    return EXTERNAL_SOURCES.includes(this.source)
+  }
+
   static get DEFAULT_NAME() {
     return WalletAccount.DEFAULT.toString()
   }
@@ -303,7 +314,12 @@ export default class WalletAccount {
   }
 
   static get VALID_SOURCES() {
-    return [...HARDWARE_SOURCES, ...CUSTODIAL_SOURCES, ...SOFTWARE_SEED_SOURCES]
+    return [
+      ...HARDWARE_SOURCES,
+      ...CUSTODIAL_SOURCES,
+      ...SOFTWARE_SEED_SOURCES,
+      ...EXTERNAL_SOURCES,
+    ]
   }
 
   static defaultWith(params: Partial<WalletAccountParams>) {

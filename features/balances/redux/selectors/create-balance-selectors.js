@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { MY_STATE } from '@exodus/redux-dependency-injection'
 import { createSelector } from 'reselect'
@@ -5,14 +6,14 @@ import { createSelector } from 'reselect'
 const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
 const createBalanceSelectorFactory = ({ field, id }) => {
-  const selectorFactory = (assetsSelector, selfSelector) =>
+  const selectorFactory = (createAssetSelector, selfSelector) =>
     memoize(
       ({ assetName, walletAccount }) =>
         createSelector(
-          assetsSelector,
+          createAssetSelector(assetName),
           selfSelector,
-          (assets, balances) =>
-            balances[walletAccount]?.data[assetName]?.[field] ?? assets[assetName]?.currency.ZERO
+          (asset, balances) =>
+            balances[walletAccount]?.data[assetName]?.[field] ?? asset?.currency.ZERO
         ),
       ({ assetName, walletAccount, field }) => [assetName, walletAccount, field].join('-')
     )
@@ -20,7 +21,7 @@ const createBalanceSelectorFactory = ({ field, id }) => {
   return {
     id,
     selectorFactory,
-    dependencies: [{ module: 'assets', selector: 'all' }, { selector: MY_STATE }],
+    dependencies: [{ module: 'assets', selector: 'createAssetSelector' }, { selector: MY_STATE }],
   }
 }
 

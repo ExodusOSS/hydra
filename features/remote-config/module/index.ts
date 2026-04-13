@@ -2,12 +2,16 @@ import ms from 'ms'
 import delay from 'delay'
 // eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
-import EventEmitter from 'eventemitter3'
 import type { Atom } from '@exodus/atoms'
 import type { ErrorTrackingModule } from '@exodus/error-tracking'
-import { synchronizeTime, isFreezable } from './helpers.js'
-import type { Fetch, Freeze, RemoteConfigType, GetBuildMetadata } from '../types/index.js'
-import type { RemoteConfigStatus } from '../atoms/index.js'
+import { synchronizeTime } from './helpers.js'
+import type {
+  Fetch,
+  Freeze,
+  RemoteConfigData,
+  RemoteConfigType,
+  GetBuildMetadata,
+} from '../types/index.js'
 import type { Definition } from '@exodus/dependency-types'
 import type { Logger } from '@exodus/logger'
 
@@ -24,7 +28,7 @@ type Config = {
 
 type ConstructorParameters = {
   errorTracking: ErrorTrackingModule
-  remoteConfigStatusAtom: Atom<RemoteConfigStatus>
+  remoteConfigAtom: Atom<RemoteConfigData>
   freeze: Freeze
   logger: Logger
   fetch: Fetch
@@ -32,13 +36,14 @@ type ConstructorParameters = {
   config?: Config
 }
 
-export class RemoteConfig extends EventEmitter implements RemoteConfigType {
+const getModificationIndicator = (response: Response) =>
+  response.headers.get('Last-Modified') || response.headers.get('ETag')
+
+export class RemoteConfig implements RemoteConfigType {
   #started = false
   #isUpdating = false
   #current?: Record<string, any>
-  #previous?: Record<string, any>
-  #lastModified?: string
-  #loadedStatusAtom: Atom<RemoteConfigStatus>
+  #remoteConfigAtom: Atom<RemoteConfigData>
 
   #remoteConfigUrl?: string
   #getBuildMetadata: GetBuildMetadata
@@ -65,10 +70,8 @@ export class RemoteConfig extends EventEmitter implements RemoteConfigType {
     fetch,
     config,
     getBuildMetadata,
-    remoteConfigStatusAtom,
+    remoteConfigAtom,
   }: ConstructorParameters) {
-    super()
-
     this.#errorTracking = errorTracking
     this.#logger = logger
     this.#fetch = (...args) => fetch(...args)
@@ -76,7 +79,14 @@ export class RemoteConfig extends EventEmitter implements RemoteConfigType {
     this.#config = config || Object.create(null)
     this.#remoteConfigUrl = config?.remoteConfigUrl
     this.#getBuildMetadata = getBuildMetadata
-    this.#loadedStatusAtom = remoteConfigStatusAtom
+    this.#remoteConfigAtom = remoteConfigAtom
+  }
+
+  /**
+   * @deprecated
+   */
+  get remoteConfigAtom() {
+    return this.#remoteConfigAtom
   }
 
   /**
@@ -124,17 +134,16 @@ export class RemoteConfig extends EventEmitter implements RemoteConfigType {
     }
   }
 
+  /**
+   * @deprecated
+   */
   sync = () => {
-    this.#emit('sync', { current: this.#current, previous: this.#previous })
+    this.#logger.warn('remoteConfig no longer supports the "sync" method')
   }
 
   stop = () => {
     this.#started = false
     this.#timer?.clear()
-  }
-
-  #emit = (name: string, ...args: any[]) => {
-    return super.emit(name, ...args.map((arg) => (isFreezable(arg) ? this.#freeze(arg) : arg)))
   }
 
   update = async () => {
@@ -143,21 +152,26 @@ export class RemoteConfig extends EventEmitter implements RemoteConfigType {
     try {
       this.#isUpdating = true
 
-      const { config, modified } = await this.#fetchConfig()
-      const changes = modified && (!this.#current || !isEqual(config, this.#current))
-
-      if (changes) {
-        this.#previous = this.#current
-        this.#current = this.#freeze(config)
-        this.sync()
-        this.#logger.debug('updated config with changes from remote')
+      const { config: current, lastModified: _lastModified } = await this.#remoteConfigAtom.get()
+      if (!this.#current && current) {
+        this.#current = this.#freeze(current)
       }
 
-      void this.#loadedStatusAtom.set({
-        remoteConfigUrl: this.#remoteConfigUrl!,
-        loaded: true,
-        gitHash: this.#current?.meta?.gitHash ?? null,
-      })
+      const { config, lastModified } = await this.#fetchConfig({ lastModified: _lastModified })
+
+      const changes = config && (!this.#current || !isEqual(config, this.#current))
+
+      if (changes) {
+        this.#current = this.#freeze(config)
+        this.#logger.debug('updated config with changes from remote')
+
+        void this.#remoteConfigAtom.set({
+          config,
+          lastModified,
+          remoteConfigUrl: this.#remoteConfigUrl!,
+        })
+      }
+
       this.#resolveLoaded!()
       return { success: true }
     } catch (error: unknown) {
@@ -172,42 +186,54 @@ export class RemoteConfig extends EventEmitter implements RemoteConfigType {
     }
   }
 
-  #fetchConfig = async () => {
+  #fetchConfig = async ({
+    lastModified: currentLastModified,
+  }: {
+    lastModified?: string | null
+  }): Promise<{ lastModified?: string | null; config?: Record<string, any> }> => {
     if (!this.#remoteConfigUrl) {
       this.#remoteConfigUrl = await generateRemoteConfigUrl(this.#getBuildMetadata)
     }
 
     const url = `${this.#remoteConfigUrl}?cacheBump=0`
     const headers = { Accept: 'application/json' }
-    const method: string = this.#lastModified ? 'head' : 'get'
+    const method: string = currentLastModified ? 'head' : 'get'
 
     this.#logger.debug(`trying to fetch remote config from ${this.#remoteConfigUrl} ...`)
     let response = await synchronizeTime(() => this.#fetch(url, { method, headers }))
 
-    const lastModified = response.headers.get('Last-Modified')
-    if (lastModified && lastModified === this.#lastModified) {
+    let lastModified = getModificationIndicator(response)
+    if (lastModified && lastModified === currentLastModified) {
       this.#logger.debug('remote config unmodified')
-      return { modified: false }
+      return {}
     }
 
-    if (this.#lastModified) {
+    if (method === 'head') {
       // last fetch was a HEAD request
-      response = await this.#fetch(url, { headers })
+      response = await this.#fetch(url, { method: 'get', headers })
+      lastModified = getModificationIndicator(response)
     }
 
-    const { data } = await response.json()
+    if (!response.ok) {
+      throw new Error(`Failed to fetch remote config: HTTP ${response.status}`)
+    }
+
+    let body: { data?: unknown }
+    try {
+      body = await response.json()
+    } catch {
+      throw new Error('Failed to parse remote config: invalid JSON')
+    }
+
+    const { data } = body
 
     if (!data || typeof data !== 'object') {
       throw new TypeError('invalid body data')
     }
 
-    if (lastModified) {
-      this.#lastModified = lastModified
-    }
-
     this.#logger.debug('remote config fetched')
 
-    return { config: data, modified: true }
+    return { config: data, lastModified }
   }
 }
 
@@ -232,7 +258,7 @@ const createRemoteConfig = ({
   fetch,
   config,
   getBuildMetadata,
-  remoteConfigStatusAtom,
+  remoteConfigAtom,
 }: ConstructorParameters): RemoteConfig => {
   return new RemoteConfig({
     errorTracking,
@@ -241,7 +267,7 @@ const createRemoteConfig = ({
     freeze,
     config,
     getBuildMetadata,
-    remoteConfigStatusAtom,
+    remoteConfigAtom,
   })
 }
 
@@ -253,7 +279,7 @@ const remoteConfigDefinition = {
     'fetch',
     'freeze',
     'logger',
-    'remoteConfigStatusAtom',
+    'remoteConfigAtom',
     'getBuildMetadata',
     'config?',
     'errorTracking',

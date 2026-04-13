@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import assert from 'minimalistic-assert'
 import { set } from '@exodus/basic-utils'
@@ -62,15 +63,28 @@ const legacyKeyAssetNames = new Set([
   'zilliqa',
 ])
 
-export const getCachePath = ({ walletAccountName, baseAssetName, derivationPath }) => {
+export const getCachePath = ({
+  walletAccountName,
+  baseAssetName,
+  derivationPath,
+  multisigDataIndex,
+}) => {
   assert(typeof walletAccountName === 'string', 'expected string "walletAccountName"')
   assert(typeof baseAssetName === 'string', 'expected string "baseAssetName"')
   assert(typeof derivationPath === 'string', 'expected string "derivationPath"')
+  assert(
+    multisigDataIndex === undefined || typeof multisigDataIndex === 'number',
+    'expected number "multisigDataIndex"'
+  )
 
   // todo add assetName for all assets when we migrate to a new fusion channel
   let path = derivationPath
   if (!legacyKeyAssetNames.has(baseAssetName)) {
     path = `${baseAssetName}/${path}` // combine these two to match fusion shape
+  }
+
+  if (multisigDataIndex !== undefined) {
+    path = `${path}/multisig/${multisigDataIndex}`
   }
 
   return [
@@ -125,8 +139,10 @@ export const getUnsyncedAddressesForPush = (cache, currentCache) => {
         currentCacheItem &&
         currentCacheItem.synced &&
         currentCacheItem.address.toString() === item.address.toString()
-      )
+      ) {
         continue
+      }
+
       if (!item.synced) set(out, [walletAccount, path], item.address)
     }
   }

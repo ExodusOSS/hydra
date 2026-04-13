@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayProfilePaymentMethodsRemove"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "payment_method_type": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

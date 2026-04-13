@@ -263,7 +263,7 @@ describe('addressProviderReport', () => {
     let addressProvider
     let report
 
-    beforeEach(() => {
+    beforeEach(async () => {
       const {
         assetsModule,
         accountStatesAtom,
@@ -272,7 +272,7 @@ describe('addressProviderReport', () => {
         publicKeyProvider,
         knownAddresses,
         addressCache,
-      } = setup()
+      } = await setup()
 
       addressProvider = createAddressProvider({
         assetsModule,

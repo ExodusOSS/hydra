@@ -32,7 +32,7 @@ test('getMutations() should handle ERC20 transactions', (t) => {
   t.plan(2)
 
   const txset = TxSet.fromArray(golemSet)
-  const balances = [71.230_671_71, 0]
+  const balances = [71.230_671, 0]
   const mutations = txset.getMutations()
 
   t.same(

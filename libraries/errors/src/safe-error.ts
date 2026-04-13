@@ -1,4 +1,4 @@
-import { getAllowlist, parseString } from '@exodus/safe-string'
+import { getAllowlist, parseString, isSafe } from '@exodus/safe-string'
 import assert from 'minimalistic-assert'
 import parseStackTraceNatively, { stackFramesToString } from './stack.js'
 import type { Frame } from './types.js'
@@ -25,10 +25,11 @@ const SAFE_NAMES_SET = makeReadonlySet([
   'SafeErrorFailedToParse',
   'TimeoutError',
   'SyntaxError',
+  'HttpError',
 ])
 
 function isSafeName(value: string): value is SafeName {
-  return (SAFE_NAMES_SET as ReadonlySet<string>).has(value)
+  return (SAFE_NAMES_SET as ReadonlySet<string>).has(value) || isSafe(value)
 }
 
 function isExodusErrorCode(code: string) {

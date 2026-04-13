@@ -1,4 +1,5 @@
 // Intentionally imported by path, as we do not want it to change on reselect alias change when testing selectors
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect'

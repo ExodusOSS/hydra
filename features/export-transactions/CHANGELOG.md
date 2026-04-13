@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/export-transactions@2.4.0...@exodus/export-transactions@2.4.1) (2026-03-16)
+
+### Bug Fixes
+
+- fix(export-transactions): missing values on export txs for staking and claiming (#15584)
+
+## [2.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/export-transactions@2.3.7...@exodus/export-transactions@2.4.0) (2026-01-15)
+
+### Features
+
+- feat: export BTC toAddresses & all personalNotes (#14922)
+
 ## [2.3.7](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/export-transactions@2.3.6...@exodus/export-transactions@2.3.7) (2025-08-25)
 
 ### Bug Fixes

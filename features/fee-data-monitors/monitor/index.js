@@ -1,4 +1,5 @@
 import { difference } from '@exodus/basic-utils'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import pDefer from 'p-defer'
 import makeConcurrent from 'make-concurrent'
@@ -32,10 +33,12 @@ class FeeMonitors {
   #logger
   #started = pDefer()
   #remoteFeeData = Object.create(null)
+  #remoteConfigAtom
+  #unobserveRemoteConfig
 
   constructor({
     assetsModule,
-    remoteConfig,
+    remoteConfigAtom,
     feeDataAtom,
     baseAssetNamesToMonitorAtom,
     availableAssetNamesAtom,
@@ -46,8 +49,7 @@ class FeeMonitors {
     this.#baseAssetNamesToMonitorAtom = baseAssetNamesToMonitorAtom
     this.#availableAssetNamesAtom = availableAssetNamesAtom
     this.#logger = logger
-
-    remoteConfig.on('sync', ({ current }) => this.#updateRemoteFeeData(current))
+    this.#remoteConfigAtom = remoteConfigAtom
   }
 
   #getMonitorAsset = async (assetName) => {
@@ -142,6 +144,10 @@ class FeeMonitors {
   }
 
   start = async () => {
+    this.#unobserveRemoteConfig = this.#remoteConfigAtom.observe(({ config }) =>
+      this.#updateRemoteFeeData(config)
+    )
+
     await this.#init()
 
     this.#unobserveBaseAssetNames?.()
@@ -163,6 +169,8 @@ class FeeMonitors {
   }
 
   stop = () => {
+    this.#started.resolve()
+    this.#unobserveRemoteConfig?.()
     this.#unobserveBaseAssetNames?.()
     ;[...this.#monitors.keys()].forEach(this.#stopOne)
   }
@@ -177,7 +185,7 @@ const feeMonitorsDefinition = {
   dependencies: [
     'assetsModule',
     'feeDataAtom',
-    'remoteConfig',
+    'remoteConfigAtom',
     'baseAssetNamesToMonitorAtom',
     'availableAssetNamesAtom',
     'logger',

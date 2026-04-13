@@ -2,7 +2,7 @@
   "name": "@exodus/auth-mobile",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
-  "version": "6.6.0",
+  "version": "6.8.0",
   "description": "Module to simplify dealing with mobile device authentication mechanisms",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/auth-mobile",
   "bugs": {
@@ -29,7 +29,7 @@
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
-    "@exodus/react-native-biometrics": "^0.2.0",
+    "@exodus/react-native-biometrics": "^0.3.0",
     "@exodus/react-native-keychain": "^4.0.7",
     "@exodus/zod": "^3.24.3",
     "lodash": "^4.17.21"

@@ -1,4 +1,5 @@
 import { createInMemoryAtom } from '@exodus/atoms'
+import { safeString } from '@exodus/safe-string'
 
 import { errorsAtomDefinition } from '../../atoms/index.js'
 import { errorTrackingDefinition } from '../error-tracking.js'
@@ -37,13 +38,13 @@ describe('errorTracking module tests', () => {
     await module.track({
       error: new Error('message1'),
       context: {},
-      namespace: 'test',
+      namespace: safeString`test`,
     })
 
     await module.track({
       error: new Error('message2'),
       context: {},
-      namespace: 'test',
+      namespace: safeString`test`,
     })
 
     const { errors } = await errorsAtom.get()
@@ -69,17 +70,17 @@ describe('errorTracking module tests', () => {
     await module.track({
       error: new Error('message1'),
       context: {},
-      namespace: 'test',
+      namespace: safeString`test`,
     })
     await module.track({
       error: new Error('message2'),
       context: {},
-      namespace: 'test',
+      namespace: safeString`test`,
     })
     await module.track({
       error: new Error('message3'),
       context: {},
-      namespace: 'test',
+      namespace: safeString`test`,
     })
 
     const { errors } = await errorsAtom.get()
@@ -103,7 +104,7 @@ describe('errorTracking module tests', () => {
       module.track({
         error: 'not an error',
         context: {},
-        namespace: 'test',
+        namespace: safeString`test`,
         silent: false,
       })
     ).rejects.toThrow('error must be an instance of Error')
@@ -125,7 +126,7 @@ test('remote error tracking', async () => {
   await errorTracking.track({
     error: new Error('message1'),
     context: {},
-    namespace: 'test',
+    namespace: safeString`test`,
   })
 
   await new Promise(setImmediate)
@@ -149,7 +150,7 @@ test('error propagation: local error', async () => {
     errorTracking.track({
       error: new Error('message1'),
       context: {},
-      namespace: 'test',
+      namespace: safeString`test`,
     })
   ).resolves.not.toThrow()
 
@@ -157,7 +158,7 @@ test('error propagation: local error', async () => {
     errorTracking.track({
       error: new Error('message1'),
       context: {},
-      namespace: 'test',
+      namespace: safeString`test`,
       silent: false,
     })
   ).rejects.toThrow('local failed')
@@ -179,7 +180,7 @@ test('error propagation: remote error', async () => {
     errorTracking.track({
       error: new Error('message1'),
       context: {},
-      namespace: 'test',
+      namespace: safeString`test`,
     })
   ).resolves.not.toThrow()
 
@@ -187,7 +188,7 @@ test('error propagation: remote error', async () => {
     errorTracking.track({
       error: new Error('message1'),
       context: {},
-      namespace: 'test',
+      namespace: safeString`test`,
       silent: false,
     })
   ).rejects.toThrow('remote failed')
@@ -215,7 +216,7 @@ test('error propagation: timeout', async () => {
   const promise1 = errorTracking.track({
     error: new Error('message1'),
     context: {},
-    namespace: 'test',
+    namespace: safeString`test`,
   })
 
   jest.advanceTimersByTime(5000)
@@ -224,7 +225,7 @@ test('error propagation: timeout', async () => {
   const promise2 = errorTracking.track({
     error: new Error('message1'),
     context: {},
-    namespace: 'test',
+    namespace: safeString`test`,
     silent: false,
   })
 

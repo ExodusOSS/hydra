@@ -6,8 +6,10 @@ import WalletAccount, {
   DEFAULT_COLORS,
   DEFAULT_ICONS,
   EXODUS_SRC,
+  EXTERNAL_SOURCES,
   HARDWARE_SOURCES,
   LABEL_MAX_LENGTH,
+  POLYMARKET_SRC,
   SEED_SRC,
   SOFTWARE_SEED_SOURCES,
   TREZOR_SRC,
@@ -20,6 +22,7 @@ test('walletAccount', () => {
     ...HARDWARE_SOURCES,
     ...CUSTODIAL_SOURCES,
     ...SOFTWARE_SEED_SOURCES,
+    ...EXTERNAL_SOURCES,
   ])
   expect(String(new WalletAccount({ source: 'exodus', index: 0 }))).toEqual('exodus_0')
   expect(String(new WalletAccount({ source: 'exodus', index: 1 }))).toEqual('exodus_1')
@@ -445,5 +448,26 @@ describe('delegated', () => {
   test('is included in toRedactedJSON', () => {
     const delegatedAccount = new WalletAccount({ source: 'exodus', index: 0, delegated: true })
     expect(delegatedAccount.toRedactedJSON().delegated).toBe(true)
+  })
+})
+
+describe('external wallet accounts', () => {
+  test('polymarket source creates a valid wallet account', () => {
+    const account = new WalletAccount({ source: POLYMARKET_SRC, index: 0 })
+    expect(account.source).toBe('polymarket')
+    expect(account.index).toBe(0)
+  })
+
+  test('isExternal returns true for polymarket', () => {
+    const account = new WalletAccount({ source: POLYMARKET_SRC, index: 0 })
+    expect(account.isExternal).toBe(true)
+    expect(account.isSoftware).toBe(false)
+    expect(account.isHardware).toBe(false)
+    expect(account.isCustodial).toBe(false)
+  })
+
+  test('isExternal returns false for non-external sources', () => {
+    expect(new WalletAccount({ source: EXODUS_SRC, index: 0 }).isExternal).toBe(false)
+    expect(new WalletAccount({ source: TREZOR_SRC, index: 0, id: '1' }).isExternal).toBe(false)
   })
 })

@@ -5,11 +5,13 @@ const createAssetsPlugin = ({
   port,
   assetsModule,
   assetsAtom,
+  assetClientInterface,
   customTokensMonitor,
   disabledPurposesAtom,
   multiAddressModeAtom,
   legacyAddressModeAtom,
   taprootAddressModeAtom,
+  remoteConfigAtom,
 }) => {
   const emitAssets = async (assets) => {
     if (!assets) {
@@ -36,7 +38,25 @@ const createAssetsPlugin = ({
 
   const subscribers = []
 
+  const getRemoteAssetsConfig = async () => {
+    const result = await remoteConfigAtom?.get()
+    return result?.config?.assets
+  }
+
+  const onCreate = () => {
+    assetClientInterface.setFreshlyCreated(true)
+  }
+
+  const onImport = async () => {
+    assetClientInterface.setFreshlyCreated(false)
+    const assetsConfig = await getRemoteAssetsConfig()
+    assetsModule.initialize({ assetClientInterface, assetsConfig })
+  }
+
   const onStart = async () => {
+    const assetsConfig = await getRemoteAssetsConfig()
+    assetsModule.initialize({ assetClientInterface, assetsConfig })
+
     let emittedInitialAssets = false
     subscribers.push(
       assetsAtom.observe(async ({ value, added, updated, disabled }) => {
@@ -87,7 +107,16 @@ const createAssetsPlugin = ({
     await assetsModule.clear()
   }
 
-  return { onStart, onLoad, onUnlock, onLock, onStop, onClear }
+  return {
+    onCreate,
+    onImport: Object.defineProperty(onImport, 'priority', { value: 1, writable: false }),
+    onStart: Object.defineProperty(onStart, 'priority', { value: 1, writable: false }),
+    onLoad,
+    onUnlock,
+    onLock,
+    onStop,
+    onClear,
+  }
 }
 
 const assetsPluginDefinition = {
@@ -98,11 +127,13 @@ const assetsPluginDefinition = {
     'port',
     'assetsModule',
     'assetsAtom',
+    'assetClientInterface',
     'customTokensMonitor?',
     'disabledPurposesAtom',
     'multiAddressModeAtom',
     'legacyAddressModeAtom',
     'taprootAddressModeAtom',
+    'remoteConfigAtom?',
   ],
   public: true,
 }

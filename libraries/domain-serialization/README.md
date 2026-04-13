@@ -1,6 +1,14 @@
 # @exodus/domain-serialization
 
-Exodus-specific serialization for common non-POJO objects like [@exodus/models](../models/README.md) and [assets](https://github.com/ExodusMovement/assets), for use in multi-process wallet applications.
+Provides Exodus-specific serialization for complex domain objects, such as those in [@exodus/models](../models/README.md) and [assets](https://github.com/ExodusMovement/assets). To plain JSON and back. In multi-process wallet applications, use this package to transfer such objects over the wire or process boundaries.
+
+# Table of Contents
+
+- [Install](#install)
+- [Usage](#usage)
+  - [Multi-process communication](#multi-process-communication)
+    - [UI thread](#ui-thread)
+    - [Background thread](#background-thread)
 
 ## Install
 
@@ -10,22 +18,23 @@ yarn add @exodus/domain-serialization
 
 ## Usage
 
-The assumption is that the Exodus SDK ([@exodus/headless](../../sdks/headless)) runs in the background process, while sending data and accepting calls from the UI process. The below example uses `@exodus/browser-extension-rpc`, but serialization itself is not specific to the browser extension environment.
+Instantiate serialization handlers with sensible defaults using the `createDomainSerialization` function. If needed, you pass in custom serializers and exclude certain assets.
 
 ```js
-// background process
-import { createRPC } from '@exodus/browser-extension-rpc/background'
-import { createBackendDomainSerialization } from '@exodus/domain-serialization'
+import createDomainSerialization from '@exodus/domain-serialization'
 
-const { deserialize, serialize } = createBackendDomainSerialization()
-const rpc = createRPC({
-  methods: exodus, // e.g. an instance of @exodus/headless
-  serialize,
-  deserialize,
-})
+const { serialize, deserialize } = createDomainSerialization()
 
-// use serialize and deserialize for messaging with the UI process
+// Use serialize and deserialize for the desired purposes
 ```
+
+### Multi-process communication
+
+A common use case is in multi-process wallets where the UI and SDK run on separate threads. This package exports two additional convenience functions for this scenario.
+
+#### UI thread
+
+`createUIDomainSerialization` allows assets to be received and deserialized, but never sent.
 
 ```js
 // UI process
@@ -45,4 +54,21 @@ const rpc = createRPC({
 })
 
 // use serialize and deserialize for messaging with the background process
+```
+
+#### Background thread
+
+`createBackendDomainSerialization`, on the other hand, can serialize and send assets, but not receive them.
+
+```js
+import { createUIDomainSerialization } from '@exodus/domain-serialization'
+
+const { serialize, deserialize } = createBackendDomainSerialization()
+const rpc = createRPC({
+  methods: exodus, // e.g. an instance of @exodus/headless
+  serialize,
+  deserialize,
+})
+
+// use serialize and deserialize for messaging with the UI process
 ```

@@ -131,10 +131,13 @@ Enable or disable the feature in certain jurisdictions. Expects an object with t
   countries: object<string, string> | string
   disabledCountries: object<string, string>
   disabledRegions: object<string, object<string, string>>
+  enabledRegions: object<string, object<string, string>>
 }
 ```
 
 Enable the feature for certain countries by setting `countries` to an object with their country codes as keys and country names as values. Set it to `all` to enable it for all countries.
+
+Blacklist rules take precedence over whitelist rules. If a country or region is listed in `disabledCountries` or `disabledRegions`, the feature will be disabled even if it is allowed by `countries` or `enabledRegions`.
 
 To disable the feature for certain countries, set `disabledCountries` to an object with their country codes as keys and country names as values.
 
@@ -154,6 +157,21 @@ E.g.
 const disabledRegions = {
   US: {
     TX: 'Texas',
+  },
+}
+```
+
+To enable the feature only for certain regions within an allowed country, set `enabledRegions` to a per-country object with their region codes as keys and region names as values.
+
+E.g.
+
+```js
+const enabledRegions = {
+  US: {
+    TX: 'Texas',
+  },
+  EE: {
+    37: 'Harjumaa',
   },
 }
 ```
@@ -202,9 +220,9 @@ Geolocation to use when enabling or disabling the application in certain jurisdi
 
 ```js
 {
-  country: string
+  countryName: string
   countryCode: string
-  region: string
+  regionName: string
   regionCode: string
 }
 ```

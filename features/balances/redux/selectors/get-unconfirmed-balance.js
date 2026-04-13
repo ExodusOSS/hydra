@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { createSelector } from 'reselect'
 
@@ -18,12 +19,12 @@ export const getUnconfirmedBalance = ({ asset, txs }) => {
   return result
 }
 
-const selectorFactory = (assetsSelector, createAssetSourceSelector) =>
-  createSelector(assetsSelector, createAssetSourceSelector, (assets, getTxs) =>
+const selectorFactory = (getAssetSelector, createAssetSourceSelector) =>
+  createSelector(getAssetSelector, createAssetSourceSelector, (getAsset, getTxs) =>
     memoize(
       ({ assetName, walletAccount }) =>
         getUnconfirmedBalance({
-          asset: assets[assetName],
+          asset: getAsset(assetName),
           txs: getTxs({ assetName, walletAccount }),
         }),
       ({ assetName, walletAccount }) => [assetName, walletAccount].join('-')
@@ -34,7 +35,7 @@ const getUnconfirmedBalanceSelectorDefinition = {
   id: 'getUnconfirmedBalance',
   selectorFactory,
   dependencies: [
-    { module: 'assets', selector: 'all' },
+    { module: 'assets', selector: 'getAsset' },
     { module: 'txLog', selector: 'createAssetSourceSelectorOld' },
   ],
 }

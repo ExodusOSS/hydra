@@ -15,6 +15,7 @@ import {
 import typeforce from '@exodus/typeforce'
 import defaultConfig from './default-config.js'
 import mockableBalancesDefinition from './module/mockable-balances.js'
+import { safeString } from '@exodus/safe-string'
 
 const balances = (walletConfig) => {
   const config = {
@@ -34,7 +35,7 @@ const balances = (walletConfig) => {
   )
 
   return {
-    id: 'balances',
+    id: safeString`balances`,
     definitions: [
       {
         definition: walletConfig?.importReport ? mockableBalancesDefinition : balancesDefinition,

@@ -61,6 +61,12 @@
       "maxLength": 20,
       "$comment": "Max length is also arbitrary, can be ledger, trezor, or nothing"
     },
+    "account_device_model": {
+      "type": "string",
+      "format": "any-string",
+      "maxLength": 20,
+      "$comment": "Max length is also arbitrary, can Safe 3, Safe 5, Safe 7, t, 1, nanoS, nanoX, nanoSP, stax, or nothing"
+    },
     "asset_exchanged_last_90": {
       "type": "boolean"
     },
@@ -98,7 +104,9 @@
       }
     },
     "device_manufacturer": {
-      "anyOf": [{ "const": "Apple" }]
+      "type": "string",
+      "format": "any-string",
+      "maxLength": 120
     },
     "device_model": {
       "type": "string",
@@ -341,6 +349,67 @@
     },
     "xmr_balance_usd": {
       "type": "number"
+    },
+    "pay_transaction_history_count": {
+      "type": "number",
+      "minimum": 0
+    },
+    "pay_phone_country": {
+      "type": "string",
+      "format": "any-string"
+    },
+    "pay_contacts_access": {
+      "type": "string",
+      "format": "any-string"
+    },
+    "pay_has_profile_picture": {
+      "type": "boolean"
+    },
+    "pay_kyc_status": {
+      "type": "string",
+      "format": "any-string"
+    },
+    "pay_notifications_access": {
+      "type": "string",
+      "format": "any-string"
+    },
+    "pay_has_any_notifications_on": {
+      "type": "boolean"
+    },
+    "pay_phone_country_code": {
+      "type": "string",
+      "format": "any-string"
+    },
+    "pay_has_card": {
+      "type": "boolean"
+    },
+    "pay_balance_usd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "pay_has_balance": {
+      "type": "boolean"
+    },
+    "pay_cash_points": {
+      "type": "number",
+      "minimum": 0
+    },
+    "pay_cash_points_usd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "pay_cash_points_tier": {
+      "type": "string",
+      "format": "any-string"
+    },
+    "pay_has_pay_as_default": {
+      "type": "boolean"
+    },
+    "pay_has_pay_available": {
+      "type": "boolean"
+    },
+    "pay_has_saved_deposit_method": {
+      "type": "boolean"
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@exodus/redux-dependency-injection",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "type": "module",
   "description": "Dependency-injection container for redux modules",
   "author": "Exodus Movement, Inc.",
@@ -23,12 +23,12 @@
   "scripts": {
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --global '**/*.test.js' && yarn test:types",
+    "test": "run -T exodus-test --jest && yarn test:types",
     "test:types": "run -T tsc"
   },
   "dependencies": {
     "@exodus/basic-utils": "^3.0.1",
-    "@exodus/dependency-injection": "^3.0.0",
+    "@exodus/dependency-injection": "^3.2.1",
     "@exodus/dependency-types": "^2.0.0",
     "@exodus/logger": "^1.2.2",
     "@exodus/typeforce": "^1.18.0",

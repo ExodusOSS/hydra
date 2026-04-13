@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.13.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/ui-config@3.13.2...@exodus/ui-config@3.13.3) (2026-01-29)
+
+### Bug Fixes
+
+- fix: ui-config syncable atom flip flop loop (#15066)
+
+## [3.13.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/ui-config@3.13.1...@exodus/ui-config@3.13.2) (2026-01-13)
+
+### Bug Fixes
+
+- fix(ui-config): sync atoms in plugin instead of in atom definition (#14908)
+
+## [3.13.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/ui-config@3.13.0...@exodus/ui-config@3.13.1) (2025-12-24)
+
+### Bug Fixes
+
+- fix: make syncable ui config atom public (#14763)
+
 ## [3.13.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/ui-config@3.12.1...@exodus/ui-config@3.13.0) (2024-11-25)
 
 ### Features

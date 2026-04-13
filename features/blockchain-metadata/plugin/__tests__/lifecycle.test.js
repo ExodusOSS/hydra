@@ -6,9 +6,8 @@ import EventEmitter from 'events/events.js'
 import createBlockchainMetadataPlugin from '../lifecycle.js'
 
 describe('blockchainMetadataPlugin', () => {
-  let txLogsAtom
-  let accountStatesAtom
   let blockchainMetadata
+  let blockchainMetadataAtom
   let port
   let plugin
 
@@ -33,19 +32,20 @@ describe('blockchainMetadataPlugin', () => {
       stop: jest.fn(),
     })
 
-    txLogsAtom = createInMemoryAtom()
-    accountStatesAtom = createInMemoryAtom()
+    blockchainMetadataAtom = createInMemoryAtom()
     plugin = createBlockchainMetadataPlugin({
       blockchainMetadata,
-      accountStatesAtom,
-      txLogsAtom,
+      blockchainMetadataAtom,
       port,
     })
   })
 
   it('should listen to changes and emit after start', async () => {
-    await txLogsAtom.set({ value: {}, changes: txLogs })
-    await accountStatesAtom.set({ value: {}, changes: accountStates })
+    await blockchainMetadataAtom.set({
+      value: {},
+      txLogChanges: txLogs,
+      accountStateChanges: accountStates,
+    })
 
     const handler = jest.fn()
     port.subscribe(handler)
@@ -67,8 +67,9 @@ describe('blockchainMetadataPlugin', () => {
   })
 
   it('should not emit full load payload onStart', async () => {
-    await txLogsAtom.set({ value: txLogs })
-    await accountStatesAtom.set({ value: accountStates })
+    await blockchainMetadataAtom.set({
+      value: { txs: txLogs, accountStates },
+    })
 
     const handler = jest.fn()
     port.subscribe(handler)
@@ -82,8 +83,11 @@ describe('blockchainMetadataPlugin', () => {
   })
 
   it('should emit full data onLoad', async () => {
-    await txLogsAtom.set({ value: txLogs, changes: {} })
-    await accountStatesAtom.set({ value: accountStates, changes: {} })
+    await blockchainMetadataAtom.set({
+      value: { txs: txLogs, accountStates },
+      txLogChanges: {},
+      accountStateChanges: {},
+    })
 
     const handler = jest.fn()
     port.subscribe(handler)
@@ -115,8 +119,11 @@ describe('blockchainMetadataPlugin', () => {
   })
 
   it('should emit full data onUnlock', async () => {
-    await txLogsAtom.set({ value: txLogs, changes: {} })
-    await accountStatesAtom.set({ value: accountStates, changes: {} })
+    await blockchainMetadataAtom.set({
+      value: { txs: txLogs, accountStates },
+      txLogChanges: {},
+      accountStateChanges: {},
+    })
 
     const handler = jest.fn()
 
@@ -139,8 +146,11 @@ describe('blockchainMetadataPlugin', () => {
   })
 
   it('should not emit onLoad when locked', async () => {
-    await txLogsAtom.set({ value: txLogs, changes: {} })
-    await accountStatesAtom.set({ value: accountStates, changes: {} })
+    await blockchainMetadataAtom.set({
+      value: { txs: txLogs, accountStates },
+      txLogChanges: {},
+      accountStateChanges: {},
+    })
 
     const handler = jest.fn()
     port.subscribe(handler)

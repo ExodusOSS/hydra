@@ -6,10 +6,7 @@ import {
 import { difference } from '@exodus/basic-utils'
 import { mnemonicToSeed } from '@exodus/bip39'
 import bip44Constants from '@exodus/bip44-constants/by-ticker.js'
-import {
-  accountStatesAtomDefinition,
-  txLogsAtomDefinition,
-} from '@exodus/blockchain-metadata/atoms/index.js'
+import { blockchainMetadataAtomDefinition } from '@exodus/blockchain-metadata/atoms/index.js'
 import blockchainMetadataDefinition from '@exodus/blockchain-metadata/module/index.js'
 import { createGetKeyIdentifier as createCardanoGetKeyIdentifier } from '@exodus/cardano-lib'
 import { createGetKeyIdentifier } from '@exodus/ethereum-lib'
@@ -134,7 +131,6 @@ const assetsMock = {
 const assetsModule = {
   getAssets: () => assetsMock,
   getAsset: (assetName) => assetsMock[assetName],
-  initialize: () => {},
 }
 
 const trezorAccount = new WalletAccount({
@@ -270,8 +266,7 @@ describe('aci get account state', () => {
       exodus_0: new WalletAccount({ source: 'exodus', index: 0, seedId: 'some' }),
     })
 
-    const txLogsAtom = txLogsAtomDefinition.factory()
-    const accountStatesAtom = accountStatesAtomDefinition.factory()
+    const blockchainMetadataAtom = blockchainMetadataAtomDefinition.factory()
 
     const availableAssetsAtom = createAvailableAssetsAtom()
     await availableAssetsAtom.set(
@@ -284,8 +279,7 @@ describe('aci get account state', () => {
       assetsModule,
       storage: createInMemoryStorage(),
       enabledWalletAccountsAtom,
-      txLogsAtom,
-      accountStatesAtom,
+      blockchainMetadataAtom,
     })
     await blockchainMetadata.load()
 
@@ -485,8 +479,7 @@ describe('aci getAssetConfig', () => {
       }),
     })
 
-    const txLogsAtom = txLogsAtomDefinition.factory()
-    const accountStatesAtom = accountStatesAtomDefinition.factory()
+    const blockchainMetadataAtom = blockchainMetadataAtomDefinition.factory()
 
     const availableAssetsAtom = createAvailableAssetsAtom()
     await availableAssetsAtom.set(
@@ -499,8 +492,7 @@ describe('aci getAssetConfig', () => {
       assetsModule,
       storage: createInMemoryStorage(),
       enabledWalletAccountsAtom,
-      txLogsAtom,
-      accountStatesAtom,
+      blockchainMetadataAtom,
     })
     await blockchainMetadata.load()
 
@@ -545,5 +537,38 @@ describe('aci getAssetConfig', () => {
       walletAccount: 'exodus_0',
     })
     expect(assetConfig).toEqual({ confirmationsNumber: 1, gapLimit: 5 })
+  })
+
+  test('should return gapLimit 0 when freshly created', async () => {
+    const assetClientInterface = _createAssetClientInterface()
+    assetClientInterface.setFreshlyCreated(true)
+    const assetConfig = await assetClientInterface.getAssetConfig({
+      assetName: 'solana',
+      walletAccount: 'exodus_0',
+    })
+    expect(assetConfig).toEqual({ confirmationsNumber: 1, gapLimit: 0 })
+  })
+
+  test('should prefer compatibilityModeGapLimits over freshlyCreated', async () => {
+    const assetClientInterface = _createAssetClientInterface({
+      compatibilityModeGapLimits: { phantom: 5 },
+    })
+    assetClientInterface.setFreshlyCreated(true)
+    const assetConfig = await assetClientInterface.getAssetConfig({
+      assetName: 'solana',
+      walletAccount: 'exodus_0',
+    })
+    expect(assetConfig).toEqual({ confirmationsNumber: 1, gapLimit: 5 })
+  })
+
+  test('should reset gapLimit after setFreshlyCreated(false)', async () => {
+    const assetClientInterface = _createAssetClientInterface()
+    assetClientInterface.setFreshlyCreated(true)
+    assetClientInterface.setFreshlyCreated(false)
+    const assetConfig = await assetClientInterface.getAssetConfig({
+      assetName: 'solana',
+      walletAccount: 'exodus_0',
+    })
+    expect(assetConfig).toEqual({ confirmationsNumber: 1 })
   })
 })

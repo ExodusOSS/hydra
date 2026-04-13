@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import AppSolana from '@ledgerhq/hw-app-solana'
 import assert from 'minimalistic-assert'
-import bs58 from 'bs58'
+import { toBase58 } from '@exodus/bytes/base58.js'
 import { XPubUnsupportedError } from '@exodus/hw-common'
 
 import type Transport from '@ledgerhq/hw-transport'
@@ -22,7 +22,7 @@ async function createHandler(transport: Transport): Promise<HardwareWalletAssetH
 
   const getAddress = async (params: GetAddressParams) => {
     const { address } = await app.getAddress(params.derivationPath.replace('m/', ''))
-    return bs58.encode(address)
+    return toBase58(address)
   }
 
   const getXPub = async (params: GetXPubParams) => {

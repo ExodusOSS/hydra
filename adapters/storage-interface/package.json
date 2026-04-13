@@ -1,0 +1,29 @@
+{
+  "name": "@exodus/storage-interface",
+  "version": "1.0.1",
+  "description": "Typings for the storage-spec interface",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/adapters/storage-interface",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Astorage-interface"
+  },
+  "main": "index.d.ts",
+  "files": [
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "project": "../../tsconfig.json"
+    }
+  }
+}

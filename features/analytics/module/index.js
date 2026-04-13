@@ -3,6 +3,9 @@ import makeConcurrent from 'make-concurrent'
 import pDefer from 'p-defer'
 import { memoize } from '@exodus/basic-utils'
 
+import { normalizePropertyName } from './utils/index.js'
+import { DEFAULT_FLUSH_TIMEOUT } from '../constants.js'
+
 class Analytics {
   #logger
   #fetchival
@@ -15,7 +18,15 @@ class Analytics {
   #installEventReportingUrl
   #propertiesPromises = Object.create(null)
   #isTrackReady = false
-  #persistIdCounter = 0 // identifier for persisted events and traits
+  // Track which properties have been resolved.
+  // We maintain this separately because p-defer doesn't expose promise state,
+  // and we need to identify pending properties when the timeout fires
+  #resolvedProperties = new Set()
+  // identifier for persisted events and traits
+  #persistIdCounter = 0
+  // Milliseconds to wait for required properties before timing out.
+  // Analytics will continue after timeout to prevent hanging indefinitely. Default: 30 seconds.
+  #flushTimeout
 
   constructor({
     fetch,
@@ -26,7 +37,7 @@ class Analytics {
     persistedAnalyticsTraitsAtom,
     analyticsTracker,
     logger,
-    config: { installEventReportingUrl } = {},
+    config: { installEventReportingUrl, flushTimeout = DEFAULT_FLUSH_TIMEOUT } = {},
   }) {
     this.#logger = logger
     this.#storage = storage
@@ -40,12 +51,19 @@ class Analytics {
     this.#installEventReportingUrl = installEventReportingUrl // optional
       ? new URL(installEventReportingUrl)
       : undefined
+    this.#flushTimeout = flushTimeout
   }
 
   flush = async () => {
     const propertiesPromises = Object.values(this.#propertiesPromises).map((defer) => defer.promise)
 
-    await Promise.all(propertiesPromises)
+    if (propertiesPromises.length > 0) {
+      const { promise: timeoutPromise, timeoutId } = this.#createFlushTimeout()
+
+      await Promise.race([Promise.all(propertiesPromises), timeoutPromise])
+
+      clearTimeout(timeoutId)
+    }
 
     this.#isTrackReady = true
 
@@ -54,6 +72,40 @@ class Analytics {
       this.#sendPersistedTraits(),
       this.#checkPostInstallEvent(),
     ])
+  }
+
+  /**
+   * Creates a circuit breaker timeout for the flush operation.
+   * If required properties aren't set within the timeout period,
+   * logs an error with pending properties and resolves anyway to prevent hanging.
+   * @returns {{ promise: Promise<void>, timeoutId: number }}
+   * @private
+   */
+  #createFlushTimeout = () => {
+    let timeoutId
+    const promise = new Promise((resolve) => {
+      timeoutId = setTimeout(() => {
+        // Find properties that are still pending (not in resolvedProperties set)
+        const pendingProperties = Object.keys(this.#propertiesPromises).filter(
+          (property) => !this.#resolvedProperties.has(property)
+        )
+
+        if (pendingProperties.length > 0) {
+          this.#logger.error(
+            'Analytics flush timeout: some required default properties were never set. ' +
+              'Analytics will continue without waiting for these properties.',
+            {
+              pendingProperties,
+              timeoutMs: this.#flushTimeout,
+            }
+          )
+        }
+
+        resolve()
+      }, this.#flushTimeout)
+    })
+
+    return { promise, timeoutId }
   }
 
   #checkPostInstallEvent = async () => {
@@ -133,10 +185,19 @@ class Analytics {
 
   requireDefaultEventProperties = (properties) => {
     for (const property of properties) {
-      if (this.#propertiesPromises[property]) continue
-      if (this.#tracker.defaultProperties[property] !== undefined) continue
+      const normalizedProperty = normalizePropertyName(property)
 
-      this.#propertiesPromises[property] = pDefer()
+      if (this.#propertiesPromises[normalizedProperty]) continue
+
+      // Check if property already exists in tracker (check both formats for backwards compatibility)
+      if (
+        this.#tracker.defaultProperties[normalizedProperty] !== undefined ||
+        this.#tracker.defaultProperties[property] !== undefined
+      ) {
+        continue
+      }
+
+      this.#propertiesPromises[normalizedProperty] = pDefer()
     }
   }
 
@@ -150,7 +211,9 @@ class Analytics {
     this.#tracker.setDefaultProperties(obj)
 
     for (const property in obj) {
-      this.#propertiesPromises[property]?.resolve()
+      const normalizedProperty = normalizePropertyName(property)
+      this.#resolvedProperties.add(normalizedProperty)
+      this.#propertiesPromises[normalizedProperty]?.resolve()
     }
   }
 
@@ -199,8 +262,9 @@ class Analytics {
 
   track = async ({ force, sample, ...args }) => {
     try {
-      if (await this.#canTrack({ force, sample }))
+      if (await this.#canTrack({ force, sample })) {
         await this.#trackOrPersistEvent({ force, ...args })
+      }
     } catch (error) {
       this.#logger.warn('Did not track the event ', args, error)
     }

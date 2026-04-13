@@ -7,10 +7,10 @@ import createKeychain from './create-keychain.js'
 const seed = await mnemonicToSeed({
   mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
 })
-const seedId = getSeedId(seed)
+const seedId = await getSeedId(seed)
 
-describe('keychain.getPublicKey', () => {
-  const keychain = createKeychain({ seed })
+describe('keychain.getPublicKey', async () => {
+  const keychain = await createKeychain({ seed })
 
   it('gets the correct key for keyType "cardanoByron"', async () => {
     const keyId = new KeyIdentifier({

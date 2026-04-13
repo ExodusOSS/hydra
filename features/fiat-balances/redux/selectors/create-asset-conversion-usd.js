@@ -5,10 +5,10 @@ import currencies from '@exodus/fiat-currencies'
 
 const fiatCurrency = currencies.USD
 
-const selectorFactory = (assetsSelector, createAssetRateSelector) =>
+const selectorFactory = (createAssetSelector, createAssetRateSelector) =>
   memoize((assetName) =>
     createSelector(
-      (state) => assetsSelector(state)[assetName],
+      createAssetSelector(assetName),
       createAssetRateSelector(assetName),
       (asset, rate) => {
         const fiatRate = rate?.priceUSD || 0
@@ -22,7 +22,7 @@ const createConversionSelectorDefinition = {
   selectorFactory,
   dependencies: [
     //
-    { selector: 'all', module: 'assets' },
+    { selector: 'createAssetSelector', module: 'assets' },
     { selector: 'assetRate', module: 'rates' },
   ],
 }

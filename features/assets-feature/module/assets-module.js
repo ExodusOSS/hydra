@@ -136,12 +136,12 @@ export class AssetsModule {
     })
   }
 
-  initialize = ({ assetClientInterface }) => {
-    // TODO: pass asset specific config to assets module in `config.assetsConfig`
-    const { assetsConfig = {} } = this.#config
+  initialize = once(({ assetClientInterface, assetsConfig }) => {
+    const { assetsConfig: defaultAssetsConfig = Object.create(null) } = this.#config
     const assetsList = Object.entries(this.#assetPlugins)
       .map(([name, assetPlugin]) => {
-        const asset = assetPlugin.createAsset({ assetClientInterface, config: assetsConfig[name] })
+        const config = { ...defaultAssetsConfig[name], ...assetsConfig?.[name]?.config }
+        const asset = assetPlugin.createAsset({ assetClientInterface, config })
         if (asset.name === name) return asset
         console.warn(`Incorrectly referenced supported asset ${name}. Expected ${asset.name}.`)
       })
@@ -151,7 +151,7 @@ export class AssetsModule {
         supportedAssetsList: [...assetsList, ...this.#combinedAssetsList],
       })
     )
-  }
+  })
 
   getAssets = () => this.#registry.getAssets()
 
@@ -234,11 +234,7 @@ export class AssetsModule {
 
     const token = normalizeToken(_token)
 
-    try {
-      await this.#iconsStorage.storeIcons([token])
-    } catch (err) {
-      this.#logger.warn(`An error occurred while decoding icon for ${assetId}`, err.message)
-    }
+    await this.#storeIcons([token])
 
     this.#setCache(key, token)
     return this.#getCache(key)
@@ -284,11 +280,7 @@ export class AssetsModule {
 
       const tokens = validTokens.map((token) => normalizeToken(token))
 
-      try {
-        await this.#iconsStorage.storeIcons(tokens)
-      } catch (err) {
-        this.#logger.warn(`An error occurred while decoding icons`, err.message)
-      }
+      await this.#storeIcons(tokens)
 
       for (const token of tokens) {
         const key = getFetchCacheKey(token.baseAssetName, token.assetId)
@@ -428,7 +420,7 @@ export class AssetsModule {
 
     if (fetchedAndHandledTokens.length > 0) {
       await this.#storeCustomTokens(fetchedAndHandledTokens)
-      await this.#iconsStorage.storeIcons(fetchedAndHandledTokens)
+      await this.#storeIcons(fetchedAndHandledTokens)
     }
 
     this.#flushChanges({ added, updated })
@@ -531,7 +523,8 @@ export class AssetsModule {
       this.#logger.warn('Invalid Custom Token schema')
     }
 
-    await this.#iconsStorage.storeIcons(validatedTokens)
+    await this.#storeIcons(validatedTokens)
+
     return validatedTokens
   }
 
@@ -677,6 +670,19 @@ export class AssetsModule {
       return await this.#fetchIcon(assetName)
     } catch (e) {
       this.#logger.error(`Cannot load icon for ${assetName} from CTR. ${e.message}`, e)
+    }
+  }
+
+  #storeIcons = async (tokens) => {
+    try {
+      if (tokens.length > 0) {
+        await this.#iconsStorage.storeIcons(tokens)
+      }
+    } catch (err) {
+      this.#logger.warn(
+        `An error occurred while storing icons ${tokens.map((t) => t.name).join(',')}`,
+        err
+      )
     }
   }
 

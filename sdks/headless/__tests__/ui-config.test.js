@@ -67,12 +67,14 @@ describe('ui-config', () => {
     await exodus.application.unlock({ passphrase })
 
     // Syncs local -> fusion
-    exodus.uiConfig.soundsEnabled.set(true)
+    let setPromise = exodus.uiConfig.soundsEnabled.set(true)
     await expect(expectEvent({ port, event: 'soundsEnabled' })).resolves.toEqual(true)
+    await setPromise
     await expect(adapters.fusion.getProfile()).resolves.toMatchObject({ soundsEnabled: true })
 
-    exodus.uiConfig.soundsEnabled.set(false)
+    setPromise = exodus.uiConfig.soundsEnabled.set(false)
     await expect(expectEvent({ port, event: 'soundsEnabled' })).resolves.toEqual(false)
+    await setPromise
     await expect(adapters.fusion.getProfile()).resolves.toMatchObject({ soundsEnabled: false })
 
     // Syncs fusion -> local

@@ -1,6 +1,6 @@
 {
   "name": "@exodus/hardware-wallets",
-  "version": "3.1.0",
+  "version": "3.6.2",
   "description": "An Exodus SDK feature that provides a high level abstraction for interacting with hardware wallet devices",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -32,8 +32,8 @@
     "@exodus/basic-utils": "^3.2.0",
     "@exodus/bip32": "^4.0.2",
     "@exodus/crypto": "^1.0.0-rc.14",
-    "@exodus/hw-common": "^3.1.0",
-    "@exodus/models": "^12.11.0",
+    "@exodus/hw-common": "^3.4.1",
+    "@exodus/models": "^12.18.0",
     "@exodus/redux-dependency-injection": "^4.0.0",
     "@exodus/wild-emitter": "^1.1.0",
     "delay": "^5.0.0",
@@ -50,6 +50,7 @@
     "redux": "^4.2.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

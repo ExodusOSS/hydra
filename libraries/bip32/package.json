@@ -1,6 +1,6 @@
 {
   "name": "@exodus/bip32",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "Exodus BIP32 modules.",
   "type": "module",
   "main": "src/index.js",
@@ -19,6 +19,7 @@
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {
+    "@exodus/bip39": "workspace:^",
     "bigi": "^1.1.0",
     "ecurve": "^1.0.0"
   },

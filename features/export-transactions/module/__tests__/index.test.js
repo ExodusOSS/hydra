@@ -2,17 +2,13 @@ import { connectAssets } from '@exodus/assets'
 import assetsBase from '@exodus/assets-base'
 import { createInMemoryAtom } from '@exodus/atoms'
 import { keyBy, mapValues } from '@exodus/basic-utils'
-import {
-  accountStatesAtomDefinition,
-  txLogsAtomDefinition,
-} from '@exodus/blockchain-metadata/atoms/index.js'
+import { blockchainMetadataAtomDefinition } from '@exodus/blockchain-metadata/atoms/index.js'
 import blockchainMetadataDefinition from '@exodus/blockchain-metadata/module/index.js'
 import { normalizeTxsJSON, OrderSet, PersonalNoteSet, WalletAccount } from '@exodus/models'
 import createStorage from '@exodus/storage-memory'
 import EventEmitter from 'events/events.js'
 
 import { create as createExportTransactions } from '../index.js'
-import { formatTransactionOutput } from '../utils.js'
 import loadFixture from './load-fixture.cjs'
 
 const ordersFixtures = loadFixture('orders-fixtures')
@@ -44,10 +40,24 @@ const createAssetsModule = () =>
     },
   })
 
-const personalNoteMessage = 'test'
 const personalNotesAtomMock = {
   get: async () =>
-    PersonalNoteSet.fromArray([{ txId: txFixtures.solana[0].txId, message: personalNoteMessage }]),
+    PersonalNoteSet.fromArray([
+      { txId: txFixtures.solana[0].txId, message: 'test' },
+      {
+        txId: txFixtures.bitcoin[0].txId,
+        message: '',
+        sends: { [txFixtures.bitcoin[0].data.sent[0].address]: { message: 'foobar' } },
+      },
+      {
+        txId: txFixtures.bitcoin[2].txId,
+        message: '',
+        sends: {
+          [txFixtures.bitcoin[2].data.sent[0].address]: { message: 'one' },
+          [txFixtures.bitcoin[2].data.sent[1].address]: { message: 'two' },
+        },
+      },
+    ]),
 }
 
 describe('export-transactions', () => {
@@ -64,8 +74,7 @@ describe('export-transactions', () => {
   let exportTransactions
   let ordersAtom
   let multipleWalletAccountsEnabledAtom
-  let txLogsAtom
-  let accountStatesAtom
+  let blockchainMetadataAtom
 
   beforeEach(async () => {
     const storage = createStorage()
@@ -83,15 +92,13 @@ describe('export-transactions', () => {
       defaultValue: true,
     })
 
-    txLogsAtom = txLogsAtomDefinition.factory()
-    accountStatesAtom = accountStatesAtomDefinition.factory()
+    blockchainMetadataAtom = blockchainMetadataAtomDefinition.factory()
 
     blockchainMetadata = createBlockchainMetadata({
       assetsModule,
       enabledWalletAccountsAtom,
       storage: storage.namespace('blockchain-metadata'),
-      txLogsAtom,
-      accountStatesAtom,
+      blockchainMetadataAtom,
     })
     blockchainMetadata.load()
 
@@ -172,30 +179,5 @@ describe('export-transactions', () => {
       expect(exportedTx).toBeDefined()
       expect(exportedTx.type).toEqual('exchange')
     })
-  })
-
-  it('should deduplicate addresses in CSV output', () => {
-    const mockTx = {
-      date: '2023-01-01',
-      from: ['addr1', 'addr1', 'addr2'],
-      to: ['addr3', 'addr3', null, 'addr4'],
-      txId: 'test-tx-id',
-      tokens: [],
-    }
-
-    const result = formatTransactionOutput({
-      tx: mockTx,
-      type: 'withdrawal',
-      asset: { blockExplorer: { txUrl: () => 'test-url' } },
-      coinAmount: { toDefaultNumber: () => 100 },
-      coinCurrency: 'BTC',
-      feeAmount: { toDefaultNumber: () => 1, isZero: false },
-      feeCurrency: 'BTC',
-      walletAccount: 'test-account',
-      oppositeWalletAccount: 'other-account',
-    })
-
-    expect(result.fromAddress).toBe('addr1 | addr2')
-    expect(result.toAddress).toBe('addr3 | addr4')
   })
 })

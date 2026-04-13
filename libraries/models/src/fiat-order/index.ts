@@ -3,7 +3,8 @@ import assert from 'minimalistic-assert'
 // eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
-import { type StatusByProvider, type Provider, ORDER_TYPES, STATUS_MAP } from './constants.js'
+import type { OrderStatus, StatusByProvider, Provider } from './constants.js'
+import { ORDER_TYPES, ORDER_STATUS, STATUS_MAP } from './constants.js'
 import { serialize, deserialize } from '../account-state/index.js'
 import { isOrderAmountLegacyDefaultUnitString, isOrderAmountLegacyNumber } from './utils.js'
 import { ModelIdSymbol } from '../constants.js'
@@ -207,7 +208,7 @@ export default class FiatOrder<P extends Provider = Provider> implements FiatOrd
     Object.assign(this, props)
 
     // old orders may have both exoduStatus 'complete' and an 'errorMessage'
-    if (this.exodusStatus === 'complete' && this.errorMessage) {
+    if (this.exodusStatus === ORDER_STATUS.complete && this.errorMessage) {
       delete this.errorMessage
     }
   }
@@ -315,12 +316,21 @@ export default class FiatOrder<P extends Provider = Provider> implements FiatOrd
   }
 
   get exodusStatus() {
-    const statuses = STATUS_MAP[this.provider as keyof typeof STATUS_MAP]! ?? {}
-    const match = Object.entries(statuses).find(([, providerStatuses]) =>
+    if (this.status === 'completed') {
+      return ORDER_STATUS.complete
+    }
+
+    if (Object.values(ORDER_STATUS).includes(this.status as OrderStatus)) {
+      return this.status
+    }
+
+    // TODO: Remove the following once we switch to fetching provider orders from fiat server
+    const providerLegacyStatuses = STATUS_MAP[this.provider as keyof typeof STATUS_MAP]! ?? {}
+    const match = Object.entries(providerLegacyStatuses).find(([, providerStatuses]) =>
       providerStatuses.includes(this.status)
     )
 
-    return match ? match[0] : 'in-progress'
+    return match ? match[0] : ORDER_STATUS.in_progress
   }
 
   get error() {

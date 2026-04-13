@@ -1,5 +1,4 @@
 import NumberUnit from '@exodus/currency'
-// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 import assets from '../../__tests__/assets.js'
@@ -7,7 +6,6 @@ import { serialize } from '../../account-state/index.js'
 import type { Provider, StatusByProvider } from '../constants.js'
 import {
   MOONPAY_ORDER_STATUS,
-  ORDER_STATUS,
   ORDER_STATUS_TO_BLOCKCHAIN_STATUS,
   ORDER_STATUS_TO_MOONPAY_STATUS,
   ORDER_STATUS_TO_ONRAMPER_STATUS,
@@ -352,6 +350,15 @@ describe('order status', () => {
     }
   })
 
+  test.each(['complete', 'failed', 'in-progress'])('get exodus "%s" order status', (status) => {
+    const order = FiatOrder.fromJSON({
+      ...serializedOrder,
+      status,
+    } as Parameters<typeof FiatOrder.fromJSON>[0])
+
+    expect(order.exodusStatus).toBe(status)
+  })
+
   test('provider unknown status', () => {
     const order = FiatOrder.fromJSON({
       ...serializedOrder,
@@ -363,7 +370,17 @@ describe('order status', () => {
   })
 
   test('all status mappings should only contain valid status keys', () => {
-    const VALID_STATUS_KEYS = [ORDER_STATUS.complete, ORDER_STATUS.failed, ORDER_STATUS.in_progress]
+    const VALID_STATUS_KEYS = [
+      'action-required',
+      'complete',
+      'expired',
+      'error',
+      'failed',
+      'info',
+      'in-progress',
+      'refunded',
+      'refunding',
+    ]
 
     for (const providerStatuses of Object.values(statusMappings)) {
       for (const status of Object.keys(providerStatuses!)) {

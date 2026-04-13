@@ -116,11 +116,6 @@ describe('networks selectors', () => {
         primary: false,
       },
       {
-        assetName: 'usdcoin_tron',
-        name: 'tronmainnet',
-        primary: false,
-      },
-      {
         assetName: 'usdc_matic_0a883d9b',
         name: 'matic',
         primary: false,
@@ -151,7 +146,6 @@ describe('networks selectors', () => {
       usdcoin: usdcoinNetworks,
       usdcoin_algorand: usdcoinNetworks,
       usdcoin_bsc: usdcoinNetworks,
-      usdcoin_tron: usdcoinNetworks,
       usdcoin_solana: usdcoinNetworks,
       usdc_avalanchec_185c8bd7: usdcoinNetworks,
       usdc_ethereumarbone_2e1129c4: usdcoinNetworks,
@@ -215,12 +209,6 @@ describe('networks selectors', () => {
         available: true,
       },
       {
-        assetName: 'usdcoin_tron',
-        name: 'tronmainnet',
-        primary: false,
-        available: true,
-      },
-      {
         assetName: 'usdc_matic_0a883d9b',
         available: true,
         primary: false,
@@ -259,7 +247,6 @@ describe('networks selectors', () => {
       usdcoin: usdcoinNetworks,
       usdcoin_algorand: usdcoinNetworks,
       usdcoin_bsc: usdcoinNetworks,
-      usdcoin_tron: usdcoinNetworks,
       usdcoin_solana: usdcoinNetworks,
       usdc_avalanchec_185c8bd7: usdcoinNetworks,
       usdc_matic_0a883d9b: usdcoinNetworks,

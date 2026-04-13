@@ -8,9 +8,11 @@ import {
   Tx,
   TxSet,
   UtxoCollection,
+  WalletAccount,
 } from '@exodus/models'
 import createSerializeDeserialize from '@exodus/serialization'
 import KeyIdentifier from '@exodus/key-identifier'
+import BN from 'bn.js'
 
 /**
  * Create serialization functions for a wide range of domain and native objects
@@ -24,50 +26,50 @@ export const createBasicDomainSerialization = (
   const typeDefinitions = [
     {
       type: 'numberunit',
-      test: (v) => isNumberUnit(v),
+      test: (v) => isNumberUnit(v), // TODO: switch to 'class' for just using instanceof
       serialize: (v) => ({ v: v.toString(), u: unitTypeToJSON(v.unitType) }),
       deserialize: (v) => UnitType.create(v.u).parse(v.v),
     },
     {
       type: 'personalnoteset',
-      test: (v) => PersonalNoteSet.isInstance(v),
+      class: PersonalNoteSet,
       serialize: (v) => v.toJSON(),
       deserialize: (v) => PersonalNoteSet.fromArray(v),
     },
     {
       type: 'utxocollection',
-      test: (v) => UtxoCollection.isInstance(v),
+      class: UtxoCollection,
       serialize: (v) => ({ v: v.toJSON(), u: unitTypeToJSON(v.currency) }),
       deserialize: (v) => UtxoCollection.fromJSON(v.v, { currency: UnitType.create(v.u) }),
     },
     {
       type: 'txset',
-      test: (v) => TxSet.isInstance(v),
+      class: TxSet,
       serialize: (v) => v.toJSON(),
       deserialize: (v) => TxSet.fromArray(v),
     },
     {
       type: 'tx',
-      test: (v) => Tx.isInstance(v),
+      class: Tx,
       serialize: (v) => v.toJSON(),
       deserialize: (v) => Tx.fromJSON(v),
     },
     {
       type: 'accountstate',
-      test: (v) => AccountState.isInstance(v),
+      class: AccountState,
       serialize: (v) => v.toJSON({ includeMem: true }),
       deserialize: (v) => deserialize(v),
     },
 
     {
       type: 'orderset',
-      test: (v) => OrderSet.isInstance(v),
+      class: OrderSet,
       serialize: (v) => v.toJSON(),
       deserialize: (v) => OrderSet.fromArray(v),
     },
     {
       type: 'fiatorderset',
-      test: (v) => FiatOrderSet.isInstance(v),
+      class: FiatOrderSet,
       serialize: (v) => v.toJSON(),
       deserialize: (v) => FiatOrderSet.fromArray(v),
     },
@@ -77,7 +79,19 @@ export const createBasicDomainSerialization = (
       serialize: (v) => v.toJSON(),
       deserialize: (v) => new KeyIdentifier(v),
     },
-    // TODO include bn.js
+    {
+      type: 'walletaccount',
+      class: WalletAccount,
+      serialize: (v) => v.toJSON(),
+      deserialize: (v) => new WalletAccount(v),
+    },
+    {
+      type: 'bn.js',
+      // Workaround for BN.isBN() not properly checking the existence of `v.constructor`
+      test: (v) => v && v.constructor && !Object.hasOwn(v, 'constructor') && BN.isBN(v),
+      serialize: (v) => v.toJSON(),
+      deserialize: (v) => new BN(v, 16),
+    },
   ]
 
   const userTypes = [...typeDefinitions, ...extraTypeDefinitions].map((userType) => {
@@ -92,6 +106,11 @@ export const createBasicDomainSerialization = (
 
     return userType
   })
-  const { serialize, deserialize } = createSerializeDeserialize(userTypes)
+  const { serialize, deserialize } = createSerializeDeserialize({
+    typeDefinitions: userTypes,
+    skipUndefinedProperties: true,
+    unknownClassesAsObjects: true, // TODO: flip to false in major
+    unknownNonObjectsPassthrough: true, // TODO: flip to false in major
+  })
   return { serialize, deserialize }
 }

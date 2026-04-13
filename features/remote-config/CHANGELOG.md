@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/remote-config@3.5.0...@exodus/remote-config@3.5.1) (2026-03-11)
+
+**Note:** Version bump only for package @exodus/remote-config
+
+## [3.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/remote-config@3.2.1...@exodus/remote-config@3.5.0) (2026-02-11)
+
+### Features
+
+- feat: persist remote config with storage-backed atom (#15038)
+
+## [3.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/remote-config@3.2.1...@exodus/remote-config@3.4.0) (2026-02-09)
+
+### Bug Fixes
+
+- fix: remote config content change check (#15228)
+
+## [3.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/remote-config@3.2.1...@exodus/remote-config@3.3.0) (2026-02-05)
+
+### Features
+
+- feat: persist remote config with storage-backed atom (#15038)
+
+## [3.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/remote-config@3.2.0...@exodus/remote-config@3.2.1) (2026-01-06)
+
+### Bug Fixes
+
+- fix(remote-config): add error handling for JSON parse failures (#14799)
+
 ## [3.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/remote-config@3.1.0...@exodus/remote-config@3.2.0) (2025-11-18)
 
 ### Features

@@ -1,6 +1,7 @@
 import { z } from '@exodus/zod'
 import { isSafe } from '@exodus/safe-string'
 import { memoize } from '@exodus/basic-utils'
+import { TraceId } from '@exodus/traceparent'
 
 const createContextSchema = () =>
   z
@@ -12,7 +13,10 @@ const createContextSchema = () =>
         })
         .strict()
         .nullish(),
-      traceId: z.string().refine(isSafe).nullish(),
+      traceId: z.custom<TraceId>((val) => val instanceof TraceId).nullish(),
+      reason: z.string().refine(isSafe).nullish(),
+      type: z.string().refine(isSafe).nullish(),
+      baseAssetName: z.string().refine(isSafe).nullish(),
     })
     .strict()
     .nullish()

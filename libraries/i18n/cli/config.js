@@ -41,5 +41,6 @@ export const readConfig = (rootDir, filesystem) => {
     additionalModules: config.additionalModules,
     additionalDecorators: config.additionalDecorators,
     ignoreRegex: new RegExp(config.ignoreRegex || 'node_modules|__tests__', 'i'),
+    scopedLocales: config.scopedLocales || {},
   }
 }

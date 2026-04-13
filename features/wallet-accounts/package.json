@@ -1,24 +1,23 @@
 {
   "name": "@exodus/wallet-accounts",
-  "version": "20.2.1",
+  "version": "20.4.0",
   "description": "CRUD interface for managing wallet accounts, a.k.a. portfolios.",
   "author": "Exodus Movement, Inc.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/wallet-accounts",
   "license": "MIT",
   "type": "module",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./redux": "./lib/redux/index.js",
+    "./redux/index.js": "./lib/redux/index.js",
+    "./redux/*": "./lib/redux/*",
+    "./atoms/*": "./lib/atoms/*",
+    "./migrations/*": "./lib/migrations/*"
+  },
   "files": [
-    "api",
-    "atoms",
-    "debug",
-    "migrations",
-    "module",
-    "plugins",
-    "redux",
-    "report",
-    "index.d.ts",
+    "lib/",
     "CHANGELOG.md",
-    "!**/*.test.js",
     "!**/__tests__/**"
   ],
   "repository": {
@@ -26,20 +25,27 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "scripts": {
-    "lint": "run -T eslint . -c ../../eslint.config.mjs",
+    "build": "run -T tsc -p tsconfig.build.json",
+    "build:watch": "run -T tsc -p tsconfig.build.json --watch",
+    "clean": "run -T tsc --build --clean",
+    "lint": "run -T tsc --noEmit && run -T eslint .",
     "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "test": "run -T exodus-test --jest --esbuild",
+    "prepublishOnly": "yarn run -T build --scope @exodus/wallet-accounts"
   },
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Awallet-accounts"
   },
   "dependencies": {
     "@exodus/atoms": "^10.0.0",
-    "@exodus/basic-utils": "^3.5.1",
+    "@exodus/basic-utils": "^3.7.3",
     "@exodus/core-selectors": "^4.0.0",
+    "@exodus/dependency-types": "^2.1.1",
     "@exodus/fusion-atoms": "^1.2.1",
+    "@exodus/logger": "^1.2.3",
     "@exodus/models": "^12.18.0",
     "@exodus/safe-string": "^1.1.0",
+    "@exodus/storage-interface": "^1.0.1",
     "@exodus/typeforce": "^1.19.0",
     "@exodus/zod": "^3.24.2",
     "lodash": "^4.17.21",
@@ -53,7 +59,6 @@
     "@exodus/argo": "workspace:^",
     "@exodus/dependency-injection": "workspace:^",
     "@exodus/fusion-local": "workspace:^",
-    "@exodus/logger": "workspace:^",
     "@exodus/redux-dependency-injection": "workspace:^",
     "@exodus/storage-memory": "workspace:^",
     "delay": "^6.0.0",

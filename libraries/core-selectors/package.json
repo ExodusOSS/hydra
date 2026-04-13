@@ -1,6 +1,6 @@
 {
   "name": "@exodus/core-selectors",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "author": "Exodus Movement, Inc.",
   "description": "Bunch of core selectors",
   "license": "MIT",
@@ -8,7 +8,6 @@
   "main": "index.js",
   "files": [
     "assets",
-    "orders",
     "tx-log",
     "utils",
     "!**/__tests__",
@@ -17,13 +16,11 @@
   "devDependencies": {
     "@exodus/assets": "^11.0.0",
     "@exodus/assets-base": "^10.0.0",
-    "@exodus/combined-assets-meta": "^3.0.0",
-    "@exodus/models": "workspace:^"
+    "@exodus/combined-assets-meta": "^3.7.0"
   },
   "peerDependencies": {
     "@exodus/assets": "^11.0.0",
-    "@exodus/combined-assets-meta": "^3.0.0",
-    "@exodus/models": "^12.0.0"
+    "@exodus/combined-assets-meta": "^3.7.0"
   },
   "dependencies": {
     "lodash": "^4.17.11",
@@ -44,6 +41,7 @@
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Acore-selectors"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

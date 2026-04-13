@@ -18,6 +18,7 @@
           "type": "string",
           "enum": [
             "no-backup",
+            "has-backup",
             "user-consent-modal",
             "confirm-email",
             "creating-backup",

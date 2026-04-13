@@ -40,13 +40,15 @@ const createHardwareWalletsApi = ({
       listUseableAssetNames: hardwareWallets.listUseableAssetNames,
       scanForDevices: hardwareWallets.scanForDevices,
       canAccessAsset: hardwareWallets.canAccessAsset,
-      ensureApplicationIsOpened: hardwareWallets.ensureApplicationIsOpened,
       scan: hardwareWallets.scan,
       sync: hardwareWallets.sync,
       addPublicKeysToWalletAccount: hardwareWallets.addPublicKeysToWalletAccount,
       create: hardwareWallets.create,
       retrySigningRequest: hardwareWallets.retrySigningRequest,
       cancelSigningRequest: hardwareWallets.cancelSigningRequest,
+      submitPairingCode: hardwareWallets.submitPairingCode,
+      clearPairingRequest: () => hardwareWallets.clearPairingRequest,
+      setPassphraseMode: hardwareWallets.setPassphraseMode,
     },
   }
 }

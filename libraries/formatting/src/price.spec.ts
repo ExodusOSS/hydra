@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/numeric-separators-style */
-import { formatAssetPrice, formatPrice } from './price.js'
+import { formatAmount, formatAssetPrice, formatPrice } from './price.js'
 
 describe('price', () => {
   describe('formatPrice', () => {
@@ -121,6 +121,18 @@ describe('price', () => {
           formatPrice(0.00123456789, { maxFraction: 2, formatZeroWithoutDecimals: true })
         ).toBe('$0')
       })
+    })
+  })
+
+  describe('formatAmount', () => {
+    it('should format amount', () => {
+      expect(formatAmount(5)).toBe('$5')
+      expect(formatAmount('5')).toBe('$5')
+      expect(formatAmount(5100.4499)).toBe('$5,100.45')
+      expect(formatAmount(0)).toBe('$0')
+      expect(formatAmount('0')).toBe('$0')
+      expect(formatAmount(0.001)).toBe('$0')
+      expect(formatAmount(0.01)).toBe('$0.01')
     })
   })
 

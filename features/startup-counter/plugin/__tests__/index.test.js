@@ -1,4 +1,5 @@
 import * as atoms from '@exodus/atoms'
+
 import startupCounterPluginDefinition from '../index.js'
 
 describe('startupCounterPlugin', () => {

@@ -17,7 +17,10 @@ const babelConfigPath = resolve(rootDir, getArgumentValue('--babel-config') ?? '
 const babelrcModule = await import(babelConfigPath)
 const babelrc = babelrcModule.default || babelrcModule
 
-const { locales, additionalModules, additionalDecorators, ignoreRegex } = readConfig(rootDir, fs)
+const { locales, additionalModules, additionalDecorators, ignoreRegex, scopedLocales } = readConfig(
+  rootDir,
+  fs
+)
 
 if (command === 'extract') {
   const fileNames = getPositionalArguments().map((filesDir) => resolve(rootDir, filesDir))
@@ -30,7 +33,7 @@ if (command === 'extract') {
     ignoreRegex,
   }
 
-  extract(fileNames, locales, options)
+  extract(fileNames, locales, options, scopedLocales)
 
   exit(0)
 }

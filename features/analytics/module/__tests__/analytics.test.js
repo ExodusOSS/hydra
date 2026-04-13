@@ -7,7 +7,7 @@ const { factory: createAnalytics } = analyticsDefinition
 
 const defaultTrackerId = 'default-id'
 const installEventReportingUrl = 'https://support-helpers.a.exodus.io/extension/installs'
-const logger = { warn: jest.fn(), debug: jest.fn() }
+const logger = { warn: jest.fn(), debug: jest.fn(), error: jest.fn() }
 
 describe('Analytics module', () => {
   let analytics,
@@ -46,6 +46,10 @@ describe('Analytics module', () => {
     mockPersistedAnalyticsEventsAtom = createInMemoryAtom({ defaultValue: [] })
     mockPersistedAnalyticsTraitsAtom = createInMemoryAtom({ defaultValue: [] })
 
+    logger.warn.mockReset()
+    logger.debug.mockReset()
+    logger.error.mockReset()
+
     analytics = createAnalytics({
       fetch,
       storage: mockStorage,
@@ -54,7 +58,7 @@ describe('Analytics module', () => {
       analyticsUserIdAtom: mockAnalyticsUserIdAtom,
       persistedAnalyticsEventsAtom: mockPersistedAnalyticsEventsAtom,
       persistedAnalyticsTraitsAtom: mockPersistedAnalyticsTraitsAtom,
-      config: { installEventReportingUrl },
+      config: { installEventReportingUrl, flushTimeout: 100 },
       logger,
     })
     mockShareActivityAtom.get.mockResolvedValueOnce(true)
@@ -169,6 +173,184 @@ describe('Analytics module', () => {
       await flush
 
       expect(mockTracker.track).toBeCalledWith({ ...event, timestamp: expect.any(String) })
+    })
+
+    describe('cross-format property handling (camelCase <-> snake_case)', () => {
+      it('should resolve when properties are required in camelCase and set in snake_case', async () => {
+        analytics.requireDefaultEventProperties(['hasBackup', 'stakedAssets'])
+
+        await analytics.track(event)
+
+        expect(mockTracker.track).not.toBeCalledWith(event)
+
+        analytics.setDefaultEventProperties({ has_backup: true, staked_assets: ['BTC', 'ETH'] })
+
+        await analytics.flush()
+
+        expect(mockTracker.track).toBeCalledWith({ ...event, timestamp: expect.any(String) })
+      })
+
+      it('should resolve when properties are required in snake_case and set in camelCase', async () => {
+        analytics.requireDefaultEventProperties(['has_backup', 'staked_assets'])
+
+        await analytics.track(event)
+
+        expect(mockTracker.track).not.toBeCalledWith(event)
+
+        analytics.setDefaultEventProperties({ hasBackup: true, stakedAssets: ['BTC', 'ETH'] })
+
+        await analytics.flush()
+
+        expect(mockTracker.track).toBeCalledWith({ ...event, timestamp: expect.any(String) })
+      })
+
+      it('should handle mixed formats in both require and set calls', async () => {
+        analytics.requireDefaultEventProperties([
+          'hasBackup',
+          'staked_assets',
+          'isStaking',
+          'account_source',
+        ])
+
+        await analytics.track(event)
+
+        expect(mockTracker.track).not.toBeCalledWith(event)
+
+        analytics.setDefaultEventProperties({
+          has_backup: true,
+          stakedAssets: ['BTC'],
+          is_staking: true,
+          accountSource: 'mobile',
+        })
+
+        await analytics.flush()
+
+        expect(mockTracker.track).toBeCalledWith({ ...event, timestamp: expect.any(String) })
+      })
+
+      it('should handle properties set in multiple calls with different formats', async () => {
+        analytics.requireDefaultEventProperties(['hasBackup', 'stakedAssets', 'totalBalanceUsd'])
+
+        await analytics.track(event)
+
+        expect(mockTracker.track).not.toBeCalledWith(event)
+
+        analytics.setDefaultEventProperties({ has_backup: true })
+
+        analytics.setDefaultEventProperties({ stakedAssets: ['BTC'] })
+
+        analytics.setDefaultEventProperties({ total_balance_usd: 1000 })
+
+        await analytics.flush()
+
+        expect(mockTracker.track).toBeCalledWith({ ...event, timestamp: expect.any(String) })
+      })
+
+      it('should not create duplicate promises for alternate format', async () => {
+        analytics.requireDefaultEventProperties(['hasBackup'])
+        analytics.requireDefaultEventProperties(['has_backup'])
+
+        await analytics.track(event)
+
+        expect(mockTracker.track).not.toBeCalledWith(event)
+
+        analytics.setDefaultEventProperties({ has_backup: true })
+
+        await analytics.flush()
+
+        expect(mockTracker.track).toBeCalledWith({ ...event, timestamp: expect.any(String) })
+      })
+
+      it('should recognize already set properties in alternate format', async () => {
+        analytics.setDefaultEventProperties({ has_backup: true, staked_assets: [] })
+
+        analytics.requireDefaultEventProperties(['hasBackup', 'stakedAssets'])
+
+        await analytics.flush()
+        await analytics.track(event)
+
+        expect(mockTracker.track).toBeCalledWith(event)
+      })
+
+      it('should handle properties that do not need conversion', async () => {
+        analytics.requireDefaultEventProperties(['os', 'build', 'version'])
+
+        await analytics.track(event)
+
+        expect(mockTracker.track).not.toBeCalledWith(event)
+
+        analytics.setDefaultEventProperties({ os: 'android', build: 'genesis', version: '1.0.0' })
+
+        await analytics.flush()
+
+        expect(mockTracker.track).toBeCalledWith({ ...event, timestamp: expect.any(String) })
+      })
+    })
+  })
+
+  describe('circuit breaker / timeout behavior', () => {
+    const event = { event: 'test event' }
+
+    it('should timeout and continue if required properties are never set', async () => {
+      analytics.requireDefaultEventProperties(['missingProperty'])
+
+      await analytics.flush()
+
+      expect(logger.error).toHaveBeenCalledWith(
+        expect.stringContaining('Analytics flush timeout'),
+        expect.objectContaining({
+          pendingProperties: ['missing_property'],
+          timeoutMs: 100,
+        })
+      )
+
+      // Analytics should still work after timeout
+      await analytics.track(event)
+      expect(mockTracker.track).toHaveBeenCalledWith(event)
+    })
+
+    it('should not timeout if all properties are set before timeout', async () => {
+      analytics.requireDefaultEventProperties(['hasBackup'])
+      analytics.setDefaultEventProperties({ has_backup: true })
+
+      await analytics.flush()
+
+      expect(logger.error).not.toHaveBeenCalledWith(
+        expect.stringContaining('Analytics flush timeout'),
+        expect.anything()
+      )
+
+      await analytics.track(event)
+      expect(mockTracker.track).toHaveBeenCalledWith(event)
+    })
+
+    it('should log only the properties that are still pending', async () => {
+      analytics.requireDefaultEventProperties(['hasBackup', 'missingProperty1', 'missingProperty2'])
+
+      analytics.setDefaultEventProperties({ has_backup: true })
+
+      await analytics.flush()
+
+      expect(logger.error).toHaveBeenCalledWith(
+        expect.stringContaining('Analytics flush timeout'),
+        {
+          pendingProperties: ['missing_property_1', 'missing_property_2'],
+          timeoutMs: 100,
+        }
+      )
+    })
+
+    it('should handle cross-format property names in timeout logging', async () => {
+      analytics.requireDefaultEventProperties(['hasBackup', 'stakedAssets'])
+
+      await analytics.flush()
+
+      expect(logger.error).toHaveBeenCalledWith(
+        expect.stringContaining('Analytics flush timeout'),
+        expect.objectContaining({
+          pendingProperties: expect.arrayContaining(['has_backup', 'staked_assets']),
+        })
+      )
     })
   })
 

@@ -1,6 +1,6 @@
 {
   "name": "@exodus/argo",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "The inversion of control setup that powers the Exodus wallet SDK",
   "author": "Exodus Movement, Inc.",
   "main": "src/index.js",
@@ -10,7 +10,7 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/sdks/argo",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aargo"
   },
@@ -39,5 +39,8 @@
   "devDependencies": {
     "@exodus/logger": "workspace:^",
     "@types/minimalistic-assert": "^1.0.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

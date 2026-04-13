@@ -1,17 +1,16 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 
-import type { RemoteConfigStatus } from '../atoms/index.js'
+import type { RemoteConfigData } from '../types/index.js'
+import type { RemoteConfigReportData } from './index.js'
 import remoteConfigReportDefinition from './index.js'
 
 describe('remoteConfigReport', () => {
-  const data: RemoteConfigStatus = {
+  const data: RemoteConfigData = {
     remoteConfigUrl: 'https://fake.url/remote-config.json',
-    loaded: false,
-    gitHash: null,
   }
 
-  const remoteConfigStatusAtom = createInMemoryAtom({ defaultValue: data })
-  const report = remoteConfigReportDefinition.factory({ remoteConfigStatusAtom })
+  const remoteConfigAtom = createInMemoryAtom({ defaultValue: data })
+  const report = remoteConfigReportDefinition.factory({ remoteConfigAtom })
 
   it('should setup correctly', () => {
     expect(report.export).toBeDefined()
@@ -19,20 +18,28 @@ describe('remoteConfigReport', () => {
   })
 
   it('should export load status to the report', async () => {
+    const expected: RemoteConfigReportData = {
+      remoteConfigUrl: data.remoteConfigUrl,
+      loaded: false,
+    }
     const reportData = report.getSchema().parse(await report.export())
-    expect(reportData).toEqual(data)
+    expect(reportData).toEqual(expected)
   })
 
   it('should export load status to the report (happy case)', async () => {
-    const data: RemoteConfigStatus = {
+    const data: RemoteConfigData = {
       remoteConfigUrl: 'https://fake.url/remote-config.json',
-      loaded: true,
-      gitHash: 'c2c22',
+      config: { meta: { gitHash: 'c2c22' } },
     }
-    const remoteConfigStatusAtom = createInMemoryAtom({ defaultValue: data })
-    const report = remoteConfigReportDefinition.factory({ remoteConfigStatusAtom })
+    const expected: RemoteConfigReportData = {
+      remoteConfigUrl: data.remoteConfigUrl,
+      loaded: true,
+      gitHash: data.config?.meta.gitHash,
+    }
+    const remoteConfigAtom = createInMemoryAtom({ defaultValue: data })
+    const report = remoteConfigReportDefinition.factory({ remoteConfigAtom })
 
     const reportData = report.getSchema().parse(await report.export())
-    expect(reportData).toEqual(data)
+    expect(reportData).toEqual(expected)
   })
 })

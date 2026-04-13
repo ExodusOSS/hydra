@@ -13,8 +13,8 @@ const otherMnemonic =
 
 const seed = await mnemonicToSeed({ mnemonic })
 const otherSeed = await mnemonicToSeed({ mnemonic: otherMnemonic })
-const seedId = getSeedId(seed)
-const otherSeedId = getSeedId(otherSeed)
+const seedId = await getSeedId(seed)
+const otherSeedId = await getSeedId(otherSeed)
 const solanaKeyId = new KeyIdentifier({
   assetName: 'solana',
   derivationAlgorithm: 'BIP32',
@@ -53,13 +53,13 @@ describe('keychain api', () => {
   /** @type {import('../').KeychainApi} */
   let api
 
-  beforeEach(() => {
+  beforeEach(async () => {
     jest.clearAllMocks()
 
     keychain = moduleDefinition.factory()
     api = apiDefinition.factory({ keychain }).keychain
-    keychain.addSeed(seed)
-    keychain.addSeed(otherSeed)
+    await keychain.addSeed(seed)
+    await keychain.addSeed(otherSeed)
     return api
   })
 
@@ -152,24 +152,24 @@ describe('keychain api', () => {
 
   describe('arePrivateKeysLocked', () => {
     test('returns false if no seeds are locked', async () => {
-      expect(api.arePrivateKeysLocked()).toBe(false)
+      expect(await api.arePrivateKeysLocked()).toBe(false)
     })
 
     test('returns true if all seeds are locked', async () => {
       keychain.lockPrivateKeys()
-      expect(api.arePrivateKeysLocked([])).toBe(true)
+      expect(await api.arePrivateKeysLocked([])).toBe(true)
     })
 
     test('returns true if some seeds are locked', async () => {
       keychain.lockPrivateKeys()
-      keychain.unlockPrivateKeys([seed])
-      expect(api.arePrivateKeysLocked()).toBe(true)
+      await keychain.unlockPrivateKeys([seed])
+      expect(await api.arePrivateKeysLocked()).toBe(true)
     })
 
     test('returns false if targetted seed is unlocked', async () => {
       keychain.lockPrivateKeys()
-      keychain.unlockPrivateKeys([seed])
-      expect(api.arePrivateKeysLocked([seed])).toBe(false)
+      await keychain.unlockPrivateKeys([seed])
+      expect(await api.arePrivateKeysLocked([seed])).toBe(false)
     })
   })
 

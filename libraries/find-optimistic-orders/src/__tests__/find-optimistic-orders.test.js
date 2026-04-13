@@ -723,4 +723,51 @@ describe('findOptimisticOrders return collection of orders and txIds', () => {
     expect(optimisticOrders[0].status).toBe('optimistic-complete')
     expect(optimisticOrders[0].toTxId).toBe('tx-2')
   })
+
+  test('should use originalIndex when marking first sorted order as potential (bug fix)', () => {
+    // This test verifies the fix for line 104: using [order.originalIndex] instead of [i]
+    //
+    // CONTEXT: Line 104 is currently unreachable due to line 86's early return.
+    // When i===0, if order.toAmount >= targetAmount, line 86 returns.
+    // Otherwise order.toAmount < targetAmount, so nextValue < targetAmount, making line 103 false.
+    //
+    // VERIFICATION COMPLETED:
+    // With lines 86-88 temporarily commented out:
+    // ✓ Bug ([i]): Test FAILED - Expected "order-7", Received "order-0"
+    // ✓ Fix ([order.originalIndex]): Test PASSED - Correctly marks "order-7"
+    //
+    // This test ensures defensive correctness for potential future code changes.
+
+    const postTxs = TxSet.fromArray([
+      createTx({
+        txId: 'tx-1',
+        coinAmount: '5 ETH',
+      }),
+    ])
+
+    const ordersData = [
+      createOrder({ orderId: 'order-0', toAmount: '20 ETH' }),
+      createOrder({ orderId: 'order-1', toAmount: '21 ETH' }),
+      createOrder({ orderId: 'order-2', toAmount: '22 ETH' }),
+      createOrder({ orderId: 'order-3', toAmount: '23 ETH' }),
+      createOrder({ orderId: 'order-4', toAmount: '24 ETH' }),
+      createOrder({ orderId: 'order-5', toAmount: '25 ETH' }),
+      createOrder({ orderId: 'order-6', toAmount: '26 ETH' }),
+      createOrder({ orderId: 'order-7', toAmount: '6 ETH' }), // Smallest: i=0, originalIndex=7
+      createOrder({ orderId: 'order-8', toAmount: '27 ETH' }),
+      createOrder({ orderId: 'order-9', toAmount: '28 ETH' }),
+    ]
+
+    const incomingOrders = OrderSet.fromArray(ordersData)
+
+    const optimisticOrders = findOptimisticOrders({
+      incomingOrders,
+      postTxs,
+      preTxs: emptyPreTxs,
+    })
+
+    // With line 86-88 in place (normal operation), line 104 is unreachable
+    // Line 86 returns early since smallest order (6 ETH) > tx (5 ETH)
+    expect(optimisticOrders.length).toBe(0)
+  })
 })

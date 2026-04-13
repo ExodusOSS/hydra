@@ -2,7 +2,7 @@ import { createInMemoryAtom } from '@exodus/atoms'
 import { asset as bitcoin } from '@exodus/bitcoin-meta'
 import { createAsset as createBitcoin } from '@exodus/bitcoin-plugin'
 import {
-  accountStatesAtomDefinition,
+  blockchainMetadataAtomDefinition,
   txLogsAtomDefinition,
 } from '@exodus/blockchain-metadata/atoms/index.js'
 import blockchainMetadataDefinition from '@exodus/blockchain-metadata/module/index.js'
@@ -67,6 +67,7 @@ describe('KnownAddresses', () => {
   }
 
   let blockchainMetadata
+  let blockchainMetadataAtom
   let txLogsAtom
   let assetsModule
   let knownAddresses
@@ -84,7 +85,8 @@ describe('KnownAddresses', () => {
       getAsset: (name) => assets[name],
       getAssets: () => assets,
     }
-    txLogsAtom = txLogsAtomDefinition.factory()
+    blockchainMetadataAtom = blockchainMetadataAtomDefinition.factory()
+    txLogsAtom = txLogsAtomDefinition.factory({ blockchainMetadataAtom })
 
     blockchainMetadata = createBlockchainMetadata({
       storage: createInMemoryStorage(),
@@ -95,8 +97,7 @@ describe('KnownAddresses', () => {
         },
       }),
       logger: console,
-      txLogsAtom,
-      accountStatesAtom: accountStatesAtomDefinition.factory(),
+      blockchainMetadataAtom,
     })
 
     await blockchainMetadata.load()
@@ -216,6 +217,56 @@ describe('KnownAddresses', () => {
 
     expect(txLogsAtom.get).not.toHaveBeenCalled()
     expect(addressesFromCache).toEqual(expectedAddresses)
+  })
+
+  it('should include internal output addresses', async () => {
+    const internalChange = Address.create('internal-change', {
+      path: 'm/1/2',
+      purpose: 44,
+    }).toJSON()
+    const internalReceive = Address.create('internal-receive', {
+      path: 'm/0/3',
+      purpose: 44,
+    }).toJSON()
+    const loggedAddress = Address.create('logged-addr', { path: 'm/0/4', purpose: 44 }).toJSON()
+
+    await blockchainMetadata.updateTxs({
+      assetName,
+      walletAccount,
+      txs: [
+        {
+          coinName: assetName,
+          coinAmount: '0.0001 BTC',
+          txId: 'internal-1',
+          addresses: [loggedAddress],
+          data: {
+            internalOutputs: [{ address: internalChange }, { address: internalReceive }],
+          },
+          currencies: { bitcoin: bitcoin.currency },
+        },
+      ],
+    })
+
+    const addresses = await knownAddresses.get({
+      walletAccount,
+      assetName,
+    })
+    const addressStrings = addresses.map(({ address }) => address.toString())
+
+    expect(addressStrings).toEqual(
+      expect.arrayContaining([
+        internalChange.address,
+        internalReceive.address,
+        loggedAddress.address,
+      ])
+    )
+    expect(addresses).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ chainIndex: 1, addressIndex: 2, purpose: 44 }),
+        expect.objectContaining({ chainIndex: 0, addressIndex: 3, purpose: 44 }),
+        expect.objectContaining({ chainIndex: 0, addressIndex: 4, purpose: 44 }),
+      ])
+    )
   })
 
   it('should bust cache on tx-log-update', async () => {

@@ -1,10 +1,9 @@
-import { tiny_secp256k1_compat as ecc } from '@exodus/crypto/secp256k1'
+import { payments, Psbt } from '@exodus/bitcoinjs'
+import * as ecc from '@exodus/crypto/tiny-secp256k1-compat'
 import { PsbtV2 } from '@exodus/ledger-bitcoin'
-import { initEccLib, payments, Psbt } from 'bitcoinjs-lib'
 import { ECPairFactory } from 'ecpair'
 
 const ECPair = ECPairFactory(ecc)
-initEccLib(ecc)
 
 const MASTER_FINGERPRINT = '75cc42dc'
 const PATH_SEGWIT_NORMAL_0 = "m/84'/0'/0'/0/0"

@@ -1,6 +1,6 @@
 import createIocContainer from '@exodus/dependency-injection'
-import createIOC from '../index.js'
 import alias from '@exodus/dependency-preprocessors/src/preprocessors/alias.js'
+import atomsIdentification from '@exodus/dependency-preprocessors/src/preprocessors/atoms-identification.js'
 import configPreprocessor from '@exodus/dependency-preprocessors/src/preprocessors/config.js'
 import debuggerPreprocessor from '@exodus/dependency-preprocessors/src/preprocessors/debugger.js'
 import devModeAtoms from '@exodus/dependency-preprocessors/src/preprocessors/dev-mode-atoms.js'
@@ -10,7 +10,8 @@ import namespacedErrorTracking from '@exodus/dependency-preprocessors/src/prepro
 import optional from '@exodus/dependency-preprocessors/src/preprocessors/optional.js'
 import performanceMonitor from '@exodus/dependency-preprocessors/src/preprocessors/performance-monitor.js'
 import readOnlyAtoms from '@exodus/dependency-preprocessors/src/preprocessors/read-only-atoms.js'
-import atomsIdentification from '@exodus/dependency-preprocessors/src/preprocessors/atoms-identification.js'
+
+import createIOC from '../index.js'
 
 const adapters = {
   createLogger: (prefix) => ({

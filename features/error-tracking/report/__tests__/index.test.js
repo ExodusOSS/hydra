@@ -1,15 +1,27 @@
 import { createInMemoryAtom } from '@exodus/atoms'
+import { safeString } from '@exodus/safe-string'
+import { TraceId } from '@exodus/traceparent'
 
 import errorTrackingReportDefinition from '../index.js'
 
+const validTraceId = TraceId.fromRawTraceparent(
+  '00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01'
+)
+
 describe('errorTrackingReport', () => {
   const errors = [
-    { namespace: 'space1', error: new Error('1'), context: {}, time: Date.now() },
-    { namespace: 'space1', error: new Error('2'), context: {}, time: Date.now() },
-    { namespace: 'space1', error: new Error('3'), context: {}, time: Date.now() },
-    { namespace: 'space2', error: new Error('1'), context: {}, time: Date.now() },
-    { namespace: 'space2', error: new Error('2'), context: {}, time: Date.now() },
-    { namespace: 'space2', error: new Error('3'), context: {}, time: Date.now() },
+    { namespace: safeString`space1`, error: new Error('1'), context: {}, time: Date.now() },
+    { namespace: safeString`space1`, error: new Error('2'), context: {}, time: Date.now() },
+    { namespace: safeString`space1`, error: new Error('3'), context: {}, time: Date.now() },
+    { namespace: safeString`space2`, error: new Error('1'), context: {}, time: Date.now() },
+    { namespace: safeString`space2`, error: new Error('2'), context: {}, time: Date.now() },
+    { namespace: safeString`space2`, error: new Error('3'), context: {}, time: Date.now() },
+    {
+      namespace: safeString`space2`,
+      error: new Error('3'),
+      context: { traceId: validTraceId },
+      time: Date.now(),
+    },
   ]
 
   it('should setup correctly', async () => {
@@ -49,5 +61,6 @@ describe('errorTrackingReport', () => {
     expect(Array.isArray(result.errors)).toEqual(true)
     expect(result.errors[0].error.name).toEqual('Error')
     expect(result.errors[2].error.name).toEqual('Error')
+    expect(result.errors[6].context.traceId).toEqual(validTraceId)
   })
 })

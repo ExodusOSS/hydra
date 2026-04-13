@@ -3,6 +3,7 @@ export const LifecycleHook = Object.freeze({
   Unlock: 'unlock',
   Clear: 'clear',
   Import: 'import',
+  PreImport: 'pre-import',
   AddSeed: 'add-seed',
   RestoreSeed: 'restore-seed',
   Migrate: 'migrate',

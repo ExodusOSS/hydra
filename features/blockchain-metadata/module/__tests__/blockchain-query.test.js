@@ -5,7 +5,7 @@ import { asset as ethereumMeta } from '@exodus/ethereum-meta'
 import { normalizeTxsJSON } from '@exodus/models'
 import createStorage from '@exodus/storage-memory'
 
-import { accountStatesAtomDefinition, txLogsAtomDefinition } from '../../atoms/index.js'
+import { blockchainMetadataAtomDefinition } from '../../atoms/index.js'
 import blockchainMetadataDefinition from '../blockchain-metadata.js'
 import blockchainQueryModuleDefinition from '../blockchain-query.js'
 import { AccountStates } from './test-utils.js'
@@ -53,16 +53,14 @@ describe('BlockchainQuery', () => {
       getAssets: () => assets,
     }
     const enabledWalletAccountsAtom = createInMemoryAtom({ defaultValue: {} })
-    const txLogsAtom = txLogsAtomDefinition.factory()
-    const accountStatesAtom = accountStatesAtomDefinition.factory()
+    const blockchainMetadataAtom = blockchainMetadataAtomDefinition.factory()
 
     const storage = createStorage()
     const blockchainMetadata = blockchainMetadataDefinition.factory({
       assetsModule,
       storage,
       enabledWalletAccountsAtom,
-      txLogsAtom,
-      accountStatesAtom,
+      blockchainMetadataAtom,
       logger: { error: jest.fn() },
     })
 

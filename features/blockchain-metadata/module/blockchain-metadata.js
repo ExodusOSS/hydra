@@ -1,5 +1,6 @@
 import { TxSet, normalizeTxsJSON } from '@exodus/models'
 import EventEmitter from 'events/events.js'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import proxyFreeze from 'proxy-freeze'
 import { Batch, getReducer } from './batching/index.js'
@@ -37,8 +38,7 @@ const cloneAssetSourceData = (data) =>
 
 class BlockchainMetadata extends EventEmitter {
   #txs
-  #txLogsAtom
-  #accountStatesAtom
+  #blockchainMetadataAtom
   #txsStorage
   #accountStates
   #accountStatesStorage
@@ -54,8 +54,7 @@ class BlockchainMetadata extends EventEmitter {
     assetsModule,
     storage,
     enabledWalletAccountsAtom,
-    txLogsAtom,
-    accountStatesAtom,
+    blockchainMetadataAtom,
     logger,
     errorTracking,
   }) {
@@ -64,8 +63,7 @@ class BlockchainMetadata extends EventEmitter {
     this.#txs = proxyFreeze(Object.create(null))
     this.#accountStates = proxyFreeze(Object.create(null))
     this.#enabledWalletAccountsAtom = enabledWalletAccountsAtom
-    this.#txLogsAtom = txLogsAtom
-    this.#accountStatesAtom = accountStatesAtom
+    this.#blockchainMetadataAtom = blockchainMetadataAtom
     this.#assetsModule = assetsModule
     this.#txsStorage = storage.namespace('txs')
     this.#accountStatesStorage = storage.namespace('states')
@@ -83,28 +81,7 @@ class BlockchainMetadata extends EventEmitter {
 
     this.#loaded.started = true
 
-    // TODO: remove after everything uses atoms
-    this.#subscriptions.push(
-      this.#txLogsAtom.observe(({ value, changes, newlyReceivedTxLogs }) => {
-        if (changes) {
-          this.emit('tx-logs-update', changes)
-        } else {
-          this.emit('tx-logs', value)
-        }
-
-        if (newlyReceivedTxLogs) {
-          this.emit('received-tx-logs-update', newlyReceivedTxLogs)
-        }
-      }),
-      this.#accountStatesAtom.observe(({ value, changes }) => {
-        if (changes) {
-          this.emit('account-states-update', changes)
-        } else {
-          this.emit('account-states', value)
-        }
-      }),
-      this.#enabledWalletAccountsAtom.observe(this.#load)
-    )
+    this.#subscriptions.push(this.#enabledWalletAccountsAtom.observe(this.#load))
   }
 
   #load = async (walletAccounts) => {
@@ -123,8 +100,7 @@ class BlockchainMetadata extends EventEmitter {
     this.#loaded.resolve()
     if (!this.#loaded.resolved) {
       this.#loaded.resolved = true
-      await this.#setCachedTxLogs()
-      await this.#setCachedAccountStates()
+      await this.#setCachedBlockchainMetadata()
     }
   }
 
@@ -240,13 +216,11 @@ class BlockchainMetadata extends EventEmitter {
       storedStates: zipObject(assetNames, initialStates),
     })
 
-    await Promise.all([
-      this.#setCachedAccountStates({
-        changes: accountStateEntries,
-        emitChanges: this.#loaded.resolved,
-      }),
-      this.#setCachedTxLogs({ changes: txLogEntries, emitChanges: this.#loaded.resolved }),
-    ])
+    await this.#setCachedBlockchainMetadata({
+      accountStateChanges: accountStateEntries,
+      txLogChanges: txLogEntries,
+      emitChanges: this.#loaded.resolved,
+    })
   }
 
   clear = async () => {
@@ -254,78 +228,79 @@ class BlockchainMetadata extends EventEmitter {
     this.#txs = Object.create(null)
     this.#accountStates = Object.create(null)
     // update atom
-    await this.#setCachedTxLogs()
-    await this.#setCachedAccountStates()
+    await this.#setCachedBlockchainMetadata()
   }
 
   #getCachedAccountState = ({ assetName, walletAccount }) =>
     this.#accountStates[walletAccount]?.[assetName]
 
+  #getCachedTxLog = ({ assetName, walletAccount }) => this.#txs[walletAccount]?.[assetName]
+
   /**
    *
    * @param {Array<{ walletAccount, assetName, accountState }>} entries
    */
-  #setCachedAccountStates = async ({ changes = [], emitChanges = true } = {}) => {
-    const cloned = cloneAssetSourceData(this.#accountStates)
-    changes.forEach(({ walletAccount, assetName, accountState }) =>
-      set(cloned, [walletAccount, assetName], accountState)
-    )
-
-    this.#accountStates = proxyFreeze(cloned)
-    if (!this.#loaded.resolved) return
-
-    await Promise.all(
-      changes.map(async ({ assetName, walletAccount, accountState }) => {
-        const key = stringifyAssetSource({ assetName, walletAccount })
-        return this.#accountStatesStorage.set(key, accountState.toJSON())
-      })
-    )
-
-    await this.#accountStatesAtom.set({
-      value: this.#accountStates,
-      changes:
-        emitChanges === false || changes.length === 0 ? undefined : changesArrayToObject(changes),
-    })
-  }
-
-  #getCachedTxLog = ({ assetName, walletAccount }) => this.#txs[walletAccount]?.[assetName]
-
-  #setCachedTxLogs = async ({
-    changes = [],
+  #setCachedBlockchainMetadata = async ({
+    accountStateChanges = [],
+    txLogChanges = [],
     newlyReceivedTxLogs = {},
     emitChanges = true,
   } = {}) => {
-    const cloned = cloneAssetSourceData(this.#txs)
-    changes.forEach(({ walletAccount, assetName, txLog }) => {
-      set(cloned, [walletAccount, assetName], txLog)
-    })
+    if (txLogChanges.length > 0) {
+      const txLogCloned = cloneAssetSourceData(this.#txs)
+      txLogChanges.forEach(({ walletAccount, assetName, txLog }) => {
+        set(txLogCloned, [walletAccount, assetName], txLog)
+      })
 
-    this.#txs = proxyFreeze(cloned)
+      this.#txs = proxyFreeze(txLogCloned)
+    }
+
+    if (accountStateChanges.length > 0) {
+      const accountStateCloned = cloneAssetSourceData(this.#accountStates)
+      accountStateChanges.forEach(({ walletAccount, assetName, accountState }) =>
+        set(accountStateCloned, [walletAccount, assetName], accountState)
+      )
+
+      this.#accountStates = proxyFreeze(accountStateCloned)
+    }
+
     if (!this.#loaded.resolved) return
 
-    await Promise.all(
-      changes.map(async ({ assetName, walletAccount, txLog }) => {
+    await Promise.all([
+      ...txLogChanges.map(async ({ assetName, walletAccount, txLog }) => {
         const key = stringifyAssetSource({ assetName, walletAccount })
         return this.#txsStorage.set(key, txLog.toJSON())
-      })
-    )
+      }),
+      ...accountStateChanges.map(async ({ assetName, walletAccount, accountState }) => {
+        const key = stringifyAssetSource({ assetName, walletAccount })
+        return this.#accountStatesStorage.set(key, accountState.toJSON())
+      }),
+    ])
 
-    await this.#txLogsAtom.set({
-      value: this.#txs,
-      changes:
-        emitChanges === false || changes.length === 0 ? undefined : changesArrayToObject(changes),
+    await this.#blockchainMetadataAtom.set({
+      value: { txs: this.#txs, accountStates: this.#accountStates },
+      accountStateChanges:
+        emitChanges === false || accountStateChanges.length === 0
+          ? undefined
+          : changesArrayToObject(accountStateChanges),
+      txLogChanges:
+        emitChanges === false || txLogChanges.length === 0
+          ? undefined
+          : changesArrayToObject(txLogChanges),
       newlyReceivedTxLogs:
         emitChanges === false || isEmpty(newlyReceivedTxLogs) ? undefined : newlyReceivedTxLogs,
     })
   }
 
   getTxLog = async ({ walletAccount, assetName }) => {
-    const { value: txLogs } = await this.#txLogsAtom.get()
+    const {
+      value: { txs: txLogs },
+    } = await this.#blockchainMetadataAtom.get()
     return txLogs[walletAccount]?.[assetName] || TxSet.EMPTY
   }
 
   /**
-   * @deprecated use txLogsAtom instead
+   * @deprecated use txLogsAtom or blockchainMetadataAtom instead
    * Returns cached txLogs for loaded accounts
    * @returns {Record<string, Record<string, TxSet>>} map of TxLog by asset source {
    *   [walletAccount]: {
@@ -338,7 +313,7 @@ class BlockchainMetadata extends EventEmitter {
     return this.#txs
   }
 
-  // @deprecated use accountStatesAtom instead
+  // @deprecated use accountStatesAtom or blockchainMetadataAtom instead
   getLoadedAccountStates = async () => {
     await this.#loaded.promise
     return this.#accountStates
@@ -366,7 +341,9 @@ class BlockchainMetadata extends EventEmitter {
 
   getAccountState = async ({ walletAccount, assetName }) => {
     const asset = this.#getAsset(assetName)
-    const { value: accountStates } = await this.#accountStatesAtom.get()
+    const {
+      value: { accountStates },
+    } = await this.#blockchainMetadataAtom.get()
     const cached = accountStates[walletAccount]?.[assetName]
     if (cached) return cached
 
@@ -392,21 +369,16 @@ class BlockchainMetadata extends EventEmitter {
     this.#subscriptions = []
   }
 
-  #setTxLogs = async ({ txLogs, newlyReceivedTxLogs }) => {
-    const changes = toTxLogChangesArray(txLogs)
-    if (changes.length === 0) return
+  #updateBlockchainMetadata = async ({ accountStates, txLogs, newlyReceivedTxLogs }) => {
+    const accountStateChanges = toAccountStateChangesArray(accountStates)
+    const txLogChanges = toTxLogChangesArray(txLogs)
+    if (accountStateChanges.length === 0 && txLogChanges.length === 0) return
 
-    await this.#setCachedTxLogs({
-      changes,
+    await this.#setCachedBlockchainMetadata({
+      accountStateChanges,
+      txLogChanges,
       newlyReceivedTxLogs,
     })
-  }
-
-  #updateAccountStates = async (accountStates) => {
-    const changes = toAccountStateChangesArray(accountStates)
-    if (changes.length === 0) return
-
-    await this.#setCachedAccountStates({ changes })
   }
 
   #handleCommit = async (actions) => {
@@ -430,10 +402,7 @@ class BlockchainMetadata extends EventEmitter {
       { accountStates: {}, txLogs: {}, newlyReceivedTxLogs: {} }
     )
 
-    await Promise.all([
-      this.#updateAccountStates(accountStates),
-      this.#setTxLogs({ txLogs, newlyReceivedTxLogs }),
-    ])
+    await this.#updateBlockchainMetadata({ accountStates, txLogs, newlyReceivedTxLogs })
   }
 }
 
@@ -447,8 +416,7 @@ const blockchainMetadataDefinition = {
     'assetsModule',
     'storage',
     'enabledWalletAccountsAtom',
-    'txLogsAtom',
-    'accountStatesAtom',
+    'blockchainMetadataAtom',
     'logger',
     'errorTracking',
   ],

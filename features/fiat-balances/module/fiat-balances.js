@@ -1,26 +1,52 @@
 import { set } from '@exodus/basic-utils'
-import { isNumberUnit } from '@exodus/currency'
-// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
-import lodash from 'lodash'
 import fiatCurrencies from '@exodus/fiat-currencies'
 import { combine } from '@exodus/atoms'
 
-const { isEqual } = lodash
+const areKeysSame = (a, b) => {
+  const keysA = Object.keys(a)
+  const keysB = Object.keys(b)
+  if (keysA.length !== keysB.length) return false
+  const aKeySet = new Set(keysA)
+  return keysB.every((key) => aKeySet.has(key))
+}
 
-// not super efficient, so we're assuming small objects, like { [walletAccount]: xyz }
-const areKeysSame = (a, b) => isEqual(Object.keys(a).sort(), Object.keys(b).sort())
+const shallowClone = (obj) => ({ ...obj })
 
-export const cloneBalances = (balances) => {
-  if (isNumberUnit(balances)) {
-    return balances
+const clone2Levels = (obj) => {
+  const result = Object.create(null)
+  for (const key of Object.keys(obj)) {
+    result[key] = { ...obj[key] }
   }
 
-  const cloned = Object.create(Object.getPrototypeOf(balances))
-  for (const key in balances) {
-    cloned[key] = cloneBalances(balances[key])
+  return result
+}
+
+const clone3Levels = (obj) => {
+  const result = Object.create(null)
+  for (const key1 of Object.keys(obj)) {
+    const level1 = obj[key1]
+    const clonedLevel1 = Object.create(null)
+    for (const key2 of Object.keys(level1)) {
+      clonedLevel1[key2] = { ...level1[key2] }
+    }
+
+    result[key1] = clonedLevel1
   }
 
-  return cloned
+  return result
+}
+
+export const cloneBalances = (wrapper) => {
+  const balances = wrapper.balances
+  return {
+    balances: {
+      totals: shallowClone(balances.totals),
+      byWalletAccount: clone2Levels(balances.byWalletAccount),
+      byAssetSource: clone3Levels(balances.byAssetSource),
+      byBaseAssetSource: clone3Levels(balances.byBaseAssetSource),
+      byAsset: clone2Levels(balances.byAsset),
+    },
+  }
 }
 
 class FiatBalances {
@@ -72,27 +98,28 @@ class FiatBalances {
   }
 
   #isReady = () => {
-    return Boolean(
-      this.#cachedRates &&
-        this.#fiatCurrency &&
-        this.#latestAssetBalances &&
-        this.#cachedRates[this.#fiatCurrency] &&
-        !Object.values(this.#cachedRates[this.#fiatCurrency]).every(({ invalid }) => invalid)
-    )
+    const rates = this.#cachedRates?.[this.#fiatCurrency]
+    if (!this.#cachedRates || !this.#fiatCurrency || !this.#latestAssetBalances || !rates) {
+      return false
+    }
+
+    for (const ticker in rates) {
+      if (!rates[ticker]?.invalid) return true
+    }
+
+    return false
   }
 
-  #convertToFiat = ({ assetName, value }) => {
+  #convertToFiat = ({ asset, value }) => {
     const fiatCurrency = fiatCurrencies[this.#fiatCurrency]
     if (value.isZero) return fiatCurrency.ZERO
-    const rates = this.#cachedRates[this.#fiatCurrency]
-    const asset = this.#assetsModule.getAsset(assetName)
-    let fiatRate
+    const rates = this.#cachedRates?.[this.#fiatCurrency]
+    const ticker = asset.ticker
     // HACK: Super hacky, terrible, the rates state object should have the prices split up by sub-objects per fiat
-    if (fiatCurrency.defaultUnit.unitName === 'USD') {
-      fiatRate = rates?.[asset.ticker]?.priceUSD || 0
-    } else {
-      fiatRate = rates?.[asset.ticker]?.price || 0
-    }
+    const fiatRate =
+      fiatCurrency.defaultUnit.unitName === 'USD'
+        ? rates?.[ticker]?.priceUSD || 0
+        : rates?.[ticker]?.price || 0
 
     if (fiatRate === 0) return fiatCurrency.ZERO
 
@@ -110,45 +137,72 @@ class FiatBalances {
     const { byAssetSource, byBaseAssetSource, byWalletAccount, byAsset } = this.#balances
     const fiatZero = fiatCurrencies[this.#fiatCurrency].ZERO
 
-    Object.keys(balances).forEach((walletAccount) => {
+    for (const walletAccount in balances) {
       const walletAccountBalances = balances[walletAccount]
-      this.#balanceFields.forEach((field) => {
-        let fieldTotal = fiatZero
-        const entries = Object.entries(walletAccountBalances).filter(([balances]) => balances)
+      const walletTotals = Object.create(null)
+      for (const field of this.#balanceFields) walletTotals[field] = fiatZero
 
-        entries.forEach(([assetName, assetBalances]) => {
-          const balance = assetBalances?.[field]
-          if (!balance) return
+      let byWalletAccountRef = byWalletAccount[walletAccount]
+      if (!byWalletAccountRef) {
+        byWalletAccountRef = Object.create(null)
+        byWalletAccount[walletAccount] = byWalletAccountRef
+      }
 
-          if (!byAsset?.[assetName]) {
-            set(byAsset, [assetName, field], fiatZero)
-          }
+      let byAssetSourceWalletRef = byAssetSource[walletAccount]
+      if (!byAssetSourceWalletRef) {
+        byAssetSourceWalletRef = Object.create(null)
+        byAssetSource[walletAccount] = byAssetSourceWalletRef
+      }
 
-          if (!byAssetSource?.[walletAccount]?.[assetName]?.[field]) {
-            set(byAssetSource, [walletAccount, assetName, field], fiatZero)
-          }
+      let byBaseAssetSourceWalletRef = byBaseAssetSource[walletAccount]
+      if (!byBaseAssetSourceWalletRef) {
+        byBaseAssetSourceWalletRef = Object.create(null)
+        byBaseAssetSource[walletAccount] = byBaseAssetSourceWalletRef
+      }
 
-          const baseAssetName = this.#assetsModule.getAsset(assetName).baseAsset.name
-          if (!byBaseAssetSource?.[walletAccount]?.[baseAssetName]?.[field]) {
-            set(byBaseAssetSource, [walletAccount, baseAssetName, field], fiatZero)
-          }
+      for (const assetName in walletAccountBalances) {
+        const assetBalances = walletAccountBalances[assetName]
+        if (!assetBalances) continue
+        const asset = this.#assetsModule.getAsset(assetName)
+        const baseAssetName = asset.baseAsset.name
 
-          const fiatValue = this.#convertToFiat({ assetName, value: balance })
+        let byAssetSourceAssetRef = byAssetSourceWalletRef[assetName]
+        if (!byAssetSourceAssetRef) {
+          byAssetSourceAssetRef = Object.create(null)
+          byAssetSourceWalletRef[assetName] = byAssetSourceAssetRef
+        }
 
-          byAssetSource[walletAccount][assetName][field] =
-            byAssetSource[walletAccount][assetName][field].add(fiatValue)
+        let byBaseAssetSourceAssetRef = byBaseAssetSourceWalletRef[baseAssetName]
+        if (!byBaseAssetSourceAssetRef) {
+          byBaseAssetSourceAssetRef = Object.create(null)
+          byBaseAssetSourceWalletRef[baseAssetName] = byBaseAssetSourceAssetRef
+        }
 
-          byBaseAssetSource[walletAccount][baseAssetName][field] =
-            byBaseAssetSource[walletAccount][baseAssetName][field].add(fiatValue)
+        let byAssetRef = byAsset[assetName]
+        if (!byAssetRef) {
+          byAssetRef = Object.create(null)
+          byAsset[assetName] = byAssetRef
+        }
 
-          byAsset[assetName][field] = byAsset[assetName][field].add(fiatValue)
+        for (const field of this.#balanceFields) {
+          const balance = assetBalances[field]
+          if (!balance) continue
 
-          fieldTotal = fieldTotal.add(fiatValue)
-        })
+          const fiatValue = this.#convertToFiat({ value: balance, asset })
 
-        set(byWalletAccount, [walletAccount, field], fieldTotal)
-      })
-    })
+          byAssetSourceAssetRef[field] = (byAssetSourceAssetRef[field] || fiatZero).add(fiatValue)
+          byBaseAssetSourceAssetRef[field] = (byBaseAssetSourceAssetRef[field] || fiatZero).add(
+            fiatValue
+          )
+          byAssetRef[field] = (byAssetRef[field] || fiatZero).add(fiatValue)
+          walletTotals[field] = walletTotals[field].add(fiatValue)
+        }
+      }
+
+      for (const field of this.#balanceFields) {
+        byWalletAccountRef[field] = walletTotals[field]
+      }
+    }
 
     this.#recomputeWalletTotals()
   }
@@ -176,7 +230,8 @@ class FiatBalances {
       const walletAccountBalances = byWalletAccount[walletAccount]
       Object.entries(walletAccountBalancesChanges).forEach(
         ([assetName, assetSourceBalancesChanges]) => {
-          const baseAssetName = this.#assetsModule.getAsset(assetName).baseAsset.name
+          const asset = this.#assetsModule.getAsset(assetName)
+          const baseAssetName = asset.baseAsset.name
           this.#balanceFields.forEach((field) => {
             // we may not be interested in all fields from `balances`
             if (!assetSourceBalancesChanges[field]) return
@@ -184,8 +239,8 @@ class FiatBalances {
             const { from, to } = assetSourceBalancesChanges[field]
             walletAccountBalances[field] = walletAccountBalances[field] || fiatZero
 
-            const fromFiatValue = this.#convertToFiat({ assetName, value: from })
-            const toFiatValue = this.#convertToFiat({ assetName, value: to })
+            const fromFiatValue = this.#convertToFiat({ value: from, asset })
+            const toFiatValue = this.#convertToFiat({ value: to, asset })
 
             if (fromFiatValue.equals(toFiatValue)) return
             needsFlush = true
@@ -261,8 +316,7 @@ class FiatBalances {
 
   #flush = () => {
     this.#logger.log('fiat balances updated')
-    const data = cloneBalances({ balances: this.#balances })
-    this.#fiatBalancesAtom.set((current) => (isEqual(current, data) ? current : data))
+    this.#fiatBalancesAtom.set(cloneBalances({ balances: this.#balances }))
   }
 
   stop = () => {

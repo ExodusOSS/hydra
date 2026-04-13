@@ -1,9 +1,9 @@
 import { createInMemoryAtom } from '@exodus/atoms'
+import { mnemonicToSeed } from '@exodus/bip39'
 import { EXODUS_KEY_IDS } from '@exodus/key-ids'
 import { getSeedId } from '@exodus/keychain/module/crypto/seed-id.js'
 import keychainDefinition from '@exodus/keychain/module/index.js'
 import { WalletAccount } from '@exodus/models'
-import { mnemonicToSeed } from 'bip39'
 
 import analyticsExtraSeedsUserIdsAtomDefinition from '../extra-seeds-user-ids.js'
 
@@ -16,24 +16,24 @@ const storage = {
 const logger = { warn: jest.fn() }
 
 describe('analyticsUserIdAtom', async () => {
-  const seed1 = await mnemonicToSeed(
-    'menu memory fury language physical wonder dog valid smart edge decrease worth'
-  )
-  const seed2 = await mnemonicToSeed(
-    'grass custom warm saddle side clerk envelope artist ankle window people doctor'
-  )
-  const seed3 = await mnemonicToSeed(
-    'buffalo hero bridge wheat rent flee office mimic tennis estate toy sheriff'
-  )
-  const seedId1 = getSeedId(seed1)
-  const seedId2 = getSeedId(seed2)
-  const seedId3 = getSeedId(seed3)
+  const seed1 = await mnemonicToSeed({
+    mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
+  })
+  const seed2 = await mnemonicToSeed({
+    mnemonic: 'grass custom warm saddle side clerk envelope artist ankle window people doctor',
+  })
+  const seed3 = await mnemonicToSeed({
+    mnemonic: 'buffalo hero bridge wheat rent flee office mimic tennis estate toy sheriff',
+  })
+  const seedId1 = await getSeedId(seed1)
+  const seedId2 = await getSeedId(seed2)
+  const seedId3 = await getSeedId(seed3)
 
   let extraSeedsUserIdsAtom
   let primarySeedIdAtom
   let keychain
 
-  beforeEach(() => {
+  beforeEach(async () => {
     const lockedAtom = createInMemoryAtom({ defaultValue: false })
     const enabledWalletAccountsAtom = createInMemoryAtom({
       defaultValue: {
@@ -47,9 +47,9 @@ describe('analyticsUserIdAtom', async () => {
     primarySeedIdAtom = createInMemoryAtom({ defaultValue: seedId1 })
 
     keychain = keychainDefinition.factory()
-    keychain.addSeed(seed1)
-    keychain.addSeed(seed2)
-    keychain.addSeed(seed3)
+    await keychain.addSeed(seed1)
+    await keychain.addSeed(seed2)
+    await keychain.addSeed(seed3)
 
     extraSeedsUserIdsAtom = createAnalyticsExtraSeedsUserIdsAtom({
       storage,

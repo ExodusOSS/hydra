@@ -2,6 +2,7 @@ import addressCacheMemoryModuleDefinition from './address-cache/memory.js'
 import assert from 'minimalistic-assert'
 import { Address, WalletAccount } from '@exodus/models'
 import { isNil } from '@exodus/basic-utils'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { AddressProvider } from './address-provider.js'
 import { createPath } from './utils.js'
@@ -65,13 +66,14 @@ class MockableAddressProvider extends AddressProvider {
         'address',
       ])
 
-      if (address)
+      if (address) {
         return new Address(address, {
           ...(hasIndex ? { path: createPath({ chainIndex, addressIndex }) } : {}),
           purpose,
           walletAccount: walletAccountName,
           keyIdentifier,
         })
+      }
     }
 
     const address = get(mockAddresses?.addresses, [

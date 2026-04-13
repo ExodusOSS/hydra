@@ -7,7 +7,14 @@ const cropHistory = ({ history, hourlyLimit }) => {
   const lastCachedTime = lastTimestampFromPricesMap(history)
   if (!lastCachedTime) return history
   const limitedTime = lastCachedTime - hourMs * hourlyLimit
-  return new Map([...history].filter(([key]) => key > limitedTime))
+  const result = new Map()
+  for (const [key, value] of history.entries()) {
+    if (key > limitedTime) {
+      result.set(key, value)
+    }
+  }
+
+  return result
 }
 
 export default cropHistory

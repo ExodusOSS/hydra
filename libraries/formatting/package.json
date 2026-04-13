@@ -1,7 +1,7 @@
 {
   "name": "@exodus/formatting",
   "type": "module",
-  "version": "9.1.0",
+  "version": "9.3.1",
   "description": "Utils for formatting numbers, strings and money.",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -26,6 +26,7 @@
   ],
   "scripts": {
     "build": "run -T tsc -p tsconfig.build.json",
+    "build:watch": "run -T tsc -w -p tsconfig.build.json",
     "clean": "run -T tsc --build --clean",
     "lint": "run -T eslint .",
     "lint:fix": "yarn lint --fix",
@@ -33,7 +34,7 @@
     "prepublishOnly": "yarn run -T build --scope @exodus/formatting"
   },
   "dependencies": {
-    "@exodus/currency": "^5.0.2",
+    "@exodus/currency": "^6.0.0",
     "@exodus/fiat-currencies": "^1.0.5",
     "bn.js": "^5.2.1"
   },
@@ -41,6 +42,7 @@
     "@types/bn.js": "^5.1.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

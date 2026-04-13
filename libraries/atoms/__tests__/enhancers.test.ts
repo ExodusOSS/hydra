@@ -42,6 +42,37 @@ describe('enhancers', () => {
     await multiObservePromise
   })
 
+  test('difference with skip initial value', async () => {
+    const atom = createInMemoryAtom({
+      defaultValue: 1,
+    })
+
+    const skippedInitialDiffAtom = difference(atom, { skipInitial: true })
+    const expectedDiffs = [
+      { previous: 1, current: 2 },
+      { previous: 2, current: 3 },
+    ]
+
+    const observe = async () =>
+      new Promise<void>((resolve) => {
+        const expectedDiffsCopy = [...expectedDiffs]
+        skippedInitialDiffAtom.observe((value) => {
+          const expectedDiff = expectedDiffsCopy.shift()
+          expect(value).toEqual(expectedDiff)
+
+          if (expectedDiffsCopy.length === 0) resolve()
+        })
+      })
+
+    const multiObservePromise = Promise.all([observe(), observe(), observe()])
+    await new Promise(setImmediate)
+
+    await skippedInitialDiffAtom.set(2)
+    await skippedInitialDiffAtom.set(3)
+
+    await multiObservePromise
+  })
+
   test('warnOnSameValueSet', async () => {
     const logger = { warn: jest.fn() }
 
@@ -114,7 +145,6 @@ describe('enhancers', () => {
           storage: createInMemoryStorage(),
         })({
           key: 'voldie',
-          isSoleWriter: true,
         }),
         logger: logger as never,
       }),

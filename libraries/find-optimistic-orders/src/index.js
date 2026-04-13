@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import findSums from './find-nu-sums.js'
 import {
@@ -100,7 +101,7 @@ const matchOrdersAndTxs = ({ receivedTxs, orders, txLog }) => {
 
       // even if first value is already > targetAmount mark this order as potential
       if (i === 0 && nextValue.gte(targetAmount)) {
-        return handlePotentialOrders([i], txs)
+        return handlePotentialOrders([order.originalIndex], txs)
       }
 
       // mark order indexes which sum is smaller than target amount

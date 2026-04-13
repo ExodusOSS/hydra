@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.1](https://github.com/ExodusMovement/hydra/compare/@exodus/hw-common@3.4.0...@exodus/hw-common@3.4.1) (2026-02-22)
+
+### Bug Fixes
+
+- fix: always pass walletAccount for ensureDevice (#15327)
+
+## [3.4.0](https://github.com/ExodusMovement/hydra/compare/@exodus/hw-common@3.3.1...@exodus/hw-common@3.4.0) (2026-01-21)
+
+### Features
+
+- feat: trezor passphrase support (#14965)
+
+## [3.3.1](https://github.com/ExodusMovement/hydra/compare/@exodus/hw-common@3.3.0...@exodus/hw-common@3.3.1) (2026-01-08)
+
+### Bug Fixes
+
+- fix: pass additional info for hw-trezor (#14853)
+
+## [3.3.0](https://github.com/ExodusMovement/hydra/compare/@exodus/hw-common@3.2.0...@exodus/hw-common@3.3.0) (2025-12-11)
+
+### Features
+
+- feat: throw device unininitialized error for hw (#14601)
+
 ## [3.2.0](https://github.com/ExodusMovement/hydra/compare/@exodus/hw-common@3.1.1...@exodus/hw-common@3.2.0) (2025-10-15)
 
 ### Features

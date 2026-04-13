@@ -54,6 +54,7 @@ const config = [
         '@typescript-eslint/parser': ['.ts', '.cts', '.mts', '.tsx'],
       },
       'import/resolver': {
+        typescript: true,
         node: {
           extensions: ['.js', '.mjs', '.cjs', '.json', '.ts', '.tsx', '.android.js', '.ios.js'],
         },

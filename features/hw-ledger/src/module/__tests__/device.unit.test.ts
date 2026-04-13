@@ -134,6 +134,7 @@ describe('LedgerDevice', () => {
         'bitcointestnet',
         'bitcoinregtest',
         'matic',
+        'ripple',
         'solana',
         'ethereum',
         'ethereumsepolia',

@@ -1,4 +1,5 @@
 import { mapValues, set } from '@exodus/basic-utils'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import restrictConcurrency from 'make-concurrent'
 import assert from 'minimalistic-assert'
@@ -151,7 +152,6 @@ class AddressCache {
           }))
         )
 
-        this.#logger.debug('received address cache update from fusion', withSyncedFlag)
         await this.#update({ caches: withSyncedFlag }, { fromSync: true })
       },
     })
@@ -219,16 +219,21 @@ class AddressCache {
     { leading: false, trailing: true }
   )
 
-  get = async ({ baseAssetName, walletAccountName, derivationPath }) => {
+  get = async ({ baseAssetName, walletAccountName, derivationPath, multisigDataIndex }) => {
     assert(typeof walletAccountName === 'string', 'expected string "walletAccountName"')
     assert(typeof derivationPath === 'string', 'expected string "derivationPath"')
-    assert(typeof baseAssetName === 'string', 'expected number "baseAssetName"')
+    assert(typeof baseAssetName === 'string', 'expected string "baseAssetName"')
+    assert(
+      multisigDataIndex === undefined || typeof multisigDataIndex === 'number',
+      'expected number "multisigDataIndex"'
+    )
     const addressCache = await this.#addressCacheAtom.get()
 
     const path = getCachePath({
       baseAssetName,
       walletAccountName,
       derivationPath,
+      multisigDataIndex,
     })
 
     return get(addressCache, ['caches', ...path])
@@ -240,10 +245,14 @@ class AddressCache {
     return get(addressCache, 'mismatches')
   }
 
-  async set({ baseAssetName, walletAccountName, derivationPath, address }) {
+  async set({ baseAssetName, walletAccountName, derivationPath, multisigDataIndex, address }) {
     assert(typeof walletAccountName === 'string', 'expected string "walletAccountName"')
     assert(typeof derivationPath === 'string', 'expected string "derivationPath"')
-    assert(typeof baseAssetName === 'string', 'expected number "baseAssetName"')
+    assert(typeof baseAssetName === 'string', 'expected string "baseAssetName"')
+    assert(
+      multisigDataIndex === undefined || typeof multisigDataIndex === 'number',
+      'expected number "multisigDataIndex"'
+    )
     assert(!!address, 'expected "address"')
     if (this.#config.disabled) return
     await this.#loaded.promise
@@ -253,6 +262,7 @@ class AddressCache {
       baseAssetName,
       walletAccountName,
       derivationPath,
+      multisigDataIndex,
     })
 
     const currentValue = await this.get({

@@ -4,8 +4,8 @@ describe('tryToLoadCache', () => {
   it('returns runtime cache if it exists', async () => {
     const runtimeCache = new Map()
     const runtimeCacheKey = 'BTC-USD-day'
-    const history = new Map([[1, { close: 1, high: 2 }]])
-    runtimeCache.set(runtimeCacheKey, history)
+    const historyArray = [[1, { close: 1, high: 2 }]]
+    runtimeCache.set(runtimeCacheKey, historyArray)
     const getCacheFromStorage = () => null
 
     await expect(
@@ -14,7 +14,28 @@ describe('tryToLoadCache', () => {
         runtimeCache,
         getCacheFromStorage,
       })
-    ).resolves.toEqual(history)
+    ).resolves.toEqual(new Map(historyArray))
+  })
+
+  it('returns a clone so mutations do not affect runtimeCache', async () => {
+    const runtimeCache = new Map()
+    const runtimeCacheKey = 'BTC-USD-day'
+    const original = [[1, { close: 100 }]]
+    runtimeCache.set(runtimeCacheKey, original)
+
+    const result = await tryToLoadCache({
+      runtimeCacheKey,
+      runtimeCache,
+      getCacheFromStorage: () => null,
+    })
+
+    expect(result).toBeInstanceOf(Map)
+    result.set(2, { close: 200 })
+    result.delete(1)
+
+    expect(runtimeCache.get(runtimeCacheKey)).toBe(original)
+    expect(original.length).toBe(1)
+    expect(original[0]).toEqual([1, { close: 100 }])
   })
 
   it('loads cache if runtime cache does not exist', async () => {

@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hw-ledger@3.8.2...@exodus/hw-ledger@3.9.0) (2026-01-21)
+
+### Features
+
+- feat(bip322-js): export Verifier for BIP-322 signature verification (#14641)
+
+- feat: trezor passphrase support (#14965)
+
+## [3.8.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hw-ledger@3.8.1...@exodus/hw-ledger@3.8.2) (2025-12-17)
+
+### Bug Fixes
+
+- fix(hw-ledger): ripple app supported versions (#14684)
+
+## [3.8.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hw-ledger@3.8.0...@exodus/hw-ledger@3.8.1) (2025-12-16)
+
+**Note:** Version bump only for package @exodus/hw-ledger
+
+## [3.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hw-ledger@3.7.0...@exodus/hw-ledger@3.8.0) (2025-12-11)
+
+### Features
+
+- feat: support XRP in hw-trezor and hw-ledger (#14600)
+
+## [3.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hw-ledger@3.6.1...@exodus/hw-ledger@3.7.0) (2025-09-16)
+
+### Features
+
+- feat: update bip322-js and bitcoinjs (#13812)
+
 ## [3.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hw-ledger@3.6.0...@exodus/hw-ledger@3.6.1) (2025-09-01)
 
 ### Bug Fixes

@@ -206,4 +206,196 @@ describe('createWithFiatActivity', () => {
     expect(result[2].fiatOrder.orderId).toEqual('failed-order-id')
     expect(result[2].date).toEqual(new Date('2023-02-11T15:10:42.226Z'))
   })
+
+  test.each([
+    {
+      description: 'sell order with pending send tx',
+      orderType: 'sell',
+      baseOrder: SELL_ORDER,
+      orderOverrides: {
+        fromWalletAccount: 'exodus_0',
+        toWalletAccount: null,
+        txId: null,
+        orderId: 'pending-sell-order',
+        status: 'in-progress',
+        fromAmount: 1,
+      },
+      txCoinAmount: '-1 BTC',
+    },
+    {
+      description: 'buy order with pending receive tx',
+      orderType: 'buy',
+      baseOrder: BUY_ORDER,
+      orderOverrides: {
+        toWalletAccount: 'exodus_0',
+        fromWalletAccount: null,
+        txId: null,
+        orderId: 'pending-buy-order',
+        status: 'in-progress',
+        toAsset: 'bitcoin',
+      },
+      txCoinAmount: '0.5 BTC',
+    },
+  ])(
+    'should hide pending tx when matching $description exists',
+    ({ baseOrder, orderOverrides, orderType, txCoinAmount }) => {
+      const { store, selectors, handleEvent, assets } = setup()
+
+      const pendingTx = {
+        txId: 'pending-tx',
+        error: null,
+        date: '2024-01-15T10:00:00.000Z',
+        confirmations: 0,
+        meta: {},
+        token: null,
+        dropped: false,
+        coinAmount: txCoinAmount,
+        coinName: 'bitcoin',
+        feeCoinName: 'bitcoin',
+        feeAmount: '0.0001 BTC',
+        currencies: { bitcoin: assets.bitcoin.currency },
+      }
+
+      const orderAmount = Math.abs(Number.parseFloat(txCoinAmount))
+      const order = {
+        ...baseOrder,
+        ...orderOverrides,
+        ...(orderType === 'sell'
+          ? { fromAmount: assets.bitcoin.currency.BTC(orderAmount) }
+          : { toAmount: assets.bitcoin.currency.BTC(orderAmount) }),
+      }
+
+      handleEvent('fiatOrders', FiatOrderSet.fromArray([order]))
+      handleEvent('activityTxs', { exodus_0: { bitcoin: [Tx.fromJSON(pendingTx)] } })
+
+      const selector = selectors.activityTxs.createWithFiatActivity({
+        createActivitySelector: selectors.activityTxs.createAssetSourceBaseActivity,
+      })({ assetName: 'bitcoin', walletAccount: 'exodus_0', displayFiatOrdersWithoutTx: true })
+
+      const result = selector(store.getState())
+
+      expect(result.length).toEqual(1)
+      expect(result[0].id).toEqual(`bitcoin.fiat-order-without-tx.${orderOverrides.orderId}`)
+      expect(result[0].type).toEqual('fiat')
+      expect(result[0].pending).toEqual(true)
+    }
+  )
+
+  test.each([
+    {
+      description: 'amount does not match',
+      txCoinAmount: '-0.5 BTC',
+      orderAmount: 1,
+      confirmations: 0,
+      expectedTxId: 'bitcoin.test-tx',
+    },
+    {
+      description: 'tx is confirmed',
+      txCoinAmount: '-1 BTC',
+      orderAmount: 1,
+      confirmations: 6,
+      expectedTxId: 'bitcoin.test-tx',
+    },
+  ])(
+    'should not hide tx when $description',
+    ({ txCoinAmount, orderAmount, confirmations, expectedTxId }) => {
+      const { store, selectors, handleEvent, assets } = setup()
+
+      const tx = {
+        txId: 'test-tx',
+        error: null,
+        date: '2024-01-15T10:00:00.000Z',
+        confirmations,
+        meta: {},
+        token: null,
+        dropped: false,
+        coinAmount: txCoinAmount,
+        coinName: 'bitcoin',
+        feeCoinName: 'bitcoin',
+        feeAmount: '0.0001 BTC',
+        currencies: { bitcoin: assets.bitcoin.currency },
+      }
+
+      handleEvent(
+        'fiatOrders',
+        FiatOrderSet.fromArray([
+          {
+            ...SELL_ORDER,
+            fromWalletAccount: 'exodus_0',
+            toWalletAccount: null,
+            txId: null,
+            orderId: 'pending-sell-order',
+            status: 'in-progress',
+            fromAmount: assets.bitcoin.currency.BTC(orderAmount),
+          },
+        ])
+      )
+      handleEvent('activityTxs', { exodus_0: { bitcoin: [Tx.fromJSON(tx)] } })
+
+      const selector = selectors.activityTxs.createWithFiatActivity({
+        createActivitySelector: selectors.activityTxs.createAssetSourceBaseActivity,
+      })({ assetName: 'bitcoin', walletAccount: 'exodus_0', displayFiatOrdersWithoutTx: true })
+
+      const result = selector(store.getState())
+
+      expect(result.length).toEqual(2)
+      expect(result.some((item) => item.id === expectedTxId)).toEqual(true)
+      expect(
+        result.some((item) => item.id === 'bitcoin.fiat-order-without-tx.pending-sell-order')
+      ).toEqual(true)
+    }
+  )
+
+  test('should only hide one pending tx per matching fiat order', () => {
+    const { store, selectors, handleEvent, assets } = setup()
+
+    const createPendingTx = (txId, date) => ({
+      txId,
+      error: null,
+      date,
+      confirmations: 0,
+      meta: {},
+      token: null,
+      dropped: false,
+      coinAmount: '-1 BTC',
+      coinName: 'bitcoin',
+      feeCoinName: 'bitcoin',
+      feeAmount: '0.0001 BTC',
+      currencies: { bitcoin: assets.bitcoin.currency },
+    })
+
+    handleEvent(
+      'fiatOrders',
+      FiatOrderSet.fromArray([
+        {
+          ...SELL_ORDER,
+          fromWalletAccount: 'exodus_0',
+          toWalletAccount: null,
+          txId: null,
+          orderId: 'pending-sell-order',
+          status: 'in-progress',
+          fromAmount: assets.bitcoin.currency.BTC(1),
+        },
+      ])
+    )
+    handleEvent('activityTxs', {
+      exodus_0: {
+        bitcoin: [
+          Tx.fromJSON(createPendingTx('pending-send-tx-1', '2024-01-15T10:00:00.000Z')),
+          Tx.fromJSON(createPendingTx('pending-send-tx-2', '2024-01-15T11:00:00.000Z')),
+        ],
+      },
+    })
+
+    const selector = selectors.activityTxs.createWithFiatActivity({
+      createActivitySelector: selectors.activityTxs.createAssetSourceBaseActivity,
+    })({ assetName: 'bitcoin', walletAccount: 'exodus_0', displayFiatOrdersWithoutTx: true })
+
+    const result = selector(store.getState())
+
+    expect(result.length).toEqual(2)
+    const txIds = result.map((item) => item.id)
+    expect(txIds).toContain('bitcoin.fiat-order-without-tx.pending-sell-order')
+    expect(txIds.some((id) => id.startsWith('bitcoin.pending-send-tx'))).toEqual(true)
+  })
 })

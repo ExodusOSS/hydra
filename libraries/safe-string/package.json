@@ -1,7 +1,7 @@
 {
   "name": "@exodus/safe-string",
   "type": "module",
-  "version": "1.2.1",
+  "version": "1.4.1",
   "description": "Library for generating safe strings that redact sensitive information",
   "author": "Exodus Movement, Inc.",
   "repository": {
@@ -9,7 +9,13 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/safe-string",
-  "license": "UNLICENSED",
+  "license": "MIT",
+  "keywords": [
+    "redaction",
+    "security",
+    "logging",
+    "sanitization"
+  ],
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asafe-string"
   },
@@ -32,6 +38,7 @@
     "@exodus/seedless-errors": "^1.0.1"
   },
   "publishConfig": {
+    "access": "public",
     "provenance": false
   }
 }

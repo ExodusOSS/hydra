@@ -25,6 +25,7 @@ describe('availableAssetsPlugin', () => {
     })
     availableAssets = {
       stop: jest.fn(),
+      load: jest.fn(),
     }
 
     port = { emit: jest.fn() }
@@ -48,6 +49,7 @@ describe('availableAssetsPlugin', () => {
     plugin.onLoad()
 
     expect(start).toHaveBeenCalled()
+    expect(availableAssets.load).toHaveBeenCalled()
   })
 
   it('should unobserve atom when stopped', async () => {

@@ -54,7 +54,7 @@ test('getReceiveAddresses() should return only one Ethereum address', async () =
     defaultValue: { value: { [walletAccount]: { [assetName]: txLog[walletAccount][assetName] } } },
   })
 
-  const { addressProvider, addressCache } = setup({ txLogsAtom })
+  const { addressProvider, addressCache } = await setup({ txLogsAtom })
 
   const set = await addressProvider.getReceiveAddresses({
     walletAccount,
@@ -85,7 +85,7 @@ test('getReceiveAddresses() should return only one Ethereum address', async () =
 
 test('getSupportedPurposes() should return the list for ethereum', async () => {
   const asset = assets.ethereum
-  const { addressProvider } = setup()
+  const { addressProvider } = await setup()
   const supportedPurposes = await addressProvider.getSupportedPurposes({
     assetName: asset.name,
     walletAccount,

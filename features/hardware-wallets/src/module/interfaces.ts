@@ -2,17 +2,17 @@ import type { WalletAccount } from '@exodus/models'
 import type {
   HardwareWalletDeviceModels,
   HardwareWalletDevice,
+  HardwareWalletManufacturer,
   MultisigData,
-  SignMessageParams,
+  SignMessageParams as HwSignMessageParams,
 } from '@exodus/hw-common'
 import type KeyIdentifier from '@exodus/key-identifier'
 
 export interface HardwareSignerProvider {
   isDeviceConnected: () => Promise<boolean>
-  scanForDevices: () => Promise<void>
+  scanForDevices: (deviceType: HardwareWalletManufacturer) => Promise<void>
   canAccessAsset: ({ assetName }: CanAccessAssetParams) => Promise<boolean>
   listUseableAssetNames: () => Promise<string[]>
-  ensureApplicationIsOpened: ({ assetName }: EnsureApplicationIsOpenedParams) => Promise<void>
   scan: ({ assetName, accountIndexes, addressOffset }: ScanParams) => Promise<ScanResult>
   sync: ({ accountIndex }: SyncParams) => Promise<SyncedKeysId>
   addPublicKeysToWalletAccount: ({
@@ -25,7 +25,22 @@ export interface HardwareSignerProvider {
     unsignedTx,
     walletAccount,
   }: SignTransactionParams) => Promise<any>
-  signMessage: ({ assetName, derivationPath, message }: SignMessageParams) => Promise<any>
+  signMessage: ({
+    assetName,
+    derivationPath,
+    message,
+    walletAccount,
+  }: SignMessageParams) => Promise<any>
+  submitPairingCode: ({ code }: ProcessPairingCodeParams) => Promise<any>
+  /**
+   * Sets the passphrase mode for the currently connected hardware wallet (if supported).
+   *
+   * Currently this is only implemented for Trezor.
+   * - `enabled: false` selects the standard wallet context.
+   * - `enabled: true` selects the passphrase-derived wallet context and will also enable
+   *   passphrase protection on the device if it isn't already enabled.
+   */
+  setPassphraseMode: ({ enabled }: SetPassphraseModeParams) => Promise<void>
 }
 
 type Asset = {
@@ -86,6 +101,7 @@ export interface SyncedKeysData {
   model: HardwareWalletDeviceModels
   assetNames: Set<string>
   keysToSync: KeyToSyncData[]
+  walletId: string
 }
 
 export type KeyToSyncData = [KeyIdentifier, { xpub?: string; publicKey?: Readonly<Uint8Array> }]
@@ -105,6 +121,7 @@ export interface GenericSignParams {
   baseAssetName: string
   scenario: 'signTransaction' | 'signMessage'
   sign: GenericSignCallback
+  walletAccount: WalletAccount
 }
 
 export interface SigningRequestState {
@@ -118,6 +135,7 @@ export interface SigningRequestState {
 export interface SigningRequest {
   id: string
   baseAssetName?: string
+  walletAccount: WalletAccount
   sign: GenericSignCallback
   resolve: (result: any) => void
   reject: (error: Error) => void
@@ -176,4 +194,16 @@ export type FetchBalanceResult = any | null
 
 export interface RequireDeviceForParams {
   walletAccount: WalletAccount
+}
+
+export interface SignMessageParams extends HwSignMessageParams {
+  walletAccount: WalletAccount
+}
+
+export interface ProcessPairingCodeParams {
+  code: string
+}
+
+export interface SetPassphraseModeParams {
+  enabled: boolean
 }

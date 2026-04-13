@@ -65,7 +65,6 @@ const createEventHandler =
       ]) => {
         const fn = eventReducers[event]
         if (fn) {
-          logger.debug(`mapped event "${event}" to an action`)
           store.dispatch({
             type: eventToAction({ moduleId, event }),
             payload,
@@ -76,7 +75,6 @@ const createEventHandler =
 
         const actionCreator = eventToActionMappers[event]
         if (actionCreator) {
-          logger.debug(`mapped event "${event}" to an action`)
           store.dispatch(actionCreator(payload))
         }
       }

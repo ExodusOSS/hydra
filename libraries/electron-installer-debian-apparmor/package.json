@@ -1,0 +1,35 @@
+{
+  "name": "@exodus/electron-installer-debian-apparmor",
+  "type": "module",
+  "version": "1.0.0",
+  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/electron-installer-debian-apparmor",
+  "description": "Wrapper around electron-installer-debian that adds apparmor profile",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aelectron-installer-debian-apparmor"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+  },
+  "scripts": {
+    "lint": "run -T eslint .",
+    "lint:fix": "yarn lint --fix",
+    "test": "run -T exodus-test --jest --passWithNoTests"
+  },
+  "author": "Exodus Movement, Inc.",
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "exports": "./src/index.js",
+  "main": "src/index.js",
+  "dependencies": {
+    "electron-installer-debian": "^3.1.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": false
+  }
+}

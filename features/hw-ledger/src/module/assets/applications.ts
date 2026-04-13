@@ -28,12 +28,19 @@ const Tron = {
   primaryAssetName: 'tronmainnet',
 }
 
+const XRP = {
+  applicationName: 'XRP',
+  supportedVersions: '^2.4.0',
+  primaryAssetName: 'ripple',
+}
+
 const applications = {
   Bitcoin,
   Solana,
   Ethereum,
   Polygon,
   Tron,
+  XRP,
 }
 
 export default applications

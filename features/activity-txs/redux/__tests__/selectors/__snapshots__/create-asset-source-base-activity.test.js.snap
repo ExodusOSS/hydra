@@ -79,9 +79,9 @@ exports[`createAssetSourceBaseActivity should add indexless orders to activity 2
   "date": 2023-09-13T11:59:24.204Z,
   "displayAmount": {
     "type": "NumberUnit",
-    "unit": "FLR",
-    "unitType": "FLR",
-    "value": "7598.14749525",
+    "unit": "ALGO",
+    "unitType": "ALGO",
+    "value": "1013.41878",
   },
   "failed": false,
   "id": "swap.algorand.eac6bec7798be8",

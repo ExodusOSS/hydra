@@ -8,6 +8,7 @@ import marketHistoryMonitorDefinition from './module/index.js'
 
 import marketHistoryPluginDefinition from './plugin/index.js'
 import marketHistoryApiDefinition from './api/index.js'
+import { safeString } from '@exodus/safe-string'
 
 const CLEAR_MARKET_HISTORY_VERSION = 'infrastructure.marketHistory.clearVersion'
 const REFRESH_INTERVAL_ATOM_PATH = 'infrastructure.marketHistory.refreshInterval'
@@ -28,7 +29,7 @@ const marketHistory = (
   } = Object.create(null)
 ) => {
   return {
-    id: 'marketHistory',
+    id: safeString`marketHistory`,
     definitions: [
       {
         definition: { type: 'monitor', ...marketHistoryMonitorDefinition },

@@ -5,15 +5,23 @@ const getErrorProps = (err) => pick(err, ['name', 'code', 'message', 'stack'])
 
 class BioAuth {
   #logger
+  #authAtom
 
-  constructor({ logger }) {
+  constructor({ authAtom, logger }) {
     this.#logger = logger
+    this.#authAtom = authAtom
   }
 
   authenticate = async ({ title, subtitle, cancelButtonText }) => {
+    const { hasDeviceAuth } = await this.#authAtom.get()
     try {
       // explicitly awaits the promise to catch errors
-      return await RNBiometrics.authenticate({ title, subtitle, cancelButtonText })
+      return await RNBiometrics.authenticate({
+        title,
+        subtitle,
+        cancelButtonText,
+        fallbackToPasscode: hasDeviceAuth,
+      })
     } catch (err) {
       this.#logger.warn('bioauth failed', getErrorProps(err))
       return false
@@ -29,7 +37,7 @@ const bioAuthDefinition = {
   id: 'bioAuth',
   type: 'module',
   factory: createBioAuth,
-  dependencies: ['logger'],
+  dependencies: ['logger', 'authAtom'],
   public: true,
 }
 

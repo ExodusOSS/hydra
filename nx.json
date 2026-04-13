@@ -1,10 +1,5 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "tasksRunnerOptions": {
-    "default": {
-      "options": {}
-    }
-  },
   "targetDefaults": {
     "test": {
       "inputs": ["^production", "test"],
@@ -56,5 +51,6 @@
       "!{projectRoot}/jest.(config|setup).[jt]s"
     ]
   },
-  "cacheDirectory": ".cache/nx"
+  "cacheDirectory": ".cache/nx",
+  "parallel": 7
 }

@@ -1,6 +1,7 @@
 import { compute, combine, filter, enforceObservableRules } from '@exodus/atoms'
 import { WalletAccount } from '@exodus/models'
 
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 import getSeedDerivedId from './get-seed-derived-id.js'

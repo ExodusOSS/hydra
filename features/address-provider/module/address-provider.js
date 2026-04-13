@@ -6,6 +6,7 @@ import { createPath, resolveUnusedAddressIndexesFromAddresses } from './utils.js
 import { parseDerivationPath } from '@exodus/key-utils'
 import KeyIdentifier from '@exodus/key-identifier'
 import assert from 'minimalistic-assert'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { types } from './validation.js'
 import BIP32 from '@exodus/bip32'
@@ -55,13 +56,22 @@ export class AddressProvider {
         // some compatibility modes may not have chain or address index
         chainIndex: typeforce.maybe(types.chainIndex),
         addressIndex: typeforce.maybe(types.addressIndex),
+        multisigDataIndex: typeforce.maybe(types.multisigDataIndex),
         useCache: '?Boolean',
       },
       opts,
       true
     )
 
-    const { purpose, assetName, walletAccount, chainIndex, addressIndex, useCache = true } = opts
+    const {
+      purpose,
+      assetName,
+      walletAccount,
+      chainIndex,
+      addressIndex,
+      multisigDataIndex,
+      useCache = true,
+    } = opts
     const walletAccountName = walletAccount.toString()
     await this.#assertAssetSourceIsSupported({ walletAccount: walletAccountName, assetName })
 
@@ -97,6 +107,7 @@ export class AddressProvider {
             walletAccountName,
             baseAssetName: asset.baseAsset.name,
             derivationPath: keyIdentifier.derivationPath,
+            multisigDataIndex,
           })
         : undefined
 
@@ -105,7 +116,13 @@ export class AddressProvider {
     if (cached) {
       const path = createPath({ chainIndex, addressIndex })
       return Address.fromJSON({
-        meta: { path, purpose: derivedPurpose, keyIdentifier, walletAccount: walletAccountName },
+        meta: {
+          path,
+          purpose: derivedPurpose,
+          keyIdentifier,
+          walletAccount: walletAccountName,
+          ...(Number.isInteger(multisigDataIndex) ? { multisigDataIndex } : Object.create(null)),
+        },
         ...cached,
       })
     }
@@ -117,6 +134,7 @@ export class AddressProvider {
       purpose: derivedPurpose,
       chainIndex,
       addressIndex,
+      multisigDataIndex,
     }
 
     const address = await (walletAccount.isMultisig
@@ -129,6 +147,7 @@ export class AddressProvider {
         walletAccountName: walletAccount.toString(),
         baseAssetName: asset.baseAsset.name,
         derivationPath: keyIdentifier.derivationPath,
+        multisigDataIndex,
         address,
       })
     }
@@ -225,32 +244,41 @@ export class AddressProvider {
     purpose,
     chainIndex,
     addressIndex,
+    multisigDataIndex,
   }) => {
     const walletAccountName = walletAccount.toString()
-    const [publicKey, multisigData] = await Promise.all([
-      this.#publicKeyProvider.getPublicKey({
-        walletAccount: walletAccountName,
-        keyIdentifier,
-      }),
-      this.#multisigAtom.get().then((s) => s[walletAccountName]),
-    ])
+    const multisigWallet = await this.#multisigAtom.get().then((s) => s[walletAccountName])
 
     const path = BipPath.fromPathArray([chainIndex, addressIndex]).toString()
 
-    const publicKeys = multisigData.cosigners.map(({ assetPublicKeys }) => {
-      if (asset.api.features.multipleAddresses) {
-        return BIP32.fromXPub(assetPublicKeys[asset.baseAssetName]).derive(path).publicKey
-      }
-
-      return Buffer.from(assetPublicKeys[asset.baseAssetName], 'hex')
-    })
+    if (multisigDataIndex === undefined) {
+      // Choose latest for multiple addresses, original for single addresses
+      multisigDataIndex = asset.api.features.multipleAddresses ? multisigWallet.data.length - 1 : 0
+    }
 
     assert(
-      publicKeys.filter((k) => k.equals(publicKey)).length === 1,
-      `Invalid derivation at ${chainIndex}/${addressIndex}`
+      multisigWallet.data.length > multisigDataIndex,
+      `Invalid multisigDataIndex ${multisigDataIndex}`
     )
+    const multisigData = multisigWallet.data[multisigDataIndex]
 
-    const internalPubkey = BIP32.fromXPub(multisigData.internalXpub).derive(path).publicKey
+    // Defined in http://github.com/ExodusMovement/treasury-wallet/blob/master/src/background/features/multisig/types.ts#L7
+    // TODO: move multisig feature into hydra repo
+    const SIGNER_ROLE = 2
+    const publicKeys = multisigData.cosigners
+      .filter((c) => c.roles.includes(SIGNER_ROLE))
+      .map(({ assetPublicKeys }) => {
+        if (asset.api.features.multipleAddresses) {
+          return BIP32.fromXPub(assetPublicKeys[asset.baseAssetName]).derive(path).publicKey
+        }
+
+        return Buffer.from(assetPublicKeys[asset.baseAssetName], 'hex')
+      })
+
+    const internalXpub = multisigData.assetData[asset.baseAssetName]?.internalXpub
+    const internalPubkey = internalXpub
+      ? BIP32.fromXPub(internalXpub).derive(path).publicKey
+      : undefined
 
     const {
       address: encodedPublicKey,

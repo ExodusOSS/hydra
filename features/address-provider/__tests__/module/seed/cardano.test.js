@@ -8,7 +8,7 @@ let addressProvider
 let assetsModule
 
 beforeEach(async () => {
-  ;({ addressProvider, assetsModule } = setup())
+  ;({ addressProvider, assetsModule } = await setup())
 })
 
 afterEach(() => {

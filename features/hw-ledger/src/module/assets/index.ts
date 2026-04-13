@@ -2,6 +2,7 @@ import bitcoin from './bitcoin'
 import basemainnet from './basemainnet'
 import ethereum from './ethereum'
 import matic from './matic'
+import ripple from './ripple'
 import solana from './solana'
 import tronmainnet from './tronmainnet'
 import applications from './applications'
@@ -30,6 +31,7 @@ export const assetApplications: Record<string, AssetMetadata> = {
   bitcointestnet: bitcoin,
   bitcoinregtest: bitcoin,
   matic,
+  ripple,
   solana,
   ethereum,
   ethereumsepolia: ethereum,
@@ -38,7 +40,7 @@ export const assetApplications: Record<string, AssetMetadata> = {
 
 /**
  * The baseAssetNames that are supported by our implementation.
- * e.g: ['bitcoin', 'ethereum', 'matic', 'solana']
+ * e.g: ['bitcoin', 'ethereum', 'matic', 'solana', 'ripple']
  */
 export const supportedBaseAssetNames = Object.keys(assetApplications)
 

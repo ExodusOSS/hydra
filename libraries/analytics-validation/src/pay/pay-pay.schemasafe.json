@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayPay"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "receiver_account_type": {
+          "type": "string"
+        },
+        "amount_usd": {
+          "type": "number"
+        },
+        "has_note": {
+          "type": "boolean"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "was_request": {
+          "type": "boolean"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

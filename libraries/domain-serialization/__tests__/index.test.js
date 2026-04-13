@@ -1,4 +1,6 @@
 import KeyIdentifier from '@exodus/key-identifier'
+import { WalletAccount } from '@exodus/models'
+import BN from 'bn.js'
 
 import createDomainSerialization, {
   assetsApi as _assetsApi,
@@ -17,6 +19,7 @@ import {
   tx,
   txSet,
   utxoCollection,
+  walletAccount,
 } from './fixture.js'
 
 describe('domain serialization', () => {
@@ -78,6 +81,18 @@ describe('domain serialization', () => {
         return SomeAccountState.fromJSON(value).equals(accountState)
       },
     },
+    {
+      name: 'WalletAccount',
+      value: walletAccount,
+      matches: (value) => {
+        return new WalletAccount(value).equals(walletAccount)
+      },
+    },
+    {
+      name: 'BN',
+      value: new BN('1000000000000000000'),
+      matches: (value) => value.eq(new BN('1000000000000000000')),
+    },
   ])('handles $name', ({ value, matches }) => {
     const { serialize, deserialize } = domainSerialization
     const serialized = serialize(value)
@@ -87,6 +102,28 @@ describe('domain serialization', () => {
 
     const deserialized = deserialize(serialized)
     expect(matches(deserialized, value)).toBe(true)
+  })
+
+  test('handles additional type defs', () => {
+    class Test {
+      constructor(value) {
+        this.value = value
+      }
+    }
+
+    const serialization = createDomainSerialization({
+      extraTypeDefinitions: [
+        {
+          type: 'test',
+          test: (v) => v instanceof Test,
+          serialize: (v) => `test:${v.value}`,
+          deserialize: (v) => new Test(v.slice(5)),
+        },
+      ],
+    })
+
+    const result = serialization.serialize(new Test('hello'))
+    expect(result).toBe('{"t":"test","v":"test:hello"}')
   })
 })
 
@@ -118,7 +155,6 @@ describe('ui/backend serialization', () => {
       displayNetworkTicker,
       displayTicker,
       gradientColors,
-      gradientCoords,
       info,
       name,
       primaryColor,
@@ -141,7 +177,6 @@ describe('ui/backend serialization', () => {
       displayNetworkTicker,
       displayTicker,
       gradientColors,
-      gradientCoords,
       info,
       name,
       primaryColor,
@@ -149,9 +184,6 @@ describe('ui/backend serialization', () => {
       units,
       isBuiltIn,
       bip44,
-      accountReserve,
-      lowBalance,
-      MIN_STAKING_AMOUNT,
       currency,
       feeAsset: expect.any(Object),
       baseAsset: expect.any(Object),
@@ -166,6 +198,10 @@ describe('ui/backend serialization', () => {
       keys: { encodePrivate: expect.any(Function), encodePublic: expect.any(Function) },
       blockExplorer: { addressUrl: expect.any(Function), txUrl: expect.any(Function) },
     })
+
+    expect(deserializedAsset.accountReserve.equals(accountReserve)).toBe(true)
+    expect(deserializedAsset.lowBalance.equals(lowBalance)).toBe(true)
+    expect(deserializedAsset.MIN_STAKING_AMOUNT.equals(MIN_STAKING_AMOUNT)).toBe(true)
   })
 
   test('serialize assets in backend and restore in ui', () => {
@@ -184,11 +220,11 @@ describe('ui/backend serialization', () => {
   })
 
   test('ui cannot serialize asset', () => {
-    expect(() => ui.serialize(assets)).toThrow(/UI cannot serialize asset bitcoin/)
+    expect(() => ui.serialize(assets.bitcoin)).toThrow(/UI cannot serialize asset bitcoin/)
   })
 
   test('backend cannot deserialize asset', () => {
-    expect(() => backend.deserialize(backend.serialize(assets))).toThrow(
+    expect(() => backend.deserialize(backend.serialize(assets.bitcoin))).toThrow(
       /Backend cannot deserialize asset bitcoin/
     )
   })

@@ -44,14 +44,21 @@ describe('uiConfig atoms', () => {
   it('should create syncable atom definitions', () => {
     const definitions = createUiConfigAtomDefinitions({ configValues: syncableConfigValues })
 
-    expect(definitions.length).toBe(2)
+    expect(definitions.length).toBe(4)
 
-    // test ids
-    expect(definitions[0].definition.id).toBe('enableSoundsConfigAtom')
-    expect(definitions[1].definition.id).toBe('shareActivityConfigAtom')
+    const localDefinitions = definitions.filter((d) => !d.definition.id.startsWith('syncable'))
+    const syncableDefinitions = definitions.filter((d) => d.definition.id.startsWith('syncable'))
 
-    // test fusion dependency
-    expect(definitions[0].definition.dependencies[0]).toBe('fusion')
-    expect(definitions[1].definition.dependencies[0]).toBe('fusion')
+    expect(localDefinitions.length).toBe(2)
+    expect(syncableDefinitions.length).toBe(2)
+
+    expect(localDefinitions[0].definition.id).toBe('enableSoundsConfigAtom')
+    expect(localDefinitions[1].definition.id).toBe('shareActivityConfigAtom')
+
+    expect(syncableDefinitions[0].definition.id).toBe('syncableenableSoundsConfigAtom')
+    expect(syncableDefinitions[1].definition.id).toBe('syncableshareActivityConfigAtom')
+
+    expect(syncableDefinitions[0].definition.dependencies).toContain('fusion')
+    expect(syncableDefinitions[1].definition.dependencies).toContain('fusion')
   })
 })

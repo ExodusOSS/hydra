@@ -5,7 +5,7 @@ import {
   GLOBAL_HOST,
 } from './constants.js'
 
-import { getUrlHostname, isValidDomain } from './validate-domain.js'
+import { getUrlHostname, isValidHostname } from './hostname.js'
 
 const omitNullish = (obj) =>
   Object.fromEntries(Object.entries(obj).filter(([_, value]) => value != null))
@@ -22,9 +22,9 @@ export class FetchFactory {
     }
   }
 
-  setHeaders(headers, allowedHostDomains = [GLOBAL_HOST]) {
-    for (const domain of allowedHostDomains) {
-      if (domain === GLOBAL_HOST) {
+  setHeaders(headers, allowedHostnames = [GLOBAL_HOST]) {
+    for (const hostname of allowedHostnames) {
+      if (hostname === GLOBAL_HOST) {
         const allowedHeaders = []
         const bannedHeaders = []
 
@@ -61,15 +61,15 @@ export class FetchFactory {
         continue
       }
 
-      if (!isValidDomain(domain)) {
-        throw new Error(`Invalid domain: ${domain}`)
+      if (!isValidHostname(hostname)) {
+        throw new Error(`Not a domain or IPv4 address: ${hostname}`)
       }
 
-      if (!this.headerConfigs[domain]) {
-        this.headerConfigs[domain] = Object.create(null)
+      if (!this.headerConfigs[hostname]) {
+        this.headerConfigs[hostname] = Object.create(null)
       }
 
-      this.headerConfigs[domain] = omitNullish({ ...this.headerConfigs[domain], ...headers })
+      this.headerConfigs[hostname] = omitNullish({ ...this.headerConfigs[hostname], ...headers })
     }
 
     return this
@@ -81,6 +81,7 @@ export class FetchFactory {
     }
 
     this.headerConfigs[EXODUS_HOST] = {
+      ...this.headerConfigs[EXODUS_HOST],
       'x-exodus-app-id': appId,
       'x-exodus-version': appVersion,
       'x-requested-with': `${appId} ${appVersion} ${appBuild}`,

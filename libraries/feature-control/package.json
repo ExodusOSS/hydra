@@ -1,6 +1,6 @@
 {
   "name": "@exodus/feature-control",
-  "version": "2.2.4",
+  "version": "2.4.0",
   "type": "module",
   "description": "This library abstracts and simplifies handling and use of feature flags and other feature controls.",
   "main": "index.js",
@@ -34,7 +34,8 @@
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   },
   "devDependencies": {
     "@types/minimalistic-assert": "^1.0.1"

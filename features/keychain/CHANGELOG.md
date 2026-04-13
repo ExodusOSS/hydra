@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@9.0.2...@exodus/keychain@9.0.3) (2026-02-09)
+
+### Bug Fixes
+
+- fix(keychain): correct return type for async arePrivateKeysLocked method (#15129)
+
+## [9.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@9.0.1...@exodus/keychain@9.0.2) (2026-02-02)
+
+### Bug Fixes
+
+- fix(keychain): correct derivationAlgorithm typo in external seed ID generation (#15127)
+
+## [9.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@9.0.0...@exodus/keychain@9.0.1) (2026-01-27)
+
+### Bug Fixes
+
+- fix: less Buffer usage in keychain (#15030)
+
+## [9.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@8.0.0...@exodus/keychain@9.0.0) (2025-08-29)
+
+### ⚠ BREAKING CHANGES
+
+- remove deprecated signTx method from keychain (#13600)
+
+### Features
+
+- feat!: remove deprecated signTx method from keychain (#13600)
+
+## [8.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@7.11.1...@exodus/keychain@8.0.0) (2025-08-15)
+
+### ⚠ BREAKING CHANGES
+
+- kill noop clear method (#13353)
+- make seed methods async (#13300)
+- drop 'raw' signature encoding support (#13294)
+- remove deprecated methods (#13254)
+
+### Features
+
+- feat: add support for external private keys in keychain (#12871)
+
+- feat!: drop 'raw' signature encoding support (#13294)
+
+- feat!: kill noop clear method (#13353)
+
+- feat!: make seed methods async (#13300)
+
+- refactor!: remove deprecated methods (#13254)
+
 ## [7.11.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@7.11.0...@exodus/keychain@7.11.1) (2025-07-18)
 
 ### Bug Fixes

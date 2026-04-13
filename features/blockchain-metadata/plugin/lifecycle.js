@@ -1,33 +1,24 @@
-const createBlockchainLifecyclePlugin = ({
-  blockchainMetadata,
-  txLogsAtom,
-  accountStatesAtom,
-  port,
-}) => {
+const createBlockchainLifecyclePlugin = ({ blockchainMetadata, blockchainMetadataAtom, port }) => {
   let subscriptions = []
 
   const onStart = async () => {
     subscriptions.push(
-      txLogsAtom.observe(({ changes, newlyReceivedTxLogs }) => {
-        if (changes) {
-          port.emit('txLogs', { changes })
+      blockchainMetadataAtom.observe(({ accountStateChanges, txLogChanges }) => {
+        if (txLogChanges) {
+          port.emit('txLogs', { changes: txLogChanges })
         }
 
-        if (newlyReceivedTxLogs) port.emit('received-tx-logs-update', newlyReceivedTxLogs)
-      }),
-      accountStatesAtom.observe(({ changes }) => {
-        if (changes) {
-          port.emit('accountStates', { changes })
+        if (accountStateChanges) {
+          port.emit('accountStates', { changes: accountStateChanges })
         }
       })
     )
   }
 
-  function emitAll() {
-    Promise.all([txLogsAtom.get(), accountStatesAtom.get()]).then(([txLogs, accountStates]) => {
-      port.emit('accountStates', { value: accountStates.value })
-      port.emit('txLogs', { value: txLogs.value })
-    })
+  async function emitAll() {
+    const { value } = await blockchainMetadataAtom.get()
+    port.emit('accountStates', { value: value.accountStates })
+    port.emit('txLogs', { value: value.txs })
   }
 
   const onLoad = async ({ isLocked }) => {

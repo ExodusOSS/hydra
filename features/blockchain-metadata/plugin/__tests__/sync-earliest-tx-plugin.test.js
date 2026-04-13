@@ -4,6 +4,7 @@ import ethereumAssets from '@exodus/ethereum-meta'
 import { TxSet, WalletAccount } from '@exodus/models'
 import createInMemoryStorage from '@exodus/storage-memory'
 
+import { txLogsAtomDefinition } from '../../atoms/index.js'
 import blockchainMetadataDefinition from '../../module/index.js'
 import createSyncEarliestTxDatePlugin from '../sync-earliest-tx-plugin.js'
 
@@ -32,7 +33,7 @@ const tx = {
 
 describe('sync-earliest-tx-date-to-fusion-plugin', () => {
   let txLogsAtom,
-    accountStatesAtom,
+    blockchainMetadataAtom,
     plugin,
     earliestTxDateAtom,
     enabledWalletAccountsAtom,
@@ -41,8 +42,8 @@ describe('sync-earliest-tx-date-to-fusion-plugin', () => {
 
   beforeEach(async () => {
     storage = createInMemoryStorage()
-    txLogsAtom = createInMemoryAtom()
-    accountStatesAtom = createInMemoryAtom()
+    blockchainMetadataAtom = createInMemoryAtom()
+    txLogsAtom = txLogsAtomDefinition.factory({ blockchainMetadataAtom })
     earliestTxDateAtom = createInMemoryAtom({ defaultValue: null })
     enabledWalletAccountsAtom = createInMemoryAtom({
       defaultValue: { exodus_0: WalletAccount.DEFAULT },
@@ -51,8 +52,7 @@ describe('sync-earliest-tx-date-to-fusion-plugin', () => {
     blockchainMetadata = blockchainMetadataDefinition.factory({
       storage,
       assetsModule,
-      txLogsAtom,
-      accountStatesAtom,
+      blockchainMetadataAtom,
       enabledWalletAccountsAtom,
       logger: console,
     })

@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [15.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.5.0...@exodus/analytics@15.5.1) (2025-12-02)
+
+### Bug Fixes
+
+- fix(analytics): support both camelCase & kebab_case on `requireDefaultEventProperties` (#14494)
+
+## [15.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.4.0...@exodus/analytics@15.5.0) (2025-11-28)
+
+### Features
+
+- feat(analytics): bump analytics-validation library (#14501)
+
+- feat: bump atoms for importers of observer factory (#14057)
+
 ## [15.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.3.0...@exodus/analytics@15.4.0) (2025-06-03)
 
 ### Features

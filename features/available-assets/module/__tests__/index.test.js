@@ -13,6 +13,7 @@ describe('available-assets module', () => {
   let enabledAndDisabledAssetsAtom
   let mockStorage
   let assetsAtom
+  let expectedAssets
 
   beforeEach(() => {
     availableAssetsAtom = availableAssetsAtomDefinition.factory()
@@ -30,6 +31,7 @@ describe('available-assets module', () => {
           bitcoin: { name: 'bitcoin', baseAsset: { name: 'bitcoin' } },
           exit: { name: 'exit', baseAsset: { name: 'exit' } },
           wayne: { name: 'wayne', baseAsset: { name: 'wayne' } },
+          rootstock: { name: 'rootstock', baseAsset: { name: 'rootstock' } },
         }
         return assets[assetName]
       },
@@ -45,9 +47,15 @@ describe('available-assets module', () => {
       enabledAndDisabledAssetsAtom,
       logger: { log: jest.fn(), error: jest.fn() },
       config: {
-        defaultAvailableAssetNames: ['bitcoin', 'wrong-asset'],
+        defaultAvailableAssetNames: ['bitcoin', 'wrong-asset', 'rootstock'],
       },
     })
+
+    expectedAssets = [
+      { assetName: 'bitcoin', reason: 'default' },
+      { assetName: 'rootstock', reason: 'default' },
+    ]
+
     availableAssets.start()
   })
 
@@ -57,12 +65,7 @@ describe('available-assets module', () => {
       predicate: (array) => array.length > 0,
     })
 
-    expect(availableAssets).toEqual([
-      {
-        assetName: 'bitcoin',
-        reason: 'default',
-      },
-    ])
+    expect(availableAssets).toEqual(expectedAssets)
   })
 
   test('make updated assets available on load', async () => {
@@ -73,14 +76,11 @@ describe('available-assets module', () => {
 
     const assetNames = await waitUntil({
       atom: availableAssetsAtom,
-      predicate: (array) => array.length > 1,
+      predicate: (array) => array.length > 2,
     })
 
     expect(assetNames).toEqual([
-      {
-        assetName: 'bitcoin',
-        reason: 'default',
-      },
+      ...expectedAssets,
       {
         assetName: 'exit',
         reason: 'assets-load',
@@ -96,14 +96,11 @@ describe('available-assets module', () => {
 
     const assetNames = await waitUntil({
       atom: availableAssetsAtom,
-      predicate: (array) => array.length > 1,
+      predicate: (array) => array.length > 2,
     })
 
     expect(assetNames).toEqual([
-      {
-        assetName: 'bitcoin',
-        reason: 'default',
-      },
+      ...expectedAssets,
       {
         assetName: 'exit',
         reason: 'assets-load',
@@ -126,14 +123,11 @@ describe('available-assets module', () => {
 
     const assetNames = await waitUntil({
       atom: availableAssetsAtom,
-      predicate: (array) => array.length === 3,
+      predicate: (array) => array.length === 4,
     })
 
     expect(assetNames).toEqual([
-      {
-        assetName: 'bitcoin',
-        reason: 'default',
-      },
+      ...expectedAssets,
       {
         assetName: 'wayne',
         reason: 'assets-add',
@@ -156,7 +150,10 @@ describe('available-assets module', () => {
 
       await enabledAndDisabledAssetsAtom.set({ disabled: { [mockTokenName]: false } })
 
-      expect(assetsModule.addRemoteTokens).toHaveBeenCalledWith({ tokenNames: [mockTokenName] })
+      expect(assetsModule.addRemoteTokens).toHaveBeenCalledWith({
+        tokenNames: [mockTokenName],
+        allowedStatusList: ['c', 'v'],
+      })
     })
 
     test('no built-in tokens made available when already available', async () => {
@@ -171,6 +168,115 @@ describe('available-assets module', () => {
       await enabledAndDisabledAssetsAtom.set({ disabled: { [mockTokenName]: false } })
 
       expect(assetsModule.addRemoteTokens).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('load', () => {
+    test('fetches missing default assets via addRemoteTokens', async () => {
+      const localAssetsModule = {
+        getAsset: (assetName) => {
+          const assets = {
+            bitcoin: { name: 'bitcoin', baseAsset: { name: 'bitcoin' } },
+            solana: { name: 'solana', baseAsset: { name: 'solana' } },
+          }
+          return assets[assetName]
+        },
+        addRemoteTokens: jest.fn(async () => {}),
+      }
+
+      const localAvailableAssetsAtom = availableAssetsAtomDefinition.factory()
+      const localAssetsAtom = createInMemoryAtom({ added: [], updated: [] })
+      const localEnabledAndDisabledAssetsAtom = createEnabledAndDisabledAssetsAtom({
+        storage: mockStorage,
+      })
+
+      const availableAssets = createAvailableAssets({
+        assetsModule: localAssetsModule,
+        assetsAtom: localAssetsAtom,
+        availableAssetsAtom: localAvailableAssetsAtom,
+        enabledAndDisabledAssetsAtom: localEnabledAndDisabledAssetsAtom,
+        logger: { log: jest.fn(), error: jest.fn() },
+        config: {
+          defaultAvailableAssetNames: [
+            'bitcoin',
+            'xous_solana_8ae2dcb8',
+            'another_solana_8ae2dcb8',
+            'notCustomTokenName',
+          ],
+        },
+      })
+
+      await availableAssets.load()
+
+      expect(localAssetsModule.addRemoteTokens).toHaveBeenCalledWith({
+        tokenNames: ['xous_solana_8ae2dcb8', 'another_solana_8ae2dcb8'],
+        allowedStatusList: ['c'],
+      })
+    })
+
+    test('does not call addRemoteTokens when all default assets exist', async () => {
+      const localAssetsModule = {
+        getAsset: (assetName) => {
+          const assets = {
+            bitcoin: { name: 'bitcoin', baseAsset: { name: 'bitcoin' } },
+            solana: { name: 'solana', baseAsset: { name: 'solana' } },
+            xous_solana_8ae2dcb8: { name: 'xous_solana_8ae2dcb8', baseAsset: { name: 'solana' } },
+          }
+          return assets[assetName]
+        },
+        addRemoteTokens: jest.fn(async () => {}),
+      }
+
+      const localAvailableAssetsAtom = availableAssetsAtomDefinition.factory()
+      const localAssetsAtom = createInMemoryAtom({ added: [], updated: [] })
+      const localEnabledAndDisabledAssetsAtom = createEnabledAndDisabledAssetsAtom({
+        storage: mockStorage,
+      })
+
+      const availableAssets = createAvailableAssets({
+        assetsModule: localAssetsModule,
+        assetsAtom: localAssetsAtom,
+        availableAssetsAtom: localAvailableAssetsAtom,
+        enabledAndDisabledAssetsAtom: localEnabledAndDisabledAssetsAtom,
+        logger: { log: jest.fn(), error: jest.fn() },
+        config: {
+          defaultAvailableAssetNames: ['bitcoin', 'solana', 'xous_solana_8ae2dcb8'],
+        },
+      })
+
+      await availableAssets.load()
+
+      expect(localAssetsModule.addRemoteTokens).not.toHaveBeenCalled()
+    })
+
+    test('only runs once due to lodash.once', async () => {
+      const localAssetsModule = {
+        getAsset: () => {},
+        addRemoteTokens: jest.fn(async () => {}),
+      }
+
+      const localAvailableAssetsAtom = availableAssetsAtomDefinition.factory()
+      const localAssetsAtom = createInMemoryAtom({ added: [], updated: [] })
+      const localEnabledAndDisabledAssetsAtom = createEnabledAndDisabledAssetsAtom({
+        storage: mockStorage,
+      })
+
+      const availableAssets = createAvailableAssets({
+        assetsModule: localAssetsModule,
+        assetsAtom: localAssetsAtom,
+        availableAssetsAtom: localAvailableAssetsAtom,
+        enabledAndDisabledAssetsAtom: localEnabledAndDisabledAssetsAtom,
+        logger: { log: jest.fn(), error: jest.fn() },
+        config: {
+          defaultAvailableAssetNames: ['another_solana_8ae2dcb8'],
+        },
+      })
+
+      await availableAssets.load()
+      await availableAssets.load()
+      await availableAssets.load()
+
+      expect(localAssetsModule.addRemoteTokens).toHaveBeenCalledTimes(1)
     })
   })
 })

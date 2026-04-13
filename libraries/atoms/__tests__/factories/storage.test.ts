@@ -12,7 +12,7 @@ function createEncryptedStorage(storage: Storage<string, string>) {
   return {
     ..._createEncryptedStorage({
       storage,
-      cryptoFunctionsPromise: deferred.promise,
+      cryptoFunctionsPromise: deferred.promise as never,
     }),
     unlock: (cryptoFunctions: unknown) => {
       deferred.resolve(cryptoFunctions)
@@ -97,7 +97,6 @@ describe('createStorageAtomFactory', () => {
       })
       const atom = createStorageAtom({
         key,
-        isSoleWriter: true,
       })
       const valueFromGetReceivedPromise = pDefer()
       let valueFromGet
@@ -156,7 +155,6 @@ describe('createStorageAtomFactory', () => {
     it('should not read from underlying storage multiple times before a value is cached', () => {
       const atom = createStorageAtom({
         key: 'wayne-enterprises-pricing-server',
-        isSoleWriter: true,
       })
 
       jest.spyOn(storage, 'get')

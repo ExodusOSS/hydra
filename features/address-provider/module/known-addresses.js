@@ -48,7 +48,7 @@ class KnownAddresses {
   get = this.#cached(async (opts) => {
     typeforce(
       {
-        walletAccount: (value) => WalletAccount.isInstance(value),
+        walletAccount: (value) => value instanceof WalletAccount,
         assetName: 'String',
       },
       opts,

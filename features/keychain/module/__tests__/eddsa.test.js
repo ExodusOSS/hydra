@@ -9,7 +9,7 @@ const seed = await mnemonicToSeed({
   mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
 })
 
-const seedId = getSeedId(seed)
+const seedId = await getSeedId(seed)
 
 const secondSeed = await mnemonicToSeed({
   mnemonic: 'wine system mean beyond filter human meat rubber episode wash stomach aunt',
@@ -24,8 +24,8 @@ const plaintextTx = Buffer.from(
 
 describe('EdDSA Signer', () => {
   it('should signBuffer', async () => {
-    const keychain = createKeychain({ seed })
-    const signer = keychain.createEd25519Signer(fusionKeyId)
+    const keychain = await createKeychain({ seed })
+    const signer = keychain.ed25519.createSigner({ keyId: fusionKeyId })
     const signature = await signer.signBuffer({ seedId, data: plaintextMessage })
     const expected =
       'a929fd6e7e37524320e9f422caef1fefa14d9a70740626116b3570eac7e992893bea708c1b9004e222a779400c7ccabbd344c2399a2e4508f1de1cc602b0590a'
@@ -33,7 +33,7 @@ describe('EdDSA Signer', () => {
   })
 
   it('should signBuffer (using ed25519 instance)', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
     const signature = await keychain.ed25519.signBuffer({
       seedId,
       keyId: fusionKeyId,
@@ -45,13 +45,13 @@ describe('EdDSA Signer', () => {
   })
 
   it('should signBuffer', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
     const keyId = new KeyIdentifier({
       assetName: 'solana',
       derivationAlgorithm: 'SLIP10',
       derivationPath: "m/44'/501'/0'/0'/0'",
     })
-    const signer = keychain.createEd25519Signer(keyId)
+    const signer = keychain.ed25519.createSigner({ keyId })
     const signature = await signer.signBuffer({ seedId, data: plaintextTx })
     const expected =
       '90ff0a2a3311957e2920223e1c5b495b731f00834ea431769a5b21cc194a6a7aa14377f1736060f5a685202efe152c18b2db87be300f93fd6a75552464567b00'
@@ -59,7 +59,7 @@ describe('EdDSA Signer', () => {
   })
 
   it('should signBuffer with solana key (using ed25519 instance)', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
     const keyId = new KeyIdentifier({
       assetName: 'solana',
       derivationAlgorithm: 'SLIP10',
@@ -72,7 +72,7 @@ describe('EdDSA Signer', () => {
   })
 
   it('should throw for keyType != nacl', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
     const plaintext = Buffer.from('I really love keychains')
     const keyId = new KeyIdentifier({
       derivationPath: 'm/0',
@@ -102,15 +102,15 @@ describe.each([
     secondarySeed: seed,
     seedId,
   },
-])('EdDSA Signer (multi-seed-keychain)', ({ primarySeed, secondarySeed, seedId }) => {
+])('EdDSA Signer (multi-seed-keychain)', async ({ primarySeed, secondarySeed, seedId }) => {
   const solanaKeyId = new KeyIdentifier({
     assetName: 'solana',
     derivationAlgorithm: 'SLIP10',
     derivationPath: "m/44'/501'/0'/0'/0'",
   })
 
-  const keychain = createKeychain({ seed: primarySeed })
-  keychain.addSeed(secondarySeed)
+  const keychain = await createKeychain({ seed: primarySeed })
+  await keychain.addSeed(secondarySeed)
 
   it('should signBuffer (using ed25519 instance)', async () => {
     const signature = await keychain.ed25519.signBuffer({

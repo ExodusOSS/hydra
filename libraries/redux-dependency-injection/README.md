@@ -206,8 +206,10 @@ This function accepts selectors, listed in `dependencies`, instead of their outp
 It's a more performant alternative to a vanilla selector that returns a function. See our [Selectors Best Practices](https://github.com/exodusmovement/exodus-hydra/blob/master/docs/docs-website/docs/development/selectors.md) for more details.
 
 ```js
-import { memoize } from 'lodash'
+import lodash from 'lodash'
 import { createSelector } from 'reselect'
+
+const { memoize } = lodash
 
 const definition = {
   id: 'createKnowsCharm',

@@ -1,9 +1,12 @@
 import KeyIdentifier from '@exodus/key-identifier'
-import { parseDerivationPath } from '@exodus/key-utils'
 import { fromMasterSeed as bip32FromMasterSeed } from '@exodus/bip32'
+import { typedView } from '@exodus/bytes/array.js'
+import { utf8fromString } from '@exodus/bytes/utf8.js'
 import SLIP10 from '@exodus/slip10'
-import { mapValues } from '@exodus/basic-utils'
 import assert from 'minimalistic-assert'
+import { hash } from '@exodus/crypto/hash'
+import { edwardsToPublic } from '@exodus/crypto/curve25519'
+import { privateKeyToPublicKey } from '@exodus/crypto/secp256k1'
 
 import * as ed25519 from './crypto/ed25519.js'
 import * as secp256k1 from './crypto/secp256k1.js'
@@ -21,6 +24,10 @@ const MAP_KDF = Object.freeze({
   BIP32: bip32FromMasterSeed,
   SLIP10: SLIP10.fromSeed,
 })
+
+const EXTERNAL_SEED_ID_PREFIX = 'ext:'
+
+const isExternalSeedId = (seedId) => seedId.startsWith(EXTERNAL_SEED_ID_PREFIX)
 
 export const MODULE_ID = 'keychain'
 
@@ -66,22 +73,27 @@ export class Keychain {
     })
   }
 
-  arePrivateKeysLocked(seeds = []) {
+  async arePrivateKeysLocked(seeds = []) {
     assert(Array.isArray(seeds), 'seeds must be an array')
-    const seedIds = getUniqueSeedIds(seeds)
+    const seedIds = await getUniqueSeedIds(seeds)
     return this.#checkPrivateKeysLocked(seedIds)
   }
 
   lockPrivateKeys() {
     const seedIds = Object.keys(this.#masters)
     this.#seedLockStatus = seedIds.reduce((acc, seedId) => {
-      acc[seedId] = true
+      if (isExternalSeedId(seedId)) {
+        delete this.#masters[seedId]
+      } else {
+        acc[seedId] = true
+      }
+
       return acc
     }, Object.create(null))
   }
 
-  unlockPrivateKeys(seeds = []) {
-    const seedIds = getUniqueSeedIds(seeds)
+  async unlockPrivateKeys(seeds = []) {
+    const seedIds = await getUniqueSeedIds(seeds)
 
     const existingSeedIds = Object.keys(this.#masters)
     for (const seedId of seedIds) {
@@ -94,17 +106,17 @@ export class Keychain {
     }
   }
 
-  addSeed(seed) {
+  async addSeed(seed) {
     assert(seed instanceof Uint8Array && seed.length === 64, 'seed must be Uint8Array of 64 bytes')
-    if (!Buffer.isBuffer(seed)) seed = Buffer.from(seed.buffer, seed.byteOffset, seed.byteLength)
+    if (!Buffer.isBuffer(seed)) seed = typedView(seed, 'buffer') // TODO: switch to Uint8Array
 
-    const masters = Object.assign(
-      Object.create(null),
-      mapValues(MAP_KDF, (fromSeed) => fromSeed(seed))
+    const mastersEntries = await Promise.all(
+      Object.entries(MAP_KDF).map(async ([key, fromSeed]) => [key, await fromSeed(seed)])
     )
+    const masters = Object.assign(Object.create(null), Object.fromEntries(mastersEntries))
     throwIfInvalidMasters(masters)
 
-    const seedId = getSeedId(seed)
+    const seedId = await getSeedId(seed)
     this.#masters[seedId] = masters
     // manually unlock here since unlockPrivateKeys requires seed to already exist
     this.#seedLockStatus[seedId] = false
@@ -116,8 +128,8 @@ export class Keychain {
     this.#seedLockStatus = Object.create(null)
   }
 
-  removeSeeds(seeds = []) {
-    const seedIds = getUniqueSeedIds(seeds)
+  async removeSeeds(seeds = []) {
+    const seedIds = await getUniqueSeedIds(seeds)
     const existingSeedIds = new Set([
       ...Object.keys(this.#masters),
       ...Object.keys(this.#seedLockStatus),
@@ -132,6 +144,82 @@ export class Keychain {
     return seedIdsToRemove
   }
 
+  removeExternalPrivateKey = (seedId) => {
+    if (!this.#masters[seedId]) return
+
+    assert(isExternalSeedId(seedId), `removeExternalPrivateKey: prevent removing seed ${seedId}`)
+
+    delete this.#masters[seedId]
+    delete this.#seedLockStatus[seedId]
+  }
+
+  addExternalPrivateKey = async ({ privateKey, keyId }) => {
+    assert(
+      privateKey instanceof Uint8Array,
+      `addExternalPrivateKey: expected type of "privateKey" to be Uint8Array`
+    )
+    assert(
+      privateKey.length === 32,
+      `addExternalPrivateKey: expected "privateKey" to be exactly 32 bytes long`
+    )
+    throwIfInvalidKeyIdentifier(keyId)
+
+    let publicKey
+
+    if (keyId.derivationAlgorithm === 'SLIP10' && keyId.keyType === 'nacl') {
+      publicKey = await edwardsToPublic({ privateKey, format: 'buffer' })
+    }
+
+    if (keyId.derivationAlgorithm === 'BIP32' && keyId.keyType === 'secp256k1') {
+      publicKey = await privateKeyToPublicKey({ privateKey, format: 'buffer' })
+    }
+
+    const seedId = await this.#createExternalSeedId({ privateKey, publicKey, keyId })
+    const master = {
+      __proto__: null,
+      privateKey,
+      keyId,
+      derive: (path) => {
+        assert(
+          path === keyId.derivationPath,
+          'derive: unable to derive path specified in key identifier for external private key'
+        )
+        // For now we only return the supplied privateKey, but we may want to support privateKeys
+        // for a derivationPath prefix and do actual derivation here for expanded derivationPaths.
+        return { privateKey, publicKey, toJSON: () => ({ xpriv: null, xpub: null }) }
+      },
+    }
+
+    this.#masters[seedId] = Object.defineProperties(Object.create(null), {
+      [keyId.derivationAlgorithm]: {
+        enumerable: true,
+        configurable: false,
+        writable: false,
+        value: master,
+      },
+    })
+
+    this.#seedLockStatus[seedId] = false
+    return seedId
+  }
+
+  #createExternalSeedId = async ({ privateKey, publicKey, keyId }) => {
+    if (!publicKey) {
+      const hdkey = { privateKey }
+      publicKey = await this.#getPublicKeyFromHDKey({ hdkey, keyId })
+    }
+
+    if (!publicKey) throw new Error(`#createExternalSeedId: failed to derive public key`)
+
+    const { keyType, derivationAlgorithm, derivationPath } = keyId
+    const data = [
+      utf8fromString(JSON.stringify({ keyType, derivationAlgorithm, derivationPath }), 'buffer'),
+      publicKey,
+    ]
+
+    return `${EXTERNAL_SEED_ID_PREFIX}${await hash('hash160', data, 'hex')}`
+  }
+
   #getPrivateHDKey = ({ seedId, keyId, getPrivateHDKeySymbol }) => {
     if (getPrivateHDKeySymbol !== this.#getPrivateHDKeySymbol) {
       this.#assertPrivateKeysUnlocked(seedId ? [seedId] : undefined)
@@ -143,8 +231,18 @@ export class Keychain {
 
     throwIfInvalidMasters(this.#masters[seedId])
 
-    const { derivationAlgorithm, derivationPath } = keyId
-    return this.#masters[seedId][derivationAlgorithm].derive(derivationPath)
+    const { derivationAlgorithm, derivationPath, keyType } = keyId
+    const master = this.#masters[seedId][derivationAlgorithm]
+
+    if (isExternalSeedId(seedId)) {
+      assert(master, '#getPrivateHDKey: found no valid master seed')
+      assert(
+        keyType === master.keyId.keyType,
+        '#getPrivateHDKey: received invalid keyType for specified master seed'
+      )
+    }
+
+    return master.derive(derivationPath)
   }
 
   #getPublicKeyFromHDKey = async ({ hdkey, keyId }) => {
@@ -154,15 +252,19 @@ export class Keychain {
       }
 
       throw new Error(`asset name ${keyId.assetName} has no legacyPrivToPub mapper`)
-    } else if (keyId.derivationAlgorithm !== 'SLIP10' && keyId.keyType === 'nacl') {
-      // SLIP10 already produces the correct public key for curve ed25119
-      // so we can safely skip using the privToPub mapper.
+    }
+
+    if (keyId.derivationAlgorithm === 'BIP32' && keyId.keyType === 'nacl') {
       return sodium.privToPub(hdkey.privateKey)
-    } else if (keyId.keyType === 'cardanoByron') {
+    }
+
+    if (keyId.keyType === 'cardanoByron') {
       const { publicKey } = await cardanoEd25519.getCardanoV1ExtendedPublicKey(hdkey.privateKey)
       return publicKey
     }
 
+    // SLIP10 already produces the correct public key for curve ed25119
+    // BIP32 already produces the correct public key for secp256k1 keyType
     return hdkey.publicKey
   }
 
@@ -247,48 +349,6 @@ export class Keychain {
     assert(noTweak, 'unsupported options supplied for ecdsa signature')
     return this.secp256k1.signBuffer({ seedId, keyId, data, enc, extraEntropy })
   }
-
-  // @deprecated use keychain.signBuffer() instead
-  async signTx({ seedId, keyIds, signTxCallback, unsignedTx }) {
-    this.#assertPrivateKeysUnlocked(seedId ? [seedId] : undefined)
-    assert(typeof signTxCallback === 'function', 'signTxCallback must be a function')
-    const hdkeys = Object.fromEntries(
-      keyIds.map((keyId) => {
-        const hdkey = this.#getPrivateHDKey({ seedId, keyId })
-        const { purpose } = parseDerivationPath(keyId.derivationPath)
-        return [String(purpose), hdkey]
-      })
-    )
-
-    const hdKeyList = Object.values(hdkeys)
-    // most asset only care about the purpose 44 derived private key
-    const privateKey = hdKeyList.length === 1 ? hdKeyList[0].privateKey : undefined
-    // signTxCallback is already an asset-specific signing function
-    return signTxCallback({ unsignedTx, hdkeys, privateKey })
-  }
-
-  // @deprecated use keychain.sodium instead
-  createSodiumEncryptor(keyId) {
-    return this.sodium.createEncryptor({ keyId })
-  }
-
-  // @deprecated use keychain.ed25519 instead
-  createEd25519Signer(keyId) {
-    return this.ed25519.createSigner({ keyId })
-  }
-
-  // @deprecated use keychain.secp256k1 instead
-  createSecp256k1Signer(keyId) {
-    return this.secp256k1.createSigner({ keyId })
-  }
-
-  clone() {
-    return new Keychain({ legacyPrivToPub: this.#legacyPrivToPub })
-  }
-
-  async clear() {
-    // noop
-  }
 }
 
 const createKeychain = (args = Object.create(null)) => new Keychain({ ...args })
@@ -298,7 +358,7 @@ const keychainDefinition = {
   type: 'module',
   public: true,
   factory: createKeychain,
-  dependencies: ['legacyPrivToPub'],
+  dependencies: ['legacyPrivToPub?'],
 }
 
 export default keychainDefinition

@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/atoms@10.1.0...@exodus/atoms@10.2.0) (2026-03-23)
+
+### Features
+
+- feat(atoms): difference with skipInitial option (#15641)
+
+- feat: convert wallet-accounts feature to TypeScript (#15556)
+
+## [10.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/atoms@10.0.0...@exodus/atoms@10.1.0) (2026-01-29)
+
+### Features
+
+- feat: infer result atom in `filter`, accept readonly atoms (#15069)
+
 ## [10.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/atoms@9.0.3...@exodus/atoms@10.0.0) (2025-10-08)
 
 ### ⚠ BREAKING CHANGES

@@ -71,6 +71,33 @@ describe('assets-serialization', () => {
         expect(token.accountReserve).toBeUndefined()
       })
     })
+
+    it('combined asset has isCombined and combinedAssets (e.g. _avalanchec)', () => {
+      const [serializedSolana] = serialize([solana])
+      const serializedAvalanchec = {
+        ...serializedSolana,
+        name: '_avalanchec',
+        baseAssetName: 'avalanchec',
+        feeAssetName: 'avalanchec',
+        isCombined: true,
+        combinedAssetNames: ['avalanchec', 'usdc_avalanchec_185c8bd7'],
+      }
+      const childStubs = {
+        avalanchec: { name: 'avalanchec' },
+        usdc_avalanchec_185c8bd7: { name: 'usdc_avalanchec_185c8bd7' },
+      }
+      const assetsWithStubs = { ...assets, ...childStubs }
+      const [deserialized] = deserialize([serializedAvalanchec], assetsWithStubs, assetsApi)
+
+      expect(deserialized.name).toBe('_avalanchec')
+      expect(deserialized.isCombined).toBe(true)
+      expect(deserialized.combinedAssets).toBeDefined()
+      expect(deserialized.combinedAssets).toHaveLength(2)
+      expect(deserialized.combinedAssets.map((a) => a.name)).toEqual([
+        'avalanchec',
+        'usdc_avalanchec_185c8bd7',
+      ])
+    })
   })
 
   describe('call simple api functions', () => {
@@ -95,9 +122,10 @@ describe('assets-serialization', () => {
 
     it(`getFee returns correct result`, async () => {
       const result = await deserialized.api.getFee({
-        feeData: { fee: solana.currency.defaultUnit(0.5) },
+        asset: { name: deserialized.name },
+        feeData: { baseFee: solana.currency.defaultUnit(0.5) },
       })
-      expect(result.toDefaultString({ unit: true })).toBe('0.5 SOL')
+      expect(result.fee.toDefaultString({ unit: true })).toBe('0.5 SOL')
     })
   })
 })

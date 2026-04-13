@@ -9,7 +9,7 @@ describe('cache behavior', () => {
   let addressProvider
   let addressCacheGet
 
-  beforeEach(() => {
+  beforeEach(async () => {
     const {
       assetsModule,
       accountStatesAtom,
@@ -18,7 +18,7 @@ describe('cache behavior', () => {
       publicKeyProvider,
       knownAddresses,
       addressCache,
-    } = setup()
+    } = await setup()
 
     addressCacheGet = jest.spyOn(addressCache, 'get')
 

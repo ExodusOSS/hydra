@@ -93,6 +93,15 @@ export interface ApplicationApi {
     import: Application['import']
 
     /**
+     * Restarts the wallet.
+     * @example
+     * ```typescript
+     * await exodus.application.restart()
+     * ```
+     */
+    restart: Application['restart']
+
+    /**
      * Schedules a deletion of the current imported wallet, then restarts the application.
      * @example
      * ```typescript
@@ -199,7 +208,7 @@ export interface ApplicationApi {
 
 const factory = ({ application, eventLog, passphraseCache }: FactoryParams): ApplicationApi => {
   const restoreFromCurrentPhrase = async ({ passphrase }: RestoreFromCurrentPhraseParams = {}) => {
-    await eventLog.record({ event: 'applicationApi.restoreFromCurrentPhrase' })
+    await eventLog.record({ event: 'restore_with_current_phrase' })
 
     if (!passphrase && passphraseCache) passphrase = await passphraseCache.get()
     const mnemonic = await application.getMnemonic({ passphrase })
@@ -216,6 +225,7 @@ const factory = ({ application, eventLog, passphraseCache }: FactoryParams): App
       lock: application.lock,
       unlock: application.unlock,
       import: application.import,
+      restart: application.restart,
       delete: application.delete,
       getMnemonic: application.getMnemonic,
       setBackedUp: application.setBackedUp,

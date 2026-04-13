@@ -9,10 +9,12 @@ import type { SigningRequestState } from '../module/interfaces.js'
 const createHardwareWalletsPlugin = ({
   hardwareWalletConnectedAssetNamesAtom,
   hardwareWalletSigningRequestsAtom,
+  hardwareWalletPairingPromptAtom,
   port,
 }: {
   hardwareWalletConnectedAssetNamesAtom: Atom<WalletAccountNameToConnectedAssetNamesMap>
   hardwareWalletSigningRequestsAtom: Atom<SigningRequestState>
+  hardwareWalletPairingPromptAtom: Atom<boolean>
   port: Port
 }) => {
   const observers = [
@@ -25,6 +27,11 @@ const createHardwareWalletsPlugin = ({
       atom: hardwareWalletSigningRequestsAtom,
       port,
       event: 'hardwareWalletSigningRequests',
+    }),
+    createAtomObserver({
+      atom: hardwareWalletPairingPromptAtom,
+      port,
+      event: 'hardwareWalletPairingPrompt',
     }),
   ]
   observers.forEach((observer) => observer.register())
@@ -59,6 +66,7 @@ const hardwareWalletsPluginDefinition = {
   dependencies: [
     'hardwareWalletConnectedAssetNamesAtom',
     'hardwareWalletSigningRequestsAtom',
+    'hardwareWalletPairingPromptAtom',
     'port',
   ],
 } as const satisfies Definition

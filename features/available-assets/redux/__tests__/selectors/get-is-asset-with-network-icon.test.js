@@ -1,4 +1,4 @@
-import { bitcoin, ethereum, setup, usdcoinFtx, usdcoinSolana } from '../utils.js'
+import { bitcoin, ethereum, setup, usdcoin, usdcoinSolana } from '../utils.js'
 
 describe('isAssetWithNetworkIcon', () => {
   test('should return false for asset without network icon', () => {
@@ -43,11 +43,11 @@ describe('isAssetWithNetworkIcon', () => {
   test('should return false if asset has assets on other chains', () => {
     const { store, selectors, emitAvailableAssetNames } = setup()
 
-    emitAvailableAssetNames(new Set([usdcoinFtx.name]))
+    emitAvailableAssetNames(new Set([usdcoin.name, usdcoinSolana.name]))
 
     expect(
       selectors.availableAssets.getIsAssetWithNetworkIcon({
-        assetName: usdcoinFtx.name,
+        assetName: usdcoin.name,
         hasIcon: true,
       })(store.getState())
     ).toBeFalsy()

@@ -181,7 +181,7 @@ const createTestTxLog = () => {
 const addressProviderTester = (mock) => {
   let addressProvider
 
-  beforeEach(() => {
+  beforeEach(async () => {
     const {
       assetsModule,
       accountStatesAtom,
@@ -190,7 +190,7 @@ const addressProviderTester = (mock) => {
       publicKeyProvider,
       knownAddresses,
       addressCache,
-    } = setup({ txLogs: createTestTxLog() })
+    } = await setup({ txLogs: createTestTxLog() })
 
     if (mock) {
       addressProvider = createMockableAddressProvider({
@@ -522,7 +522,7 @@ const addressProviderTester = (mock) => {
 
   test('getReceiveAddresses() when empty TxLog', async () => {
     // When there is no transactions, getReceiveAddresses multiAddressMode should return addressIndex=0 addresses
-    const { addressProvider } = setup({
+    const { addressProvider } = await setup({
       txLogs: {},
     })
 
@@ -697,7 +697,7 @@ const multisigAddressProviderTester = () => {
 
   beforeEach(async () => {
     multisigAtom = createInMemoryAtom()
-    ;({ addressProvider, publicKeyProvider } = setup({
+    ;({ addressProvider, publicKeyProvider } = await setup({
       txLogs: createTestTxLog(),
       assets: {
         ...assets,
@@ -749,24 +749,34 @@ const multisigAddressProviderTester = () => {
 
     multisigAtom.set({
       [multisigWalletAccount.toString()]: {
-        id: '1',
-        threshold: 2,
-        version: 0,
-        cosigners: [
+        data: [
           {
-            nick: 'cosigner1',
-            assetPublicKeys: assetPublicKeys[0],
-          },
-          {
-            nick: 'cosigner2',
-            assetPublicKeys: assetPublicKeys[1],
-          },
-          {
-            nick: 'cosigner3',
-            assetPublicKeys: assetPublicKeys[2],
+            id: '1',
+            threshold: 2,
+            version: 0,
+            assetData: {
+              bitcoin: { internalXpub: assetPublicKeys[0].bitcoin },
+              bitcoinByPublicKey: { internalXpub: assetPublicKeys[0].bitcoin },
+            },
+            cosigners: [
+              {
+                name: 'cosigner1',
+                roles: [2],
+                assetPublicKeys: assetPublicKeys[0],
+              },
+              {
+                name: 'cosigner2',
+                roles: [2],
+                assetPublicKeys: assetPublicKeys[1],
+              },
+              {
+                name: 'cosigner3',
+                roles: [2],
+                assetPublicKeys: assetPublicKeys[2],
+              },
+            ],
           },
         ],
-        internalXpub: assetPublicKeys[0].bitcoin,
       },
     })
   })
@@ -808,18 +818,6 @@ const multisigAddressProviderTester = () => {
         keyIdentifier: expect.any(KeyIdentifier),
       },
     })
-  })
-
-  test('getAddress() fails with segwit purpose for multisig', async () => {
-    await expect(
-      addressProvider.getAddress({
-        assetName,
-        walletAccount: multisigWalletAccount,
-        purpose: 84,
-        chainIndex: 0,
-        addressIndex: 0,
-      })
-    ).rejects.toThrow()
   })
 }
 

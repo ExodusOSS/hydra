@@ -198,3 +198,7 @@ tmp
 
 .nx
 .docusaurus
+
+# local AI config
+.claude/settings.local.json
+CLAUDE.local.md

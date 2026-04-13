@@ -5,6 +5,7 @@ import authApiDefinition from './api/index.js'
 import authPluginDefinition from './plugin/index.js'
 import bioAuthDefinition from './module/bio/bio-auth'
 import biometryDefinition from './module/bio/biometry'
+import canUseDeviceAuth from './module/can-use-device-auth.js'
 
 const auth = (config) => {
   return {
@@ -17,6 +18,7 @@ const auth = (config) => {
       { definition: authPluginDefinition },
       { definition: bioAuthDefinition },
       { definition: biometryDefinition },
+      { definition: canUseDeviceAuth },
     ],
   }
 }

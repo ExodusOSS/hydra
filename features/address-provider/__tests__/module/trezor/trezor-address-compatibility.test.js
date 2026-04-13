@@ -22,7 +22,7 @@ const { factory: createKnownAddresses } = knownAddressesDefinition
 const { factory: createPublicKeyStore } = publicKeyStoreDefinition
 const { factory: createAddressProvider } = addressProviderDefinition
 
-describe('Trezor Address Compatibility', () => {
+describe('Trezor Address Compatibility', async () => {
   const walletAccountsAtom = createInMemoryAtom({
     defaultValue: { [walletAccount]: walletAccount },
   })
@@ -41,7 +41,7 @@ describe('Trezor Address Compatibility', () => {
     walletAccountsAtom,
     getBuildMetadata: jest.fn().mockResolvedValue({ dev: false }),
   })
-  const { assetSources, assetsModule, addressCache } = setup({
+  const { assetSources, assetsModule, addressCache } = await setup({
     assets,
     walletAccountsAtom,
     publicKeyProvider,

@@ -689,6 +689,69 @@
       "coinName": "bitcoin",
       "feeAmount": "1193 satoshis",
       "feeCoinName": "bitcoin"
+    },
+    {
+      "txId": "16d251116f55d3dbbb3f55f426429bab1944bac0e83da8f877090c989a366ff8",
+      "date": "2024-01-19T10:11:42.000Z",
+      "confirmations": 1,
+      "from": [
+        "3LUQMHULG5jyTcBmM7f7SbQE8V3298Cr2w",
+        "3LUQMHULG5jyTcBmM7f7SbQE8V3298Cr2w",
+        "bc1patkrskgt0v2fzwpvx78jsxccmju7y6ha96ctn68wqtle2r7dyrzsdcjcuh",
+        "3LUQMHULG5jyTcBmM7f7SbQE8V3298Cr2w"
+      ],
+      "data": {
+        "feePerKB": 42072.916666666664,
+        "blocksSeen": 0
+      },
+      "addresses": [
+        {
+          "address": "bc1p22qcdrzevtp2yh5g4ygkh3lz0cdyqhvt7ghctk8gnnme8mqh8gks6m4y5q",
+          "meta": {
+            "path": "m/0/1",
+            "isTaproot": true
+          }
+        }
+      ],
+      "coinName": "bitcoin",
+      "coinAmount": "0.00001901 BTC"
+    },
+    {
+      "txId": "17a8badf59e9bbf00c6cb4cb507e2890c0ad95d796ea7ec3150c70e8d7ad405c",
+      "date": "2024-01-26T00:21:45.000Z",
+      "confirmations": 1,
+      "data": {
+        "feePerKB": 27154.929577464784,
+        "blocksSeen": 0,
+        "sent": [
+          {
+            "address": "3BumemnBP19qNmSZ1wZRjiKUscnqfYWz3n",
+            "amount": "0.00601266 BTC"
+          },
+          {
+            "address": "bc1qdfuh9g7yxp7sh9gkzukqmm635tj54mvl29wfgx",
+            "amount": "0.000618 BTC"
+          }
+        ],
+        "inputs": {
+          "bc1qpw44zztnae06kwf00mffs6f2znk00lagzsn2hf": {
+            "address": "bc1qpw44zztnae06kwf00mffs6f2znk00lagzsn2hf",
+            "path": "m/1/1",
+            "utxos": [
+              {
+                "script": "00140bab510973ee5fab392f7ed298692a14ecf7ffa8",
+                "txId": "8ef68c61575b08615bb297027bbabacf044cb4c7330765bcecc51969d31bf209",
+                "vout": 1,
+                "value": "0.00666922 BTC"
+              }
+            ]
+          }
+        }
+      },
+      "coinName": "bitcoin",
+      "feeCoinName": "bitcoin",
+      "coinAmount": "-0.00663066 BTC",
+      "feeAmount": "0.00003856 BTC"
     }
   ]
 }

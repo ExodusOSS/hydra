@@ -11,3 +11,10 @@ export class InvalidPasscodeLengthError extends Error {
     this.name = 'InvalidPasscodeLength'
   }
 }
+
+export class DeviceAuthenticationUnavailableError extends Error {
+  constructor(message = 'Device passcode or biometrics should be enabled.') {
+    super(message)
+    this.name = 'DeviceAuthenticationUnavailable'
+  }
+}

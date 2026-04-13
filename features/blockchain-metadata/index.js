@@ -1,6 +1,7 @@
 import blockchainMetadataApiDefinition from './api/index.js'
 import {
   accountStatesAtomDefinition,
+  blockchainMetadataAtomDefinition,
   txLogsAtomDefinition,
   earliestTxDateAtom,
 } from './atoms/index.js'
@@ -13,10 +14,11 @@ import {
   blockchainMetadataAnalyticsPluginDefinition,
 } from './plugin/index.js'
 import blockchainMetadataReportDefinition from './report/index.js'
+import { safeString } from '@exodus/safe-string'
 
 const blockchainMetadata = () => {
   return {
-    id: 'blockchainMetadata',
+    id: safeString`blockchainMetadata`,
     definitions: [
       {
         definition: blockchainMetadataDefinition,
@@ -24,6 +26,7 @@ const blockchainMetadata = () => {
       },
       { definition: blockchainMetadataPluginDefinition },
       { definition: blockchainMetadataApiDefinition },
+      { definition: blockchainMetadataAtomDefinition },
       { definition: txLogsAtomDefinition },
       { definition: accountStatesAtomDefinition },
       { definition: earliestTxDateAtom },

@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 import type { Asset } from '../types.js'

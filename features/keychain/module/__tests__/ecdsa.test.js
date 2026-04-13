@@ -9,7 +9,7 @@ const seed = await mnemonicToSeed({
   mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
 })
 
-const seedId = getSeedId(seed)
+const seedId = await getSeedId(seed)
 
 const secondSeed = await mnemonicToSeed({
   mnemonic: 'wine system mean beyond filter human meat rubber episode wash stomach aunt',
@@ -22,9 +22,9 @@ const keyId = new KeyIdentifier({
 
 describe('EcDSA Signer', () => {
   it('should signBuffer', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
 
-    const signer = keychain.createSecp256k1Signer(keyId)
+    const signer = keychain.secp256k1.createSigner({ keyId })
     const plaintext = Buffer.from('I really love keychains')
     const signature = await signer.signBuffer({ seedId, data: await hash('sha256', plaintext) })
     const expected =
@@ -33,7 +33,7 @@ describe('EcDSA Signer', () => {
   })
 
   it('should signBuffer (using secp256k1 instance)', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
     const plaintext = Buffer.from('I really love keychains')
     const signature = await keychain.secp256k1.signBuffer({
       seedId,
@@ -47,7 +47,7 @@ describe('EcDSA Signer', () => {
   })
 
   it('should throw for keyType != secp256k1', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
     const plaintext = Buffer.from('I really love keychains')
     const keyId = new KeyIdentifier({
       derivationPath: 'm/0',
@@ -79,8 +79,8 @@ describe.each([
   },
 ])('EcDSA Signer (multi-seed-keychain)', ({ primarySeed, secondarySeed, seedId }) => {
   it('should signBuffer (using secp256k1 instance)', async () => {
-    const keychain = createKeychain({ seed: primarySeed })
-    keychain.addSeed(secondarySeed)
+    const keychain = await createKeychain({ seed: primarySeed })
+    await keychain.addSeed(secondarySeed)
 
     const plaintext = Buffer.from('I really love keychains')
     const signature = await keychain.secp256k1.signBuffer({
@@ -96,7 +96,7 @@ describe.each([
 })
 
 describe('EcDSA Signer Signature Encoding', async () => {
-  const keychain = createKeychain({ seed })
+  const keychain = await createKeychain({ seed })
   const data = await hash('sha256', 'I really love keychains')
   const expected = {
     default:
@@ -144,16 +144,6 @@ describe('EcDSA Signer Signature Encoding', async () => {
     expect(signature.toString('hex')).toBe(expected.binary.slice(0, 128))
     expect(recovery === 0 || recovery === 1).toBe(true)
     expect(recovery).toBe(Buffer.from(expected.binary, 'hex')[64])
-  })
-
-  it('Raw encoding', async () => {
-    const signature = await keychain.secp256k1.signBuffer({ seedId, keyId, data, enc: 'raw' })
-    expect(typeof signature === 'object').toBe(true)
-    expect(Object.getOwnPropertyNames(signature)).toStrictEqual(['r', 's', 'recoveryParam'])
-    const r = Buffer.from(signature.r.toArray('be', 32))
-    const s = Buffer.from(signature.s.toArray('be', 32))
-    const binary = Buffer.concat([r, s, Buffer.from([signature.recoveryParam])])
-    expect(binary.toString('hex')).toBe(expected.binary)
   })
 
   it('Invalid encoding', async () => {

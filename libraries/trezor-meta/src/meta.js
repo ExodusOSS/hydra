@@ -12,9 +12,14 @@ const getTrezorMeta = (assets) => {
     (assetName) => assets[assetName].assetType === 'ETHEREUM_ERC20'
   )
 
+  const SOLANA_TOKEN_NAMES = Object.keys(assets).filter(
+    (assetName) => assets[assetName].baseAsset?.name === 'solana'
+  )
+
   // Assets supported by all trezor models on Exodus
   const BASE_SUPPORTED_ASSETS = [
     'bitcoin',
+    'bitcoinregtest',
     'ethereum',
     'dogecoin',
     'litecoin',
@@ -30,6 +35,15 @@ const getTrezorMeta = (assets) => {
 
   // Assets supported by specific Trezor models on Exodus.
   const ASSETS_BY_MODEL = {
+    'Safe 7': [
+      'bitcoin',
+      'bitcoinregtest',
+      'ethereum',
+      'solana',
+      'ripple',
+      ...ERC20_TOKEN_NAMES,
+      ...SOLANA_TOKEN_NAMES,
+    ].sort(),
     'Safe 5': [...BASE_SUPPORTED_ASSETS, 'cardano', 'ripple'].sort(),
     'Safe 3': [...BASE_SUPPORTED_ASSETS, 'cardano', 'ripple'].sort(),
     T: [...BASE_SUPPORTED_TREZOR_ONE_AND_T, 'cardano', 'ripple'].sort(),
@@ -59,7 +73,7 @@ const getTrezorMeta = (assets) => {
     assets[assetName].assetType !== 'ETHEREUM_ERC20' && coinUtil.isSegwit(assetName)
 
   // eslint-disable-next-line @exodus/hydra/no-asset-conditions
-  const isBip84 = (assetName) => ['bitcoin', 'litecoin'].includes(assetName)
+  const isBip84 = (assetName) => ['bitcoin', 'bitcoinregtest', 'litecoin'].includes(assetName)
 
   const isSupportedByTrezor = (assetName) => SUPPORTED_ASSETS.includes(assetName)
 

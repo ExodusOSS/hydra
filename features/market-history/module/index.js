@@ -3,7 +3,7 @@ import delay from 'delay'
 import makeConcurrent, { byArguments as makeConcurrentByArguments } from 'make-concurrent'
 import ms from 'ms'
 import { createInMemoryAtom, difference } from '@exodus/atoms'
-import { getAssetFromTicker, parseGranularity } from '../utils.js'
+import { getAssetFromTicker, mapToArray, parseGranularity } from '../utils.js'
 import fetchHistoricalPrices from './fetch-historical-prices.js'
 
 const CLEAR_MARKET_HISTORY_CACHE_KEY = 'clear-market-history-cache'
@@ -45,17 +45,38 @@ const _invalidateStorageCache = async ({
 const getCacheKeyDefault = ({ currency, assetName, granularity }) =>
   `prices-${currency}-${assetName}-${granularity}`
 
-const getOldestTimestampFromCache = (cache) =>
-  cache.length === 0 ? null : Math.min(...cache.map((item) => item[0]))
+const getOldestTimestampFromCache = (cache) => {
+  if (cache.length === 0) return null
 
-const filterMapAssetDataFromServer = (data) =>
-  data.filter((item) => item.close !== 0).map((item) => [item.time * 1000, { close: item.close }])
+  let min = null
+  for (const item of cache) {
+    const time = item[0]
+    if (min === null || time < min) min = time
+  }
 
-const mapPricesForCache = (pricesMap, assetNames, assets) => {
+  return min
+}
+
+const filterMapAssetDataFromServer = (data) => {
+  const result = []
+  for (const item of data) {
+    if (item.close !== 0) {
+      result.push([item.time * 1000, { close: item.close }])
+    }
+  }
+
+  return result
+}
+
+const mapPricesForCache = (fetchedPricesMap, assetNames, assets) => {
   const result = Object.create(null)
   for (const assetName of assetNames) {
-    const assetPricesMap = pricesMap.get(assets[assetName].ticker)
-    result[assetName] = assetPricesMap ? [...assetPricesMap] : []
+    const map = fetchedPricesMap.get(assets[assetName].ticker)
+    if (map) {
+      result[assetName] = mapToArray(map)
+    } else {
+      result[assetName] = []
+    }
   }
 
   return result
@@ -257,14 +278,17 @@ class MarketHistoryMonitor {
       })
     }
 
-    const fullHistoryByAssetName = transformHistoricalPrices(
-      historicalPricesMap,
-      assetNames,
-      assets
-    )
+    const assetNamesWithPrices = []
+    for (const assetName of assetNames) {
+      const history = historicalPricesMap.get(assets[assetName].ticker)
+      if (history && history.size > 0) {
+        assetNamesWithPrices.push(assetName)
+      }
+    }
 
     return {
-      prices: fullHistoryByAssetName,
+      getPrices: () => transformHistoricalPrices(historicalPricesMap, assetNames, assets),
+      assetNamesWithPrices,
       hasNewPrices: fetchedPricesMap.size > 0,
     }
   }
@@ -289,7 +313,6 @@ class MarketHistoryMonitor {
       const e = new Error('market-history updateAll cannot be called before module started')
       this.#errorTracking.track({
         error: e,
-        namespace: 'marketHistory',
         context: { method: 'updateAll' },
       })
       throw e
@@ -299,7 +322,6 @@ class MarketHistoryMonitor {
       const e = new Error('market-history updateAll cannot be called before currency is loaded')
       this.#errorTracking.track({
         error: e,
-        namespace: 'marketHistory',
         context: { method: 'updateAll' },
       })
       throw e
@@ -313,7 +335,6 @@ class MarketHistoryMonitor {
     } catch (error) {
       this.#errorTracking.track({
         error,
-        namespace: 'marketHistory',
         context: { method: 'updateAll' },
       })
       this.#logger.error('Market history update all failed', error)
@@ -361,11 +382,9 @@ class MarketHistoryMonitor {
         if (result.hasNewPrices) return true
 
         // simply check if any asset missing prices. if asset already exist in atom and updated it should be covered by previous condition
-        return Object.keys(result.prices).some((assetName) => {
-          if (!result.prices[assetName] || Object.values(result.prices[assetName]).length === 0)
-            return false
-          return !current?.data?.[currency]?.[parsedGranularity]?.[assetName]
-        })
+        return result.assetNamesWithPrices.some(
+          (assetName) => !current?.data?.[currency]?.[parsedGranularity]?.[assetName]
+        )
       }
 
       const hasChanges = granularities.some((granularity, index) => {
@@ -386,13 +405,16 @@ class MarketHistoryMonitor {
       }
 
       granularities.forEach((granularity, index) => {
-        const result = results[index]?.prices
+        const result = results[index]
         if (result) {
           const parsedGranularity = parseGranularity(granularity)
-
-          data[currency][parsedGranularity] = {
-            ...data[currency][parsedGranularity],
-            ...result,
+          if (!detectHasChanges(result, parsedGranularity)) return
+          const prices = result.getPrices()
+          const existing = current?.data?.[currency]?.[parsedGranularity]
+          if (existing) {
+            data[currency][parsedGranularity] = Object.assign(Object.create(null), existing, prices)
+          } else {
+            data[currency][parsedGranularity] = prices
           }
         }
       })
@@ -432,7 +454,6 @@ class MarketHistoryMonitor {
           clear().catch((e) => {
             this.#errorTracking.track({
               error: e,
-              namespace: 'marketHistory',
               context: { method: 'listenRemoteConfigClearCacheVersionChanges' },
             })
           })
@@ -631,22 +652,25 @@ class MarketHistoryMonitor {
 
       const filteredAssetData = filterMapAssetDataFromServer(assetData)
 
-      const sortedPrices = [...cache, ...filteredAssetData].sort((a, b) => a[0] - b[0])
-
-      const updatedAssetHistoryMap = new Map(sortedPrices)
+      const updatedAssetHistoryMap = new Map(cache)
+      for (const [time, value] of filteredAssetData) {
+        updatedAssetHistoryMap.set(time, value)
+      }
 
       await this.#setCache({
         currency,
         granularity,
         pricesByAssetName: {
-          [assetName]: [...updatedAssetHistoryMap],
+          [assetName]: mapToArray(updatedAssetHistoryMap),
         },
       })
 
       await this.#marketHistoryAtom.set(async (current) => {
-        const transformedPrices = Object.fromEntries(
-          [...updatedAssetHistoryMap].map(([time, priceData]) => [time, priceData.close])
-        )
+        const transformedPrices = Object.create(null)
+        for (const [time, priceData] of updatedAssetHistoryMap.entries()) {
+          transformedPrices[time] = priceData.close
+        }
+
         const parsedGranularity = parseGranularity(granularity)
 
         return {

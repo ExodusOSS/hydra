@@ -1,3 +1,4 @@
+import { typedView } from '@exodus/bytes/array.js'
 import { hash } from '@exodus/crypto/hash'
 import { hmac } from '@exodus/crypto/hmac'
 import { randomBytes } from '@exodus/crypto/randomBytes'
@@ -5,11 +6,11 @@ import * as secp256k1 from '@noble/secp256k1'
 
 async function singleRoundHmacDRBG(nonce) {
   const seed = randomBytes(32)
-  let K = Buffer.alloc(32, 0)
-  let V = Buffer.alloc(32, 1)
-  K = await hmac('sha256', K, [V, new Uint8Array([0]), seed, nonce])
+  let K = new Uint8Array(32)
+  let V = new Uint8Array(32).fill(1)
+  K = await hmac('sha256', K, [V, Uint8Array.of(0), seed, nonce])
   V = await hmac('sha256', K, V)
-  K = await hmac('sha256', K, [V, new Uint8Array([1]), seed, nonce])
+  K = await hmac('sha256', K, [V, Uint8Array.of(1), seed, nonce])
   V = await hmac('sha256', K, V)
   return hmac('sha256', K, V)
 }
@@ -29,9 +30,10 @@ async function singleRoundHmacDRBG(nonce) {
  * // 7. mu = (r, s)
  * // 8. return mu.
  *
- * @param {Buffer} data
- * @param {Buffer} privateKey
- * @returns {string}
+ * @param {object} params
+ * @param {Uint8Array} params.data - The data to sign
+ * @param {Uint8Array} params.privateKey - The private key for signing
+ * @returns {Buffer}
  */
 export async function schnorrZ({ data, privateKey }) {
   const { utils, Signature, CURVE, getPublicKey } = secp256k1
@@ -55,7 +57,7 @@ export async function schnorrZ({ data, privateKey }) {
     if (s === BigInt(0)) continue // 6
 
     const sig = new Signature(r, s) // 7
-    return Buffer.from(sig.toCompactRawBytes()) // 8
+    return typedView(sig.toCompactRawBytes(), 'buffer') // 8
   }
 
   // eslint-disable-next-line no-unreachable

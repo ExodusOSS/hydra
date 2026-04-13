@@ -8,7 +8,7 @@ const selectors: Record<any, any> = {
   assets: {
     ...typedSelectors.assets,
     moneroIsOutOfDate: () => false,
-    algoMustOptIn: () => false,
+    mustOptInToken: () => false,
   },
 }
 

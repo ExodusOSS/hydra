@@ -1,4 +1,4 @@
-import bs58 from 'bs58'
+import { fromBase58 } from '@exodus/bytes/base58.js'
 import type { WalletPolicy } from '@exodus/ledger-bitcoin'
 import { AppClient, PsbtV2 } from '@exodus/ledger-bitcoin'
 import { BIP322 } from '@exodus/bip322-js'
@@ -77,7 +77,8 @@ async function createHandler(
   }
 
   const getPublicKey = async (params: GetPublicKeyParams) => {
-    return bs58.decode(await app.getExtendedPubkey(params.derivationPath)).slice(45, 45 + 33)
+    const pubString = await app.getExtendedPubkey(params.derivationPath)
+    return fromBase58(pubString, 'buffer').subarray(45, 45 + 33)
   }
 
   const signTransaction = async (params: SignTransactionParams) => {

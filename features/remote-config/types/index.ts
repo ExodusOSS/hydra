@@ -1,4 +1,4 @@
-import type EventEmitter from 'eventemitter3'
+import type { Atom } from '@exodus/atoms'
 
 export type Fetch = typeof fetch
 
@@ -13,14 +13,20 @@ export type GetBuildMetadata = () => Promise<{
   version: string
 }>
 
+export type RemoteConfigData = {
+  config?: Record<string, any>
+  lastModified?: string | null
+  remoteConfigUrl?: string
+}
+
 export type RemoteConfigType = {
   load(): Promise<void>
   stop(): void
-  sync(): void
   update(): void
   get(key: string): Promise<string | undefined>
   getAll(): Promise<Record<string, any>>
-} & EventEmitter
+  remoteConfigAtom: Atom<RemoteConfigData>
+}
 
 export type Port = {
   emit(event: string, value: any): void

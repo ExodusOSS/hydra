@@ -9,6 +9,25 @@
 
 This is the monorepo that is home to the many components of the Exodus SDK.
 
+## Agentic PR review
+
+This repo runs Codex reviews through GitHub Agentic Workflows and complements them with GitHub Copilot Pull Request Reviews.
+
+- Codex reviews use `.github/workflows/codex-pr-review.md` (source) and the compiled `.lock.yml`; the workflow relies on `OPENAI_API_KEY` (or `CODEX_API_KEY` for legacy setups) and accepts repository vars like `GH_AW_MODEL_AGENT_CODEX` for tuning. After modifying `.github/workflows/codex-pr-review.md`, re-run `gh aw compile` from the repo root.
+- Copilot Pull Request Reviews are configured via the Copilot GitHub App/Actions in the repo (not managed inside these workflows).
+
+This repo does not expose a GUI for the Codex workflow, but you can tune it either by setting repository variables such as `GH_AW_MODEL_AGENT_CODEX` or by editing `.github/workflows/codex-pr-review.md` and, from the repo root, re-running `gh aw compile`.
+
+Common customizations live in the workflow frontmatter, for example:
+
+- `engine.model` to pin a specific Codex model
+- `engine.env` for engine-specific environment variables
+- the markdown body to change review behavior and instructions
+
+The compiled workflow currently also accepts `CODEX_API_KEY` as a compatibility fallback, but `OPENAI_API_KEY` is the standard secret documented by GitHub Agentic Workflows for the Codex engine.
+
+The workflow intentionally uses the `pull_request` event rather than `pull_request_target`. That keeps the OpenAI secret out of forked PR runs by default, which is the safer starting point for GitHub Actions-based review.
+
 ## Getting started
 
 Please sort yourself into one of the six houses:

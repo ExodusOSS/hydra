@@ -2,6 +2,7 @@ import id from './id.js'
 import initialState from './initial-state.js'
 import selectorDefinitions from './selectors/index.js'
 import { mapValues } from '@exodus/basic-utils'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import helper from './multi-account-helper.js'
 import { setAccounts } from '@exodus/multi-account-redux/src/common.js'

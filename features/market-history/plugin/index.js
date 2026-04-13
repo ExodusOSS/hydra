@@ -43,7 +43,7 @@ const createMarketHistoryLifecyclePlugin = ({
         await marketHistoryMonitor.start()
         subscribeToAppProcessChanges()
       } catch (e) {
-        errorTracking.track({ error: e, namespace: 'marketHistory', context: 'unlock' })
+        errorTracking.track({ error: e, context: 'unlock' })
         throw e
       }
     }

@@ -1,4 +1,5 @@
 import type { Feature } from '@exodus/dependency-types'
+
 import createIOC from '../index.js'
 
 const feature = () =>

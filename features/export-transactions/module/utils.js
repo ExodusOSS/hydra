@@ -18,6 +18,19 @@ export const formatTransactionOutput = ({
   const isStaked = type === 'staked'
   const isUnstakedOrClaimed = ['unstaked', 'claimed'].includes(type)
 
+  const toAddresses = [
+    ...new Set([tx.to, tx?.data?.sent?.map((send) => send.address)].flat().filter(Boolean)),
+  ]
+  // no point duplicating identical personal notes
+  const personalNotes = [
+    ...new Set(
+      [
+        personalNote?.getMessage(),
+        ...toAddresses.map((address) => personalNote?.getMessage({ to: address })),
+      ].filter(Boolean)
+    ),
+  ]
+
   const useOutTx = (isWithdrawal || isStaked) && !isUnstakedOrClaimed
   const useInTx = (!isWithdrawal && !isStaked) || isUnstakedOrClaimed
 
@@ -31,14 +44,14 @@ export const formatTransactionOutput = ({
     feeAmount: isWithdrawal || !feeAmount?.isZero ? feeAmountOutput : '',
     feeCurrency: isWithdrawal || !feeAmount?.isZero ? feeCurrency : '',
     fromAddress: [...new Set([tx.from].flat().filter(Boolean))].join(' | '),
-    toAddress: [...new Set([tx.to].flat().filter(Boolean))].join(' | '),
+    toAddress: toAddresses.join(' | '),
     outTxId: useOutTx ? tx.txId : '',
     outTxUrl: useOutTx ? asset.blockExplorer.txUrl(tx.txId) : '',
     inAmount: useInTx ? coinAmountOutput : '',
     inCurrency: useInTx ? coinCurrency : '',
     inTxId: useInTx ? tx.txId : '',
     inTxUrl: useInTx ? asset.blockExplorer.txUrl(tx.txId) : '',
-    personalNote: personalNote?.getMessage({ to: tx.to }),
+    personalNote: personalNotes.length > 0 ? personalNotes.join(' | ') : undefined,
 
     tokens: tx.tokens.join(' '),
 

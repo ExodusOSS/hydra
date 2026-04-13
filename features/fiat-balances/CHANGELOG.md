@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.7.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.7.2...@exodus/fiat-balances@13.7.3) (2026-03-05)
+
+### Performance
+
+- perf(fiat-balances): optimize cloneBalances with structure-aware shallow clone (#15481)
+
+## [13.7.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.7.1...@exodus/fiat-balances@13.7.2) (2026-02-25)
+
+### Performance
+
+- perf(fiat-balances): remove dead isEqual deep comparison from flush (#15352)
+
+## [13.7.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.7.0...@exodus/fiat-balances@13.7.1) (2026-02-03)
+
+### Performance
+
+- perf(fiat-balances): reduce allocations in recompute (#15162)
+
+## [13.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.6.3...@exodus/fiat-balances@13.7.0) (2026-01-21)
+
+### Features
+
+- feat: filter out combined assets without members (#14961)
+
 ## [13.6.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.6.2...@exodus/fiat-balances@13.6.3) (2025-11-24)
 
 ### Bug Fixes

@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import defaultConfig from '../../default-config.js'
 
@@ -5,7 +6,7 @@ const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-bas
 
 const { balanceFields } = defaultConfig
 
-const resultFunction = (assets, getBalances) =>
+const resultFunction = (getAsset, getBalances) =>
   memoize(
     ({ assetName, walletAccount, field }) => {
       if (!balanceFields.includes(field)) {
@@ -14,7 +15,9 @@ const resultFunction = (assets, getBalances) =>
         )
       }
 
-      return getBalances({ assetName, walletAccount })?.[field] ?? assets[assetName]?.currency.ZERO
+      return (
+        getBalances({ assetName, walletAccount })?.[field] ?? getAsset(assetName)?.currency.ZERO
+      )
     },
     ({ assetName, walletAccount, field }) => [assetName, walletAccount, field].join('-')
   )
@@ -23,7 +26,7 @@ const getBalanceForFieldSelectorDefinition = {
   id: 'getBalanceForField',
   resultFunction,
   dependencies: [
-    { module: 'assets', selector: 'all' },
+    { module: 'assets', selector: 'getAsset' },
     { module: 'balances', selector: 'getBalances' },
   ],
 }

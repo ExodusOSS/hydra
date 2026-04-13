@@ -1,7 +1,7 @@
 import { memoize } from '@exodus/basic-utils'
 import { prepareTime } from './date-utils.js'
 
-const memoizeGetPrices = (getAssetPrices, rates, type, assets, currentTime) => {
+const memoizeGetPrices = (getAssetPrices, rates, type, getAsset, currentTime) => {
   const preparedCurrentTime = prepareTime(new Date(currentTime), type)
 
   const getHistoricalPrice = (assetName, time) => {
@@ -10,7 +10,7 @@ const memoizeGetPrices = (getAssetPrices, rates, type, assets, currentTime) => {
 
     const preparedTime = prepareTime(time, type)
 
-    const rate = rates[assets[assetName].ticker]
+    const rate = rates[getAsset(assetName).ticker]
     if (rate && rate.price && preparedTime === preparedCurrentTime) return rate.price
 
     return historicalPrices?.[preparedTime] || null

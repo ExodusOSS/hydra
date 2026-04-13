@@ -108,7 +108,10 @@ function createAssetModuleForTest({ assetsAtom, fetch, storage, iconsStorage, co
     config,
   })
 
-  assetsModule.initialize({ assetClientInterface: { createLogger: createNoopLogger } })
+  assetsModule.initialize({
+    assetClientInterface: { createLogger: createNoopLogger },
+    assetsConfig: {},
+  })
 
   const bitcoin = assetsModule.getAsset('bitcoin')
   jest.spyOn(bitcoin.api, 'hasFeature').mockReturnValue(true)
@@ -192,6 +195,115 @@ describe('assetsModule', () => {
     Object.keys(assetPlugins).forEach((assetName) => {
       const asset = assetsModule.getAsset(assetName)
       expect(asset && asset.name === asset.baseAsset.name).toBeTruthy()
+    })
+  })
+
+  describe('initialize(): remote assets config', () => {
+    const assetClientInterface = { createLogger: createNoopLogger }
+
+    test('merges assetsConfig.[name].config into asset config', () => {
+      const capturedConfigs = {}
+      const mockAssetPlugins = {
+        bitcoin: {
+          createAsset: ({ assetClientInterface, config }) => {
+            capturedConfigs.bitcoin = config
+            return assetPlugins.bitcoin.createAsset({ assetClientInterface, config })
+          },
+        },
+        ethereum: {
+          createAsset: ({ assetClientInterface, config }) => {
+            capturedConfigs.ethereum = config
+            return assetPlugins.ethereum.createAsset({ assetClientInterface, config })
+          },
+        },
+      }
+
+      const module = createAssetsModule({
+        assetPlugins: mockAssetPlugins,
+        assetsAtom: createInMemoryAtom(),
+        fetch,
+        storage,
+        logger: console,
+        config: {
+          assetsConfig: {
+            bitcoin: { localSetting: 'local-value', overriddenSetting: 'local' },
+          },
+        },
+      })
+
+      module.initialize({
+        assetClientInterface,
+        assetsConfig: {
+          bitcoin: { config: { remoteSetting: 'remote-value', overriddenSetting: 'remote' } },
+        },
+      })
+
+      expect(capturedConfigs.bitcoin).toEqual({
+        localSetting: 'local-value',
+        remoteSetting: 'remote-value',
+        overriddenSetting: 'remote',
+      })
+      expect(capturedConfigs.ethereum).toEqual({})
+    })
+
+    test('works with undefined assetsConfig', () => {
+      const capturedConfigs = {}
+      const mockAssetPlugins = {
+        bitcoin: {
+          createAsset: ({ assetClientInterface, config }) => {
+            capturedConfigs.bitcoin = config
+            return assetPlugins.bitcoin.createAsset({ assetClientInterface, config })
+          },
+        },
+      }
+
+      const module = createAssetsModule({
+        assetPlugins: mockAssetPlugins,
+        assetsAtom: createInMemoryAtom(),
+        fetch,
+        storage,
+        logger: console,
+        config: {
+          assetsConfig: {
+            bitcoin: { localSetting: 'local-value' },
+          },
+        },
+      })
+
+      module.initialize({
+        assetClientInterface,
+        assetsConfig: undefined,
+      })
+
+      expect(capturedConfigs.bitcoin).toEqual({ localSetting: 'local-value' })
+    })
+
+    test('works with empty assetsConfig', () => {
+      const capturedConfigs = {}
+      const mockAssetPlugins = {
+        bitcoin: {
+          createAsset: ({ assetClientInterface, config }) => {
+            capturedConfigs.bitcoin = config
+            return assetPlugins.bitcoin.createAsset({ assetClientInterface, config })
+          },
+        },
+      }
+
+      const module = createAssetsModule({
+        assetPlugins: mockAssetPlugins,
+        assetsAtom: createInMemoryAtom(),
+        fetch,
+        storage,
+        logger: console,
+        config: {},
+      })
+
+      module.initialize({
+        assetClientInterface,
+        assetsConfig: {},
+      })
+
+      expect(capturedConfigs.bitcoin).toEqual({})
     })
   })
 

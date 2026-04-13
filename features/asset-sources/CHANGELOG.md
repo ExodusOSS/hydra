@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/asset-sources@1.8.1...@exodus/asset-sources@1.9.0) (2025-10-27)
+
+### Features
+
+- feat: add delegated field on WalletAccount (#14195)
+
 ## [1.8.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/asset-sources@1.8.0...@exodus/asset-sources@1.8.1) (2025-09-12)
 
 ### Bug Fixes

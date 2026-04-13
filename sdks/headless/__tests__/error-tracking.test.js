@@ -1,9 +1,14 @@
 import { SafeError } from '@exodus/errors'
 import { safeString } from '@exodus/safe-string'
+import { TraceId } from '@exodus/traceparent'
 
 import createAdapters from './adapters/index.js'
 import config from './config.js'
 import createExodus from './exodus.js'
+
+const harryTraceId = TraceId.fromRawTraceparent(
+  '00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01'
+)
 
 const passphrase = 'exceptionally-complex-secret'
 
@@ -25,7 +30,7 @@ describe('error-tracking preprocessors', () => {
       definition: {
         id: 'voldieModule',
         type: 'module',
-        namespace: 'voldie',
+        namespace: safeString`voldie`,
         factory: ({ errorTracking }) => {
           errorTracking.track({
             error: new Error('error0'),
@@ -44,11 +49,11 @@ describe('error-tracking preprocessors', () => {
       definition: {
         id: 'harryModule',
         type: 'module',
-        namespace: 'harry',
+        namespace: safeString`harry`,
         factory: ({ errorTracking }) => {
           errorTracking.track({
             error: new Error('error1'),
-            context: { traceId: safeString`harry-trace-id` },
+            context: { traceId: harryTraceId },
           })
           return { v: () => 'harry' }
         },
@@ -81,7 +86,7 @@ describe('error-tracking preprocessors', () => {
           namespace: 'harry',
           error: expect.any(SafeError),
           time,
-          context: { traceId: 'harry-trace-id' },
+          context: { traceId: harryTraceId },
         },
         {
           namespace: 'voldie',

@@ -21,6 +21,13 @@ export interface AddressProviderApi {
       useCache?: boolean
       multiAddressMode?: boolean
     } & AssetSource
+  ): Promise<string>
+  getReceiveAddressObject(
+    params: {
+      purpose?: number
+      useCache?: boolean
+      multiAddressMode?: boolean
+    } & AssetSource
   ): Promise<Address>
   getUnusedAddress(
     params: { purpose?: number; chainIndex?: PathIndex; useCache?: boolean } & AssetSource
@@ -35,6 +42,7 @@ export interface AddressProviderApi {
     } & AssetSource
   ): Promise<Address>
   getSupportedPurposes(params: AssetSource): Promise<string[]>
+  awaitAddressCacheLoaded(): Promise<void>
 }
 
 declare const addressProviderApiDefinition: {

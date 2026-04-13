@@ -7,14 +7,14 @@ const seed = await mnemonicToSeed({
   mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
 })
 
-const seedId = getSeedId(seed)
+const seedId = await getSeedId(seed)
 
 const keychain = keychainDefinition.factory({
   logger: console,
   legacyPrivToPub: Object.create(null),
 })
 
-keychain.addSeed(seed)
+await keychain.addSeed(seed)
 
 const solanaKeyId = new KeyIdentifier({
   assetName: 'solana',
@@ -43,7 +43,7 @@ test('unlock', async () => {
 
   await expect(keychain.exportKey({ seedId, keyId: solanaKeyId })).rejects.toThrow()
 
-  keychain.addSeed(seed)
+  await keychain.addSeed(seed)
 
   await expect(keychain.exportKey({ seedId, keyId: solanaKeyId })).resolves.not.toThrow()
 })
@@ -54,7 +54,7 @@ test('lock', async () => {
     legacyPrivToPub: Object.create(null),
   })
 
-  keychain.addSeed(seed)
+  await keychain.addSeed(seed)
   keychain.removeAllSeeds()
 
   await expect(keychain.exportKey(solanaKeyId)).rejects.toThrow()
@@ -62,7 +62,7 @@ test('lock', async () => {
 
 describe('removeSeeds', async () => {
   const extraSeed = await mnemonicToSeed({ mnemonic: 'menu'.repeat(12) })
-  const extraSeedId = getSeedId(extraSeed)
+  const extraSeedId = await getSeedId(extraSeed)
 
   it('removes seeds from the keychain', async () => {
     const keychain = keychainDefinition.factory({
@@ -70,9 +70,9 @@ describe('removeSeeds', async () => {
       legacyPrivToPub: Object.create(null),
     })
 
-    keychain.addSeed(seed)
-    keychain.addSeed(extraSeed)
-    keychain.removeSeeds([extraSeed])
+    await keychain.addSeed(seed)
+    await keychain.addSeed(extraSeed)
+    await keychain.removeSeeds([extraSeed])
 
     await expect(keychain.exportKey(seed)).resolves.toBe([extraSeedId])
     await expect(keychain.exportKey(extraSeed)).rejects.toThrow()
@@ -84,9 +84,9 @@ describe('removeSeeds', async () => {
       legacyPrivToPub: Object.create(null),
     })
 
-    keychain.addSeed(seed)
-    keychain.addSeed(extraSeed)
-    keychain.removeSeeds([extraSeed, 'missingSeed'])
+    await keychain.addSeed(seed)
+    await keychain.addSeed(extraSeed)
+    await keychain.removeSeeds([extraSeed, 'missingSeed'])
 
     await expect(keychain.exportKey(seed)).resolves.toBe([extraSeedId])
   })
@@ -119,7 +119,7 @@ test('exportKey', async () => {
 })
 
 test('encryptSecretBox/decryptSecretBox', async () => {
-  const sodiumEncryptor = await keychain.createSodiumEncryptor(ALICE_KEY)
+  const sodiumEncryptor = await keychain.sodium.createEncryptor({ keyId: ALICE_KEY })
   const plaintext = 'I really love keychains'
   const ciphertext = await sodiumEncryptor.encryptSecretBox({
     seedId,
@@ -150,8 +150,8 @@ test('encryptSecretBox/decryptSecretBox (using sodium instance)', async () => {
 })
 
 test('encryptBox/decryptBox', async () => {
-  const aliceSodiumEncryptor = await keychain.createSodiumEncryptor(ALICE_KEY)
-  const bobSodiumEncryptor = await keychain.createSodiumEncryptor(BOB_KEY)
+  const aliceSodiumEncryptor = await keychain.sodium.createEncryptor({ keyId: ALICE_KEY })
+  const bobSodiumEncryptor = await keychain.sodium.createEncryptor({ keyId: BOB_KEY })
   const plaintext = 'I really love keychains'
   const {
     box: { publicKey: bobPublicKey },
@@ -203,8 +203,8 @@ test('encryptBox/decryptBox (using sodium instance)', async () => {
 })
 
 test('should encryptSealedBox and decryptSealedBox', async () => {
-  const aliceSodiumEncryptor = await keychain.createSodiumEncryptor(ALICE_KEY)
-  const bobSodiumEncryptor = await keychain.createSodiumEncryptor(BOB_KEY)
+  const aliceSodiumEncryptor = await keychain.sodium.createEncryptor({ keyId: ALICE_KEY })
+  const bobSodiumEncryptor = await keychain.sodium.createEncryptor({ keyId: BOB_KEY })
   const plaintext = 'I really love keychains'
   const {
     box: { publicKey: bobPublicKey },
@@ -251,7 +251,7 @@ test('EcDSA Signer', async () => {
     keyType: 'nacl',
   })
 
-  const signer = keychain.createSecp256k1Signer(keyId)
+  const signer = keychain.secp256k1.createSigner({ keyId })
   const plaintext = Buffer.from('I really love keychains')
   const signature = await signer.signBuffer({ seedId, data: plaintext })
   const expected =
@@ -280,7 +280,7 @@ test('EdDSA Signer', async () => {
     keyType: 'nacl',
   })
 
-  const signer = keychain.createEd25519Signer(keyId)
+  const signer = keychain.ed25519.createSigner({ keyId })
   const plaintext = Buffer.from('I really love keychains')
   const signature = await signer.signBuffer({ seedId, data: plaintext })
   const expected =

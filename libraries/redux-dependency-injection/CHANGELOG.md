@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.2](https://github.com/ExodusMovement/hydra/compare/@exodus/redux-dependency-injection@4.1.1...@exodus/redux-dependency-injection@4.1.2) (2025-08-13)
+
+**Note:** Version bump only for package @exodus/redux-dependency-injection
+
 ## [4.1.1](https://github.com/ExodusMovement/hydra/compare/@exodus/redux-dependency-injection@4.1.0...@exodus/redux-dependency-injection@4.1.1) (2024-11-25)
 
 ### License

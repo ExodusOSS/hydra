@@ -134,7 +134,7 @@ export class Application extends EventEmitter {
 
     if (isImporting || !walletExists) {
       await this.#eventLog.record({
-        event: 'application.willFireClearHook',
+        event: 'app_state_clear_requested',
         applicationWillFireClearHookOpts: { isImporting, isDeleting, walletExists },
       })
 
@@ -269,7 +269,7 @@ export class Application extends EventEmitter {
     this.#logger.log('importing wallet')
 
     await this.#eventLog.record({
-      event: 'application.import',
+      event: 'restore_wallet',
       applicationImportOpts: {
         forceRestart: opts.forceRestart,
         forgotPassphrase: opts.forgotPassphrase,
@@ -283,11 +283,13 @@ export class Application extends EventEmitter {
 
     const walletExists = await this.#wallet.exists()
 
-    const { forceRestart, compatibilityMode, backupType, ...wallet } = opts
+    const { forceRestart, compatibilityMode, backupType, forgotPassphrase, ...wallet } = opts
 
     if (backupType) {
       await this.#storage.set('backupType', backupType)
     }
+
+    await this.fire(Hook.PreImport, { backupType, walletExists, forgotPassphrase })
 
     const importResult = await this.#wallet.import(wallet)
     const importParams = {
@@ -301,12 +303,16 @@ export class Application extends EventEmitter {
       await this.#flagsStorage.set(IMPORT_FLAG, true)
 
       await this.#storage.set('importParams', importParams)
-      await this.fire(Hook.Restart, { reason: 'import', backupType })
+      await this.fire(Hook.Restart, { reason: 'import', backupType, forgotPassphrase })
     } else {
       await this.fire(Hook.Import, importParams)
 
       this.#logger.log('wallet imported')
     }
+  }
+
+  restart = async () => {
+    await this.fire(Hook.Restart, { reason: 'restart-method' })
   }
 
   addSeed = async (opts: AddSeedParams): Promise<string> => {
@@ -318,7 +324,7 @@ export class Application extends EventEmitter {
     const seedId = await this.#wallet.addSeed({ mnemonic, compatibilityMode })
     await this.fire(Hook.AddSeed, { seedId, compatibilityMode })
 
-    // restore-progress-tracker#plugin subscribes to this event and defer the execution
+    // restoreAssetsPlugin subscribes to this event and defers the execution
     // of the next hook until the seed is fully restored.
     await this.fire(Hook.RestoreSeed, { seedId, compatibilityMode })
 

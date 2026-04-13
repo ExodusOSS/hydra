@@ -19,6 +19,7 @@ class AssetClientInterface {
   #transactionSigner
   #walletAccountsAtom
   #multisigAtom
+  #freshlyCreated = false
 
   constructor({
     addressProvider,
@@ -48,8 +49,10 @@ class AssetClientInterface {
     this.#transactionSigner = transactionSigner
     this.#walletAccountsAtom = walletAccountsAtom
     this.#multisigAtom = multisigAtom
+  }
 
-    assetsModule.initialize({ assetClientInterface: this })
+  setFreshlyCreated = (value) => {
+    this.#freshlyCreated = value
   }
 
   createLogger = (namespace) => {
@@ -177,6 +180,10 @@ class AssetClientInterface {
 
     const confirmationsNumber = await this.getConfirmationsNumber({ assetName })
     const out = { confirmationsNumber }
+
+    if (this.#freshlyCreated) {
+      out.gapLimit = 0
+    }
 
     const gapLimit =
       this.#config?.compatibilityModeGapLimits?.[walletAccountInstance.compatibilityMode]

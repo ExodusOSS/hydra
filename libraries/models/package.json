@@ -1,6 +1,6 @@
 {
   "name": "@exodus/models",
-  "version": "12.18.0",
+  "version": "13.1.0",
   "description": "Containers for common business objects in the wild world of Exodus wallets",
   "type": "module",
   "main": "lib/index.js",
@@ -13,7 +13,7 @@
     "CHANGELOG.md"
   ],
   "dependencies": {
-    "@exodus/currency": "^5.0.1",
+    "@exodus/currency": "^6.0.0",
     "@exodus/serialization": "^2.1.0",
     "bip32-path": "^0.4.2",
     "lodash": "^4.17.11",
@@ -23,11 +23,12 @@
   "devDependencies": {
     "@exodus/assets": "^11.0.0",
     "@exodus/assets-base": "^10.0.0",
-    "bs58check": "^3.0.1"
+    "@exodus/bytes": "^1.0.0-rc.6"
   },
   "scripts": {
     "test": "run -T exodus-test --jest --esbuild",
     "build": "yarn run -T tsc -p tsconfig.build.json",
+    "build:watch": "yarn run -T tsc -p tsconfig.build.json --watch",
     "clean": "yarn run -T tsc --build --clean",
     "prepublishOnly": "yarn run -T build --scope @exodus/models",
     "lint": "run -T tsc --noEmit && run -T eslint .",

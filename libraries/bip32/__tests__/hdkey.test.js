@@ -1,13 +1,23 @@
+import { mnemonicToSeed } from '@exodus/bip39'
 import { randomBytes } from '@exodus/crypto/randomBytes'
 import assert from 'assert'
 import BigInteger from 'bigi'
 import ecurve from 'ecurve'
 
-import { HARDENED_OFFSET, HDKey } from '../src/hdkey.js'
+import { getSeedId, HARDENED_OFFSET, HDKey } from '../src/hdkey.js'
 import loadFixture from './load-fixture.cjs'
 
 const fixtures = loadFixture('hdkey')
 const curve = ecurve.getCurveByName('secp256k1')
+
+describe('getSeedId', async () => {
+  const mnemonic = 'cousin access oak tragic entire dynamic marine expand govern enjoy honey tissue'
+  const seed = await mnemonicToSeed({ mnemonic })
+
+  test('returns hex encoded seed id', async () => {
+    assert.equal(await getSeedId(seed), '69c0aafcbc21f299e0205ee8cfd8619cefebbf0c')
+  })
+})
 
 describe('hdkey', function () {
   describe('+ fromMasterSeed', function () {
@@ -36,6 +46,12 @@ describe('hdkey', function () {
           assert.strictEqual(newKey.privateExtendedKey, f.private)
           assert.strictEqual(newKey.publicExtendedKey, f.public)
         })
+      })
+
+      it('seedId should match', async () => {
+        const seed = Buffer.from(f.seed, 'hex')
+        const hdkey = HDKey.fromMasterSeed(seed)
+        assert.equal(await getSeedId(seed), hdkey.identifier.toString('hex'))
       })
     })
   })

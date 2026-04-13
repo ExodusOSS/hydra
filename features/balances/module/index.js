@@ -1,9 +1,10 @@
 import { safeString } from '@exodus/safe-string'
 import { isNumberUnit } from '@exodus/currency'
 import { TxSet } from '@exodus/models'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { difference as getChanges } from '@exodus/atoms'
-import { difference, flattenToPaths, pick, set } from '@exodus/basic-utils'
+import { difference, pick, set, mapValues } from '@exodus/basic-utils'
 import makeConcurrent from 'make-concurrent'
 import { processAssetBalances, validateBalances } from './balances-utils.js'
 import defaultConfig from '../default-config.js'
@@ -41,8 +42,7 @@ class Balances {
 
   #balances = Object.create(null)
   #balancesAtom
-  #accountStatesAtom
-  #txLogsAtom
+  #blockchainMetadataAtom
   #feeDataAtom
   #enabledWalletAccountsAtom
   #loaded = false
@@ -55,8 +55,7 @@ class Balances {
     config,
     logger,
     balancesAtom,
-    txLogsAtom,
-    accountStatesAtom,
+    blockchainMetadataAtom,
     feeDataAtom,
     errorTracking,
   }) {
@@ -66,8 +65,7 @@ class Balances {
     this.#balanceFieldsConfig = config?.balanceFieldsConfig || defaultConfig.balanceFieldsConfig
     this.#balanceFields = config?.balanceFields || defaultConfig.balanceFields
     this.#balancesAtom = balancesAtom
-    this.#accountStatesAtom = accountStatesAtom
-    this.#txLogsAtom = txLogsAtom
+    this.#blockchainMetadataAtom = blockchainMetadataAtom
     this.#feeDataAtom = feeDataAtom
     this.#enabledWalletAccountsAtom = enabledWalletAccountsAtom
     this.#errorTracking = errorTracking
@@ -92,7 +90,7 @@ class Balances {
 
     // these share a queue
     this.#updateAssetSource = shareQueue(this.#updateAssetSource)
-    this.#handleTxLogUpdate = shareQueue(this.#handleTxLogUpdate)
+    this.#handleBlockchainMetadataUpdate = shareQueue(this.#handleBlockchainMetadataUpdate)
     this.#handleFeeDataUpdate = shareQueue(this.#handleFeeDataUpdate)
     this.#recompute = shareQueue(this.#recompute)
     this.#onAssetsChanged = shareQueue(this.#onAssetsChanged)
@@ -111,16 +109,17 @@ class Balances {
       this.#enabledWalletAccountsAtom.observe((payload) => {
         this.#setWalletAccounts(Object.keys(payload))
       }),
-      this.#accountStatesAtom.observe(({ changes }) =>
-        flattenToPaths(changes).forEach(([walletAccount, assetName, accountState]) =>
-          this.#handleAccountStateUpdate({ walletAccount, assetName, accountState })
+      this.#blockchainMetadataAtom.observe(({ accountStateChanges, txLogChanges }) => {
+        this.#flattenToBlockchainMetadataObjects({ accountStateChanges, txLogChanges }).forEach(
+          ({ walletAccount, assetName, accountState, txLogsByAssetName }) =>
+            this.#handleBlockchainMetadataUpdate({
+              walletAccount,
+              assetName,
+              accountState,
+              txLogsByAssetName,
+            })
         )
-      ),
-      this.#txLogsAtom.observe(({ changes }) =>
-        flattenToPaths(changes).forEach(([walletAccount, assetName, txLog]) =>
-          this.#handleTxLogUpdate({ walletAccount, assetName, txLog })
-        )
-      ),
+      }),
       this.#feeDataAtom.observe((changes) => {
         Object.entries(changes).forEach(([assetName, feeData]) => {
           const asset = this.#getAsset(assetName).baseAsset
@@ -146,18 +145,34 @@ class Balances {
 
   #getAssets = () => this.#assetsModule.getAssets()
 
-  #handleAccountStateUpdate = async (opts) => {
-    if (!this.#ready) {
-      this.#logger.log('ignore update from account-state event.', { isReady: this.#ready })
-      return
-    }
+  #flattenToBlockchainMetadataObjects = ({
+    accountStateChanges = Object.create(null),
+    txLogChanges = Object.create(null),
+  }) => {
+    const byBaseAssetName = mapValues(accountStateChanges, (accountStates) =>
+      mapValues(accountStates, (accountState) => ({ accountState }))
+    )
 
-    return this.#updateAssetSource(opts)
+    Object.entries(txLogChanges).forEach(([walletAccount, txLogs]) => {
+      Object.entries(txLogs).map(([assetName, txLog]) => {
+        const { baseAsset } = this.#getAsset(assetName)
+        set(byBaseAssetName, [walletAccount, baseAsset.name, 'txLogsByAssetName', assetName], txLog)
+      })
+    })
+
+    return Object.entries(byBaseAssetName).flatMap(([walletAccount, baseAssets]) =>
+      Object.entries(baseAssets).map(([baseAssetName, { accountState, txLogsByAssetName }]) => ({
+        walletAccount,
+        assetName: baseAssetName,
+        ...(accountState && { accountState }),
+        ...(txLogsByAssetName && { txLogsByAssetName }),
+      }))
+    )
   }
 
-  #handleTxLogUpdate = (opts) => {
+  #handleBlockchainMetadataUpdate = (opts) => {
     if (!this.#ready) {
-      this.#logger.log('ignore update from tx-log event.', { isReady: this.#ready })
+      this.#logger.log('ignore update from blockchain-metadata event.', { isReady: this.#ready })
       return
     }
 
@@ -298,15 +313,15 @@ class Balances {
     accountState: providedAccountState = null,
     txLogsByAssetName: providedTxLogsByAssetName = {},
   }) => {
-    const { value: txLogsByAssetSource } = await this.#txLogsAtom.get()
+    const {
+      value: { txs: txLogsByAssetSource, accountStates },
+    } = await this.#blockchainMetadataAtom.get()
     let accountState = providedAccountState
 
     const baseAsset = this.#getAsset(assetName).baseAsset
 
     if (!accountState) {
-      const assetNameToUse = baseAsset.name
-      const { value } = await this.#accountStatesAtom.get()
-      const cached = value[walletAccount]?.[assetNameToUse]
+      const cached = accountStates[walletAccount]?.[baseAsset.name]
       if (cached) {
         accountState = cached
       } else {
@@ -343,7 +358,7 @@ class Balances {
     assetName,
     walletAccount,
     accountState: providedAccountState,
-    txLog: providedTxLog,
+    txLogsByAssetName: providedTxLogsByAssetName,
     feeData: providedFeeData,
   }) => {
     if (!this.#isSupportedAsset(assetName)) return
@@ -359,9 +374,7 @@ class Balances {
         walletAccount,
         feeData: providedFeeData,
         accountState: providedAccountState,
-        txLogsByAssetName: {
-          [assetName]: providedTxLog,
-        },
+        txLogsByAssetName: providedTxLogsByAssetName,
       })
 
     const accountBalances = this.#balances[walletAccount]
@@ -430,8 +443,7 @@ const balancesDefinition = {
     'config',
     'logger',
     'balancesAtom',
-    'txLogsAtom',
-    'accountStatesAtom',
+    'blockchainMetadataAtom',
     'feeDataAtom',
     'errorTracking',
   ],

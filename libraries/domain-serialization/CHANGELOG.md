@@ -3,6 +3,64 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/domain-serialization@1.8.0...@exodus/domain-serialization@1.8.1) (2026-02-25)
+
+### Bug Fixes
+
+- fix: asset serialization missing prop (#15378)
+
+## [1.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/domain-serialization@1.7.0...@exodus/domain-serialization@1.8.0) (2026-02-24)
+
+### Features
+
+- feat: update exodus/serialization to 2.1.0 (#13723)
+
+### Bug Fixes
+
+- fix: assets serialization (#15367)
+
+## [1.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/domain-serialization@1.6.1...@exodus/domain-serialization@1.7.0) (2025-09-01)
+
+### Features
+
+- feat: wallet account serialization (#13726)
+
+## [1.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/domain-serialization@1.6.0...@exodus/domain-serialization@1.6.1) (2025-07-02)
+
+### Bug Fixes
+
+- fix: remove gradientCoords (#13023)
+
+## [1.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/domain-serialization@1.5.1...@exodus/domain-serialization@1.6.0) (2025-05-22)
+
+### Features
+
+- feat: drop lodash from domain-serialization (#12648)
+
+## [1.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/domain-serialization@1.5.0...@exodus/domain-serialization@1.5.1) (2025-05-06)
+
+### Bug Fixes
+
+- fix(domain-serialization): ESM compat, switch to exodus/test (#12168)
+
+## [1.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/domain-serialization@1.4.1...@exodus/domain-serialization@1.5.0) (2025-01-27)
+
+### Features
+
+- feat: allow passing additional type defs (#11251)
+
+## [1.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/domain-serialization@1.4.0...@exodus/domain-serialization@1.4.1) (2024-12-06)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
+## [1.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/domain-serialization@1.3.2...@exodus/domain-serialization@1.4.0) (2024-11-29)
+
+### Features
+
+- feat: add BN to domain serialization (#10610)
+
 ## [1.3.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/domain-serialization@1.3.1...@exodus/domain-serialization@1.3.2) (2024-10-30)
 
 **Note:** Version bump only for package @exodus/domain-serialization

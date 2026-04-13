@@ -95,6 +95,7 @@ export default {
     segmentConfig: {
       apiKey: '<dummy api key>',
     },
+    flushTimeout: 0,
   },
   fiatRamp: {
     assets: {

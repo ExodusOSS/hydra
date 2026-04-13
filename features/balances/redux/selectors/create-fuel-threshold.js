@@ -1,13 +1,13 @@
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { createSelector } from 'reselect'
 import { isNumberUnit } from '@exodus/currency'
 
 const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
-const selectorFactory = (getFeeDataSelector, assetsSelector) =>
+const selectorFactory = (getFeeDataSelector, createAssetSelector) =>
   memoize((assetName) =>
-    createSelector(getFeeDataSelector, assetsSelector, (getFeeData, assets) => {
-      const asset = assets[assetName]
+    createSelector(getFeeDataSelector, createAssetSelector(assetName), (getFeeData, asset) => {
       if (!asset) {
         // not all assets are supported by Exodus.
         return null
@@ -25,7 +25,7 @@ const createFuelThresholdSelectorDefinition = {
   selectorFactory,
   dependencies: [
     { module: 'feeData', selector: 'getData' },
-    { module: 'assets', selector: 'all' },
+    { module: 'assets', selector: 'createAssetSelector' },
   ],
 }
 

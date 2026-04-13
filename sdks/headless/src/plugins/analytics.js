@@ -39,7 +39,7 @@ const setEnvProperties = async ({ analytics, env }) => {
 
 const createHeadlessAnalyticsPlugin = ({ analytics, env, getBuildMetadata, systemPreferences }) => {
   const onStart = async () => {
-    Promise.all([
+    void Promise.all([
       setEnvProperties({ analytics, env }),
       setBuildMetadataProperties({ analytics, getBuildMetadata }),
       setSystemPreferencesProperties({ analytics, systemPreferences }),

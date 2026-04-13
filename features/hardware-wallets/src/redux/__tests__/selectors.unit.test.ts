@@ -24,7 +24,7 @@ describe('selectors.hardwareWallets.isAssetNameConnectedForWalletAccount', () =>
   })
 })
 
-describe('selectors.hardwareWallets.getSigningRequests', () => {
+describe('selectors.hardwareWallets.signingRequests', () => {
   it('should retrieve state', () => {
     const { store, selectors, emit } = setup()
 
@@ -38,6 +38,6 @@ describe('selectors.hardwareWallets.getSigningRequests', () => {
     }
     emit('hardwareWalletSigningRequests', signingRequests)
 
-    expect(selectors.hardwareWallets.getSigningRequests(store.getState())).toEqual(signingRequests)
+    expect(selectors.hardwareWallets.signingRequests(store.getState())).toEqual(signingRequests)
   })
 })

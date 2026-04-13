@@ -16,6 +16,11 @@ export default async function fetchAndProcessTickers({
     return
   }
 
+  const lastCachedItemByTicker = new Map()
+  for (const { tickerSymbol, lastCachedItem } of assetTickersToFetch) {
+    lastCachedItemByTicker.set(tickerSymbol, lastCachedItem)
+  }
+
   const maxLimit = Math.max(...assetTickersToFetch.map(({ limit }) => limit))
 
   const requests = [
@@ -43,7 +48,7 @@ export default async function fetchAndProcessTickers({
             assetTicker,
             fiatTicker,
             fetchedPrices,
-            assetTickersToFetch,
+            lastCachedItemByTicker,
             ignoreInvalidSymbols,
             historicalPricesMap,
             granularity,

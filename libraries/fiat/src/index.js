@@ -1,4 +1,1 @@
-'use strict'
-
-const unitsJson = require('./units.json')
-module.exports = unitsJson
+export { default } from './units.js'

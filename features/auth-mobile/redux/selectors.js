@@ -1,7 +1,7 @@
 const shouldAuthenticateSelectorDefinition = {
   id: 'shouldAuthenticate',
-  resultFunction: (hasPin, hasBioAuth) => hasPin || hasBioAuth,
-  dependencies: [{ selector: 'hasPin' }, { selector: 'hasBioAuth' }],
+  resultFunction: (hasDeviceAuth, hasPin, hasBioAuth) => hasDeviceAuth || hasPin || hasBioAuth,
+  dependencies: [{ selector: 'hasDeviceAuth' }, { selector: 'hasPin' }, { selector: 'hasBioAuth' }],
 }
 
 const selectorDefinitions = [shouldAuthenticateSelectorDefinition]

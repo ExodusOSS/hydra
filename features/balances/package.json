@@ -1,6 +1,6 @@
 {
   "name": "@exodus/balances",
-  "version": "13.13.1",
+  "version": "13.15.2",
   "description": "Tracks crypto balances across enabled wallet accounts.",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
@@ -33,8 +33,8 @@
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abalances"
   },
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/atoms": "^10.0.0",
+    "@exodus/basic-utils": "^3.7.3",
     "@exodus/core-selectors": "^4.0.0",
     "@exodus/currency": "^5.0.2",
     "@exodus/errors": "^3.0.0",
@@ -49,7 +49,7 @@
     "reselect": "^3.0.1"
   },
   "peerDependencies": {
-    "@exodus/blockchain-metadata": "^15.4.0"
+    "@exodus/blockchain-metadata": "^17.0.0"
   },
   "devDependencies": {
     "@exodus/assets": "^11.0.0",
@@ -66,6 +66,7 @@
     "redux": "^4.2.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

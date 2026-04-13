@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.11.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/available-assets@8.10.1...@exodus/available-assets@8.11.0) (2026-02-13)
+
+### Features
+
+- feat(available-assets): fetch missing default assets via addRemoteTokens (#15248)
+
+## [8.10.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/available-assets@8.10.0...@exodus/available-assets@8.10.1) (2026-01-22)
+
+**Note:** Version bump only for package @exodus/available-assets
+
+## [8.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/available-assets@8.9.0...@exodus/available-assets@8.10.0) (2026-01-21)
+
+### Features
+
+- feat: filter out combined assets without members (#14961)
+
+## [8.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/available-assets@8.8.0...@exodus/available-assets@8.9.0) (2025-12-11)
+
+### Features
+
+- feat: bump atoms for importers of observer factory (#14057)
+
+### Bug Fixes
+
+- fix: handle invalid token names (#14587)
+
 ## [8.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/available-assets@8.6.0...@exodus/available-assets@8.8.0) (2025-08-22)
 
 ### Features

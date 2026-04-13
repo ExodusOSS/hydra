@@ -1,8 +1,8 @@
 import { getCreateConversion } from '../../shared/get-create-conversion.js'
 import { memoize } from '@exodus/basic-utils'
 
-const resultFunction = (fiatCurrency, assets, rates) =>
-  memoize((assetName) => getCreateConversion(fiatCurrency, rates)(assets[assetName]))
+const resultFunction = (fiatCurrency, getAsset, rates) =>
+  memoize((assetName) => getCreateConversion(fiatCurrency, rates)(getAsset(assetName)))
 
 const createConversionSelectorDefinition = {
   id: 'createConversion',
@@ -10,7 +10,7 @@ const createConversionSelectorDefinition = {
   dependencies: [
     //
     { selector: 'currencyUnitType', module: 'locale' },
-    { selector: 'all', module: 'assets' },
+    { selector: 'getAsset', module: 'assets' },
     { selector: 'fiatRates', module: 'rates' },
   ],
 }

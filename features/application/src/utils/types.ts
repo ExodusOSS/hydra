@@ -58,7 +58,7 @@ export type LifecycleHookListener = ((...params: unknown[]) => MaybePromise<unkn
   priority?: number
 }
 
-type BackupType = 'passkeys' | 'seed-phrase'
+type BackupType = 'passkeys' | 'seed-phrase' | 'v3'
 
 export type StartApplicationParams = {
   /** Allows manually setting the restoring flag which will be propagated to lifecycle hooks. Use with caution, this is normally set automatically by the corresponding application methods */

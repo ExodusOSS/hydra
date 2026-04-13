@@ -1,11 +1,8 @@
-import { fromMasterSeed } from '@exodus/bip32'
+import { getSeedId } from '@exodus/bip32'
 
-export const getSeedId = (seed) => fromMasterSeed(seed).identifier.toString('hex')
-
-export const getManySeedIds = (seeds) => seeds.map(getSeedId)
-
-export const getUniqueSeedIds = (seeds) => {
-  const seedIds = getManySeedIds(seeds)
-  const uniqueSeedIds = new Set(seedIds)
-  return [...uniqueSeedIds]
+export const getUniqueSeedIds = async (seeds) => {
+  const seedIds = await Promise.all(seeds.map(getSeedId))
+  return [...new Set(seedIds)]
 }
+
+export { getSeedId } from '@exodus/bip32'

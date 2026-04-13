@@ -1,13 +1,13 @@
 {
   "name": "@exodus/startup-counter",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Tracks how many times app started",
   "author": "Exodus Movement, Inc.",
   "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/startup-counter",
   "bugs": {
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Astartup-counter"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
@@ -28,10 +28,13 @@
     "test": "run -T exodus-test --jest"
   },
   "dependencies": {
-    "@exodus/atoms": "^8.0.0"
+    "@exodus/atoms": "^9.0.0"
   },
   "devDependencies": {
     "@exodus/redux-dependency-injection": "workspace:^",
     "redux": "^4.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

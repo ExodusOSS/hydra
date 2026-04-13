@@ -642,6 +642,59 @@ describe('createAssetSourceBaseActivity', () => {
     expect(omit(result[1], ['toAsset', 'fromAsset'])).toMatchSnapshot()
   })
 
+  test('should skip unindexed receive-side orders without an amount', () => {
+    const { store, selectors, handleEvent, assets } = setup()
+    handleEvent('assets', {
+      assets: {
+        algorand: assets.algorand,
+        flare: assets.flare,
+      },
+    })
+    handleEvent('availableAssetNames', ['algorand', 'flare'])
+
+    handleEvent(
+      'orders',
+      OrderSet.fromArray([
+        {
+          orderId: 'failed-without-to-amount',
+          status: 'failed-final',
+          date: new Date('2023-09-13T11:59:24.204Z'),
+          fromTxId: 'algorand-send-tx',
+          toTxId: null,
+          fromAsset: 'algorand',
+          fromAmount: assets.algorand.currency.defaultUnit(100),
+          toAsset: 'flare',
+          fromWalletAccount: 'exodus_0',
+          toWalletAccount: 'exodus_0',
+          svc: 'cn',
+          synced: true,
+          region: 'INTL',
+          displaySvc: 'cn',
+          potentialToTxIds: [],
+          _version: 1,
+        },
+      ])
+    )
+
+    const receiveSelector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'flare',
+      walletAccount: 'exodus_0',
+      displayOrderWithoutTx: true,
+    })
+    const sendSelector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'algorand',
+      walletAccount: 'exodus_0',
+      displayOrderWithoutTx: true,
+    })
+
+    expect(receiveSelector(store.getState())).toEqual([])
+
+    const sendResult = sendSelector(store.getState())
+    expect(sendResult).toHaveLength(1)
+    expect(sendResult[0].id).toEqual('swap.algorand.failed-without-to-amount')
+    expect(sendResult[0].displayAmount).toEqual(assets.algorand.currency.defaultUnit(100))
+  })
+
   test('should return txs if orders are not supported', () => {
     const { store, selectors, handleEvent, assets } = setup({ withOrders: false })
     handleEvent('assets', {

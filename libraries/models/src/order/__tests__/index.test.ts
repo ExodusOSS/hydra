@@ -10,6 +10,24 @@ test('can create an order', () => {
     orderId: '1',
     toWalletAccount: 'exodus_0',
   })
+  expect(order.toAddress).toBeUndefined()
+})
+
+test('can create an order with toAddress for third-party withdrawals', () => {
+  const order = Order.fromJSON({
+    orderId: '1',
+    svc: 'ch',
+    toAddress: '0x1234567890abcdef',
+  })
+  expect(order.toAddress).toBe('0x1234567890abcdef')
+  expect(order.toJSON()).toMatchObject({
+    orderId: '1',
+    toAddress: '0x1234567890abcdef',
+  })
+  expect(order.toRedactedJSON()).toMatchObject({
+    orderId: '1',
+    toAddress: '0x1234567890abcdef',
+  })
 })
 
 describe('error handling', () => {

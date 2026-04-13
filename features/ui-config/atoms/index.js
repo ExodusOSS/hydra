@@ -1,10 +1,10 @@
-import createSyncableUiConfigAtom from './syncable.js'
+import createSyncableRemoteAtom from './syncable.js'
 import createLocalUiConfigAtom from './local.js'
 
 const createUiConfigAtomDefinitions = ({ configValues }) => {
-  return configValues.map((configValue) =>
+  return configValues.flatMap((configValue) =>
     configValue.syncable
-      ? createSyncableUiConfigAtom(configValue)
+      ? [createLocalUiConfigAtom(configValue), createSyncableRemoteAtom(configValue)]
       : createLocalUiConfigAtom(configValue)
   )
 }

@@ -2,6 +2,8 @@ import type addressProviderApiDefinition from './api/index.js'
 import type addressProviderDebugDefinition from './debug/index.js'
 import type { Definition } from '@exodus/dependency-types'
 
+export type * from './module/address-provider.d.ts'
+
 declare const addressProvider: () => {
   id: 'addressProvider'
   definitions: [

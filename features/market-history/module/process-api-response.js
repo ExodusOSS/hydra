@@ -5,7 +5,7 @@ export default function processApiResponse({
   assetTicker,
   fiatTicker,
   fetchedPrices,
-  assetTickersToFetch,
+  lastCachedItemByTicker,
   ignoreInvalidSymbols,
   historicalPricesMap,
   granularity,
@@ -23,9 +23,7 @@ export default function processApiResponse({
   }
 
   const newData = fetchedPrices[assetTicker][fiatTicker]
-  const { lastCachedItem } =
-    assetTickersToFetch.find(({ tickerSymbol }) => tickerSymbol === assetTicker) ||
-    Object.create(null)
+  const lastCachedItem = lastCachedItemByTicker.get(assetTicker)
   const wrongDataItem = findInvalidPrice(newData, lastCachedItem)
 
   if (wrongDataItem) {
@@ -38,17 +36,17 @@ export default function processApiResponse({
     return null
   }
 
-  const filteredData = newData
-    .filter((piece) => piece.close !== 0)
-    .map((piece) => ({ time: piece.time, close: piece.close }))
-
   let history = historicalPricesMap.get(assetTicker) || new Map()
+  let added = 0
 
-  for (const price of filteredData) {
-    history.set(price.time * 1000, { close: price.close })
+  for (const piece of newData) {
+    if (piece.close !== 0) {
+      history.set(piece.time * 1000, { close: piece.close })
+      added++
+    }
   }
 
-  if (granularity === 'hour' && !specificTimestamp && filteredData.length > 0 && requestLimit) {
+  if (granularity === 'hour' && !specificTimestamp && added > 0 && requestLimit) {
     history = cropHistory({ history, hourlyLimit: requestLimit })
   }
 

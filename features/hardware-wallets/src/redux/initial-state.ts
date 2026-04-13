@@ -4,11 +4,13 @@ import type { SigningRequestState } from '../module/interfaces.js'
 export type HardwareWalletsState = {
   walletAccountNameToConnectedAssetNamesMap: WalletAccountNameToConnectedAssetNamesMap
   signingRequests: SigningRequestState
+  pairingPrompt: boolean
 }
 
 const initialState: HardwareWalletsState = {
   walletAccountNameToConnectedAssetNamesMap: Object.create(null),
   signingRequests: Object.create(null),
+  pairingPrompt: false,
 }
 
 export default initialState

@@ -10,11 +10,7 @@
     "strict": true,
     "downlevelIteration": true,
     "noUncheckedIndexedAccess": true,
-    "esModuleInterop": true,
-    "paths": {
-      "@exodus/transform-storage": ["./libraries/transform-storage/src"],
-      "@exodus/transform-storage/*": ["./libraries/transform-storage/src/*"]
-    }
+    "esModuleInterop": true
   },
   "exclude": ["node_modules"]
 }

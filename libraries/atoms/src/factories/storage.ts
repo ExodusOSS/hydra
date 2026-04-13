@@ -3,16 +3,27 @@ import enforceObservableRules from '../enforce-rules.js'
 import type { Atom, ResettableListener } from '../utils/types.js'
 import type { Storage } from '@exodus/storage-interface'
 
-type FactoryParams<T> = {
-  storage: Storage<T>
-}
-
 type Params<D> = {
   key: string
   defaultValue?: D
+  isSoleWriter?: boolean
 }
 
-const createStorageAtomFactory = <T>({ storage }: FactoryParams<T>) => {
+function createStorageAtomFactory<T>(params: {
+  storage: Storage<T>
+}): ReturnType<typeof _createStorageAtomFactory<T>>
+function createStorageAtomFactory<T = unknown>(params: {
+  storage: Storage
+}): ReturnType<typeof _createStorageAtomFactory<T>>
+function createStorageAtomFactory<T = unknown>({
+  storage,
+}: {
+  storage: Storage
+}): ReturnType<typeof _createStorageAtomFactory<T>> {
+  return _createStorageAtomFactory<T>({ storage })
+}
+
+const _createStorageAtomFactory = <T = unknown>({ storage }: { storage: Storage }) => {
   function createStorageAtom(opts: Omit<Params<unknown>, 'defaultValue'>): Atom<T | undefined>
   function createStorageAtom<D extends T>(opts: Params<D>): Atom<T | D>
   function createStorageAtom<D extends T>({ key, defaultValue }: Params<D>): Atom<T | D> {
@@ -57,7 +68,7 @@ const createStorageAtomFactory = <T>({ storage }: FactoryParams<T>) => {
       }
 
       const currentVersion = version
-      const value = await storage.get(key)
+      const value = (await storage.get(key)) as T | undefined
 
       if (currentVersion !== version) {
         return get()

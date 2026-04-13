@@ -1,7 +1,7 @@
 import memoizeGetPrices from './helpers/memoize-get-price.js'
 
-const resultFunction = (getAssetMinutelyPrices, rates, assets, startOfMinuteTime) =>
-  memoizeGetPrices(getAssetMinutelyPrices, rates, 'minutely', assets, startOfMinuteTime)
+const resultFunction = (getAssetMinutelyPrices, rates, getAsset, startOfMinuteTime) =>
+  memoizeGetPrices(getAssetMinutelyPrices, rates, 'minutely', getAsset, startOfMinuteTime)
 
 const getMinutelyPriceSelector = {
   id: 'getMinutelyPrice',
@@ -10,7 +10,7 @@ const getMinutelyPriceSelector = {
     //
     { selector: 'getAssetMinutelyPrices' },
     { selector: 'fiatRates', module: 'rates' },
-    { module: 'assets', selector: 'all' },
+    { module: 'assets', selector: 'getAsset' },
     { selector: 'startOfMinute', module: 'time' },
   ],
 }

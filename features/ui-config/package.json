@@ -1,6 +1,6 @@
 {
   "name": "@exodus/ui-config",
-  "version": "3.13.0",
+  "version": "3.13.3",
   "description": "Helper for storing various UI-specific settings/config.",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
@@ -42,6 +42,7 @@
     "redux": "^4.2.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

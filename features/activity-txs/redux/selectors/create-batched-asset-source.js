@@ -11,8 +11,7 @@ const { get, groupBy, merge } = lodash
 // Now, we write the `order.txsIds` array, which contains information about setup, swap transactions, and more.
 // An order can be matched using any transaction ID from this array.
 // Each transaction will match the order, but we can deduplicate them later using `order.id` to display single activity item
-const collapseBatch = ({ batch, assets }) => {
-  const asset = assets[batch[0].coinName]
+const collapseBatch = ({ batch, asset }) => {
   const isToken = asset.baseAsset.name !== asset.name
 
   const totalBatchValue = batch.reduce(
@@ -44,13 +43,14 @@ const collapseBatch = ({ batch, assets }) => {
   )
 }
 
-const groupAndCollapseBatched = ({ txs, personalNotesWithBatchId, assets }) => {
+const groupAndCollapseBatched = ({ txs, personalNotesWithBatchId, getAsset }) => {
   const { NO_BATCH: unbatchedTransactions = [], ...batches } = groupBy(txs, (tx) =>
     get(personalNotesWithBatchId.get(tx.txId), 'dapp.batch.id', 'NO_BATCH')
   )
-  const batchedTransactions = Object.values(batches).map((batch) =>
-    collapseBatch({ batch, assets })
-  )
+  const batchedTransactions = Object.values(batches).map((batch) => {
+    const asset = getAsset(batch[0].coinName)
+    return collapseBatch({ batch, asset })
+  })
 
   return [...unbatchedTransactions, ...batchedTransactions]
 }
@@ -60,12 +60,12 @@ const createBatchedAssetSourceSelectorDefinition = {
   dependencies: [
     { selector: 'createLimitedAssetSourceSelector' },
     { module: 'personalNotes', selector: 'withBatchId', optional: true },
-    { module: 'assets', selector: 'all' },
+    { module: 'assets', selector: 'getAsset' },
   ],
   selectorFactory: (
     createLimitedAssetSourceSelector,
     personalNotesWithBatchIdSelector,
-    assetsSelector
+    getAssetSelector
   ) =>
     memoize(
       ({ assetName, walletAccount, limit }) =>
@@ -74,10 +74,10 @@ const createBatchedAssetSourceSelectorDefinition = {
           : createSelector(
               createLimitedAssetSourceSelector({ assetName, walletAccount, limit }),
               personalNotesWithBatchIdSelector,
-              assetsSelector,
-              (txs, personalNotesWithBatchId, assets) => {
+              getAssetSelector,
+              (txs, personalNotesWithBatchId, getAsset) => {
                 return personalNotesWithBatchId.size > 0
-                  ? groupAndCollapseBatched({ txs, personalNotesWithBatchId, assets })
+                  ? groupAndCollapseBatched({ txs, personalNotesWithBatchId, getAsset })
                   : txs
               }
             ),

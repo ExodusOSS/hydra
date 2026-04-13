@@ -33,3 +33,10 @@ export interface Keystore {
 }
 
 export type Logger = Pick<Console, 'trace' | 'debug' | 'error' | 'info' | 'log' | 'warn'>
+
+export type AnyAtom<V = any> = Atom<V> | ReadonlyAtom<V>
+
+export type AtomValue<A extends AnyAtom> = A extends AnyAtom<infer V> ? V : never
+
+export type SetAtomValue<A extends AnyAtom, V> =
+  A extends Atom<any> ? Atom<V> : A extends ReadonlyAtom<any> ? ReadonlyAtom<V> : never

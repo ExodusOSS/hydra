@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { createSelector } from 'reselect'
 
@@ -5,11 +6,16 @@ import { _resultFunction } from './get-data.js'
 
 const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
 
-const selectorFactory = (dataSelector, allAssetsSelector) =>
+const selectorFactory = (dataSelector, createAssetSelector) =>
   memoize((assetName) =>
-    createSelector(dataSelector, allAssetsSelector, (feeData, assets) =>
-      _resultFunction({ feeData, assets, assetName })
-    )
+    createSelector(dataSelector, createAssetSelector(assetName), (feeData, asset) => {
+      if (!asset) {
+        console.warn(`"${assetName}" is not present in assets`)
+        return
+      }
+
+      return _resultFunction({ feeData, asset })
+    })
   )
 
 const getDataSelectorDefinition = {
@@ -18,7 +24,7 @@ const getDataSelectorDefinition = {
   dependencies: [
     //
     { selector: 'data' },
-    { selector: 'all', module: 'assets' },
+    { selector: 'createAssetSelector', module: 'assets' },
   ],
 }
 

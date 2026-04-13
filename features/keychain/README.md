@@ -50,16 +50,14 @@ const seed = await mnemonicToSeed({
   mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
 })
 
-keychain.addSeed(seed)
-keychain.addSeed(secondSeed)
-keychain.addSeed(thirdSeed)
+await keychain.addSeed(seed)
+await keychain.addSeed(secondSeed)
+await keychain.addSeed(thirdSeed)
 // ...
 keychain.removeAllSeeds()
 ```
 
 ### Sign a transaction
-
-The function `keychain.signTx(...)` is deprecated.
 
 Use `keychain.signBuffer(...)` to sign serialized transactions for a given key identifier.
 
@@ -100,7 +98,7 @@ const ALICE_KEY = new KeyIdentifier({
   keyType: 'nacl',
 })
 
-const sodiumEncryptor = keychain.createSodiumEncryptor(ALICE_KEY)
+const sodiumEncryptor = keychain.sodium.createEncryptor({ keyId: ALICE_KEY })
 const plaintext = 'I really love keychains'
 const ciphertext = await sodiumEncryptor.encryptSecretBox({
   seedId,
@@ -118,8 +116,8 @@ const decrypted = await sodiumEncryptor.decryptSecretBox({
 #### encryptBox/decryptBox
 
 ```js
-const aliceSodiumEncryptor = keychain.createSodiumEncryptor(ALICE_KEY)
-const bobSodiumEncryptor = keychain.createSodiumEncryptor(BOB_KEY)
+const aliceSodiumEncryptor = keychain.sodium.createEncryptor({ keyId: ALICE_KEY })
+const bobSodiumEncryptor = keychain.sodium.createEncryptor({ keyId: BOB_KEY })
 const plaintext = 'I really love keychains'
 const {
   box: { publicKey: bobPublicKey },
@@ -145,8 +143,8 @@ const decrypted = await bobSodiumEncryptor.decryptBox({
 #### encryptSealedBox/decryptSealedBox
 
 ```js
-const aliceSodiumEncryptor = keychain.createSodiumEncryptor(ALICE_KEY)
-const bobSodiumEncryptor = keychain.createSodiumEncryptor(BOB_KEY)
+const aliceSodiumEncryptor = keychain.sodium.createEncryptor({ keyId: ALICE_KEY })
+const bobSodiumEncryptor = keychain.sodium.createEncryptor({ keyId: BOB_KEY })
 const plaintext = 'I really love keychains'
 const {
   box: { publicKey: bobPublicKey },
@@ -192,7 +190,7 @@ const keyId = new KeyIdentifier({
   keyType: 'nacl',
 })
 
-const signer = keychain.createSecp256k1Signer(keyId)
+const signer = keychain.secp256k1.createSigner({ keyId })
 const plaintext = Buffer.from('I really love keychains')
 const signature = await signer.signBuffer({ seedId, data: plaintext })
 ```
@@ -208,7 +206,7 @@ const keyId = new KeyIdentifier({
   keyType: 'nacl',
 })
 
-const signer = keychain.createEd25519Signer(keyId)
+const signer = keychain.ed25519.createSigner({ keyId })
 const plaintext = Buffer.from('I really love keychains')
 const signature = await signer.signBuffer({ seedId, data: plaintext })
 ```

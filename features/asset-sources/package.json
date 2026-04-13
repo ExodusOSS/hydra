@@ -1,6 +1,6 @@
 {
   "name": "@exodus/asset-sources",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "description": "Provides compatibility info and metadata about asset sources (asset source = walletAccount + asset)",
   "author": "Exodus Movement, Inc.",
   "type": "module",
@@ -33,7 +33,7 @@
   "dependencies": {
     "@exodus/atoms": "^9.0.0",
     "@exodus/basic-utils": "^3.0.1",
-    "@exodus/models": "^12.2.0",
+    "@exodus/models": "^12.18.0",
     "@exodus/trezor-meta": "^3.3.6",
     "@exodus/typeforce": "^1.19.0",
     "lodash": "^4.17.21",
@@ -64,6 +64,7 @@
     "redux": "4.0.0"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

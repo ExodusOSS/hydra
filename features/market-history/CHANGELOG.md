@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.6.0...@exodus/market-history@10.6.1) (2026-02-24)
+
+### Performance
+
+- perf(market-history): use pre-allocated array instead of Array.from (#15345)
+
+## [10.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.3.1...@exodus/market-history@10.6.0) (2026-02-20)
+
+### Features
+
+- feat: improve market history fetching process perf (#15120)
+
+- feat: update all consumers to use safe strings for error namespaces (#14429)
+
+### Performance
+
+- perf(market-history): replace spread with pre-allocated arrays and reduce redundant work (#15323)
+
+## [10.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.3.1...@exodus/market-history@10.5.0) (2026-02-03)
+
+### Features
+
+- feat: improve market history fetching process perf (#15120)
+
+- feat: update all consumers to use safe strings for error namespaces (#14429)
+
+## [10.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.3.1...@exodus/market-history@10.4.0) (2025-11-19)
+
+### Features
+
+- feat: update all consumers to use safe strings for error namespaces (#14429)
+
 ## [10.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.3.0...@exodus/market-history@10.3.1) (2025-07-01)
 
 ### Bug Fixes

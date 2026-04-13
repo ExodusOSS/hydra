@@ -1,13 +1,13 @@
 import createCountdownLock from '../countdown-lock.js'
 import createSimpleObserver from '../simple-observer.js'
 import enforceObservableRules from '../enforce-rules.js'
-import type { Atom, Listener, ReadonlyAtom, Unsubscribe } from '../utils/types.js'
+import type { AnyAtom, Listener, ReadonlyAtom, Unsubscribe } from '../utils/types.js'
 
 type CombinedValue<T> = {
-  [Key in keyof T]: T[Key] extends Atom<infer U> ? U : never
+  [Key in keyof T]: T[Key] extends AnyAtom<infer U> ? U : never
 }
 
-const combine = <T, U extends { [key: string]: Atom<T> }>(
+const combine = <T, U extends { [key: string]: AnyAtom<T> }>(
   atoms: U
 ): ReadonlyAtom<CombinedValue<U>> => {
   const { notify, observe: observeSimpleObserver } = createSimpleObserver<CombinedValue<U>>()

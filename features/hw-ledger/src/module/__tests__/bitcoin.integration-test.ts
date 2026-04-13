@@ -1,4 +1,4 @@
-import Verifier from '@exodus/bip322-js/src/__tests__/src/Verifier'
+import { Verifier } from '@exodus/bip322-js'
 
 import suite from './integration.suite'
 
@@ -276,7 +276,7 @@ const fixture = {
           Verifier.verifySignature(
             'bc1qwfm5x9dl8hqpff93getkrsmqd9l2mdhhfglnrs',
             'hello world',
-            signature.toString('base64')
+            signature
           )
         ).toBeTruthy()
       },
@@ -305,7 +305,7 @@ const fixture = {
           Verifier.verifySignature(
             'bc1plfa6egr94lcda0pmcwn3gh253d5fecd92w7pp6spwrt9xgy4aypqhs29nj',
             'hello world',
-            signature.toString('base64')
+            signature
           )
         ).toBeTruthy()
       },

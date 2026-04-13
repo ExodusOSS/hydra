@@ -1,7 +1,7 @@
 import { memoize } from '@exodus/basic-utils'
 import { HDKey } from './hdkey.js'
 
-export { HARDENED_OFFSET } from './hdkey.js'
+export { HARDENED_OFFSET, getSeedId } from './hdkey.js'
 
 // TODO: remove 'versions' argument in next major, it's unused by apps
 export function fromMasterSeed(seedBuffer, versions) {

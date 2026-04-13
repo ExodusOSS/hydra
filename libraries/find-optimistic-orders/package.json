@@ -1,6 +1,6 @@
 {
   "name": "@exodus/find-optimistic-orders",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Util to match orders with specific amount (solve n-sum problem)",
   "type": "module",
   "main": "src/index.js",
@@ -34,6 +34,7 @@
     "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afind-optimistic-orders"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

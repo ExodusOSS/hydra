@@ -7,6 +7,21 @@ import { processAssetBalances, validateBalances } from '../balances-utils.js'
 const { balanceFieldsConfig } = config
 const zero = 0
 
+const allZeroFields = {
+  frozen: 0,
+  networkReserve: 0,
+  rewards: 0,
+  stakeable: 0,
+  staked: 0,
+  staking: 0,
+  unconfirmedReceived: 0,
+  unconfirmedSent: 0,
+  unspendable: 0,
+  unstaked: 0,
+  unstaking: 0,
+  walletReserve: 0,
+}
+
 describe('processAssetBalances', () => {
   it('should return an empty object if balances is empty', () => {
     const expected = {
@@ -14,6 +29,7 @@ describe('processAssetBalances', () => {
       spendable: 0,
       spendableBalance: 0,
       total: 0,
+      ...allZeroFields,
     }
     expect(processAssetBalances({ balances: {}, zero, balanceFieldsConfig })).toEqual(expected)
   })
@@ -25,6 +41,7 @@ describe('processAssetBalances', () => {
       spendable: 100,
       spendableBalance: 100,
       total: 200,
+      ...allZeroFields,
     }
     expect(processAssetBalances({ balances, zero, balanceFieldsConfig })).toEqual(expected)
   })
@@ -36,13 +53,20 @@ describe('processAssetBalances', () => {
       spendable: 50,
       spendableBalance: 50,
       total: 100,
+      ...allZeroFields,
     }
     expect(processAssetBalances({ balances, zero, balanceFieldsConfig })).toEqual(expected)
   })
 
   it('should prioritize new field names over legacy ones', () => {
     const balances = { total: 100, balance: 200, spendable: 50, spendableBalance: 100 }
-    const expected = { total: 100, balance: 100, spendable: 50, spendableBalance: 50 }
+    const expected = {
+      total: 100,
+      balance: 100,
+      spendable: 50,
+      spendableBalance: 50,
+      ...allZeroFields,
+    }
     expect(processAssetBalances({ balances, zero, balanceFieldsConfig })).toEqual(expected)
   })
 
@@ -53,6 +77,7 @@ describe('processAssetBalances', () => {
       spendable: 100,
       spendableBalance: 100,
       total: 100,
+      ...allZeroFields,
     }
     expect(processAssetBalances({ balances, zero, balanceFieldsConfig })).toEqual(expected)
   })

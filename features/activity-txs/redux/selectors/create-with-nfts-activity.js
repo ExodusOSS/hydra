@@ -4,7 +4,7 @@ import assert from 'minimalistic-assert'
 import { formatNftTx, formatUnindexedNftTx } from '../utils/activity-formatters/format-nft.js'
 
 const selectorFactory =
-  (createAssetSourceNftTxsById, activeNftsSelector, assetsSelector) =>
+  (createAssetSourceNftTxsById, activeNftsSelector, getAssetSelector) =>
   ({ createActivitySelector, nftsNetworkNameToAssetName }) => {
     assert(createActivitySelector, 'please provide activitySelector')
     assert(nftsNetworkNameToAssetName, 'please provide nftsNetworkNameToAssetName')
@@ -21,9 +21,9 @@ const selectorFactory =
         return createSelector(
           nftsSelector,
           activeNftsSelector,
-          assetsSelector,
+          getAssetSelector,
           activitySelector,
-          (nftsByTxId, activeNfts, assets, activity) => {
+          (nftsByTxId, activeNfts, getAsset, activity) => {
             const spamNftIdsSet = new Set(
               Object.values(activeNfts)
                 .flat()
@@ -46,7 +46,7 @@ const selectorFactory =
                     formatNftTx({
                       ...activityItem,
                       nft,
-                      asset: assets[activityItem.assetName],
+                      asset: getAsset(activityItem.assetName),
                       assetName: activityItem.assetName,
                     })
                   )
@@ -69,7 +69,7 @@ const selectorFactory =
               .forEach((nftTx) => {
                 hasChanges = true
                 const assetName = nftsNetworkNameToAssetName[nftTx.network]
-                const asset = assets[assetName]
+                const asset = getAsset(assetName)
                 const formatted = formatUnindexedNftTx({ nftTx, assetName: asset.name })
 
                 resultActivity.push(formatted)
@@ -92,7 +92,7 @@ const createWithNftsActivitySelectorDefinition = {
   dependencies: [
     { module: 'nfts', selector: 'createAssetSourceNftTxsById', optional: true },
     { module: 'nfts', selector: 'activeNfts', optional: true },
-    { module: 'assets', selector: 'all' },
+    { module: 'assets', selector: 'getAsset' },
   ],
 }
 

@@ -43,48 +43,6 @@ const createAssetSourceTxsSelector = memoize(
   ({ assetName, walletAccount }) => `${assetName}_${walletAccount}`
 )
 
-const areActivitiesEqual = (obj1 = {}, obj2 = {}) => {
-  // Get wallet account keys from both objects
-  const obj1WalletAccounts = Object.keys(obj1)
-  const obj2WalletAccounts = Object.keys(obj2)
-
-  // Check if both objects have the same number of wallet accounts
-  if (obj1WalletAccounts.length !== obj2WalletAccounts.length) {
-    return false
-  }
-
-  // Iterate over each wallet account in obj1
-  for (const walletAccount of obj1WalletAccounts) {
-    // Check if obj2 has the same wallet account
-    if (!Object.prototype.hasOwnProperty.call(obj2, walletAccount)) {
-      return false
-    }
-
-    const obj1Assets = obj1[walletAccount] || {}
-    const obj2Assets = obj2[walletAccount] || {}
-
-    const obj1AssetNames = Object.keys(obj1Assets)
-    const obj2AssetNames = Object.keys(obj2Assets)
-
-    if (obj1AssetNames.length !== obj2AssetNames.length) {
-      return false
-    }
-
-    // Iterate over each asset in obj1Assets
-    for (const assetName of obj1AssetNames) {
-      // Check if obj2Assets has the same asset name and the data matches
-      if (
-        !Object.prototype.hasOwnProperty.call(obj2Assets, assetName) ||
-        obj1Assets[assetName] !== obj2Assets[assetName]
-      ) {
-        return false
-      }
-    }
-  }
-
-  return true
-}
-
 const createActivityTxsAtom = ({
   txLogsAtom,
   accountStatesAtom,
@@ -98,82 +56,225 @@ const createActivityTxsAtom = ({
   })
 
   let prevResult = Object.create(null)
+  const perAssetCache = new Map()
+  let cacheEntriesCount = 0
+  let runIdCounter = 0
 
-  const selector = async ({ txLogs, accountStates }) => {
-    const { value } = txLogs
-    const { value: accountStatesValue } = accountStates
+  const getWalletCache = (walletAccount) => {
+    let walletCache = perAssetCache.get(walletAccount)
+    if (!walletCache) {
+      walletCache = new Map()
+      perAssetCache.set(walletAccount, walletCache)
+    }
 
-    // Process each wallet account asynchronously
-    const resultEntries = await Promise.all(
-      Object.entries(value).map(async ([walletAccount, accountTxLogs]) => {
-        // Process each asset within the wallet account asynchronously
-        const assetEntries = await Promise.all(
-          Object.entries(accountTxLogs).map(async ([assetName, assetTxSet]) => {
-            const asset = assetsModule.getAsset(assetName)
-            const baseAssetName = asset.baseAsset.name
+    return walletCache
+  }
 
-            if (asset?.api?.getActivityTxs) {
-              let activityOptions
+  function processActivityForAsset(
+    walletAccount,
+    assetName,
+    assetTxSet,
+    accountStatesValue,
+    runId
+  ) {
+    const walletCache = getWalletCache(walletAccount)
+    const cached = walletCache.get(assetName)
+    const asset = assetsModule.getAsset(assetName)
+    const baseAssetName = asset.baseAsset.name
+    const baseAssetAccountState = accountStatesValue?.[walletAccount]?.[baseAssetName]
 
-              if (asset?.api?.getActivityOptions) {
-                const baseAssetAccountState = accountStatesValue?.[walletAccount]?.[baseAssetName]
+    if (
+      cached &&
+      cached.txSet === assetTxSet &&
+      cached.baseAssetAccountState === baseAssetAccountState
+    ) {
+      cached.lastSeen = runId
+      return cached.output
+    }
 
-                const getOptionsForAssetSource = createAssetSourceActivityOptionsSelector({
-                  assetName,
-                  walletAccount,
-                })
+    const txs =
+      cached && cached.txSet === assetTxSet
+        ? cached.txs
+        : createAssetSourceTxsSelector({ assetName, walletAccount })({ txSet: assetTxSet })
 
-                activityOptions = await getOptionsForAssetSource({
-                  accountState: baseAssetAccountState,
-                  asset,
-                })
-              }
-
-              const txs = createAssetSourceTxsSelector({ assetName, walletAccount })({
-                txSet: assetTxSet,
+    if (asset?.api?.getActivityTxs) {
+      let activityOptions
+      if (asset?.api?.getActivityOptions) {
+        activityOptions =
+          cached &&
+          cached.baseAssetAccountState === baseAssetAccountState &&
+          cached.baseAssetName === baseAssetName
+            ? cached.activityOptions
+            : createAssetSourceActivityOptionsSelector({ assetName, walletAccount })({
+                accountState: baseAssetAccountState,
+                asset,
               })
+      }
 
-              const getActivityForAssetSource = createAssetSourceActivityTxsSelector({
-                assetName,
-                walletAccount,
-              })
-
-              try {
-                const activityTxs = await getActivityForAssetSource({
-                  asset,
-                  txs,
-                  activityOptions,
-                })
-
-                return [assetName, activityTxs]
-              } catch (e) {
-                errorTracking.track({ error: e, namespace: 'activityTxs', context: { assetName } })
-                logger.warn(`failed to get activity txs for asset: ${assetName}`, e)
-                return [assetName, []]
-              }
-            }
-
-            const txs = createAssetSourceTxsSelector({ assetName, walletAccount })({
-              txSet: assetTxSet,
-            })
-
-            return [assetName, txs]
-          })
-        )
-
-        return [walletAccount, Object.fromEntries(assetEntries)]
+      const getActivityForAssetSource = createAssetSourceActivityTxsSelector({
+        assetName,
+        walletAccount,
       })
-    )
 
-    const result = Object.fromEntries(resultEntries)
+      try {
+        const activityTxs = getActivityForAssetSource({
+          asset,
+          txs,
+          activityOptions,
+        })
 
-    if (areActivitiesEqual(result, prevResult)) {
+        if (!cached) cacheEntriesCount += 1
+        walletCache.set(assetName, {
+          baseAssetName,
+          baseAssetAccountState,
+          txSet: assetTxSet,
+          txs,
+          activityOptions,
+          output: activityTxs,
+          lastSeen: runId,
+        })
+
+        return activityTxs
+      } catch (e) {
+        errorTracking?.track({
+          error: e,
+          context: { assetName },
+        })
+        logger?.warn?.(`failed to get activity txs for asset: ${assetName}`, e)
+
+        if (!cached) cacheEntriesCount += 1
+        walletCache.set(assetName, {
+          baseAssetName,
+          baseAssetAccountState,
+          txSet: assetTxSet,
+          txs,
+          activityOptions,
+          output: [],
+          lastSeen: runId,
+        })
+
+        return []
+      }
+    }
+
+    if (!cached) cacheEntriesCount += 1
+    walletCache.set(assetName, {
+      baseAssetName,
+      baseAssetAccountState,
+      txSet: assetTxSet,
+      txs,
+      activityOptions: undefined,
+      output: txs,
+      lastSeen: runId,
+    })
+
+    return txs
+  }
+
+  const selector = ({ txLogs, accountStates }) => {
+    const runId = (runIdCounter += 1)
+    const txLogsValue = txLogs?.value ?? Object.create(null)
+    const accountStatesValue = accountStates?.value ?? Object.create(null)
+
+    let activeCount = 0
+
+    const nextResult = Object.create(null)
+    let reusedAllWalletObjects = true
+    let walletCount = 0
+    let prevWalletCount = 0
+
+    for (const prevWalletAccount in prevResult) {
+      if (Object.prototype.hasOwnProperty.call(prevResult, prevWalletAccount)) prevWalletCount += 1
+    }
+
+    for (const walletAccount in txLogsValue) {
+      if (!Object.prototype.hasOwnProperty.call(txLogsValue, walletAccount)) continue
+      walletCount += 1
+
+      const accountTxLogs = txLogsValue[walletAccount] ?? Object.create(null)
+      const prevWallet = prevResult[walletAccount]
+
+      let canReuseWallet = Boolean(prevWallet)
+      let assetsCount = 0
+
+      if (prevWallet) {
+        for (const assetName in accountTxLogs) {
+          if (!Object.prototype.hasOwnProperty.call(accountTxLogs, assetName)) continue
+          assetsCount += 1
+          activeCount += 1
+
+          const activityTxs = processActivityForAsset(
+            walletAccount,
+            assetName,
+            accountTxLogs[assetName],
+            accountStatesValue,
+            runId
+          )
+
+          if (prevWallet[assetName] !== activityTxs) {
+            canReuseWallet = false
+            break
+          }
+        }
+
+        if (canReuseWallet) {
+          let prevWalletAssetsCount = 0
+          for (const assetName in prevWallet) {
+            if (Object.prototype.hasOwnProperty.call(prevWallet, assetName)) {
+              prevWalletAssetsCount += 1
+            }
+          }
+
+          if (prevWalletAssetsCount === assetsCount) {
+            nextResult[walletAccount] = prevWallet
+            continue
+          }
+
+          canReuseWallet = false
+        }
+      }
+
+      const nextWallet = Object.create(null)
+      for (const assetName in accountTxLogs) {
+        if (!Object.prototype.hasOwnProperty.call(accountTxLogs, assetName)) continue
+        activeCount += 1
+
+        const activityTxs = processActivityForAsset(
+          walletAccount,
+          assetName,
+          accountTxLogs[assetName],
+          accountStatesValue,
+          runId
+        )
+        nextWallet[assetName] = activityTxs
+      }
+
+      nextResult[walletAccount] = nextWallet
+      reusedAllWalletObjects = false
+    }
+
+    if (reusedAllWalletObjects && walletCount === prevWalletCount) {
       return prevResult
     }
 
-    prevResult = result
+    if (activeCount > 0 && cacheEntriesCount > activeCount * 2) {
+      for (const [walletAccount, walletCache] of perAssetCache) {
+        for (const [assetName, cached] of walletCache) {
+          if (cached.lastSeen !== runId) {
+            walletCache.delete(assetName)
+            cacheEntriesCount -= 1
+          }
+        }
 
-    return result
+        if (walletCache.size === 0) {
+          perAssetCache.delete(walletAccount)
+        }
+      }
+    }
+
+    prevResult = nextResult
+
+    return nextResult
   }
 
   return compute({

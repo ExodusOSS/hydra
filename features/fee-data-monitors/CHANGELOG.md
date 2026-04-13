@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fee-data-monitors@5.0.4...@exodus/fee-data-monitors@5.0.5) (2026-02-24)
+
+**Note:** Version bump only for package @exodus/fee-data-monitors
+
 ## [5.0.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fee-data-monitors@5.0.3...@exodus/fee-data-monitors@5.0.4) (2025-02-06)
 
 ### Bug Fixes

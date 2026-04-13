@@ -478,7 +478,7 @@ export const SERIALIZED_EVENTS = [
                 "contractGasLimit": 1000000,
                 "displayNetworkName": "Base",
                 "displayNetworkTicker": "BASE",
-                "displayTicker": "BASEETH",
+                "displayTicker": "ETH",
                 "gasLimit": 21000,
                 "gradientColors": [
                   "#474A73",
@@ -1210,7 +1210,7 @@ export const SERIALIZED_EVENTS = [
                 "contractGasLimit": 1000000,
                 "displayNetworkName": "Arbitrum Nova",
                 "displayNetworkTicker": "ARBN",
-                "displayTicker": "ARBETH",
+                "displayTicker": "ETH",
                 "gasLimit": 21000,
                 "gradientColors": [
                   "#FF9900",
@@ -1282,7 +1282,7 @@ export const SERIALIZED_EVENTS = [
                 "contractGasLimit": 1000000,
                 "displayNetworkName": "Arbitrum One",
                 "displayNetworkTicker": "ARB1",
-                "displayTicker": "ARBETH",
+                "displayTicker": "ETH",
                 "gasLimit": 21000,
                 "gradientColors": [
                   "#0A3377",
@@ -1642,7 +1642,7 @@ export const SERIALIZED_EVENTS = [
                 "contractGasLimit": 1000000,
                 "displayNetworkName": "Optimism",
                 "displayNetworkTicker": "OP",
-                "displayTicker": "OPETH",
+                "displayTicker": "ETH",
                 "gasLimit": 21000,
                 "gradientColors": [
                   "#474A73",
@@ -24743,7 +24743,7 @@ export const SERIALIZED_EVENTS = [
                 "contractGasLimit": 1000000,
                 "displayNetworkName": "Base",
                 "displayNetworkTicker": "BASE",
-                "displayTicker": "BASEETH",
+                "displayTicker": "ETH",
                 "gasLimit": 21000,
                 "gradientColors": [
                   "#474A73",
@@ -25475,7 +25475,7 @@ export const SERIALIZED_EVENTS = [
                 "contractGasLimit": 1000000,
                 "displayNetworkName": "Arbitrum Nova",
                 "displayNetworkTicker": "ARBN",
-                "displayTicker": "ARBETH",
+                "displayTicker": "ETH",
                 "gasLimit": 21000,
                 "gradientColors": [
                   "#FF9900",
@@ -25547,7 +25547,7 @@ export const SERIALIZED_EVENTS = [
                 "contractGasLimit": 1000000,
                 "displayNetworkName": "Arbitrum One",
                 "displayNetworkTicker": "ARB1",
-                "displayTicker": "ARBETH",
+                "displayTicker": "ETH",
                 "gasLimit": 21000,
                 "gradientColors": [
                   "#0A3377",
@@ -25907,7 +25907,7 @@ export const SERIALIZED_EVENTS = [
                 "contractGasLimit": 1000000,
                 "displayNetworkName": "Optimism",
                 "displayNetworkTicker": "OP",
-                "displayTicker": "OPETH",
+                "displayTicker": "ETH",
                 "gasLimit": 21000,
                 "gradientColors": [
                   "#474A73",

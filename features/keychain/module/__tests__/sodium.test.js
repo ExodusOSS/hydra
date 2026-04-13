@@ -8,7 +8,7 @@ const seed = await mnemonicToSeed({
   mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
 })
 
-const seedId = getSeedId(seed)
+const seedId = await getSeedId(seed)
 
 const ALICE_KEY = new KeyIdentifier({
   derivationAlgorithm: 'SLIP10',
@@ -24,10 +24,10 @@ const BOB_KEY = new KeyIdentifier({
 
 describe('libsodium', () => {
   it('should have sign keys compatibility with SLIP10', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
     const exportedKeys = await keychain.exportKey({ seedId, keyId: ALICE_KEY })
 
-    const sodiumEncryptor = await keychain.createSodiumEncryptor(ALICE_KEY)
+    const sodiumEncryptor = await keychain.sodium.createEncryptor({ keyId: ALICE_KEY })
     const {
       sign: { publicKey },
     } = await sodiumEncryptor.getSodiumKeysFromSeed({ seedId })
@@ -35,7 +35,7 @@ describe('libsodium', () => {
   })
 
   it('should not export private keys by default', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
 
     const {
       sign: { privateKey: signPrivateKey },
@@ -49,7 +49,7 @@ describe('libsodium', () => {
   })
 
   it('should allow exporting private keys', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
 
     const {
       sign: { privateKey: signPrivateKey },
@@ -67,7 +67,7 @@ describe('libsodium', () => {
   })
 
   it('should have sign keys compatibility with SLIP10 (using sodium instance)', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
     const exportedKeys = await keychain.exportKey({ seedId, keyId: ALICE_KEY })
 
     const {
@@ -78,8 +78,8 @@ describe('libsodium', () => {
   })
 
   it('should sign', async () => {
-    const keychain = createKeychain({ seed })
-    const sodiumEncryptor = await keychain.createSodiumEncryptor(ALICE_KEY)
+    const keychain = await createKeychain({ seed })
+    const sodiumEncryptor = await keychain.sodium.createEncryptor({ keyId: ALICE_KEY })
     const plaintext = Buffer.from('I really love keychains')
     const signature = await sodiumEncryptor.sign({ seedId, data: plaintext })
     const isVerified = await sodiumEncryptor.signOpen({ seedId, data: signature })
@@ -97,7 +97,7 @@ describe('libsodium', () => {
   })
 
   it('should sign (using sodium instance)', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
     const plaintext = Buffer.from('I really love keychains')
 
     const signature = await keychain.sodium.sign({ seedId, keyId: ALICE_KEY, data: plaintext })
@@ -118,8 +118,8 @@ describe('libsodium', () => {
   })
 
   it('should encryptSecretBox and decryptSecretBox', async () => {
-    const keychain = createKeychain({ seed })
-    const sodiumEncryptor = await keychain.createSodiumEncryptor(ALICE_KEY)
+    const keychain = await createKeychain({ seed })
+    const sodiumEncryptor = await keychain.sodium.createEncryptor({ keyId: ALICE_KEY })
     const plaintext = 'I really love keychains'
     const ciphertext = await sodiumEncryptor.encryptSecretBox({
       seedId,
@@ -133,7 +133,7 @@ describe('libsodium', () => {
   })
 
   it('should encryptSecretBox and decryptSecretBox (using sodim instance)', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
     const plaintext = 'I really love keychains'
 
     const ciphertext = await keychain.sodium.encryptSecretBox({
@@ -150,9 +150,9 @@ describe('libsodium', () => {
   })
 
   it('should encryptBox and decryptBox', async () => {
-    const keychain = createKeychain({ seed })
-    const aliceSodiumEncryptor = await keychain.createSodiumEncryptor(ALICE_KEY)
-    const bobSodiumEncryptor = await keychain.createSodiumEncryptor(BOB_KEY)
+    const keychain = await createKeychain({ seed })
+    const aliceSodiumEncryptor = await keychain.sodium.createEncryptor({ keyId: ALICE_KEY })
+    const bobSodiumEncryptor = await keychain.sodium.createEncryptor({ keyId: BOB_KEY })
     const plaintext = 'I really love keychains'
     const {
       box: { publicKey: bobPublicKey },
@@ -174,7 +174,7 @@ describe('libsodium', () => {
   })
 
   it('should encryptBox and decryptBox (using sodium instance)', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
     const plaintext = 'I really love keychains'
 
     const {
@@ -200,9 +200,9 @@ describe('libsodium', () => {
   })
 
   it('should encryptSealedBox and decryptSealedBox', async () => {
-    const keychain = createKeychain({ seed })
-    const aliceSodiumEncryptor = await keychain.createSodiumEncryptor(ALICE_KEY)
-    const bobSodiumEncryptor = await keychain.createSodiumEncryptor(BOB_KEY)
+    const keychain = await createKeychain({ seed })
+    const aliceSodiumEncryptor = await keychain.sodium.createEncryptor({ keyId: ALICE_KEY })
+    const bobSodiumEncryptor = await keychain.sodium.createEncryptor({ keyId: BOB_KEY })
     const plaintext = 'I really love keychains'
     const {
       box: { publicKey: bobPublicKey },
@@ -220,7 +220,7 @@ describe('libsodium', () => {
   })
 
   it('should encryptSealedBox and decryptSealedBox (using sodium instance)', async () => {
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
     const plaintext = 'I really love keychains'
 
     const {

@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@3.6.1...@exodus/hardware-wallets@3.6.2) (2026-02-22)
+
+### Bug Fixes
+
+- fix: always pass walletAccount for ensureDevice (#15327)
+
+## [3.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@3.6.0...@exodus/hardware-wallets@3.6.1) (2026-02-09)
+
+### Bug Fixes
+
+- fix(hardware-wallets): connect ledger evm from fresh wallets (#15201)
+
+## [3.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@3.5.0...@exodus/hardware-wallets@3.6.0) (2026-01-21)
+
+### Features
+
+- feat: trezor passphrase support (#14965)
+
+## [3.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@3.4.0...@exodus/hardware-wallets@3.5.0) (2025-12-11)
+
+### Features
+
+- feat: throw device unininitialized error for hw (#14601)
+
+### Bug Fixes
+
+- fix: various trezor and hardware-wallets fixes (#14502)
+
+## [3.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@3.4.0...@exodus/hardware-wallets@3.4.1) (2025-11-28)
+
+### Bug Fixes
+
+- fix: various trezor and hardware-wallets fixes (#14502)
+
+## [3.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@3.3.0...@exodus/hardware-wallets@3.4.0) (2025-11-13)
+
+### Features
+
+- feat: trezor bluetooth (#14374)
+
+## [3.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@3.2.0...@exodus/hardware-wallets@3.3.0) (2025-10-27)
+
+### Features
+
+- feat: add delegated field on WalletAccount (#14195)
+
+## [3.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@3.1.0...@exodus/hardware-wallets@3.2.0) (2025-10-09)
+
+### Features
+
+- feat: add trezor safe 7 support (#13965)
+
 ## [3.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@3.0.2...@exodus/hardware-wallets@3.1.0) (2025-10-01)
 
 ### Features

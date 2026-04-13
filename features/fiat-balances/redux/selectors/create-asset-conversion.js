@@ -2,11 +2,11 @@ import { memoize } from '@exodus/basic-utils'
 import { createSelector } from 'reselect'
 import { conversionByRate } from '@exodus/currency'
 
-const selectorFactory = (fiatCurrencySelector, assetsSelector, createAssetRateSelector) =>
+const selectorFactory = (fiatCurrencySelector, createAssetSelector, createAssetRateSelector) =>
   memoize((assetName) =>
     createSelector(
       fiatCurrencySelector,
-      (state) => assetsSelector(state)[assetName],
+      createAssetSelector(assetName),
       createAssetRateSelector(assetName),
       (fiatCurrency, asset, rate) => {
         let fiatRate
@@ -27,7 +27,7 @@ const createConversionSelectorDefinition = {
   dependencies: [
     //
     { selector: 'currencyUnitType', module: 'locale' },
-    { selector: 'all', module: 'assets' },
+    { selector: 'createAssetSelector', module: 'assets' },
     { selector: 'assetRate', module: 'rates' },
   ],
 }

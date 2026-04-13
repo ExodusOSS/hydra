@@ -21,6 +21,13 @@ const UI_TX_TYPE_FROM_EXODEX = new Map([
   [EXODEX_TX_TYPES.CLEANUP, TX_TYPES.CLEANUP],
 ])
 
+function getSwapDisplayAmount({ tx, order }) {
+  if (tx.coinName === order.fromAsset && order.fromAmount) return order.fromAmount.abs()
+  if (tx.coinName === order.toAsset && order.toAmount) return order.toAmount.abs()
+  if (tx.coinAmount?.abs) return tx.coinAmount.abs()
+  return null
+}
+
 function getOrderType({ order, tx }) {
   const txInfoFromOrder = tx
     ? order.txIds?.find((txFromOrder) => txFromOrder.txId === tx.txId)
@@ -58,24 +65,30 @@ const getSwapSharedProps = ({
   }
 }
 
-export const formatSwapActivity = ({ tx, order, personalNote }) =>
-  getSwapSharedProps({
+export const formatSwapActivity = ({ tx, order, personalNote }) => {
+  const displayAmount = getSwapDisplayAmount({ tx, order })
+  if (!displayAmount) return null
+
+  return getSwapSharedProps({
     date: tx.date,
     assetName: tx.coinName,
     txId: tx.txId,
     tx,
     order,
     failed: !!(tx.failed || order.error),
-    displayAmount: order.toAmount.abs(),
+    displayAmount,
     personalNote,
     pending: order.exodusStatus === FINAL_ORDER_STATUS.inProgress,
   })
+}
 
 export const formatUnindexedOrder = ({ order, assetName: _assetName, personalNote }) => {
   const isFromIndexlessAsset = order.fromAsset === _assetName
   const assetName = isFromIndexlessAsset ? order.fromAsset : order.toAsset
-  let displayAmount = isFromIndexlessAsset ? order.fromAmount : order.toAmount
-  displayAmount = displayAmount.abs()
+  const amount = isFromIndexlessAsset ? order.fromAmount : order.toAmount
+  if (!amount) return null
+
+  const displayAmount = amount.abs()
   const txId = isFromIndexlessAsset ? order.fromTxId : order.toTxId
 
   return getSwapSharedProps({

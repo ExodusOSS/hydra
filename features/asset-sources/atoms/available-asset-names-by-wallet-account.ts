@@ -14,6 +14,9 @@ type Dependencies = {
   assetsAtom: AssetsAtom
   availableAssetNamesAtom: Atom<string[]>
   enabledWalletAccountsAtom: Atom<WalletAccounts>
+  config?: {
+    delegatedAllowedAssetNames: string[]
+  }
 }
 
 type CombinedAtomResult = {
@@ -36,6 +39,10 @@ type LedgerSelectorState = {
 
 type PasskeysSelectorState = {
   assets: Assets
+  availableAssetNames: string[]
+}
+
+type DelegatedSelectorState = {
   availableAssetNames: string[]
 }
 
@@ -126,12 +133,26 @@ const passkeysAvailableAssetsSelector = createSelector(
   }
 )
 
+const createDelegatedAvailableAssetsSelector = (delegatedAllowedAssetNames: string[]) =>
+  createSelector(
+    (state: DelegatedSelectorState) => state.availableAssetNames,
+    (availableAssetNames) => {
+      const allowedAssets = new Set(delegatedAllowedAssetNames)
+      return availableAssetNames.filter((name) => allowedAssets.has(name))
+    }
+  )
+
 const createAvailableAssetNamesByWalletAccountAtom = ({
   assetsAtom,
   availableAssetNamesAtom,
   enabledWalletAccountsAtom,
-}: Dependencies): ReadonlyAtom<AvailableAssetNamesByWalletAccount> =>
-  dedupe(
+  config = { delegatedAllowedAssetNames: ['solana', 'usdcoin_solana'] },
+}: Dependencies): ReadonlyAtom<AvailableAssetNamesByWalletAccount> => {
+  const delegatedAvailableAssetsSelector = createDelegatedAvailableAssetsSelector(
+    config.delegatedAllowedAssetNames
+  )
+
+  return dedupe(
     compute({
       atom: <Atom<CombinedAtomResult>>combine({
         walletAccounts: enabledWalletAccountsAtom,
@@ -139,7 +160,13 @@ const createAvailableAssetNamesByWalletAccountAtom = ({
         assets: assetsAtom,
       }),
       selector: ({ assets, walletAccounts, availableAssetNames }: CombinedAtomResult) => {
-        return mapValues(walletAccounts, ({ source, model }: WalletAccount) => {
+        return mapValues(walletAccounts, ({ source, model, delegated }: WalletAccount) => {
+          if (delegated) {
+            return delegatedAvailableAssetsSelector({
+              availableAssetNames,
+            })
+          }
+
           if (source === WalletAccount.TREZOR_SRC) {
             return trezorAvailableAssetsSelector({
               assets: assets.value,
@@ -168,11 +195,12 @@ const createAvailableAssetNamesByWalletAccountAtom = ({
       },
     }) as Atom<AvailableAssetNamesByWalletAccount>
   ) as ReadonlyAtom<AvailableAssetNamesByWalletAccount>
+}
 
 export const availableAssetNamesByWalletAccountAtomDefinition = {
   id: 'availableAssetNamesByWalletAccountAtom',
   type: 'atom',
   factory: createAvailableAssetNamesByWalletAccountAtom,
-  dependencies: ['assetsAtom', 'availableAssetNamesAtom', 'enabledWalletAccountsAtom'],
+  dependencies: ['assetsAtom', 'availableAssetNamesAtom', 'enabledWalletAccountsAtom', 'config?'],
   public: true,
 } as const satisfies Definition

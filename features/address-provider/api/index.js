@@ -1,4 +1,9 @@
-const createAddressProviderApi = ({ addressProvider, lockedAtom, walletAccountsAtom }) => {
+const createAddressProviderApi = ({
+  addressProvider,
+  lockedAtom,
+  walletAccountsAtom,
+  addressCacheAtom,
+}) => {
   const getAddressFromResponse =
     (fn) =>
     async (...args) =>
@@ -27,6 +32,10 @@ const createAddressProviderApi = ({ addressProvider, lockedAtom, walletAccountsA
     withWalletAccountInstance(addressProvider.getReceiveAddress.bind(addressProvider))
   )
 
+  const getReceiveAddressObject = withWalletAccountInstance(
+    addressProvider.getReceiveAddress.bind(addressProvider)
+  )
+
   const getUnusedAddress = withWalletAccountInstance(
     addressProvider.getUnusedAddress.bind(addressProvider)
   )
@@ -36,10 +45,14 @@ const createAddressProviderApi = ({ addressProvider, lockedAtom, walletAccountsA
       getAddress,
       getDefaultAddress,
       getReceiveAddress,
+      getReceiveAddressObject,
       getSupportedPurposes,
       getDefaultPurpose: addressProvider.getDefaultPurpose,
       getUnusedAddress,
       isOwnAddress,
+      awaitAddressCacheLoaded: async () => {
+        await addressCacheAtom.get()
+      },
     },
   }
 }
@@ -48,7 +61,7 @@ const addressProviderApiDefinition = {
   id: 'addressProviderApi',
   type: 'api',
   factory: createAddressProviderApi,
-  dependencies: ['addressProvider', 'lockedAtom', 'walletAccountsAtom'],
+  dependencies: ['addressProvider', 'lockedAtom', 'walletAccountsAtom', 'addressCacheAtom'],
 }
 
 export default addressProviderApiDefinition

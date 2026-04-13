@@ -9,7 +9,7 @@ const seed = await mnemonicToSeed({
   mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
 })
 
-const seedId = getSeedId(seed)
+const seedId = await getSeedId(seed)
 
 describe('compatibility', () => {
   it('should have libsodium.sign keys compatible with SLIP10', async () => {
@@ -18,7 +18,7 @@ describe('compatibility', () => {
     // This is because Ed25519 allows for multiple cofactors, allowing
     // multiple publicKeys (different order) for the same private key.
 
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
     const keyId = createKeyIdentifierForExodus({ exoType: 'FUSION' })
     const exportedKeys = await keychain.exportKey({
       seedId,
@@ -27,7 +27,7 @@ describe('compatibility', () => {
     })
 
     // Public keys should be the same
-    const sodiumEncryptor = keychain.createSodiumEncryptor(keyId)
+    const sodiumEncryptor = keychain.sodium.createEncryptor({ keyId })
     const {
       sign: { publicKey },
     } = await sodiumEncryptor.getSodiumKeysFromSeed({ seedId })
@@ -46,13 +46,13 @@ describe('compatibility', () => {
         '90ff0a2a3311957e2920223e1c5b495b731f00834ea431769a5b21cc194a6a7aa14377f1736060f5a685202efe152c18b2db87be300f93fd6a75552464567b00',
     }
 
-    const keychain = createKeychain({ seed })
+    const keychain = await createKeychain({ seed })
     const keyId = new KeyIdentifier({
       assetName: 'solana',
       derivationAlgorithm: 'SLIP10',
       derivationPath: "m/44'/501'/0'/0'/0'",
     })
-    const signer = keychain.createEd25519Signer(keyId)
+    const signer = keychain.ed25519.createSigner({ keyId })
     const signature = await signer.signBuffer({
       seedId,
       keyId,
