@@ -3,6 +3,113 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0-rc.105](https://github.com/ExodusMovement/exodus/compare/@exodus/headless@5.0.0-rc.104...@exodus/headless@5.0.0-rc.105) (2026-11-09)
+
+### Features
+
+- **asset-sources:** limit a wallet account to configured networks ([#48740](https://github.com/ExodusMovement/exodus/issues/48740)) ([5a9d173](https://github.com/ExodusMovement/exodus/commit/5a9d173f7335ed6112c644b6512756c5ca738909))
+
+## [5.0.0-rc.104](https://github.com/ExodusMovement/exodus/compare/@exodus/headless@5.0.0-rc.103...@exodus/headless@5.0.0-rc.104) (2026-11-03)
+
+### Features
+
+- **app-process-mobile:** take @react-native-community/netinfo as a peer dependency ([#48362](https://github.com/ExodusMovement/exodus/issues/48362)) ([112e99d](https://github.com/ExodusMovement/exodus/commit/112e99dee8eed9deb7585ba7ce0449b60590b83f))
+
+## [5.0.0-rc.103](https://github.com/ExodusMovement/exodus/compare/@exodus/headless@5.0.0-rc.102...@exodus/headless@5.0.0-rc.103) (2026-10-06)
+
+### Bug Fixes
+
+- **headless:** preserve safe reports when wallet state reads fail ([#46464](https://github.com/ExodusMovement/exodus/issues/46464)) ([7108ea1](https://github.com/ExodusMovement/exodus/commit/7108ea1c107301f382ef56c583c018e7e516a403))
+
+## [5.0.0-rc.102](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.101...@exodus/headless@5.0.0-rc.102) (2026-07-20)
+
+### ⚠ BREAKING CHANGES
+
+- move wallet state atoms to wallet (#17228)
+
+### Bug Fixes
+
+- **argo:** add package.json exports map ([#17429](https://github.com/ExodusMovement/exodus-hydra/issues/17429)) ([61bde73](https://github.com/ExodusMovement/exodus-hydra/commit/61bde73f658c1dedf12c680c066e55d7f55d6d2e))
+
+### Code Refactoring
+
+- move wallet state atoms to wallet ([#17228](https://github.com/ExodusMovement/exodus-hydra/issues/17228)) ([faba834](https://github.com/ExodusMovement/exodus-hydra/commit/faba834045ccac67f100659befd4685886ca9dee))
+
+## [5.0.0-rc.101](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.100...@exodus/headless@5.0.0-rc.101) (2026-07-01)
+
+### Features
+
+- **headless:** type redux IOC selectors ([#16944](https://github.com/ExodusMovement/exodus-hydra/issues/16944)) ([2bf3b9b](https://github.com/ExodusMovement/exodus-hydra/commit/2bf3b9bd7b3d211c4a72b73f3572b1937bc8eb99))
+
+### Bug Fixes
+
+- **headless:** resolve redux IOC selector types under nodenext ([#17426](https://github.com/ExodusMovement/exodus-hydra/issues/17426)) ([9785eb1](https://github.com/ExodusMovement/exodus-hydra/commit/9785eb18b6961a58a55c2c13cf5cbea9c4947350))
+
+## [5.0.0-rc.100](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.98...@exodus/headless@5.0.0-rc.100) (2026-06-24)
+
+### Features
+
+- **account-security:** add active security warnings to Safe Report ([#17220](https://github.com/ExodusMovement/exodus-hydra/issues/17220)) ([f55a50e](https://github.com/ExodusMovement/exodus-hydra/commit/f55a50eef2a937e00170483d3943af7eee2edc71))
+- **oxlint-plugin-hydra:** port @exodus/\* eslint rules to oxlint jsPlugins ([#17280](https://github.com/ExodusMovement/exodus-hydra/issues/17280)) ([76e483c](https://github.com/ExodusMovement/exodus-hydra/commit/76e483cf8afa7035ce98279ae2ff80deb4ae6a50)), closes [#17278](https://github.com/ExodusMovement/exodus-hydra/issues/17278)
+
+## [5.0.0-rc.98](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.97...@exodus/headless@5.0.0-rc.98) (2026-06-03)
+
+**Note:** Version bump only for package @exodus/headless
+
+## [5.0.0-rc.97](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.96...@exodus/headless@5.0.0-rc.97) (2026-06-03)
+
+### ⚠ BREAKING CHANGES
+
+- remove multi-seed support from wallet/keychain (#16379)
+
+### Features
+
+- **keychain:** expose needed exports at the root ([#16638](https://github.com/ExodusMovement/exodus-hydra/issues/16638)) ([30b1e96](https://github.com/ExodusMovement/exodus-hydra/commit/30b1e9644d476958f8a8c53e36a87dec3d27c7fb)), closes [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361) [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361)
+
+### Code Refactoring
+
+- remove multi-seed support from wallet/keychain ([#16379](https://github.com/ExodusMovement/exodus-hydra/issues/16379)) ([e63510f](https://github.com/ExodusMovement/exodus-hydra/commit/e63510f2b57b7bcb7704d993baf2e75d11edb3ad))
+
+## [5.0.0-rc.96](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.95...@exodus/headless@5.0.0-rc.96) (2026-05-01)
+
+### ⚠ BREAKING CHANGES
+
+- @exodus/crypto-news-monitor package is removed.
+  Consumers relying on the cryptoNews feature in the headless SDK
+  must unregister it from their SDK build.
+
+### Features
+
+- feat: update locale in headless (#16268)
+
+- chore: remove @exodus/crypto-news-monitor (#16128)
+
+## [5.0.0-rc.95](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.94...@exodus/headless@5.0.0-rc.95) (2026-04-07)
+
+### Bug Fixes
+
+- fix(headless): forward restore-seed payload to port (BUG-001) (#15841)
+
+## [5.0.0-rc.94](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.93...@exodus/headless@5.0.0-rc.94) (2026-03-11)
+
+**Note:** Version bump only for package @exodus/headless
+
+## [5.0.0-rc.93](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.92...@exodus/headless@5.0.0-rc.93) (2026-02-24)
+
+### Features
+
+- feat: migrate non-prod pricing domain to a.exodus-int.com (#15289)
+
+## [5.0.0-rc.92](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.91...@exodus/headless@5.0.0-rc.92) (2026-02-16)
+
+### Features
+
+- feat(assets-feature): call start on plugin startup (#15042)
+
+### Bug Fixes
+
+- fix(headless): update assets-feature (#15276)
+
 ## [5.0.0-rc.91](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/headless@5.0.0-rc.90...@exodus/headless@5.0.0-rc.91) (2026-02-12)
 
 ### Bug Fixes

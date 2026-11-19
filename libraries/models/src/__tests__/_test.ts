@@ -19,13 +19,13 @@ function createT() {
       assert.deepStrictEqual(arg1, arg2, desc),
     deepEquals: (arg1: unknown, arg2: unknown, desc?: string) =>
       assert.deepStrictEqual(arg1, arg2, desc),
-    plan: (count: number) => {}, // eslint-disable-line @typescript-eslint/no-unused-vars
+    plan: (count: number) => {}, // oxlint-disable-line no-unused-vars
   }
 }
 
 type TestCallback = (t: T) => Promise<void> | void
 // add skip
-test.skip = function (name: string, callback: TestCallback) {} // eslint-disable-line @typescript-eslint/no-unused-vars
+test.skip = function (name: string, callback: TestCallback) {} // oxlint-disable-line no-unused-vars
 
 export type T = ReturnType<typeof createT>
 

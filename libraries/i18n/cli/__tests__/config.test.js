@@ -1,5 +1,4 @@
-import { createFsFromVolume } from 'memfs'
-import { Volume } from 'memfs/lib/volume.js'
+import { createFsFromVolume, Volume } from 'memfs'
 
 import { readConfig } from '../config.js'
 
@@ -41,7 +40,7 @@ describe('config', () => {
   it('should throw if config file is missing', () => {
     const { fs } = setup({ exists: false })
 
-    expect(() => readConfig(rootDir, fs)).toThrowError(new Error('missing .i18nrc config file'))
+    expect(() => readConfig(rootDir, fs)).toThrow(new Error('missing .i18nrc config file'))
   })
 
   it('should return additional modules', () => {

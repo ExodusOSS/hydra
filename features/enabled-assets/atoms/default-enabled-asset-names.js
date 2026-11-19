@@ -1,6 +1,6 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 
 export const createDefaultEnabledAssetNamesAtom = () => {
-  // eslint-disable-next-line @exodus/hydra/in-memory-atom-default-value
+  // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/in-memory-atom-default-value
   return createInMemoryAtom()
 }

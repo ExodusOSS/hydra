@@ -9,10 +9,7 @@ Run built-in and custom preprocessors as follows:
 ```js
 import createIocContainer from '@exodus/dependency-injection'
 import preprocess from '@exodus/dependency-preprocessors'
-import logify from '@exodus/dependency-preprocessors/src/preprocessors/logify'
-import config from '@exodus/dependency-preprocessors/src/preprocessors/config'
-import alias from '@exodus/dependency-preprocessors/src/preprocessors/alias'
-import namespaceStorage from '@exodus/dependency-preprocessors/src/preprocessors/namespace-storage'
+import { logify, config, alias, namespaceStorage } from '@exodus/dependency-preprocessors'
 
 const createLogger =
   (namespace) =>
@@ -78,7 +75,7 @@ Performs global config auto-binding given module id, or injection from a node if
 ```js
 import createIocContainer from '@exodus/dependency-injection'
 import preprocess from '@exodus/dependency-preprocessors'
-import config from '@exodus/dependency-preprocessors/src/config'
+import { config } from '@exodus/dependency-preprocessors'
 
 const createLogger =
   (namespace) =>
@@ -126,20 +123,20 @@ ioc.resolve()
 
 Alias injected dependencies, e.g. so you can inject a global dependency `myMobileImplementationOfSomething` as a locally named option `something` to a module.
 
-See [example](./__tests__/examples/voldemort-roulette.test.js).
+See [example](./__tests__/examples/voldemort-roulette.test.ts).
 
 ### namespaceStorage
 
 Namespaces the storage injected to your dependency.
 
-See [example](./__tests__/examples/namespace-storage.test.js).
+See [example](./__tests__/examples/namespace-storage.test.ts).
 
 ### readOnlyAtoms
 
 Makes all atoms readonly unless configured to be writeable
 
 ```js
-import readOnlyAtoms from '@exodus/dependency-preprocessors/src/preprocessors/read-only-atoms'
+import { readOnlyAtoms } from '@exodus/dependency-preprocessors'
 
 const deps = preprocess({
   dependencies: [
@@ -158,7 +155,7 @@ const deps = preprocess({
 To warn instead of throw, set the `warn` flag to `true` and inject a logger instace:
 
 ```js
-import readOnlyAtoms from '@exodus/dependency-preprocessors/src/preprocessors/read-only-atoms'
+import { readOnlyAtoms } from '@exodus/dependency-preprocessors'
 
 const deps = preprocess({
   // ...
@@ -171,7 +168,7 @@ const deps = preprocess({
 Allows conditionally adding dependencies using the `if` property:
 
 ```js
-import optional from '@exodus/dependency-preprocessors/src/preprocessors/optional'
+import { optional } from '@exodus/dependency-preprocessors'
 
 const deps = preprocess({
   dependencies: [
@@ -193,7 +190,7 @@ const deps = preprocess({
 Helps detect various well-known issues with atoms
 
 ```js
-import devModeAtoms from '@exodus/dependency-preprocessors/src/preprocessors/dev-mode-atoms'
+import { devModeAtoms } from '@exodus/dependency-preprocessors'
 
 const deps = preprocess({
   dependencies,
@@ -218,7 +215,7 @@ const deps = preprocess({
 Wraps method calls to IOC nodes in a proxy that notifies about the execution time of methods which exceed a configures threshold.
 
 ```js
-import performanceMonitor from '@exodus/dependency-preprocessors/src/preprocessors/performance-monitor'
+import { performanceMonitor } from '@exodus/dependency-preprocessors'
 
 const deps = preprocess({
   dependencies,
@@ -233,35 +230,5 @@ const deps = preprocess({
       },
     }),
   ],
-})
-```
-
-### order
-
-The order preprocessor changes the order of nodes before passing them on to the IoC, based on the order configuration.
-In the below example `weasleySpells` will be reordered to come before `potterSpells`.
-
-```js
-import order from '@exodus/dependency-preprocessors/src/preprocessors/order'
-
-const deps = preprocess({
-  dependencies: [
-    {
-      definition: {
-        id: 'potterSpells',
-        factory: () => ['lumos'],
-      },
-    },
-    {
-      definition: {
-        id: 'weasleySpells',
-        factory: () => ['lumos', 'wingardium leviosa'],
-      },
-      order: {
-        before: ['potterSpells'],
-      },
-    },
-  ],
-  preprocessors: [order()],
 })
 ```

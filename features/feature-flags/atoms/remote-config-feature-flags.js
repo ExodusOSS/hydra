@@ -3,7 +3,7 @@ import { compute } from '@exodus/atoms'
 import { createRemoteConfigAtomFactory } from '@exodus/remote-config-atoms'
 import normalizeRemoteConfigValue from './utils/normalize-remote-config-value.js'
 
-// eslint-disable-next-line @exodus/export-default/named
+// oxlint-disable-next-line @exodus/oxlint-plugin-hydra/export-default-named
 export default {
   id: 'remoteConfigFeatureFlagAtoms',
   type: 'atom-collection',

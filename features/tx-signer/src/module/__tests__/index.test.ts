@@ -1,5 +1,4 @@
-import { WalletAccount } from '@exodus/models'
-import type { WalletAccountSource } from '@exodus/models/lib/wallet-account'
+import { WalletAccount, type WalletAccountSource } from '@exodus/models'
 
 import { UnsupportedWalletAccountSource } from '../errors.js'
 import transactionSignerDefinition from '../transaction-signer.js'

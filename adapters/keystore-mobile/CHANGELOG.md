@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.0](https://github.com/ExodusMovement/exodus/compare/@exodus/keystore-mobile@2.0.0...@exodus/keystore-mobile@2.1.0) (2026-08-27)
+
+### Features
+
+- **keystore-mobile:** configurable keychain authenticationPrompt ([#44239](https://github.com/ExodusMovement/exodus/issues/44239)) ([a7b5b7e](https://github.com/ExodusMovement/exodus/commit/a7b5b7e1711e7d05d4825778ddb32b35ef91ad26))
+
+## [2.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keystore-mobile@1.3.0...@exodus/keystore-mobile@2.0.0) (2024-12-20)
+
+### ⚠ BREAKING CHANGES
+
+- Pixel decryption padding bug (#8279)
+
+### Features
+
+- feat: use atoms v9 (#9651)
+
+### Bug Fixes
+
+- fix!: Pixel decryption padding bug (#8279)
+
+### License
+
+- license: re-license under MIT license (#10599)
+
 ## [1.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keystore-mobile@1.2.0...@exodus/keystore-mobile@1.3.0) (2024-07-20)
 
 ### Features

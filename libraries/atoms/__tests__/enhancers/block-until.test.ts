@@ -1,10 +1,10 @@
-import type { Setter } from 'libraries/atoms/src/utils/types'
 import type { DeferredPromise } from 'p-defer'
 import pDefer from 'p-defer'
 
 import blockUntil from '../../src/enhancers/block-until.js'
 import type { Atom } from '../../src/index.js'
 import { createInMemoryAtom } from '../../src/index.js'
+import type { Setter } from '../../src/utils/types.js'
 
 describe('blockUntil', () => {
   let identityAtom: Atom<string>

@@ -1,3 +1,4 @@
+import assert from 'minimalistic-assert'
 import BipPath from 'bip32-path'
 import * as util from './util.js'
 import { ModelIdSymbol } from '../constants.js'
@@ -48,7 +49,16 @@ export default class Address {
   static fromJSON(json: string | AddressJson) {
     const data = typeof json === 'string' ? JSON.parse(json) : json
 
-    return Address.create(data.address, data.meta || data.path)
+    if (data.meta) {
+      return Address.create(data.address, data.meta)
+    }
+
+    if (data.path !== undefined) {
+      assert(typeof data.path === 'string', 'path must be a string')
+      return Address.create(data.address, { path: data.path })
+    }
+
+    return Address.create(data.address)
   }
 
   get pathArray() {

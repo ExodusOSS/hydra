@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayPredictionsBuyInsufficientFunds"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        },
+        {
+          "$ref": "common-properties#/definitions/predictionsProperties"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "market_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "amount_attempted_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "balance_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "shortfall_usd": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

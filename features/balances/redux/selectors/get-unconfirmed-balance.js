@@ -2,7 +2,7 @@
 import lodash from 'lodash'
 import { createSelector } from 'reselect'
 
-const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { memoize } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 export const getUnconfirmedBalance = ({ asset, txs }) => {
   let result = asset.currency.ZERO

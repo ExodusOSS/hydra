@@ -26,7 +26,7 @@ const useOrderedAnimation = ({
     () => {
       ref.current?.animate(animation, animationTimingFunction(order))
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
     [animation, animationTimingFunction, order, ref.current]
   )
 }

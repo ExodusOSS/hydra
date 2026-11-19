@@ -1,10 +1,18 @@
 import { memoize } from '@exodus/basic-utils'
+import type { RootStateWithSlice, SelectorDefinition } from '@exodus/redux-dependency-injection'
 import { createSelector } from 'reselect'
+
+import type { AssetSourcesState } from '../index.js'
 
 const EMPTY = new Set<string>()
 
-type AvailableAssetNamesByWalletAccountSelector = (state: any) => Record<string, Set<string>>
-type EnabledAssetsSelector = (state: any) => Record<string, boolean>
+type RootState = RootStateWithSlice<'assetSources', AssetSourcesState>
+
+type AvailableAssetNamesByWalletAccountSelector = (state: RootState) => Record<string, Set<string>>
+// `enabledAssets` is a cross-module dep imported from a JS module without a type;
+// declaring it on RootState here would over-constrain consumers whose store can't
+// statically prove the slice. Keep the own-slice requirement only.
+type EnabledAssetsSelector = (state: RootState) => Record<string, boolean>
 
 const selectorFactory = (
   availableAssetNamesByWalletAccountSelector: AvailableAssetNamesByWalletAccountSelector,
@@ -30,6 +38,6 @@ const createEnabledAssetsByWalletAccountSelectorDefinition = {
     { selector: 'availableAssetNamesByWalletAccount' },
     { module: 'enabledAssets', selector: 'data' },
   ],
-} as const
+} as const satisfies SelectorDefinition
 
 export default createEnabledAssetsByWalletAccountSelectorDefinition

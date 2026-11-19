@@ -1,6 +1,6 @@
-/* eslint-disable unicorn/no-zero-fractions */
+/* oxlint-disable unicorn/no-zero-fractions */
 
-/* eslint-disable unicorn/numeric-separators-style */
+/* oxlint-disable unicorn/numeric-separators-style */
 import { formatPercentage } from './percentage.js'
 
 describe('price', () => {

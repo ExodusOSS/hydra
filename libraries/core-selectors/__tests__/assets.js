@@ -1,7 +1,3 @@
-import { connectAssetsList } from '@exodus/assets'
-import assetsBase from '@exodus/assets-base'
-import combinedAssetsList from '@exodus/combined-assets-meta'
+import { testAssets } from '@exodus/assets-test-meta'
 
-const assets = connectAssetsList([...combinedAssetsList, ...Object.values(assetsBase)])
-
-export default assets
+export default testAssets

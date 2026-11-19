@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.2](https://github.com/ExodusMovement/exodus/compare/@exodus/trezor-meta@3.10.1...@exodus/trezor-meta@3.10.2) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/trezor-meta
+
+## [3.10.1](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.10.0...@exodus/trezor-meta@3.10.1) (2026-04-16)
+
+**Note:** Version bump only for package @exodus/trezor-meta
+
+## [3.10.0](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.9.1...@exodus/trezor-meta@3.10.0) (2025-12-22)
+
+### Features
+
+- feat: configuration driven trezor-meta (#14589)
+
+### Bug Fixes
+
+- fix: remove unused FIRMWARE_ASSETS_BY_MODEL (#14734)
+
+## [3.9.1](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.9.0...@exodus/trezor-meta@3.9.1) (2025-12-15)
+
+### Bug Fixes
+
+- fix: sort trezor-meta configs (#14630)
+
 ## [3.9.0](https://github.com/ExodusMovement/hydra/compare/@exodus/trezor-meta@3.8.0...@exodus/trezor-meta@3.9.0) (2025-12-11)
 
 ### Features

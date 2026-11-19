@@ -2,10 +2,10 @@ import { WalletAccount } from '@exodus/models'
 
 import createLogger from './adapters/create-logger.js'
 
-// eslint-disable-next-line @exodus/export-default/named
+// oxlint-disable-next-line @exodus/oxlint-plugin-hydra/export-default-named
 export default {
   abTesting: {
-    apiUrl: 'https://schrodinger-d.a.exodus.io/api',
+    apiUrl: 'https://schrodinger-d.a.exodus-int.com/api',
   },
   apyRatesMonitor: {
     stakingAssetNames: ['algorand', 'cardano', 'solana'],
@@ -34,7 +34,7 @@ export default {
   },
   pricingServerUrlAtom: {
     pricingServerPath: 'infrastructure.price-server.server',
-    defaultPricingServerUrl: 'https://pricing-s.a.exodus.io',
+    defaultPricingServerUrl: 'https://pricing-s.a.exodus-int.com',
   },
   currencyAtom: {
     defaultValue: 'USD',
@@ -56,14 +56,6 @@ export default {
   kyc: {
     environment: 'sandbox',
     apiUrl: 'https://kyc-d.a.exodus.io',
-  },
-  referrals: {
-    API_URL: 'https://referrals-d.a.exodus.io',
-  },
-  cryptoNewsMonitor: {
-    fetchLimit: 12,
-    fetchInterval: 1_800_000,
-    baseUrl: 'https://crypto-news-s.a.exodus.io/',
   },
   addressProvider: {
     addressCacheFlavor: 'synced',

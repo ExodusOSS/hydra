@@ -28,21 +28,21 @@ describe('sync-time plugin', () => {
       synchronizedTime: SynchronizedTime,
     })
 
-    expect(handler).toBeCalledTimes(0)
+    expect(handler).toHaveBeenCalledTimes(0)
 
     plugin.onLoad()
-    expect(handler).toBeCalledTimes(1)
+    expect(handler).toHaveBeenCalledTimes(1)
 
     await jest.advanceTimersByTimeAsync(1000)
-    expect(handler).toBeCalledTimes(2)
+    expect(handler).toHaveBeenCalledTimes(2)
 
     await jest.advanceTimersByTimeAsync(1000)
-    expect(handler).toBeCalledTimes(3)
+    expect(handler).toHaveBeenCalledTimes(3)
 
     plugin.onStop()
-    expect(handler).toBeCalledTimes(3)
+    expect(handler).toHaveBeenCalledTimes(3)
 
     await jest.advanceTimersByTimeAsync(1000)
-    expect(handler).toBeCalledTimes(3)
+    expect(handler).toHaveBeenCalledTimes(3)
   })
 })

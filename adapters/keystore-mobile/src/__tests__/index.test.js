@@ -73,6 +73,62 @@ describe('keystore', () => {
     )
   })
 
+  it('reads without authenticationPrompt when unconfigured', async () => {
+    await keystore.getSecret('voldemort kills')
+    expect(reactNativeKeychain.getInternetCredentials).toHaveBeenCalledWith('voldemort kills', {})
+  })
+
+  it('passes configured authenticationPrompt object to reads', async () => {
+    const authenticationPrompt = { title: 'Prove yourself' }
+    keystore = createKeystore({ reactNativeKeychain, platform: 'ios', authenticationPrompt })
+
+    await keystore.getSecret('voldemort kills')
+    expect(reactNativeKeychain.getInternetCredentials).toHaveBeenCalledWith('voldemort kills', {
+      authenticationPrompt,
+    })
+  })
+
+  it('evaluates authenticationPrompt function on every read', async () => {
+    let title = 'Prove yourself'
+    keystore = createKeystore({
+      reactNativeKeychain,
+      platform: 'ios',
+      authenticationPrompt: () => ({ title }),
+    })
+
+    await keystore.getSecret('voldemort kills')
+    expect(reactNativeKeychain.getInternetCredentials).toHaveBeenLastCalledWith('voldemort kills', {
+      authenticationPrompt: { title: 'Prove yourself' },
+    })
+
+    title = 'Demuestra quien eres'
+    await keystore.getSecret('voldemort kills')
+    expect(reactNativeKeychain.getInternetCredentials).toHaveBeenLastCalledWith('voldemort kills', {
+      authenticationPrompt: { title: 'Demuestra quien eres' },
+    })
+  })
+
+  it('rejects invalid authenticationPrompt config', () => {
+    for (const authenticationPrompt of ['title', null, ['title']]) {
+      expect(() =>
+        createKeystore({ reactNativeKeychain, platform: 'ios', authenticationPrompt })
+      ).toThrow('authenticationPrompt must resolve to an object or undefined')
+    }
+  })
+
+  it('rejects authenticationPrompt function resolving to a non-object', async () => {
+    keystore = createKeystore({
+      reactNativeKeychain,
+      platform: 'ios',
+      authenticationPrompt: () => 'title',
+    })
+
+    await expect(keystore.getSecret('voldemort kills')).rejects.toThrow(
+      'authenticationPrompt must resolve to an object or undefined'
+    )
+    expect(reactNativeKeychain.getInternetCredentials).not.toBeCalled()
+  })
+
   it('defaults to locked', async () => {
     const keystore = createKeystore({
       reactNativeKeychain: createKeychainMock(),
@@ -80,7 +136,7 @@ describe('keystore', () => {
       isLockedInitially: true,
     })
 
-    keystore.getSecret('voldemort kills')
+    void keystore.getSecret('voldemort kills')
     await new Promise(setImmediate)
     expect(reactNativeKeychain.getInternetCredentials).not.toBeCalled()
   })

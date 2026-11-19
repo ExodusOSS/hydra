@@ -1,63 +1,67 @@
 {
   "name": "@exodus/analytics",
-  "version": "15.5.1",
+  "version": "16.1.2",
   "description": "This Exodus SDK feature enables you to generate client-side analytics.",
   "author": "Exodus Movement, Inc.",
   "type": "module",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./atoms": "./lib/atoms/index.js",
+    "./module": "./lib/module/index.js",
+    "./migrations/opt-in-migration": "./lib/migrations/opt-in-migration.js",
+    "./redux": "./lib/redux/index.js",
+    "./redux/index.js": "./lib/redux/index.js"
+  },
   "files": [
-    "api",
-    "index.d.ts",
-    "atoms",
-    "client",
-    "module",
-    "plugins",
-    "migrations",
-    "redux",
-    "report",
-    "constants.js",
-    "CHANGELOG.md",
-    "schemasafe.config.js",
-    "!**/__tests__/**"
+    "lib",
+    "CHANGELOG.md"
   ],
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint",
-    "lint:fix": "yarn lint --fix"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "rm -rf lib",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "lint": "pnpm exec eslint",
+    "lint:fix": "pnpm run lint --fix",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/analytics"
   },
   "dependencies": {
-    "@exodus/analytics-validation": "^2.60.0",
-    "@exodus/atoms": "^10.0.0",
-    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/analytics-validation": "workspace:^",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "workspace:^",
     "@exodus/crypto": "^1.0.0-rc.2",
     "@exodus/fetch": "^1.3.0",
-    "@exodus/fusion-atoms": "^1.4.0",
-    "@exodus/key-ids": "^1.2.3",
-    "@exodus/models": "^12.0.1",
-    "@exodus/segment-metrics": "^4.0.1",
-    "@exodus/typeforce": "^1.19.1",
-    "@exodus/zod": "^3.24.2",
+    "@exodus/fusion-atoms": "workspace:^",
+    "@exodus/key-identifier": "workspace:^",
+    "@exodus/key-ids": "workspace:^",
+    "@exodus/segment-metrics": "workspace:^",
+    "@exodus/storage-interface": "workspace:^",
+    "@exodus/typeforce": "workspace:^",
+    "@exodus/zod": "^3.24.4",
     "lodash": "^4.17.21",
-    "make-concurrent": "^4.0.0",
     "p-defer": "^4.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/analytics",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/analytics",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aanalytics"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aanalytics"
   },
   "devDependencies": {
     "@exodus/argo": "workspace:^",
+    "@exodus/bip32": "workspace:^",
     "@exodus/bip39": "workspace:^",
-    "@exodus/keychain": "^7.3.0",
+    "@exodus/dependency-types": "workspace:^",
+    "@exodus/keychain": "workspace:^",
     "@exodus/logger": "workspace:^",
     "@exodus/redux-dependency-injection": "workspace:^",
     "@exodus/storage-memory": "workspace:^",
+    "@types/lodash": "^4.14.182",
+    "jest-mock": "^30.3.0",
     "redux": "^4.2.1"
   },
   "publishConfig": {

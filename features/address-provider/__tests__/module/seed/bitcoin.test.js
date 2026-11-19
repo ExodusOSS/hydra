@@ -1,5 +1,5 @@
-/* eslint-disable jest/no-duplicate-hooks */
-/* eslint-disable jest/prefer-hooks-on-top */
+/* oxlint-disable jest/no-duplicate-hooks */
+/* oxlint-disable jest/prefer-hooks-on-top */
 import { createInMemoryAtom } from '@exodus/atoms'
 import bip44Constants from '@exodus/bip44-constants/by-ticker.js'
 import { createGetKeyIdentifier } from '@exodus/bitcoin-lib'
@@ -183,7 +183,7 @@ const addressProviderTester = (mock) => {
 
   beforeEach(async () => {
     const {
-      assetsModule,
+      assetsAtom,
       accountStatesAtom,
       walletAccountsAtom,
       assetSources,
@@ -194,7 +194,7 @@ const addressProviderTester = (mock) => {
 
     if (mock) {
       addressProvider = createMockableAddressProvider({
-        assetsModule,
+        assetsAtom,
         accountStatesAtom,
         walletAccountsAtom,
         assetSources,
@@ -205,7 +205,7 @@ const addressProviderTester = (mock) => {
       })
     } else {
       addressProvider = createAddressProvider({
-        assetsModule,
+        assetsAtom,
         addressCache,
         accountStatesAtom,
         publicKeyProvider,

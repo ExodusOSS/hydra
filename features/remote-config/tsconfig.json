@@ -1,11 +1,14 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "target": "ES2022",
     "types": ["node", "jest"],
     "outDir": "./lib",
     "allowJs": true,
-    "lib": ["dom", "dom.iterable", "esnext"]
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "noEmit": true
   },
   "include": ["redux", "./**/*.ts"]
 }

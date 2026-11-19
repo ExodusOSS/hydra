@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.12.0](https://github.com/ExodusMovement/exodus/compare/@exodus/enabled-assets@10.11.1...@exodus/enabled-assets@10.12.0) (2026-11-08)
+
+### Features
+
+- **enabled-assets,fiat-balances:** ignore configured wallet accounts ([#48791](https://github.com/ExodusMovement/exodus/issues/48791)) ([8d69151](https://github.com/ExodusMovement/exodus/commit/8d6915133d8f3c58424157dfd644adb2b998c164))
+
+## [10.11.1](https://github.com/ExodusMovement/exodus/compare/@exodus/enabled-assets@10.11.0...@exodus/enabled-assets@10.11.1) (2026-08-19)
+
+### Bug Fixes
+
+- **enabled-assets:** prevent mutation of input array in enable() ([#43910](https://github.com/ExodusMovement/exodus/issues/43910)) ([5c03434](https://github.com/ExodusMovement/exodus/commit/5c03434aaa643ef8d085209ed8695985e46fbe47))
+
+## [10.11.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/enabled-assets@10.10.4...@exodus/enabled-assets@10.11.0) (2025-11-19)
+
+### Features
+
+- feat: update all consumers to use safe strings for error namespaces (#14429)
+
 ## [10.10.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/enabled-assets@10.10.3...@exodus/enabled-assets@10.10.4) (2025-09-25)
 
 **Note:** Version bump only for package @exodus/enabled-assets

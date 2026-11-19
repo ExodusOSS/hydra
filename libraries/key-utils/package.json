@@ -1,35 +1,51 @@
 {
   "name": "@exodus/key-utils",
-  "version": "3.7.2",
+  "version": "4.1.1",
   "author": "Exodus Movement, Inc.",
   "description": "Utilities to manage derivation paths and key identifier aspects.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/key-utils",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/key-utils",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Akey-utils"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Akey-utils"
   },
   "type": "module",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
-    "src",
+    "lib/",
     "README.md",
     "CHANGELOG.md"
   ],
   "devDependencies": {
-    "bip39": "^3.1.0"
+    "@exodus/bip39": "workspace:^",
+    "@types/minimalistic-assert": "^1.0.1"
   },
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/key-utils"
   },
   "dependencies": {
-    "@exodus/bip32": "^4.0.2",
+    "@exodus/bip32": "workspace:^",
     "bip32-path": "^0.4.2",
     "minimalistic-assert": "^1.0.1"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

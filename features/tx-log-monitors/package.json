@@ -1,16 +1,16 @@
 {
   "name": "@exodus/tx-log-monitors",
-  "version": "2.6.0",
+  "version": "3.0.5",
   "description": "This Exodus SDK feature loads transaction history for all enabled assets. It also provides the option to force refresh transaction history for assets individually or en masse.",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/tx-log-monitors",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/tx-log-monitors",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Atx-log-monitors"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Atx-log-monitors"
   },
   "type": "module",
   "main": "index.js",
@@ -19,6 +19,8 @@
     "atoms",
     "api",
     "plugin",
+    "redux",
+    "report",
     "README.md",
     "CHANGELOG.md",
     "index.d.ts",
@@ -26,26 +28,30 @@
     "!**/*.test.js"
   ],
   "scripts": {
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@exodus/asset-lib": "^5.2.1",
     "@exodus/assets": "^11.0.0",
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.0.1",
-    "@exodus/remote-config-atoms": "^1.1.0",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/remote-config-atoms": "workspace:^",
+    "@exodus/zod": "^3.24.4",
     "events": "^3.3.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "make-concurrent": "^5.4.0"
   },
   "devDependencies": {
-    "@exodus/assets-base": "^10.0.0",
+    "@exodus/assets-test-meta": "workspace:^",
     "@exodus/available-assets": "workspace:^",
-    "@exodus/combined-assets-meta": "^3.3.2",
-    "@exodus/enabled-assets": "workspace:^"
+    "@exodus/enabled-assets": "workspace:^",
+    "@exodus/storage-memory": "workspace:^"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

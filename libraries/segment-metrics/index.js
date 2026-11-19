@@ -1,8 +1,8 @@
-const { v4: uuidv4 } = require('uuid')
-const camelCase = require('camelcase')
-const createFetchival = require('@exodus/fetch/experimental/create-fetchival')
+import { randomUUID } from '@exodus/crypto/randomUUID'
+import camelCase from 'camelcase'
+import createFetchival from '@exodus/fetch/experimental/create-fetchival'
 
-const { snakeCase, shallowMerge, omitUndefined } = require('./utils')
+import { snakeCase, shallowMerge, omitUndefined } from './utils.js'
 
 const noopLogger = { debug: () => {}, log: () => {}, error: () => {}, warn: () => {} }
 
@@ -17,13 +17,15 @@ function toHttpsUrl(s) {
   return parsedUrl
 }
 
-module.exports = class Tracker {
+export default class Tracker {
   #encodedWriteKey
   #parsedApiBaseUrl
   #logger
   #validateEvent
   #getBuildMetadata
   #fetchival
+  #preserveEventNames
+  #preservePropertyKeys
 
   constructor({
     writeKey,
@@ -32,9 +34,12 @@ module.exports = class Tracker {
     validateEvent = noopValidator,
     getBuildMetadata,
     fetch,
+    preserveEventNames = [],
+    preservePropertyKeys = {},
   }) {
-    if (typeof validateEvent !== 'function')
+    if (typeof validateEvent !== 'function') {
       throw new TypeError('validateEvent must be function if provided')
+    }
 
     this.#encodedWriteKey = Buffer.from(`${writeKey}:`).toString('base64')
     this.#parsedApiBaseUrl = toHttpsUrl(apiBaseUrl)
@@ -42,11 +47,13 @@ module.exports = class Tracker {
     this.#validateEvent = validateEvent
     this.#getBuildMetadata = getBuildMetadata
     this.#fetchival = createFetchival({ fetch })
+    this.#preserveEventNames = new Set(preserveEventNames)
+    this.#preservePropertyKeys = preservePropertyKeys
   }
 
   defaultProperties = Object.create(null)
   errorProperties = Object.create(null)
-  anonymousId = uuidv4()
+  anonymousId = randomUUID()
   #userId = null
 
   getAnonymousId() {
@@ -92,11 +99,14 @@ module.exports = class Tracker {
     timestamp,
     exactTimestamp = true,
   }) => {
+    const preserveEventName = this.#preserveEventNames.has(event)
+    const preserveKeys = this.#preservePropertyKeys[event] || []
+
     const eventToSave = {
       anonymousId,
       userId,
-      event: camelCase(event, { pascalCase: true }),
-      properties: omitUndefined(shallowMerge(this.defaultProperties, properties)),
+      event: preserveEventName ? event : camelCase(event, { pascalCase: true }),
+      properties: omitUndefined(shallowMerge(this.defaultProperties, properties, { preserveKeys })),
     }
 
     const { dev } = await this.#getBuildMetadata()
@@ -122,7 +132,7 @@ module.exports = class Tracker {
     }
 
     if (sensitive) {
-      eventToSave.anonymousId = uuidv4()
+      eventToSave.anonymousId = randomUUID()
     }
 
     const eventTimestamp = new Date(timestamp || Date.now())

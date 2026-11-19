@@ -1,5 +1,6 @@
 import assetsClientInterfaceDefinition from './client/index.js'
 import assetsPluginDefinition from './plugin/index.js'
+import searchBasedAssetLoaderPluginDefinition from './plugin/search-based-asset-loader-plugin.js'
 import multiAddressModeAtomDefinition from './atoms/multi-address-mode.js'
 import legacyAddressModeAtomDefinition from './atoms/legacy-address-mode.js'
 import taprootAddressModeAtomDefinition from './atoms/taproot-address-mode.js'
@@ -17,6 +18,9 @@ const assets = (config = Object.create(null)) => {
     disabledPurposes,
     compatibilityModeGapLimits,
     compatibilityModeMultiAddressMode,
+    runtimeConfigFlags,
+    searchBasedAssetLoaderPlugin,
+    assetsModule,
   } = { ...defaultConfig, ...config }
 
   return {
@@ -27,6 +31,7 @@ const assets = (config = Object.create(null)) => {
         config: {
           compatibilityModeGapLimits,
           compatibilityModeMultiAddressMode,
+          runtimeConfigFlags,
         },
       },
       { definition: assetsPluginDefinition },
@@ -35,8 +40,14 @@ const assets = (config = Object.create(null)) => {
         storage: { namespace: 'assetPreferences' },
         config: multiAddressMode,
       },
-      { definition: legacyAddressModeAtomDefinition },
-      { definition: taprootAddressModeAtomDefinition },
+      {
+        definition: legacyAddressModeAtomDefinition,
+        storage: { namespace: 'assetPreferences' },
+      },
+      {
+        definition: taprootAddressModeAtomDefinition,
+        storage: { namespace: 'assetPreferences' },
+      },
       { definition: assetsAtomDefinition },
       {
         definition: disabledPurposesAtomDefinition,
@@ -45,18 +56,25 @@ const assets = (config = Object.create(null)) => {
       },
       { definition: assetsApiDefinition },
       // TODO: add storage namespace once we remove customTokensStorage
-      // eslint-disable-next-line @exodus/hydra/missing-storage-namespace
+      // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/missing-storage-namespace
       {
         definition: assetModuleDefinition,
         // storage: { namespace: 'customTokens' },
         aliases: [{ implementationId: 'customTokensStorage', interfaceId: 'storage' }],
+        config: assetsModule,
       },
       { definition: assetPreferencesDefinition },
       { if: { registered: ['customTokensStorage'] }, definition: customTokensMonitorDefinition },
+      searchBasedAssetLoaderPlugin && {
+        if: { registered: ['customTokensStorage'] },
+        definition: searchBasedAssetLoaderPluginDefinition,
+        storage: { namespace: 'assetPreferences' },
+        config: searchBasedAssetLoaderPlugin,
+      },
       // This report was intentionally omitted as it did not provide useful value in practice.
       // We prefer less data over more when it's not meaningful, keeping them commented for reference.
       // { definition: assetsReportDefinition },
-    ],
+    ].filter(Boolean),
   }
 }
 

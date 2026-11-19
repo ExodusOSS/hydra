@@ -3,7 +3,7 @@ import lodash from 'lodash'
 import { createSelector } from 'reselect'
 import { MY_STATE } from '@exodus/redux-dependency-injection'
 
-const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { memoize } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 const EMPTY_BALANCES = Object.create(null)
 

@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayRewardsJoin"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "entry_point": {
+          "type": "string",
+          "enum": [
+            "wallet_banner",
+            "pay_home_card",
+            "settings",
+            "dashboard_info",
+            "disable_sheet",
+            "cash_banner",
+            "profile",
+            "send_invitation",
+            "onboarding",
+            "swap_fee"
+          ]
+        },
+        "intro_variant": {
+          "type": "string",
+          "enum": ["new_user", "existing_pay_user"]
+        },
+        "eligible_asset_count": {
+          "type": "number"
+        },
+        "eligible_balance_usd": {
+          "type": "number"
+        },
+        "eligible_balance_usdc_solana": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdt_solana": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdc_ethereum": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdt_ethereum": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdc_bsc": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdt_bsc": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdc_ethereumarbone": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdt_ethereumarbone": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdc_matic": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdt_matic": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdc_basemainnet": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdt_tronmainnet": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdc_optimism": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdt_optimism": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdc_avalanchec": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdt_avalanchec": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_dai_ethereum": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_pyusd_ethereum": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_pyusd_solana": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_dai_matic": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_tusd_ethereum": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_busd_ethereum": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdc_algorand": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_busd_bsc": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_dai_bsc": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_gusd_ethereum": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_usdt_algorand": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eligible_balance_rlusd_ripple": {
+          "type": "number",
+          "minimum": 0
+        },
+        "network_fee_usd": {
+          "type": ["number", "null"]
+        },
+        "fee_reimbursement_points": {
+          "type": ["number", "null"]
+        },
+        "eligible_assets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "wallet_age_days": {
+          "type": ["number", "null"]
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

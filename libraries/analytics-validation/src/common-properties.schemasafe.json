@@ -15,6 +15,49 @@
         }
       },
       "$comment": "It explicitly omits the 'unevaluatedProperties' keyword to make it usable with 'allOf' syntax."
+    },
+    "predictionsProperties": {
+      "description": "Global properties shared by every Predictions (PayPredictions*) event.",
+      "type": "object",
+      "required": [],
+      "properties": {
+        "funded_state": {
+          "enum": ["funded", "non_funded"]
+        },
+        "entry_source": {
+          "enum": [
+            "tab_nav",
+            "deeplink",
+            "p2p_share",
+            "rewards_card",
+            "home_recommendation",
+            "wallet_banner",
+            "pay_home_tab",
+            "profile_card"
+          ]
+        },
+        "user_type": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "prediction_account_activated": {
+          "type": "boolean"
+        },
+        "view_mode": {
+          "enum": ["card", "list"]
+        },
+        "provider": {
+          "enum": ["polymarket", "kalshi"]
+        },
+        "market_type": {
+          "enum": ["binary", "multi"]
+        },
+        "balance_usd_at_event": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "$comment": "It explicitly omits the 'unevaluatedProperties' keyword to make it usable with 'allOf' syntax."
     }
   },
   "properties": {
@@ -335,21 +378,6 @@
       "type": "number",
       "minimum": 0
     },
-    "lightning_btc_balance": {
-      "type": "number",
-      "minimum": 0
-    },
-    "lightning_btc_balance_usd": {
-      "type": "number",
-      "minimum": 0
-    },
-    "xmr_balance": {
-      "type": "number",
-      "minimum": 0
-    },
-    "xmr_balance_usd": {
-      "type": "number"
-    },
     "pay_transaction_history_count": {
       "type": "number",
       "minimum": 0
@@ -410,6 +438,20 @@
     },
     "pay_has_saved_deposit_method": {
       "type": "boolean"
+    },
+    "pay_rewards_joined": {
+      "type": "boolean"
+    },
+    "pay_rewards_available": {
+      "type": "boolean"
+    },
+    "pay_rewards_cohort": {
+      "type": "string",
+      "enum": ["solana", "ethereum", "other_evm", "tron", "none"]
+    },
+    "rewards_eligible_balance_usd": {
+      "type": "number",
+      "minimum": 0
     }
   }
 }

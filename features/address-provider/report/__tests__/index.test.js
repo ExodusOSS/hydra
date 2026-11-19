@@ -13,7 +13,7 @@ import addressProviderReportDefinition from '../index.js'
 const { factory: createAddressProvider } = addressProviderDefinition
 
 describe('addressProviderReport', () => {
-  let assetsModule
+  let assetsAtom
   let enabledWalletAccountsAtom
   let accountStatesAtom
   let availableAssetNamesByWalletAccountAtom
@@ -110,10 +110,7 @@ describe('addressProviderReport', () => {
   }
 
   beforeEach(() => {
-    assetsModule = {
-      getAssets: jest.fn().mockReturnValue(assets),
-      getAsset: (assetName) => assets[assetName],
-    }
+    assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
 
     enabledWalletAccountsAtom = createInMemoryAtom({ defaultValue: walletAccounts })
     accountStatesAtom = createInMemoryAtom({
@@ -141,7 +138,7 @@ describe('addressProviderReport', () => {
 
   it('should provide the correct namespace', async () => {
     const report = addressProviderReportDefinition.factory({
-      assetsModule,
+      assetsAtom,
       enabledWalletAccountsAtom,
       accountStatesAtom,
       availableAssetNamesByWalletAccountAtom,
@@ -153,7 +150,7 @@ describe('addressProviderReport', () => {
 
   it('should gracefully handle when a wallet does not exist or locked', async () => {
     const report = addressProviderReportDefinition.factory({
-      assetsModule,
+      assetsAtom,
       enabledWalletAccountsAtom,
       accountStatesAtom,
       availableAssetNamesByWalletAccountAtom,
@@ -169,7 +166,7 @@ describe('addressProviderReport', () => {
 
   it('should include VALID_SOURCES in the schema', async () => {
     const report = addressProviderReportDefinition.factory({
-      assetsModule,
+      assetsAtom,
       enabledWalletAccountsAtom,
       accountStatesAtom,
       availableAssetNamesByWalletAccountAtom,
@@ -184,7 +181,7 @@ describe('addressProviderReport', () => {
 
   it('should report addresses for each enabled wallet account and asset', async () => {
     const report = addressProviderReportDefinition.factory({
-      assetsModule,
+      assetsAtom,
       enabledWalletAccountsAtom,
       accountStatesAtom,
       availableAssetNamesByWalletAccountAtom,
@@ -198,13 +195,13 @@ describe('addressProviderReport', () => {
   it('should sort assets and purposes alphabetically', async () => {
     // Make sure assets are not sorted alphabetically
     const assetNames = ['ethereum', 'solana', 'bitcoin']
-    assetsModule.getAssets.mockReturnValue(pick(assets, assetNames))
+    assetsAtom = createInMemoryAtom({ defaultValue: { value: pick(assets, assetNames) } })
     when(addressProvider.getSupportedPurposes)
       .calledWith(expect.objectContaining({ assetName: 'bitcoin' }))
       .mockResolvedValue([84, 44, 86])
 
     const report = addressProviderReportDefinition.factory({
-      assetsModule,
+      assetsAtom,
       enabledWalletAccountsAtom,
       accountStatesAtom,
       availableAssetNamesByWalletAccountAtom,
@@ -221,7 +218,7 @@ describe('addressProviderReport', () => {
     jest.spyOn(enabledWalletAccountsAtom, 'get').mockRejectedValue(error)
 
     const report = addressProviderReportDefinition.factory({
-      assetsModule,
+      assetsAtom,
       enabledWalletAccountsAtom,
       accountStatesAtom,
       availableAssetNamesByWalletAccountAtom,
@@ -231,6 +228,60 @@ describe('addressProviderReport', () => {
     await expect(report.export({ walletExists: true })).rejects.toEqual(error)
   })
 
+  it('should expose error for an asset when supported purposes cannot be determined', async () => {
+    const error = new Error('Could not get supported purposes')
+    when(addressProvider.getSupportedPurposes)
+      .calledWith(expect.objectContaining({ assetName: 'solana' }))
+      .mockRejectedValue(error)
+
+    const report = addressProviderReportDefinition.factory({
+      assetsAtom,
+      enabledWalletAccountsAtom,
+      accountStatesAtom,
+      availableAssetNamesByWalletAccountAtom,
+      addressProvider,
+    })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
+
+    expect(result).toEqual({
+      exodus_0: {
+        ...addresses.exodus_0,
+        solana: { error: expect.any(SafeError) },
+      },
+      exodus_1: {
+        ...addresses.exodus_1,
+        solana: { error: expect.any(SafeError) },
+      },
+      trezor_0_123: addresses.trezor_0_123,
+    })
+  })
+
+  it('should omit assets without supported purposes, e.g. unsynced hardware wallet assets', async () => {
+    when(addressProvider.getSupportedPurposes)
+      .calledWith(
+        expect.objectContaining({
+          assetName: 'ethereum',
+          walletAccount: walletAccounts.trezor_0_123,
+        })
+      )
+      .mockResolvedValue([])
+
+    const report = addressProviderReportDefinition.factory({
+      assetsAtom,
+      enabledWalletAccountsAtom,
+      accountStatesAtom,
+      availableAssetNamesByWalletAccountAtom,
+      addressProvider,
+    })
+    const result = report.getSchema().parse(await report.export({ walletExists: true }))
+
+    expect(result).toEqual({
+      exodus_0: addresses.exodus_0,
+      exodus_1: addresses.exodus_1,
+      trezor_0_123: pick(addresses.trezor_0_123, ['bitcoin']),
+    })
+  })
+
   it('should expose error for an address', async () => {
     const error = new Error('Could not get address')
     when(addressProvider.getReceiveAddress)
@@ -238,7 +289,7 @@ describe('addressProviderReport', () => {
       .mockRejectedValue(error)
 
     const report = addressProviderReportDefinition.factory({
-      assetsModule,
+      assetsAtom,
       enabledWalletAccountsAtom,
       accountStatesAtom,
       availableAssetNamesByWalletAccountAtom,
@@ -265,7 +316,7 @@ describe('addressProviderReport', () => {
 
     beforeEach(async () => {
       const {
-        assetsModule,
+        assetsAtom,
         accountStatesAtom,
         walletAccountsAtom,
         assetSources,
@@ -275,7 +326,7 @@ describe('addressProviderReport', () => {
       } = await setup()
 
       addressProvider = createAddressProvider({
-        assetsModule,
+        assetsAtom,
         addressCache,
         accountStatesAtom,
         publicKeyProvider,
@@ -294,7 +345,7 @@ describe('addressProviderReport', () => {
       })
 
       report = addressProviderReportDefinition.factory({
-        assetsModule,
+        assetsAtom,
         enabledWalletAccountsAtom,
         accountStatesAtom,
         availableAssetNamesByWalletAccountAtom,

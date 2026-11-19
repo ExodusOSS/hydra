@@ -1,7 +1,7 @@
 // From https://www.npmjs.com/package/bip39, ISC
 // Changed for API
 
-import { mock, test } from '@exodus/test/node'
+import { mock, test } from 'node:test'
 
 mock.module('@exodus/crypto/randomBytes', {
   namedExports: {
@@ -10,7 +10,7 @@ mock.module('@exodus/crypto/randomBytes', {
 })
 
 const { randomBytes } = await import('@exodus/crypto/randomBytes')
-const bip39 = await import('@exodus/bip39') // eslint-disable-line import/no-extraneous-dependencies
+const bip39 = await import('@exodus/bip39')
 
 test('README example 1', async (c) => {
   // defaults to BIP39 English word list

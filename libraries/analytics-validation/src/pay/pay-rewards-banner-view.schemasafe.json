@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayRewardsBannerView"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "surface": {
+          "type": "string",
+          "enum": ["wallet_carousel", "pay_home", "profile"]
+        },
+        "invitation": {
+          "type": "string",
+          "enum": ["new", "existing"]
+        },
+        "stablecoin_balance_usd": {
+          "type": "number"
+        },
+        "stablecoin_balance_usdc_solana": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdt_solana": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdc_ethereum": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdt_ethereum": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdc_bsc": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdt_bsc": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdc_ethereumarbone": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdt_ethereumarbone": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdc_matic": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdt_matic": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdc_basemainnet": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdt_tronmainnet": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdc_optimism": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdt_optimism": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdc_avalanchec": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdt_avalanchec": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_dai_ethereum": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_pyusd_ethereum": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_pyusd_solana": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_dai_matic": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_tusd_ethereum": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_busd_ethereum": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdc_algorand": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_busd_bsc": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_dai_bsc": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_gusd_ethereum": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_usdt_algorand": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_balance_rlusd_ripple": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stablecoin_assets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

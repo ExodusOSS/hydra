@@ -41,6 +41,7 @@ const walletAccountNames = walletAccountInstances.map((w) => w.toString())
 let enabledWalletAccountsAtom
 let blockchainMetadata
 let assetsModule
+let assetsAtom
 let availableAssetNamesAtom
 let walletAccountsAtom
 let storage
@@ -100,6 +101,7 @@ const createAvailableAssetNamesAtom = () =>
 const setupModules = ({ config } = {}) => {
   storage = createStorage()
   assetsModule = createAssetsModuleMock()
+  assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
   availableAssetNamesAtom = createAvailableAssetNamesAtom()
   walletAccountsAtom = createInMemoryAtom({ defaultValue: walletAccountsData })
   enabledWalletAccountsAtom = createEnabledWalletAccountsAtom({ walletAccountsAtom })
@@ -118,7 +120,7 @@ const setupModules = ({ config } = {}) => {
   balancesAtom = createBalancesAtom()
 
   balances = createBalances({
-    assetsModule,
+    assetsAtom,
     availableAssetNamesAtom,
     enabledWalletAccountsAtom,
     blockchainMetadata,
@@ -156,6 +158,7 @@ describe('balances module', () => {
     await accountStateStorage.set(key, accountState.toJSON())
 
     assetsModule = createAssetsModuleMock()
+    assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
     walletAccountsAtom = createInMemoryAtom({ defaultValue: walletAccountsData })
     enabledWalletAccountsAtom = createEnabledWalletAccountsAtom({ walletAccountsAtom })
     blockchainMetadataAtom = blockchainMetadataAtomDefinition.factory()
@@ -175,7 +178,7 @@ describe('balances module', () => {
     balancesAtom.observe(handler)
 
     balances = createBalances({
-      assetsModule,
+      assetsAtom,
       availableAssetNamesAtom: createAvailableAssetNamesAtom(),
       enabledWalletAccountsAtom,
       blockchainMetadata,
@@ -188,7 +191,7 @@ describe('balances module', () => {
       logger: { log: jest.fn(), warn: jest.fn(), error: jest.fn() },
     })
 
-    balances.load()
+    void balances.load()
 
     blockchainMetadata.load()
 
@@ -593,12 +596,9 @@ describe('balances module', () => {
       txs: baseAssetTxLog.toJSON(),
     })
 
-    const txLogBasedAssets = pickBy(
-      assetsModule.getAssets(),
-      (asset) => asset.api?.features?.historyBasedBalance
-    )
+    const txLogBasedAssets = pickBy(assets, (asset) => asset.api?.features?.historyBasedBalance)
 
-    assetsModule.getAssets = () => txLogBasedAssets
+    await assetsAtom.set({ value: txLogBasedAssets })
 
     const baseAssetExpectedBalance = baseAssetTxLog.getMutations().slice(-1)[0].balance
     const baseAssetExpectedSpendableBalance = baseAssetExpectedBalance
@@ -695,40 +695,22 @@ describe('balances module', () => {
       },
     })
 
-    assetsModule.getAssets = () => ({
-      accountStateBasedBalanceAsset: assets.accountStateBasedBalanceAsset,
-    })
-    // never do this in production code, only the assets module is allowed the honor
-    await availableAssetNamesAtom.set((names) => [...names, 'waynecoin'])
+    // remove token from available assets
+    await availableAssetNamesAtom.set((names) =>
+      names.filter((n) => n !== 'accountStateBasedBalanceToken')
+    )
 
     await new Promise(setImmediate)
     const actualBalances = await balancesAtom.get()
-    expectBalances(actualBalances, {
-      balances: {
-        [walletAccountNames[0]]: {
-          accountStateBasedBalanceAsset: {
-            balance: assets.accountStateBasedBalanceAsset.currency.defaultUnit(1),
-            total: assets.accountStateBasedBalanceAsset.currency.defaultUnit(1),
-            spendable: assets.accountStateBasedBalanceAsset.currency.defaultUnit(1),
-            spendableBalance: assets.accountStateBasedBalanceAsset.currency.defaultUnit(1),
-            unconfirmedReceived: assets.accountStateBasedBalanceAsset.currency.defaultUnit(0),
-            unconfirmedSent: assets.accountStateBasedBalanceAsset.currency.defaultUnit(0),
-          },
-          accountStateBasedBalanceToken: {
-            balance: undefined,
-            total: undefined,
-          },
-        },
-      },
-    })
+    expect(
+      actualBalances.balances[walletAccountNames[0]].accountStateBasedBalanceAsset
+    ).toBeDefined()
+    expect(
+      actualBalances.balances[walletAccountNames[0]].accountStateBasedBalanceToken
+    ).toBeUndefined()
 
-    assetsModule.getAssets = () => ({
-      accountStateBasedBalanceAsset: assets.accountStateBasedBalanceAsset,
-      accountStateBasedBalanceToken: assets.accountStateBasedBalanceToken,
-    })
-
-    // never do this in production code, only the assets module is allowed the honor
-    await availableAssetNamesAtom.set((names) => [...names, 'othercoin'])
+    // re-add token to available assets
+    await availableAssetNamesAtom.set((names) => [...names, 'accountStateBasedBalanceToken'])
     await new Promise(setImmediate)
     expectBalances(await balancesAtom.get(), {
       balances: {
@@ -752,7 +734,7 @@ describe('balances module', () => {
     })
   })
 
-  test('balance for txLog tokens persists on recompute', async () => {
+  test('balance for txLog tokens persists after asset removal and re-addition', async () => {
     await initializeModules()
     await blockchainMetadata.updateTxs({
       assetName: assets.txLogBasedBalanceAsset.name,
@@ -786,11 +768,18 @@ describe('balances module', () => {
     }
     const spy = jest.spyOn(balancesAtom, 'set')
     await new Promise(setImmediate)
-    expect(spy).toBeCalledTimes(1)
-    // force recompute
-    await availableAssetNamesAtom.set((names) => [...names, 'waynecoin'])
+    expect(spy).toHaveBeenCalledTimes(1)
+    expectBalances(await balancesAtom.get(), result)
+
+    // verify balances persist after asset removal and re-addition
+    await availableAssetNamesAtom.set((names) =>
+      names.filter((n) => n !== 'txLogBasedBalanceAsset')
+    )
     await new Promise(setImmediate)
-    expect(spy).toBeCalledTimes(2)
+    expect(spy).toHaveBeenCalledTimes(2)
+    await availableAssetNamesAtom.set((names) => [...names, 'txLogBasedBalanceAsset'])
+    await new Promise(setImmediate)
+    expect(spy).toHaveBeenCalledTimes(3)
     expectBalances(await balancesAtom.get(), result)
   })
 
@@ -903,8 +892,11 @@ describe('balances module', () => {
 
     expectBalances(await balancesAtom.get(), result)
 
-    // force recompute
-    availableAssetNamesAtom.set((names) => [...names, 'waynecoin'])
+    // force recompute by removing and re-adding asset
+    await availableAssetNamesAtom.set((names) =>
+      names.filter((n) => n !== 'accountStateBasedBalanceAsset')
+    )
+    await availableAssetNamesAtom.set((names) => [...names, 'accountStateBasedBalanceAsset'])
     await new Promise(setImmediate)
 
     // Since on first recompute balance is zero unconfirmedReceived is not returned. with updates we also ignore `changes` with unconfirmedReceived since it's zero
@@ -1006,14 +998,17 @@ describe('balances module', () => {
       txs: tokenTxLog.toJSON(),
     })
 
-    expect(spy).toBeCalledTimes(3)
-    // force recompute
-    availableAssetNamesAtom.set((names) => [...names, 'waynecoin'])
+    expect(spy).toHaveBeenCalledTimes(3)
+    // force recompute by removing and re-adding asset
+    await availableAssetNamesAtom.set((names) =>
+      names.filter((n) => n !== 'accountStateBasedBalanceAsset')
+    )
+    await availableAssetNamesAtom.set((names) => [...names, 'accountStateBasedBalanceAsset'])
 
     // const baseAssetTxs = mapValues(fixture, (tx) => baseAssetTxLog.get(tx.txId))
     // const tokenTxs = mapValues(fixture, (tx) => tokenTxLog.get(tx.txId))
     await new Promise(setImmediate)
-    expect(spy).toBeCalledTimes(4)
+    expect(spy).toHaveBeenCalledTimes(5)
     const accountSpendableBalance = baseAssetBalanceFromAccountState
       // note: coinAmount is positive for receives and negative for sends
       .sub(baseAssetTxs.baseAssetTxReceivedUnconfirmed.coinAmount)
@@ -1127,15 +1122,18 @@ describe('balances module', () => {
     await batch.commit()
 
     await new Promise(setImmediate)
-    expect(spy).toBeCalledTimes(1) // all of the above in one batch
+    expect(spy).toHaveBeenCalledTimes(1) // all of the above in one batch
 
-    // force recompute
-    availableAssetNamesAtom.set((names) => [...names, 'waynecoin'])
+    // force recompute by removing and re-adding asset
+    await availableAssetNamesAtom.set((names) =>
+      names.filter((n) => n !== 'accountStateBasedBalanceAsset')
+    )
+    await availableAssetNamesAtom.set((names) => [...names, 'accountStateBasedBalanceAsset'])
 
     // const baseAssetTxs = mapValues(fixture, (tx) => baseAssetTxLog.get(tx.txId))
     // const tokenTxs = mapValues(fixture, (tx) => tokenTxLog.get(tx.txId))
     await new Promise(setImmediate)
-    expect(spy).toBeCalledTimes(2)
+    expect(spy).toHaveBeenCalledTimes(3)
     const accountSpendableBalance = baseAssetBalanceFromAccountState
       // note: coinAmount is positive for receives and negative for sends
       .sub(baseAssetTxs.baseAssetTxReceivedUnconfirmed.coinAmount)
@@ -1365,6 +1363,7 @@ describe('balances module', () => {
     )
 
     assetsModule = createAssetsModuleMock()
+    assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
     walletAccountsAtom = createInMemoryAtom({ defaultValue: walletAccountsData })
     enabledWalletAccountsAtom = createEnabledWalletAccountsAtom({ walletAccountsAtom })
     blockchainMetadataAtom = blockchainMetadataAtomDefinition.factory()
@@ -1387,7 +1386,7 @@ describe('balances module', () => {
     const errorTracking = { track: jest.fn() }
 
     const balancesModule = createBalances({
-      assetsModule,
+      assetsAtom,
       availableAssetNamesAtom: createAvailableAssetNamesAtom(),
       enabledWalletAccountsAtom,
       blockchainMetadata,
@@ -1399,7 +1398,7 @@ describe('balances module', () => {
       errorTracking,
       logger,
     })
-    balancesModule.load()
+    void balancesModule.load()
 
     jest.spyOn(accountStateBasedBalanceAsset.api, 'getBalances').mockImplementation(() => {
       throw new Error('boo!')
@@ -1427,5 +1426,95 @@ describe('balances module', () => {
     })
 
     expect(isSafe('getBalancesForAssetSource')).toBe(true)
+  })
+
+  test('should return independent copies on each flush (mutation isolation)', async () => {
+    const { accountStateBasedBalanceAsset } = assets
+    const walletAccount = walletAccountNames[0]
+    const initialBalance = accountStateBasedBalanceAsset.currency.defaultUnit(1)
+    const newBalance = accountStateBasedBalanceAsset.currency.defaultUnit(2)
+
+    await initializeModules()
+
+    await blockchainMetadata.updateAccountState({
+      walletAccount,
+      assetName: accountStateBasedBalanceAsset.name,
+      newData: { balance: initialBalance },
+    })
+
+    const balances1 = await balancesAtom.get()
+
+    await blockchainMetadata.updateAccountState({
+      walletAccount,
+      assetName: accountStateBasedBalanceAsset.name,
+      newData: { balance: newBalance },
+    })
+
+    const balances2 = await balancesAtom.get()
+
+    expect(balances1).not.toBe(balances2)
+    expect(balances1.balances).not.toBe(balances2.balances)
+    expect(balances1.balances[walletAccount]).not.toBe(balances2.balances[walletAccount])
+
+    expect(
+      balances1.balances[walletAccount][accountStateBasedBalanceAsset.name].total.equals(
+        initialBalance
+      )
+    ).toBe(true)
+    expect(
+      balances2.balances[walletAccount][accountStateBasedBalanceAsset.name].total.equals(newBalance)
+    ).toBe(true)
+  })
+
+  test('should compute only newly available assets incrementally', async () => {
+    const { accountStateBasedBalanceAsset, txLogBasedBalanceToken } = assets
+    const walletAccount = walletAccountNames[0]
+
+    const logger = { log: jest.fn(), warn: jest.fn(), error: jest.fn() }
+    setupModules()
+    balances = createBalances({
+      assetsAtom,
+      availableAssetNamesAtom,
+      enabledWalletAccountsAtom,
+      blockchainMetadata,
+      blockchainMetadataAtom,
+      config: defaultConfig,
+      balancesAtom,
+      txLogsAtom,
+      feeDataAtom,
+      accountStatesAtom,
+      logger,
+    })
+
+    await availableAssetNamesAtom.set(
+      Object.keys(assets).filter((name) => name !== 'txLogBasedBalanceToken')
+    )
+    await blockchainMetadata.load()
+    await balances.load()
+    await waitUntil({ atom: balancesAtom, predicate: (v) => !!v?.balances })
+
+    await blockchainMetadata.updateAccountState({
+      walletAccount,
+      assetName: accountStateBasedBalanceAsset.name,
+      newData: { balance: accountStateBasedBalanceAsset.currency.defaultUnit(1) },
+    })
+
+    const balancesBefore = await balancesAtom.get()
+    expect(balancesBefore.balances[walletAccount][accountStateBasedBalanceAsset.name]).toBeDefined()
+    expect(balancesBefore.balances[walletAccount][txLogBasedBalanceToken.name]).toBeUndefined()
+
+    logger.log.mockClear()
+
+    await availableAssetNamesAtom.set((names) => [...names, 'txLogBasedBalanceToken'])
+    await new Promise(setImmediate)
+
+    expect(logger.log).toHaveBeenCalledWith('computing balances for newly available assets', [
+      'txLogBasedBalanceToken',
+    ])
+    expect(logger.log).not.toHaveBeenCalledWith(expect.stringContaining('loading walletAccount'))
+
+    const balancesAfter = await balancesAtom.get()
+    expect(balancesAfter.balances[walletAccount][accountStateBasedBalanceAsset.name]).toBeDefined()
+    expect(balancesAfter.balances[walletAccount][txLogBasedBalanceToken.name]).toBeDefined()
   })
 })

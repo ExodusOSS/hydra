@@ -5,7 +5,7 @@ Timer helper class
 ## Install
 
 ```
-    yarn add @exodus/timer
+    pnpm add @exodus/timer
 ```
 
 ## Usage

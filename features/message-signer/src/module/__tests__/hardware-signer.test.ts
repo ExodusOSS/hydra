@@ -1,7 +1,8 @@
+import { createInMemoryAtom } from '@exodus/atoms'
 import { WalletAccount } from '@exodus/models'
-import { LEDGER_SRC } from '@exodus/models/lib/wallet-account'
 
 import hardwareSignerDefinition from '../hardware-signer.js'
+import type { Asset } from '../interfaces.js'
 
 const assets = {
   ethereum: {
@@ -17,12 +18,10 @@ const assets = {
     get baseAsset() {
       return assets.ethereum
     },
-  },
+  } as unknown as Asset,
 }
 
-const assetsModule = {
-  getAsset: (assetName: keyof typeof assets) => assets[assetName],
-}
+const assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
 
 const mockHardwareDevice = {
   signMessage: jest.fn(),
@@ -34,7 +33,7 @@ const mockHardwareWallets = {
 
 const setup = () => {
   const hardwareMessageSigner = hardwareSignerDefinition.factory({
-    assetsModule: assetsModule as never,
+    assetsAtom,
     hardwareWallets: mockHardwareWallets as never,
     assetSources: {
       getSupportedPurposes: async () => [44],
@@ -49,7 +48,11 @@ const setup = () => {
 describe('HardwareMessageSigner', () => {
   it('sign a message with the default address', async () => {
     const { hardwareMessageSigner } = setup()
-    const walletAccount = new WalletAccount({ index: 1, source: LEDGER_SRC, id: 'something' })
+    const walletAccount = new WalletAccount({
+      index: 1,
+      source: WalletAccount.LEDGER_SRC,
+      id: 'something',
+    })
     const expectedResult = Buffer.alloc(32)
     mockHardwareDevice.signMessage.mockReturnValueOnce(expectedResult)
     const signedMessage = await hardwareMessageSigner.signMessage({

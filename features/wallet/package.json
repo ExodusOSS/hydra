@@ -1,21 +1,22 @@
 {
   "name": "@exodus/wallet",
-  "version": "16.0.1",
-  "description": "Primary module for managing bip39 mnemonic(s) for a single-seed or multi-seed wallet.",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/wallet",
+  "version": "18.0.1",
+  "description": "Primary module for managing the bip39 mnemonic of a wallet.",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/wallet",
   "license": "MIT",
   "author": "Exodus Movement, Inc.",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Awallet"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Awallet"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix"
+    "test": "pnpm exec exodus-test --jest",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix"
   },
   "type": "module",
   "main": "index.js",
@@ -25,24 +26,23 @@
     "module",
     "migrations",
     "plugin",
+    "rpc",
     "index.d.ts",
     "CHANGELOG.md",
     "README.md",
     "!**/__tests__/**"
   ],
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/bip39": "^1.0.1",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/bip39": "workspace:^",
     "@exodus/crypto": "^1.0.0-rc.18",
-    "@exodus/key-ids": "^1.2.3",
-    "@exodus/key-utils": "^3.2.0",
-    "@exodus/safe-string": "^1.1.0",
+    "@exodus/key-utils": "workspace:^",
+    "@exodus/safe-string": "workspace:^",
     "make-concurrent": "^4.0.0",
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {
-    "@exodus/key-identifier": "^1.2.1",
-    "@exodus/keychain": "^7.3.0",
+    "@exodus/keychain": "workspace:^",
     "@exodus/storage-memory": "workspace:^",
     "buffer-json": "^2.0.0"
   },

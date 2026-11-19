@@ -2,7 +2,7 @@ import { retry } from '../src/index.js'
 
 // Throws n times before succeeding
 async function testFun(n, testFunData) {
-  // eslint-disable-next-line @exodus/mutable/no-param-reassign-prop-only
+  // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
   if (n > testFunData.n++) {
     // console.log(`testFun throwing at run ${testFunData.n}`)
     throw new Error(`Error at retry ${testFunData.n}`)

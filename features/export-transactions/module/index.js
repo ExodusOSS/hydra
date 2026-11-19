@@ -8,7 +8,7 @@ const { get } = lodash
 
 class ExportTransactions {
   #blockchainMetadata = null
-  #assetsModule = null
+  #assetsAtom = null
   #personalNotesAtom = null
   #enabledWalletAccountsAtom = null
   #multipleWalletAccountsEnabledAtom = null
@@ -16,22 +16,20 @@ class ExportTransactions {
 
   constructor({
     blockchainMetadata,
-    assetsModule,
+    assetsAtom,
     personalNotesAtom,
     enabledWalletAccountsAtom,
     multipleWalletAccountsEnabledAtom,
     ordersAtom,
   }) {
     this.#blockchainMetadata = blockchainMetadata
-    this.#assetsModule = assetsModule
+    this.#assetsAtom = assetsAtom
 
     this.#enabledWalletAccountsAtom = enabledWalletAccountsAtom
     this.#multipleWalletAccountsEnabledAtom = multipleWalletAccountsEnabledAtom
     this.#personalNotesAtom = personalNotesAtom
     this.#ordersAtom = ordersAtom
   }
-
-  #getAsset = (assetName) => this.#assetsModule.getAsset(assetName)
 
   #getTxOppositeWalletAccount = async (tx) => {
     const multipleWalletAccountsEnabled = await this.#multipleWalletAccountsEnabledAtom.get()
@@ -111,13 +109,13 @@ class ExportTransactions {
     return null
   }
 
-  #prepareTxForExport = async ({ tx, walletAccount, personalNotes }) => {
+  #prepareTxForExport = async ({ tx, walletAccount, personalNotes, assets }) => {
     let isWithdrawal = tx.sent && !tx.coinAmount.isPositive
     const stakingType = this.#getTxStakingType(tx)
 
     let coinAmount = tx.coinAmount
     const assetName = tx.coinName
-    const asset = this.#getAsset(assetName)
+    const asset = assets[assetName]
     const coinCurrency = asset.displayTicker || tx.coinAmount.defaultUnit.unitName
     let feeAmount = tx.feeAmount && tx.feeAmount.negate()
     if (tx.data && tx.data.delegatorFee) {
@@ -208,6 +206,7 @@ class ExportTransactions {
   }
 
   #addOrderData = async (txs) => {
+    const { value: assets } = await this.#assetsAtom.get()
     const orders = await this.#ordersAtom.get()
     let resultTxs = [...txs]
 
@@ -242,7 +241,7 @@ class ExportTransactions {
         const toTx = txLog.get(order.toTxId)
         if (!toTx) continue
         const toAssetName = toTx.coinName
-        const toAsset = this.#getAsset(toAssetName)
+        const toAsset = assets[toAssetName]
         const inCurrency = toAsset.displayTicker || toAsset.ticker
         let inAmount
         if (ordersWithSameToTxId.length > 1) {
@@ -267,7 +266,7 @@ class ExportTransactions {
         const fromTx = txLog.get(order.fromTxId)
         if (!fromTx) continue
         const fromAssetName = fromTx.coinName
-        const fromAsset = this.#getAsset(fromAssetName)
+        const fromAsset = assets[fromAssetName]
         const outCurrency = fromAsset.displayTicker || fromAsset.ticker
         let outAmount
         if (ordersWithSameToTxId.length > 1) {
@@ -314,8 +313,9 @@ class ExportTransactions {
 
     txs.sort((a, b) => a.date - b.date)
 
+    const { value: assets } = await this.#assetsAtom.get()
     let exportedTxs = await Promise.all(
-      txs.map((tx) => this.#prepareTxForExport({ tx, walletAccount, personalNotes }))
+      txs.map((tx) => this.#prepareTxForExport({ tx, walletAccount, personalNotes, assets }))
     )
 
     // // When tx.token is set, it is the 0 ETH tx corresponding to an outgoing ERC20 transfer. Exclude it.
@@ -337,7 +337,7 @@ const exportTransactionsDefinition = {
   factory: create,
   dependencies: [
     'blockchainMetadata',
-    'assetsModule',
+    'assetsAtom',
     'enabledWalletAccountsAtom',
     'multipleWalletAccountsEnabledAtom',
     'personalNotesAtom',

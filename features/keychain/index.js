@@ -1,6 +1,8 @@
 import moduleDefinition from './module/keychain.js'
 import apiDefinition from './api/index.js'
 
+export { Keychain } from './module/keychain.js'
+
 const keychain = ({ cachePublicKeys = false } = Object.create(null)) => {
   // TODO: support caching
   return {

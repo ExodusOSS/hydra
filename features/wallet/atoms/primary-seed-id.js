@@ -3,7 +3,7 @@ import { createInMemoryAtom } from '@exodus/atoms'
 const primarySeedIdAtomDefinition = {
   id: 'primarySeedIdAtom',
   type: 'atom',
-  factory: () => createInMemoryAtom(), // eslint-disable-line @exodus/hydra/in-memory-atom-default-value
+  factory: () => createInMemoryAtom(), // oxlint-disable-line @exodus/oxlint-plugin-hydra/in-memory-atom-default-value
   public: true,
 }
 

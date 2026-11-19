@@ -2,7 +2,7 @@
 import lodash from 'lodash'
 import defaultConfig from '../../default-config.js'
 
-const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { memoize } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 const { balanceFields } = defaultConfig
 

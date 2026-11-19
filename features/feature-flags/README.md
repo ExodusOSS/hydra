@@ -41,6 +41,8 @@ const featureFlags = {
         geolocation: true,
         // can be enabled/disabled for users on certain app versions via remote config
         shutdownSemver: true,
+        // can be rolled out to a share of users via remote config, see "Gradual rollout"
+        rollout: true,
       },
     },
   },
@@ -97,6 +99,24 @@ const HomePage = () => {
   return dogeMode?.isOn ? <DogeMode /> : <NormalMode />
 }
 ```
+
+### Gradual rollout
+
+With `supportedOverrides.rollout`, set `rollout` in remote config to an integer from `0` to `100`:
+
+```json
+{ "features": { "dogeMode": { "enabled": true, "rollout": 10 } } }
+```
+
+Each user gets a bucket from `0` to `99`: `sha256(featureName + ":" + telemetryId)`, first 4 bytes, mod 100. The flag is on when the bucket is less than `rollout`. Thus:
+
+- A user stays in the same cohort when you increase `rollout`, and on all devices with the same seed.
+- Each flag has an independent cohort.
+- Renaming the flag gives new cohorts.
+- An invalid `rollout` value turns the flag off.
+- The flag keeps its local default until the wallet is unlocked, because `telemetryId` comes from the seed.
+
+Rollout requires the `analyticsUserIdAtom` dependency (from `@exodus/analytics`).
 
 ### Usage examples without `@exodus/headless`
 

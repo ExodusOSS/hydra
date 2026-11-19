@@ -1,18 +1,19 @@
 {
   "name": "@exodus/remote-config-atoms",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Atoms sourced from remote config",
   "type": "module",
   "main": "lib/index.js",
   "exports": "./lib/index.js",
   "author": "Exodus Movement, Inc.",
   "scripts": {
-    "build": "run -T tsc -p tsconfig.build.json",
-    "clean": "run -T tsc --build --clean",
-    "lint": "run -T eslint .",
-    "test": "run -T exodus-test --jest --esbuild",
-    "lint:fix": "yarn lint --fix",
-    "prepublishOnly": "yarn run -T build --scope @exodus/remote-config-atoms"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint .",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "lint:fix": "pnpm run lint --fix",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/remote-config-atoms"
   },
   "files": [
     "lib",
@@ -20,15 +21,15 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/remote-config-atoms",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/remote-config-atoms",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aremote-config-atoms"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aremote-config-atoms"
   },
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
+    "@exodus/atoms": "workspace:^",
     "lodash": "^4.17.21"
   },
   "devDependencies": {

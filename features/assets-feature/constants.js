@@ -6,7 +6,13 @@ export const disabledPurposesDefaultConfig = {
   defaults: Object.create(null),
 }
 
+export const assetsModuleDefaultConfig = {
+  useDynamicCombinedAssets: false,
+  dynamicCombinedAssetOverrides: Object.create(null),
+}
+
 export const defaultConfig = {
   multiAddressMode: multiAddressModeDefaultConfig,
   disabledPurposes: disabledPurposesDefaultConfig,
+  assetsModule: assetsModuleDefaultConfig,
 }

@@ -18,6 +18,6 @@ const modularRedux = (createStore) => (reducers, initialState, enhancer) => {
   return store
 }
 
-export * from './utils'
+export * from './utils.js'
 
 export default modularRedux

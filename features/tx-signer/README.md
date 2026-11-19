@@ -15,7 +15,7 @@ flowchart LR
 ## Install
 
 ```sh
-yarn add @exodus/tx-signer
+pnpm add @exodus/tx-signer
 ```
 
 ## Usage

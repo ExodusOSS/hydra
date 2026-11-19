@@ -1,20 +1,20 @@
 {
   "name": "@exodus/dayjs",
   "version": "1.1.1",
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/dayjs",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/dayjs",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
   "description": "Initializes dayjs with plugins",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Adayjs"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Adayjs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "scripts": {
-    "lint": "run -T eslint",
-    "lint:fix": "yarn lint --fix"
+    "lint": "pnpm exec eslint",
+    "lint:fix": "pnpm run lint --fix"
   },
   "type": "module",
   "main": "index.js",
@@ -25,6 +25,7 @@
     "CHANGELOG.md"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

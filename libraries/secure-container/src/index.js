@@ -1,8 +1,9 @@
-import { randomBytes } from '@exodus/crypto/randomBytes'
+import { randomBytes, randomFill } from '@exodus/crypto/randomBytes'
 import * as conBlob from './blob.js'
 import * as conHeader from './header.js'
 import * as conMetadata from './metadata.js'
 import * as conFile from './file.js'
+import { utf8fromString } from '@exodus/bytes/utf8.js'
 
 // options: passphrase, blobKey, metdata
 export async function encrypt(data, options = {}) {
@@ -22,17 +23,29 @@ export async function encrypt(data, options = {}) {
     throw new Error('Must set either passphrase or (metadata and blobKey)')
   }
 
-  data = Buffer.isBuffer(data) ? data : Buffer.from(data, 'utf8')
-  const { blob: encBlob } = await conBlob.encrypt(data, metadata, blobKey)
+  let scrub = false
+  if (typeof data === 'string') {
+    data = utf8fromString(data) // throws on invalid strings
+    scrub = true
+  } else if (!(data instanceof Uint8Array)) {
+    throw new TypeError('data must be a string or an Uint8Array instance')
+  }
+
+  let enc
+  try {
+    enc = await conBlob.encrypt(data, metadata, blobKey)
+  } finally {
+    if (scrub) randomFill(data)
+  }
 
   const headerBuf = conHeader.serialize(header)
   const mdBuf = conMetadata.serialize(metadata)
 
   const fileObj = {
     header: headerBuf,
-    checksum: await conFile.computeChecksum(mdBuf, encBlob),
+    checksum: await conFile.computeChecksum(mdBuf, enc.blob),
     metadata: mdBuf,
-    blob: encBlob,
+    blob: enc.blob,
   }
   const encryptedData = conFile.encode(fileObj)
 
@@ -43,8 +56,9 @@ export async function decrypt(encryptedData, passphrase) {
   const fileObj = conFile.decode(encryptedData)
 
   const checksum = await conFile.computeChecksum(fileObj.metadata, fileObj.blob)
-  if (!fileObj.checksum.equals(checksum))
+  if (!fileObj.checksum.equals(checksum)) {
     throw new Error('seco checksum does not match; data may be corrupted')
+  }
 
   const metadata = conMetadata.decode(fileObj.metadata)
   const blobKey = await conMetadata.decryptBlobKey(metadata, passphrase)

@@ -34,7 +34,7 @@ export function captureStackTrace(err: Error): void {
 
   try {
     // do NOT add "void", it will remove the whole line in a tragic transpilation accident
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    // oxlint-disable-next-line no-unused-expressions
     err.stack // trigger prepareStackTrace
   } finally {
     Error.prepareStackTrace = originalPrepareStackTrace

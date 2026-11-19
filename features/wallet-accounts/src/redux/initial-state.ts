@@ -1,3 +1,5 @@
+import type { WalletAccount } from '@exodus/models'
+
 const initialState: WalletAccountsReduxState = {
   error: null,
   configuredActiveWalletAccountLoaded: false,
@@ -17,7 +19,7 @@ export type WalletAccountsReduxState = {
   multipleWalletAccountsEnabledLoaded: boolean
   walletAccountsDataLoaded: boolean
   loaded: boolean
-  data: Record<string, unknown>
+  data: Record<string, WalletAccount>
   multipleWalletAccountsEnabled: boolean | undefined
   configuredActiveWalletAccount: string | null
 }

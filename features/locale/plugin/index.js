@@ -5,7 +5,13 @@ export const localeLifecyclePluginDefinition = {
   id: 'localeLifecyclePlugin',
   type: 'plugin',
   factory: createLocalePlugin,
-  dependencies: ['languageAtom', 'port', 'currencyAtom', 'languageFusionAtom'],
+  dependencies: [
+    'languageAtom',
+    'port',
+    'currencyAtom',
+    'currencyFusionAtom',
+    'languageFusionAtom',
+  ],
   public: true,
 }
 

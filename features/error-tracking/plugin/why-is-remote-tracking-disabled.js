@@ -59,6 +59,14 @@ export class ErrorTrackingAbExperiment {
   }
 }
 
+function whyIsExperimentDisabled({ experimentId, abTesting, logger, prefix = '' }) {
+  const experiment = new ErrorTrackingAbExperiment({ experimentId, abTesting, logger })
+
+  if (!experiment.hasExperimentId) return `${prefix}missing-ab-experiment-id`
+  if (!experiment.enabled) return `${prefix}ab-experiment-disabled`
+  if (experiment.variant !== 'enabled') return `${prefix}ab-experiment-variant-disabled`
+}
+
 export function whyIsRemoteTrackingDisabled({
   remoteErrorTrackingABExperimentId,
   remoteErrorTrackingFundedWalletsABExperimentId,
@@ -72,20 +80,12 @@ export function whyIsRemoteTrackingDisabled({
 }) {
   if (buildMetadata.dev) return 'dev-mode'
 
-  const unfundedExperiment = new ErrorTrackingAbExperiment({
+  const baseDisabledReason = whyIsExperimentDisabled({
     experimentId: remoteErrorTrackingABExperimentId,
     abTesting,
     logger,
   })
-
-  if (!unfundedExperiment.hasExperimentId) return 'missing-ab-experiment-id'
-  if (!unfundedExperiment.enabled) {
-    return 'ab-experiment-disabled'
-  }
-
-  if (unfundedExperiment.variant !== 'enabled') {
-    return 'ab-experiment-variant-disabled'
-  }
+  if (baseDisabledReason) return baseDisabledReason
 
   if (
     trackWalletsCreatedAfter &&
@@ -103,21 +103,26 @@ export function whyIsRemoteTrackingDisabled({
   }
 
   // FUNDED WALLETS: separate AB experiment
-  const fundedExperiment = new ErrorTrackingAbExperiment({
+  const fundedDisabledReason = whyIsExperimentDisabled({
     experimentId: remoteErrorTrackingFundedWalletsABExperimentId,
     abTesting,
     logger,
+    prefix: 'funded-wallets-',
   })
+  if (fundedDisabledReason) return fundedDisabledReason
+}
 
-  if (!fundedExperiment.hasExperimentId) {
-    return 'missing-funded-wallets-ab-experiment-id'
-  }
+export function whyIsUnsafeRemoteTrackingDisabled({
+  remoteErrorTrackingABExperimentId,
+  abTesting,
+  buildMetadata,
+  logger,
+}) {
+  if (buildMetadata.dev) return 'dev-mode'
 
-  if (!fundedExperiment.enabled) {
-    return 'funded-wallets-ab-experiment-disabled'
-  }
-
-  if (fundedExperiment.variant !== 'enabled') {
-    return 'funded-wallets-ab-experiment-variant-disabled'
-  }
+  return whyIsExperimentDisabled({
+    experimentId: remoteErrorTrackingABExperimentId,
+    abTesting,
+    logger,
+  })
 }

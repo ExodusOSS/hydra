@@ -3,21 +3,14 @@ import KeyIdentifier from '@exodus/key-identifier'
 import { createKeyIdentifierForExodus } from '@exodus/key-ids'
 
 import { getSeedId } from '../crypto/seed-id.js'
+import moduleDefinition from '../index.js'
 import createKeychain from './create-keychain.js'
 
 const seed = await mnemonicToSeed({
   mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
 })
 
-const seed1 = await mnemonicToSeed({
-  mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease test',
-  validate: false,
-})
-
-const otherSeed = await mnemonicToSeed({ mnemonic: 'language'.repeat(12), validate: false })
-
 const seedId = await getSeedId(seed)
-const otherSeedId = await getSeedId(otherSeed)
 
 describe('lockPrivateKeys', () => {
   it('should allow private key usage when unlocked', async () => {
@@ -37,23 +30,23 @@ describe('lockPrivateKeys', () => {
     expect(Buffer.compare(publicKey, exportedKeys.publicKey)).toBe(0)
   })
 
-  it('should allow addSeed when locked', async () => {
-    const keychain = await createKeychain({ seed })
+  it('should allow unlock when locked', async () => {
+    const keychain = moduleDefinition.factory()
     keychain.lockPrivateKeys()
-    await keychain.addSeed(seed)
+    await keychain.unlock(seed)
   })
 
-  it('should allow removeAllSeeds when locked', async () => {
+  it('should allow lock when locked', async () => {
     const keychain = await createKeychain({ seed })
     keychain.lockPrivateKeys()
-    keychain.removeAllSeeds()
+    keychain.lock()
   })
 
-  it('should allow usage when locked after removeAllSeeds and re-adding seeds', async () => {
+  it('should allow usage when locked after lock and re-adding seeds', async () => {
     const keychain = await createKeychain({ seed })
     keychain.lockPrivateKeys()
-    keychain.removeAllSeeds()
-    await keychain.addSeed(seed)
+    keychain.lock()
+    await keychain.unlock(seed)
 
     const keyId = createKeyIdentifierForExodus({ exoType: 'FUSION' })
     await keychain.exportKey({
@@ -75,17 +68,25 @@ describe('lockPrivateKeys', () => {
     expect(exportedKeys.publicKey).toBeDefined()
   })
 
-  it('allows unlocking seeds in batches', async () => {
+  it('reports lock state via arePrivateKeysLocked', async () => {
     const keychain = await createKeychain({ seed })
-    await keychain.addSeed(otherSeed)
+
+    expect(await keychain.arePrivateKeysLocked()).toBe(false)
 
     keychain.lockPrivateKeys()
-    await keychain.unlockPrivateKeys([seed])
-
     expect(await keychain.arePrivateKeysLocked()).toBe(true)
-    expect(await keychain.arePrivateKeysLocked([seed])).toBe(false)
 
-    await keychain.unlockPrivateKeys([otherSeed])
+    await keychain.unlockPrivateKeys()
+    expect(await keychain.arePrivateKeysLocked()).toBe(false)
+  })
+
+  it('lock resets lock state', async () => {
+    const keychain = await createKeychain({ seed })
+
+    keychain.lockPrivateKeys()
+    expect(await keychain.arePrivateKeysLocked()).toBe(true)
+
+    keychain.lock()
     expect(await keychain.arePrivateKeysLocked()).toBe(false)
   })
 
@@ -93,8 +94,7 @@ describe('lockPrivateKeys', () => {
     const keychain = await createKeychain({ seed })
 
     keychain.lockPrivateKeys()
-    await keychain.unlockPrivateKeys([seed])
-    await keychain.addSeed(otherSeed)
+    await keychain.unlockPrivateKeys()
 
     const keyId = createKeyIdentifierForExodus({ exoType: 'FUSION' })
     const exportedKeys = await keychain.exportKey({
@@ -109,54 +109,6 @@ describe('lockPrivateKeys', () => {
       sign: { publicKey },
     } = await sodiumEncryptor.getSodiumKeysFromSeed({ seedId })
     expect(Buffer.compare(publicKey, exportedKeys.publicKey)).toBe(0)
-  })
-
-  it('should block exporting seeds that still locked', async () => {
-    const keychain = await createKeychain({ seed })
-    const keyId = createKeyIdentifierForExodus({ exoType: 'FUSION' })
-
-    await keychain.addSeed(otherSeed)
-    keychain.lockPrivateKeys()
-    await keychain.unlockPrivateKeys([seed])
-
-    await expect(
-      keychain.exportKey({
-        seedId: otherSeedId,
-        keyId,
-        exportPrivate: true,
-      })
-    ).rejects.toThrow(/private keys are locked/)
-  })
-
-  it('should block unlock for wrong seed ids', async () => {
-    const keychain = await createKeychain({ seed })
-    keychain.lockPrivateKeys()
-
-    const wrongSeed = await mnemonicToSeed({ mnemonic: 'menu'.repeat(12), validate: false })
-    await expect(async () => keychain.unlockPrivateKeys([wrongSeed])).rejects.toThrow(
-      /must pass in existing seed/
-    )
-
-    const keychain1 = await createKeychain({ seed })
-    await keychain1.addSeed(seed1)
-    keychain1.lockPrivateKeys()
-    await expect(async () => keychain1.unlockPrivateKeys([seed, wrongSeed])).rejects.toThrow(
-      /must pass in existing seed/
-    )
-  })
-
-  it('either unlock all provided seeds or none', async () => {
-    const keychain = await createKeychain({ seed })
-
-    await keychain.addSeed(seed1)
-    keychain.lockPrivateKeys()
-
-    const wrongSeed = await mnemonicToSeed({ mnemonic: 'menu'.repeat(12), validate: false })
-    await expect(async () => keychain.unlockPrivateKeys([seed, wrongSeed])).rejects.toThrow(
-      /must pass in existing seed/
-    )
-
-    expect(await keychain.arePrivateKeysLocked([seed])).toBe(true)
   })
 
   it('should block exportKey for private keys when locked', async () => {
@@ -222,6 +174,73 @@ describe('lockPrivateKeys', () => {
     )
     await expect(keychain.secp256k1.createSigner({ keyId }).signBuffer({})).rejects.toThrow(
       /private keys are locked/
+    )
+  })
+
+  it('is idempotent when unlocking the same seed', async () => {
+    const keychain = moduleDefinition.factory()
+    const first = await keychain.unlock(seed)
+
+    await expect(keychain.unlock(seed)).resolves.toBe(first)
+  })
+
+  it('re-unlocking the same seed clears the private-keys lock', async () => {
+    const keychain = moduleDefinition.factory()
+    await keychain.unlock(seed)
+    keychain.lockPrivateKeys()
+    expect(await keychain.arePrivateKeysLocked()).toBe(true)
+
+    await keychain.unlock(seed)
+    expect(await keychain.arePrivateKeysLocked()).toBe(false)
+
+    const keyId = createKeyIdentifierForExodus({ exoType: 'FUSION' })
+    await expect(keychain.exportKey({ seedId, keyId, exportPrivate: true })).resolves.toBeDefined()
+  })
+
+  it('replaces the current seed when unlocking a different one (last-write-wins)', async () => {
+    const otherSeed = await mnemonicToSeed({
+      mnemonic: 'wine system mean beyond filter human meat rubber episode wash stomach aunt',
+    })
+    const otherSeedId = await getSeedId(otherSeed)
+    const keychain = moduleDefinition.factory()
+    await keychain.unlock(seed)
+
+    await expect(keychain.unlock(otherSeed)).resolves.toBe(otherSeedId)
+
+    const keyId = createKeyIdentifierForExodus({ exoType: 'FUSION' })
+    // the new seed is usable...
+    await expect(
+      keychain.exportKey({ seedId: otherSeedId, keyId, exportPrivate: true })
+    ).resolves.toBeDefined()
+    // ...and the replaced seed is gone.
+    await expect(keychain.exportKey({ seedId, keyId, exportPrivate: true })).rejects.toThrow(
+      /not initialized/
+    )
+  })
+
+  it('serializes concurrent unlocks so the last seed wins without interleaving', async () => {
+    const otherSeed = await mnemonicToSeed({
+      mnemonic: 'wine system mean beyond filter human meat rubber episode wash stomach aunt',
+    })
+    const otherSeedId = await getSeedId(otherSeed)
+    const keychain = moduleDefinition.factory()
+
+    const [first, second] = await Promise.allSettled([
+      keychain.unlock(seed),
+      keychain.unlock(otherSeed),
+    ])
+
+    expect(first.status).toBe('fulfilled')
+    expect(second.status).toBe('fulfilled')
+
+    // Serialized FIFO: the second (otherSeed) ran last and is the surviving seed;
+    // the keychain holds exactly one hard seed, never a corrupted blend of both.
+    const keyId = createKeyIdentifierForExodus({ exoType: 'FUSION' })
+    await expect(
+      keychain.exportKey({ seedId: otherSeedId, keyId, exportPrivate: true })
+    ).resolves.toBeDefined()
+    await expect(keychain.exportKey({ seedId, keyId, exportPrivate: true })).rejects.toThrow(
+      /not initialized/
     )
   })
 })

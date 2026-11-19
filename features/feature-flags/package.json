@@ -1,19 +1,23 @@
 {
   "name": "@exodus/feature-flags",
   "type": "module",
-  "version": "6.1.2",
+  "version": "6.5.0",
   "description": "Module for monitoring/controlling the currently available features based on remoteConfig, device geolocation, etc",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/feature-flags",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/feature-flags",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afeature-flags"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Afeature-flags"
   },
   "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./redux": "./redux/index.js"
+  },
   "files": [
     "api",
     "atoms",
@@ -28,16 +32,18 @@
     "!**/*.test.js"
   ],
   "scripts": {
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.0.1",
-    "@exodus/feature-control": "^2.2.3",
-    "@exodus/remote-config-atoms": "^1.1.0",
-    "@exodus/typeforce": "^1.18.0",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/crypto": "^1.0.0-rc.34",
+    "@exodus/feature-control": "workspace:^",
+    "@exodus/remote-config-atoms": "workspace:^",
+    "@exodus/typeforce": "workspace:^",
     "minimalistic-assert": "^1.0.1",
     "reselect": "^3.0.1",
     "semver": ">5 <7"
@@ -48,10 +54,11 @@
     "@exodus/remote-config": "workspace:^",
     "@exodus/storage-memory": "workspace:^",
     "@types/minimalistic-assert": "^1.0.1",
-    "events": "^3.3.0",
+    "p-defer": "^4.0.0",
     "redux": "^4.2.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

@@ -1,19 +1,13 @@
 import { createInMemoryAtom } from '@exodus/atoms'
-import {
-  availableAssetNamesAtomDefinition,
-  availableAssetsAtomDefinition,
-} from '@exodus/available-assets/atoms/index.js'
 import { difference } from '@exodus/basic-utils'
+import { getSeedId } from '@exodus/bip32'
 import { mnemonicToSeed } from '@exodus/bip39'
 import bip44Constants from '@exodus/bip44-constants/by-ticker.js'
-import { blockchainMetadataAtomDefinition } from '@exodus/blockchain-metadata/atoms/index.js'
-import blockchainMetadataDefinition from '@exodus/blockchain-metadata/module/index.js'
 import { createGetKeyIdentifier as createCardanoGetKeyIdentifier } from '@exodus/cardano-lib'
 import { createGetKeyIdentifier } from '@exodus/ethereum-lib'
-import { getSeedId } from '@exodus/keychain/module/crypto/seed-id.js'
-import { Keychain } from '@exodus/keychain/module/index.js'
+import { Keychain } from '@exodus/keychain'
 import { AccountState, WalletAccount } from '@exodus/models'
-import { PublicKeyProvider } from '@exodus/public-key-provider/lib/module/public-key-provider.js'
+import { PublicKeyProvider } from '@exodus/public-key-provider'
 import publicKeyStoreDefinition from '@exodus/public-key-provider/lib/module/store/index.js'
 import createInMemoryStorage from '@exodus/storage-memory'
 import createHardwareWalletPublicKeysAtom from '@exodus/wallet-accounts/atoms/hardware-wallet-public-keys.js'
@@ -22,9 +16,6 @@ import createWalletAccountsAtom from '@exodus/wallet-accounts/atoms/wallet-accou
 import createWalletAccountsInternalAtom from '@exodus/wallet-accounts/atoms/wallet-accounts-internal.js'
 
 import createAssetClientInterface from '../asset-client-interface.js'
-
-const { factory: createAvailableAssetsAtom } = availableAssetsAtomDefinition
-const { factory: createAvailableAssetNamesAtom } = availableAssetNamesAtomDefinition
 
 class DummyAccountState extends AccountState {}
 
@@ -133,6 +124,42 @@ const assetsModule = {
   getAsset: (assetName) => assetsMock[assetName],
 }
 
+const availableAssetNames = Object.keys(assetsMock).filter(
+  (assetName) => assetName !== 'disabled_coin'
+)
+
+const createAvailableAssetNamesAtom = () =>
+  createInMemoryAtom({ defaultValue: availableAssetNames })
+
+// Minimal stand-in for @exodus/blockchain-metadata: the ACI only reads account states and
+// commits `updateAccountState` batches against it.
+const createInMemoryBlockchainMetadata = () => {
+  const accountStates = new Map()
+  const keyOf = ({ assetName, walletAccount }) => `${walletAccount}:${assetName}`
+
+  const readAccountState = (params) =>
+    accountStates.get(keyOf(params)) ??
+    assetsModule.getAsset(params.assetName).api.createAccountState().create()
+
+  const batch = () => {
+    const updates = []
+    const self = {
+      updateAccountState: (update) => {
+        updates.push(update)
+        return self
+      },
+      commit: async () => {
+        for (const { newData, ...params } of updates) {
+          accountStates.set(keyOf(params), readAccountState(params).merge(newData))
+        }
+      },
+    }
+    return self
+  }
+
+  return { getAccountState: async (params) => readAccountState(params), batch }
+}
+
 const trezorAccount = new WalletAccount({
   id: '123',
   source: 'trezor',
@@ -142,6 +169,7 @@ const trezorAccount = new WalletAccount({
 
 describe('aci get wallet accounts', () => {
   let assetClientInterface
+  let getReceiveAddress
 
   beforeEach(async () => {
     const storage = createInMemoryStorage()
@@ -169,12 +197,20 @@ describe('aci get wallet accounts', () => {
       }),
     })
 
-    const availableAssetsAtom = createAvailableAssetsAtom()
-    await availableAssetsAtom.set(
-      Object.keys(assetsMock)
-        .filter((assetName) => assetName !== 'disabled_coin')
-        .map((assetName) => ({ assetName, reason: 'default' }))
-    )
+    const availableAssetNamesByWalletAccountAtom = createInMemoryAtom({
+      defaultValue: {
+        exodus_0: availableAssetNames,
+        exodus_1: ['solana', 'usdcoin_solana'],
+        trezor: availableAssetNames,
+      },
+    })
+    getReceiveAddress = jest.fn(({ walletAccount }) => {
+      if (walletAccount.source === 'trezor') {
+        throw new Error('address not supported for this asset')
+      }
+
+      return 'some-address'
+    })
 
     assetClientInterface = createAssetClientInterface({
       blockchainMetadata: {},
@@ -182,15 +218,10 @@ describe('aci get wallet accounts', () => {
       walletAccountsAtom,
       enabledWalletAccountsAtom,
       assetsModule,
-      availableAssetNamesAtom: createAvailableAssetNamesAtom({ availableAssetsAtom }),
+      availableAssetNamesAtom: createAvailableAssetNamesAtom(),
+      availableAssetNamesByWalletAccountAtom,
       addressProvider: {
-        getReceiveAddress: ({ assetName, walletAccount }) => {
-          if (walletAccount.source === 'trezor') {
-            throw new Error('address not supported for this asset')
-          }
-
-          return 'some-address'
-        },
+        getReceiveAddress,
       },
     })
   })
@@ -207,6 +238,20 @@ describe('aci get wallet accounts', () => {
       'exodus_0',
       'exodus_1',
     ])
+  })
+
+  test('filters restricted wallets before deriving an unsupported asset address', async () => {
+    const getReceiveAddress = jest.spyOn(assetClientInterface, 'getReceiveAddress')
+
+    await expect(
+      assetClientInterface.getWalletAccounts({ assetName: 'ethereum' })
+    ).resolves.toEqual(['exodus_0'])
+    expect(getReceiveAddress).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        assetName: 'ethereum',
+        walletAccount: 'exodus_1',
+      })
+    )
   })
 
   test('should getWalletAccounts raise error when invalid asset name', async () => {
@@ -266,22 +311,7 @@ describe('aci get account state', () => {
       exodus_0: new WalletAccount({ source: 'exodus', index: 0, seedId: 'some' }),
     })
 
-    const blockchainMetadataAtom = blockchainMetadataAtomDefinition.factory()
-
-    const availableAssetsAtom = createAvailableAssetsAtom()
-    await availableAssetsAtom.set(
-      Object.keys(assetsMock)
-        .filter((assetName) => assetName !== 'disabled_coin')
-        .map((assetName) => ({ assetName, reason: 'default' }))
-    )
-
-    blockchainMetadata = blockchainMetadataDefinition.factory({
-      assetsModule,
-      storage: createInMemoryStorage(),
-      enabledWalletAccountsAtom,
-      blockchainMetadataAtom,
-    })
-    await blockchainMetadata.load()
+    blockchainMetadata = createInMemoryBlockchainMetadata()
 
     assetClientInterface = createAssetClientInterface({
       assetsModule,
@@ -289,7 +319,7 @@ describe('aci get account state', () => {
       // wallet: {},
       walletAccountsAtom,
       enabledWalletAccountsAtom,
-      availableAssetNamesAtom: createAvailableAssetNamesAtom({ availableAssetsAtom }),
+      availableAssetNamesAtom: createAvailableAssetNamesAtom(),
     })
   })
 
@@ -350,7 +380,7 @@ describe('getPublicKey', async () => {
 
   beforeEach(async () => {
     const keychain = new Keychain({})
-    await keychain.addSeed(seed)
+    await keychain.unlock(seed)
 
     const mockLogger = { warn: jest.fn() }
     const walletAccountsAtom = createInMemoryAtom({
@@ -358,7 +388,7 @@ describe('getPublicKey', async () => {
     })
 
     const storage = createInMemoryStorage()
-    storage.set('hardwareWalletPublicKeys', {
+    await storage.set('hardwareWalletPublicKeys', {
       publicKey,
       xpub,
     })
@@ -460,7 +490,6 @@ describe('getPublicKey', async () => {
 
 describe('aci getAssetConfig', () => {
   let _createAssetClientInterface
-  let blockchainMetadata
 
   beforeEach(async () => {
     const storage = createInMemoryStorage()
@@ -479,31 +508,13 @@ describe('aci getAssetConfig', () => {
       }),
     })
 
-    const blockchainMetadataAtom = blockchainMetadataAtomDefinition.factory()
-
-    const availableAssetsAtom = createAvailableAssetsAtom()
-    await availableAssetsAtom.set(
-      Object.keys(assetsMock)
-        .filter((assetName) => assetName !== 'disabled_coin')
-        .map((assetName) => ({ assetName, reason: 'default' }))
-    )
-
-    blockchainMetadata = blockchainMetadataDefinition.factory({
-      assetsModule,
-      storage: createInMemoryStorage(),
-      enabledWalletAccountsAtom,
-      blockchainMetadataAtom,
-    })
-    await blockchainMetadata.load()
-
     _createAssetClientInterface = (config) =>
       createAssetClientInterface({
         assetsModule,
-        blockchainMetadata,
         // wallet: {},
         walletAccountsAtom,
         enabledWalletAccountsAtom,
-        availableAssetNamesAtom: createAvailableAssetNamesAtom({ availableAssetsAtom }),
+        availableAssetNamesAtom: createAvailableAssetNamesAtom(),
         config,
       })
   })
@@ -570,5 +581,146 @@ describe('aci getAssetConfig', () => {
       walletAccount: 'exodus_0',
     })
     expect(assetConfig).toEqual({ confirmationsNumber: 1 })
+  })
+})
+
+describe('aci getRuntimeConfig', () => {
+  const runtimeConfigFlags = {
+    ethereum: {
+      'transactionAssessment.enabled': 'ethereumTransactionAssessment',
+      'energySponsorship.enabled': 'ethereumEnergySponsorship',
+    },
+  }
+
+  const createFeatureFlagAtoms = () => ({
+    ethereumTransactionAssessment: createInMemoryAtom({ defaultValue: { isOn: true } }),
+    ethereumEnergySponsorship: createInMemoryAtom({ defaultValue: { isOn: false } }),
+  })
+
+  test('returns an empty config when no runtime config flags are configured', async () => {
+    const assetClientInterface = createAssetClientInterface({
+      assetsModule,
+      featureFlagAtoms: createFeatureFlagAtoms(),
+    })
+
+    await expect(assetClientInterface.getRuntimeConfig({ assetName: 'ethereum' })).resolves.toEqual(
+      {}
+    )
+  })
+
+  test('maps feature flags to the base asset config for a token', async () => {
+    const assetClientInterface = createAssetClientInterface({
+      assetsModule,
+      featureFlagAtoms: createFeatureFlagAtoms(),
+      config: { runtimeConfigFlags },
+    })
+
+    await expect(
+      assetClientInterface.getRuntimeConfig({ assetName: 'tetherusd' })
+    ).resolves.toEqual({
+      transactionAssessment: { enabled: true },
+      energySponsorship: { enabled: false },
+    })
+  })
+
+  test('merges token runtime config flags over the base asset ones', async () => {
+    const assetClientInterface = createAssetClientInterface({
+      assetsModule,
+      featureFlagAtoms: {
+        ...createFeatureFlagAtoms(),
+        tetherusdEnergySponsorship: createInMemoryAtom({ defaultValue: { isOn: true } }),
+        tetherusdSwap: createInMemoryAtom({ defaultValue: { isOn: false } }),
+      },
+      config: {
+        runtimeConfigFlags: {
+          ...runtimeConfigFlags,
+          tetherusd: {
+            'energySponsorship.enabled': 'tetherusdEnergySponsorship',
+            'swap.enabled': 'tetherusdSwap',
+          },
+        },
+      },
+    })
+
+    await expect(
+      assetClientInterface.getRuntimeConfig({ assetName: 'tetherusd' })
+    ).resolves.toEqual({
+      transactionAssessment: { enabled: true },
+      energySponsorship: { enabled: true },
+      swap: { enabled: false },
+    })
+    await expect(assetClientInterface.getRuntimeConfig({ assetName: 'ethereum' })).resolves.toEqual(
+      {
+        transactionAssessment: { enabled: true },
+        energySponsorship: { enabled: false },
+      }
+    )
+  })
+
+  test('returns an empty config when the asset has no runtime config flags', async () => {
+    const assetClientInterface = createAssetClientInterface({
+      assetsModule,
+      featureFlagAtoms: createFeatureFlagAtoms(),
+      config: { runtimeConfigFlags },
+    })
+
+    await expect(assetClientInterface.getRuntimeConfig({ assetName: 'solana' })).resolves.toEqual(
+      {}
+    )
+  })
+
+  test('reflects feature flag updates without recreating the interface', async () => {
+    const featureFlagAtoms = createFeatureFlagAtoms()
+    const assetClientInterface = createAssetClientInterface({
+      assetsModule,
+      featureFlagAtoms,
+      config: { runtimeConfigFlags },
+    })
+
+    await featureFlagAtoms.ethereumEnergySponsorship.set({ isOn: true })
+
+    await expect(assetClientInterface.getRuntimeConfig({ assetName: 'ethereum' })).resolves.toEqual(
+      {
+        transactionAssessment: { enabled: true },
+        energySponsorship: { enabled: true },
+      }
+    )
+  })
+
+  test('returns an empty config when feature flags are not available', async () => {
+    const assetClientInterface = createAssetClientInterface({
+      assetsModule,
+      config: { runtimeConfigFlags },
+    })
+
+    await expect(assetClientInterface.getRuntimeConfig({ assetName: 'ethereum' })).resolves.toEqual(
+      {}
+    )
+  })
+
+  test('throws when a mapped feature flag is not registered', async () => {
+    const assetClientInterface = createAssetClientInterface({
+      assetsModule,
+      featureFlagAtoms: {
+        ethereumTransactionAssessment: createInMemoryAtom({ defaultValue: { isOn: true } }),
+      },
+      config: { runtimeConfigFlags },
+    })
+
+    await expect(assetClientInterface.getRuntimeConfig({ assetName: 'ethereum' })).rejects.toThrow(
+      'feature flag ethereumEnergySponsorship is not registered'
+    )
+  })
+
+  test('throws for an unsupported asset', async () => {
+    const assetClientInterface = createAssetClientInterface({
+      assetsModule,
+      featureFlagAtoms: createFeatureFlagAtoms(),
+      config: { runtimeConfigFlags },
+    })
+
+    await expect(
+      assetClientInterface.getRuntimeConfig({ assetName: 'unknown_asset' })
+    ).rejects.toThrow('assetName unknown_asset is not supported')
   })
 })

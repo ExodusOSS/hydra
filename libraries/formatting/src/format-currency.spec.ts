@@ -50,7 +50,7 @@ describe('formatCurrency()', () => {
     }))
 
     formatCurrency(0, { maxSignificant: 3 })
-    expect(global.Intl.NumberFormat).toBeCalledWith(['en-US'], {
+    expect(global.Intl.NumberFormat).toHaveBeenCalledWith(['en-US'], {
       locale: 'en-US',
       localeMatcher: 'best fit',
       minimumFractionDigits: 2,
@@ -60,7 +60,7 @@ describe('formatCurrency()', () => {
       useGrouping: true,
     })
     formatCurrency(0, { maximumSignificantDigits: 3 })
-    expect(global.Intl.NumberFormat).toBeCalledWith(['en-US'], {
+    expect(global.Intl.NumberFormat).toHaveBeenCalledWith(['en-US'], {
       locale: 'en-US',
       localeMatcher: 'best fit',
       minimumFractionDigits: 2,
@@ -71,7 +71,7 @@ describe('formatCurrency()', () => {
     })
 
     formatCurrency(0, { minSignificant: 3 })
-    expect(global.Intl.NumberFormat).toBeCalledWith(['en-US'], {
+    expect(global.Intl.NumberFormat).toHaveBeenCalledWith(['en-US'], {
       locale: 'en-US',
       localeMatcher: 'best fit',
       minimumFractionDigits: 2,
@@ -83,7 +83,7 @@ describe('formatCurrency()', () => {
 
     formatCurrency(0, { minimumSignificantDigits: 3 })
 
-    expect(global.Intl.NumberFormat).toBeCalledWith(['en-US'], {
+    expect(global.Intl.NumberFormat).toHaveBeenCalledWith(['en-US'], {
       locale: 'en-US',
       localeMatcher: 'best fit',
       minimumFractionDigits: 2,
@@ -95,7 +95,7 @@ describe('formatCurrency()', () => {
 
     formatCurrency(0, { maxInteger: 3 })
 
-    expect(global.Intl.NumberFormat).toBeCalledWith(['en-US'], {
+    expect(global.Intl.NumberFormat).toHaveBeenCalledWith(['en-US'], {
       locale: 'en-US',
       localeMatcher: 'best fit',
       minimumFractionDigits: 2,
@@ -107,7 +107,7 @@ describe('formatCurrency()', () => {
 
     formatCurrency(0, { locale: 'ka-GE' })
 
-    expect(global.Intl.NumberFormat).toBeCalledWith(['ka-GE'], {
+    expect(global.Intl.NumberFormat).toHaveBeenCalledWith(['ka-GE'], {
       locale: 'ka-GE',
       localeMatcher: 'best fit',
       minimumFractionDigits: 2,
@@ -118,7 +118,7 @@ describe('formatCurrency()', () => {
 
     formatCurrency(0, { locale: 'en-GB', format: '%v', code: 'not-sure', symbol: 'money' }) // ignored fields does not effect Intl call
 
-    expect(global.Intl.NumberFormat).toBeCalledWith(['en-GB'], {
+    expect(global.Intl.NumberFormat).toHaveBeenCalledWith(['en-GB'], {
       locale: 'en-GB',
       localeMatcher: 'best fit',
       minimumFractionDigits: 2,

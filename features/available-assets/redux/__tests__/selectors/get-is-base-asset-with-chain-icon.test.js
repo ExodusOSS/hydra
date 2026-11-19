@@ -19,7 +19,7 @@ describe('isBaseAssetWithChainIcon', () => {
     shiba: {
       name: 'shiba',
       api: {
-        hasFeature: (feature) => feature === 'customTokens',
+        features: { customTokens: true },
       },
       baseAsset: { name: 'shiba' },
     },

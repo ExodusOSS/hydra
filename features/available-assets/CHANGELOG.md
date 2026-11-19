@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.11.3](https://github.com/ExodusMovement/exodus/compare/@exodus/available-assets@8.11.2...@exodus/available-assets@8.11.3) (2026-11-12)
+
+### Bug Fixes
+
+- **available-assets:** retry a failed default remote token load with backoff ([#49007](https://github.com/ExodusMovement/exodus/issues/49007)) ([aef22ac](https://github.com/ExodusMovement/exodus/commit/aef22aca6f4e4424d738da0ed518f3e50db8d2b7))
+
+## [8.11.2](https://github.com/ExodusMovement/exodus/compare/@exodus/available-assets@8.11.1...@exodus/available-assets@8.11.2) (2026-08-31)
+
+### Bug Fixes
+
+- **available-assets:** filter out delisted assets ([#44400](https://github.com/ExodusMovement/exodus/issues/44400)) ([2a30d1a](https://github.com/ExodusMovement/exodus/commit/2a30d1a325b48a59d50dd4aa89be03809a3c2a0a))
+
+## [8.11.1](https://github.com/ExodusMovement/exodus/compare/@exodus/available-assets@8.11.0...@exodus/available-assets@8.11.1) (2026-08-20)
+
+### Bug Fixes
+
+- **assets:** guard against undefined in isAssetWithNetworkIcon chain icon resolution ([#42793](https://github.com/ExodusMovement/exodus/issues/42793)) ([ac9778d](https://github.com/ExodusMovement/exodus/commit/ac9778d47a2e0edef9d6b78cab3c80b5a4b72e58))
+
+### Performance Improvements
+
+- **available-assets:** memoize derived names instead of deep-comparing inputs ([#43935](https://github.com/ExodusMovement/exodus/issues/43935)) ([bd28cf6](https://github.com/ExodusMovement/exodus/commit/bd28cf6657d39a114c029168c2e6b6b8adca0cb4))
+
 ## [8.11.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/available-assets@8.10.1...@exodus/available-assets@8.11.0) (2026-02-13)
 
 ### Features

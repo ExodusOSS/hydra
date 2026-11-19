@@ -15,7 +15,7 @@ const I18nProvider = ({
   const [currentLocale, setCurrentLocale] = useState(locale)
   const [currentCurrency, setCurrentCurrency] = useState(currency)
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // oxlint-disable-next-line react/exhaustive-deps
   const i18n = useMemo(() => new I18N({ defaultCurrency, defaultLanguage }), [])
 
   useEffect(() => {

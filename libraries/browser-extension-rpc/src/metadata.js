@@ -1,6 +1,6 @@
 const ICON_MAX_SIZE = 120
 
-const base64 = (buf) => btoa([...buf].map((byte) => String.fromCharCode(byte)).join('')) // eslint-disable-line unicorn/prefer-code-point
+const base64 = (buf) => btoa([...buf].map((byte) => String.fromCharCode(byte)).join('')) // oxlint-disable-line unicorn/prefer-code-point
 
 export const getTitle = () => {
   const siteName = document.querySelector('head > meta[property="og:site_name"]')
@@ -73,7 +73,7 @@ const getIconData = (href) => {
     })
 
     // If can't compute, enable connecting dapp without icon. UI will render empty state
-    img.onerror = () => resolve(null) // eslint-disable-line unicorn/prefer-add-event-listener
+    img.onerror = () => resolve(null) // oxlint-disable-line unicorn/prefer-add-event-listener
   })
 }
 

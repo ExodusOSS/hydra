@@ -5,7 +5,7 @@ This feature offers a CRUD interface for wallet accounts, also known as portfoli
 ## Install
 
 ```sh
-yarn add @exodus/wallet-accounts
+pnpm add @exodus/wallet-accounts
 ```
 
 ## Usage

@@ -4,7 +4,6 @@ import pDefer from 'p-defer'
 import makeConcurrent from 'make-concurrent'
 
 import NftsNetworkMonitor from './NftsNetworkMonitor.js'
-import assert from 'minimalistic-assert'
 import { ASSET_NAME_TO_NFTS_NETWORK } from '../constants/index.js'
 import NftsBatchMonitor from './NftsBatchMonitor.js'
 import { dedupe } from '@exodus/atoms'
@@ -22,7 +21,7 @@ class NftsMonitor extends EventEmitter {
   #txLogsAtom
   #nftBatchMonitorStatusAtom
   #nftsMonitorStatusAtom
-  #assetsModule
+  #assetsAtom
   #nftsAtom
   #nftsTxsAtom
   #nftsModule
@@ -45,7 +44,7 @@ class NftsMonitor extends EventEmitter {
     nftsConfigAtom,
     nftBatchMonitorStatusAtom,
     nftsMonitorStatusAtom,
-    assetsModule,
+    assetsAtom,
     nfts,
     config,
     fetch,
@@ -55,7 +54,7 @@ class NftsMonitor extends EventEmitter {
 
     this.#nftsProxy = nftsProxy
     this.#addressProvider = addressProvider
-    this.#assetsModule = assetsModule
+    this.#assetsAtom = assetsAtom
     this.#nftsModule = nfts
     this.#nftsAtom = nftsAtom
     this.#nftsTxsAtom = nftsTxsAtom
@@ -73,7 +72,7 @@ class NftsMonitor extends EventEmitter {
     if (config.useBatchMonitor) {
       this.#batchMonitor = new NftsBatchMonitor({
         addressProvider,
-        assetsModule,
+        assetsAtom,
         enabledWalletAccountsAtom,
         nftsModule: nfts,
         nftsConfigAtom,
@@ -87,10 +86,10 @@ class NftsMonitor extends EventEmitter {
   }
 
   #startOne = async (assetName) => {
-    const asset = this.#assetsModule.getAsset(assetName)
+    const { value: assets } = await this.#assetsAtom.get()
+    const asset = assets[assetName]
 
-    assert(asset.api.hasFeature, `asset.api.hasFeature is required. Is ${assetName} a base asset?`)
-    if (!asset.api.hasFeature('nfts')) return
+    if (!asset.api.features?.nfts) return
 
     const network = ASSET_NAME_TO_NFTS_NETWORK[assetName] || assetName
 
@@ -131,7 +130,7 @@ class NftsMonitor extends EventEmitter {
     monitor.on('nftsTxs', this.#updateNftsTxs)
 
     // We don't await on purpose, as it blocks baseAssetNamesToMonitorAtom observe chain
-    monitor.start()
+    void monitor.start()
   }
 
   #stopOne = async (assetName) => {
@@ -182,7 +181,7 @@ class NftsMonitor extends EventEmitter {
         await this.#batchMonitor.initialize()
         this.#batchMonitor.on('nfts', this.#updateNfts)
         this.#batchMonitor.on('nftsTxs', this.#updateNftsTxs)
-        this.#batchMonitor.start({ fromImport: this.#handleImportOnStart })
+        void this.#batchMonitor.start({ fromImport: this.#handleImportOnStart })
       }
     } catch {}
 
@@ -203,7 +202,7 @@ class NftsMonitor extends EventEmitter {
     this.#unobserveBaseAssetNames = this.#baseAssetNamesToMonitorAtom.observe(monitorAssets)
 
     this.#unobserveTxLogs = this.#txLogsAtom.observe(({ changes }) => {
-      this.#batchMonitor?.refresh()
+      void this.#batchMonitor?.refresh()
       flattenToPaths(changes).forEach(([walletAccountName, assetName]) => {
         const monitor = this.#monitors.get(assetName)
         if (monitor) {
@@ -217,7 +216,7 @@ class NftsMonitor extends EventEmitter {
 
   stop = async () => {
     this.#handleImportOnStart = false
-    this.#batchMonitor?.stop()
+    void this.#batchMonitor?.stop()
     await Promise.all([...this.#monitors.keys()].map((assetName) => this.#stopOne(assetName)))
     this.#unobserveBaseAssetNames?.()
     this.#unobserveTxLogs?.()
@@ -252,7 +251,7 @@ const nftsMonitorDefinition = {
     'enabledWalletAccountsAtom',
     'activeWalletAccountAtom',
     'nftsProxy',
-    'assetsModule',
+    'assetsAtom',
     'config',
     'fetch',
     'nfts',

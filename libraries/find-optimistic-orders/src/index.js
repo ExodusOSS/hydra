@@ -9,7 +9,8 @@ import {
 
 const { groupBy, union } = lodash
 
-const matchOrdersAndTxs = ({ receivedTxs, orders, txLog }) => {
+// Pure matching core over plain order fields; callers decide whether to persist the returned assignments
+export const matchOrdersAndTxs = ({ receivedTxs, orders, txLog }) => {
   let potentialToTxIds = orders.reduce((acc, order) => {
     if (order.status === 'potential-complete') {
       order.potentialToTxIds.forEach((txId) => {
@@ -22,17 +23,19 @@ const matchOrdersAndTxs = ({ receivedTxs, orders, txLog }) => {
     return acc
   }, [])
   let ordersCopy = [...orders]
-  const updatedOrders = []
+  const assignments = []
   const matchedTxIds = []
 
   const handleMatchedResult = (indexes, tx) => {
     indexes.forEach((index) => {
-      const updatedOrder = ordersCopy[index].update({
-        status: 'optimistic-complete',
-        toTxId: tx ? tx.txId : null,
-        potentialToTxIds: [], // reset if there was something
+      assignments.push({
+        order: ordersCopy[index],
+        update: {
+          status: 'optimistic-complete',
+          toTxId: tx ? tx.txId : null,
+          potentialToTxIds: [], // reset if there was something
+        },
       })
-      updatedOrders.push(updatedOrder)
       ordersCopy[index] = null
     })
 
@@ -50,11 +53,13 @@ const matchOrdersAndTxs = ({ receivedTxs, orders, txLog }) => {
 
     // we don't delete items from ordersCopy here, for next receivedTx loop.
     indexes.forEach((index) => {
-      const updatedOrder = orders[index].update({
-        status: 'potential-complete',
-        potentialToTxIds: matchedPotentialToTxIds,
+      assignments.push({
+        order: orders[index],
+        update: {
+          status: 'potential-complete',
+          potentialToTxIds: matchedPotentialToTxIds,
+        },
       })
-      updatedOrders.push(updatedOrder)
     })
   }
 
@@ -136,15 +141,22 @@ const matchOrdersAndTxs = ({ receivedTxs, orders, txLog }) => {
       return handleMatchedResult([matchByIdIndex], tx)
     }
 
-    const simpleMatchIndex = ordersCopy.findIndex(
-      ({ toAmount, slippage = DEFAULT_ORDER_TO_AMOUNT_SLIPPAGE }) => {
-        return (
-          toAmount.gt(amount.mul(1 - slippage / 100)) && toAmount.lt(amount.mul(1 + slippage / 100))
-        )
+    // Abstain when 2+ orders fall in the slippage window — picking by array
+    // order has glued payouts onto unrelated orders (exodus-desktop#19477).
+    // Fall through; the server-supplied toTxId resolves on a later tick.
+    const simpleMatchIndexes = []
+    for (const [index, order] of ordersCopy.entries()) {
+      const { toAmount, slippage = DEFAULT_ORDER_TO_AMOUNT_SLIPPAGE } = order
+      const lower = amount.mul(1 - slippage / 100)
+      const upper = amount.mul(1 + slippage / 100)
+      if (toAmount.gt(lower) && toAmount.lt(upper)) {
+        simpleMatchIndexes.push(index)
+        if (simpleMatchIndexes.length > 1) break
       }
-    )
-    if (simpleMatchIndex !== -1) {
-      return handleMatchedResult([simpleMatchIndex], tx)
+    }
+
+    if (simpleMatchIndexes.length === 1) {
+      return handleMatchedResult([simpleMatchIndexes[0]], tx)
     }
 
     const totalSum = ordersCopy.reduce(
@@ -169,7 +181,7 @@ const matchOrdersAndTxs = ({ receivedTxs, orders, txLog }) => {
   })
 
   return {
-    updatedOrders,
+    assignments,
     matchedTxIds,
   }
 }
@@ -187,14 +199,14 @@ const findOptimisticOrders = ({ incomingOrders, postTxs, preTxs }) => {
 
   const result = Object.values(groupedOrders).reduce((acc, orders) => {
     if (receivedTxs.length === 0) return acc
-    const { updatedOrders, matchedTxIds } = matchOrdersAndTxs({
+    const { assignments, matchedTxIds } = matchOrdersAndTxs({
       receivedTxs,
       orders,
       txLog: postTxs,
     })
     receivedTxs = receivedTxs.filter((tx) => !matchedTxIds.includes(tx.txId))
 
-    acc.push(...updatedOrders)
+    acc.push(...assignments.map(({ order, update }) => order.update(update)))
 
     return acc
   }, [])
@@ -211,7 +223,7 @@ const findOptimisticOrders = ({ incomingOrders, postTxs, preTxs }) => {
     const matchedOrder = incomingOrders.find((o) => {
       const delta = o.toAmount.sub(tx.coinAmount)
       // TODO: figure out whether we should use toDefaultNumber instead
-      // eslint-disable-next-line @exodus/hydra/no-unsafe-number-unit-methods
+      // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-unsafe-number-unit-methods
       return delta.abs().toNumber() <= EOS_MAX_RAM_COST
     })
 

@@ -85,4 +85,111 @@ describe('withSerialization', () => {
     await expect(atom.get()).resolves.toBe(undefined)
     expect(deserialize).not.toHaveBeenCalled()
   })
+
+  describe('setter function optimization', () => {
+    it('should not call serialize when setter returns the same reference', async () => {
+      const serialize = jest.fn((set: Set<number>) => [...set])
+      const deserialize = jest.fn((arr: number[]) => new Set(arr))
+
+      const atom = withSerialization({
+        atom: createInMemoryAtom<number[]>({ defaultValue: [] }),
+        serialize,
+        deserialize,
+        pure: true,
+      })
+
+      await atom.set(new Set([1, 2, 3]))
+      const callsBefore = serialize.mock.calls.length
+
+      await atom.set((prev) => prev)
+
+      expect(serialize).toHaveBeenCalledTimes(callsBefore)
+      await expect(atom.get()).resolves.toEqual(new Set([1, 2, 3]))
+    })
+
+    it('should call serialize when setter returns a new reference', async () => {
+      const serialize = jest.fn((set: Set<number>) => [...set])
+      const deserialize = jest.fn((arr: number[]) => new Set(arr))
+
+      const atom = withSerialization({
+        atom: createInMemoryAtom<number[]>({ defaultValue: [] }),
+        serialize,
+        deserialize,
+        pure: true,
+      })
+
+      await atom.set(new Set([1, 2, 3]))
+      const callsBefore = serialize.mock.calls.length
+
+      await atom.set((prev) => new Set(prev))
+
+      expect(serialize).toHaveBeenCalledTimes(callsBefore + 1)
+    })
+
+    it('should still serialize when setter returns same reference without pure flag', async () => {
+      const serialize = jest.fn((set: Set<number>) => [...set])
+      const deserialize = jest.fn((arr: number[]) => new Set(arr))
+
+      const atom = withSerialization({
+        atom: createInMemoryAtom<number[]>({ defaultValue: [] }),
+        serialize,
+        deserialize,
+      })
+
+      await atom.set(new Set([1, 2, 3]))
+      const callsBefore = serialize.mock.calls.length
+
+      await atom.set((prev) => prev)
+
+      expect(serialize).toHaveBeenCalledTimes(callsBefore + 1)
+    })
+
+    it('should not write to storage when setter returns the same reference', async () => {
+      const storage = createInMemoryStorage()
+      const storageSpy = jest.spyOn(storage, 'set')
+
+      const storedAtom = createStorageAtomFactory<number[]>({ storage })({
+        key: 'test-key',
+        defaultValue: [],
+      })
+
+      const atom = withSerialization({
+        atom: storedAtom,
+        serialize: (set: Set<number>) => [...set],
+        deserialize: (arr: number[]) => new Set(arr),
+        pure: true,
+      })
+
+      await atom.set(new Set([1, 2]))
+      const writesBefore = storageSpy.mock.calls.length
+
+      await atom.set((prev) => prev)
+
+      expect(storageSpy).toHaveBeenCalledTimes(writesBefore)
+    })
+
+    it('should write to storage when setter returns a new reference', async () => {
+      const storage = createInMemoryStorage()
+      const storageSpy = jest.spyOn(storage, 'set')
+
+      const storedAtom = createStorageAtomFactory<number[]>({ storage })({
+        key: 'test-key',
+        defaultValue: [],
+      })
+
+      const atom = withSerialization({
+        atom: storedAtom,
+        serialize: (set: Set<number>) => [...set],
+        deserialize: (arr: number[]) => new Set(arr),
+        pure: true,
+      })
+
+      await atom.set(new Set([1, 2]))
+      const writesBefore = storageSpy.mock.calls.length
+
+      await atom.set((prev) => new Set(prev))
+
+      expect(storageSpy).toHaveBeenCalledTimes(writesBefore + 1)
+    })
+  })
 })

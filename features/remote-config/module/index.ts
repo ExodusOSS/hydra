@@ -126,7 +126,7 @@ export class RemoteConfig implements RemoteConfigType {
     while (this.#started) {
       const { error } = await this.update()
 
-      if (!this.#started) break // eslint-disable-line @typescript-eslint/no-unnecessary-condition
+      if (!this.#started) break
 
       this.#timer = delay(error ? errorBackoffTime : fetchInterval)
 

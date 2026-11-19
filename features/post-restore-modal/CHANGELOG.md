@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/post-restore-modal@1.2.0...@exodus/post-restore-modal@1.3.0) (2025-05-10)
+
+### Features
+
+- feat: make post-restore-modal proper ESM (#12325)
+
+- feat(post-restore-modal): add ts types (#11224)
+
+## [1.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/post-restore-modal@1.1.1...@exodus/post-restore-modal@1.2.0) (2024-12-06)
+
+### Features
+
+- feat: use atoms v9 (#9651)
+
+### License
+
+- license: re-license under MIT license (#10355)
+
 ## [1.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/post-restore-modal@1.1.0...@exodus/post-restore-modal@1.1.1) (2024-09-16)
 
 ### Bug Fixes

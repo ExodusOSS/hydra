@@ -8,7 +8,6 @@ import getHasAssetsOnOtherChainsSelectorDefinition from './get-has-assets-on-oth
 import getSelectorDefinition from './get.js'
 import getParentCombinedSelector from './get-parent-combined.js'
 import getIsBaseAssetWithChainIconSelector from './get-is-base-asset-with-chain-icon.js'
-import getIsAssetWithNetworkIconSelector from './get-is-asset-with-network-icon.js'
 
 export default [
   //
@@ -22,5 +21,4 @@ export default [
   getSelectorDefinition,
   getParentCombinedSelector,
   getIsBaseAssetWithChainIconSelector,
-  getIsAssetWithNetworkIconSelector,
 ]

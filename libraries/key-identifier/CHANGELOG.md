@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.1](https://github.com/ExodusMovement/exodus/compare/@exodus/key-identifier@1.5.0...@exodus/key-identifier@1.5.1) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/key-identifier
+
+## [1.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-identifier@1.4.3...@exodus/key-identifier@1.5.0) (2026-06-24)
+
+### Features
+
+- **key-identifier:** migrate to TypeScript ([#17229](https://github.com/ExodusMovement/exodus-hydra/issues/17229)) ([09fa4b8](https://github.com/ExodusMovement/exodus-hydra/commit/09fa4b8f99b2add20f038c161b783ac3e882e2d7)), closes [#17237](https://github.com/ExodusMovement/exodus-hydra/issues/17237)
+
+## [1.4.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-identifier@1.4.2...@exodus/key-identifier@1.4.3) (2026-06-18)
+
+### Features
+
+- **key-utils:** migrate to TypeScript ([#17237](https://github.com/ExodusMovement/exodus-hydra/issues/17237)) ([9920438](https://github.com/ExodusMovement/exodus-hydra/commit/992043890b1a2fc8631dff17f3a8909f776ae288))
+
+## [1.4.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-identifier@1.4.1...@exodus/key-identifier@1.4.2) (2026-06-03)
+
+**Note:** Version bump only for package @exodus/key-identifier
+
+## [1.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-identifier@1.4.0...@exodus/key-identifier@1.4.1) (2026-05-19)
+
+### Bug Fixes
+
+- **key-identifier:** null-prototype constructor params internally ([#16646](https://github.com/ExodusMovement/exodus-hydra/issues/16646)) ([9e8c7e5](https://github.com/ExodusMovement/exodus-hydra/commit/9e8c7e5276843842f687b5a7a21fc65a488dbd93))
+
 ## [1.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-identifier@1.3.2...@exodus/key-identifier@1.4.0) (2025-05-06)
 
 ### Features

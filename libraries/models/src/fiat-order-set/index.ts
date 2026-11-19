@@ -7,6 +7,15 @@ import { createIsInstance } from '../utils.js'
 
 const FACTORY_SYMBOL = Symbol('FiatOrderSet')
 
+// Symbol-keyed instance state. These symbols are module-private (not exported),
+// so consumers cannot read them — but they are own enumerable properties as far
+// as `lodash.isEqual` is concerned, which preserves the structural equality
+// contract that callers (e.g. Redux selectors) rely on. See the
+// `lodash isEqual` block in the unit tests.
+const ITEMS = Symbol('items')
+const SORT_ORDER = Symbol('sortOrder')
+const TX_MAP = Symbol('txMap')
+
 type ConvertToOrder<T extends FiatOrder | FiatOrderProps> = T extends FiatOrder
   ? T
   : T extends FiatOrderProps<infer P>
@@ -18,9 +27,9 @@ function isObjectOrConvert<T extends FiatOrder | FiatOrderProps>(obj: T): Conver
 }
 
 export default class FiatOrderSet {
-  private readonly _sortOrder: string[]
-  private readonly _items: Map<string, FiatOrder>
-  private _txMap = new Map<string, string[]>()
+  readonly [SORT_ORDER]: string[]
+  readonly [ITEMS]: Map<string, FiatOrder>;
+  [TX_MAP] = new Map<string, string[]>()
 
   constructor({
     items,
@@ -36,8 +45,8 @@ export default class FiatOrderSet {
 
     const itemArray = [...items.values()]
     itemArray.sort((a, b) => +b.date - +a.date)
-    this._items = items
-    this._sortOrder = itemArray.map((tx) => tx.orderId)
+    this[ITEMS] = items
+    this[SORT_ORDER] = itemArray.map((tx) => tx.orderId)
 
     for (const item of itemArray) {
       if (!item.txId) {
@@ -50,7 +59,7 @@ export default class FiatOrderSet {
         continue
       }
 
-      this._txMap.set(item.txId, [...oids, String(item)])
+      this[TX_MAP].set(item.txId, [...oids, String(item)])
     }
   }
 
@@ -99,9 +108,9 @@ export default class FiatOrderSet {
     return new FiatOrderSet({ items, initSymbol: FACTORY_SYMBOL })
   }
 
-  add(item: FiatOrder): FiatOrderSet | undefined {
+  add(item: FiatOrder): FiatOrderSet {
     if (this.has(item)) {
-      return
+      return this
     }
 
     return FiatOrderSet.fromArray([...this, item])
@@ -111,9 +120,9 @@ export default class FiatOrderSet {
     return FiatOrderSet.fromArray(this.toJSON())
   }
 
-  delete(item: FiatOrder): FiatOrderSet | undefined {
+  delete(item: FiatOrder): FiatOrderSet {
     if (!this.has(item)) {
-      return
+      return this
     }
 
     return FiatOrderSet.fromArray(this.toJSON().filter(({ orderId }) => orderId !== String(item)))
@@ -135,11 +144,11 @@ export default class FiatOrderSet {
   }
 
   has(item: FiatOrder<Provider>) {
-    return this._items.has(String(item))
+    return this[ITEMS].has(String(item))
   }
 
   get(item: FiatOrder<Provider> | string) {
-    return this._items.get(String(item))
+    return this[ITEMS].get(String(item))
   }
 
   getAt(index: number) {
@@ -158,11 +167,11 @@ export default class FiatOrderSet {
   }
 
   #getIdsByTx(txId: string) {
-    return this._txMap.get(txId) || []
+    return this[TX_MAP].get(txId) || []
   }
 
   #getSortedIdAt(index: number) {
-    return this._sortOrder[index]
+    return this[SORT_ORDER][index]
   }
 
   toJSON() {
@@ -174,11 +183,11 @@ export default class FiatOrderSet {
   }
 
   [Symbol.iterator]() {
-    return this._items.values()
+    return this[ITEMS].values()
   }
 
   get size() {
-    return this._items.size
+    return this[ITEMS].size
   }
 
   // NOTE: precondition that both sets are mutually exclusive

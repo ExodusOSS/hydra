@@ -1,38 +1,48 @@
 import { safeString } from '@exodus/safe-string'
-import { isNumberUnit } from '@exodus/currency'
 import { TxSet } from '@exodus/models'
-// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
-import lodash from 'lodash'
 import { difference as getChanges } from '@exodus/atoms'
 import { difference, pick, set, mapValues } from '@exodus/basic-utils'
 import makeConcurrent from 'make-concurrent'
 import { processAssetBalances, validateBalances } from './balances-utils.js'
 import defaultConfig from '../default-config.js'
 
-const { isEmpty, merge, zipObject } = lodash
-
-export const cloneBalances = (balances) => {
-  if (isNumberUnit(balances)) {
-    return balances
+const zipObject = (keys, values) => {
+  const result = Object.create(null)
+  for (const [i, key] of keys.entries()) {
+    result[key] = values[i]
   }
 
-  const cloned = Object.create(Object.getPrototypeOf(balances))
-  for (const key in balances) {
-    cloned[key] = cloneBalances(balances[key])
-  }
-
-  return cloned
+  return result
 }
 
-const zipNonNull = (keys, values) =>
-  zipObject(
-    keys.filter((key, i) => values[i] != null),
-    values.filter((value) => value != null)
-  )
+export const cloneBalances = (balances) => {
+  const result = Object.create(null)
+  for (const walletAccount of Object.keys(balances)) {
+    const accountBalances = balances[walletAccount]
+    const clonedAccount = Object.create(null)
+    for (const assetName of Object.keys(accountBalances)) {
+      clonedAccount[assetName] = { ...accountBalances[assetName] }
+    }
+
+    result[walletAccount] = clonedAccount
+  }
+
+  return result
+}
+
+const zipNonNull = (keys, values) => {
+  const result = Object.create(null)
+  for (const [i, key] of keys.entries()) {
+    if (values[i] != null) result[key] = values[i]
+  }
+
+  return result
+}
 
 class Balances {
   #logger
-  #assetsModule
+  #assetsAtom
+  #assets = Object.create(null)
   #availableAssetNamesAtom
   #availableAssetNames = []
   #balanceFieldsConfig
@@ -49,7 +59,7 @@ class Balances {
   #subscriptions = []
   #errorTracking
   constructor({
-    assetsModule,
+    assetsAtom,
     availableAssetNamesAtom,
     enabledWalletAccountsAtom,
     config,
@@ -60,7 +70,7 @@ class Balances {
     errorTracking,
   }) {
     this.#logger = logger
-    this.#assetsModule = assetsModule
+    this.#assetsAtom = assetsAtom
     this.#availableAssetNamesAtom = availableAssetNamesAtom
     this.#balanceFieldsConfig = config?.balanceFieldsConfig || defaultConfig.balanceFieldsConfig
     this.#balanceFields = config?.balanceFields || defaultConfig.balanceFields
@@ -105,9 +115,15 @@ class Balances {
     if (this.#loaded) return
     this.#loaded = true
 
+    const { value } = await this.#assetsAtom.get()
+    this.#assets = value
+
     this.#subscriptions.push(
+      this.#assetsAtom.observe(({ value }) => {
+        this.#assets = value
+      }),
       this.#enabledWalletAccountsAtom.observe((payload) => {
-        this.#setWalletAccounts(Object.keys(payload))
+        void this.#setWalletAccounts(Object.keys(payload))
       }),
       this.#blockchainMetadataAtom.observe(({ accountStateChanges, txLogChanges }) => {
         this.#flattenToBlockchainMetadataObjects({ accountStateChanges, txLogChanges }).forEach(
@@ -134,16 +150,17 @@ class Balances {
       getChanges(this.#availableAssetNamesAtom).observe(({ previous = [], current }) => {
         this.#availableAssetNames = current
         const added = difference(current, previous)
-        if (added.length > 0) this.#onAssetsChanged(added)
+        const removed = difference(previous, current)
+        if (added.length > 0 || removed.length > 0) void this.#onAssetsChanged({ added, removed })
       })
     )
 
     this.#availableAssetNames = await this.#availableAssetNamesAtom.get()
   }
 
-  #getAsset = (assetName) => this.#assetsModule.getAsset(assetName)
+  #getAsset = (assetName) => this.#assets[assetName]
 
-  #getAssets = () => this.#assetsModule.getAssets()
+  #getAssets = () => this.#assets
 
   #flattenToBlockchainMetadataObjects = ({
     accountStateChanges = Object.create(null),
@@ -247,7 +264,7 @@ class Balances {
     )
 
     const balances = results.map(({ value }) => value).filter(Boolean)
-    return merge(Object.create(null), ...balances)
+    return Object.assign(Object.create(null), ...balances)
   }
 
   #load = async ({ walletAccount }) => {
@@ -277,29 +294,56 @@ class Balances {
     }
   }
 
-  #onAssetsChanged = async (added) => {
-    if (
-      added.every((name) =>
-        this.#walletAccounts.every((walletAccount) => !!this.#balances?.[walletAccount]?.[name])
-      )
-    ) {
+  #onAssetsChanged = async ({ added, removed }) => {
+    if (removed.length > 0) {
+      for (const walletAccount of this.#walletAccounts) {
+        for (const assetName of removed) {
+          delete this.#balances[walletAccount]?.[assetName]
+        }
+      }
+    }
+
+    const newSupportedAssets = added.filter(this.#isSupportedAsset)
+    const missingAssets = newSupportedAssets.filter(
+      (name) =>
+        !this.#walletAccounts.every((walletAccount) => !!this.#balances?.[walletAccount]?.[name])
+    )
+
+    if (missingAssets.length === 0) {
+      if (removed.length > 0) this.#flush()
       return
     }
 
-    this.#logger.log('recomputing based on new assets list')
-    this.#recompute()
+    this.#logger.log('computing balances for newly available assets', missingAssets)
+    await Promise.all(
+      this.#walletAccounts.map(async (walletAccount) => {
+        const balances = await Promise.all(
+          missingAssets.map((assetName) =>
+            this.#getBalancesForAssetSource({ assetName, walletAccount })
+          )
+        )
+        if (this.#balances[walletAccount]) {
+          Object.assign(this.#balances[walletAccount], ...balances)
+        }
+      })
+    )
+
+    this.#flush()
   }
 
-  #isSupportedAsset = (assetName) =>
-    this.#availableAssetNames.includes(assetName) && !this.#getAsset(assetName).isCombined
+  #isSupportedAsset = (assetName) => {
+    if (!this.#availableAssetNames.includes(assetName)) return false
+    const asset = this.#getAsset(assetName)
+    return asset && !asset.isCombined
+  }
 
   #getSupportedAssetNames = () => Object.keys(this.#getAssets()).filter(this.#isSupportedAsset)
 
   #getRelatedAssetNames = (assetName) => {
-    const asset = this.#assetsModule.getAsset(assetName)
+    const asset = this.#assets[assetName]
     if (asset.baseAsset.name === assetName) {
-      return [assetName, ...this.#assetsModule.getTokenNames(assetName)].filter(
-        this.#isSupportedAsset
+      return Object.keys(this.#assets).filter(
+        (name) => this.#assets[name].baseAsset.name === assetName && this.#isSupportedAsset(name)
       )
     }
 
@@ -406,7 +450,7 @@ class Balances {
       }
     }
 
-    if (!isEmpty(changes)) this.#flush({ changes })
+    if (Object.keys(changes).length > 0) this.#flush({ changes })
   }
 
   #recompute = async ({ walletAccounts = this.#walletAccounts } = {}) => {
@@ -437,7 +481,7 @@ const balancesDefinition = {
   type: 'module',
   factory: createBalances,
   dependencies: [
-    'assetsModule',
+    'assetsAtom',
     'availableAssetNamesAtom',
     'enabledWalletAccountsAtom',
     'config',

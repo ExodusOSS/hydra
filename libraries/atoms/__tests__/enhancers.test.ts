@@ -151,7 +151,7 @@ describe('enhancers', () => {
       timeout: 20,
     })
 
-    atom.observe(() => delay(1000))
+    atom.observe(() => delay(50)) // just needs to outlast the 20ms timeout above; was 1000ms, which kept the timer (and the process) alive long after the assertion
     void atom.set("don't wait up")
     await delay(100) // do NOT change this to 99!
     expect(logger.error).toHaveBeenCalledWith(

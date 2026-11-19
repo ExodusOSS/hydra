@@ -7,6 +7,7 @@ import assert from 'minimalistic-assert'
 import { hash } from '@exodus/crypto/hash'
 import { edwardsToPublic } from '@exodus/crypto/curve25519'
 import { privateKeyToPublicKey } from '@exodus/crypto/secp256k1'
+import { restrictConcurrency } from '@exodus/basic-utils'
 
 import * as ed25519 from './crypto/ed25519.js'
 import * as secp256k1 from './crypto/secp256k1.js'
@@ -18,7 +19,7 @@ import {
   throwIfInvalidMasters,
   throwIfInvalidLegacyPrivToPub,
 } from './validate.js'
-import { getSeedId, getUniqueSeedIds } from './crypto/seed-id.js'
+import { getSeedId } from './crypto/seed-id.js'
 
 const MAP_KDF = Object.freeze({
   BIP32: bip32FromMasterSeed,
@@ -34,7 +35,7 @@ export const MODULE_ID = 'keychain'
 export class Keychain {
   #masters = Object.create(null)
   #legacyPrivToPub = null
-  #seedLockStatus = Object.create(null)
+  #isLocked = false
   #getPrivateHDKeySymbol = Symbol('getPrivateHDKey')
 
   // TODO: remove default param. Use it temporarily for backward compatibility.
@@ -54,94 +55,58 @@ export class Keychain {
     this.cardanoEd25519 = cardanoEd25519.create({ getPrivateHDKey: this.#getPrivateHDKey })
   }
 
-  #assertPrivateKeysUnlocked(seedIds) {
-    const locked = this.#checkPrivateKeysLocked(seedIds)
-    assert(!locked, 'private keys are locked')
+  #assertPrivateKeysUnlocked() {
+    assert(!this.#isLocked, 'private keys are locked')
   }
 
-  #checkPrivateKeysLocked(seedIds) {
-    if (!seedIds?.length) {
-      return Object.values(this.#seedLockStatus).some(Boolean)
-    }
-
-    return seedIds.some((seedId) => {
-      assert(
-        Object.hasOwn(this.#seedLockStatus, seedId),
-        `cannot check lock state for unknown seed "${seedId}"`
-      )
-      return this.#seedLockStatus[seedId]
-    })
-  }
-
-  async arePrivateKeysLocked(seeds = []) {
-    assert(Array.isArray(seeds), 'seeds must be an array')
-    const seedIds = await getUniqueSeedIds(seeds)
-    return this.#checkPrivateKeysLocked(seedIds)
+  async arePrivateKeysLocked() {
+    return this.#isLocked
   }
 
   lockPrivateKeys() {
-    const seedIds = Object.keys(this.#masters)
-    this.#seedLockStatus = seedIds.reduce((acc, seedId) => {
+    // External keys are raw 32-byte secrets stored in #masters; a soft lock
+    // (#isLocked flag) wouldn't protect them. Hard-wipe instead. They will not
+    // come back on unlockPrivateKeys — caller must re-add via addExternalPrivateKey.
+    for (const seedId of Object.keys(this.#masters)) {
       if (isExternalSeedId(seedId)) {
         delete this.#masters[seedId]
-      } else {
-        acc[seedId] = true
       }
-
-      return acc
-    }, Object.create(null))
-  }
-
-  async unlockPrivateKeys(seeds = []) {
-    const seedIds = await getUniqueSeedIds(seeds)
-
-    const existingSeedIds = Object.keys(this.#masters)
-    for (const seedId of seedIds) {
-      const hasSeed = existingSeedIds.includes(seedId)
-      assert(hasSeed, 'must pass in existing seed')
     }
 
-    for (const seedId of seedIds) {
-      this.#seedLockStatus[seedId] = false
-    }
+    this.#isLocked = true
   }
 
-  async addSeed(seed) {
+  async unlockPrivateKeys() {
+    this.#isLocked = false
+  }
+
+  unlock = restrictConcurrency(async (seed) => {
     assert(seed instanceof Uint8Array && seed.length === 64, 'seed must be Uint8Array of 64 bytes')
     if (!Buffer.isBuffer(seed)) seed = typedView(seed, 'buffer') // TODO: switch to Uint8Array
 
+    const seedId = await getSeedId(seed)
     const mastersEntries = await Promise.all(
       Object.entries(MAP_KDF).map(async ([key, fromSeed]) => [key, await fromSeed(seed)])
     )
     const masters = Object.assign(Object.create(null), Object.fromEntries(mastersEntries))
     throwIfInvalidMasters(masters)
 
-    const seedId = await getSeedId(seed)
-    this.#masters[seedId] = masters
-    // manually unlock here since unlockPrivateKeys requires seed to already exist
-    this.#seedLockStatus[seedId] = false
-    return seedId
-  }
-
-  removeAllSeeds() {
-    this.#masters = Object.create(null)
-    this.#seedLockStatus = Object.create(null)
-  }
-
-  async removeSeeds(seeds = []) {
-    const seedIds = await getUniqueSeedIds(seeds)
-    const existingSeedIds = new Set([
-      ...Object.keys(this.#masters),
-      ...Object.keys(this.#seedLockStatus),
-    ])
-    const seedIdsToRemove = seedIds.filter((seedId) => existingSeedIds.has(seedId))
-
-    for (const id of seedIdsToRemove) {
-      delete this.#masters[id]
-      delete this.#seedLockStatus[id]
+    // drop masters except for external keys
+    for (const id of Object.keys(this.#masters)) {
+      if (!isExternalSeedId(id)) delete this.#masters[id]
     }
+    this.#masters[seedId] = masters
 
-    return seedIdsToRemove
+    // Unlocking clears the soft private-keys lock (see lockPrivateKeys): callers
+    // (wallet.unlock, desktop #setSeed) unlock precisely when transitioning into
+    // the unlocked state.
+    this.#isLocked = false
+    return seedId
+  })
+
+  lock() {
+    this.#masters = Object.create(null)
+    this.#isLocked = false
   }
 
   removeExternalPrivateKey = (seedId) => {
@@ -150,7 +115,6 @@ export class Keychain {
     assert(isExternalSeedId(seedId), `removeExternalPrivateKey: prevent removing seed ${seedId}`)
 
     delete this.#masters[seedId]
-    delete this.#seedLockStatus[seedId]
   }
 
   addExternalPrivateKey = async ({ privateKey, keyId }) => {
@@ -199,7 +163,6 @@ export class Keychain {
       },
     })
 
-    this.#seedLockStatus[seedId] = false
     return seedId
   }
 
@@ -222,7 +185,7 @@ export class Keychain {
 
   #getPrivateHDKey = ({ seedId, keyId, getPrivateHDKeySymbol }) => {
     if (getPrivateHDKeySymbol !== this.#getPrivateHDKeySymbol) {
-      this.#assertPrivateKeysUnlocked(seedId ? [seedId] : undefined)
+      this.#assertPrivateKeysUnlocked()
     }
 
     throwIfInvalidKeyIdentifier(keyId)
@@ -272,7 +235,7 @@ export class Keychain {
     assert(typeof seedId === 'string', 'seedId must be a string')
 
     if (exportPrivate) {
-      this.#assertPrivateKeysUnlocked([seedId])
+      this.#assertPrivateKeysUnlocked()
     }
 
     keyId = new KeyIdentifier(keyId)
@@ -317,7 +280,7 @@ export class Keychain {
     assert(invalidOptions.length === 0, `unsupported options supplied to signBuffer()`)
     assert(data instanceof Uint8Array, `expected "data" to be a Uint8Array, got: ${typeof data}`)
     assert(
-      (['ecdsa', 'schnorr', 'schnorrZ'].includes(signatureType) && keyId.keyType === 'secp256k1') ||
+      (['ecdsa', 'schnorr'].includes(signatureType) && keyId.keyType === 'secp256k1') ||
         (signatureType === 'ed25519' && ['nacl', 'cardanoByron'].includes(keyId.keyType)),
       `"keyId.keyType" ${keyId.keyType} does not support "signatureType" ${signatureType}`
     )
@@ -332,12 +295,7 @@ export class Keychain {
       return this.ed25519.signBuffer({ seedId, keyId, data })
     }
 
-    if (signatureType === 'schnorrZ') {
-      assert(noOpts, 'unsupported options supplied for schnorrZ signature')
-      return this.secp256k1.signSchnorrZ({ seedId, keyId, data })
-    }
-
-    // only accept 32 byte buffers for ecdsa
+    // ecdsa and schnorr both sign a 32-byte message hash
     assert(data.length === 32, `expected "data" to have 32 bytes, got: ${data.length}`)
 
     if (signatureType === 'schnorr') {

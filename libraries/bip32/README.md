@@ -5,7 +5,7 @@ This package helps you work with [BIP32 keys](https://github.com/bitcoin/bips/bl
 ## Install
 
 ```sh
-yarn add @exodus/bip32
+pnpm add @exodus/bip32
 ```
 
 ## Usage

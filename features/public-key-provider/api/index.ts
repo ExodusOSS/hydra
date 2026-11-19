@@ -1,14 +1,14 @@
 import type { Definition } from '@exodus/dependency-types'
 import type { PublicKeyProvider } from '../module/public-key-provider.js'
-import type { AssetsModule, AssetSources } from '../module/utils/types.js'
+import type { Asset, AssetSources } from '../module/utils/types.js'
 import type { Atom } from '@exodus/atoms'
 import type { WalletAccount } from '@exodus/models'
-import assert from 'minimalistic-assert'
 import { getDefaultPathIndexes } from '@exodus/asset-lib'
+import { WalletAccountNotFoundError } from '../errors/errors.js'
 
 type Dependencies = {
   publicKeyProvider: PublicKeyProvider
-  assetsModule: AssetsModule
+  assetsAtom: Atom<{ value: Record<string, Asset> }>
   assetSources: AssetSources
   walletAccountsAtom: Atom<Record<string, WalletAccount>>
 }
@@ -46,15 +46,18 @@ export interface PublicKeyProviderApi {
 const createPublicKeyProviderApi = ({
   publicKeyProvider,
   assetSources,
-  assetsModule,
+  assetsAtom,
   walletAccountsAtom,
 }: Dependencies): PublicKeyProviderApi => {
   const getKeyIdentifier = async (params: ApiParams) => {
     const { walletAccount: walletAccountName, assetName } = params
     const walletAccounts = await walletAccountsAtom.get()
-    const asset = assetsModule.getAsset(assetName)
+    const { value: assets } = await assetsAtom.get()
+    const asset = assets[assetName]!
     const walletAccount = walletAccounts[walletAccountName]
-    assert(walletAccount, `Unknown wallet account: ${walletAccountName}`)
+    if (!walletAccount) {
+      throw new WalletAccountNotFoundError(walletAccountName)
+    }
 
     const { chainIndex: defaultChainIndex, addressIndex: defaultAddressIndex } =
       getDefaultPathIndexes({
@@ -111,7 +114,7 @@ const publicKeyProviderApiDefinition = {
   id: 'publicKeyProviderApi',
   type: 'api',
   factory: createPublicKeyProviderApi,
-  dependencies: ['publicKeyProvider', 'assetSources', 'assetsModule', 'walletAccountsAtom'],
+  dependencies: ['publicKeyProvider', 'assetSources', 'assetsAtom', 'walletAccountsAtom'],
 } as const satisfies Definition
 
 export default publicKeyProviderApiDefinition

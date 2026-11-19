@@ -1,10 +1,6 @@
 import { difference } from '@exodus/basic-utils'
-// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
-import lodash from 'lodash'
 import pDefer from 'p-defer'
 import makeConcurrent from 'make-concurrent'
-
-const { get } = lodash
 
 const stopAndStartMonitorsByAssetNames = async ({
   currentAssetNames,
@@ -25,7 +21,7 @@ const stopAndStartMonitorsByAssetNames = async ({
 class FeeMonitors {
   #monitors = new Map()
   #fees
-  #assetsModule
+  #assetsAtom
   #feeDataAtom
   #unobserveBaseAssetNames
   #baseAssetNamesToMonitorAtom
@@ -37,14 +33,14 @@ class FeeMonitors {
   #unobserveRemoteConfig
 
   constructor({
-    assetsModule,
+    assetsAtom,
     remoteConfigAtom,
     feeDataAtom,
     baseAssetNamesToMonitorAtom,
     availableAssetNamesAtom,
     logger,
   }) {
-    this.#assetsModule = assetsModule
+    this.#assetsAtom = assetsAtom
     this.#feeDataAtom = feeDataAtom
     this.#baseAssetNamesToMonitorAtom = baseAssetNamesToMonitorAtom
     this.#availableAssetNamesAtom = availableAssetNamesAtom
@@ -53,7 +49,8 @@ class FeeMonitors {
   }
 
   #getMonitorAsset = async (assetName) => {
-    const asset = this.#assetsModule.getAsset(assetName)
+    const assetsAtomValue = await this.#assetsAtom.get()
+    const asset = assetsAtomValue.value[assetName]
     const availableAssetNames = new Set(await this.#availableAssetNamesAtom.get())
 
     return asset?.api?.features?.feeMonitor && availableAssetNames.has(asset.name)
@@ -61,32 +58,51 @@ class FeeMonitors {
       : undefined
   }
 
+  // Merges remote config over the monitor's fee data. Returns true when the asset's fee changed.
+  #applyFee = (assetName, feeData) => {
+    const currentFeeData = this.#fees[assetName]
+    const newFeeData = currentFeeData.update({
+      ...feeData,
+      ...this.#remoteFeeData[assetName],
+    })
+    if (newFeeData === currentFeeData) return false
+
+    this.#fees[assetName] = newFeeData
+    return true
+  }
+
+  #publishFees = () => this.#feeDataAtom.set({ ...this.#fees })
+
   #updateRemoteFeeData = makeConcurrent(async (data) => {
     await this.#started.promise
 
+    let changed = false
+
     for (const baseAssetName in this.#fees) {
-      const feeDataJson = get(data, ['assets', baseAssetName, 'feeData'])
+      const feeDataJson = data?.assets?.[baseAssetName]?.feeData
       if (!feeDataJson) {
         delete this.#remoteFeeData[baseAssetName]
         continue
       }
 
       this.#remoteFeeData[baseAssetName] = feeDataJson
-      this.updateFee({ assetName: baseAssetName, feeData: feeDataJson })
+
+      try {
+        if (this.#applyFee(baseAssetName, feeDataJson)) changed = true
+      } catch (error) {
+        // An asset whose payload cannot be applied must not stop the others.
+        this.#logger.error(
+          `Cannot apply remote fee data for asset ${baseAssetName}. ${error?.message ?? error}`,
+          error
+        )
+      }
     }
+
+    if (changed) void this.#publishFees()
   })
 
   updateFee = async ({ assetName, feeData }) => {
-    const currentFeeData = this.#fees[assetName]
-    const newFeeData = currentFeeData.update({
-      ...feeData,
-      ...this.#remoteFeeData[assetName],
-    })
-    if (newFeeData === currentFeeData) return
-
-    this.#fees[assetName] = newFeeData
-
-    await this.#feeDataAtom.set((prevValue) => ({ ...prevValue, [assetName]: newFeeData }))
+    if (this.#applyFee(assetName, feeData)) await this.#publishFees()
   }
 
   getFeeData = async ({ assetName }) => {
@@ -111,7 +127,8 @@ class FeeMonitors {
       if (!asset) return
 
       const updateMonitorFeeData = async (assetName, feeData) => {
-        const baseAssetName = this.#assetsModule.getAsset(assetName).baseAsset.name
+        const assetsAtomValue = await this.#assetsAtom.get()
+        const baseAssetName = assetsAtomValue.value[assetName].baseAsset.name
         return this.updateFee({ assetName: baseAssetName, feeData })
       }
 
@@ -127,8 +144,9 @@ class FeeMonitors {
     }
   }
 
-  #getBaseAssets = () => {
-    return Object.values(this.#assetsModule.getAssets()).filter(
+  #getBaseAssets = async () => {
+    const assetsAtomValue = await this.#assetsAtom.get()
+    return Object.values(assetsAtomValue.value).filter(
       (asset) => asset.name === asset.baseAsset.name && typeof asset.api?.getFeeData === 'function'
     )
   }
@@ -136,11 +154,10 @@ class FeeMonitors {
   #init = async () => {
     if (this.#fees) return
 
-    this.#fees = Object.fromEntries(
-      this.#getBaseAssets().map((asset) => [asset.name, asset.api.getFeeData()])
-    )
+    const baseAssets = await this.#getBaseAssets()
+    this.#fees = Object.fromEntries(baseAssets.map((asset) => [asset.name, asset.api.getFeeData()]))
 
-    await this.#feeDataAtom.set(this.#fees)
+    await this.#publishFees()
   }
 
   start = async () => {
@@ -155,7 +172,7 @@ class FeeMonitors {
     await new Promise((resolve) => {
       this.#unobserveBaseAssetNames = this.#baseAssetNamesToMonitorAtom.observe(
         (nextAssetNames) => {
-          stopAndStartMonitorsByAssetNames({
+          void stopAndStartMonitorsByAssetNames({
             startOne: this.#startOne,
             stopOne: this.#stopOne,
             currentAssetNames: [...this.#monitors.keys()],
@@ -183,7 +200,7 @@ const feeMonitorsDefinition = {
   type: 'monitor',
   factory: createFeeMonitors,
   dependencies: [
-    'assetsModule',
+    'assetsAtom',
     'feeDataAtom',
     'remoteConfigAtom',
     'baseAssetNamesToMonitorAtom',

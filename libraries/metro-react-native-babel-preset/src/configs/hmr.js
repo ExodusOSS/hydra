@@ -8,10 +8,10 @@
  * @oncall react_native
  */
 
-"use strict";
+'use strict'
 
 module.exports = function () {
   return {
-    plugins: [require("react-refresh/babel")],
-  };
-};
+    plugins: [require('react-refresh/babel')],
+  }
+}

@@ -18,9 +18,9 @@ const validateSerialized = (serialized: unknown): serialized is MoneroPublicKey 
   return (
     typeof serialized === 'object' &&
     serialized !== null &&
-    typeof (<MoneroPublicKey>serialized).spendPub === 'string' &&
-    typeof (<MoneroPublicKey>serialized).viewPriv === 'string' &&
-    typeof (<MoneroPublicKey>serialized).viewPub === 'string'
+    typeof (serialized as MoneroPublicKey).spendPub === 'string' &&
+    typeof (serialized as MoneroPublicKey).viewPriv === 'string' &&
+    typeof (serialized as MoneroPublicKey).viewPub === 'string'
   )
 }
 

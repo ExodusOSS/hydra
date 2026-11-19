@@ -119,7 +119,7 @@ describe('attach', () => {
 
     attachMigrations({ migrations, application, adapters, modules })
 
-    application.fire('migrate')
+    void application.fire('migrate')
   })
 
   test('should clear migration flags on clear hook', async () => {
@@ -187,11 +187,11 @@ describe('attach', () => {
       const slowMigration = {
         name: safeString`slow`,
         factory: jest.fn(async () => {
-          await new Promise((resolve) => setTimeout(resolve, 200))
+          await new Promise((resolve) => setTimeout(resolve, 120))
         }),
       }
 
-      const config = { migrations: { maxDuration: 100 } }
+      const config = { migrations: { maxDuration: 50 } }
 
       attachMigrations({
         migrations: [slowMigration],
@@ -268,7 +268,7 @@ describe('attach', () => {
         }),
       }
 
-      const config = { migrations: { maxDuration: 100 } }
+      const config = { migrations: { maxDuration: 50 } }
 
       attachMigrations({
         migrations: [fastMigration1, fastMigration2],
@@ -299,11 +299,11 @@ describe('attach', () => {
       const slowMigration = {
         name: safeString`timeout-test`,
         factory: jest.fn(async () => {
-          await new Promise((resolve) => setTimeout(resolve, 200))
+          await new Promise((resolve) => setTimeout(resolve, 120))
         }),
       }
 
-      const config = { migrations: { maxDuration: 100 } }
+      const config = { migrations: { maxDuration: 50 } }
 
       attachMigrations({
         migrations: [slowMigration],
@@ -334,11 +334,11 @@ describe('attach', () => {
       const slowMigration = {
         name: safeString`slow`,
         factory: jest.fn(async () => {
-          await new Promise((resolve) => setTimeout(resolve, 200))
+          await new Promise((resolve) => setTimeout(resolve, 120))
         }),
       }
 
-      const config = { migrations: { maxDuration: 100 } }
+      const config = { migrations: { maxDuration: 50 } }
 
       attachMigrations({
         migrations: [fastMigration, slowMigration],
@@ -427,11 +427,11 @@ describe('attach', () => {
       const slowMigration = {
         name: safeString`slow`,
         factory: jest.fn(async () => {
-          await new Promise((resolve) => setTimeout(resolve, 200))
+          await new Promise((resolve) => setTimeout(resolve, 120))
         }),
       }
 
-      const config = { migrations: { maxDuration: 100 } }
+      const config = { migrations: { maxDuration: 50 } }
 
       attachMigrations({
         migrations: [fastMigration, slowMigration],

@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.5](https://github.com/ExodusMovement/exodus/compare/@exodus/tx-log-monitors@3.0.4...@exodus/tx-log-monitors@3.0.5) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/tx-log-monitors
+
+## [3.0.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-log-monitors@3.0.3...@exodus/tx-log-monitors@3.0.4) (2026-06-03)
+
+### ⚠ BREAKING CHANGES
+
+- remove multi-seed support from wallet/keychain (#16379)
+
+### Code Refactoring
+
+- remove multi-seed support from wallet/keychain ([#16379](https://github.com/ExodusMovement/exodus-hydra/issues/16379)) ([e63510f](https://github.com/ExodusMovement/exodus-hydra/commit/e63510f2b57b7bcb7704d993baf2e75d11edb3ad))
+
+## [3.0.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-log-monitors@3.0.2...@exodus/tx-log-monitors@3.0.3) (2026-04-03)
+
+### Bug Fixes
+
+- fix(tx-log-monitors): guard restoreAsset against undefined atom value (#15799)
+
+## [3.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-log-monitors@3.0.1...@exodus/tx-log-monitors@3.0.2) (2026-04-02)
+
+### Bug Fixes
+
+- fix(tx-log-monitors): add type declarations for TxLogMonitors module (#15804)
+
+## [3.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-log-monitors@3.0.0...@exodus/tx-log-monitors@3.0.1) (2026-03-02)
+
+**Note:** Version bump only for package @exodus/tx-log-monitors
+
+## [3.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-log-monitors@2.6.0...@exodus/tx-log-monitors@3.0.0) (2025-08-27)
+
+### ⚠ BREAKING CHANGES
+
+- clean-up tx-log-monitors (#13700)
+
+- refactor!: clean-up tx-log-monitors (#13700)
+
 ## [2.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-log-monitors@2.5.2...@exodus/tx-log-monitors@2.6.0) (2025-08-26)
 
 ### Features

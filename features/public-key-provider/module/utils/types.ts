@@ -5,7 +5,7 @@ export type Asset = {
   baseAsset: Asset
   bip44: number
   api?: {
-    hasFeature?: (feature: string) => boolean
+    features?: Record<string, boolean>
     getKeyIdentifier(params: {
       purpose: number
       accountIndex: number

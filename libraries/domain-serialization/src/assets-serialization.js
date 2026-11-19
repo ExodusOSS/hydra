@@ -111,15 +111,15 @@ const deserializePassTwo = (asset, _assets) => {
     return asset
   }
 
-  // eslint-disable-next-line @exodus/mutable/no-param-reassign-prop-only
+  // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
   asset.baseAsset = getAsset(asset.baseAssetName)
-  // eslint-disable-next-line @exodus/mutable/no-param-reassign-prop-only
+  // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
   asset.feeAsset = getAsset(asset.feeAssetName)
 
   if (asset.isCombined) {
-    // eslint-disable-next-line @exodus/mutable/no-param-reassign-prop-only
+    // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
     asset.combinedAssetNames = asset.combinedAssetNames.filter((assetName) => _assets[assetName])
-    // eslint-disable-next-line @exodus/mutable/no-param-reassign-prop-only
+    // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
     asset.combinedAssets = asset.combinedAssetNames.map((assetName) => _assets[assetName])
   }
 

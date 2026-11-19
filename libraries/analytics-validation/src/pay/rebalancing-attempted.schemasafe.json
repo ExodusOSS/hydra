@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": { "const": "RebalancingAttempted" },
+    "properties": {
+      "allOf": [{ "$ref": "common-properties#" }],
+      "type": "object",
+      "required": ["source_asset", "target_asset", "amount_usd", "attempt_number"],
+      "properties": {
+        "source_asset": { "type": "string", "format": "any-string" },
+        "target_asset": { "type": "string", "format": "any-string" },
+        "amount_usd": { "type": "number", "exclusiveMinimum": 0 },
+        "attempt_number": { "type": "integer", "minimum": 1 },
+        "pay_order_id": {
+          "type": "string",
+          "pattern": "^[0-9a-z]{20,32}$"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

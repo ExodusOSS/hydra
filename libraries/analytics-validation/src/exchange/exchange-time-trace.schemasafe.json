@@ -94,6 +94,15 @@
         },
         "send_tx_bundle": {
           "type": "number"
+        },
+        "execute_trade": {
+          "type": "number"
+        },
+        "time_to_broadcast": {
+          "type": "number"
+        },
+        "stale_swap_aborted": {
+          "type": "boolean"
         }
       },
       "unevaluatedProperties": false

@@ -1,16 +1,16 @@
 {
   "name": "@exodus/message-signer",
-  "version": "3.0.0",
+  "version": "3.1.2",
   "description": "a module to sign asset-related messages",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/message-signer",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/message-signer",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Amessage-signer"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Amessage-signer"
   },
   "main": "lib/index.js",
   "type": "module",
@@ -20,37 +20,42 @@
     "!**/__tests__/**"
   ],
   "scripts": {
-    "build": "run -T tsc -p tsconfig.build.json",
-    "clean": "run -T tsc --build --clean",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest --esbuild",
-    "prepublishOnly": "yarn run -T build --scope @exodus/message-signer"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/message-signer"
   },
   "dependencies": {
     "@exodus/asset-lib": "^5.2.1",
-    "@exodus/key-identifier": "^1.2.1",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/key-identifier": "workspace:^",
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {
-    "@exodus/algorand-lib": "^3.0.0",
-    "@exodus/atoms": "workspace:^",
+    "@exodus/algorand-lib": "^3.2.3",
+    "@exodus/asset-sources": "workspace:^",
+    "@exodus/bip32": "workspace:^",
     "@exodus/bip39": "workspace:^",
     "@exodus/bip44-constants": "workspace:^",
-    "@exodus/bitcoin-api": "^4.1.0",
+    "@exodus/bitcoin-api": "^4.13.0",
     "@exodus/cardano-lib": "^4.0.0",
     "@exodus/dependency-types": "workspace:^",
-    "@exodus/ethereum-lib": "^5.17.2",
+    "@exodus/ethereum-lib": "^5.26.0",
     "@exodus/hw-common": "workspace:^",
     "@exodus/key-utils": "workspace:^",
-    "@exodus/keychain": "^7.3.0",
+    "@exodus/keychain": "workspace:^",
     "@exodus/models": "workspace:^",
-    "@exodus/solana-lib": "^3.11.2"
+    "@exodus/solana-lib": "^3.11.2",
+    "@types/minimalistic-assert": "^1.0.1"
   },
   "peerDependencies": {
     "@exodus/asset-sources": "^1.7.4"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

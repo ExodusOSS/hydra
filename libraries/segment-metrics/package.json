@@ -1,8 +1,9 @@
 {
   "name": "@exodus/segment-metrics",
-  "version": "4.0.3",
+  "version": "5.1.1",
   "description": "This library allows any app to send events to Segment for metrics analysis.",
   "license": "MIT",
+  "type": "module",
   "main": "index.js",
   "author": "Exodus Movement, Inc.",
   "files": [
@@ -10,22 +11,25 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix"
+    "test": "pnpm exec exodus-test --jest",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix"
   },
   "dependencies": {
+    "@exodus/crypto": "^1.0.0-rc.18",
     "@exodus/fetch": "^1.3.0",
     "camelcase": "^5.3.1",
-    "snake-case": "^3.0.4",
-    "uuid": "^3.4.0"
+    "snake-case": "^3.0.4"
   },
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/segment-metrics",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/segment-metrics",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asegment-metrics"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Asegment-metrics"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

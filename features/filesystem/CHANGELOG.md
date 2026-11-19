@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.2](https://github.com/ExodusMovement/exodus/compare/@exodus/filesystem@1.3.1...@exodus/filesystem@1.3.2) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/filesystem
+
+## [1.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/filesystem@1.3.0...@exodus/filesystem@1.3.1) (2026-04-15)
+
+### Bug Fixes
+
+- fix(filesystem): add delay to steady-state monitor loop (#15768)
+
+## [1.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/filesystem@1.2.1...@exodus/filesystem@1.3.0) (2025-07-25)
+
+### Features
+
+- feat: make filesystem proper ESM (#12199)
+
 ## [1.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/filesystem@1.2.0...@exodus/filesystem@1.2.1) (2025-04-04)
 
 ### Bug Fixes

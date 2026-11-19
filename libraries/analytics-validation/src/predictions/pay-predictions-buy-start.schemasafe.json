@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayPredictionsBuyStart"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        },
+        {
+          "$ref": "common-properties#/definitions/predictionsProperties"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "market_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "option_selected": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "option_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "option_price": {
+          "type": "number"
+        },
+        "reward_pct": {
+          "type": "number",
+          "minimum": 0
+        },
+        "available_balance_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "is_position_existing": {
+          "type": "boolean"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

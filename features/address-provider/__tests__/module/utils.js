@@ -1,9 +1,8 @@
-import { availableAssetNamesByWalletAccountAtomDefinition } from '@exodus/asset-sources/lib/atoms/available-asset-names-by-wallet-account.js'
-import assetSourcesDefinition from '@exodus/asset-sources/lib/module/asset-sources.js'
+import assetSources from '@exodus/asset-sources'
 import { createInMemoryAtom } from '@exodus/atoms'
 import { getSeedId } from '@exodus/key-utils'
 import { WalletAccount } from '@exodus/models'
-import { PublicKeyProvider } from '@exodus/public-key-provider/lib/module/public-key-provider.js'
+import publicKeyProvider from '@exodus/public-key-provider'
 import BJSON from 'buffer-json'
 
 import { createAddressCache } from '../../module/address-cache/memory.js'
@@ -12,6 +11,20 @@ import knownAddressesDefinition from '../../module/known-addresses.js'
 import seedAssets from './seed/_assets.js'
 import { wallets } from './seed/fixtures/index.js'
 import { createKeychain } from './seed/keychain.js'
+
+const assetSourcesDefinition = assetSources().definitions.find(
+  ({ definition }) => definition.id === 'assetSources'
+).definition
+
+const availableAssetNamesByWalletAccountAtomDefinition = assetSources().definitions.find(
+  ({ definition }) => definition.id === 'availableAssetNamesByWalletAccountAtom'
+).definition
+
+const publicKeyProviderDefinition = publicKeyProvider().definitions.find(
+  ({ definition }) => definition.id === 'publicKeyProvider'
+).definition
+
+const { factory: createPublicKeyProvider } = publicKeyProviderDefinition
 
 export const seed = BJSON.parse(JSON.stringify(wallets.valid[0].masterSeed))
 export const seedId = await getSeedId(seed)
@@ -65,7 +78,7 @@ export const setup = async (overrides = {}) => {
 
   const publicKeyProvider =
     overrides.publicKeyProvider ||
-    new PublicKeyProvider({
+    createPublicKeyProvider({
       keychain,
       walletAccountsAtom,
       publicKeyStore,
@@ -74,14 +87,9 @@ export const setup = async (overrides = {}) => {
 
   const addressCache = overrides.addressCache || createAddressCache()
 
-  const assetsModule = overrides.assetsModule || {
-    getAsset: (assetName) => assets[assetName],
-    getAssets: () => assets,
-  }
-
   const txLogsAtom = createInMemoryAtom({ defaultValue: { value: overrides.txLogs || {} } })
   const knownAddresses =
-    overrides.knownAddresses || knownAddressesDefinition.factory({ txLogsAtom, assetsModule })
+    overrides.knownAddresses || knownAddressesDefinition.factory({ txLogsAtom, assetsAtom })
 
   knownAddresses.start()
 
@@ -89,8 +97,11 @@ export const setup = async (overrides = {}) => {
     defaultValue: { value: overrides.accountStates || {} },
   })
 
+  const externalWalletAddressesAtom =
+    overrides.externalWalletAddressesAtom || createInMemoryAtom({ defaultValue: {} })
+
   const addressProvider = addressProviderDefinition.factory({
-    assetsModule,
+    assetsAtom,
     addressCache,
     accountStatesAtom,
     publicKeyProvider,
@@ -98,10 +109,11 @@ export const setup = async (overrides = {}) => {
     walletAccountsAtom,
     assetSources,
     multisigAtom: overrides.multisigAtom,
+    externalWalletAddressesAtom,
   })
 
   return {
-    assetsModule,
+    assetsAtom,
     addressCache,
     assetSources,
     keychain,
@@ -112,6 +124,7 @@ export const setup = async (overrides = {}) => {
     accountStatesAtom,
     addressProvider,
     enabledWalletAccountsAtom,
+    externalWalletAddressesAtom,
   }
 }
 

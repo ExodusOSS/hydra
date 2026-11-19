@@ -5,7 +5,7 @@ Pseudonymous signature based authentication client. Used for when your auth scen
 ## Install
 
 ```sh
-yarn add @exodus/auth-client-base
+pnpm add @exodus/auth-client-base
 ```
 
 ## Usage

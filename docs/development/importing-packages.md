@@ -32,8 +32,8 @@ The script will replace the `repository`, `homepage`, and `bugs.url` properties 
 and set the homepage to the module's folder on master.
 
 2. You should check for potentially broken badges in your README.md, no longer required ci folders,
-   eslint configs, .gitignore files, and lockfiles on package level. `yarn postmigrate` can help to identify unwanted
-   files and create new config files to extend the root configuration in this repository. If the last commit affects files inside the imported package's folder, `yarn postmigrate` will be able to determine the package automatically. Otherwise you can supply the module path manually: `yarn postmigrate modules/orders-monitor`.
+   eslint configs, .gitignore files, and lockfiles on package level. `pnpm run postmigrate` can help to identify unwanted
+   files and create new config files to extend the root configuration in this repository. If the last commit affects files inside the imported package's folder, `pnpm run postmigrate` will be able to determine the package automatically. Otherwise you can supply the module path manually: `pnpm run postmigrate modules/orders-monitor`.
 
 3. Many `devDependencies` may no longer be required as they are hoisted to avoid duplication and use the same
    versions across all modules. Prune what you can from your imported module.
@@ -50,4 +50,4 @@ and set the homepage to the module's folder on master.
 
 5. Last, push to master directly.
 
-Note: if your package is missing them you will most likely need to add `babel.config.js` and `jest.config.js`. `yarn postmigrate` also offers to add them (see 2.)
+Note: if your package is missing them you will most likely need to add `babel.config.js` and `jest.config.js`. `pnpm run postmigrate` also offers to add them (see 2.)

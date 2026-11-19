@@ -1,9 +1,9 @@
-import Channel from './channel'
+import Channel from './channel.js'
 
 const channels = Object.create(null)
 
 const get = (obj, key) => {
-  obj[key] = obj[key] || new Channel({ name: key }) // eslint-disable-line @exodus/mutable/no-param-reassign-prop-only
+  obj[key] = obj[key] || new Channel({ name: key }) // oxlint-disable-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
   return obj[key]
 }
 

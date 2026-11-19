@@ -7,7 +7,7 @@ Lightweight lodash-like utils commonly used in Exodus projects.
 ## Install
 
 ```
-yarn add @exodus/basic-utils
+pnpm add @exodus/basic-utils
 ```
 
 ## Usage
@@ -60,7 +60,7 @@ flattenToPaths({
 
 ## Lodash-like utility functions
 
-The [following functions](./src/lodash.js) work like their lodash counterparts, with some caveats:
+The [following functions](./src/lodash.ts) work like their lodash counterparts, with some caveats:
 
 - They're strict with respect to arguments, and don't support multiple options like arrays, strings, etc. For example, `pick(users, ['name', 'age'])` but NOT `pick(users, 'name')`. Please see the tests before you use them.
 - Functions that create objects return objects with a null prototype.
@@ -88,12 +88,12 @@ import {
 
 ## async helpers
 
-See [./src/async.js](./src/async.js) and [./src/p-debounce.js](./src/p-debounce.js) for more details.
+See [./src/async.ts](./src/async.ts) and [./src/p-debounce.ts](./src/p-debounce.ts) for more details.
 
 - `mapValuesAsync`, `filterAsync`, `partitionAsync` are the async counterparts of `mapValues`, `filter`, `partition` respectively.
 - `pDebounce`: [p-debounce](https://www.npmjs.com/package/p-debounce), copied from the original temporarily to avoid having to ship this as ESM.
 
 ## Prototype pollution safety
 
-- [getOwnProperty](./src/get-own-property.js)
-- [defineProperty](./src/define-property.js)
+- [getOwnProperty](./src/get-own-property.ts)
+- [defineProperty](./src/define-property.ts)

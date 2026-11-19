@@ -39,7 +39,7 @@ type Params<T> = {
 
 const warnOnSameValueSet = <T>({ atom, isEqual = deepEqual, logger }: Params<T>): Atom<T> => {
   assert(atom, 'expected "atom')
-  assert(typeof logger?.warn === 'function', 'expected logger with ".warn" function') // eslint-disable-line @typescript-eslint/no-unnecessary-condition
+  assert(typeof logger?.warn === 'function', 'expected logger with ".warn" function')
 
   let previousValue: T
   atom.observe((value) => {

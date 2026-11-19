@@ -5,7 +5,7 @@ This Exodus SDK feature tracks daily and hourly historical asset prices for diff
 ## Install
 
 ```sh
-yarn add @exodus/market-history
+pnpm add @exodus/market-history
 ```
 
 ## Usage

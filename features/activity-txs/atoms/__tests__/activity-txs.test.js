@@ -1,4 +1,5 @@
 import { createInMemoryAtom } from '@exodus/atoms'
+import { mapValues } from '@exodus/basic-utils'
 import { createAsset as createBitcoin } from '@exodus/bitcoin-plugin'
 import errorTracking from '@exodus/error-tracking'
 import { createNoopLogger } from '@exodus/logger'
@@ -52,15 +53,15 @@ describe('activityTxsAtom', () => {
     const handler = jest.fn()
     const txLogsAtom = createInMemoryAtom({})
     const accountStatesAtom = createInMemoryAtom({})
+    const assetsAtom = createInMemoryAtom({})
     const atom = activityTxsAtomDefinition.factory({
       txLogsAtom,
       accountStatesAtom,
-      assetsModule: {
-        getAsset: (assetName) => assets[assetName],
-      },
+      assetsAtom,
     })
 
     atom.observe(handler)
+    await assetsAtom.set({ value: assets })
     await txLogsAtom.set({
       value: {
         exodus_0: {
@@ -208,12 +209,11 @@ describe('activityTxsAtom', () => {
     const handler = jest.fn()
     const txLogsAtom = createInMemoryAtom({})
     const accountStatesAtom = createInMemoryAtom({})
+    const assetsAtom = createInMemoryAtom({})
     const atom = activityTxsAtomDefinition.factory({
       txLogsAtom,
       accountStatesAtom,
-      assetsModule: {
-        getAsset: (assetName) => assets[assetName],
-      },
+      assetsAtom,
     })
 
     const stableWallet0Txs = TxSet.fromArray(fixtures.bitcoin)
@@ -221,6 +221,7 @@ describe('activityTxsAtom', () => {
     const wallet1TxsB = TxSet.fromArray(fixtures.bitcoin.slice(0, 1))
 
     atom.observe(handler)
+    await assetsAtom.set({ value: assets })
     await txLogsAtom.set({
       value: {
         exodus_0: { bitcoin: stableWallet0Txs },
@@ -259,15 +260,15 @@ describe('activityTxsAtom', () => {
     const handler = jest.fn()
     const txLogsAtom = createInMemoryAtom({})
     const accountStatesAtom = createInMemoryAtom({})
+    const assetsAtom = createInMemoryAtom({})
     const atom = activityTxsAtomDefinition.factory({
       txLogsAtom,
       accountStatesAtom,
-      assetsModule: {
-        getAsset: (assetName) => assets[assetName],
-      },
+      assetsAtom,
     })
 
     atom.observe(handler)
+    await assetsAtom.set({ value: assets })
     await txLogsAtom.set({
       value: {
         exodus_0: {
@@ -316,15 +317,15 @@ describe('activityTxsAtom', () => {
     const handler = jest.fn()
     const txLogsAtom = createInMemoryAtom({})
     const accountStatesAtom = createInMemoryAtom({ defaultValue: {} })
+    const assetsAtom = createInMemoryAtom({})
     const atom = activityTxsAtomDefinition.factory({
       txLogsAtom,
       accountStatesAtom,
-      assetsModule: {
-        getAsset: (assetName) => assets[assetName],
-      },
+      assetsAtom,
     })
 
     atom.observe(handler)
+    await assetsAtom.set({ value: assets })
     await txLogsAtom.set({
       value: {
         exodus_0: {
@@ -447,6 +448,7 @@ describe('activityTxsAtom', () => {
     const txLogsAtom = createInMemoryAtom({})
     const errorsAtom = createInMemoryAtom({ defaultValue: { errors: [] } })
     const accountStatesAtom = createInMemoryAtom({ defaultValue: {} })
+    const assetsAtom = createInMemoryAtom({})
 
     const atom = activityTxsAtomDefinition.factory({
       errorTracking: errorTracking({ maxErrorsCount: 10 })
@@ -459,20 +461,21 @@ describe('activityTxsAtom', () => {
       logger: console,
       txLogsAtom,
       accountStatesAtom,
-      assetsModule: {
-        getAsset: (assetName) => ({
-          ...assets[assetName],
-          api: {
-            ...assets[assetName].api,
-            getActivityTxs: () => {
-              throw new Error('bug in implementation')
-            },
-          },
-        }),
-      },
+      assetsAtom,
     })
 
-    atom.observe(handler)
+    const unobserve = atom.observe(handler)
+    await assetsAtom.set({
+      value: mapValues(assets, (asset) => ({
+        ...asset,
+        api: {
+          ...asset.api,
+          getActivityTxs: () => {
+            throw new Error('bug in implementation')
+          },
+        },
+      })),
+    })
     await txLogsAtom.set({
       value: {
         exodus_0: {
@@ -519,9 +522,14 @@ describe('activityTxsAtom', () => {
         },
       },
     })
-    const errorPromise = new Promise((resolve) =>
-      errorsAtom.observe((errors) => errors.errors.length > 0 && resolve(errors))
-    )
+    const errorPromise = new Promise((resolve) => {
+      const unobserveErrors = errorsAtom.observe((errors) => {
+        if (errors.errors.length > 0) {
+          unobserveErrors()
+          resolve(errors)
+        }
+      })
+    })
 
     await advance()
     const errors = await errorPromise
@@ -529,5 +537,14 @@ describe('activityTxsAtom', () => {
     expect(handler.mock.calls[0][0].exodus_0.eosio.map((tx) => tx.toJSON())).toEqual([])
     expect(errors.errors[0].context).toEqual({ assetName: 'eosio' })
     expect(errors.errors[0].error.toString()).toEqual('Error: bug in implementation')
+
+    // getActivityTxs throws synchronously, but the atom reports it through a fire-and-forget
+    // errorTracking.track() that the synchronous selector cannot await. Stop observing (so the
+    // combined input atom drops its source subscriptions) and let that asynchronous report
+    // settle within this test. Otherwise the intentionally-thrown error stays in flight after
+    // the test resolves and can surface as an unhandled rejection during a later test, failing
+    // the whole Test job without failing any single test.
+    unobserve()
+    await advance()
   })
 })

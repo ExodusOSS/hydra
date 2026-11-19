@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/ExodusMovement/exodus/compare/@exodus/key-ids@2.1.0...@exodus/key-ids@2.1.1) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/key-ids
+
+## [2.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-ids@2.0.0...@exodus/key-ids@2.1.0) (2026-07-17)
+
+### ⚠ BREAKING CHANGES
+
+- **eslint-config-exodus:** @exodus/eslint-config-exodus no longer enforces
+  no-floating-promises or no-unnecessary-condition and no longer sets
+  parserOptions.project. Consumers relying on these without oxlint
+  --type-aware lose the coverage; adopt oxlint type-aware.
+
+Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+- chore: drop redundant local no-floating-promises disable
+
+@exodus/eslint-config-exodus no longer enables no-floating-promises, so
+
+### Features
+
+- add gift card feature ([#17567](https://github.com/ExodusMovement/exodus-hydra/issues/17567)) ([f0417f6](https://github.com/ExodusMovement/exodus-hydra/commit/f0417f66fafe6c7dfb1889dc9aaa0b6a23256b02))
+- **eslint-config-exodus:** retire type-aware eslint rules, drop parserOptions.project ([#17273](https://github.com/ExodusMovement/exodus-hydra/issues/17273)) ([622ec93](https://github.com/ExodusMovement/exodus-hydra/commit/622ec935f14f0b7d54ee6f2b034995606383397c)), closes [#7693](https://github.com/ExodusMovement/exodus-hydra/issues/7693) [#17253](https://github.com/ExodusMovement/exodus-hydra/issues/17253)
+
+## [2.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-ids@1.6.0...@exodus/key-ids@2.0.0) (2026-06-03)
+
+### ⚠ BREAKING CHANGES
+
+- remove multi-seed support from wallet/keychain (#16379)
+
+### Features
+
+- **key-ids:** convert to TypeScript ([#16644](https://github.com/ExodusMovement/exodus-hydra/issues/16644)) ([b488935](https://github.com/ExodusMovement/exodus-hydra/commit/b488935593cd2f07452e4857223f8aa841d44428))
+
+### Code Refactoring
+
+- remove multi-seed support from wallet/keychain ([#16379](https://github.com/ExodusMovement/exodus-hydra/issues/16379)) ([e63510f](https://github.com/ExodusMovement/exodus-hydra/commit/e63510f2b57b7bcb7704d993baf2e75d11edb3ad))
+
+## [1.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-ids@1.5.0...@exodus/key-ids@1.6.0) (2026-01-26)
+
+### Features
+
+- feat: remove Buffer usage in key-ids (#15015)
+
 ## [1.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-ids@1.4.0...@exodus/key-ids@1.5.0) (2025-11-04)
 
 ### Features

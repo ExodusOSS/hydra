@@ -1,47 +1,21 @@
-/* eslint-disable sonarjs/no-identical-functions */
-
 import type { State } from './types.js'
 import type { LockHistoryEntry } from '../utils/types.js'
 
-type EventReducer<T = undefined> = (state: State, payload: T) => State
+type EventReducer<T = void> = (state: State, payload: T) => State
 
-type HookPayload = {
-  isLocked: boolean
-  walletExists: boolean
-  hasPassphraseSet: boolean
-  isRestoring: boolean
-}
-
-const preLoad: EventReducer<HookPayload> = (state, payload) => ({
-  ...state,
-  isLocked: payload.isLocked,
-  walletExists: payload.walletExists,
-  hasPassphraseSet: payload.hasPassphraseSet,
-  isRestoring: payload.isRestoring,
-})
-
-const load: EventReducer<HookPayload> = (state, payload) => ({
+const load: EventReducer = (state) => ({
   ...state,
   isLoading: false,
-  isLocked: payload.isLocked,
-  walletExists: payload.walletExists,
-  hasPassphraseSet: payload.hasPassphraseSet,
-  isRestoring: payload.isRestoring,
 })
 
-const create: EventReducer<HookPayload> = (state, payload) => ({
+const create: EventReducer = (state) => ({
   ...state,
   isLoading: false,
-  isLocked: payload.isLocked,
-  walletExists: payload.walletExists,
-  hasPassphraseSet: payload.hasPassphraseSet,
-  isRestoring: payload.isRestoring,
 })
 
-const importCompleted: EventReducer<{ walletExists: boolean }> = (state, payload) => ({
+const importCompleted: EventReducer = (state) => ({
   ...state,
   isLoading: false,
-  walletExists: payload.walletExists,
 })
 
 const lock: EventReducer = (state) => ({
@@ -52,6 +26,21 @@ const lock: EventReducer = (state) => ({
 const unlock: EventReducer = (state) => ({
   ...state,
   isLocked: false,
+})
+
+const locked: EventReducer<boolean> = (state, payload) => ({
+  ...state,
+  isLocked: payload,
+})
+
+const walletExists: EventReducer<boolean> = (state, payload) => ({
+  ...state,
+  walletExists: payload,
+})
+
+const hasPassphraseSet: EventReducer<boolean> = (state, payload) => ({
+  ...state,
+  hasPassphraseSet: payload,
 })
 
 const backedUp: EventReducer<boolean> = (state, payload) => ({
@@ -66,18 +55,12 @@ const backup: EventReducer = (state) => ({
 
 const restore: EventReducer<boolean> = (state, payload) => ({
   ...state,
-  walletExists: state.walletExists || Boolean(payload),
   isRestoring: payload,
 })
 
 const restoreCompleted: EventReducer = (state) => ({
   ...state,
   isRestoring: false,
-})
-
-const passphraseChanged: EventReducer = (state) => ({
-  ...state,
-  hasPassphraseSet: true,
 })
 
 const lockHistory: EventReducer<LockHistoryEntry[]> = (state, payload) => ({
@@ -96,17 +79,18 @@ const walletCreatedAt: EventReducer<string> = (state: State, payload: string) =>
 })
 
 const eventReducers = {
-  'pre-load': preLoad,
   load,
   create,
   'import-completed': importCompleted,
   lock,
   unlock,
+  locked,
+  walletExists,
+  hasPassphraseSet,
   backedUp,
   backup,
   restore,
   'restore-completed': restoreCompleted,
-  'passphrase-changed': passphraseChanged,
   lockHistory,
   autoLockTimer,
   walletCreatedAt,

@@ -6,7 +6,7 @@ import units from './units.js'
 export { default as units } from './units.js'
 export * from './units.js'
 
-// eslint-disable-next-line @exodus/basic-utils/prefer-basic-utils
+// oxlint-disable-next-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 export default lodash.mapValues(units, (unit, key) => {
   // we do not display cents or other baseUnit right now
   // so `microcents` is ok

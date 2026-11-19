@@ -48,6 +48,11 @@ class AddressCache {
     this.#loaded = pDefer()
     this.#config = config
     this.#fusion = fusion
+    this.#throttledUpdateFusion = throttle(
+      this.#updateFusion,
+      config?.fusionPushDelay ?? ms('60s'),
+      { leading: false, trailing: true }
+    )
   }
 
   #update = restrictConcurrency(async (addressCacheChanges, { fromSync } = Object.create(null)) => {
@@ -76,32 +81,34 @@ class AddressCache {
   })
 
   /**
-   * Schedule a push to fusion. This is throttled to avoid flooding the channel with messages.
+   * Push to fusion with concurrency control. Wrapped with throttle in the constructor.
    */
-  #throttledUpdateFusion = throttle(
-    restrictConcurrency(async () => {
-      if (this.#config.noSync) return
+  #updateFusion = restrictConcurrency(async () => {
+    if (this.#config.noSync) return
 
-      // Let's await for the channel to be synced down
-      // so our addressCacheAtom is up to date
-      const channel = await this.#getSyncedChannel()
-      const currentCache = await this.#addressCacheAtom.get()
+    // Let's await for the channel to be synced down
+    // so our addressCacheAtom is up to date
+    const channel = await this.#getSyncedChannel()
+    const currentCache = await this.#addressCacheAtom.get()
 
-      // Get only unsynced addresses, so we don't push the whole cache every time
-      const data = getUnsyncedAddressesForPush(currentCache.caches)
+    // Get only unsynced addresses, so we don't push the whole cache every time
+    const data = getUnsyncedAddressesForPush(currentCache.caches)
 
-      // Also be nice and not push empty data to fusion
-      if (Object.keys(data).length === 0) return
+    // Also be nice and not push empty data to fusion
+    if (Object.keys(data).length === 0) return
 
-      this.#logger.debug('pushing address cache update to fusion', data)
-      await channel.push({
-        type: addressCacheChannel.type,
-        data,
-      })
-    }),
-    this.#config?.fusionPushDelay ?? ms('60s'),
-    { leading: false, trailing: true }
-  )
+    this.#logger.debug('pushing address cache update to fusion', data)
+    await channel.push({
+      type: addressCacheChannel.type,
+      data,
+    })
+  })
+
+  /**
+   * Schedule a push to fusion. This is throttled to avoid flooding the channel with messages.
+   * Initialized in the constructor so `#config.fusionPushDelay` is available.
+   */
+  #throttledUpdateFusion
 
   #getSyncedChannel = async () => {
     await this.#channel.awaitProcessed()
@@ -169,7 +176,7 @@ class AddressCache {
     // awaits first run, then runs on changes in enabledWalletAccounts
     await new Promise((resolve) => {
       this.#unsubscribe = this.#enabledWalletAccountsAtom.observe((walletAccounts) => {
-        this.#loadDataIntoAtom(Object.keys(walletAccounts)).then(resolve)
+        void this.#loadDataIntoAtom(Object.keys(walletAccounts)).then(resolve)
       })
     })
   }

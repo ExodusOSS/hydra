@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.1](https://github.com/ExodusMovement/exodus/compare/@exodus/fusion-atoms@1.4.0...@exodus/fusion-atoms@1.4.1) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/fusion-atoms
+
 ## [1.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fusion-atoms@1.3.1...@exodus/fusion-atoms@1.4.0) (2024-11-25)
 
 ### Features

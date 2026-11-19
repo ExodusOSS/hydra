@@ -15,7 +15,7 @@ const useUpdateEffect = (effect, deps) => {
     if (!isFirstMount) {
       return effect()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, deps)
 }
 

@@ -3,6 +3,288 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.20.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.19.0...@exodus/analytics-validation@3.20.0) (2026-11-17)
+
+### Features
+
+- **analytics-validation:** rename RebalancingSucceeded to RebalancingBroadcast ([#49422](https://github.com/ExodusMovement/exodus/issues/49422)) ([c52f3ca](https://github.com/ExodusMovement/exodus/commit/c52f3caa78d3a30f5a197552638363a854212dcd))
+
+## [3.19.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.18.0...@exodus/analytics-validation@3.19.0) (2026-11-17)
+
+### Features
+
+- **analytics-validation:** accept the real trade fees and fail amounts on Predictions events ([#49276](https://github.com/ExodusMovement/exodus/issues/49276)) ([4559f3a](https://github.com/ExodusMovement/exodus/commit/4559f3a454fc3de596c4bee5d6c193bbb1a38640))
+
+## [3.18.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.17.0...@exodus/analytics-validation@3.18.0) (2026-11-13)
+
+### ⚠ BREAKING CHANGES
+
+- **pay-exchange:** send the Rebalancing pay order id (#49109)
+
+### Features
+
+- **pay-exchange:** send the Rebalancing pay order id ([#49109](https://github.com/ExodusMovement/exodus/issues/49109)) ([7942ae4](https://github.com/ExodusMovement/exodus/commit/7942ae47dd635cd9c5b8e270760b453cb8642a7d))
+
+## [3.17.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.16.0...@exodus/analytics-validation@3.17.0) (2026-11-11)
+
+### Features
+
+- **analytics-validation:** export the schemasafe config as CommonJS ([#49031](https://github.com/ExodusMovement/exodus/issues/49031)) ([619a3a2](https://github.com/ExodusMovement/exodus/commit/619a3a2a0814a27f85d777c0b38b0847ee9ee10c))
+
+## [3.16.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.15.0...@exodus/analytics-validation@3.16.0) (2026-11-11)
+
+### Features
+
+- **analytics-validation:** accept the sponsorship result on WalletAssetSend ([#48932](https://github.com/ExodusMovement/exodus/issues/48932)) ([5a245c6](https://github.com/ExodusMovement/exodus/commit/5a245c65209826234aed3a70884105c942ca3756))
+
+## [3.15.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.14.0...@exodus/analytics-validation@3.15.0) (2026-11-06)
+
+### Features
+
+- **analytics:** add spend crypto card event schemas ([#48727](https://github.com/ExodusMovement/exodus/issues/48727)) ([5b4a3c8](https://github.com/ExodusMovement/exodus/commit/5b4a3c822d1b16dc9b507b2638b714f85dfd4c96))
+
+## [3.14.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.13.0...@exodus/analytics-validation@3.14.0) (2026-11-04)
+
+### Features
+
+- **analytics-validation:** accept energy sponsorship on WalletAssetSend ([#48569](https://github.com/ExodusMovement/exodus/issues/48569)) ([62b93a0](https://github.com/ExodusMovement/exodus/commit/62b93a07fd26ff31a847b92cd8e3ecd3c7ba4c4d))
+
+## [3.13.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.12.0...@exodus/analytics-validation@3.13.0) (2026-10-30)
+
+### Features
+
+- **analytics-validation:** accept the extra stablecoins' balances on PayRewardsJoin and PayRewardsBannerView ([#48087](https://github.com/ExodusMovement/exodus/issues/48087)) ([475f252](https://github.com/ExodusMovement/exodus/commit/475f2525d39dea7fee9538ff4c0a4b976f84155f))
+
+## [3.12.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.11.0...@exodus/analytics-validation@3.12.0) (2026-10-16)
+
+### Features
+
+- **analytics-validation:** add Rewards v2 dashboard, claim and send invitation events ([#47204](https://github.com/ExodusMovement/exodus/issues/47204)) ([3233749](https://github.com/ExodusMovement/exodus/commit/3233749fcc414b8a67d67fc29a7ba89efd0a70cc))
+
+## [3.11.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.10.0...@exodus/analytics-validation@3.11.0) (2026-10-15)
+
+### Features
+
+- **analytics-validation:** add Predictions transfer settlement events ([#47066](https://github.com/ExodusMovement/exodus/issues/47066)) ([b76d9be](https://github.com/ExodusMovement/exodus/commit/b76d9becb5281cd3953c62e74af64ab98f81000f))
+- **analytics-validation:** add stock order outcome events ([#47065](https://github.com/ExodusMovement/exodus/issues/47065)) ([aa938aa](https://github.com/ExodusMovement/exodus/commit/aa938aa99387a94dc178667d7754d8bf98248bd3))
+
+## [3.10.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.9.0...@exodus/analytics-validation@3.10.0) (2026-10-09)
+
+### Features
+
+- **pay-transactions:** send rebalanceId to Pay and accept it on Rebalancing events ([#46774](https://github.com/ExodusMovement/exodus/issues/46774)) ([f43c2e2](https://github.com/ExodusMovement/exodus/commit/f43c2e2ea016596e6321eec6e9bc435de5fea327))
+
+## [3.9.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.8.1...@exodus/analytics-validation@3.9.0) (2026-10-09)
+
+### Features
+
+- **analytics-validation:** accept error_type on RebalancingFailed ([#46771](https://github.com/ExodusMovement/exodus/issues/46771)) ([adb7105](https://github.com/ExodusMovement/exodus/commit/adb710551abbdd8d676743d988626a6a75164620))
+- **analytics-validation:** add Predictions funnel event schemas ([#46605](https://github.com/ExodusMovement/exodus/issues/46605)) ([24c5d13](https://github.com/ExodusMovement/exodus/commit/24c5d1304da1eb2d9256e8070162aecb51402bb2))
+
+## [3.8.1](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.8.0...@exodus/analytics-validation@3.8.1) (2026-10-02)
+
+### Bug Fixes
+
+- **analytics-validation:** split Rewards balances by stablecoin, not network ([#46341](https://github.com/ExodusMovement/exodus/issues/46341)) ([fda3eeb](https://github.com/ExodusMovement/exodus/commit/fda3eeba60bd2b9f4301233e9f5df3f60667b3b5))
+
+## [3.8.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.7.0...@exodus/analytics-validation@3.8.0) (2026-10-01)
+
+### Features
+
+- **analytics-validation:** accept Rewards eligible balance per network ([#46298](https://github.com/ExodusMovement/exodus/issues/46298)) ([a47aab3](https://github.com/ExodusMovement/exodus/commit/a47aab32d0bad6373f270f21fdc1290f51fd45f2))
+
+## [3.7.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.6.1...@exodus/analytics-validation@3.7.0) (2026-09-28)
+
+### Features
+
+- **analytics-validation:** add the rewards eligible balance default property ([#45984](https://github.com/ExodusMovement/exodus/issues/45984)) ([52f8b8a](https://github.com/ExodusMovement/exodus/commit/52f8b8a87cf3f194718362b58182f34f0289431c))
+- **analytics-validation:** allow the Profile Rewards surface and entry point ([#45982](https://github.com/ExodusMovement/exodus/issues/45982)) ([3512954](https://github.com/ExodusMovement/exodus/commit/351295431d1a77330e0af3140f6e0d8068eb3be8))
+
+## [3.6.1](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.6.0...@exodus/analytics-validation@3.6.1) (2026-09-27)
+
+### Bug Fixes
+
+- **rewards:** preserve redemption details and extend analytics schemas ([#45832](https://github.com/ExodusMovement/exodus/issues/45832)) ([449a8aa](https://github.com/ExodusMovement/exodus/commit/449a8aaa512e22b91f5a4a99058b1187544760e1))
+
+## [3.6.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.5.0...@exodus/analytics-validation@3.6.0) (2026-09-24)
+
+### Features
+
+- **analytics:** add pay rewards event schemas and joined super property ([#45676](https://github.com/ExodusMovement/exodus/issues/45676)) ([29f7892](https://github.com/ExodusMovement/exodus/commit/29f78924bfafbc2c0dcd5d161a401b4744d5a48c))
+
+## [3.5.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.3.0...@exodus/analytics-validation@3.5.0) (2026-09-23)
+
+### Features
+
+- **analytics-libs:** track fund and withdraw telemetry for markets ([#43186](https://github.com/ExodusMovement/exodus/issues/43186)) ([dfd1a61](https://github.com/ExodusMovement/exodus/commit/dfd1a61371b0be3b818d0055891bc982c0f9b95d))
+- **analytics-validation:** add Rebalancing lifecycle events ([#45640](https://github.com/ExodusMovement/exodus/issues/45640)) ([5d600df](https://github.com/ExodusMovement/exodus/commit/5d600dfbb77aa2ab2962dc81ff771555d74393d2))
+
+### Bug Fixes
+
+- **exchange:** abort stale swaps before broadcasting the deposit ([#44416](https://github.com/ExodusMovement/exodus/issues/44416)) ([50150cc](https://github.com/ExodusMovement/exodus/commit/50150cc22190d1767d5b1008ad3bddfcee6d47bf))
+
+## [3.4.0](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics-validation@3.3.0...@exodus/analytics-validation@3.4.0) (2026-09-23)
+
+### Features
+
+- **analytics-libs:** track fund and withdraw telemetry for markets ([#43186](https://github.com/ExodusMovement/exodus/issues/43186)) ([dfd1a61](https://github.com/ExodusMovement/exodus/commit/dfd1a61371b0be3b818d0055891bc982c0f9b95d))
+- **analytics-validation:** add Rebalancing lifecycle events ([#45640](https://github.com/ExodusMovement/exodus/issues/45640)) ([5d600df](https://github.com/ExodusMovement/exodus/commit/5d600dfbb77aa2ab2962dc81ff771555d74393d2))
+
+### Bug Fixes
+
+- **exchange:** abort stale swaps before broadcasting the deposit ([#44416](https://github.com/ExodusMovement/exodus/issues/44416)) ([50150cc](https://github.com/ExodusMovement/exodus/commit/50150cc22190d1767d5b1008ad3bddfcee6d47bf))
+
+## [3.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@3.2.1...@exodus/analytics-validation@3.3.0) (2026-07-09)
+
+### Features
+
+- **analytics-validation:** add StocksBuyAmountValid schema ([#17506](https://github.com/ExodusMovement/exodus-hydra/issues/17506)) ([9310115](https://github.com/ExodusMovement/exodus-hydra/commit/9310115c8b39422cd8a2da6c6ad3ddd01432533b))
+
+## [3.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@3.2.0...@exodus/analytics-validation@3.2.1) (2026-07-03)
+
+### Bug Fixes
+
+- **analytics-validation:** constrain stocks buy balance_usd to minimum 0 ([#17463](https://github.com/ExodusMovement/exodus-hydra/issues/17463)) ([e027a2e](https://github.com/ExodusMovement/exodus-hydra/commit/e027a2e62f50c8bc49ac1f0cb6eea97d6de93d33))
+
+## [3.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@3.1.0...@exodus/analytics-validation@3.2.0) (2026-07-02)
+
+### Features
+
+- **analytics-validation:** add stocks buy funnel telemetry schemas ([#17453](https://github.com/ExodusMovement/exodus-hydra/issues/17453)) ([a9f9a70](https://github.com/ExodusMovement/exodus-hydra/commit/a9f9a7024836bb902ddde52b17f385eafe581495))
+
+## [3.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@3.0.1...@exodus/analytics-validation@3.1.0) (2026-06-19)
+
+### Features
+
+- **analytics-validation:** add PayDepositBlocked event schema ([#17248](https://github.com/ExodusMovement/exodus-hydra/issues/17248)) ([49e3f14](https://github.com/ExodusMovement/exodus-hydra/commit/49e3f14b9e1c3990840dd13e93ce5455c329d064)), closes [ExodusMovement/exodus-mobile#40803](https://github.com/ExodusMovement/exodus-mobile/issues/40803)
+
+## [3.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@3.0.0...@exodus/analytics-validation@3.0.1) (2026-06-19)
+
+**Note:** Version bump only for package @exodus/analytics-validation
+
+## [3.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.80.1...@exodus/analytics-validation@3.0.0) (2026-06-10)
+
+### ⚠ BREAKING CHANGES
+
+- **analytics-validation:** convert to ESM (#17025)
+
+- refactor(analytics-validation)!: convert to ESM (#17025)
+
+## [2.80.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.80.0...@exodus/analytics-validation@2.80.1) (2026-06-05)
+
+### Bug Fixes
+
+- **analytics-validation:** keep ESM emit so schema compiles via babel ([#17003](https://github.com/ExodusMovement/exodus-hydra/issues/17003)) ([919a6a3](https://github.com/ExodusMovement/exodus-hydra/commit/919a6a38a69595fc12436ad5e70fc02eadb53ce2)), closes [#16840](https://github.com/ExodusMovement/exodus-hydra/issues/16840)
+
+## [2.80.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.79.0...@exodus/analytics-validation@2.80.0) (2026-06-04)
+
+### Features
+
+- **analytics-validation:** add restore foreground and background ms to RestoreWalletSeedInputComplete ([#16956](https://github.com/ExodusMovement/exodus-hydra/issues/16956)) ([1f9cd7a](https://github.com/ExodusMovement/exodus-hydra/commit/1f9cd7a1d97512dbaf070787628f13cb993c57d9))
+
+## [2.79.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.78.0...@exodus/analytics-validation@2.79.0) (2026-06-03)
+
+**Note:** Version bump only for package @exodus/analytics-validation
+
+## [2.78.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.77.1...@exodus/analytics-validation@2.78.0) (2026-06-02)
+
+### Features
+
+- **analytics-validation:** add Predictions event schemas ([#16521](https://github.com/ExodusMovement/exodus-hydra/issues/16521)) ([9cb302b](https://github.com/ExodusMovement/exodus-hydra/commit/9cb302becb668e279837e01acc087d04474d2f84)), closes [ExodusMovement/exodus-mobile#39181](https://github.com/ExodusMovement/exodus-mobile/issues/39181)
+
+## [2.77.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.77.0...@exodus/analytics-validation@2.77.1) (2026-05-26)
+
+**Note:** Version bump only for package @exodus/analytics-validation
+
+## [2.77.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.76.0...@exodus/analytics-validation@2.77.0) (2026-05-26)
+
+### Features
+
+- **analytics-validation:** add PayCardComingSoon events ([#16699](https://github.com/ExodusMovement/exodus-hydra/issues/16699)) ([47082c1](https://github.com/ExodusMovement/exodus-hydra/commit/47082c1af70ba1b2515d613f686f4b4907e76e0d))
+- **analytics-validation:** add RestoreBackupWarningModalView event schema ([#16768](https://github.com/ExodusMovement/exodus-hydra/issues/16768)) ([cbdcfa3](https://github.com/ExodusMovement/exodus-hydra/commit/cbdcfa3d8ae4f405d12e1ee2ebd6fe9c8b1d9f33))
+
+## [2.76.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.75.0...@exodus/analytics-validation@2.76.0) (2026-05-19)
+
+### Features
+
+- **analytics-validation:** allow v3 backup_type in SecurityBackupCreated ([#16656](https://github.com/ExodusMovement/exodus-hydra/issues/16656)) ([edfc2c0](https://github.com/ExodusMovement/exodus-hydra/commit/edfc2c011803a8f42a65e9e16d67122d1cf654ee))
+
+## [2.75.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.74.1...@exodus/analytics-validation@2.75.0) (2026-05-18)
+
+### Features
+
+- **analytics-validation:** add SecurityDeviceAuthToggle event schema ([#16637](https://github.com/ExodusMovement/exodus-hydra/issues/16637)) ([99aee57](https://github.com/ExodusMovement/exodus-hydra/commit/99aee57ed06d87896156088ce888eff66708f86e)), closes [#35542](https://github.com/ExodusMovement/exodus-hydra/issues/35542) [#39337](https://github.com/ExodusMovement/exodus-hydra/issues/39337)
+
+## [2.74.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.74.0...@exodus/analytics-validation@2.74.1) (2026-05-14)
+
+### Bug Fixes
+
+- **analytics-validation:** allow DAppSign events to send is_dismissed ([#16263](https://github.com/ExodusMovement/exodus-hydra/issues/16263)) ([2b199d7](https://github.com/ExodusMovement/exodus-hydra/commit/2b199d7931fd9ce3b17dd26bd1115c0a7de3e2a9))
+
+## [2.74.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.73.0...@exodus/analytics-validation@2.74.0) (2026-05-14)
+
+**Note:** Version bump only for package @exodus/analytics-validation
+
+## [2.73.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.72.0...@exodus/analytics-validation@2.73.0) (2026-05-12)
+
+### Features
+
+- feat: build analytic events types (#16382)
+
+## [2.72.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.71.0...@exodus/analytics-validation@2.72.0) (2026-05-12)
+
+### Features
+
+- feat(analytics-validation): AdjustAttribution event schema (#16429)
+
+## [2.71.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.70.0...@exodus/analytics-validation@2.71.0) (2026-05-11)
+
+### Features
+
+- feat: wealth stocks telemetry validation schemas and tests (#16370)
+
+### Bug Fixes
+
+- fix: ship schemas to `/lib` (#16445)
+
+## [2.70.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.69.0...@exodus/analytics-validation@2.70.0) (2026-05-08)
+
+### Features
+
+- feat(analytics-validation): add origin property to pay telemetry events (#16050)
+
+- feat: implement mixpanel feature flag and experimentation provider (#15782)
+
+## [2.69.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.68.0...@exodus/analytics-validation@2.69.0) (2026-04-17)
+
+### Features
+
+- feat(analytics-validation): rename PayWithdrawStablecoins to PayWithdraw events (#16003)
+
+## [2.68.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.67.2...@exodus/analytics-validation@2.68.0) (2026-04-13)
+
+### Features
+
+- feat(analytics-validation): add PayWithdrawTypeSelected event schema (#15969)
+
+## [2.67.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.67.1...@exodus/analytics-validation@2.67.2) (2026-04-09)
+
+### Bug Fixes
+
+- fix(analytics): remove extraneous lightning and xmr balance properties (#15935)
+
+## [2.67.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.67.0...@exodus/analytics-validation@2.67.1) (2026-04-08)
+
+### Bug Fixes
+
+- fix(analytics-validation): pay events casing (#15907)
+
+## [2.67.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.66.1...@exodus/analytics-validation@2.67.0) (2026-03-26)
+
+### Features
+
+- feat(analytics-validation): add PayWithdrawStablecoins events schemas (#15711)
+
 ## [2.66.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics-validation@2.66.0...@exodus/analytics-validation@2.66.1) (2026-03-26)
 
 ### Bug Fixes

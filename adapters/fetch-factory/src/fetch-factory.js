@@ -2,13 +2,18 @@ import {
   WHITELISTED_HEADERS,
   WHITELISTED_X_AUTH_HEADERS,
   EXODUS_HOST,
+  EXODUS_INT_HOST,
   GLOBAL_HOST,
 } from './constants.js'
 
-import { getUrlHostname, isValidHostname } from './hostname.js'
+const omitNullish = (obj) => {
+  const result = Object.create(null)
+  for (const [key, value] of Object.entries(obj)) {
+    if (value != null) result[key] = value
+  }
 
-const omitNullish = (obj) =>
-  Object.fromEntries(Object.entries(obj).filter(([_, value]) => value != null))
+  return result
+}
 
 export class FetchFactory {
   constructor(fetchFn) {
@@ -17,9 +22,8 @@ export class FetchFactory {
     }
 
     this.fetchFn = fetchFn
-    this.headerConfigs = {
-      [GLOBAL_HOST]: Object.create(null),
-    }
+    this.headerConfigs = Object.create(null)
+    this.headerConfigs[GLOBAL_HOST] = Object.create(null)
   }
 
   setHeaders(headers, allowedHostnames = [GLOBAL_HOST]) {
@@ -61,14 +65,6 @@ export class FetchFactory {
         continue
       }
 
-      if (!isValidHostname(hostname)) {
-        throw new Error(`Not a domain or IPv4 address: ${hostname}`)
-      }
-
-      if (!this.headerConfigs[hostname]) {
-        this.headerConfigs[hostname] = Object.create(null)
-      }
-
       this.headerConfigs[hostname] = omitNullish({ ...this.headerConfigs[hostname], ...headers })
     }
 
@@ -76,15 +72,18 @@ export class FetchFactory {
   }
 
   setDefaultExodusIdentifierHeaders({ appId, appVersion, appBuild }) {
-    if (!this.headerConfigs[EXODUS_HOST]) {
-      this.headerConfigs[EXODUS_HOST] = Object.create(null)
-    }
-
-    this.headerConfigs[EXODUS_HOST] = {
-      ...this.headerConfigs[EXODUS_HOST],
+    const identifierHeaders = {
       'x-exodus-app-id': appId,
       'x-exodus-version': appVersion,
       'x-requested-with': `${appId} ${appVersion} ${appBuild}`,
+    }
+
+    for (const host of [EXODUS_HOST, EXODUS_INT_HOST]) {
+      this.headerConfigs[host] = Object.assign(
+        Object.create(null),
+        this.headerConfigs[host],
+        identifierHeaders
+      )
     }
 
     return this
@@ -97,7 +96,11 @@ export class FetchFactory {
       headers.set(key, value)
     })
 
-    const hostname = getUrlHostname(url)
+    let hostname
+    try {
+      ;({ hostname } = new URL(url))
+    } catch {}
+
     if (hostname) {
       const matchedDomain = Object.keys(this.headerConfigs).find((key) => {
         return hostname === key || hostname.endsWith(`.${key}`)

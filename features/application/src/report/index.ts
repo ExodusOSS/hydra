@@ -44,12 +44,16 @@ const createApplicationReport = ({
 
       // We have a theory that this might take a while to fetch, so we add a timeout.
       // Consider removing this if we don't see any placeholder errors below in Safe Reports.
-      const timeout = new Promise((resolve) =>
-        setTimeout(() => {
-          resolve('Cannot fetch wallet created at.')
-        }, 5000)
-      )
-      return Promise.race([walletCreatedAtAtom.get(), timeout])
+      let timerId: ReturnType<typeof setTimeout>
+      const timeout = new Promise<string>((resolve) => {
+        timerId = setTimeout(() => resolve('Cannot fetch wallet created at.'), 5000)
+      })
+
+      try {
+        return await Promise.race([walletCreatedAtAtom.get(), timeout])
+      } finally {
+        clearTimeout(timerId!)
+      }
     }
 
     return {

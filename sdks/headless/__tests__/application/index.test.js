@@ -33,6 +33,7 @@ describe('reporting', () => {
 
   test('should successfully export report (post-wallet-exists)', async () => {
     await exodus.application.start()
+    await exodus.application.load()
     await exodus.application.create()
     await exodus.application.unlock()
     await expect(exodus.wallet.exists()).resolves.toBe(true)

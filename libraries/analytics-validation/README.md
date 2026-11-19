@@ -21,7 +21,7 @@ flowchart TD
     B(You're done!)
     C{Does it only require\n the 'origin' property?}
     C -->|Yes| B
-    C -->|No| E[Generate a new JSON Schema: \nyarn generate analytics-validation]
+    C -->|No| E[Generate a new JSON Schema: \npnpm generate analytics-validation]
     E --> D[Adjust the schema and tests]
     D --> B
 
@@ -32,7 +32,7 @@ flowchart TD
 To add a new schema run
 
 ```bash
-yarn generate analytics-validation
+pnpm generate analytics-validation
 ```
 
 in the project root. The CLI tool will ask you for all details needed.

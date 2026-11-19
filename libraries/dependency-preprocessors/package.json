@@ -1,43 +1,50 @@
 {
   "name": "@exodus/dependency-preprocessors",
-  "version": "6.3.2",
+  "version": "6.3.4",
   "description": "Dependency preprocessors to enable declarative augmenting of dependency definitions before passing them to @exodus/dependency-injection",
   "author": "Exodus Movement, Inc.",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/dependency-preprocessors",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/dependency-preprocessors",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Adependency-preprocessors"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Adependency-preprocessors"
   },
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
-    "src",
+    "lib",
     "README.md",
     "CHANGELOG.md"
   ],
   "scripts": {
-    "lint": "run -T eslint",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec tsc -p tsconfig.build.json && pnpm exec exodus-test --jest --esbuild",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/dependency-preprocessors"
   },
   "devDependencies": {
     "@exodus/storage-memory": "workspace:^",
     "@types/jest-when": "^3.5.2",
+    "@types/minimalistic-assert": "^1.0.1",
     "delay": "^5.0.0",
     "jest-when": "^3.6.0"
   },
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.0.1",
-    "@exodus/dependency-injection": "^3.1.0",
-    "@exodus/typeforce": "^1.18.0",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/dependency-injection": "workspace:^",
+    "@exodus/dependency-types": "workspace:^",
+    "@exodus/typeforce": "workspace:^",
     "minimalistic-assert": "^1.0.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

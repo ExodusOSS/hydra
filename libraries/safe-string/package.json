@@ -1,14 +1,14 @@
 {
   "name": "@exodus/safe-string",
   "type": "module",
-  "version": "1.4.1",
+  "version": "1.5.1",
   "description": "Library for generating safe strings that redact sensitive information",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/safe-string",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/safe-string",
   "license": "MIT",
   "keywords": [
     "redaction",
@@ -17,7 +17,7 @@
     "sanitization"
   ],
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asafe-string"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Asafe-string"
   },
   "main": "lib/index.js",
   "exports": "./lib/index.js",
@@ -27,12 +27,13 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "run -T tsc -p tsconfig.build.json",
-    "prepublishOnly": "yarn run -T build --scope @exodus/safe-string",
-    "clean": "run -T tsc --build --clean",
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest --esbuild"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/safe-string",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@exodus/seedless-errors": "^1.0.1"

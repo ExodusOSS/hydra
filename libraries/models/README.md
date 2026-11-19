@@ -7,7 +7,7 @@ Containers for collections typically have convenience methods for accessing elem
 ## Installation/Usage
 
 ```bash
-yarn add @exodus/models
+pnpm add @exodus/models
 ```
 
 This library exports each model as a named export. Usage example:

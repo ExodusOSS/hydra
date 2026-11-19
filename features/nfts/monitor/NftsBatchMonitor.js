@@ -3,6 +3,7 @@ import EventEmitter from 'events/events.js'
 import createFetchival from '@exodus/fetch/create-fetchival'
 
 import { set, partition } from '@exodus/basic-utils'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { DEFAULT_CONFIGS, NFTS_NETWORK_TO_ASSET_NAME, Networks } from '../constants/index.js'
 import { getNftsAddresses } from './addresses-utils.js'
@@ -27,7 +28,7 @@ class NftsBatchMonitor extends EventEmitter {
   #config
   #logger
   #addressProvider
-  #assetsModule
+  #assetsAtom
   #fetchival
   #isStarted = false
   #interval = MONITOR_SLOW_INTERVAL
@@ -39,7 +40,7 @@ class NftsBatchMonitor extends EventEmitter {
 
   constructor({
     addressProvider,
-    assetsModule,
+    assetsAtom,
     enabledWalletAccountsAtom,
     nftsModule,
     nftsConfigAtom,
@@ -55,7 +56,7 @@ class NftsBatchMonitor extends EventEmitter {
     this.#nftsConfigAtom = nftsConfigAtom
     this.#nftsTxsAtom = nftsTxsAtom
     this.#addressProvider = addressProvider
-    this.#assetsModule = assetsModule
+    this.#assetsAtom = assetsAtom
     this.#nftBatchMonitorStatusAtom = nftBatchMonitorStatusAtom
     this.#enabledWalletAccountsAtom = enabledWalletAccountsAtom
     this.#config = config
@@ -301,9 +302,10 @@ class NftsBatchMonitor extends EventEmitter {
     const addresses = []
 
     const walletAccounts = await this.#getWalletAccounts()
+    const { value: assets } = await this.#assetsAtom.get()
 
     for (const network of networks) {
-      const asset = this.#assetsModule.getAsset(NFTS_NETWORK_TO_ASSET_NAME[network])
+      const asset = assets[NFTS_NETWORK_TO_ASSET_NAME[network]]
       if (!asset) {
         continue
       }

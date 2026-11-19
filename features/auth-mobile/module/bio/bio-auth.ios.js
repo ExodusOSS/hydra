@@ -1,10 +1,13 @@
-import { BiometryChangedError } from '../utils/errors.js'
+import { safeString } from '@exodus/safe-string'
+import { BiometryChangedError, DeviceAuthenticationFailedError } from '../utils/errors.js'
 
 class BioAuth {
   #auth
+  #errorTracking
 
-  constructor({ auth }) {
+  constructor({ auth, errorTracking }) {
     this.#auth = auth
+    this.#errorTracking = errorTracking
   }
 
   authenticate = async () => {
@@ -22,7 +25,12 @@ class BioAuth {
     } catch (e) {
       if (e instanceof BiometryChangedError) throw e
 
-      return false
+      void this.#auth.refreshDeviceAuth()
+      if (String(e?.code) === '-128') return false
+
+      const error = new DeviceAuthenticationFailedError(e?.code)
+      void this.#errorTracking.track({ namespace: safeString`auth-mobile`, error }).catch(() => {})
+      throw error
     }
   }
 
@@ -35,7 +43,7 @@ const bioAuthDefinition = {
   id: 'bioAuth',
   type: 'module',
   factory: createBioAuth,
-  dependencies: ['auth'],
+  dependencies: ['auth', 'errorTracking'],
   public: true,
 }
 

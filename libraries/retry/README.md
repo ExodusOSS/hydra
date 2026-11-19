@@ -3,7 +3,7 @@
 ## Install
 
 ```sh
-yarn add @exodus/retry
+pnpm add @exodus/retry
 ```
 
 ## Usage

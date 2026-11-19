@@ -4,8 +4,6 @@ export const LifecycleHook = Object.freeze({
   Clear: 'clear',
   Import: 'import',
   PreImport: 'pre-import',
-  AddSeed: 'add-seed',
-  RestoreSeed: 'restore-seed',
   Migrate: 'migrate',
   Start: 'start',
   Stop: 'stop',

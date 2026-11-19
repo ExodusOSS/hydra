@@ -18,6 +18,7 @@ const walletAccountsApi = ({
     getActive: walletAccounts.getActive,
     setActive: walletAccounts.setActive,
     setMultipleEnabled: (value: boolean) => multipleWalletAccountsEnabledAtom.set(value),
+    setExternalAddress: walletAccounts.setExternalAddress,
   },
 })
 

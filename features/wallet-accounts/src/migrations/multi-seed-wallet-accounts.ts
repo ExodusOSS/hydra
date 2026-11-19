@@ -1,6 +1,5 @@
 import { mapValues } from '@exodus/basic-utils'
-import { EXODUS_SRC, type WalletAccountParams } from '@exodus/models/lib/wallet-account/index.js'
-import { WalletAccount } from '@exodus/models'
+import { WalletAccount, type WalletAccountParams } from '@exodus/models'
 import type { StorageAdapters, Wallet } from '../types.js'
 
 const createMultiSeedWalletAccountsMigration = async ({ adapters, modules }: MigrationParams) => {
@@ -25,7 +24,7 @@ const createMultiSeedWalletAccountsMigration = async ({ adapters, modules }: Mig
   }
 
   const migrated = mapValues(walletAccounts, (walletAccount) => {
-    if (walletAccount.source === EXODUS_SRC) {
+    if (walletAccount.source === WalletAccount.EXODUS_SRC) {
       return new WalletAccount({
         ...walletAccount,
         seedId: primarySeedId,

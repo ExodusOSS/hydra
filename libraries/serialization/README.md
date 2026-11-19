@@ -5,7 +5,7 @@ Serialize and deserialize data, e.g. for sending over the wire. Supports arrays,
 ## Install
 
 ```sh
-yarn add @exodus/serialization
+pnpm add @exodus/serialization
 ```
 
 ## Usage

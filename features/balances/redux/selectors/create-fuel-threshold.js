@@ -3,7 +3,7 @@ import lodash from 'lodash'
 import { createSelector } from 'reselect'
 import { isNumberUnit } from '@exodus/currency'
 
-const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { memoize } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 const selectorFactory = (getFeeDataSelector, createAssetSelector) =>
   memoize((assetName) =>

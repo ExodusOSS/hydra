@@ -5,7 +5,7 @@ This Exodus SDK feature enables you to generate client-side analytics.
 ## Install
 
 ```sh
-yarn add @exodus/analytics
+pnpm add @exodus/analytics
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ container.use(
 
 ### API Side
 
-See [using the sdk](../../docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK and the API interface in the [type declaration](./api/index.d.ts).
+See [using the sdk](../../docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK and the API interface in the [type declaration](./src/api/index.ts).
 
 #### API Reference
 

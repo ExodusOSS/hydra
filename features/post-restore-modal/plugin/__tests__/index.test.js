@@ -1,11 +1,8 @@
-import postRestoreModalPluginDefinition from '../index'
 import { createInMemoryAtom } from '@exodus/atoms'
 
-describe('post-restore-modal plugin', () => {
-  beforeEach(() => {
-    jest.useFakeTimers({ doNotFake: ['setImmediate'] })
-  })
+import postRestoreModalPluginDefinition from '../index.js'
 
+describe('post-restore-modal plugin', () => {
   test('set shouldShowModalRestoredAtom when conditions are met', async () => {
     const port = { emit: jest.fn() }
     const syncedBalancesAtom = createInMemoryAtom({})
@@ -25,7 +22,7 @@ describe('post-restore-modal plugin', () => {
     const handler = jest.fn()
     shouldShowPostRestoredModalAtom.observe(handler)
     expect(handler).toHaveBeenCalledTimes(0)
-    restorePlugin.onRestoreCompleted()
+    void restorePlugin.onRestoreCompleted()
     expect(handler).toHaveBeenCalledTimes(0)
 
     await syncedBalancesAtom.set({
@@ -35,7 +32,7 @@ describe('post-restore-modal plugin', () => {
         },
       },
     })
-    await new Promise(setImmediate)
+    await new Promise((resolve) => setTimeout(resolve, 0))
     // expect(handler).toHaveBeenCalledTimes(1)
     const show = await shouldShowPostRestoredModalAtom.get()
     expect(show).toEqual(true)
@@ -58,7 +55,7 @@ describe('post-restore-modal plugin', () => {
     const handler = jest.fn()
     shouldShowPostRestoredModalAtom.observe(handler)
     expect(handler).toHaveBeenCalledTimes(0)
-    restorePlugin.onRestoreCompleted()
+    void restorePlugin.onRestoreCompleted()
     expect(handler).toHaveBeenCalledTimes(0)
 
     await balancesAtom.set({
@@ -72,7 +69,7 @@ describe('post-restore-modal plugin', () => {
         },
       },
     })
-    await new Promise(setImmediate)
+    await new Promise((resolve) => setTimeout(resolve, 0))
     expect(handler).toHaveBeenCalledTimes(1)
     const show = await shouldShowPostRestoredModalAtom.get()
     expect(show).toEqual(true)

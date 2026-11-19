@@ -7,13 +7,13 @@ const getCacheKey = ({ walletAccount, assetName }) => `${walletAccount}|${assetN
 
 class KnownAddresses {
   #txLogsAtom
-  #assetsModule
+  #assetsAtom
   #cache = new Map()
   #unsubscribe
 
-  constructor({ txLogsAtom, assetsModule }) {
+  constructor({ txLogsAtom, assetsAtom }) {
     this.#txLogsAtom = txLogsAtom
-    this.#assetsModule = assetsModule
+    this.#assetsAtom = assetsAtom
   }
 
   #getTxLog = async ({ walletAccount, assetName }) => {
@@ -31,7 +31,10 @@ class KnownAddresses {
     this.#unsubscribe = this.#txLogsAtom.observe(({ changes }) => invalidateCache(changes))
   }
 
-  #getAsset = (assetName) => this.#assetsModule.getAsset(assetName)
+  #getAsset = async (assetName) => {
+    const { value: assets } = await this.#assetsAtom.get()
+    return assets[assetName]
+  }
 
   #cached = (fn) => async (opts) => {
     const { walletAccount, assetName } = opts
@@ -62,7 +65,7 @@ class KnownAddresses {
       walletAccount: walletAccount.toString(),
     })
 
-    const asset = this.#getAsset(assetName)
+    const asset = await this.#getAsset(assetName)
     return getAddressesFromTxLog({ asset, txLog, walletAccount })
   })
 
@@ -75,7 +78,7 @@ const knownAddressesDefinition = {
   id: 'knownAddresses',
   type: 'module',
   factory: (deps) => new KnownAddresses(deps),
-  dependencies: ['assetsModule', 'txLogsAtom'],
+  dependencies: ['assetsAtom', 'txLogsAtom'],
   public: true,
 }
 

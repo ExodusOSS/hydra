@@ -1,8 +1,8 @@
 import * as bitcoin from '@exodus/bitcoinjs'
 
+import * as bitcoinMessage from '../bitcoinjs-message-verify.js'
 // Import module to be tested
 import Signer, { createSigner as createSignerStruct } from '../Signer.js'
-import * as bitcoinMessage from './src/bitcoinjs-message-verify.js'
 
 const createSigner = (encodedKey, network) => {
   const { signer } = createSignerStruct(encodedKey, network)
@@ -56,6 +56,17 @@ describe('Signer Test', () => {
     // Assert
     expect(bitcoinMessage.verify(message, address, signature)).toBeTruthy()
     expect(bitcoinMessage.verify(message, addressTestnet, signatureTestnet)).toBeTruthy()
+  })
+
+  it('Rejects a WIF private key that does not match the network', () => {
+    const privateKey = 'L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k'
+
+    expect(() => createSigner(privateKey, bitcoin.networks.testnet)).toThrow(
+      'Invalid network version'
+    )
+    expect(() => createSigner(privateKey, { ...bitcoin.networks.bitcoin, wif: undefined })).toThrow(
+      'Invalid network version'
+    )
   })
 
   it('Can sign BIP-322 signature using nested segwit address', async () => {

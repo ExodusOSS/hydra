@@ -1,11 +1,13 @@
 type Asset = any
 
-export enum TokenStatus {
-  CURATED = 'c',
-  DISABLED = 'd',
-  UNVERIFIED = 'u',
-  VERIFIED = 'v',
-}
+export const TokenStatus = {
+  CURATED: 'c',
+  DISABLED: 'd',
+  UNVERIFIED: 'u',
+  VERIFIED: 'v',
+} as const
+
+export type TokenStatus = (typeof TokenStatus)[keyof typeof TokenStatus]
 
 Object.setPrototypeOf(TokenStatus, null)
 
@@ -21,10 +23,12 @@ declare const assetsApiDefinition: {
     }
     assets: {
       fetchToken(assetId: string, baseAssetName: string): Asset
+      fetchTokens(assetDescriptors: { assetId: string; baseAssetName: string }[]): Promise<Asset[]>
       searchTokens(params: {
         baseAssetName?: string | string[]
         lifecycleStatus?: TokenStatus[]
         query?: string
+        tags?: string[]
         excludeTags?: string[]
         pageNumber?: number
         pageSize?: number

@@ -1,16 +1,16 @@
 {
   "name": "@exodus/ui-config",
-  "version": "3.13.3",
+  "version": "3.13.4",
   "description": "Helper for storing various UI-specific settings/config.",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/ui-config",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/ui-config",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aui-config"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aui-config"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "type": "module",
   "main": "index.js",
@@ -27,14 +27,15 @@
     "!**/__tests__/**"
   ],
   "scripts": {
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/formatting": "^9.0.2",
-    "@exodus/fusion-atoms": "^1.4.0",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/formatting": "workspace:^",
+    "@exodus/fusion-atoms": "workspace:^",
     "lodash": "^4.17.21"
   },
   "devDependencies": {

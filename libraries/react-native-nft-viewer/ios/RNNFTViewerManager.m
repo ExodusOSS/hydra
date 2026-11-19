@@ -15,6 +15,7 @@ RCT_EXPORT_MODULE(RNNFTViewer)
 }
 
 RCT_EXPORT_VIEW_PROPERTY(html, NSString)
+RCT_EXPORT_VIEW_PROPERTY(baseUrl, NSString)
 RCT_EXPORT_VIEW_PROPERTY(javaScriptEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(hideKeyboardAccessoryView, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(keyboardAppearance, UIKeyboardAppearance)

@@ -39,12 +39,10 @@ const createErrorTracking = ({
     // TODO: eventually kill this and only track remote
     const localPromise = errorsAtom.set(({ errors }) => {
       return {
-        // this array can be big. not sure about prefering spread operator here
-        // concat function seems like a better option
-        errors: [{ namespace, error, context, time: Date.now() }]
-          // eslint-disable-next-line unicorn/prefer-spread
-          .concat(errors)
-          .slice(0, config.maxErrorsCount),
+        errors: [{ namespace, error, context, time: Date.now() }, ...errors].slice(
+          0,
+          config.maxErrorsCount
+        ),
       }
     })
 

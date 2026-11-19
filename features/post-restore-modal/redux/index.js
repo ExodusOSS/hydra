@@ -1,4 +1,5 @@
 const initialState = {
+  __proto__: null,
   shouldShowRestoredModal: false,
 }
 

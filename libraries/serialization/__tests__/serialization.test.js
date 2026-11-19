@@ -15,6 +15,9 @@ const date2 = new Date(2)
 
 const dateMatcher = (v, d) => v instanceof Date && d.getTime() === v.getTime()
 
+// Re-create a serialized `{ t, v }` wrapper with its keys in reversed (`{ v, t }`) insertion order
+const reverseKeys = (obj) => Object.fromEntries(Object.entries(obj).reverse())
+
 describe('without custom types', () => {
   const { serialize, deserialize } = createSerializeDeserialize({ skipUndefinedProperties: true })
 
@@ -111,6 +114,33 @@ describe('without skipUndefinedProperties', () => {
   })
 })
 
+describe('reversed key order', () => {
+  // `deserialize` detects the typed wrapper by key, so it must match both `{ t, v }` and the
+  // reversed `{ v, t }` order. Otherwise reversed payloads bypass the typed-deserialize path and
+  // are returned as plain wrapper objects instead of their original value.
+  const { serialize, deserialize } = createSerializeDeserialize()
+
+  test.each([
+    { name: 'bigint', value: BigInt('11111111111111111111111111111111111111111111111111111') },
+    { name: 'date', value: new Date(1) },
+    { name: 'buffer', value: Buffer.from('Hello') },
+    { name: 'Uint8Array', value: new Uint8Array([32, 42]) },
+    { name: 'object', value: { foo: 'bar' } },
+    { name: 'array', value: [1, 2, 3] },
+  ])('deserializes a reversed $name wrapper', ({ value }) => {
+    const reversed = reverseKeys(serialize(value))
+    expect(Object.keys(reversed)).toStrictEqual(['v', 't']) // guard: input really is reversed
+
+    expect(deserialize(reversed)).toStrictEqual(value)
+  })
+
+  test('deserializes a reversed wrapper nested inside an object', () => {
+    // `deserialize` recurses into object values, so reversed wrappers must be matched at any depth
+    const serialized = { t: 'object', v: { big: reverseKeys(serialize(BigInt(5))) } }
+    expect(deserialize(serialized)).toStrictEqual({ big: BigInt(5) })
+  })
+})
+
 describe('custom types', () => {
   const typeDefinitions = [
     {
@@ -133,5 +163,14 @@ describe('custom types', () => {
     const deserializedPerson = deserialize(serialize([{ guy: johnDoe }]))[0].guy
     expect(deserializedPerson).not.toBe(johnDoe) // won't be the exact same instance
     expect(deserializedPerson.name).toBe(johnDoe.name)
+  })
+  test('reversed Person wrapper', () => {
+    const reversed = reverseKeys(serialize(johnDoe))
+    expect(Object.keys(reversed)).toStrictEqual(['v', 't']) // guard: input really is reversed
+
+    const deserialized = deserialize(reversed)
+    expect(deserialized).not.toBe(johnDoe) // won't be the exact same instance
+    expect(deserialized instanceof Person).toBe(true)
+    expect(deserialized.name).toBe(johnDoe.name)
   })
 })

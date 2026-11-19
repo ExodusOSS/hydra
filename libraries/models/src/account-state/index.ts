@@ -7,7 +7,7 @@ import { createIsInstance, omitNullable } from '../utils.js'
 import { isNumberUnit } from '@exodus/currency'
 import { safeFields } from './utils.js'
 
-const { isEqual, pick, mapValues, isString, cloneDeepWith } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { isEqual, pick, mapValues, isString, cloneDeepWith } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 export * from './serialization.js'
 
@@ -193,7 +193,7 @@ export default class AccountState {
     return omitNullable(cloned)
   }
 
-  // eslint-disable-next-line unicorn/no-object-as-default-parameter
+  // oxlint-disable-next-line unicorn/no-object-as-default-parameter
   equals(other: AccountState, opts = { includeMem: true }) {
     return this === other || isEqual(this.toJSON(opts), other.toJSON(opts))
   }

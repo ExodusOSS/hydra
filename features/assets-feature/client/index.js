@@ -9,6 +9,7 @@ const assetsClientInterfaceDefinition = {
     'assetsModule',
     'assetSources',
     'availableAssetNamesAtom',
+    'availableAssetNamesByWalletAccountAtom',
     'blockchainMetadata',
     'config?',
     'createLogger',
@@ -19,6 +20,7 @@ const assetsClientInterfaceDefinition = {
     'wallet',
     'walletAccountsAtom',
     'multisigAtom?',
+    'featureFlagAtoms?',
   ],
   public: true,
 }

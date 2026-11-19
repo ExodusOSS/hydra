@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.1](https://github.com/ExodusMovement/exodus/compare/@exodus/bigint@4.2.0...@exodus/bigint@4.2.1) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/bigint
+
+## [4.2.0](https://github.com/ExodusMovement/hydra/compare/@exodus/bigint@4.1.0...@exodus/bigint@4.2.0) (2026-05-20)
+
+**Note:** Version bump only for package @exodus/bigint
+
+## [4.1.0](https://github.com/ExodusMovement/hydra/compare/@exodus/bigint@4.0.1...@exodus/bigint@4.1.0) (2026-04-21)
+
+### Features
+
+- feat(bigint): instanceof across copies of the library (#16064)
+
+## [4.0.1](https://github.com/ExodusMovement/hydra/compare/@exodus/bigint@4.0.0...@exodus/bigint@4.0.1) (2026-04-06)
+
+### Bug Fixes
+
+- fix(bigint): abs() returns new instance instead of this for non-negative values (#15857)
+
 ## [4.0.0](https://github.com/ExodusMovement/hydra/compare/@exodus/bigint@3.0.1...@exodus/bigint@4.0.0) (2025-10-21)
 
 ### ⚠ BREAKING CHANGES

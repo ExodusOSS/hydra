@@ -1,16 +1,17 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
     "target": "es2022",
-    "moduleResolution": "node",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "declaration": true,
     "useDefineForClassFields": true,
     "removeComments": true,
     "skipLibCheck": true,
     "strict": true,
-    "downlevelIteration": true,
     "noUncheckedIndexedAccess": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true
   },
   "exclude": ["node_modules"]
 }

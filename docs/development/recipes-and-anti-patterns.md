@@ -18,7 +18,7 @@
 - [Properties](#properties)
 - [\_local_modules (`#/`) is reserved for future npm packages](#_local_modules--is-reserved-for-future-npm-packages)
 - [Managing Feature Constants and Configuration in Mobile/Desktop/Browser Extension](#managing-feature-constants-and-configuration-in-mobiledesktopbrowser-extension)
-- [Don't use yarn `resolutions` to patch `@exodus/` dependencies](#dont-use-yarn-resolutions-to-patch-exodus-dependencies)
+- [Don't use pnpm `overrides` to patch `@exodus/` dependencies](#dont-use-pnpm-overrides-to-patch-exodus-dependencies)
 - [Prefer Exporting Your Modules as Factory Functions](#prefer-exporting-your-modules-as-factory-functions)
 - [Auto-bind methods](#auto-bind-methods)
 - [null vs. undefined](#null-vs-undefined)
@@ -888,27 +888,30 @@ If it's not meant to be extracted to an npm package, don't put it in `_local_mod
 - When you publish your module to npm, export your constants explicitly from `@exodus/<my-well-behaved-
 feature>/constants.js` to make them importable in the client repos.
 
-## Don't use yarn `resolutions` to patch `@exodus/` dependencies
+## Don't use pnpm `overrides` to patch `@exodus/` dependencies
 
 **Details**
 
-yarn resolutions are for pinning sub-dependencies of modules we can't control. If we control the module itself, we should just
+pnpm overrides are for pinning sub-dependencies of modules we can't control. If we control the module itself, we should just
 update the module to use the sub-dependency we want.
 
 ### Bad
 
 ```json
-"resolutions": {
-  "@exodus/currency": "2.1.2",
-  "**/@exodus/solana-web3.js/secp256k1": "file:_local_modules/you-shall-not-pass/secp256k1/",
+"pnpm": {
+  "overrides": {
+    "@exodus/currency": "2.1.2"
+  }
 }
 ```
 
 ### Good
 
 ```json
-"resolutions": {
-  "electron/@types/node": "file:src/app/_local_modules/you-shall-not-pass/empty",
+"pnpm": {
+  "overrides": {
+    "electron>@types/node": "file:src/app/_local_modules/you-shall-not-pass/empty"
+  }
 }
 ```
 

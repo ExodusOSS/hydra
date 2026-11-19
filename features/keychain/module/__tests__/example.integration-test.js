@@ -14,7 +14,7 @@ const keychain = keychainDefinition.factory({
   legacyPrivToPub: Object.create(null),
 })
 
-await keychain.addSeed(seed)
+await keychain.unlock(seed)
 
 const solanaKeyId = new KeyIdentifier({
   assetName: 'solana',
@@ -43,7 +43,7 @@ test('unlock', async () => {
 
   await expect(keychain.exportKey({ seedId, keyId: solanaKeyId })).rejects.toThrow()
 
-  await keychain.addSeed(seed)
+  await keychain.unlock(seed)
 
   await expect(keychain.exportKey({ seedId, keyId: solanaKeyId })).resolves.not.toThrow()
 })
@@ -54,42 +54,10 @@ test('lock', async () => {
     legacyPrivToPub: Object.create(null),
   })
 
-  await keychain.addSeed(seed)
-  keychain.removeAllSeeds()
+  await keychain.unlock(seed)
+  keychain.lock()
 
   await expect(keychain.exportKey(solanaKeyId)).rejects.toThrow()
-})
-
-describe('removeSeeds', async () => {
-  const extraSeed = await mnemonicToSeed({ mnemonic: 'menu'.repeat(12) })
-  const extraSeedId = await getSeedId(extraSeed)
-
-  it('removes seeds from the keychain', async () => {
-    const keychain = keychainDefinition.factory({
-      logger: console,
-      legacyPrivToPub: Object.create(null),
-    })
-
-    await keychain.addSeed(seed)
-    await keychain.addSeed(extraSeed)
-    await keychain.removeSeeds([extraSeed])
-
-    await expect(keychain.exportKey(seed)).resolves.toBe([extraSeedId])
-    await expect(keychain.exportKey(extraSeed)).rejects.toThrow()
-  })
-
-  it('return the ids of the removed seeds only', async () => {
-    const keychain = keychainDefinition.factory({
-      logger: console,
-      legacyPrivToPub: Object.create(null),
-    })
-
-    await keychain.addSeed(seed)
-    await keychain.addSeed(extraSeed)
-    await keychain.removeSeeds([extraSeed, 'missingSeed'])
-
-    await expect(keychain.exportKey(seed)).resolves.toBe([extraSeedId])
-  })
 })
 
 test('exportKey', async () => {

@@ -1,12 +1,12 @@
 import type { PublicKeyProviderDependencies } from './public-key-provider.js'
 import { PublicKeyProvider } from './public-key-provider.js'
 import type { AddParams, GetParams, IPublicKeyStore } from './store/types.js'
-import type { Logger } from 'libraries/atoms/lib/utils/types.js'
+import type { Logger } from '@exodus/logger'
 import type { WalletAccount } from '@exodus/models'
 import type { Atom } from '@exodus/atoms'
-import type { AssetsModule } from './utils/types.js'
 import type { Definition } from '@exodus/dependency-types'
 import pDefer from 'p-defer'
+import type { Asset } from './utils/types.js'
 
 /** Purpose -> XPub */
 type RawXPubMockAsset = Record<number, string>
@@ -21,7 +21,7 @@ type RawXPubMock = {
 
 export type MockablePublicKeyProviderDependencies = PublicKeyProviderDependencies & {
   config: { xpubs?: RawXPubMock }
-  assetsModule: AssetsModule
+  assetsAtom: Atom<{ value: Record<string, Asset> }>
 }
 
 type MockedXPub = Pick<AddParams, 'walletAccount' | 'xpub' | 'keyIdentifier'>
@@ -52,7 +52,7 @@ export class MockablePublicKeyProvider extends PublicKeyProvider {
   public readonly onReady: Promise<unknown>
 
   readonly #publicKeyStore: IPublicKeyStore
-  readonly #assetsModule: AssetsModule
+  readonly #assetsAtom: Atom<{ value: Record<string, Asset> }>
   readonly #logger: Logger
   readonly #walletAccountsAtom: Atom<{
     [name: string]: WalletAccount
@@ -60,7 +60,7 @@ export class MockablePublicKeyProvider extends PublicKeyProvider {
 
   constructor({
     config,
-    assetsModule,
+    assetsAtom,
     publicKeyStore,
     walletAccountsAtom,
     logger,
@@ -72,7 +72,7 @@ export class MockablePublicKeyProvider extends PublicKeyProvider {
     const deferred = pDefer()
     this.onReady = deferred.promise
 
-    this.#assetsModule = assetsModule
+    this.#assetsAtom = assetsAtom
     this.#publicKeyStore = publicKeyStore
     this.#walletAccountsAtom = walletAccountsAtom
     this.#logger = logger
@@ -86,9 +86,10 @@ export class MockablePublicKeyProvider extends PublicKeyProvider {
     details: RawXPubMockAsset
   ) => {
     const walletAccountName = walletAccount.toString()
-    const asset = this.#assetsModule.getAsset(assetName)
+    const { value: assets } = await this.#assetsAtom.get()
+    const asset = assets[assetName]!
 
-    const keys = Object.entries(details).map(([purpose, xpub]) => {
+    const keys = Object.entries(details).flatMap(([purpose, xpub]) => {
       const keyIdentifier = asset.baseAsset.api?.getKeyIdentifier({
         accountIndex: walletAccount.index!,
         compatibilityMode: walletAccount.compatibilityMode,
@@ -104,7 +105,7 @@ export class MockablePublicKeyProvider extends PublicKeyProvider {
         walletAccountName
       )
 
-      return { keyIdentifier, xpub }
+      return keyIdentifier ? [{ keyIdentifier, xpub }] : []
     })
 
     await this.#publicKeyStore.addMany({ walletAccount, keys })
@@ -167,7 +168,7 @@ const mockablePublicKeyProviderDefinition = {
     'publicKeyStore',
     'keychain',
     'walletAccountsAtom',
-    'assetsModule',
+    'assetsAtom',
     'logger',
     'config',
     'getBuildMetadata',

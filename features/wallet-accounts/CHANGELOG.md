@@ -3,6 +3,88 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [20.4.12](https://github.com/ExodusMovement/exodus/compare/@exodus/wallet-accounts@20.4.11...@exodus/wallet-accounts@20.4.12) (2026-09-22)
+
+### Bug Fixes
+
+- **wallet-compatibility-modes:** prefer Exodus derivation over compatibility modes ([#45413](https://github.com/ExodusMovement/exodus/issues/45413)) ([5666b33](https://github.com/ExodusMovement/exodus/commit/5666b33f437c587287bba44404692cc55a700a15))
+
+## [20.4.11](https://github.com/ExodusMovement/exodus/compare/@exodus/wallet-accounts@20.4.10...@exodus/wallet-accounts@20.4.11) (2026-08-14)
+
+### Performance Improvements
+
+- **wallet-accounts:** cache deserialized wallet accounts while storage is unchanged ([#43543](https://github.com/ExodusMovement/exodus/issues/43543)) ([c127bfe](https://github.com/ExodusMovement/exodus/commit/c127bfee57d1a307e271b8a26bcdd1e9637f6a92))
+
+## [20.4.10](https://github.com/ExodusMovement/exodus/compare/@exodus/wallet-accounts@20.4.9...@exodus/wallet-accounts@20.4.10) (2026-07-30)
+
+### Bug Fixes
+
+- **accounts:** restrict delegated account monitoring ([#42728](https://github.com/ExodusMovement/exodus/issues/42728)) ([d61617f](https://github.com/ExodusMovement/exodus/commit/d61617f04013ffa8ecfa9aaf0ea2be61d76099cd))
+
+## [20.4.9](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.4.8...@exodus/wallet-accounts@20.4.9) (2026-07-17)
+
+### Bug Fixes
+
+- **wallet-accounts:** ignore external accounts when enabling multiple accounts ([#17588](https://github.com/ExodusMovement/exodus-hydra/issues/17588)) ([baacae1](https://github.com/ExodusMovement/exodus-hydra/commit/baacae135523279c2e1d5c2d7e5576a7a3fb972e))
+
+## [20.4.8](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.4.7...@exodus/wallet-accounts@20.4.8) (2026-06-25)
+
+### Features
+
+- **oxlint-plugin-hydra:** port @exodus/\* eslint rules to oxlint jsPlugins ([#17280](https://github.com/ExodusMovement/exodus-hydra/issues/17280)) ([76e483c](https://github.com/ExodusMovement/exodus-hydra/commit/76e483cf8afa7035ce98279ae2ff80deb4ae6a50)), closes [#17278](https://github.com/ExodusMovement/exodus-hydra/issues/17278)
+
+### Bug Fixes
+
+- **wallet-accounts:** ship webpack-compat root re-export stubs ([#17359](https://github.com/ExodusMovement/exodus-hydra/issues/17359)) ([d96bfe9](https://github.com/ExodusMovement/exodus-hydra/commit/d96bfe952346a88ff481c1aa03e85ba81f7d3008))
+
+## [20.4.7](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.4.6...@exodus/wallet-accounts@20.4.7) (2026-06-12)
+
+### Bug Fixes
+
+- **wallet-accounts:** exclude external accounts from max accounts limit ([#17173](https://github.com/ExodusMovement/exodus-hydra/issues/17173)) ([906af64](https://github.com/ExodusMovement/exodus-hydra/commit/906af644dd91aaa160c0d72dc815ece14aa06638))
+
+## [20.4.6](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.4.5...@exodus/wallet-accounts@20.4.6) (2026-06-03)
+
+### ⚠ BREAKING CHANGES
+
+- remove multi-seed support from wallet/keychain (#16379)
+
+### Code Refactoring
+
+- remove multi-seed support from wallet/keychain ([#16379](https://github.com/ExodusMovement/exodus-hydra/issues/16379)) ([e63510f](https://github.com/ExodusMovement/exodus-hydra/commit/e63510f2b57b7bcb7704d993baf2e75d11edb3ad))
+
+## [20.4.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.4.4...@exodus/wallet-accounts@20.4.5) (2026-05-28)
+
+### Bug Fixes
+
+- **wallet-accounts:** include source in unique-tag for non-software accounts ([#16776](https://github.com/ExodusMovement/exodus-hydra/issues/16776)) ([93f4126](https://github.com/ExodusMovement/exodus-hydra/commit/93f4126906bbc08e3cbdaa7f07654b511f65ae0f))
+
+## [20.4.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.4.3...@exodus/wallet-accounts@20.4.4) (2026-05-08)
+
+### Bug Fixes
+
+- fix(wallet-accounts): ensure selectors.walletAccounts.someSelector is typed (#16150)
+
+- fix(wallet-accounts): slice enabled accounts only on explicit opt-out (#16375)
+
+## [20.4.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.4.2...@exodus/wallet-accounts@20.4.3) (2026-04-11)
+
+**Note:** Version bump only for package @exodus/wallet-accounts
+
+## [20.4.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.4.1...@exodus/wallet-accounts@20.4.2) (2026-04-10)
+
+### Bug Fixes
+
+- fix(wallet-accounts): avoid mutating proxy-frozen hardwareWalletPublicKeys (#15951)
+
+## [20.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.4.0...@exodus/wallet-accounts@20.4.1) (2026-04-06)
+
+### Bug Fixes
+
+- fix(wallet-accounts): expose setExternalAddress in API slice (#15852)
+
+- fix(wallet-accounts): prevent race condition in fusion sync from overwriting local changes (#15728)
+
 ## [20.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet-accounts@20.3.0...@exodus/wallet-accounts@20.4.0) (2026-03-24)
 
 ### Features

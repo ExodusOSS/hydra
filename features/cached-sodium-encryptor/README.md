@@ -5,7 +5,7 @@ This feature offers sodium encryption but derives keys once. This is useful for 
 ## Install
 
 ```sh
-yarn add @exodus/cached-sodium-encryptor
+pnpm add @exodus/cached-sodium-encryptor
 ```
 
 ## Usage

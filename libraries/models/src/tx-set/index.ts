@@ -1,5 +1,5 @@
 import assert from 'minimalistic-assert'
-import type { TxProps } from '../tx/index.js'
+import type { TxJson, TxProps } from '../tx/index.js'
 import Tx from '../tx/index.js'
 import AddressSet from '../address-set/index.js'
 import * as util from './util.js'
@@ -187,7 +187,7 @@ class TxSet {
     return createTxSet({ txs })
   }
 
-  updateTxsProperties(items: (Partial<TxProps> & { txId: string })[]) {
+  updateTxsProperties(items: ((Partial<TxProps> | Partial<TxJson> | Tx) & { txId: string })[]) {
     const txs = new Map(this._txs)
     let changed = false
     for (const item of items) {
@@ -211,6 +211,8 @@ class TxSet {
     if (this._mutations) return this._mutations
 
     let balance: NumberUnit
+    // a tx log missing its early receives goes negative on most txs, so warn once per call
+    const negativeMutations: { tx: Tx; balance: NumberUnit }[] = []
     this._mutations = [...this].map((tx) => {
       try {
         if (balance === undefined) balance = tx.coinAmount!.unitType.ZERO
@@ -227,11 +229,7 @@ class TxSet {
         }
 
         if (balance.isNegative && !mutationTxIdsWithWarning[tx.txId!]) {
-          console.warn('negative balance in mutations calculation', {
-            tx,
-            balance,
-          })
-          mutationTxIdsWithWarning[tx.txId!] = tx.txId!
+          negativeMutations.push({ tx, balance })
         }
 
         return { tx, balance }
@@ -249,6 +247,15 @@ class TxSet {
         throw e
       }
     })
+
+    if (negativeMutations.length > 0) {
+      console.warn('negative balance in mutations calculation', {
+        ...negativeMutations[0],
+        count: negativeMutations.length,
+      })
+      for (const { tx } of negativeMutations) mutationTxIdsWithWarning[tx.txId!] = tx.txId!
+    }
+
     return this._mutations
   }
 

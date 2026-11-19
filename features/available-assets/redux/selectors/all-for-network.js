@@ -2,7 +2,7 @@
 import lodash from 'lodash'
 import { pickBy } from '@exodus/basic-utils'
 
-const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { memoize } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 const resultFunction = (availableAssets) =>
   memoize((baseAssetName) => {

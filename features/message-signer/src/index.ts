@@ -5,6 +5,8 @@ import {
 } from './module/index.js'
 import messageSignerApiDefinition from './api/index.js'
 
+export type { IMessageSigner, IUnsignedMessage, SignMessageParams } from './module/interfaces.js'
+
 const messageSigner = () => {
   return {
     id: 'messageSigner',

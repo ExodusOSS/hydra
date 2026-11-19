@@ -5,7 +5,7 @@ Factory for creating read-only [atoms](../atoms/README.md) for values stored in 
 ## Install
 
 ```sh
-yarn add @exodus/remote-config-atoms
+pnpm add @exodus/remote-config-atoms
 ```
 
 ## Usage

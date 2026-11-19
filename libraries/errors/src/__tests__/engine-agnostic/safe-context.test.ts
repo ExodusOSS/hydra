@@ -153,6 +153,27 @@ const fixtures = [
       reason: 'network error',
     },
   },
+  // exchange namespace tests
+  {
+    context: {
+      exchange: {
+        events: [safeString`CREATING_ORDER`, safeString`SENDING_TX`],
+      },
+    },
+    expectedSafeContext: {
+      exchange: {
+        events: ['CREATING_ORDER', 'SENDING_TX'],
+      },
+    },
+  },
+  {
+    context: {
+      exchange: {
+        events: ['unsafe user-controlled string'],
+      },
+    },
+    expectedSafeContext: undefined,
+  },
 ]
 
 describe('SafeContext.parse', () => {

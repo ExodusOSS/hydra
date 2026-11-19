@@ -61,8 +61,8 @@ describe('featureFlagsLifecyclePlugin', () => {
     expect(featureFlags.load).toHaveBeenCalled()
   })
 
-  it('should start observing atoms when loaded', () => {
-    plugin.onLoad()
+  it('should start observing atoms when started', () => {
+    plugin.onStart()
 
     expect(featureFlagsAtomObserver.start).toHaveBeenCalled()
   })

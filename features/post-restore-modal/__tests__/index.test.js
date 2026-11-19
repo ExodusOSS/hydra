@@ -1,12 +1,14 @@
-import createIocContainer from '@exodus/dependency-injection'
-import preprocess from '@exodus/dependency-preprocessors'
-import logify from '@exodus/dependency-preprocessors/src/preprocessors/logify'
-import optional from '@exodus/dependency-preprocessors/src/preprocessors/optional'
-import readOnlyAtoms from '@exodus/dependency-preprocessors/src/preprocessors/read-only-atoms'
-import alias from '@exodus/dependency-preprocessors/src/preprocessors/alias'
-import createInMemoryStorage from '@exodus/storage-memory'
-import postRestoreModal from '../'
 import { createInMemoryAtom } from '@exodus/atoms'
+import createIocContainer from '@exodus/dependency-injection'
+import preprocess, {
+  alias,
+  logify,
+  optional,
+  readOnlyAtoms,
+} from '@exodus/dependency-preprocessors'
+import createInMemoryStorage from '@exodus/storage-memory'
+
+import postRestoreModal from '../index.js'
 
 const createLogger = (namespace) => console
 

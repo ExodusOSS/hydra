@@ -5,7 +5,7 @@ This Exodus SDK feature tracks the crypto-denominated balances for all enabled w
 ## Install
 
 ```sh
-yarn add @exodus/balances
+pnpm add @exodus/balances
 ```
 
 ## Usage

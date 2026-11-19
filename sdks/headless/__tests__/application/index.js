@@ -1,4 +1,4 @@
-// eslint-disable-next-line @exodus/restricted-imports/no-node-core-events
+// oxlint-disable-next-line @exodus/oxlint-plugin-restricted-imports/no-node-core-events
 import { EventEmitter } from 'events'
 
 class ApplicationMock extends EventEmitter {

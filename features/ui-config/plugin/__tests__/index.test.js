@@ -110,7 +110,7 @@ describe('uiConfig plugin', () => {
     expect(unsubscribeRemote).toHaveBeenCalledTimes(1)
   })
 
-  it('should emit values on load', async () => {
+  it('should emit values once observers start', async () => {
     const port = { emit: jest.fn() }
 
     const { definition } = createUiConfigPluginDefinition({ configValues })
@@ -133,7 +133,7 @@ describe('uiConfig plugin', () => {
     expect(port.emit).toHaveBeenCalledTimes(0)
 
     // Test observables start
-    await plugin.onLoad()
+    plugin.onStart()
 
     // Simulate atom get delay
     await new Promise((resolve) => setTimeout(resolve, 0))

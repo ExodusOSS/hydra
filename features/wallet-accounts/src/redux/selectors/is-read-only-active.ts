@@ -1,7 +1,11 @@
-const resultFunction = (activeWalletAccount: string, isReadOnly: (name: string) => boolean) =>
-  isReadOnly(activeWalletAccount)
+import { defineSelectorResultFunction } from '@exodus/redux-dependency-injection'
 
-const isReadOnlySelector = {
+const resultFunction = (
+  activeWalletAccount: string,
+  isReadOnly: (name: string) => boolean
+): boolean => isReadOnly(activeWalletAccount)
+
+const isReadOnlySelector = defineSelectorResultFunction({
   id: 'isReadOnlyActive',
   resultFunction,
   dependencies: [
@@ -9,6 +13,6 @@ const isReadOnlySelector = {
     { selector: 'active' },
     { selector: 'isReadOnly' },
   ],
-} as const
+})
 
 export default isReadOnlySelector

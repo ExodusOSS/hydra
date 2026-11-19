@@ -16,6 +16,15 @@ describe('countdown lock', () => {
     expect(lock.unlock('c')).toEqual(true)
   })
 
+  test('does not count keys not in original keys array', () => {
+    const lock = createCountdownLock(['a', 'b'])
+    expect(lock.unlock('x')).toEqual(false)
+    expect(lock.unlock('y')).toEqual(false)
+    // Lock should not resolve — 'a' and 'b' were never unlocked
+    expect(lock.unlock('a')).toEqual(false)
+    expect(lock.unlock('b')).toEqual(true)
+  })
+
   test('stays unlocked after unlock', () => {
     const lock = createCountdownLock(['a'])
     expect(lock.unlock('a')).toEqual(true)
@@ -31,6 +40,30 @@ describe('countdown lock', () => {
     expect(onUnlock).not.toHaveBeenCalled()
 
     lock.unlock('b')
+    await new Promise(setImmediate)
+    expect(onUnlock).toHaveBeenCalled()
+  })
+
+  test('handles duplicate keys by deduplicating', () => {
+    const lock = createCountdownLock(['a', 'a', 'b'])
+    expect(lock.unlock('a')).toEqual(false)
+    expect(lock.unlock('b')).toEqual(true)
+  })
+
+  test('lock.promise resolves with duplicate keys', async () => {
+    const lock = createCountdownLock(['a', 'a', 'b', 'c', 'c'])
+    const onUnlock = jest.fn()
+    void lock.promise.then(onUnlock)
+
+    lock.unlock('a')
+    await new Promise(setImmediate)
+    expect(onUnlock).not.toHaveBeenCalled()
+
+    lock.unlock('b')
+    await new Promise(setImmediate)
+    expect(onUnlock).not.toHaveBeenCalled()
+
+    lock.unlock('c')
     await new Promise(setImmediate)
     expect(onUnlock).toHaveBeenCalled()
   })

@@ -13,7 +13,7 @@ import getBuildMetadata from './get-build-metadata.js'
 
 const createStorage = () =>
   transformStorage({
-    storage: <Storage<string, string>>(<unknown>createStorageMemory()),
+    storage: createStorageMemory() as unknown as Storage<string, string>,
     onRead: async (str: string | undefined) => (str === undefined ? str : BJSON.parse(str)),
     onWrite: (value) => BJSON.stringify(value),
   })
@@ -22,9 +22,9 @@ type DeferringStorage = Storage & { release: () => void }
 
 const createUnlockableStorage = (): Storage & { unlock: () => void } => {
   const storage = createStorage()
-  const { release, ...storageSpecApi } = <DeferringStorage>(
-    (createDeferringStorage(storage) as unknown)
-  )
+  const { release, ...storageSpecApi } = createDeferringStorage(
+    storage
+  ) as unknown as DeferringStorage
   return {
     ...storageSpecApi,
     unlock: () => release(),

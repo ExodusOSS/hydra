@@ -8,13 +8,19 @@ import featureFlagsDefinition from './module/index.js'
 import featureFlagsApiDefinition from './api/index.js'
 import featureFlagsPluginDefinition from './plugin/index.js'
 
-const featureFlags = ({ features = Object.create(null) } = Object.create(null)) => {
+const featureFlags = (
+  {
+    features = Object.create(null),
+    provider,
+    providerConfig = Object.create(null),
+  } = Object.create(null)
+) => {
   return {
     id: 'featureFlags',
     definitions: [
       {
         definition: featureFlagsDefinition,
-        config: { features },
+        config: { features, provider, providerConfig },
       },
       {
         definition: featureFlagAtomsDefinition,

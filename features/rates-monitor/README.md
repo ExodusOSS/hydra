@@ -12,7 +12,11 @@ This feature is designed to be used together with `@exodus/headless`. See [Using
 
 ### API Side
 
-`exodus.rates.refresh()` public method to re-fetch pricing data
+- `exodus.rates.refresh()` re-fetches monitored pricing data.
+- `exodus.rates.fetchTickers(tickers)` immediately fetches installed or temporary tickers.
+  Uninstalled tickers remain monitored for five minutes, and another call renews that period.
+  Installing the asset transfers ownership without dropping its cached price. Empty input and calls
+  while stopped are no-ops; a failed explicit fetch rejects without clearing existing rates.
 
 ### Play with it
 

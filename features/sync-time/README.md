@@ -5,7 +5,7 @@ This Exodus SDK feature provides a `startOfHour` timestamp via redux, which is s
 ## Install
 
 ```sh
-yarn add @exodus/sync-time
+pnpm add @exodus/sync-time
 ```
 
 ## Usage

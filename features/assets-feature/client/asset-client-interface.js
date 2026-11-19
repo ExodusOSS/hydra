@@ -1,15 +1,12 @@
-import { pickBy, filterAsync } from '@exodus/basic-utils'
-// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
-import lodash from 'lodash'
+import { filterAsync, pickBy, set } from '@exodus/basic-utils'
 import assert from 'minimalistic-assert'
-
-const { isEmpty } = lodash
 
 class AssetClientInterface {
   #addressProvider
   #assetsModule
   #assetSources
   #availableAssetNamesAtom
+  #availableAssetNamesByWalletAccountAtom
   #blockchainMetadata
   #config
   #createLogger
@@ -19,6 +16,7 @@ class AssetClientInterface {
   #transactionSigner
   #walletAccountsAtom
   #multisigAtom
+  #featureFlagAtoms
   #freshlyCreated = false
 
   constructor({
@@ -26,6 +24,7 @@ class AssetClientInterface {
     assetsModule,
     assetSources,
     availableAssetNamesAtom,
+    availableAssetNamesByWalletAccountAtom,
     blockchainMetadata,
     createLogger,
     config,
@@ -35,11 +34,13 @@ class AssetClientInterface {
     transactionSigner,
     walletAccountsAtom,
     multisigAtom,
+    featureFlagAtoms,
   }) {
     this.#addressProvider = addressProvider
     this.#assetsModule = assetsModule
     this.#assetSources = assetSources
     this.#availableAssetNamesAtom = availableAssetNamesAtom
+    this.#availableAssetNamesByWalletAccountAtom = availableAssetNamesByWalletAccountAtom
     this.#blockchainMetadata = blockchainMetadata
     this.#config = config
     this.#createLogger = createLogger || (() => console)
@@ -49,6 +50,7 @@ class AssetClientInterface {
     this.#transactionSigner = transactionSigner
     this.#walletAccountsAtom = walletAccountsAtom
     this.#multisigAtom = multisigAtom
+    this.#featureFlagAtoms = featureFlagAtoms
   }
 
   setFreshlyCreated = (value) => {
@@ -131,11 +133,11 @@ class AssetClientInterface {
     }
 
     // merge mem to keep the previous accountMem behavior
-    if (!isEmpty(newData?.mem) && (!accountState || accountState.mem)) {
+    if (Object.keys(newData?.mem ?? {}).length > 0 && (!accountState || accountState.mem)) {
       newData = { ...newData, mem: { ...accountState?.mem, ...newData.mem } }
     }
 
-    if (!isEmpty(newData)) {
+    if (Object.keys(newData ?? {}).length > 0) {
       return batch.updateAccountState({ assetName, walletAccount, newData })
     }
 
@@ -149,7 +151,13 @@ class AssetClientInterface {
     const asset = this.#assetsModule.getAsset(assetName)
     assert(asset, `${assetName} is not supported`)
     const enabledWalletAccounts = await this.#enabledWalletAccountsAtom.get()
-    return filterAsync(Object.keys(enabledWalletAccounts), async (walletAccount) => {
+    const availableAssetNamesByWalletAccount =
+      await this.#availableAssetNamesByWalletAccountAtom.get()
+    const supportedWalletAccounts = Object.keys(enabledWalletAccounts).filter((walletAccount) =>
+      availableAssetNamesByWalletAccount[walletAccount]?.includes(assetName)
+    )
+
+    return filterAsync(supportedWalletAccounts, async (walletAccount) => {
       try {
         // hardware wallet account may not support coin, to check this get address
         await this.getReceiveAddress({ assetName, walletAccount, useCache: true })
@@ -203,6 +211,30 @@ class AssetClientInterface {
     }
 
     return out
+  }
+
+  getRuntimeConfig = async ({ assetName }) => {
+    const asset = this.#assetsModule.getAsset(assetName)
+    assert(asset, `assetName ${assetName} is not supported`)
+    const runtimeConfigFlags = this.#config?.runtimeConfigFlags ?? Object.create(null)
+    const flagsByPath = {
+      ...runtimeConfigFlags[asset.baseAsset.name],
+      ...runtimeConfigFlags[asset.name],
+    }
+    if (!this.#featureFlagAtoms || Object.keys(flagsByPath).length === 0) return {}
+
+    const flagValuesByPath = await Promise.all(
+      Object.entries(flagsByPath).map(async ([path, flag]) => {
+        const featureFlagAtom = this.#featureFlagAtoms[flag]
+        assert(featureFlagAtom, `feature flag ${flag} is not registered`)
+        const featureFlag = await featureFlagAtom.get()
+        return [path, featureFlag?.isOn === true]
+      })
+    )
+
+    const runtimeConfig = {}
+    for (const [path, isOn] of flagValuesByPath) set(runtimeConfig, path, isOn)
+    return runtimeConfig
   }
 
   getConfirmationsNumber = async ({ assetName }) => {

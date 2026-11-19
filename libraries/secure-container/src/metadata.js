@@ -35,10 +35,12 @@ export const struct = varstruct(
 )
 
 export function decode(metadataBlob) {
-  if (metadataBlob.byteLength > METADATA_LEN_BYTES)
+  if (metadataBlob.byteLength > METADATA_LEN_BYTES) {
     console.warn(
       `metadata greater than ${METADATA_LEN_BYTES} bytes, are you sure this is the SECO metadata?`
     )
+  }
+
   return struct.decode(metadataBlob)
 }
 
@@ -70,9 +72,9 @@ export function create(scryptParams = createScryptParams()) {
 
 export async function encryptBlobKey(metadata, passphrase, blobKey) {
   const { authTag, blob, iv, salt } = await boxEncrypt(passphrase, blobKey, metadata.scrypt)
-  // eslint-disable-next-line @exodus/mutable/no-param-reassign-prop-only
+  // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
   metadata.scrypt.salt = salt
-  // eslint-disable-next-line @exodus/mutable/no-param-reassign-prop-only
+  // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
   metadata.blobKey = { authTag, iv, key: blob }
 }
 

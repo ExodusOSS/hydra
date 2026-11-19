@@ -1,5 +1,6 @@
-import { create } from '../crypto/secp256k1.js'
 import KeyIdentifier from '@exodus/key-identifier'
+
+import { create } from '../crypto/secp256k1.js'
 
 const fixtures = [
   {

@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.5.0](https://github.com/ExodusMovement/exodus/compare/@exodus/feature-flags@6.4.1...@exodus/feature-flags@6.5.0) (2026-10-09)
+
+### Features
+
+- **feature-flags:** add gradual rollout via remote config ([#46584](https://github.com/ExodusMovement/exodus/issues/46584)) ([28c3f31](https://github.com/ExodusMovement/exodus/commit/28c3f31b4992ebeb7d7c323dd8a33af7f8c66c58))
+
+## [6.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/feature-flags@6.4.0...@exodus/feature-flags@6.4.1) (2026-07-08)
+
+### Bug Fixes
+
+- **feature-flags:** apply client geolocation default when remote config omits the flag ([#17496](https://github.com/ExodusMovement/exodus-hydra/issues/17496)) ([7a12e7a](https://github.com/ExodusMovement/exodus-hydra/commit/7a12e7a49f820ddd209f241c9418ea604d191c63))
+
+## [6.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/feature-flags@6.3.2...@exodus/feature-flags@6.4.0) (2026-07-07)
+
+### Features
+
+- **feature-flags:** support client default geolocation with remote override ([#17444](https://github.com/ExodusMovement/exodus-hydra/issues/17444)) ([162e630](https://github.com/ExodusMovement/exodus-hydra/commit/162e63073309da2c59fc3a36c515f319ac04a9f5))
+- **oxlint-plugin-hydra:** port @exodus/\* eslint rules to oxlint jsPlugins ([#17280](https://github.com/ExodusMovement/exodus-hydra/issues/17280)) ([76e483c](https://github.com/ExodusMovement/exodus-hydra/commit/76e483cf8afa7035ce98279ae2ff80deb4ae6a50)), closes [#17278](https://github.com/ExodusMovement/exodus-hydra/issues/17278)
+
+## [6.3.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/feature-flags@6.3.1...@exodus/feature-flags@6.3.2) (2026-05-27)
+
+### Bug Fixes
+
+- **feature-flags:** start atom observer in onStart, not onLoad ([#16812](https://github.com/ExodusMovement/exodus-hydra/issues/16812)) ([3cfdaed](https://github.com/ExodusMovement/exodus-hydra/commit/3cfdaeda5a4c6182881cc54af9ef93d16ebe2c17))
+
+## [6.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/feature-flags@6.3.0...@exodus/feature-flags@6.3.1) (2026-05-26)
+
+### Bug Fixes
+
+- **feature-flags:** avoid blocking load on analyticsUserIdAtom ([#16796](https://github.com/ExodusMovement/exodus-hydra/issues/16796)) ([8e633bd](https://github.com/ExodusMovement/exodus-hydra/commit/8e633bdda1b2847d3a8177e5f537078250e30e48))
+
+## [6.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/feature-flags@6.2.0...@exodus/feature-flags@6.3.0) (2026-05-08)
+
+### Features
+
+- feat: implement mixpanel feature flag and experimentation provider (#15782)
+
+## [6.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/feature-flags@6.1.3...@exodus/feature-flags@6.2.0) (2026-02-05)
+
+### Features
+
+- feat: persist remote config with storage-backed atom (#15038)
+
+## [6.1.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/feature-flags@6.1.2...@exodus/feature-flags@6.1.3) (2026-01-06)
+
+### Bug Fixes
+
+- fix(remote-config): add error handling for JSON parse failures (#14799)
+
 ## [6.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/feature-flags@6.1.1...@exodus/feature-flags@6.1.2) (2025-02-14)
 
 **Note:** Version bump only for package @exodus/feature-flags

@@ -1,19 +1,24 @@
 {
   "name": "@exodus/asset-sources",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "Provides compatibility info and metadata about asset sources (asset source = walletAccount + asset)",
   "author": "Exodus Movement, Inc.",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/asset-sources",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/asset-sources",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aasset-sources"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aasset-sources"
   },
   "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./redux": "./lib/redux/index.js",
+    "./module/utils": "./lib/module/utils.js"
+  },
   "files": [
     "lib",
     "redux.js",
@@ -21,21 +26,22 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "run -T tsc -p tsconfig.build.json",
-    "build:watch": "concurrently 'run -T tsc -w -p tsconfig.build.json' 'run -T tsc-alias -w -p tsconfig.build.json'",
-    "clean": "run -T tsc --build --clean",
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest --esbuild",
-    "prepublishOnly": "yarn run -T build --scope @exodus/asset-sources",
-    "sync:mobile": "concurrently 'run -T sync:mobile @exodus/asset-sources' yarn:build:watch"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "build:watch": "concurrently 'pnpm exec tsc -w -p tsconfig.build.json' 'pnpm exec tsc-alias -w -p tsconfig.build.json'",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/asset-sources",
+    "sync:mobile": "concurrently 'pnpm -w run sync:mobile -- @exodus/asset-sources' pnpm:build:watch"
   },
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.0.1",
-    "@exodus/models": "^12.18.0",
-    "@exodus/trezor-meta": "^3.3.6",
-    "@exodus/typeforce": "^1.19.0",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/models": "workspace:^",
+    "@exodus/trezor-meta": "workspace:^",
+    "@exodus/typeforce": "workspace:^",
     "lodash": "^4.17.21",
     "minimalistic-assert": "^1.0.1",
     "reselect": "^3.0.1"
@@ -43,25 +49,25 @@
   "devDependencies": {
     "@exodus/argo": "workspace:^",
     "@exodus/assets": "^11.5.0",
-    "@exodus/assets-base": "^10.0.0",
-    "@exodus/bitcoin-plugin": "^1.17.1",
-    "@exodus/cardano-lib": "^3.4.1",
-    "@exodus/cardano-meta": "^1.0.7",
-    "@exodus/combined-assets-meta": "^3.7.0",
+    "@exodus/assets-base": "^12.0.0",
+    "@exodus/assets-test-meta": "workspace:^",
+    "@exodus/bitcoin-plugin": "^2.0.0",
+    "@exodus/cardano-lib": "^4.0.0",
+    "@exodus/cardano-meta": "^2.0.0",
     "@exodus/dependency-types": "workspace:^",
-    "@exodus/dogecoin-plugin": "^1.10.2",
-    "@exodus/ethereum-meta": "^2.9.1",
-    "@exodus/ethereum-plugin": "^2.5.0",
+    "@exodus/dogecoin-plugin": "^2.0.0",
+    "@exodus/ethereum-plugin": "^3.1.1",
     "@exodus/hw-common": "workspace:^",
-    "@exodus/litecoin-plugin": "^1.7.3",
-    "@exodus/logger": "^1.1.0",
+    "@exodus/litecoin-plugin": "^2.0.0",
+    "@exodus/logger": "workspace:^",
     "@exodus/redux-dependency-injection": "workspace:^",
     "@exodus/solana-plugin": "^1.15.0",
-    "@exodus/stellar-plugin": "^0.4.4",
+    "@exodus/stellar-plugin": "^0.6.5",
     "@types/events": "^3.0.0",
+    "@types/lodash": "^4.17.0",
     "@types/minimalistic-assert": "^1.0.1",
     "events": "^3.3.0",
-    "redux": "4.0.0"
+    "redux": "^4.0.0"
   },
   "publishConfig": {
     "access": "public",

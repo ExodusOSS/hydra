@@ -1,5 +1,5 @@
-/* eslint-disable jest/no-duplicate-hooks */
-/* eslint-disable jest/prefer-hooks-in-order */
+/* oxlint-disable jest/no-duplicate-hooks */
+/* oxlint-disable jest/prefer-hooks-in-order */
 import Timer from '../src/timer.js'
 
 beforeEach(() => {
@@ -32,9 +32,9 @@ const sleep = (ms) => {
 }
 
 test('timer should fail if invalid interval', async () => {
-  expect(() => new Timer(Number.NaN)).toThrowError('Interval should be a positive number')
-  expect(() => new Timer(0)).toThrowError('Interval should be a positive number')
-  expect(() => new Timer(-10)).toThrowError('Interval should be a positive number')
+  expect(() => new Timer(Number.NaN)).toThrow('Interval should be a positive number')
+  expect(() => new Timer(0)).toThrow('Interval should be a positive number')
+  expect(() => new Timer(-10)).toThrow('Interval should be a positive number')
 })
 
 test('timer should start, tick and stop', async () => {
@@ -274,28 +274,28 @@ test('timer fuzziness should be ignored when next tick is smaller', async () => 
 test('not started timer should raise on pause', async () => {
   const timer = new Timer(20)
   expect(timer.isRunning).toEqual(false)
-  expect(() => timer.pause()).toThrowError(
+  expect(() => timer.pause()).toThrow(
     "You cannot pause a timer that hasn't started or it has been stopped!"
   )
   let counter = 0
   await timer.start(() => counter++)
   await timer.stop(() => counter++)
   expect(timer.isRunning).toEqual(false)
-  expect(() => timer.pause()).toThrowError(
+  expect(() => timer.pause()).toThrow(
     "You cannot pause a timer that hasn't started or it has been stopped!"
   )
 })
 test('not started timer should raise on resume', async () => {
   const timer = new Timer(20)
   expect(timer.isRunning).toEqual(false)
-  expect(() => timer.resume()).toThrowError(
+  expect(() => timer.resume()).toThrow(
     "You cannot resume a timer that hasn't started or it has been stopped!"
   )
   let counter = 0
   await timer.start(() => counter++)
   await timer.stop(() => counter++)
   expect(timer.isRunning).toEqual(false)
-  expect(() => timer.resume()).toThrowError(
+  expect(() => timer.resume()).toThrow(
     "You cannot resume a timer that hasn't started or it has been stopped!"
   )
 })
@@ -446,7 +446,7 @@ test('timer resume all should not restart all after pause all', async () => {
 test('Timer should not be running when it stopped()', async () => {
   const timer = new Timer(50)
   await timer.start(() => {})
-  timer.setNewInterval(100)
+  void timer.setNewInterval(100)
   await timer.stop()
   expect(timer.isRunning).toBe(false)
   await Promise.resolve()
@@ -470,9 +470,9 @@ test('Timer should report as running while in setNewInterval()', async () => {
 test('Timer should stop after parallel setNewInterval()', async () => {
   const timer = new Timer(50)
   await timer.start(() => {})
-  timer.setNewInterval(100) // not awaiting
+  void timer.setNewInterval(100) // not awaiting
   await Promise.resolve()
-  timer.setNewInterval(150) // not awaiting
+  void timer.setNewInterval(150) // not awaiting
   await Promise.resolve()
   await timer.stop()
   expect(timer.isRunning).toBe(false)
@@ -586,4 +586,20 @@ test('Timer should use the correct interval when multiple setNewInterval() were 
   await sleep(10)
   expect(counter).toBe(4)
   expect(timer.interval).toBe(200)
+})
+
+test('Timer does not speed up on manual tick calls', async () => {
+  const timer = new Timer(20)
+  let counter = 0
+  await timer.start(() => counter++, { delayedStart: true })
+  await jest.advanceTimersByTimeAsync(20)
+  expect(counter).toEqual(1)
+  await timer.tick()
+  expect(counter).toEqual(2)
+  await timer.tick()
+  expect(counter).toEqual(3)
+  await timer.tick()
+  expect(counter).toEqual(4)
+  await jest.advanceTimersByTimeAsync(20)
+  expect(counter).toEqual(5) // (+1) and not 8 (+4)
 })

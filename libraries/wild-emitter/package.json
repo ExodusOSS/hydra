@@ -5,12 +5,12 @@
   "description": "Wildcard emitter implementation",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/wild-emitter",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/wild-emitter",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Awild-emitter"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Awild-emitter"
   },
   "type": "module",
   "main": "src/index.js",
@@ -20,8 +20,12 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix"
+    "test": "pnpm exec exodus-test --jest",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

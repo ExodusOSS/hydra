@@ -1,5 +1,5 @@
 import assert from 'minimalistic-assert'
-import proxyFreeze from 'proxy-freeze'
+import proxyFreeze from '@exodus/proxy-freeze'
 // eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import type NumberUnit from '@exodus/currency'
@@ -10,7 +10,7 @@ import { ModelIdSymbol } from '../constants.js'
 import type Address from '../address/index.js'
 import { createIsInstance, omitUndefined } from '../utils.js'
 
-const { isEqual, isEmpty, isString, merge, omit, mapValues, pick } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { isEqual, isEmpty, isString, merge, omit, mapValues, pick } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 const FACTORY_SYMBOL = Symbol('Tx')
 
@@ -25,7 +25,29 @@ function parseCurrency(
   return currency.parse(typeof val === 'string' ? val : val.value + ' ' + (val as any).unit)
 }
 
-const coerceToObject = (obj: Tx | Partial<TxProps>) => (obj instanceof Tx ? obj.toJSON() : obj)
+const coerceToObject = (obj: Tx | Partial<TxProps> | Partial<TxJson>) =>
+  obj instanceof Tx ? obj.toJSON() : obj
+
+export interface TxJson {
+  version?: number
+  txId?: string
+  error?: string | null
+  date: string
+  confirmations: number
+  selfSend?: boolean
+  from?: string[]
+  to?: string
+  meta?: Record<string, any>
+  data?: Record<string, any>
+  tokens?: string[]
+  addresses?: ReturnType<Address['toJSON']>[]
+  currencies: Record<string, ReturnType<typeof unitTypeToJSON>>
+  coinAmount?: string
+  feeAmount?: string
+  coinName?: string
+  feeCoinName?: string
+  dropped?: boolean
+}
 
 export type TxProps = {
   txId?: string
@@ -37,7 +59,7 @@ export type TxProps = {
   selfSend?: boolean
   from?: string[]
   to?: string
-  meta?: Record<string, any>
+  meta?: Record<string, any> // @deprecated
   data?: Record<string, any>
   tokens?: string[]
   token?: string // legacy
@@ -188,7 +210,7 @@ export default class Tx {
   }
   */
 
-  toJSON() {
+  toJSON(): TxJson {
     const _obj = {
       __proto__: null,
       ...this,
@@ -214,7 +236,7 @@ export default class Tx {
 
     if (obj.tokens!.length === 0) delete obj.tokens
 
-    return omitUndefined(obj)
+    return omitUndefined(obj) as TxJson
   }
 
   toRedactedJSON() {
@@ -225,7 +247,7 @@ export default class Tx {
     return String(this.txId)
   }
 
-  update(fields: Partial<TxProps> | Tx) {
+  update(fields: Partial<TxProps> | Tx | Partial<TxJson>) {
     const current: Record<string, any> = this.toJSON()
     const data = coerceToObject(fields)
     const updateable: Record<string, any> = omit(data, ['version'])

@@ -1,7 +1,6 @@
-/* eslint-disable @exodus/hydra/no-asset-proper */
+/* oxlint-disable @exodus/oxlint-plugin-hydra/no-asset-proper */
 
 import { createInMemoryAtom } from '@exodus/atoms'
-import combinedAssetsList from '@exodus/combined-assets-meta'
 import { createNoopLogger } from '@exodus/logger'
 import createStorage from '@exodus/storage-memory'
 import { http, HttpResponse } from 'msw'
@@ -10,6 +9,25 @@ import { setupServer } from 'msw/node'
 import AssetsModule from '../assets-module.js'
 import { CT_DATA_KEY } from '../constants.js'
 import assetPlugins from './supported-assets-list.js'
+
+const combinedAssetsList = [
+  {
+    name: '_usdcoin',
+    ticker: '_USDCOIN',
+    baseAssetName: '_usdcoin',
+    displayName: 'USD Coin',
+    displayTicker: 'USDC',
+    assetType: 'MULTI_NETWORK_ASSET',
+    isCombined: true,
+    units: { _usdcoin_base: 0, _USDCOIN: 6 },
+    combinedAssetNames: ['usdcoin'],
+    info: { description: '' },
+    primaryColor: '#2775CA',
+    gradientColors: ['#2775CA', '#2775CA'],
+    chainBadgeColors: ['#2775CA', '#2775CA'],
+    toString: () => '_usdcoin',
+  },
+]
 
 const createAssetsModule = (args) => new AssetsModule({ ...args })
 
@@ -94,14 +112,19 @@ const ctrData = {
   },
 }
 
-function createAssetModuleForTest({ assetsAtom, fetch, storage, iconsStorage, config }) {
+function createAssetModuleForTest({
+  assetsAtom,
+  fetch,
+  storage,
+  iconsStorage,
+  config,
+  combinedAssets = combinedAssetsList,
+}) {
   const assetsModule = createAssetsModule({
     assetPlugins,
     assetsAtom,
     fetch,
-    combinedAssetsList: combinedAssetsList.filter(
-      (asset) => asset.assetType === 'MULTI_NETWORK_ASSET'
-    ),
+    combinedAssetsList: combinedAssets.filter((asset) => asset.assetType === 'MULTI_NETWORK_ASSET'),
     storage,
     logger: console,
     iconsStorage,
@@ -114,8 +137,7 @@ function createAssetModuleForTest({ assetsAtom, fetch, storage, iconsStorage, co
   })
 
   const bitcoin = assetsModule.getAsset('bitcoin')
-  jest.spyOn(bitcoin.api, 'hasFeature').mockReturnValue(true)
-
+  bitcoin.api.features.customTokens = true
   bitcoin.api.createToken = (token) => token
   return assetsModule
 }
@@ -305,6 +327,33 @@ describe('assetsModule', () => {
 
       expect(capturedConfigs.bitcoin).toEqual({})
     })
+
+    test('falls back from invalid assetConfig', () => {
+      const mockAssetPlugins = {
+        ethereum: {
+          createAsset: ({ assetClientInterface, config }) => {
+            if (config?.monitorType === 'invalidMonitorType') throw new Error('invalidMonitorType')
+
+            return assetPlugins.ethereum.createAsset({ assetClientInterface, config })
+          },
+        },
+      }
+
+      const module = createAssetsModule({
+        assetPlugins: mockAssetPlugins,
+        assetsAtom: createInMemoryAtom(),
+        fetch,
+        storage,
+        logger: console,
+      })
+
+      module.initialize({
+        assetClientInterface,
+        assetsConfig: {
+          ethereum: { config: { monitorType: 'invalidMonitorType' } },
+        },
+      })
+    })
   })
 
   describe('with mock CTR', () => {
@@ -330,6 +379,42 @@ describe('assetsModule', () => {
         return HttpResponse.json({
           status: 'OK',
           tokens: [{ ...ctrData.combinedcoin, parents: [] }],
+        })
+      }),
+      http.post('https://ctr.a.exodus.io/registry/search', async ({ request }) => {
+        const body = await request.json()
+        const { baseAssetName, query, tags } = body
+
+        const searchTokens = [
+          {
+            ...ctrData.abcd_bitcoin_a2345678,
+            tags: ['wayne', 'coin'],
+          },
+        ]
+
+        let results = searchTokens
+
+        if (baseAssetName && !baseAssetName.includes('bitcoin')) {
+          results = []
+        }
+
+        if (query) {
+          results = results.filter(
+            (token) =>
+              token.properName?.toLowerCase().includes(query.toLowerCase()) ||
+              token.properTicker?.toLowerCase().includes(query.toLowerCase())
+          )
+        }
+
+        if (tags && tags.length > 0) {
+          results = results.filter((token) =>
+            tags.some((tag) => token.tags?.some((t) => t.toLowerCase().includes(tag.toLowerCase())))
+          )
+        }
+
+        return HttpResponse.json({
+          status: 'OK',
+          tokens: results,
         })
       })
     )
@@ -377,7 +462,9 @@ describe('assetsModule', () => {
         const { value, added } = await assetsAtom.get()
 
         expect(value.waynecoin).toBeUndefined()
-        expect(added).toEqual([])
+        // Filter out combined assets that were added during initialization
+        const addedTokens = added.filter((a) => !a.isCombined)
+        expect(addedTokens).toEqual([])
       })
 
       test('should accept valid schema token', async () => {
@@ -408,6 +495,185 @@ describe('assetsModule', () => {
     })
 
     describe('combined assets', () => {
+      describe('dynamic grouping overrides without static definitions', () => {
+        const token = {
+          ...combinedcoin,
+          displayName: 'Combined Coin',
+          displayTicker: 'CC',
+          lifecycleStatus: 'c',
+          parents: null,
+          version: 1,
+        }
+        const groupName = '_combined_btc_bitcoin'
+        const config = {
+          shouldValidateCustomToken: false,
+          useDynamicCombinedAssets: true,
+          dynamicCombinedAssetOverrides: { [token.name]: 'bitcoin' },
+        }
+        let module
+        let atom
+        let tokenStorage
+
+        const createModule = (overrides) =>
+          createAssetModuleForTest({
+            assetsAtom: atom,
+            fetch,
+            storage: tokenStorage,
+            combinedAssets: [],
+            config: { ...config, ...overrides },
+          })
+
+        const expectMembership = () => {
+          expect(module.getAsset(groupName)).toMatchObject({
+            displayName: 'Bitcoin',
+            displayTicker: 'BTC',
+            combinedAssetNames: ['bitcoin', token.name],
+          })
+          expect(module.getAsset(token.name)).toMatchObject({
+            displayTicker: 'CC',
+            assetId: token.assetId,
+            baseAsset: expect.objectContaining({ name: 'ethereum' }),
+          })
+          expect(
+            Object.values(module.getAssets())
+              .filter((asset) => asset.isCombined && asset.combinedAssetNames.includes(token.name))
+              .map((asset) => asset.name)
+          ).toEqual([groupName])
+        }
+
+        beforeEach(() => {
+          atom = createInMemoryAtom()
+          tokenStorage = createStorage()
+          module = createModule()
+          mswServer.use(
+            http.post('https://ctr.a.exodus.io/registry/tokens', () =>
+              HttpResponse.json({ status: 'OK', tokens: [token] })
+            ),
+            http.post('https://ctr.a.exodus.io/registry/updates', () =>
+              HttpResponse.json({
+                status: 'OK',
+                tokens: [{ ...token, parents: ['_usdcoin'], version: 2 }],
+              })
+            )
+          )
+        })
+
+        afterEach(() => mswServer.resetHandlers())
+
+        test('creates and publishes the group when a remote member loads after startup', async () => {
+          await module.load()
+          expect(module.getAsset(groupName)).toBeUndefined()
+          await module.addRemoteTokens({ tokenNames: [token.name] })
+          expectMembership()
+          const { added, updated } = await atom.get()
+          expect(added.map((asset) => asset.name)).toEqual(
+            expect.arrayContaining([token.name, groupName])
+          )
+          expect(updated.map((asset) => asset.name)).toContain('bitcoin')
+          await module.addRemoteTokens({ tokenNames: [token.name] })
+          expectMembership()
+        })
+
+        test('restores the group and preserves it through registry updates and another restart', async () => {
+          await tokenStorage.set(CT_DATA_KEY, { [token.name]: token })
+          await module.load()
+          expectMembership()
+          await module.updateTokens()
+          expectMembership()
+          const storedTokens = await tokenStorage.get(CT_DATA_KEY)
+          expect(storedTokens[token.name].version).toBe(2)
+          module = createModule()
+          await module.load()
+          expectMembership()
+        })
+
+        test.each([false, true])(
+          'keeps other wrappers separate (reversed: %s)',
+          async (reverse) => {
+            const otherToken = {
+              ...token,
+              name: 'anothercoin',
+              assetName: 'anothercoin',
+              assetId: 'anothercoin',
+            }
+            const tokens = reverse ? [otherToken, token] : [token, otherToken]
+            await tokenStorage.set(
+              CT_DATA_KEY,
+              Object.fromEntries(tokens.map((asset) => [asset.name, asset]))
+            )
+            await module.load()
+            expectMembership()
+            expect(module.getAsset(otherToken.name)).toBeDefined()
+            expect(
+              Object.values(module.getAssets()).filter((asset) => asset.isCombined)
+            ).toHaveLength(1)
+          }
+        )
+
+        test('does not apply overrides when dynamic grouping is disabled', async () => {
+          module = createModule({ useDynamicCombinedAssets: false })
+          await module.load()
+          await module.addRemoteTokens({ tokenNames: [token.name] })
+          expect(module.getAsset(groupName)).toBeUndefined()
+          expect(module.getAsset(token.name)).toBeDefined()
+        })
+
+        test('waits for a late target without creating a wrapper-only group, including after restart', async () => {
+          const otherToken = {
+            ...token,
+            name: 'anothercoin',
+            assetName: 'anothercoin',
+            assetId: 'anothercoin',
+          }
+          const target = {
+            ...token,
+            name: 'targetcoin',
+            assetName: 'targetcoin',
+            assetId: 'targetcoin',
+            displayName: 'Target Coin',
+            displayTicker: 'TARGET',
+          }
+          const overrides = {
+            dynamicCombinedAssetOverrides: {
+              [token.name]: target.name,
+              [otherToken.name]: target.name,
+            },
+          }
+          const getGroups = () =>
+            Object.values(module.getAssets())
+              .filter((asset) => asset.isCombined)
+              .map(({ name, combinedAssetNames }) => ({ name, combinedAssetNames }))
+          const expectedGroups = [
+            {
+              name: '_combined_target_targetcoin',
+              combinedAssetNames: [target.name, otherToken.name, token.name],
+            },
+          ]
+
+          await tokenStorage.set(CT_DATA_KEY, {
+            [token.name]: token,
+            [otherToken.name]: otherToken,
+          })
+          module = createModule(overrides)
+          await module.load()
+          expect(module.getAsset(token.name)).toBeDefined()
+          expect(module.getAsset(otherToken.name)).toBeDefined()
+          expect(getGroups()).toEqual([])
+
+          mswServer.use(
+            http.post('https://ctr.a.exodus.io/registry/tokens', () =>
+              HttpResponse.json({ status: 'OK', tokens: [target] })
+            )
+          )
+          await module.addRemoteTokens({ tokenNames: [target.name] })
+          expect(getGroups()).toEqual(expectedGroups)
+
+          module = createModule(overrides)
+          await module.load()
+          expect(getGroups()).toEqual(expectedGroups)
+        })
+      })
+
       test('update combined asset', async () => {
         await assetsModule.addRemoteTokens({ tokenNames: ['combinedcoin'] })
 
@@ -485,6 +751,36 @@ describe('assetsModule', () => {
         const icon = await assetsModule.getIcon('searchedtoken')
         expect(icon).toEqual(undefined)
       })
+
+      test('getIcon falls back to CTR when stored icon is missing for a registered token', async () => {
+        await assetsModule.addRemoteTokens({ tokenNames: ['waynecoin'] })
+        icons.clear() // simulate lost icon files, e.g. wallet restored on a new device
+
+        const icon = await assetsModule.getIcon('waynecoin')
+
+        expect(icon).toEqual('UNZIP abcd')
+        expect(icons.get('waynecoin')).toEqual('abcd') // re-persisted for next launch
+      })
+
+      test('getIcon does not fall back to CTR for built-in assets', async () => {
+        fetch.mockClear()
+
+        const icon = await assetsModule.getIcon('bitcoin')
+
+        expect(icon).toEqual(undefined)
+        expect(fetch).not.toHaveBeenCalled()
+      })
+
+      test('getIcon falls back to CTR when reading the stored icon throws', async () => {
+        await assetsModule.addRemoteTokens({ tokenNames: ['waynecoin'] })
+        iconsStorage.getIcon = () => {
+          throw new Error('validate: invalid tag')
+        }
+
+        const icon = await assetsModule.getIcon('waynecoin')
+
+        expect(icon).toEqual('UNZIP abcd')
+      })
     })
 
     describe('addRemoteTokens with batching', () => {
@@ -537,6 +833,57 @@ describe('assetsModule', () => {
         expect(secondCallBody.tokenNames).toHaveLength(25)
         expect(firstCallBody.tokenNames).toEqual(tokenNames.slice(0, 50))
         expect(secondCallBody.tokenNames).toEqual(tokenNames.slice(50, 75))
+
+        fetch.mockRestore()
+      })
+    })
+
+    describe('searchTokens()', () => {
+      test('searchTokens with query', async () => {
+        const tokens = await assetsModule.searchTokens({
+          baseAssetName: 'bitcoin',
+          query: 'wayne',
+        })
+
+        expect(tokens).toHaveLength(1)
+        expect(tokens[0]).toMatchObject({ name: 'abcd_bitcoin_a2345678' })
+      })
+
+      test('searchTokens with tags', async () => {
+        const tokens = await assetsModule.searchTokens({
+          baseAssetName: 'bitcoin',
+          tags: ['wayne'],
+        })
+
+        expect(tokens).toHaveLength(1)
+        expect(tokens[0]).toMatchObject({ name: 'abcd_bitcoin_a2345678' })
+      })
+
+      test('searchTokens with tags that do not match', async () => {
+        const tokens = await assetsModule.searchTokens({
+          baseAssetName: 'bitcoin',
+          tags: ['nonexistent'],
+        })
+
+        expect(tokens).toHaveLength(0)
+      })
+
+      test('searchTokens passes tags to fetch', async () => {
+        fetch.mockReset()
+        fetch.mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          json: jest.fn().mockResolvedValue({ status: 'OK', tokens: [] }),
+        })
+
+        await assetsModule.searchTokens({
+          baseAssetName: 'bitcoin',
+          tags: ['test_tag', 'keyword'],
+        })
+
+        const requestBody = JSON.parse(fetch.mock.calls[0][1].body)
+        expect(requestBody.tags).toEqual(['test_tag', 'keyword'])
+        expect(requestBody.baseAssetName).toEqual(['bitcoin'])
 
         fetch.mockRestore()
       })

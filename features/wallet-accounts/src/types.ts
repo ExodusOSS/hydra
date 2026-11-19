@@ -22,12 +22,17 @@ export type WalletAccountsData = Partial<{
   index: number
   label: string
   enabled: boolean
+  delegated: boolean
 }>
 
 export type UpdateableData = Omit<
   WalletAccountsData,
-  'id' | 'seedId' | 'index' | 'compatibilityMode'
+  'id' | 'seedId' | 'index' | 'compatibilityMode' | 'delegated'
 >
+
+export interface Wallet {
+  getPrimarySeedId(): Promise<string>
+}
 
 export interface AllWalletAccountsEver {
   grantChannelAccess(params: { tail: () => Promise<unknown[]> }): void
@@ -42,11 +47,6 @@ export interface Fusion {
 
 export interface Port {
   emit(event: string, value: unknown): void
-}
-
-export interface Wallet {
-  getPrimarySeedId(): Promise<string>
-  getExtraSeedIds(): Promise<string[]>
 }
 
 export interface ErrorTracking {

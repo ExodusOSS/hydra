@@ -13,7 +13,7 @@ Provides Exodus-specific serialization for complex domain objects, such as those
 ## Install
 
 ```sh
-yarn add @exodus/domain-serialization
+pnpm add @exodus/domain-serialization
 ```
 
 ## Usage

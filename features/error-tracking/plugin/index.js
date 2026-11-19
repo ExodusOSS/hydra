@@ -1,6 +1,9 @@
 import { combine, compute } from '@exodus/atoms'
 
-import { whyIsRemoteTrackingDisabled } from './why-is-remote-tracking-disabled.js'
+import {
+  whyIsRemoteTrackingDisabled,
+  whyIsUnsafeRemoteTrackingDisabled,
+} from './why-is-remote-tracking-disabled.js'
 
 function errorTrackingPlugin({
   abTestingAtom,
@@ -8,6 +11,7 @@ function errorTrackingPlugin({
   walletCreatedAtAtom,
   getBuildMetadata,
   remoteErrorTrackingEnabledAtom,
+  unsafeRemoteErrorTrackingEnabledAtom,
   config: {
     remoteErrorTrackingABExperimentId,
     remoteErrorTrackingFundedWalletsABExperimentId,
@@ -17,6 +21,16 @@ function errorTrackingPlugin({
   logger,
 }) {
   const subscriptions = []
+
+  const toEnabled = (reasonDisabled, label) => {
+    if (reasonDisabled) {
+      logger.debug(`${label} is disabled: ${reasonDisabled}`)
+      return false
+    }
+
+    logger.debug(`${label} is enabled`)
+    return true
+  }
 
   const onAssetsSynced = async () => {
     if (!abTestingAtom) {
@@ -32,31 +46,43 @@ function errorTrackingPlugin({
         earliestTxDate: earliestTxDateAtom,
         walletCreatedAt: walletCreatedAtAtom,
       }),
-      selector: async ({ abTesting, earliestTxDate, walletCreatedAt }) => {
-        const reasonDisabled = whyIsRemoteTrackingDisabled({
-          remoteErrorTrackingABExperimentId,
-          remoteErrorTrackingFundedWalletsABExperimentId,
-          abTesting,
-          trackWalletsCreatedAfter,
-          walletCreatedAt,
-          trackFundedWallets,
-          earliestTxDate,
-          buildMetadata: await getBuildMetadata(),
-          logger,
-        })
-
-        if (reasonDisabled) {
-          logger.debug(`remote error tracking is disabled: ${reasonDisabled}`)
-          return false
-        }
-
-        logger.debug('remote error tracking is enabled')
-        return true
-      },
+      selector: async ({ abTesting, earliestTxDate, walletCreatedAt }) =>
+        toEnabled(
+          whyIsRemoteTrackingDisabled({
+            remoteErrorTrackingABExperimentId,
+            remoteErrorTrackingFundedWalletsABExperimentId,
+            abTesting,
+            trackWalletsCreatedAfter,
+            walletCreatedAt,
+            trackFundedWallets,
+            earliestTxDate,
+            buildMetadata: await getBuildMetadata(),
+            logger,
+          }),
+          'remote error tracking'
+        ),
     })
 
     subscriptions.push(
       internalRemoteErrorTrackingEnabledAtom.observe(remoteErrorTrackingEnabledAtom.set)
+    )
+
+    const internalUnsafeRemoteErrorTrackingEnabledAtom = compute({
+      atom: abTestingAtom,
+      selector: async (abTesting) =>
+        toEnabled(
+          whyIsUnsafeRemoteTrackingDisabled({
+            remoteErrorTrackingABExperimentId,
+            abTesting,
+            buildMetadata: await getBuildMetadata(),
+            logger,
+          }),
+          'unsafe remote error tracking'
+        ),
+    })
+
+    subscriptions.push(
+      internalUnsafeRemoteErrorTrackingEnabledAtom.observe(unsafeRemoteErrorTrackingEnabledAtom.set)
     )
   }
 
@@ -79,8 +105,9 @@ const errorTrackingPluginDefinition = {
     'abTestingAtom?',
     'earliestTxDateAtom',
     'walletCreatedAtAtom',
-    'remoteErrorTrackingEnabledAtom',
     'getBuildMetadata',
+    'remoteErrorTrackingEnabledAtom',
+    'unsafeRemoteErrorTrackingEnabledAtom',
     'config',
     'logger',
   ],

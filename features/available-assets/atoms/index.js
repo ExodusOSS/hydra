@@ -21,6 +21,6 @@ export const availableAssetNamesWithoutParentCombinedAtomDefinition = {
   id: 'availableAssetNamesWithoutParentCombinedAtom',
   type: 'atom',
   factory: createAvailableAssetNamesWithoutParentCombinedAtom,
-  dependencies: ['assetsModule', 'availableAssetNamesAtom'],
+  dependencies: ['assetsAtom', 'availableAssetNamesAtom'],
   public: true,
 }

@@ -5,12 +5,12 @@
   "description": "Proxies a module and delays all module calls",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/await-proxy",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/await-proxy",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aawait-proxy"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aawait-proxy"
   },
   "type": "module",
   "main": "index.js",
@@ -18,11 +18,15 @@
     "CHANGELOG.md"
   ],
   "devDependencies": {
-    "delay": "^5.0.0"
+    "delay": "^5.0.0",
+    "p-defer": "^4.0.1"
   },
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix"
+    "test": "pnpm exec exodus-test --jest",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

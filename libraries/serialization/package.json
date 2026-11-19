@@ -1,38 +1,31 @@
 {
   "name": "@exodus/serialization",
-  "version": "2.3.1",
+  "version": "2.3.3",
   "description": "JSON serialization/deserialization for Exodus' commonly-used classes",
   "type": "module",
   "exports": "./src/index.js",
   "author": "Exodus Movement, Inc.",
   "main": "src/index.js",
   "license": "MIT",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/serialization",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/serialization",
   "files": [
     "src",
     "CHANGELOG.md"
   ],
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "NODE_ENV=test run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "benchmark": "run -T exodus-test --concurrency 1 __tests__/*.bench.js",
-    "benchmark:hermes": "EXODUS_TEST_ENGINE=hermes:bundle run benchmark"
+    "test": "pnpm exec exodus-test --jest",
+    "lint": "NODE_ENV=test pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aserialization"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aserialization"
   },
   "dependencies": {
     "@exodus/bytes": "^1.0.0-rc.2"
-  },
-  "devDependencies": {
-    "@exodus/currency": "workspace:^",
-    "@exodus/models": "workspace:^",
-    "@exodus/test": "^1.0.0-rc.105"
   },
   "publishConfig": {
     "access": "public",

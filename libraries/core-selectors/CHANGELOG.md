@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.4](https://github.com/ExodusMovement/exodus/compare/@exodus/core-selectors@4.0.3...@exodus/core-selectors@4.0.4) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/core-selectors
+
 ## [4.0.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/core-selectors@4.0.2...@exodus/core-selectors@4.0.3) (2026-03-04)
 
 ### Code Refactoring

@@ -1,9 +1,9 @@
 import restrictConcurrency from 'make-concurrent'
-// eslint-disable-next-line no-restricted-imports
-import lodash from 'lodash'
+import ms from 'ms'
 
 const TOKEN_NAME_RE = /^[^_]+_([^_]+)_([^_]+)$/u
-const { once } = lodash
+const INITIAL_LOAD_RETRY_DELAY = ms('5s')
+const MAX_LOAD_RETRY_DELAY = ms('5m')
 
 class AvailableAssets {
   #logger
@@ -13,6 +13,11 @@ class AvailableAssets {
   #assetsAtom
   #defaultAvailableAssetNames
   #subscriptions = []
+  #loadPromise
+  #failedLoadTokenNames
+  #loadRetryDelay = INITIAL_LOAD_RETRY_DELAY
+  #loadRetryTimeout
+  #stopped = false
 
   constructor({
     assetsModule,
@@ -35,6 +40,8 @@ class AvailableAssets {
   }
 
   start = async () => {
+    this.#stopped = false
+
     // we will filter the hardcoded default available asset names list by defined assets
     // not every wallet will have the same assets set up
     await this.#availableAssetsAtom.set(
@@ -47,17 +54,17 @@ class AvailableAssets {
 
     const toMakeAvailable = [...added, ...updated]
     if (toMakeAvailable.length > 0) {
-      this.#makeAssetsAvailable(toMakeAvailable, 'assets-load')
+      void this.#makeAssetsAvailable(toMakeAvailable, 'assets-load')
     }
 
     this.#subscriptions.push(
       this.#assetsAtom.observe(({ added, updated }) => {
         if (added.length > 0) {
-          this.#makeAssetsAvailable(added, 'assets-add')
+          void this.#makeAssetsAvailable(added, 'assets-add')
         }
 
         if (updated.length > 0) {
-          this.#makeAssetsAvailable(updated, 'assets-update')
+          void this.#makeAssetsAvailable(updated, 'assets-update')
         }
       }),
       // built-in custom tokens that the user added/enabled/disabled explicitly needs to be available forever
@@ -84,18 +91,57 @@ class AvailableAssets {
     )
   }
 
-  load = once(async () => {
-    const missingTokenNames = this.#defaultAvailableAssetNames.filter(
-      (name) => TOKEN_NAME_RE.test(name) && !this.#assetsModule.getAsset(name)
-    )
+  // Runs once it succeeds. A failed run is logged and retried with a growing delay,
+  // so default remote tokens still load after a network error at startup.
+  load = () => {
+    this.#loadPromise ??= this.#addMissingDefaultTokens()
+    return this.#loadPromise
+  }
 
-    if (missingTokenNames.length > 0) {
-      await this.#assetsModule.addRemoteTokens({
-        tokenNames: missingTokenNames,
-        allowedStatusList: ['c'],
-      })
+  stop = () => {
+    this.#stopped = true
+    clearTimeout(this.#loadRetryTimeout)
+    this.#subscriptions.forEach((unsubscribe) => unsubscribe())
+    this.#subscriptions = []
+  }
+
+  #addMissingDefaultTokens = async () => {
+    clearTimeout(this.#loadRetryTimeout)
+
+    // A failed run can register tokens before it throws (a storage write failure) without
+    // announcing them, so a retry asks for the same names. addRemoteTokens returns a registered
+    // token as an update, which makes it available.
+    const tokenNames =
+      this.#failedLoadTokenNames ??
+      this.#defaultAvailableAssetNames.filter(
+        (name) => TOKEN_NAME_RE.test(name) && !this.#assetsModule.getAsset(name)
+      )
+
+    if (tokenNames.length === 0) return
+
+    try {
+      await this.#assetsModule.addRemoteTokens({ tokenNames, allowedStatusList: ['c'] })
+      this.#failedLoadTokenNames = undefined
+    } catch (error) {
+      this.#loadPromise = undefined
+      this.#failedLoadTokenNames = tokenNames
+      this.#scheduleLoadRetry(error)
+      throw error
     }
-  })
+  }
+
+  #scheduleLoadRetry = (error) => {
+    if (this.#stopped) {
+      this.#logger.error('failed to load default remote tokens', error)
+      return
+    }
+
+    const delay = this.#loadRetryDelay
+    this.#loadRetryDelay = Math.min(delay * 2, MAX_LOAD_RETRY_DELAY)
+    this.#logger.error(`failed to load default remote tokens, retrying in ${ms(delay)}`, error)
+    // The failed run logs its own error and schedules the next retry.
+    this.#loadRetryTimeout = setTimeout(() => this.load().catch(() => {}), delay)
+  }
 
   #resolveBaseAssetName = (assetName) => {
     if (!assetName) return {}
@@ -117,6 +163,7 @@ class AvailableAssets {
     const availableAssetsNamesSet = await this.#getAvailableAssetsSet()
     const toMakeAvailable = assets
       .filter((asset) => !availableAssetsNamesSet.has(asset.name))
+      .filter((asset) => !asset.api?.features?.delisted)
       .map((asset) => ({ assetName: asset.name, reason }))
 
     if (toMakeAvailable.length === 0) return
@@ -125,11 +172,6 @@ class AvailableAssets {
     const update = [...availableAssets, ...toMakeAvailable]
     await this.#availableAssetsAtom.set(update)
   })
-
-  stop = () => {
-    this.#subscriptions.forEach((unsubscribe) => unsubscribe())
-    this.#subscriptions = []
-  }
 }
 
 const createAvailableAssetsModule = (opts) => new AvailableAssets(opts)

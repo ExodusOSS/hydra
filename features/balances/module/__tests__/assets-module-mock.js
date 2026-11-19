@@ -49,7 +49,7 @@ const accountStateBasedBalanceAsset = {
     SOL: 9,
   }),
   api: {
-    hasFeature: (feature) => ({})[feature],
+    features: {},
     getBalances: ({ accountState, txLog, asset, feeData }) => {
       if (feeData) {
         throw new Error('Fee data is not expected here!')
@@ -97,7 +97,7 @@ const assetMocks = {
       SRM: 6,
     }),
     api: {
-      hasFeature: (feature) => ({})[feature],
+      features: {},
       getBalances: ({ asset, txLog, accountState, feeData }) => {
         if (feeData) {
           throw new Error('Fee data is not expected here!')
@@ -154,7 +154,7 @@ const assetMocks = {
       return assetMocks.madeUpCombinedAsset
     },
     api: {
-      hasFeature: (feature) => ({})[feature],
+      features: {},
     },
     isCombined: true,
   },

@@ -1,6 +1,4 @@
 import createFetchival from '@exodus/fetch/create-fetchival'
-// eslint-disable-next-line no-restricted-imports
-import { fetch as exodusFetch } from '@exodus/fetch'
 
 import {
   EXODUS_NFTS_PROXY_BASE_URL,
@@ -11,6 +9,7 @@ import {
 import type {
   CanvasData,
   CollectionStats,
+  FetchFunction,
   FetchOptions,
   Nft,
   NftsByOwnerParams,
@@ -20,10 +19,12 @@ import type {
 } from './types.js'
 import { decomposeId } from './utils.js'
 
+const globalFetch: FetchFunction = (url, options) => fetch(url, options as RequestInit | undefined)
+
 interface NftsProxyNetworkInterface {
   getNftsByOwner: (address: string, params?: NftsByOwnerParams) => Promise<Nft[]>
-  getNft: (...args: any[]) => Promise<Nft>
-  getNftImage: (...args: any[]) => Promise<CanvasData>
+  getNft: (...args: (string | number)[]) => Promise<Nft>
+  getNftImage: (...args: (string | number)[]) => Promise<CanvasData>
   getNftsTransactionsByAddress?: (address: string) => Promise<Transaction[]>
   getCollectionStats?: (args: {
     collectionSymbol?: string
@@ -40,16 +41,16 @@ export class NftsProxyApi {
    * networks is the list of network names, using Networks as default for non breaking change. Wallet should provide their own list, e.g. ME's BE only cares about solana, ethereum and bitcoin.
    */
   public constructor(
-    // eslint-disable-next-line unicorn/no-object-as-default-parameter
-    { baseUrl, fetch = exodusFetch, networks = SUPPORTED_NETWORKS }: NftsProxyApiParams = {
+    // oxlint-disable-next-line unicorn/no-object-as-default-parameter
+    { baseUrl, fetch = globalFetch, networks = SUPPORTED_NETWORKS }: NftsProxyApiParams = {
       networks: SUPPORTED_NETWORKS,
     }
   ) {
     this.#fetchival = createFetchival({ fetch })
     this.#baseUrl = baseUrl || EXODUS_NFTS_PROXY_BASE_URL
     networks.forEach((network: string) => {
-      this.api[network] = this._createNftProxyNetworkClient(network)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      this.api[network] = this.#createNftProxyNetworkClient(network)
+      // oxlint-disable-next-line typescript/ban-ts-comment
       // @ts-ignore // so clients can keep calling like nftProxy.solana.getNftImage like it used to.
       this[network] = this.api[network] // @deprecated, use nftProxy.api.solana.getNftImage
     })
@@ -74,7 +75,7 @@ export class NftsProxyApi {
     mintAddress?: string
     tokenId?: string
   } {
-    const { idParts, ...decomposed } = decomposeId(nftId) // eslint-disable-line @typescript-eslint/no-unused-vars
+    const { idParts, ...decomposed } = decomposeId(nftId)
     return decomposed
   }
 
@@ -120,7 +121,7 @@ export class NftsProxyApi {
     return url.toString()
   }
 
-  private _createNftProxyNetworkClient(network: string): NftsProxyNetworkInterface {
+  #createNftProxyNetworkClient(network: string): NftsProxyNetworkInterface {
     const encodedNetwork = encodeURIComponent(network)
     return {
       getNftsByOwner: (address: string, params: NftsByOwnerParams = {}): Promise<Nft[]> => {

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayPredictionsFundFail"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        },
+        {
+          "$ref": "common-properties#/definitions/predictionsProperties"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "failure_reason": {
+          "enum": [
+            "provider_error",
+            "network",
+            "geoblocked",
+            "quote_unavailable",
+            "user_cancelled",
+            "other"
+          ]
+        },
+        "source": {
+          "enum": ["empty_state", "insufficient_funds", "proactive_top_up"]
+        },
+        "amount_usd": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

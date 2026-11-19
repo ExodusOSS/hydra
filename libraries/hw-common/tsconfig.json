@@ -1,11 +1,13 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "outDir": "./lib",
     "allowJs": true,
     "target": "es2022",
-    "lib": ["esnext"]
+    "lib": ["esnext"],
+    "rootDir": "./src"
   },
   "include": ["src"]
 }

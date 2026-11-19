@@ -10,6 +10,8 @@ type Params = {
   lockHistoryAtom: ReadonlyAtom<LockHistoryEntry>
   restoreAtom: Atom<boolean>
   backedUpAtom: Atom<boolean | undefined>
+  walletExistsAtom: ReadonlyAtom<boolean>
+  hasPassphraseSetAtom: ReadonlyAtom<boolean>
   autoLockTimerAtom: Atom<number | undefined>
   walletCreatedAtAtom: Atom<string | undefined>
 }
@@ -20,6 +22,8 @@ const applicationLifecyclePlugin = ({
   lockHistoryAtom,
   restoreAtom,
   backedUpAtom,
+  walletExistsAtom,
+  hasPassphraseSetAtom,
   autoLockTimerAtom,
   walletCreatedAtAtom,
 }: Params) => {
@@ -28,6 +32,8 @@ const applicationLifecyclePlugin = ({
     createAtomObserver({ port, atom: lockHistoryAtom, event: 'lockHistory' }),
     createAtomObserver({ port, atom: restoreAtom, event: 'restore' }),
     createAtomObserver({ port, atom: backedUpAtom, event: 'backedUp' }),
+    createAtomObserver({ port, atom: walletExistsAtom, event: 'walletExists' }),
+    createAtomObserver({ port, atom: hasPassphraseSetAtom, event: 'hasPassphraseSet' }),
     createAtomObserver({ port, atom: autoLockTimerAtom, event: 'autoLockTimer' }),
     createAtomObserver({ port, atom: walletCreatedAtAtom, event: 'walletCreatedAt' }),
   ]
@@ -45,10 +51,6 @@ const applicationLifecyclePlugin = ({
     void restoreAtom.set(true)
   }
 
-  const onAddSeed = () => {
-    void restoreAtom.set(true)
-  }
-
   const onAssetsSynced = async () => {
     void restoreAtom.set(false)
   }
@@ -61,7 +63,7 @@ const applicationLifecyclePlugin = ({
     await Promise.all([backedUpAtom.set(undefined), autoLockTimerAtom.set(undefined)])
   }
 
-  return { onStart, onLoad, onImport, onAssetsSynced, onStop, onClear, onAddSeed }
+  return { onStart, onLoad, onImport, onAssetsSynced, onStop, onClear }
 }
 
 const applicationLifecyclePluginDefinition = {
@@ -74,6 +76,8 @@ const applicationLifecyclePluginDefinition = {
     'lockHistoryAtom',
     'restoreAtom',
     'backedUpAtom',
+    'walletExistsAtom',
+    'hasPassphraseSetAtom',
     'autoLockTimerAtom',
     'walletCreatedAtAtom',
   ],

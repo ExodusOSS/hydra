@@ -11,7 +11,7 @@ describe('cache behavior', () => {
 
   beforeEach(async () => {
     const {
-      assetsModule,
+      assetsAtom,
       accountStatesAtom,
       walletAccountsAtom,
       assetSources,
@@ -23,7 +23,7 @@ describe('cache behavior', () => {
     addressCacheGet = jest.spyOn(addressCache, 'get')
 
     addressProvider = createAddressProvider({
-      assetsModule,
+      assetsAtom,
       addressCache,
       accountStatesAtom,
       publicKeyProvider,

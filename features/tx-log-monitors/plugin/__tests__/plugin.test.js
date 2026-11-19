@@ -1,5 +1,4 @@
-import { connectAssets } from '@exodus/assets'
-import assetsBase from '@exodus/assets-base'
+import { testAssets } from '@exodus/assets-test-meta'
 import { createInMemoryAtom } from '@exodus/atoms'
 import { availableAssetsAtomDefinition } from '@exodus/available-assets/atoms/index.js'
 import { enabledAssetsDifferenceAtomDefinition } from '@exodus/enabled-assets/atoms/index.js'
@@ -7,7 +6,7 @@ import EventEmitter from 'events/events.js'
 
 import plugin from '../index.js'
 
-const assets = connectAssets(assetsBase)
+const assets = testAssets
 
 describe('tx-log-monitor plugin', () => {
   const advance = async (ms = 0) => jest.advanceTimersByTimeAsync(ms)
@@ -71,11 +70,11 @@ describe('tx-log-monitor plugin', () => {
     instance.onUnlock()
     expect(walletAccounts.awaitSynced).toBeCalled()
     await advance()
-    expect(txLogMonitors.start).toBeCalledTimes(1)
+    expect(txLogMonitors.start).toHaveBeenCalledTimes(1)
 
     instance.onUnlock()
     await advance()
-    expect(txLogMonitors.start).toBeCalledTimes(2)
+    expect(txLogMonitors.start).toHaveBeenCalledTimes(2)
   })
 
   test('starts after unlock on timeout if fusion not resolved', async () => {
@@ -139,13 +138,13 @@ describe('tx-log-monitor plugin', () => {
         reason: 'assets-add',
       },
       {
-        assetName: 'tronmainnet',
+        assetName: 'solana',
         reason: 'assets-update',
       },
     ])
     await advance()
     expect(txLogMonitors.update).toHaveBeenCalledWith({ assetName: 'ethereum', refresh: true })
-    expect(txLogMonitors.update).toHaveBeenCalledWith({ assetName: 'tronmainnet', refresh: true })
+    expect(txLogMonitors.update).toHaveBeenCalledWith({ assetName: 'solana', refresh: true })
   })
 
   test('ignore refreshing enabled asset if it was just added to available list', async () => {
@@ -170,19 +169,19 @@ describe('tx-log-monitor plugin', () => {
         reason: 'assets-load',
       },
       {
-        assetName: 'tronmainnet',
+        assetName: 'solana',
         reason: 'assets-add',
       },
     ])
     await advance()
 
-    expect(txLogMonitors.update).toHaveBeenCalledWith({ assetName: 'tronmainnet', refresh: true })
+    expect(txLogMonitors.update).toHaveBeenCalledWith({ assetName: 'solana', refresh: true })
     expect(txLogMonitors.update).toHaveBeenCalledTimes(1)
     instance.onAssetsSynced()
     await advance()
     await enabledAssetsAtom.set({
       ethereum: true,
-      tronmainnet: true,
+      solana: true,
     })
     await advance()
     expect(txLogMonitors.update).toHaveBeenCalledTimes(1)
@@ -193,7 +192,7 @@ describe('tx-log-monitor plugin', () => {
     expect(txLogMonitors.update).toHaveBeenCalledTimes(1)
     await enabledAssetsAtom.set({
       ethereum: true,
-      tronmainnet: true,
+      solana: true,
     })
     await advance()
     expect(txLogMonitors.update).toHaveBeenCalledTimes(2)

@@ -2,22 +2,25 @@
 
 Compiles imported JSON schemas into validator functions using `@exodus/schemasafe`.
 
+> [!WARNING]
+> This is a codegen library and therefore poses a risk if used with untrusted input.
+
 # Usage
 
 ### Usage:
+
 1. Add the plugin in `babel.config.js`, e.g.:
 
 ```js
 module.exports = {
-  plugins: [
-    ['@exodus/schemasafe-babel-plugin', pluginParams],
-  ]
+  plugins: [['@exodus/schemasafe-babel-plugin', pluginParams]],
 }
 ```
 
 `pluginParams` should be a valid [SchemasafeBabelPluginParams](#api-reference) object.
 
 2. Import a JSON schema in your project:
+
 ```js
 import validateData from './data.schemasafe.json'
 import { validateMeta } from './meta.schemasafe.json' // Named imports also work.
@@ -52,25 +55,30 @@ interface SchemasafeBabelPluginParams {
   }[]
 }
 ```
+
 Example:
+
 ```js
 plugins: [
-    ['@exodus/schemasafe-babel-plugin',
-        { options: [
-            {
-                globs: ["**/src/schemas/*.schema.json"],
-                schemasafeOptions: {
-                    formats: { 'no-foo': (str) => !str.includes('foo') }
-                }
-            },
-            {
-                globs: ["**/node_modules/some-package/**/*.schemasafe.json"],
-                schemasafeOptions: {
-                    enableExtra: true,
-                    removeAdditional: true
-                }
-            }]
-        }
-    ],
-  ]
+  [
+    '@exodus/schemasafe-babel-plugin',
+    {
+      options: [
+        {
+          globs: ['**/src/schemas/*.schema.json'],
+          schemasafeOptions: {
+            formats: { 'no-foo': (str) => !str.includes('foo') },
+          },
+        },
+        {
+          globs: ['**/node_modules/some-package/**/*.schemasafe.json'],
+          schemasafeOptions: {
+            enableExtra: true,
+            removeAdditional: true,
+          },
+        },
+      ],
+    },
+  ],
+]
 ```

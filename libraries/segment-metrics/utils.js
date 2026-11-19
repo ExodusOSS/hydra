@@ -1,6 +1,6 @@
-const { snakeCase: _snakeCase } = require('snake-case')
+import { snakeCase as _snakeCase } from 'snake-case'
 
-const snakeCase = (input) => {
+export const snakeCase = (input) => {
   return _snakeCase(input).replace(/([A-Za-z])(\d+)/gu, '$1_$2')
 }
 
@@ -16,17 +16,16 @@ const safeAssign = (obj, key, value) => {
   return obj
 }
 
-const shallowMerge = (oldObj, newObj) => {
+export const shallowMerge = (oldObj, newObj, { preserveKeys = [] } = {}) => {
   return Object.keys(newObj).reduce(
     (mergedObj, newObjKey) => {
-      safeAssign(mergedObj, snakeCase(newObjKey), newObj[newObjKey])
+      const key = preserveKeys.includes(newObjKey) ? newObjKey : snakeCase(newObjKey)
+      safeAssign(mergedObj, key, newObj[newObjKey])
       return mergedObj
     },
     { ...oldObj }
   )
 }
 
-const omitUndefined = (obj) =>
+export const omitUndefined = (obj) =>
   Object.fromEntries(Object.entries(obj).filter(([_, v]) => v !== undefined))
-
-module.exports = { snakeCase, shallowMerge, omitUndefined }

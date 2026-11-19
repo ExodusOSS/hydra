@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayPredictionsPositionTap"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        },
+        {
+          "$ref": "common-properties#/definitions/predictionsProperties"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "position_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "market_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "unrealized_pnl_pct": {
+          "type": "number"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

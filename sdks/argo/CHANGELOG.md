@@ -3,6 +3,75 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1](https://github.com/ExodusMovement/exodus/compare/@exodus/argo@2.3.0...@exodus/argo@2.3.1) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/argo
+
+## [2.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/argo@2.2.4...@exodus/argo@2.3.0) (2026-07-01)
+
+### Features
+
+- **headless:** type redux IOC selectors ([#16944](https://github.com/ExodusMovement/exodus-hydra/issues/16944)) ([2bf3b9b](https://github.com/ExodusMovement/exodus-hydra/commit/2bf3b9bd7b3d211c4a72b73f3572b1937bc8eb99))
+
+### Bug Fixes
+
+- **argo:** add package.json exports map ([#17429](https://github.com/ExodusMovement/exodus-hydra/issues/17429)) ([61bde73](https://github.com/ExodusMovement/exodus-hydra/commit/61bde73f658c1dedf12c680c066e55d7f55d6d2e))
+
+## [2.2.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/argo@2.2.3...@exodus/argo@2.2.4) (2026-06-05)
+
+### ⚠ BREAKING CHANGES
+
+- **redux-dependency-injection:** `setupRedux` no longer accepts an `initialState`
+  parameter. Callers passing it must remove that property — every known
+  caller passed `{}` so the migration is mechanical.
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+- fix(argo): drop now-rejected initialState arg from setupRedux call
+
+Mechanical follow-up to @exodus/redux-dependency-injection dropping
+the `initialState` parameter. The `initialState: {}` line was always a
+no-op; with the new major it would throw at runtime.
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+- test: drop now-unused initialState arg from setupRedux test fixtures
+
+Mechanical follow-up to the @exodus/redux-dependency-injection major in
+the previous commit. The `setupRedux({initialState: {}})` line in each
+fixture was always a no-op; it now type-errors and must be removed.
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+- feat(redux-dependency-injection): throw on passed `initialState` for unmigrated callers
+
+TypeScript catches `setupRedux({ initialState })` at the type level for
+typed callers — but excess-property checks don't fire on
+generic-constrained params, JS callers have no type wall at all, and
+any-typed wrappers slip through. Add a runtime guard so unmigrated
+consumers get a clear error pointing them at the module-level
+`initialState` field instead of silent no-op behavior.
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+- fix(redux-dependency-injection): preserve empty-object state fallback for module-less deps
+
+When `setupRedux` is called with `dependencies: []` (or an array
+containing only `DependencyNodeDefinition`s with no redux-modules),
+the distributive mapped type collapses to `UnionToIntersection<never>`,
+which widens to `unknown` and leaks through to `initialState` and the
+reducer signature.
+
+Guard with an explicit `Record<string, never>` fallback when no
+redux-module arms are present in the dependency union. Matches the
+runtime, where `buildInitialState` returns an empty object in that
+case. Adds a `__tests__/types.ts` assertion that locks the fallback in
+structurally.
+
+### Features
+
+- **redux-dependency-injection:** drop unused setupRedux initialState ([#16561](https://github.com/ExodusMovement/exodus-hydra/issues/16561)) ([c906a8c](https://github.com/ExodusMovement/exodus-hydra/commit/c906a8c8cd2258060f55f0a45412b82c827dbbaa))
+
 ## [2.2.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/argo@2.2.2...@exodus/argo@2.2.3) (2024-11-25)
 
 ### License

@@ -5,7 +5,7 @@ This Exodus SDK feature loads transaction history for all enabled assets. It als
 ## Install
 
 ```sh
-yarn add @exodus/tx-log-monitors
+pnpm add @exodus/tx-log-monitors
 ```
 
 ## Usage

@@ -31,6 +31,51 @@ describe('hasMaxAmountOfAccounts', () => {
     expect(selectors.walletAccounts.hasMaxAmountOfAccounts(store.getState())).toEqual(true)
   })
 
+  test('should not count external accounts towards the limit', () => {
+    const { store, selectors, emitWalletAccounts } = setup()
+
+    emitWalletAccounts({
+      [WalletAccount.DEFAULT_NAME]: WalletAccount.DEFAULT,
+      exodus_1: new WalletAccount({
+        source: 'exodus',
+        index: 1,
+        enabled: true,
+      }),
+      polymarket_0: new WalletAccount({
+        source: WalletAccount.POLYMARKET_SRC,
+        index: 0,
+        enabled: true,
+      }),
+    })
+
+    expect(selectors.walletAccounts.hasMaxAmountOfAccounts(store.getState())).toEqual(false)
+  })
+
+  test('should return true if has max amount of accounts besides external accounts', () => {
+    const { store, selectors, emitWalletAccounts } = setup()
+
+    emitWalletAccounts({
+      [WalletAccount.DEFAULT_NAME]: WalletAccount.DEFAULT,
+      exodus_1: new WalletAccount({
+        source: 'exodus',
+        index: 1,
+        enabled: true,
+      }),
+      exodus_2: new WalletAccount({
+        source: 'exodus',
+        index: 2,
+        enabled: true,
+      }),
+      polymarket_0: new WalletAccount({
+        source: WalletAccount.POLYMARKET_SRC,
+        index: 0,
+        enabled: true,
+      }),
+    })
+
+    expect(selectors.walletAccounts.hasMaxAmountOfAccounts(store.getState())).toEqual(true)
+  })
+
   test('should return true if has max amount of accounts with custom value', () => {
     const { store, selectors, emitWalletAccounts } = setup({
       config: { maxAmountOfAccounts: 2 },

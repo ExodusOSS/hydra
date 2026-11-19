@@ -25,7 +25,7 @@ describe('availableAssetsPlugin', () => {
     })
     availableAssets = {
       stop: jest.fn(),
-      load: jest.fn(),
+      load: jest.fn(async () => {}),
     }
 
     port = { emit: jest.fn() }

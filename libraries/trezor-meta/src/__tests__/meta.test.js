@@ -1,11 +1,17 @@
-const meta = require('../meta')
+import { connectAssets } from '@exodus/assets'
+import assetsBase from '@exodus/assets-base'
 
-const mockAssets = {
-  bitcoin: { assetType: 'BITCOIN_LIKE' },
-  ethereum: { assetType: 'ETHEREUM_LIKE' },
-  token1: { assetType: 'ETHEREUM_ERC20' },
-  token2: { assetType: 'ETHEREUM_ERC20' },
-}
+import meta from '../meta.js'
+
+const noTokens = Object.fromEntries(
+  Object.entries(assetsBase).filter(([, asset]) => asset.baseAssetName === asset.name)
+)
+
+const connectedAssets = connectAssets({
+  ...noTokens,
+  token1: { baseAssetName: 'ethereum' },
+  token2: { baseAssetName: 'ethereum' },
+})
 
 describe('Trezor meta', () => {
   test('should match snapshot', () => {
@@ -16,7 +22,7 @@ describe('Trezor meta', () => {
       isSupportedOnlyByModelT,
       isSupportedFirmware,
       ...staticProps
-    } = meta(mockAssets)
+    } = meta(connectedAssets)
     expect(staticProps).toMatchSnapshot()
   })
 })

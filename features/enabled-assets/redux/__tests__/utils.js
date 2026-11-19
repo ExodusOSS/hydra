@@ -1,24 +1,30 @@
-import { connectAssetsList } from '@exodus/assets'
-import assetsBase from '@exodus/assets-base'
 import assetsReduxModule from '@exodus/assets-feature/redux/index.js'
+import { combinedAssetsList, testAssets } from '@exodus/assets-test-meta'
+import availableAssetsReduxModule from '@exodus/available-assets/redux/index.js'
 import { keyBy } from '@exodus/basic-utils'
-import combinedAssetsList from '@exodus/combined-assets-meta'
 import { setupRedux } from '@exodus/redux-dependency-injection'
 import { combineReducers, createStore } from 'redux'
 
 import reduxModule from '../index.js'
 
-const assets = connectAssetsList([...combinedAssetsList, ...Object.values(assetsBase)])
+const combinedAsset = combinedAssetsList.find((a) => a.combinedAssetNames.includes('usdcoin'))
+
 export const {
   bitcoin,
   ethereum,
-  _usdcoin,
   usdcoin: usdcoinEthereum,
   usdcoin_solana: usdcoinSolana,
-} = assets
+} = testAssets
+
+export const _usdcoin = testAssets[combinedAsset.name]
 
 export function setup({ dependencies = [] } = {}) {
-  const allDependencies = [...dependencies, reduxModule, assetsReduxModule]
+  const allDependencies = [
+    ...dependencies,
+    reduxModule,
+    assetsReduxModule,
+    availableAssetsReduxModule,
+  ]
 
   const enhancers = (createStore) => (reducers, initialState, enhancer) => {
     const reducer = combineReducers(reducers)
@@ -38,6 +44,10 @@ export function setup({ dependencies = [] } = {}) {
   handleEvent('assets', {
     assets: keyBy([bitcoin, ethereum, _usdcoin, usdcoinSolana, usdcoinEthereum], 'name'),
   })
+  handleEvent(
+    'availableAssetNames',
+    [bitcoin, ethereum, _usdcoin, usdcoinSolana, usdcoinEthereum].map(({ name }) => name)
+  )
 
   const emitEnabledAssets = (data) => handleEvent('enabledAssets', data)
 

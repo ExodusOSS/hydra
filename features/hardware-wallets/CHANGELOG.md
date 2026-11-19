@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.5](https://github.com/ExodusMovement/exodus/compare/@exodus/hardware-wallets@3.6.4...@exodus/hardware-wallets@3.6.5) (2026-08-20)
+
+### Bug Fixes
+
+- **hardware-wallets:** expose connected asset names atom ([#43688](https://github.com/ExodusMovement/exodus/issues/43688)) ([41da1ed](https://github.com/ExodusMovement/exodus/commit/41da1ed986d2a793f633add2760534ba6b22a3bc))
+
+## [3.6.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@3.6.3...@exodus/hardware-wallets@3.6.4) (2026-05-28)
+
+### Bug Fixes
+
+- **hardware-wallets:** make addressOffset optional in ScanParams ([#16862](https://github.com/ExodusMovement/exodus-hydra/issues/16862)) ([e422910](https://github.com/ExodusMovement/exodus-hydra/commit/e422910a68007a091aac69a44b6c70bce749884f))
+
+## [3.6.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@3.6.2...@exodus/hardware-wallets@3.6.3) (2026-05-11)
+
+### Bug Fixes
+
+- fix(hardware-wallets): rename restoreProgressTracker dep to restoreAssetsTracker (#16366)
+
 ## [3.6.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/hardware-wallets@3.6.1...@exodus/hardware-wallets@3.6.2) (2026-02-22)
 
 ### Bug Fixes

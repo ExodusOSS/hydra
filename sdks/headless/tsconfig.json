@@ -2,7 +2,14 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "rootDir": ".",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext"
   },
-  "include": ["src/index.d.ts", "redux/index.d.ts", "__tests__/types.ts"]
+  "include": [
+    "src/index.d.ts",
+    "redux/index.d.ts",
+    "__tests__/types.ts",
+    "__tests__/redux-types.ts"
+  ]
 }

@@ -1,4 +1,8 @@
-import { asOrdinal, roundDecimalSignificantsUp } from './numbers.js'
+import {
+  asOrdinal,
+  roundDecimalSignificantsUp,
+  truncateDecimalSignificantsDown,
+} from './numbers.js'
 
 describe('numbers', () => {
   describe('round', () => {
@@ -42,6 +46,49 @@ describe('numbers', () => {
 
     it('should produce return type consistent to input type', () => {
       expect(roundDecimalSignificantsUp('99.999999999999999999999999', 10)).toBe('100')
+    })
+  })
+
+  describe('truncate', () => {
+    it('should truncate values exceeding significantDigits limit', () => {
+      expect(truncateDecimalSignificantsDown(53.170_961, 6)).toBe(53.1709)
+      expect(truncateDecimalSignificantsDown(29.231_969_03, 6)).toBe(29.2319)
+      expect(truncateDecimalSignificantsDown(19_228.880_017_96, 6)).toBe(19_228.8)
+      expect(truncateDecimalSignificantsDown(0.000_012_567_8, 6)).toBe(0.000_012)
+      expect(truncateDecimalSignificantsDown(0.001_234_567_89, 6)).toBe(0.001_234)
+    })
+
+    it('should not truncate values under significantDigits limit', () => {
+      expect(truncateDecimalSignificantsDown(1.23, 6)).toBe(1.23)
+      expect(truncateDecimalSignificantsDown(100, 6)).toBe(100)
+      expect(truncateDecimalSignificantsDown(0.05, 6)).toBe(0.05)
+    })
+
+    it('should preserve input type for strings', () => {
+      expect(truncateDecimalSignificantsDown('53.170961', 6)).toBe('53.1709')
+    })
+
+    it('should not truncate when significantDigits is larger than digit count', () => {
+      expect(truncateDecimalSignificantsDown(1.23, 10)).toBe(1.23)
+      expect(truncateDecimalSignificantsDown(0.001_234, 10)).toBe(0.001_234)
+      expect(truncateDecimalSignificantsDown(99.99, 8)).toBe(99.99)
+    })
+
+    it('should truncate aggressively when significantDigits is smaller', () => {
+      expect(truncateDecimalSignificantsDown(53.170_961, 2)).toBe(53)
+      expect(truncateDecimalSignificantsDown(53.170_961, 3)).toBe(53.1)
+      expect(truncateDecimalSignificantsDown(0.001_234_567, 3)).toBe(0.001)
+      expect(truncateDecimalSignificantsDown(123.456, 3)).toBe(123)
+      expect(truncateDecimalSignificantsDown(9.87, 1)).toBe(9)
+    })
+
+    it('should handle scientific notation', () => {
+      expect(truncateDecimalSignificantsDown(5.6e-9, 9)).toBe(5e-9)
+    })
+
+    it('should not collapse magnitude for large positive exponents', () => {
+      expect(truncateDecimalSignificantsDown(1.23e21, 6)).toBe(1.23e21)
+      expect(truncateDecimalSignificantsDown(1.23e22, 6)).toBe(1.23e22)
     })
   })
 

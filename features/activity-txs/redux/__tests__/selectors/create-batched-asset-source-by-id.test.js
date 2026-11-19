@@ -3,6 +3,17 @@ import { Tx } from '@exodus/models'
 import { setup } from '../utils.js'
 
 describe('createBatchedAssetSourceByIdSelector', () => {
+  it('should return no activity txs when the asset is missing from the assets registry', () => {
+    const { store, selectors } = setup()
+
+    expect(
+      selectors.activityTxs.createBatchedAssetSourceActivityById({
+        walletAccount: 'exodus_0',
+        assetName: 'unregistered-token',
+      })(store.getState())
+    ).toEqual({})
+  })
+
   it('should return activity txs by id', () => {
     const { store, selectors, handleEvent } = setup()
 

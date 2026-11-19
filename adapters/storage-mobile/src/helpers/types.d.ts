@@ -17,10 +17,16 @@ export type Filesystem = {
   writeUtf8: (key: string, value: string) => Promise<void>
 }
 
+export type ErrorTracking = {
+  track: (params: { error: Error }) => Promise<void>
+}
+
 export type Dependencies = {
   asyncStorage: AsyncStorageStatic
+  errorTracking?: ErrorTracking
   androidFallback?: {
     filesystem: Filesystem
+    /** Maximum JSON-serialized size in UTF-8 bytes before falling back to files. */
     threshold?: number
     rootDir: string
     placeholder?: string
@@ -29,6 +35,5 @@ export type Dependencies = {
 }
 
 export type FunctionProperties<T> = {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   [K in keyof T]: T[K] extends Function ? K : never
 }[keyof T][]

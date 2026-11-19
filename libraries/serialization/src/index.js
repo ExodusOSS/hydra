@@ -81,7 +81,7 @@ export default function createSerializeDeserialize({
     const keys = Object.keys(value)
     if (
       keys.length === 2 &&
-      ((keys[0] === 't' && keys[1] === 'v') || (keys[1] === 'v' && keys[0] === 't'))
+      ((keys[0] === 't' && keys[1] === 'v') || (keys[0] === 'v' && keys[1] === 't'))
     ) {
       const { t, v } = value
       // Fast path

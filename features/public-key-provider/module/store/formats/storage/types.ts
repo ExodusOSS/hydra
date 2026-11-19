@@ -1,4 +1,4 @@
-import type { KeyIdentifier } from '@exodus/keychain/module'
+import type KeyIdentifier from '@exodus/key-identifier'
 import type { MoneroPublicKey, PublicKey, XPUB } from '../serialization/index.js'
 
 export type WalletAccountName = string

@@ -14,7 +14,7 @@
     },
     "build": {
       "dependsOn": ["^build", "^prepack"],
-      "inputs": ["production", "^production"],
+      "inputs": ["default", "^production", "{workspaceRoot}/tools/tsconfig.json"],
       "outputs": ["{projectRoot}/dist", "{projectRoot}/lib", "{projectRoot}/build"],
       "cache": true
     },
@@ -23,10 +23,15 @@
     },
     "lint": {
       "inputs": ["^production", "lint"],
-      "dependsOn": ["^build", "^prepack"],
+      "dependsOn": [],
       "cache": true
     },
     "lint:fix": {
+      "cache": true
+    },
+    "typecheck": {
+      "inputs": ["^production", "default"],
+      "dependsOn": ["^build", "^prepack"],
       "cache": true
     }
   },
@@ -42,7 +47,11 @@
       "{workspaceRoot}/.prettierignore"
     ],
     "test": ["default", "{workspaceRoot}/jest.config.js", "{workspaceRoot}/jest.setup.js"],
-    "default": ["{workspaceRoot}/package.json", "{workspaceRoot}/yarn.lock", "{projectRoot}/**/*"],
+    "default": [
+      "{workspaceRoot}/package.json",
+      "{workspaceRoot}/pnpm-lock.yaml",
+      "{projectRoot}/**/*"
+    ],
     "production": [
       "default",
       "!{projectRoot}/.eslintrc.js",
@@ -52,5 +61,6 @@
     ]
   },
   "cacheDirectory": ".cache/nx",
+  "maxCacheSize": "256MB",
   "parallel": 7
 }

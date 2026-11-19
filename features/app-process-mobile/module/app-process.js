@@ -1,4 +1,5 @@
 import NetInfo from '@exodus/netinfo'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { AppState, DeviceEventEmitter, Platform } from 'react-native'
 import { APP_PROCESS_INITIAL_STATE } from '../constants.js'
@@ -216,8 +217,8 @@ export class AppProcess {
 
     NetInfo.addEventListener('connectionChange', this.#handleConnectionChange)
 
-    NetInfo.getConnectionInfo().then((initialState) => {
-      if (!this.#networkState) this.#handleConnectionChange(initialState)
+    void NetInfo.getConnectionInfo().then((initialState) => {
+      if (!this.#networkState) void this.#handleConnectionChange(initialState)
     })
 
     this.#unsubscribes = [

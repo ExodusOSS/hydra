@@ -90,15 +90,6 @@ export const trezorAddressesFixture = {
           'addr1q8ax5kdzp30lcsxr8rlt9xmpuqqjwx9yn88gj9cfnvnrmfge7mgyyh6ma4vljxqh2ml6ykme33phf5f55p9q3cmnv76q0kf2y7',
       },
     ],
-    monero: [
-      {
-        purpose: 44,
-        chainIndex: 0,
-        addressIndex: 0,
-        expectedAddress:
-          '42w4WA7oZ8jevooLgvyXUiAG3NeeCrAsBa6WmsUnT81FKrEB3wyD6CBCPtgmGnZCJDRgSdpuovznKCX8uUrNr6xz3vP33pM',
-      },
-    ],
     dash: [
       {
         purpose: 44,
@@ -175,32 +166,6 @@ export const trezorAddressesFixture = {
         chainIndex: 1,
         addressIndex: 3,
         expectedAddress: 'DTCS95bNUH3qXd2fhTNM6UUjK5pmWhLou9',
-      },
-    ],
-    bgold: [
-      {
-        purpose: 49,
-        chainIndex: 0,
-        addressIndex: 0,
-        expectedAddress: 'AVCg9M2XWXYNRMWKK7RBkAzv9n5NhyVdba',
-      },
-      {
-        purpose: 49,
-        chainIndex: 0,
-        addressIndex: 6,
-        expectedAddress: 'AXFfsTd8t16bR9QLUzVxVsH4G1RjCEc7xM',
-      },
-      {
-        purpose: 49,
-        chainIndex: 1,
-        addressIndex: 0,
-        expectedAddress: 'AbZe6sLD8qVHkHgf2gKn5LcQHhKToBr2Wm',
-      },
-      {
-        purpose: 49,
-        chainIndex: 1,
-        addressIndex: 6,
-        expectedAddress: 'ARQafmqWjDhCN7CcTn82TpyKudZfqNAEwM',
       },
     ],
     litecoin: [

@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.1](https://github.com/ExodusMovement/exodus/compare/@exodus/bip32@4.3.0...@exodus/bip32@4.3.1) (2026-09-17)
+
+### Bug Fixes
+
+- **bip32:** allocate key material outside the shared Buffer pool ([#44860](https://github.com/ExodusMovement/exodus/issues/44860)) ([edaa7a9](https://github.com/ExodusMovement/exodus/commit/edaa7a9664f6f736885c0eee3ce9900a458f4e46))
+
+## [4.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/bip32@4.2.2...@exodus/bip32@4.3.0) (2026-06-19)
+
+### Features
+
+- **bip32:** migrate to TypeScript ([#17230](https://github.com/ExodusMovement/exodus-hydra/issues/17230)) ([9cf691f](https://github.com/ExodusMovement/exodus-hydra/commit/9cf691f8284d3029be27a9bfe66af984c9e97548))
+
+## [4.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/bip32@4.2.1...@exodus/bip32@4.2.2) (2026-05-27)
+
+### Bug Fixes
+
+- **bip32:** detach HDKey IL/IR halves from HMAC digest buffer ([#16741](https://github.com/ExodusMovement/exodus-hydra/issues/16741)) ([cdee9f1](https://github.com/ExodusMovement/exodus-hydra/commit/cdee9f13af211889edb2ff8517856865cd078515)), closes [ExodusMovement/exodus-hydra#16436](https://github.com/ExodusMovement/exodus-hydra/issues/16436) [#16436](https://github.com/ExodusMovement/exodus-hydra/issues/16436)
+
+## [4.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/bip32@4.2.0...@exodus/bip32@4.2.1) (2026-05-12)
+
+### Bug Fixes
+
+- fix(bip32): include skipVerification in memoizedFromXPub cache key (#16283)
+
 ## [4.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/bip32@4.1.0...@exodus/bip32@4.2.0) (2025-07-24)
 
 ### Features

@@ -1,5 +1,5 @@
+import { getSeedId } from '@exodus/bip32'
 import { mnemonicToSeed } from '@exodus/bip39'
-import { getSeedId } from '@exodus/keychain/module/crypto/seed-id.js'
 import Emitter from '@exodus/wild-emitter'
 
 import createAdapters from './adapters/index.js'
@@ -249,21 +249,6 @@ describe('wallet', async () => {
     await expect(newExodus.wallet.exists()).resolves.toBe(false)
 
     await newExodus.application.stop()
-    await exodus.application.stop()
-  })
-
-  test('it should emit "add-seed" over the port', async () => {
-    await exodus.application.start()
-    await exodus.application.import({ mnemonic })
-    await exodus.application.unlock()
-
-    const expectAddSeedEvent = expectEvent({ port, event: 'add-seed' })
-    exodus.wallet.addSeed({
-      mnemonic: 'excuse fly local lyrics tattoo hub way range globe put supreme glass',
-    })
-
-    await expectAddSeedEvent
-
     await exodus.application.stop()
   })
 

@@ -1,6 +1,7 @@
 import { createLimiter } from '@exodus/asset-lib'
 import { difference, intersection } from '@exodus/basic-utils'
 import EventEmitter from 'events/events.js'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
 const { isEqual } = lodash
@@ -10,8 +11,8 @@ const TX_LOG_TICK_CONCURRENCY = 5
 class Monitors extends EventEmitter {
   #serverConfigs = new Map()
   #monitors = new Map()
-  #assetsModule
-  // deprecated: please use for `createHistoryMonitor` and NOTHING ELSE!
+  #assetsAtom
+  // deprecated: please use for `createHistoryMonitor` and NOTHING ELSE! The asset factory should supply ACI to the monitor.
   #assetClientInterface
   #assetsConfigAtom
   #txLogLimiterRunner
@@ -25,7 +26,7 @@ class Monitors extends EventEmitter {
   #queuedRefresh
 
   constructor({
-    assetsModule,
+    assetsAtom,
     assetClientInterface,
     assetsConfigAtom,
     baseAssetNamesToMonitorAtom,
@@ -36,7 +37,7 @@ class Monitors extends EventEmitter {
     super()
 
     this.#logger = logger
-    this.#assetsModule = assetsModule
+    this.#assetsAtom = assetsAtom
     this.#assetClientInterface = assetClientInterface
     this.#assetsConfigAtom = assetsConfigAtom
     this.#baseAssetNamesToMonitorAtom = baseAssetNamesToMonitorAtom
@@ -89,16 +90,6 @@ class Monitors extends EventEmitter {
     this.#serverConfigs.set(assetName, config)
   }
 
-  // @deprecated
-  refreshMonitor = (assetName) => {
-    const monitor = this.#monitors.get(assetName)
-    if (monitor) {
-      return monitor.update({
-        refresh: true,
-      })
-    }
-  }
-
   update = async (opts) => {
     const { assetName, refresh } = opts
     const monitor = this.#monitors.get(assetName)
@@ -127,7 +118,8 @@ class Monitors extends EventEmitter {
   }
 
   #getMonitorAsset = async (assetName) => {
-    const asset = this.#assetsModule.getAsset(assetName)
+    const { value: assets } = await this.#assetsAtom.get()
+    const asset = assets[assetName]
     if (!asset) return
 
     return asset.api?.createHistoryMonitor ? asset : undefined
@@ -149,7 +141,7 @@ class Monitors extends EventEmitter {
 
     const monitor = asset.api.createHistoryMonitor({
       asset,
-      assetClientInterface: this.#assetClientInterface,
+      assetClientInterface: this.#assetClientInterface, // @deprecated: all assets supply ACI themselves, so this is ignored
       runner: this.#txLogLimiterRunner,
       yieldToUI: this.#yieldToUI,
       logger: assetMonitorLogger,
@@ -169,11 +161,6 @@ class Monitors extends EventEmitter {
           monitor.on(eventName, (params) => this.emit(eventName, { assetName, params }))
         )
       }
-
-      // TODO: remove this platform specific and asset specific event
-      monitor.on('after-restore', (params) => {
-        this.emit('after-restore', { assetName, ...params })
-      })
     }
 
     this.#monitors.set(assetName, monitor)
@@ -199,8 +186,13 @@ class Monitors extends EventEmitter {
 
     await new Promise((resolve) => {
       this.#subscriptions.push(
-        this.#baseAssetNamesToMonitorAtom.observe((nextAssetNames) => {
-          const unordered = difference(this.#assetsModule.getBaseAssetNames(), [
+        this.#baseAssetNamesToMonitorAtom.observe(async (nextAssetNames) => {
+          const { value: assets } = await this.#assetsAtom.get()
+          const baseAssetNames = Object.values(assets)
+            .filter((asset) => asset.name === asset.baseAsset.name)
+            .map(({ name }) => name)
+
+          const unordered = difference(baseAssetNames, [
             ...this.#orderedFirst,
             ...this.#orderedLast,
           ])
@@ -208,7 +200,7 @@ class Monitors extends EventEmitter {
           const ordered = [...this.#orderedFirst, ...unordered, ...this.#orderedLast]
           nextAssetNames = intersection(ordered, nextAssetNames)
 
-          this.#stopAndStartMonitorsByAssetNames({
+          void this.#stopAndStartMonitorsByAssetNames({
             currentAssetNames: [...this.#monitors.keys()],
             nextAssetNames,
           }).then(resolve)
@@ -241,7 +233,7 @@ const txLogMonitorsModuleDefinition = {
   factory: createMonitors,
   type: 'module',
   dependencies: [
-    'assetsModule',
+    'assetsAtom',
     'assetClientInterface',
     'assetsConfigAtom',
     'baseAssetNamesToMonitorAtom',

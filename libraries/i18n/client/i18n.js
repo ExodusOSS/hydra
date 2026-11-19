@@ -5,13 +5,17 @@ import formatters from '../formatters/index.js'
 import * as icu from '../icu/index.js'
 import { castString } from './utils.js'
 
+const TRAILING_PUNCTUATION_REGEX = /[.…。！？!?]$/u
+
 class I18N extends EventEmitter {
+  #currency
+
   constructor({ defaultCurrency, defaultLanguage, languages = Object.create(null) }) {
     super()
 
     this.language = defaultLanguage
     this.defaultLanguage = defaultLanguage
-    this.currency = defaultCurrency
+    this.#currency = defaultCurrency
     this.languages = languages
   }
 
@@ -20,7 +24,7 @@ class I18N extends EventEmitter {
   }
 
   setCurrency = (currency) => {
-    this.currency = currency
+    this.#currency = currency
 
     this.emit('change', { currency })
   }
@@ -47,11 +51,11 @@ class I18N extends EventEmitter {
 
   #format = (value, format, subType) => {
     const formatter = formatters[this.language]?.[format] || castString
-    return formatter(value, { subType, currency: this.currency })
+    return formatter(value, { subType, currency: this.#currency })
   }
 
   #interpolate = (translation, values) => {
-    const opts = { currency: this.currency }
+    const opts = { currency: this.#currency }
     return icu.interpolate(translation, values, formatters[this.language], opts)
   }
 
@@ -60,7 +64,9 @@ class I18N extends EventEmitter {
 
     const value = this.#interpolate(translation, values)
     const leadingPunctuations = punctuations?.leading || ''
-    const trailingPunctuations = punctuations?.trailing || ''
+    const trailingPunctuations = TRAILING_PUNCTUATION_REGEX.test(value)
+      ? ''
+      : punctuations?.trailing || ''
 
     return `${leadingPunctuations}${value}${trailingPunctuations}`
   }

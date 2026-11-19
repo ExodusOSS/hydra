@@ -1,18 +1,32 @@
 {
   "name": "@exodus/argo",
-  "version": "2.2.3",
+  "version": "2.3.1",
   "description": "The inversion of control setup that powers the Exodus wallet SDK",
   "author": "Exodus Movement, Inc.",
   "main": "src/index.js",
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./redux": {
+      "types": "./redux/index.d.ts",
+      "default": "./redux/index.js"
+    },
+    "./redux/index.js": {
+      "types": "./redux/index.d.ts",
+      "default": "./redux/index.js"
+    }
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/sdks/argo",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/sdks/argo",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aargo"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aargo"
   },
   "files": [
     "src",
@@ -23,16 +37,17 @@
     "!**/*.test.js"
   ],
   "scripts": {
-    "lint": "yarn run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "yarn run -T exodus-test --jest && yarn test:types",
-    "test:types": "run -T tsc --noEmit"
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest && pnpm run test:types",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "test:types": "pnpm exec tsc --noEmit"
   },
   "dependencies": {
-    "@exodus/dependency-injection": "^3.0.0",
-    "@exodus/dependency-preprocessors": "^6.3.0",
-    "@exodus/dependency-types": "^2.0.0",
-    "@exodus/redux-dependency-injection": "^4.0.2",
+    "@exodus/dependency-injection": "workspace:^",
+    "@exodus/dependency-preprocessors": "workspace:^",
+    "@exodus/dependency-types": "workspace:^",
+    "@exodus/redux-dependency-injection": "workspace:^",
     "minimalistic-assert": "^1.0.1",
     "redux": "^4.0.1"
   },
@@ -41,6 +56,7 @@
     "@types/minimalistic-assert": "^1.0.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

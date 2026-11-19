@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.3.5](https://github.com/ExodusMovement/exodus/compare/@exodus/atoms@10.3.4...@exodus/atoms@10.3.5) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/atoms
+
+## [10.3.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/atoms@10.3.3...@exodus/atoms@10.3.4) (2026-04-11)
+
+**Note:** Version bump only for package @exodus/atoms
+
+## [10.3.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/atoms@10.3.2...@exodus/atoms@10.3.3) (2026-04-06)
+
+### Bug Fixes
+
+- fix(atoms): reset countdownLock and values on full unsubscribe in combine (#15858)
+
+## [10.3.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/atoms@10.3.1...@exodus/atoms@10.3.2) (2026-04-06)
+
+### Bug Fixes
+
+- fix(countdown-lock): deduplicate keys to prevent hangs on duplicate ids (#15839)
+
+## [10.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/atoms@10.3.0...@exodus/atoms@10.3.1) (2026-04-04)
+
+### Bug Fixes
+
+- fix(atoms): clear timeout promise on observer rejection (#15848)
+
+## [10.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/atoms@10.2.2...@exodus/atoms@10.3.0) (2026-04-03)
+
+### Features
+
+- feat(atoms): pure withSerialization optimization (#15822)
+
+## [10.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/atoms@10.2.1...@exodus/atoms@10.2.2) (2026-04-02)
+
+### Bug Fixes
+
+- fix(atoms): resolve promise hanging anti-pattern in filter enhancer (#15780)
+
+## [10.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/atoms@10.2.0...@exodus/atoms@10.2.1) (2026-04-02)
+
+### Bug Fixes
+
+- fix(atoms): sequenced-keystore get() idempotency when isSoleWriter is true (#15787)
+
+- fix(atoms): validate key membership in countdown-lock unlock (#15789)
+
 ## [10.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/atoms@10.1.0...@exodus/atoms@10.2.0) (2026-03-23)
 
 ### Features

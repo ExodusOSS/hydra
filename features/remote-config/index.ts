@@ -39,7 +39,7 @@ const remoteConfig = (config = Object.create(null)) => {
   } as const
 }
 
-export {
+export type {
   Fetch,
   GetBuildMetadata,
   RemoteConfigData,

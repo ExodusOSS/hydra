@@ -53,8 +53,9 @@ class POFile {
   #mergeEntry = ({ id, value, comments, context, references }) => {
     const entry = this.#entryMap.get(this.#transformPlaceholders(id, context))
 
-    if (value && this.#transformPlaceholders(entry.value) !== this.#transformPlaceholders(value))
+    if (value && this.#transformPlaceholders(entry.value) !== this.#transformPlaceholders(value)) {
       throw new Error(`pofile: can't merge entries with different values`)
+    }
 
     comments?.forEach((comment) => entry.addComment(comment))
     references?.forEach((reference) => entry.addReference(reference))

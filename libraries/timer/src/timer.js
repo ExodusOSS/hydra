@@ -174,6 +174,7 @@ export default class Timer {
         // Case 1: clearTimeout called in the idle of timer, timer is canceled, callback is not executed.
         // Case 2: clearTimeout called in the middle of callback(), can not stop following setTimeout statement
         // So we need set a check point for case 2
+        if (this.timerId !== true) clearTimeout(this.timerId) // tick can be called manually. true means first call from start()
         this.timerId = setTimeout(() => this.tick(true), this.interval)
       }
     }
@@ -210,8 +211,9 @@ export default class Timer {
    * @param {number} interval the interval to ve validated.
    */
   static validateInterval(interval) {
-    if (typeof interval !== 'number' || interval <= 0 || !Number.isFinite(interval))
+    if (typeof interval !== 'number' || interval <= 0 || !Number.isFinite(interval)) {
       throw new Error('Interval should be a positive number')
+    }
   }
 
   /**

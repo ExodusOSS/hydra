@@ -1,5 +1,5 @@
 import makeConcurrent from 'make-concurrent'
-import proxyFreeze from 'proxy-freeze'
+import proxyFreeze from '@exodus/proxy-freeze'
 import type { Atom, Listener } from './utils/types.js'
 import { isSetter } from './utils/guards.js'
 

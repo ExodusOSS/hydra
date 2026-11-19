@@ -1,3 +1,5 @@
+import { WalletAccount } from '@exodus/models'
+
 import { setup, WALLET_ACCOUNTS_STATE } from '../utils.js'
 
 describe('filter', () => {
@@ -12,5 +14,25 @@ describe('filter', () => {
 
     emitWalletAccounts(WALLET_ACCOUNTS_STATE)
     expect(filterDisabled()).toEqual(['exodus_1'])
+  })
+
+  test('should filter by external property', () => {
+    const { store, selectors, emitWalletAccounts } = setup()
+    const filterByExternal = (external: boolean) =>
+      selectors.walletAccounts
+        .filter({ external })(store.getState())
+        .map((w) => w.toString())
+
+    emitWalletAccounts({
+      [WalletAccount.DEFAULT_NAME]: WalletAccount.DEFAULT,
+      polymarket_0: new WalletAccount({
+        source: WalletAccount.POLYMARKET_SRC,
+        index: 0,
+        enabled: true,
+      }),
+    })
+
+    expect(filterByExternal(true)).toEqual(['polymarket_0'])
+    expect(filterByExternal(false)).toEqual([WalletAccount.DEFAULT_NAME])
   })
 })

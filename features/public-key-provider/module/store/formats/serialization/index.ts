@@ -1,4 +1,7 @@
-import { UnableToDeserializePublicKeyError, UnableToSerializePublicKeyError } from '../../errors.js'
+import {
+  UnableToDeserializePublicKeyError,
+  UnableToSerializePublicKeyError,
+} from '../../../../errors/errors.js'
 import moneroKeys from './monero-public-key.js'
 import publicKeys from './public-key.js'
 import xpub from './xpub.js'

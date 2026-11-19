@@ -1,22 +1,38 @@
 import { omit } from '@exodus/basic-utils'
 import assert from 'minimalistic-assert'
 
+const supportsLegacyAddressMode = (asset) => asset?.useBip84 === true
+const supportsTaprootAddressMode = (asset) => asset?.useBip86 === true
+
 class AssetPreferences {
+  #assetsModule
   #disabledPurposesAtom
   #multiAddressModeAtom
   #legacyAddressModeAtom
   #taprootAddressModeAtom
 
   constructor({
+    assetsModule,
     disabledPurposesAtom,
     multiAddressModeAtom,
     legacyAddressModeAtom,
     taprootAddressModeAtom,
   }) {
+    this.#assetsModule = assetsModule
     this.#disabledPurposesAtom = disabledPurposesAtom
     this.#multiAddressModeAtom = multiAddressModeAtom
     this.#legacyAddressModeAtom = legacyAddressModeAtom
     this.#taprootAddressModeAtom = taprootAddressModeAtom
+  }
+
+  #assertAssetsSupport = ({ assetNames, method, isSupported }) => {
+    assert(assetNames.length > 0, `${method} requires at least one asset`)
+    for (const assetName of assetNames) {
+      assert(
+        isSupported(this.#assetsModule.getAsset(assetName)),
+        `${method} does not support ${assetName}`
+      )
+    }
   }
 
   enableMultiAddressMode = ({ assetNames }) =>
@@ -38,10 +54,11 @@ class AssetPreferences {
     }))
 
   enableLegacyAddressMode = async ({ assetNames }) => {
-    assert(
-      assetNames.length === 1 && assetNames[0] === 'bitcoin',
-      'enableLegacyAddressMode only supports bitcoin'
-    )
+    this.#assertAssetsSupport({
+      assetNames,
+      method: 'enableLegacyAddressMode',
+      isSupported: supportsLegacyAddressMode,
+    })
 
     await this.#legacyAddressModeAtom.set((value) => ({
       ...value,
@@ -53,19 +70,21 @@ class AssetPreferences {
   }
 
   disableLegacyAddressMode = async ({ assetNames }) => {
-    assert(
-      assetNames.length === 1 && assetNames[0] === 'bitcoin',
-      'disableLegacyAddressMode only supports bitcoin'
-    )
+    this.#assertAssetsSupport({
+      assetNames,
+      method: 'disableLegacyAddressMode',
+      isSupported: supportsLegacyAddressMode,
+    })
 
     await this.#legacyAddressModeAtom.set((value) => omit(value, assetNames))
   }
 
   enableTaprootAddressMode = async ({ assetNames }) => {
-    assert(
-      assetNames.length === 1 && assetNames[0] === 'bitcoin',
-      'enableTaprootAddressMode only supports bitcoin'
-    )
+    this.#assertAssetsSupport({
+      assetNames,
+      method: 'enableTaprootAddressMode',
+      isSupported: supportsTaprootAddressMode,
+    })
 
     await this.#taprootAddressModeAtom.set((value) => ({
       ...value,
@@ -77,10 +96,11 @@ class AssetPreferences {
   }
 
   disableTaprootAddressMode = async ({ assetNames }) => {
-    assert(
-      assetNames.length === 1 && assetNames[0] === 'bitcoin',
-      'disableTaprootAddressMode only supports bitcoin'
-    )
+    this.#assertAssetsSupport({
+      assetNames,
+      method: 'disableTaprootAddressMode',
+      isSupported: supportsTaprootAddressMode,
+    })
 
     await this.#taprootAddressModeAtom.set((value) => omit(value, assetNames))
   }
@@ -115,6 +135,7 @@ const assetPreferencesDefinition = {
   type: 'module',
   factory: (opts) => new AssetPreferences(opts),
   dependencies: [
+    'assetsModule',
     'disabledPurposesAtom',
     'multiAddressModeAtom',
     'legacyAddressModeAtom',

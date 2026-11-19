@@ -1,13 +1,6 @@
-import { mock } from 'node:test'
+import { Client, createClient } from '../index.js'
 
-mock.module('@exodus/fetch', {
-  namedExports: {
-    fetch: jest.fn(),
-  },
-})
-
-const { Client, createClient } = await import('../index.js')
-const { fetch } = await import('@exodus/fetch')
+globalThis.fetch = jest.fn()
 
 const unauthorizedError = new Error('Unauthorized - failed signature validation')
 unauthorizedError.response = { status: 401 }

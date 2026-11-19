@@ -1,13 +1,13 @@
 import type { Atom } from '@exodus/atoms'
 import { createInMemoryAtom } from '@exodus/atoms'
-import { WalletAccount } from '@exodus/models'
-import type { WalletAccountSource } from 'libraries/models/lib/wallet-account/index.js'
+import KeyIdentifier from '@exodus/key-identifier'
+import { WalletAccount, type WalletAccountSource } from '@exodus/models'
 
 import { createSoftwareWalletPublicKeysAtom } from '../../../atoms/software-wallet-public-keys.js'
 import type { MoneroPublicKeyBuffer } from '../formats/serialization/index.js'
 import type { StorageFormatLegacy } from '../formats/storage/legacy.js'
 import publicKeyStoreDefinition from '../public-key-store.js'
-import type { IPublicKeyStore, WalletAccounts } from '../types.js'
+import type { AddParams, IPublicKeyStore, WalletAccounts } from '../types.js'
 import { hardwareWalletFixture, softwareWalletFixture } from './fixture-legacy.js'
 
 const mockHardwarePublicKeysAtom = createInMemoryAtom<StorageFormatLegacy>()
@@ -19,11 +19,11 @@ const mockWalletAccounts = {
 }
 
 const walletAccountName = 'fixture'
-const keyIdentifier = {
+const keyIdentifier = new KeyIdentifier({
   derivationAlgorithm: 'BIP32',
   derivationPath: "m/84'/0'/0'",
   keyType: 'secp256k1',
-}
+})
 const xpubFixture =
   'xpub6D4u7EypFhfRS2Tq1AfFU5f48cpem3sZDmukszbhAwyBbN6YUGDhyCqZCQ3JKNwFujgj4NStfxoN21HfDsExTsxWj6j57rcBbwpDKsA9eC7'
 
@@ -75,19 +75,17 @@ describe('PublicKeyStore', () => {
   })
 
   describe('.add()', () => {
-    const addFixtures: [
-      string,
-      { walletAccountName: string; keyIdentifier: any; publicKey?: any; xpub?: string },
-    ][] = [
+    type AddFixture = Omit<AddParams, 'walletAccount'> & { walletAccountName: string }
+    const addFixtures: [string, AddFixture][] = [
       [
         'a normal public key',
         {
           walletAccountName,
-          keyIdentifier: {
+          keyIdentifier: new KeyIdentifier({
             derivationAlgorithm: 'BIP32',
             derivationPath: "m/44'/134'/0'/0/0", // Lisk
             keyType: 'secp256k1',
-          },
+          }),
           publicKey: Buffer.from(
             'f1eeb909c9de0b1402279d84c0ee56ae0811663582fee802746f678473e39b33',
             'hex'
@@ -98,11 +96,11 @@ describe('PublicKeyStore', () => {
         'an xpub',
         {
           walletAccountName,
-          keyIdentifier: {
+          keyIdentifier: new KeyIdentifier({
             derivationAlgorithm: 'BIP32',
             derivationPath: "m/84'/0'/0'",
             keyType: 'secp256k1',
-          },
+          }),
           xpub: 'xpub6D4u7EypFhfRS2Tq1AfFU5f48cpem3sZDmukszbhAwyBbN6YUGDhyCqZCQ3JKNwFujgj4NStfxoN21HfDsExTsxWj6j57rcBbwpDKsA9eC7',
         },
       ],
@@ -110,12 +108,12 @@ describe('PublicKeyStore', () => {
         'a Monero public key',
         {
           walletAccountName,
-          keyIdentifier: {
+          keyIdentifier: new KeyIdentifier({
             derivationAlgorithm: 'BIP32',
             derivationPath: `m/44'/128'/0'`,
             keyType: 'legacy',
             assetName: 'monero',
-          },
+          }),
           publicKey: {
             spendPub: Buffer.from(
               '228e68216d3b30e2c1432dca51a6af375b9ef4faa742dac5dcc7a31ca6614a70',
@@ -342,12 +340,12 @@ describe('PublicKeyStore', () => {
     it.each(walletTypes)('(%s wallets) should retrieve monero public key', async (walletType) => {
       const { publicKey } = (await publicKeyStore.get({
         walletAccountName: accountNames.get(walletType) as string,
-        keyIdentifier: {
+        keyIdentifier: new KeyIdentifier({
           derivationAlgorithm: 'BIP32',
           derivationPath: `m/44'/128'/0'`,
           keyType: 'legacy',
           assetName: 'monero',
-        },
+        }),
       }))!
 
       expect((publicKey as MoneroPublicKeyBuffer).spendPub.toString('hex')).toBe(
@@ -360,11 +358,11 @@ describe('PublicKeyStore', () => {
       async (walletType) => {
         const retrievedKey = await publicKeyStore.get({
           walletAccountName: accountNames.get(walletType) as string,
-          keyIdentifier: {
+          keyIdentifier: new KeyIdentifier({
             derivationAlgorithm: 'BIP32',
             derivationPath: "m/1337'/0'/0'",
             keyType: 'secp256k1',
-          },
+          }),
         })
 
         expect(retrievedKey).toBe(null)

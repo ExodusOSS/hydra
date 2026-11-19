@@ -146,6 +146,15 @@ describe('enabled-assets', () => {
     expect(await enabledAssets.wasChangedByUser('otherToken')).toEqual(true)
   })
 
+  it('does not mutate the input array when enabling assets', async () => {
+    await enabledAssets.load()
+    const inputArray = ['otherToken']
+    const originalLength = inputArray.length
+    await enabledAssets.enable(inputArray)
+    expect(inputArray).toHaveLength(originalLength)
+    expect(inputArray).toEqual(['otherToken'])
+  })
+
   it('supports disabling assets dynamically', async () => {
     await enabledAssets.load()
     await enabledAssets.disable(['token'])
@@ -178,16 +187,16 @@ describe('enabled-assets', () => {
     expect(await enabledAndDisabledAssetsAtom.get()).toEqual({
       disabled: {},
     })
-    expect(handler).toBeCalledTimes(1)
+    expect(handler).toHaveBeenCalledTimes(1)
     await enabledAssets.load()
-    expect(handler).toBeCalledTimes(2)
+    expect(handler).toHaveBeenCalledTimes(2)
     expect(await enabledAndDisabledAssetsAtom.get()).toEqual({
       disabled: {
         baseAsset: false,
       },
     })
 
-    expect(handler).toBeCalledTimes(2)
+    expect(handler).toHaveBeenCalledTimes(2)
     await enabledAssets.enable(['baseAsset'])
 
     expect(await enabledAndDisabledAssetsAtom.get()).toEqual({
@@ -195,7 +204,7 @@ describe('enabled-assets', () => {
         baseAsset: false,
       },
     })
-    expect(handler).toBeCalledTimes(2)
+    expect(handler).toHaveBeenCalledTimes(2)
   })
 
   it('ignores disabling same asset', async () => {
@@ -204,9 +213,9 @@ describe('enabled-assets', () => {
     expect(await enabledAndDisabledAssetsAtom.get()).toEqual({
       disabled: {},
     })
-    expect(handler).toBeCalledTimes(1)
+    expect(handler).toHaveBeenCalledTimes(1)
     await enabledAssets.load()
-    expect(handler).toBeCalledTimes(2)
+    expect(handler).toHaveBeenCalledTimes(2)
     expect(await enabledAndDisabledAssetsAtom.get()).toEqual({
       disabled: {
         baseAsset: false,
@@ -220,7 +229,7 @@ describe('enabled-assets', () => {
         baseAsset: true,
       },
     })
-    expect(handler).toBeCalledTimes(3)
+    expect(handler).toHaveBeenCalledTimes(3)
 
     await enabledAssets.disable(['baseAsset'])
     expect(await enabledAndDisabledAssetsAtom.get()).toEqual({
@@ -228,7 +237,7 @@ describe('enabled-assets', () => {
         baseAsset: true,
       },
     })
-    expect(handler).toBeCalledTimes(3)
+    expect(handler).toHaveBeenCalledTimes(3)
   })
 
   it('ignores enabling asset disabled by user when call enabled with unlessDisabled', async () => {
@@ -237,9 +246,9 @@ describe('enabled-assets', () => {
     expect(await enabledAndDisabledAssetsAtom.get()).toEqual({
       disabled: {},
     })
-    expect(handler).toBeCalledTimes(1)
+    expect(handler).toHaveBeenCalledTimes(1)
     await enabledAssets.load()
-    expect(handler).toBeCalledTimes(2)
+    expect(handler).toHaveBeenCalledTimes(2)
     expect(await enabledAndDisabledAssetsAtom.get()).toEqual({
       disabled: {
         baseAsset: false,
@@ -253,7 +262,7 @@ describe('enabled-assets', () => {
         baseAsset: true,
       },
     })
-    expect(handler).toBeCalledTimes(3)
+    expect(handler).toHaveBeenCalledTimes(3)
 
     await enabledAssets.enable(['baseAsset'], { unlessDisabled: true })
 
@@ -262,7 +271,7 @@ describe('enabled-assets', () => {
         baseAsset: true,
       },
     })
-    expect(handler).toBeCalledTimes(3)
+    expect(handler).toHaveBeenCalledTimes(3)
   })
 
   it('enable asset disabled by user', async () => {
@@ -271,9 +280,9 @@ describe('enabled-assets', () => {
     expect(await enabledAndDisabledAssetsAtom.get()).toEqual({
       disabled: {},
     })
-    expect(handler).toBeCalledTimes(1)
+    expect(handler).toHaveBeenCalledTimes(1)
     await enabledAssets.load()
-    expect(handler).toBeCalledTimes(2)
+    expect(handler).toHaveBeenCalledTimes(2)
     expect(await enabledAndDisabledAssetsAtom.get()).toEqual({
       disabled: {
         baseAsset: false,
@@ -287,7 +296,7 @@ describe('enabled-assets', () => {
         baseAsset: true,
       },
     })
-    expect(handler).toBeCalledTimes(3)
+    expect(handler).toHaveBeenCalledTimes(3)
 
     await enabledAssets.enable(['baseAsset'])
 
@@ -296,6 +305,6 @@ describe('enabled-assets', () => {
         baseAsset: false,
       },
     })
-    expect(handler).toBeCalledTimes(4)
+    expect(handler).toHaveBeenCalledTimes(4)
   })
 })

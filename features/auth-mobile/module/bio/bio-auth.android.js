@@ -6,10 +6,12 @@ const getErrorProps = (err) => pick(err, ['name', 'code', 'message', 'stack'])
 class BioAuth {
   #logger
   #authAtom
+  #auth
 
-  constructor({ authAtom, logger }) {
+  constructor({ authAtom, logger, auth }) {
     this.#logger = logger
     this.#authAtom = authAtom
+    this.#auth = auth
   }
 
   authenticate = async ({ title, subtitle, cancelButtonText }) => {
@@ -24,11 +26,18 @@ class BioAuth {
       })
     } catch (err) {
       this.#logger.warn('bioauth failed', getErrorProps(err))
+      void this.#auth.refreshDeviceAuth()
       return false
     }
   }
 
-  stop = () => {}
+  stop = () => {
+    try {
+      RNBiometrics.cancel?.()
+    } catch (err) {
+      this.#logger.warn('bioauth stop failed', getErrorProps(err))
+    }
+  }
 }
 
 const createBioAuth = (deps) => new BioAuth(deps)
@@ -37,7 +46,7 @@ const bioAuthDefinition = {
   id: 'bioAuth',
   type: 'module',
   factory: createBioAuth,
-  dependencies: ['logger', 'authAtom'],
+  dependencies: ['logger', 'authAtom', 'auth'],
   public: true,
 }
 

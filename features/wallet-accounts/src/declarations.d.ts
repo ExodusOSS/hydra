@@ -1,4 +1,4 @@
-declare module 'proxy-freeze'
+declare module '@exodus/proxy-freeze'
 declare module '@exodus/typeforce'
 declare module '@exodus/fusion-atoms'
 declare module '@exodus/fusion-local/module'

@@ -5,7 +5,7 @@ import { pricingServerUrlAtomDefinition } from './atoms/index.js'
 const ENV_CONFIG = {
   sandbox: {
     pricingServerPath: 'infrastructure.price-server.server',
-    defaultPricingServerUrl: 'https://pricing-s.a.exodus.io',
+    defaultPricingServerUrl: 'https://pricing-s.a.exodus-int.com',
   },
   production: {
     pricingServerPath: 'infrastructure.price-server.server',

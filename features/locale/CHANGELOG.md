@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.1](https://github.com/ExodusMovement/exodus/compare/@exodus/locale@2.7.0...@exodus/locale@2.7.1) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/locale
+
+## [2.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/locale@2.6.1...@exodus/locale@2.7.0) (2026-04-30)
+
+### Features
+
+- feat(locale): back currencyAtom with local storage (#16260)
+
+## [2.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/locale@2.6.0...@exodus/locale@2.6.1) (2026-04-24)
+
+### Bug Fixes
+
+- fix: missing deps for exporting types (#16158)
+
+## [2.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/locale@2.5.0...@exodus/locale@2.6.0) (2025-06-16)
+
+### Features
+
+- feat: type locale redux module (#12920)
+
 ## [2.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/locale@2.4.0...@exodus/locale@2.5.0) (2025-04-24)
 
 ### Features

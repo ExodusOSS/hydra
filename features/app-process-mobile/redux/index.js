@@ -8,7 +8,7 @@ const balancesReduxDefinition = {
   initialState: APP_PROCESS_INITIAL_STATE,
   eventReducers: {
     appProcess: (state, payload) => ({
-      ...state.data,
+      ...state,
       ...payload,
     }),
   },

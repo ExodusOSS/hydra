@@ -287,7 +287,7 @@ describe('SafeError', () => {
     expect(safeError.stackFrames![0]!.line).toBe(observedLine)
 
     const observedStackLength = safeError.stackFrames!.length
-    safeError.stackFrames!.push({})
+    safeError.stackFrames!.push({ __proto__: null })
     expect(safeError.stackFrames!.length).toBe(observedStackLength)
   })
 })

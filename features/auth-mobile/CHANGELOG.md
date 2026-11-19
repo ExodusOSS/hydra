@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.9.6](https://github.com/ExodusMovement/exodus/compare/@exodus/auth-mobile@6.9.5...@exodus/auth-mobile@6.9.6) (2026-10-07)
+
+### Bug Fixes
+
+- **auth-mobile:** expose device lock in safe reports ([#46571](https://github.com/ExodusMovement/exodus/issues/46571)) ([7959dd2](https://github.com/ExodusMovement/exodus/commit/7959dd213149927d7c358b1a3ca0ed29ebb3bfce))
+- **auth-mobile:** open the wallet as-is when device auth was removed from the OS ([#45358](https://github.com/ExodusMovement/exodus/issues/45358)) ([f7e43b9](https://github.com/ExodusMovement/exodus/commit/f7e43b92c3f6989a447b11701e10460d3209508e))
+
+## [6.9.5](https://github.com/ExodusMovement/exodus/compare/@exodus/auth-mobile@6.9.4...@exodus/auth-mobile@6.9.5) (2026-09-25)
+
+### Bug Fixes
+
+- **auth-mobile:** report iOS authentication failures ([#45814](https://github.com/ExodusMovement/exodus/issues/45814)) ([ca80ebc](https://github.com/ExodusMovement/exodus/commit/ca80ebca6c2571ce52709a11d1a8db5bde0fbc6d))
+
+## [6.9.4](https://github.com/ExodusMovement/exodus/compare/@exodus/auth-mobile@6.9.3...@exodus/auth-mobile@6.9.4) (2026-09-21)
+
+### Bug Fixes
+
+- **auth-mobile:** serialize authentication transitions ([#45292](https://github.com/ExodusMovement/exodus/issues/45292)) ([7d4be73](https://github.com/ExodusMovement/exodus/commit/7d4be734003663c737b2855e8bbf993b2f55b978))
+
+## [6.9.3](https://github.com/ExodusMovement/exodus/compare/@exodus/auth-mobile@6.9.2...@exodus/auth-mobile@6.9.3) (2026-09-16)
+
+### Bug Fixes
+
+- **auth:** tolerate an undecryptable deviceAuth keychain flag ([#45070](https://github.com/ExodusMovement/exodus/issues/45070)) ([3b4b3fa](https://github.com/ExodusMovement/exodus/commit/3b4b3fa48e282d9229a9ebd74f3fda282f419891))
+
+## [6.9.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.9.1...@exodus/auth-mobile@6.9.2) (2026-07-08)
+
+### Bug Fixes
+
+- fail fast on failure to write auth trigger ([#17493](https://github.com/ExodusMovement/exodus-hydra/issues/17493)) ([d7a5e3d](https://github.com/ExodusMovement/exodus-hydra/commit/d7a5e3d02a28525eade65d34006af6b05ff75f8e))
+
+## [6.9.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.9.0...@exodus/auth-mobile@6.9.1) (2026-05-25)
+
+### Bug Fixes
+
+- **auth-mobile:** cancel the in-flight Android BiometricPrompt in bio.stop() ([#16539](https://github.com/ExodusMovement/exodus-hydra/issues/16539)) ([20d019e](https://github.com/ExodusMovement/exodus-hydra/commit/20d019edd498fc775af9fec7da88408583e0a693))
+
+## [6.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.8.0...@exodus/auth-mobile@6.9.0) (2026-04-08)
+
+### Features
+
+- feat: bump @exodus/react-native-keychain to ^9.2.3 (#15900)
+
 ## [6.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/auth-mobile@6.7.0...@exodus/auth-mobile@6.8.0) (2026-01-15)
 
 ### Features

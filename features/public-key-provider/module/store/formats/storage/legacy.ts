@@ -143,11 +143,13 @@ export function assertStorageFormatLegacy(deserializedData: StorageFormatLegacy)
           Boolean(publicKey) || Boolean(xpub),
           'publicKeyWithMetadata should have either public key or xpub'
         )
-        if (publicKey)
+        if (publicKey) {
           assert(
             serialization.publicKey.validateSerialized(publicKey),
             'publicKey was not deserializable'
           )
+        }
+
         if (xpub) assert(serialization.xpub.validateSerialized(xpub), 'xpub was not deserializable')
       }
     )

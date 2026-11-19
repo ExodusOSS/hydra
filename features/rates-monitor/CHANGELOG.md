@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.16.0](https://github.com/ExodusMovement/exodus/compare/@exodus/rates-monitor@4.15.1...@exodus/rates-monitor@4.16.0) (2026-09-21)
+
+### Features
+
+- **rates-monitor:** fetch temporary pricing tickers on demand ([#44992](https://github.com/ExodusMovement/exodus/issues/44992)) ([572e4dd](https://github.com/ExodusMovement/exodus/commit/572e4dd021706e1f73a92c02e97685a6e4c70777))
+
+## [4.15.1](https://github.com/ExodusMovement/exodus/compare/@exodus/rates-monitor@4.15.0...@exodus/rates-monitor@4.15.1) (2026-09-21)
+
+### Bug Fixes
+
+- **rates-monitor:** isolate slow rates by currency and lifecycle ([#45187](https://github.com/ExodusMovement/exodus/issues/45187)) ([6746759](https://github.com/ExodusMovement/exodus/commit/674675910bc8a2c97d8ef998b5f362b96b58f80c))
+- **rates-monitor:** preserve valid results across overlapping fetches ([#45188](https://github.com/ExodusMovement/exodus/issues/45188)) ([5d8dc17](https://github.com/ExodusMovement/exodus/commit/5d8dc17574081a300e3b3d81e02d3d8ea311589a))
+
+## [4.15.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.14.8...@exodus/rates-monitor@4.15.0) (2026-05-18)
+
+### Features
+
+- **rates-monitor:** add fiatCurrencyOverrides config option ([#16622](https://github.com/ExodusMovement/exodus-hydra/issues/16622)) ([d5d3d5a](https://github.com/ExodusMovement/exodus-hydra/commit/d5d3d5a821b0dce090df5663dd61579264a10441))
+- refactor redux-dependency-injection to use typed helpers ([#15607](https://github.com/ExodusMovement/exodus-hydra/issues/15607)) ([9663ac3](https://github.com/ExodusMovement/exodus-hydra/commit/9663ac30269ffc8281b4dad00af7f509fc48cf5c))
+
+## [4.14.8](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.14.7...@exodus/rates-monitor@4.14.8) (2026-03-17)
+
+### Code Refactoring
+
+- refactor(rates-monitor): convert to TypeScript (#15397)
+
+## [4.14.7](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.14.6...@exodus/rates-monitor@4.14.7) (2025-10-09)
+
+### Bug Fixes
+
+- fix: skip combined asset ticker (#14037)
+
 ## [4.14.6](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/rates-monitor@4.14.5...@exodus/rates-monitor@4.14.6) (2025-09-03)
 
 ### Bug Fixes

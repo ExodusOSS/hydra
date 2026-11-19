@@ -5,7 +5,7 @@ This Exodus SDK feature tracks available assets, i.e. assets that the user can p
 ## Install
 
 ```sh
-yarn add @exodus/available-assets
+pnpm add @exodus/available-assets
 ```
 
 ## Usage

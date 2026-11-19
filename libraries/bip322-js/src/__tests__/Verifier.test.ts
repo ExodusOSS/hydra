@@ -1,17 +1,28 @@
 import * as bitcoin from '@exodus/bitcoinjs'
-import { tiny_secp256k1_compat as ecc } from '@exodus/crypto/secp256k1'
+import * as ecc from '@exodus/crypto/tiny-secp256k1-compat'
 import { ECPairFactory } from 'ecpair'
 
 import BIP322 from '../BIP322.js'
+import Verifier from '../Verifier.js'
 import Witness from './src/helpers/Witness.js'
-// Import module to be tested
-import Verifier from './src/Verifier.js'
 
 const ECPair = ECPairFactory(ecc)
 
-// Tests
+const toBuffer = (base64: string) => Buffer.from(base64, 'base64')
+
 describe('Verifier Test', () => {
-  it('Can verify legacy P2PKH signature', () => {
+  it('Throws when signature is not a Buffer', async () => {
+    const address = 'bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l'
+    const message = 'Hello World'
+    const signatureBase64 =
+      'AkcwRAIgM2gBAQqvZX15ZiysmKmQpDrG83avLIT492QBzLnQIxYCIBaTpOaD20qRlEylyxFSeEA2ba9YOixpX8z46TSDtS40ASECx/EgAxlkQpQ9hYjgGu6EBCPMVPwVIVJqO4XCsMvViHI='
+
+    await expect(
+      Verifier.verifySignature(address, message, signatureBase64 as any as Buffer)
+    ).rejects.toThrow('signature must be a Buffer')
+  })
+
+  it('Can verify legacy P2PKH signature', async () => {
     // Arrange
     // Test vector copied from https://github.com/bitcoinjs/bitcoinjs-message/blob/c43430f4c03c292c719e7801e425d887cbdf7464/README.md?plain=1#L21
     const address = '1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV'
@@ -24,19 +35,31 @@ describe('Verifier Test', () => {
       'H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk='
 
     // Act
-    const resultCorrect = Verifier.verifySignature(address, message, signature) // Everything correct
-    const resultCorrectTestnet = Verifier.verifySignature(addressTestnet, message, signature) // Everything correct
-    const resultWrongMessage = Verifier.verifySignature(address, messageWrong, signature) // Wrong message - should be false
-    const resultWrongMessageTestnet = Verifier.verifySignature(
+    const resultCorrect = await Verifier.verifySignature(address, message, toBuffer(signature)) // Everything correct
+    const resultCorrectTestnet = await Verifier.verifySignature(
+      addressTestnet,
+      message,
+      toBuffer(signature)
+    ) // Everything correct
+    const resultWrongMessage = await Verifier.verifySignature(
+      address,
+      messageWrong,
+      toBuffer(signature)
+    ) // Wrong message - should be false
+    const resultWrongMessageTestnet = await Verifier.verifySignature(
       addressTestnet,
       messageWrong,
-      signature
+      toBuffer(signature)
     ) // Wrong message - should be false
-    const resultWrongAddress = Verifier.verifySignature(addressWrong, message, signature) // Wrong address - should be false
-    const resultWrongAddressTestnet = Verifier.verifySignature(
+    const resultWrongAddress = await Verifier.verifySignature(
+      addressWrong,
+      message,
+      toBuffer(signature)
+    ) // Wrong address - should be false
+    const resultWrongAddressTestnet = await Verifier.verifySignature(
       addressWrongTestnet,
       message,
-      signature
+      toBuffer(signature)
     ) // Wrong address - should be false
 
     // Assert
@@ -48,7 +71,7 @@ describe('Verifier Test', () => {
     expect(resultWrongAddressTestnet).toBeFalsy()
   })
 
-  it('Can verify legacy BIP-137 signature from P2SH-P2WPKH, P2WPKH, and P2TR address', () => {
+  it('Can verify legacy BIP-137 signature from P2SH-P2WPKH, P2WPKH, and P2TR address', async () => {
     // Arrange
     const message = 'Hello World'
     const signature =
@@ -76,69 +99,98 @@ describe('Verifier Test', () => {
     const invalidAddressTestnet = 'tb1a000273lqsqqfw2a6h2vqxr2tll4wgtv7zu8a30rz4mhree8q5jzq8cjtyp'
 
     // Act
-    const p2pkhMainnetValidResult = Verifier.verifySignature(p2pkhMainnetValid, message, signature)
-    const p2pkhTestnetValidResult = Verifier.verifySignature(p2pkhTestnetValid, message, signature)
-    const p2shMainnetValidResult = Verifier.verifySignature(p2shMainnetValid, message, signature)
-    const p2shTestnetValidResult = Verifier.verifySignature(p2shTestnetValid, message, signature)
-    const p2wpkhMainnetValidResult = Verifier.verifySignature(
+    const signatureBuffer = toBuffer(signature)
+    const p2pkhMainnetValidResult = await Verifier.verifySignature(
+      p2pkhMainnetValid,
+      message,
+      signatureBuffer
+    )
+    const p2pkhTestnetValidResult = await Verifier.verifySignature(
+      p2pkhTestnetValid,
+      message,
+      signatureBuffer
+    )
+    const p2shMainnetValidResult = await Verifier.verifySignature(
+      p2shMainnetValid,
+      message,
+      signatureBuffer
+    )
+    const p2shTestnetValidResult = await Verifier.verifySignature(
+      p2shTestnetValid,
+      message,
+      signatureBuffer
+    )
+    const p2wpkhMainnetValidResult = await Verifier.verifySignature(
       p2wpkhMainnetValid,
       message,
-      signature
+      signatureBuffer
     )
-    const p2wpkhTestnetValidResult = Verifier.verifySignature(
+    const p2wpkhTestnetValidResult = await Verifier.verifySignature(
       p2wpkhTestnetValid,
       message,
-      signature
+      signatureBuffer
     )
-    const p2trMainnetValidResult = Verifier.verifySignature(p2trMainnetValid, message, signature)
-    const p2trTestnetValidResult = Verifier.verifySignature(p2trTestnetValid, message, signature)
+    const p2trMainnetValidResult = await Verifier.verifySignature(
+      p2trMainnetValid,
+      message,
+      signatureBuffer
+    )
+    const p2trTestnetValidResult = await Verifier.verifySignature(
+      p2trTestnetValid,
+      message,
+      signatureBuffer
+    )
 
-    const p2pkhMainnetInvalidResult = Verifier.verifySignature(
+    const p2pkhMainnetInvalidResult = await Verifier.verifySignature(
       p2pkhMainnetInvalid,
       message,
-      signature
+      signatureBuffer
     )
-    const p2pkhTestnetInvalidResult = Verifier.verifySignature(
+    const p2pkhTestnetInvalidResult = await Verifier.verifySignature(
       p2pkhTestnetInvalid,
       message,
-      signature
+      signatureBuffer
     )
-    const p2shMainnetInvalidResult = Verifier.verifySignature(
+    const p2shMainnetInvalidResult = await Verifier.verifySignature(
       p2shMainnetInvalid,
       message,
-      signature
+      signatureBuffer
     )
-    const p2shTestnetInvalidResult = Verifier.verifySignature(
+    const p2shTestnetInvalidResult = await Verifier.verifySignature(
       p2shTestnetInvalid,
       message,
-      signature
+      signatureBuffer
     )
-    const p2wpkhMainnetInvalidResult = Verifier.verifySignature(
+    const p2wpkhMainnetInvalidResult = await Verifier.verifySignature(
       p2wpkhMainnetInvalid,
       message,
-      signature
+      signatureBuffer
     )
-    const p2wpkhTestnetInvalidResult = Verifier.verifySignature(
+    const p2wpkhTestnetInvalidResult = await Verifier.verifySignature(
       p2wpkhTestnetInvalid,
       message,
-      signature
+      signatureBuffer
     )
-    const p2trMainnetInvalidResult = Verifier.verifySignature(
+    const p2trMainnetInvalidResult = await Verifier.verifySignature(
       p2trMainnetInvalid,
       message,
-      signature
+      signatureBuffer
     )
-    const p2trTestnetInvalidResult = Verifier.verifySignature(
+    const p2trTestnetInvalidResult = await Verifier.verifySignature(
       p2trTestnetInvalid,
       message,
-      signature
+      signatureBuffer
     )
 
-    const invalidAddressResult = Verifier.verifySignature(invalidAddress, message, signature)
-    const invalidAddressTestnetResult = Verifier.verifySignature(
+    const invalidAddressResult = await Verifier.verifySignature(
+      invalidAddress,
+      message,
+      signatureBuffer
+    )
+    const invalidAddressTestnetResult = await Verifier.verifySignature(
       invalidAddressTestnet,
       message,
-      signature
+      signatureBuffer
     )
 
     // Assert
@@ -164,7 +216,30 @@ describe('Verifier Test', () => {
     expect(invalidAddressTestnetResult).toBeFalsy()
   })
 
-  it('Can verify and falsify BIP-322 signature for P2SH-P2WPKH address', () => {
+  it('Recovers the BIP-137 signer from compact r||s even when it also parses as DER', async () => {
+    // The 64 bytes after the header were built as a DER signature (30 3e 02 20 <32-byte r> 02 1a
+    // <26-byte s>) made with the crafter's own key. Bitcoin Core reads them only as compact r||s,
+    // which recovers a different signer. P2PKH and P2WPKH go through separate recovery code.
+    const message = 'Hello World'
+    const signature = toBuffer(
+      'IDA+AiAHS6oess6AVJ8HX5xD6pyOlJKt2Upu9bcxpVffQysXJwIadxSXa7sM+uQ2JgV+ExBHm1dzXUf2qceby3A='
+    )
+    const compactSignerP2PKH = '1D5ghb5pkfRPZPHfhrEVsB2puJ9nvwkN7i'
+    const compactSignerP2WPKH = 'bc1qsjz9q859zdkrldtuc5pcclmss0pxaapf6q3k77'
+    const derSignerP2PKH = '16URrNHapNrwobne75uTNvR4mAyWdfLWb4'
+    const derSignerP2WPKH = 'bc1q8syf433n4ryw72t79k7h0q8rqy6489jdwcfw4c'
+
+    await expect(Verifier.verifySignature(compactSignerP2PKH, message, signature)).resolves.toBe(
+      true
+    )
+    await expect(Verifier.verifySignature(compactSignerP2WPKH, message, signature)).resolves.toBe(
+      true
+    )
+    await expect(Verifier.verifySignature(derSignerP2PKH, message, signature)).resolves.toBe(false)
+    await expect(Verifier.verifySignature(derSignerP2WPKH, message, signature)).resolves.toBe(false)
+  })
+
+  it('Can verify and falsify BIP-322 signature for P2SH-P2WPKH address', async () => {
     // Arrange
     // Constants
     const privateKey = 'KwTbAxmBXjoZM3bzbXixEr9nxLhyYSM4vp2swet58i19bw9sqk5z' // Private key of "3HSVzEhCFuH9Z3wvoWTexy7BMVVp3PjS6f", also serve to test public key that begins with 0x03
@@ -179,11 +254,11 @@ describe('Verifier Test', () => {
     // Obtain the script public key
     const scriptPubKey = bitcoin.payments.p2sh({
       address,
-    }).output
+    }).output!
     // Derive the P2SH-P2WPKH redeemScript from the corresponding hashed public key
     const redeemScript = bitcoin.payments.p2wpkh({
       hash: bitcoin.crypto.hash160(testPrivateKey.publicKey),
-    }).output
+    }).output!
     // Draft a toSpend transaction with messageHelloWorld
     const toSpendTx = BIP322.buildToSpendTx(messageHelloWorld, scriptPubKey)
     // Draft a toSign transaction that spends toSpend transaction
@@ -191,26 +266,38 @@ describe('Verifier Test', () => {
     // Sign the toSign transaction
     const toSignTxSigned = toSignTx.signAllInputs(testPrivateKey).finalizeAllInputs()
     // Extract the signature
-    const signature = BIP322.encodeWitness(toSignTxSigned)
+    const signatureBuffer = toBuffer(BIP322.encodeWitness(toSignTxSigned))
 
     // Act
-    const resultCorrect = Verifier.verifySignature(address, messageHelloWorld, signature) // Everything correct
-    const resultCorrectTestnet = Verifier.verifySignature(
+    const resultCorrect = await Verifier.verifySignature(
+      address,
+      messageHelloWorld,
+      signatureBuffer
+    ) // Everything correct
+    const resultCorrectTestnet = await Verifier.verifySignature(
       addressTestnet,
       messageHelloWorld,
-      signature
+      signatureBuffer
     ) // Everything correct
-    const resultWrongMessage = Verifier.verifySignature(address, messageWrong, signature) // Wrong message - should be false
-    const resultWrongMessageTestnet = Verifier.verifySignature(
+    const resultWrongMessage = await Verifier.verifySignature(
+      address,
+      messageWrong,
+      signatureBuffer
+    ) // Wrong message - should be false
+    const resultWrongMessageTestnet = await Verifier.verifySignature(
       addressTestnet,
       messageWrong,
-      signature
+      signatureBuffer
     ) // Wrong message - should be false
-    const resultWrongAddress = Verifier.verifySignature(addressWrong, messageHelloWorld, signature) // Wrong address - should be false
-    const resultWrongAddressTestnet = Verifier.verifySignature(
+    const resultWrongAddress = await Verifier.verifySignature(
+      addressWrong,
+      messageHelloWorld,
+      signatureBuffer
+    ) // Wrong address - should be false
+    const resultWrongAddressTestnet = await Verifier.verifySignature(
       addressTestnetWrong,
       messageHelloWorld,
-      signature
+      signatureBuffer
     ) // Wrong address - should be false
 
     // Assert
@@ -222,7 +309,7 @@ describe('Verifier Test', () => {
     expect(resultWrongAddressTestnet).toBeFalsy()
   })
 
-  it('Can verify and falsify BIP-322 signature for P2WPKH address', () => {
+  it('Can verify and falsify BIP-322 signature for P2WPKH address', async () => {
     // Arrange
     // Test vectors listed at https://github.com/bitcoin/bips/blob/master/bip-0322.mediawiki#user-content-Test_vectors
     const address = 'bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l'
@@ -240,74 +327,81 @@ describe('Verifier Test', () => {
       'AkgwRQIhAOzyynlqt93lOKJr+wmmxIens//zPzl9tqIOua93wO6MAiBi5n5EyAcPScOjf1lAqIUIQtr3zKNeavYabHyR8eGhowEhAsfxIAMZZEKUPYWI4BruhAQjzFT8FSFSajuFwrDL1Yhy'
 
     // Act
+    const signatureEmptyBuffer = toBuffer(signatureEmpty)
+    const signatureHelloWorldBuffer = toBuffer(signatureHelloWorld)
+    const signatureHelloWorldAltBuffer = toBuffer(signatureHelloWorldAlt)
     // Correct addresses and correct signature
-    const resultEmptyValid = Verifier.verifySignature(address, messageEmpty, signatureEmpty)
-    const resultEmptyValidTestnet = Verifier.verifySignature(
+    const resultEmptyValid = await Verifier.verifySignature(
+      address,
+      messageEmpty,
+      signatureEmptyBuffer
+    )
+    const resultEmptyValidTestnet = await Verifier.verifySignature(
       addressTestnet,
       messageEmpty,
-      signatureEmpty
+      signatureEmptyBuffer
     )
-    const resultHelloWorldValid = Verifier.verifySignature(
+    const resultHelloWorldValid = await Verifier.verifySignature(
       address,
       messageHelloWorld,
-      signatureHelloWorld
+      signatureHelloWorldBuffer
     )
-    const resultHelloWorldValidTestnet = Verifier.verifySignature(
+    const resultHelloWorldValidTestnet = await Verifier.verifySignature(
       addressTestnet,
       messageHelloWorld,
-      signatureHelloWorld
+      signatureHelloWorldBuffer
     )
-    const resultHelloWorldValidII = Verifier.verifySignature(
+    const resultHelloWorldValidII = await Verifier.verifySignature(
       address,
       messageHelloWorld,
-      signatureHelloWorldAlt
+      signatureHelloWorldAltBuffer
     )
-    const resultHelloWorldValidIITestnet = Verifier.verifySignature(
+    const resultHelloWorldValidIITestnet = await Verifier.verifySignature(
       addressTestnet,
       messageHelloWorld,
-      signatureHelloWorldAlt
+      signatureHelloWorldAltBuffer
     )
     // Correct addresses but incorrect signature
-    const resultHelloWorldInvalidSig = Verifier.verifySignature(
+    const resultHelloWorldInvalidSig = await Verifier.verifySignature(
       address,
       messageEmpty,
-      signatureHelloWorld
+      signatureHelloWorldBuffer
     ) // Mixed up the signature and message - should be false
-    const resultHelloWorldInvalidSigTestnet = Verifier.verifySignature(
+    const resultHelloWorldInvalidSigTestnet = await Verifier.verifySignature(
       addressTestnet,
       messageEmpty,
-      signatureHelloWorld
+      signatureHelloWorldBuffer
     ) // Mixed up the signature and message - should be false
-    const resultEmptyInvalidSig = Verifier.verifySignature(
+    const resultEmptyInvalidSig = await Verifier.verifySignature(
       address,
       messageHelloWorld,
-      signatureEmpty
+      signatureEmptyBuffer
     ) // Mixed up the signature and message - should be false
-    const resultEmptyInvalidSigTestnet = Verifier.verifySignature(
+    const resultEmptyInvalidSigTestnet = await Verifier.verifySignature(
       addressTestnet,
       messageHelloWorld,
-      signatureEmpty
+      signatureEmptyBuffer
     ) // Mixed up the signature and message - should be false
     // Incorrect addresses
-    const resultEmptyInvalidAddress = Verifier.verifySignature(
+    const resultEmptyInvalidAddress = await Verifier.verifySignature(
       addressWrong,
       messageEmpty,
-      signatureEmpty
+      signatureEmptyBuffer
     ) // Wrong address - should be false
-    const resultEmptyInvalidAddressTestnet = Verifier.verifySignature(
+    const resultEmptyInvalidAddressTestnet = await Verifier.verifySignature(
       addressWrongTestnet,
       messageEmpty,
-      signatureEmpty
+      signatureEmptyBuffer
     ) // Wrong address - should be false
-    const resultHelloWorldInvalidAddress = Verifier.verifySignature(
+    const resultHelloWorldInvalidAddress = await Verifier.verifySignature(
       addressWrong,
       messageHelloWorld,
-      signatureHelloWorld
+      signatureHelloWorldBuffer
     ) // Wrong address - should be false
-    const resultHelloWorldInvalidAddressTestnet = Verifier.verifySignature(
+    const resultHelloWorldInvalidAddressTestnet = await Verifier.verifySignature(
       addressWrongTestnet,
       messageHelloWorld,
-      signatureHelloWorld
+      signatureHelloWorldBuffer
     ) // Wrong address - should be false
 
     // Assert
@@ -327,7 +421,7 @@ describe('Verifier Test', () => {
     expect(resultHelloWorldInvalidAddressTestnet).toBeFalsy()
   })
 
-  it('Can verify and falsify BIP-322 signature for single-key-spend P2TR address using SIGHASH_ALL flag', () => {
+  it('Can verify and falsify BIP-322 signature for single-key-spend P2TR address using SIGHASH_ALL flag', async () => {
     // Arrange
     // Test vector listed at https://github.com/bitcoin/bitcoin/blob/29b28d07fa958b89e1c7916fda5d8654474cf495/src/test/util_tests.cpp#L2747
     const address = 'bc1ppv609nr0vr25u07u95waq5lucwfm6tde4nydujnu8npg4q75mr5sxq8lt3'
@@ -340,27 +434,36 @@ describe('Verifier Test', () => {
       'AUHd69PrJQEv+oKTfZ8l+WROBHuy9HKrbFCJu7U1iK2iiEy1vMU5EfMtjc+VSHM7aU0SDbak5IUZRVno2P5mjSafAQ=='
 
     // Act
-    const resultCorrect = Verifier.verifySignature(address, messageHelloWorld, signatureHelloWorld) // Everything correct
-    const resultCorrectTestnet = Verifier.verifySignature(
+    const signatureHelloWorldBuffer = toBuffer(signatureHelloWorld)
+    const resultCorrect = await Verifier.verifySignature(
+      address,
+      messageHelloWorld,
+      signatureHelloWorldBuffer
+    ) // Everything correct
+    const resultCorrectTestnet = await Verifier.verifySignature(
       addressTestnet,
       messageHelloWorld,
-      signatureHelloWorld
+      signatureHelloWorldBuffer
     ) // Everything correct
-    const resultWrongMessage = Verifier.verifySignature(address, messageWrong, signatureHelloWorld) // Wrong message - should be false
-    const resultWrongMessageTestnet = Verifier.verifySignature(
+    const resultWrongMessage = await Verifier.verifySignature(
+      address,
+      messageWrong,
+      signatureHelloWorldBuffer
+    ) // Wrong message - should be false
+    const resultWrongMessageTestnet = await Verifier.verifySignature(
       addressTestnet,
       messageWrong,
-      signatureHelloWorld
+      signatureHelloWorldBuffer
     ) // Wrong message - should be false
-    const resultWrongAddress = Verifier.verifySignature(
+    const resultWrongAddress = await Verifier.verifySignature(
       addressWrong,
       messageHelloWorld,
-      signatureHelloWorld
+      signatureHelloWorldBuffer
     ) // Wrong address - should be false
-    const resultWrongAddressTestnet = Verifier.verifySignature(
+    const resultWrongAddressTestnet = await Verifier.verifySignature(
       addressWrongTestnet,
       messageHelloWorld,
-      signatureHelloWorld
+      signatureHelloWorldBuffer
     ) // Wrong address - should be false
 
     // Assert
@@ -372,7 +475,7 @@ describe('Verifier Test', () => {
     expect(resultWrongAddressTestnet).toBeFalsy()
   })
 
-  it('Can verify and falsify BIP-322 signature for single-key-spend P2TR address using SIGHASH_DEFAULT flag', () => {
+  it('Can verify and falsify BIP-322 signature for single-key-spend P2TR address using SIGHASH_DEFAULT flag', async () => {
     // Arrange
     const privateKey = 'L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k' // Private key of bc1ppv609nr0vr25u07u95waq5lucwfm6tde4nydujnu8npg4q75mr5sxq8lt3
     const address = 'bc1ppv609nr0vr25u07u95waq5lucwfm6tde4nydujnu8npg4q75mr5sxq8lt3'
@@ -393,7 +496,7 @@ describe('Verifier Test', () => {
     // Obtain the script public key
     const scriptPubKey = bitcoin.payments.p2tr({
       address,
-    }).output
+    }).output!
     // Draft a toSpend transaction with messageHelloWorld
     const toSpendTx = BIP322.buildToSpendTx(messageHelloWorld, scriptPubKey)
     // Draft a toSign transaction that spends toSpend transaction
@@ -403,26 +506,38 @@ describe('Verifier Test', () => {
       .signAllInputs(testPrivateKeyTweaked, [bitcoin.Transaction.SIGHASH_DEFAULT])
       .finalizeAllInputs()
     // Extract the signature
-    const signature = BIP322.encodeWitness(toSignTxSigned)
+    const signatureBuffer = toBuffer(BIP322.encodeWitness(toSignTxSigned))
 
     // Act
-    const resultCorrect = Verifier.verifySignature(address, messageHelloWorld, signature) // Everything correct
-    const resultCorrectTestnet = Verifier.verifySignature(
+    const resultCorrect = await Verifier.verifySignature(
+      address,
+      messageHelloWorld,
+      signatureBuffer
+    ) // Everything correct
+    const resultCorrectTestnet = await Verifier.verifySignature(
       addressTestnet,
       messageHelloWorld,
-      signature
+      signatureBuffer
     ) // Everything correct
-    const resultWrongMessage = Verifier.verifySignature(address, messageWrong, signature) // Wrong message - should be false
-    const resultWrongMessageTestnet = Verifier.verifySignature(
+    const resultWrongMessage = await Verifier.verifySignature(
+      address,
+      messageWrong,
+      signatureBuffer
+    ) // Wrong message - should be false
+    const resultWrongMessageTestnet = await Verifier.verifySignature(
       addressTestnet,
       messageWrong,
-      signature
+      signatureBuffer
     ) // Wrong message - should be false
-    const resultWrongAddress = Verifier.verifySignature(addressWrong, messageHelloWorld, signature) // Wrong address - should be false
-    const resultWrongAddressTestnet = Verifier.verifySignature(
+    const resultWrongAddress = await Verifier.verifySignature(
+      addressWrong,
+      messageHelloWorld,
+      signatureBuffer
+    ) // Wrong address - should be false
+    const resultWrongAddressTestnet = await Verifier.verifySignature(
       addressWrongTestnet,
       messageHelloWorld,
-      signature
+      signatureBuffer
     ) // Wrong address - should be false
 
     // Assert
@@ -434,7 +549,7 @@ describe('Verifier Test', () => {
     expect(resultWrongAddressTestnet).toBeFalsy()
   })
 
-  it('Refuse to verify P2WSH transaction', () => {
+  it('Refuse to verify P2WSH transaction', async () => {
     // Arrange
     // Taken from transaction 4221ff28411a87e6d412458689c471b875dd43aca7d02c7fb7c7331855581434
     const address = 'bc1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3qccfmv3'
@@ -442,16 +557,13 @@ describe('Verifier Test', () => {
     const signature =
       'ApAzMDQ1MDIyMTAwYzkzMWY5YzAxZmU2ZjRlNGY2N2M1NTY0NDc2NDY1OTI4OWQ4ZDRjYzcyM2ZlODJkZDJiOTdmYmZkYTA2NGJlYzAyMjAwZGZkNTg2ZjU4YzllZGJhODc0ZTBjZWY2NmU5ZmU5MWU3YWE3YTZjZGRkNmExZjU3MmVmYjY2ZmU5Y2FlZjJlMDFGMjEwMjc5YmU2NjdlZjlkY2JiYWM1NWEwNjI5NWNlODcwYjA3MDI5YmZjZGIyZGNlMjhkOTU5ZjI4MTViMTZmODE3OThhYw=='
 
-    // Act
-    const result = Verifier.verifySignature.bind(Verifier, address, message, signature)
-
     // Assert
-    expect(result).toThrow(
+    await expect(Verifier.verifySignature(address, message, toBuffer(signature))).rejects.toThrow(
       'Only P2WPKH, P2SH-P2WPKH, and single-key-spend P2TR BIP-322 verification is supported. Unsupported address is provided.'
     )
   })
 
-  it('Refuse to verify script-spend P2TR transaction', () => {
+  it('Refuse to verify script-spend P2TR transaction', async () => {
     // Arrange
     // Taken from transaction d1042c9db36af59586e5681feeace356e85599a8fc0000cc50e263186a9c2276 which is an ordinal inscription transaction
     const address = 'bc1p3r88nsysd8sv555nur4h85wdupa5z0xpcgcdjxy5up30re8gcneswrkwkv'
@@ -460,13 +572,15 @@ describe('Verifier Test', () => {
       'A4AxODdkNTJkNGVkNDQ2OThlY2M5NjJlZDc0ZDdmODIyODIwNDc1YTc1NjdjMTViYmFkOGY5MWNlOTZkMGYxMzJkMmQxM2U0MzA3OWFlNzAwMTE5YzkxYTQ2MjA4Yzk5NWUzYTE4YjUzNjYzNjhkZDA0NDUwYzNmZjU2NTIyMWQyY+AyMDVkZTgxNTRlNzBkNmFmNTI5MDZhNGM0ZDc4OThiMDE4MGRlNWRiOGI3Y2Q0NGNiZDI3Y2RkZmY3NzUxY2ViYzdhYzAwNjMwMzZmNzI2NDAxMDExODc0NjU3ODc0MmY3MDZjNjE2OTZlM2I2MzY4NjE3MjczNjU3NDNkNzU3NDY2MmQzODAwMmE3YjIyNzAyMjNhMjI3MzZlNzMyMjJjMjI2ZjcwMjIzYTIyNzI2NTY3MjIyYzIyNmU2MTZkNjUyMjNhMjIzNjMzMzEzMjM4MmU3MzYxNzQ3MzIyN2Q2OEJjMDVkZTgxNTRlNzBkNmFmNTI5MDZhNGM0ZDc4OThiMDE4MGRlNWRiOGI3Y2Q0NGNiZDI3Y2RkZmY3NzUxY2ViYzc='
 
     // Act
-    const result = Verifier.verifySignature.bind(Verifier, address, message, signature)
 
+    const promise = Verifier.verifySignature(address, message, toBuffer(signature))
     // Assert
-    expect(result).toThrow('BIP-322 verification from script-spend P2TR is unsupported.')
+    await expect(promise).rejects.toThrow(
+      'BIP-322 verification from script-spend P2TR is unsupported.'
+    )
   })
 
-  it('Reject verification from malformed address', () => {
+  it('Reject verification from malformed address', async () => {
     // Arrange
     const malformP2PKH = '1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV' + 'M'
     const malformP2WPKHInP2SH = '37qyp7jQAzqb2rCBpMvVtLDuuzKAUCVnJb' + 'M'
@@ -481,39 +595,27 @@ describe('Verifier Test', () => {
       'AUHd69PrJQEv+oKTfZ8l+WROBHuy9HKrbFCJu7U1iK2iiEy1vMU5EfMtjc+VSHM7aU0SDbak5IUZRVno2P5mjSafAQ==' // Correctly encoded P2TR signature
 
     // Act
-    const resultP2PKH = Verifier.verifySignature.bind(
-      Verifier,
-      malformP2PKH,
-      message,
-      signatureP2PKH
-    )
-    const resultP2WPKHInP2SH = Verifier.verifySignature.bind(
-      Verifier,
+    const resultP2PKH = Verifier.verifySignature(malformP2PKH, message, toBuffer(signatureP2PKH))
+    const resultP2WPKHInP2SH = Verifier.verifySignature(
       malformP2WPKHInP2SH,
       message,
-      signatureP2WPKH
+      toBuffer(signatureP2WPKH)
     )
-    const resultP2WPKH = Verifier.verifySignature.bind(
-      Verifier,
+    const resultP2WPKH = Verifier.verifySignature(
       malformedP2WPKH,
       message,
-      signatureP2WPKH
+      toBuffer(signatureP2WPKH)
     )
-    const resultP2Tr = Verifier.verifySignature.bind(
-      Verifier,
-      malformedP2TR,
-      message,
-      signatureP2TR
-    )
+    const resultP2Tr = Verifier.verifySignature(malformedP2TR, message, toBuffer(signatureP2TR))
 
     // Assert
-    expect(resultP2PKH).toThrow() // Throw by bitcoinjs-message library
-    expect(resultP2WPKHInP2SH).toThrow() // Throw by bitcoinjs-lib
-    expect(resultP2WPKH).toThrow() // Throw by helper/Address
-    expect(resultP2Tr).toThrow() // Throw by helper/Address
+    await expect(resultP2PKH).rejects.toThrow() // Throw by bitcoinjs-message library
+    await expect(resultP2WPKHInP2SH).rejects.toThrow() // Throw by bitcoinjs-lib
+    await expect(resultP2WPKH).rejects.toThrow() // Throw by helper/Address
+    await expect(resultP2Tr).rejects.toThrow() // Throw by helper/Address
   })
 
-  it('Reject Schnorr signature with incorrect length', () => {
+  it('Reject Schnorr signature with incorrect length', async () => {
     // Arrange
     // Test vector listed at https://github.com/bitcoin/bitcoin/blob/29b28d07fa958b89e1c7916fda5d8654474cf495/src/test/util_tests.cpp#L2747
     const address = 'bc1ppv609nr0vr25u07u95waq5lucwfm6tde4nydujnu8npg4q75mr5sxq8lt3'
@@ -521,7 +623,7 @@ describe('Verifier Test', () => {
     const signatureHelloWorld =
       'AUHd69PrJQEv+oKTfZ8l+WROBHuy9HKrbFCJu7U1iK2iiEy1vMU5EfMtjc+VSHM7aU0SDbak5IUZRVno2P5mjSafAQ=='
     // Deserialize the signature
-    const signatureHelloWorldDeserialized = Witness.deserialize(signatureHelloWorld)[0]
+    const signatureHelloWorldDeserialized = Witness.deserialize(signatureHelloWorld)[0]!
     // Append an extra byte at the end of signatureHelloWorld
     const signatureHelloWorldExtraByte = Buffer.concat([
       signatureHelloWorldDeserialized,
@@ -531,18 +633,17 @@ describe('Verifier Test', () => {
     const signatureHelloWorldExtraByteSerialized = Witness.serialize([signatureHelloWorldExtraByte])
 
     // Act
-    const result = Verifier.verifySignature.bind(
-      Verifier,
+    const result = Verifier.verifySignature(
       address,
       messageHelloWorld,
-      signatureHelloWorldExtraByteSerialized
+      toBuffer(signatureHelloWorldExtraByteSerialized)
     ) // Schnorr signature with incorrect length
 
     // Assert
-    expect(result).toThrow('Invalid Schnorr signature provided.')
+    await expect(result).rejects.toThrow('Invalid Schnorr signature provided.')
   })
 
-  it('Reject signature signed using invalid SIGHASH', () => {
+  it('Reject signature signed using invalid SIGHASH', async () => {
     // Arrange
     const privateKey = 'L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k' // Private key of bc1ppv609nr0vr25u07u95waq5lucwfm6tde4nydujnu8npg4q75mr5sxq8lt3
     const address = 'bc1ppv609nr0vr25u07u95waq5lucwfm6tde4nydujnu8npg4q75mr5sxq8lt3'
@@ -557,9 +658,9 @@ describe('Verifier Test', () => {
       bitcoin.crypto.taggedHash('TapTweak', testPrivateKey.publicKey.subarray(1, 33))
     )
     // Obtain the script public key
-    const scriptPubKey = bitcoin.payments.p2tr({
+    const scriptPubKey: Buffer = bitcoin.payments.p2tr({
       address,
-    }).output
+    }).output!
     // Draft a toSpend transaction with messageHelloWorld
     const toSpendTx = BIP322.buildToSpendTx(messageHelloWorld, scriptPubKey)
     // Draft, sign the toSign transaction, and extract the signature using different SIGHASH
@@ -595,51 +696,42 @@ describe('Verifier Test', () => {
     )
 
     // Act
-    const resultAnyOneCanPay = Verifier.verifySignature.bind(
-      Verifier,
+    const resultAnyOneCanPay = Verifier.verifySignature(
       address,
       messageHelloWorld,
-      signatureAnyOneCanPay
+      toBuffer(signatureAnyOneCanPay)
     )
-    const resultInputMask = Verifier.verifySignature.bind(
-      Verifier,
+    const resultInputMask = Verifier.verifySignature(
       address,
       messageHelloWorld,
-      signatureInputMask
+      toBuffer(signatureInputMask)
     )
-    const resultNone = Verifier.verifySignature.bind(
-      Verifier,
+    const resultNone = Verifier.verifySignature(address, messageHelloWorld, toBuffer(signatureNone))
+    const resultOutputMask = Verifier.verifySignature(
       address,
       messageHelloWorld,
-      signatureNone
+      toBuffer(signatureOutputMask)
     )
-    const resultOutputMask = Verifier.verifySignature.bind(
-      Verifier,
+    const resultSingle = Verifier.verifySignature(
       address,
       messageHelloWorld,
-      signatureOutputMask
-    )
-    const resultSingle = Verifier.verifySignature.bind(
-      Verifier,
-      address,
-      messageHelloWorld,
-      signatureSingle
+      toBuffer(signatureSingle)
     )
 
     // Assert
-    expect(resultAnyOneCanPay).toThrow(
+    await expect(resultAnyOneCanPay).rejects.toThrow(
       'Invalid SIGHASH used in signature. Must be either SIGHASH_ALL or SIGHASH_DEFAULT.'
     )
-    expect(resultInputMask).toThrow(
+    await expect(resultInputMask).rejects.toThrow(
       'Invalid SIGHASH used in signature. Must be either SIGHASH_ALL or SIGHASH_DEFAULT.'
     )
-    expect(resultNone).toThrow(
+    await expect(resultNone).rejects.toThrow(
       'Invalid SIGHASH used in signature. Must be either SIGHASH_ALL or SIGHASH_DEFAULT.'
     )
-    expect(resultOutputMask).toThrow(
+    await expect(resultOutputMask).rejects.toThrow(
       'Invalid SIGHASH used in signature. Must be either SIGHASH_ALL or SIGHASH_DEFAULT.'
     )
-    expect(resultSingle).toThrow(
+    await expect(resultSingle).rejects.toThrow(
       'Invalid SIGHASH used in signature. Must be either SIGHASH_ALL or SIGHASH_DEFAULT.'
     )
   })

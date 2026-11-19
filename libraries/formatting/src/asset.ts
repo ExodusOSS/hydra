@@ -1,4 +1,5 @@
 import { formatCurrency } from './currency.js'
+import { toPlainDecimalString, truncateDecimalSignificantsDown } from './numbers.js'
 import type NumberUnit from '@exodus/currency'
 import { isNumberUnit } from '@exodus/currency'
 
@@ -40,18 +41,19 @@ export function formatAssetAmount(
   amount: Amount,
   { useGrouping = true, maxSignificant = 6, withPlusSign = false } = {}
 ) {
-  // Always make sure it's a number
   amount = parseAmount(amount)
   const convertDust = useGrouping
   if (isNaN(amount)) return '0'
 
   if (amount === 0) return '0'
 
-  // Handle dust amounts
   if (convertDust && isDustAmount(amount as number)) return '0'
 
-  const absAmount = Math.abs(amount)
-  const absStr = absAmount.toFixed(21)
+  // Only positives are truncated to prevent NOT_ENOUGH_BALANCE; negatives retain Intl rounding.
+  const absAmount =
+    amount >= 0 ? truncateDecimalSignificantsDown(amount, maxSignificant) : Math.abs(amount)
+
+  const absStr = toPlainDecimalString(absAmount)
   const integerPart = absStr.split('.')[0] as string
   const intLength = integerPart.length
 

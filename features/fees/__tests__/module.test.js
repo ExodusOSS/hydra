@@ -2,6 +2,7 @@ import { connectAssetsList } from '@exodus/assets'
 import { createInMemoryAtom } from '@exodus/atoms'
 import {
   accountStatesAtomDefinition,
+  blockchainMetadataAtomDefinition,
   txLogsAtomDefinition,
 } from '@exodus/blockchain-metadata/atoms/index.js'
 import ethereum from '@exodus/ethereum-meta'
@@ -13,9 +14,10 @@ const createFees = feesModuleDefinition.factory
 
 describe('fees.getFee', () => {
   let feeMonitors,
+    blockchainMetadataAtom,
     accountStatesAtom,
     txLogsAtom,
-    assetsModule,
+    assetsAtom,
     feesModule,
     assets,
     logger,
@@ -26,10 +28,6 @@ describe('fees.getFee', () => {
       [WalletAccount.DEFAULT_NAME]: WalletAccount.DEFAULT,
     }
     assets = connectAssetsList([...ethereum]) // shallow clone the metas
-    assetsModule = {
-      getAsset: (name) => assets[name],
-      getAssets: () => assets,
-    }
 
     addressProvider = { getReceiveAddress: () => '0xReciverAddress' }
 
@@ -39,8 +37,10 @@ describe('fees.getFee', () => {
       error: jest.fn(),
     }
 
-    txLogsAtom = txLogsAtomDefinition.factory()
-    accountStatesAtom = accountStatesAtomDefinition.factory()
+    assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
+    blockchainMetadataAtom = blockchainMetadataAtomDefinition.factory()
+    txLogsAtom = txLogsAtomDefinition.factory({ blockchainMetadataAtom })
+    accountStatesAtom = accountStatesAtomDefinition.factory({ blockchainMetadataAtom })
 
     feeMonitors = { getFeeData: jest.fn() }
 
@@ -52,7 +52,7 @@ describe('fees.getFee', () => {
       feeMonitors,
       accountStatesAtom,
       txLogsAtom,
-      assetsModule,
+      assetsAtom,
       logger,
       addressProvider,
       walletAccountsAtom: createInMemoryAtom({ defaultValue: walletAccounts }),
@@ -91,7 +91,7 @@ describe('fees.getFee', () => {
       extraFeeData: { extraFee },
     })
 
-    expect(assets.ethereum.api.getFeeAsync).toBeCalledWith({
+    expect(assets.ethereum.api.getFeeAsync).toHaveBeenCalledWith({
       asset: assets.ethereum,
       walletAccount,
       feeData,
@@ -111,12 +111,12 @@ describe('fees.getFee', () => {
     feeMonitors.getFeeData.mockResolvedValue(feeData)
 
     const walletAccount = 'exodus_0'
-    const result = await feesModule.getFees({ assetName: 'augurv2', walletAccount })
+    const result = await feesModule.getFees({ assetName: 'polygon', walletAccount })
 
     expect(result).toEqual({ fee, gasLimit: 100 })
 
-    expect(assets.ethereum.api.getFeeAsync).toBeCalledWith({
-      asset: assets.augurv2,
+    expect(assets.ethereum.api.getFeeAsync).toHaveBeenCalledWith({
+      asset: assets.polygon,
       walletAccount,
       feeData,
       toAddress: undefined,
@@ -142,9 +142,12 @@ describe('fees.getFee', () => {
 
     const walletAccount = 'exodus_0'
 
-    txLogsAtom.set({ value: { [walletAccount]: { ethereum: 'SomeTxLog' } } })
-
-    accountStatesAtom.set({ value: { [walletAccount]: { ethereum: 'SomeAccountState' } } })
+    blockchainMetadataAtom.set({
+      value: {
+        txs: { [walletAccount]: { ethereum: 'SomeTxLog' } },
+        accountStates: { [walletAccount]: { ethereum: 'SomeAccountState' } },
+      },
+    })
 
     const result = await feesModule.getFees({
       assetName: 'ethereum',
@@ -154,7 +157,7 @@ describe('fees.getFee', () => {
 
     expect(result).toEqual({ fee, gasLimit: 200, extraFeeData: { extraFee } })
 
-    expect(assets.ethereum.api.getFee).toBeCalledWith({
+    expect(assets.ethereum.api.getFee).toHaveBeenCalledWith({
       asset: assets.ethereum,
       feeData,
       accountState: 'SomeAccountState',
@@ -177,9 +180,12 @@ describe('fees.getFee', () => {
 
     const walletAccount = 'exodus_0'
 
-    txLogsAtom.set({ value: { [walletAccount]: { ethereum: 'SomeTxLog' } } })
-
-    accountStatesAtom.set({ value: { [walletAccount]: { ethereum: 'SomeAccountState' } } })
+    blockchainMetadataAtom.set({
+      value: {
+        txs: { [walletAccount]: { ethereum: 'SomeTxLog' } },
+        accountStates: { [walletAccount]: { ethereum: 'SomeAccountState' } },
+      },
+    })
 
     const result = await feesModule.getFees({
       assetName: 'ethereum',
@@ -190,7 +196,7 @@ describe('fees.getFee', () => {
 
     expect(result).toEqual({ fee, gasLimit: 200, somethingElse: true })
 
-    expect(assets.ethereum.api.getFee).toBeCalledWith({
+    expect(assets.ethereum.api.getFee).toHaveBeenCalledWith({
       asset: assets.ethereum,
       feeData,
       accountState: 'SomeAccountState',

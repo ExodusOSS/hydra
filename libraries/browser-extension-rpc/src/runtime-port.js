@@ -45,7 +45,7 @@ class RuntimePort {
   }
 
   postMessage = (event) => {
-    this.connected.then(() => this.port.postMessage(event))
+    void this.connected.then(() => this.port.postMessage(event))
   }
 }
 

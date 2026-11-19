@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.4](https://github.com/ExodusMovement/exodus/compare/@exodus/logger@1.2.3...@exodus/logger@1.2.4) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/logger
+
 ## [1.2.3](https://github.com/ExodusMovement/hydra/compare/@exodus/logger@1.2.2...@exodus/logger@1.2.3) (2024-11-01)
 
 Re-licensed under MIT license.

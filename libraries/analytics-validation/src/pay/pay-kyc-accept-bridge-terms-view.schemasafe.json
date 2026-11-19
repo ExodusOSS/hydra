@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
     "event": {
-      "const": "PayKYCAcceptBridgeTermsView"
+      "const": "PayKycAcceptBridgeTermsView"
     },
     "properties": {
       "allOf": [

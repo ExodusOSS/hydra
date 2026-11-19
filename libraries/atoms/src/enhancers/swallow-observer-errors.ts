@@ -8,7 +8,7 @@ type Params<T> = {
 
 const swallowObserverErrors = <T>({ atom, logger }: Params<T>) => {
   assert(atom, 'expected "atom')
-  assert(typeof logger?.error === 'function', 'expected logger with ".error" function') // eslint-disable-line @typescript-eslint/no-unnecessary-condition
+  assert(typeof logger?.error === 'function', 'expected logger with ".error" function')
 
   const observe = (observer: Listener<T>) =>
     atom.observe(async (...args) => {

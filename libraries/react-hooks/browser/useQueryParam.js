@@ -21,7 +21,7 @@ const useQueryParam = (param) => {
       window.removeEventListener('pushstate', onChange)
       window.removeEventListener('replacestate', onChange)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [])
 
   return value

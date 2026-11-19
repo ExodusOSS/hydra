@@ -7,7 +7,7 @@ This package is a helper module for dealing with [SLIP10 keys](https://github.co
 ## Install
 
 ```
-yarn add @exodus/slip10
+pnpm add @exodus/slip10
 ```
 
 ## Usage
@@ -28,7 +28,7 @@ const key = SLIP10.fromSeed(seed)
 // `key` is an instance of SLIP10
 ```
 
-### SLIP10.fromXPriv({ private, chainCode })
+### SLIP10.fromXPriv({ key, chainCode })
 
 Import an SLIP10 key from an extended private key, as exported by [key.toJSON()](#keytojson).
 
@@ -37,7 +37,7 @@ import SLIP10 from '@exodus/slip10'
 
 const key = SLIP10.fromXPriv({
   chainCode: '5d70af781f3a37b829f0d060924d5e960bdc02e85423494afc0b1a41bbe196d4',
-  private: '551d333177df541ad876a60ea71f00447931c0a9da16f227c11ea080d7391b8d',
+  key: '551d333177df541ad876a60ea71f00447931c0a9da16f227c11ea080d7391b8d',
 })
 
 // `key` is an instance of SLIP10

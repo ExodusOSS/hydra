@@ -1,0 +1,35 @@
+{
+  "name": "@exodus/key-challenge",
+  "version": "1.0.1",
+  "type": "module",
+  "description": "Challenge envelope for proving control of a key, shared by the verifier and the prover",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/key-challenge",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Akey-challenge"
+  },
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/key-challenge",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc --noEmit"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": false
+  }
+}

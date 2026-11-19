@@ -1,16 +1,16 @@
 {
   "name": "@exodus/locale",
-  "version": "2.5.0",
+  "version": "2.7.1",
   "description": "Module for tracking users locale data such as language and currency",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/locale",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/locale",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Alocale"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Alocale"
   },
   "type": "module",
   "main": "index.js",
@@ -26,20 +26,24 @@
     "!**/__tests__/**"
   ],
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix"
+    "test": "pnpm exec exodus-test --jest",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "lint": "pnpm exec eslint",
+    "lint:fix": "pnpm run lint --fix",
+    "test:types": "pnpm exec tsc --noEmit"
   },
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/fiat-currencies": "^1.2.3",
-    "@exodus/fusion-atoms": "^1.2.1"
+    "@exodus/atoms": "workspace:^",
+    "@exodus/currency": "workspace:^",
+    "@exodus/fiat-currencies": "workspace:^",
+    "@exodus/fusion-atoms": "workspace:^"
   },
   "devDependencies": {
     "@exodus/redux-dependency-injection": "workspace:^",
     "redux": "4.0.0"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

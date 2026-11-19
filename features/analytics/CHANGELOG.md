@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [16.1.2](https://github.com/ExodusMovement/exodus/compare/@exodus/analytics@16.1.1...@exodus/analytics@16.1.2) (2026-08-11)
+
+### Bug Fixes
+
+- **analytics:** restore lifecycle flush and unblock the required-props gate ([#43268](https://github.com/ExodusMovement/exodus/issues/43268)) ([1086d8b](https://github.com/ExodusMovement/exodus/commit/1086d8bfdebbd7ff3ddabfecbee9efa44a7df7dc))
+
+## [16.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@16.1.0...@exodus/analytics@16.1.1) (2026-06-16)
+
+### Bug Fixes
+
+- **analytics:** cap and chunk persisted backlog flush ([#17168](https://github.com/ExodusMovement/exodus-hydra/issues/17168)) ([a5b292e](https://github.com/ExodusMovement/exodus-hydra/commit/a5b292e0e27ad7e691e547c280fc5fc82f5f9878))
+
+## [16.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@16.0.0...@exodus/analytics@16.1.0) (2026-06-10)
+
+### Features
+
+- **analytics:** bump `@exodus/analytics-validation` ([#17131](https://github.com/ExodusMovement/exodus-hydra/issues/17131)) ([0cd0c65](https://github.com/ExodusMovement/exodus-hydra/commit/0cd0c6578297fef959ce12014da7f48b27bb6d56))
+
+## [16.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.8.0...@exodus/analytics@16.0.0) (2026-06-03)
+
+### ⚠ BREAKING CHANGES
+
+- remove multi-seed support from wallet/keychain (#16379)
+
+### Features
+
+- **keychain:** expose needed exports at the root ([#16638](https://github.com/ExodusMovement/exodus-hydra/issues/16638)) ([30b1e96](https://github.com/ExodusMovement/exodus-hydra/commit/30b1e9644d476958f8a8c53e36a87dec3d27c7fb)), closes [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361) [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361)
+
+### Code Refactoring
+
+- remove multi-seed support from wallet/keychain ([#16379](https://github.com/ExodusMovement/exodus-hydra/issues/16379)) ([e63510f](https://github.com/ExodusMovement/exodus-hydra/commit/e63510f2b57b7bcb7704d993baf2e75d11edb3ad))
+
+## [15.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.7.0...@exodus/analytics@15.8.0) (2026-05-19)
+
+### Features
+
+- **analytics:** expose setUserTraits on the public API surface ([#16682](https://github.com/ExodusMovement/exodus-hydra/issues/16682)) ([ecaa11e](https://github.com/ExodusMovement/exodus-hydra/commit/ecaa11e5d05c83cddddf890f37113be60a066922))
+
+## [15.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.6.0...@exodus/analytics@15.7.0) (2026-05-14)
+
+### Features
+
+- **analytics:** use event/properties types from analytics-validation ([#16479](https://github.com/ExodusMovement/exodus-hydra/issues/16479)) ([cb3013a](https://github.com/ExodusMovement/exodus-hydra/commit/cb3013ad3e36533d2cc119a4ff897ba3e3ae6140))
+
+## [15.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.5.2...@exodus/analytics@15.6.0) (2026-05-08)
+
+### Features
+
+- feat: implement mixpanel feature flag and experimentation provider (#15782)
+
+## [15.5.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.5.1...@exodus/analytics@15.5.2) (2026-04-13)
+
+### Bug Fixes
+
+- fix(analytics): update @exodus/segment-metrics to ^5.0.0 (#15978)
+
 ## [15.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/analytics@15.5.0...@exodus/analytics@15.5.1) (2025-12-02)
 
 ### Bug Fixes

@@ -69,7 +69,7 @@ describe('KnownAddresses', () => {
   let blockchainMetadata
   let blockchainMetadataAtom
   let txLogsAtom
-  let assetsModule
+  let assetsAtom
   let knownAddresses
 
   beforeEach(async () => {
@@ -81,7 +81,8 @@ describe('KnownAddresses', () => {
       dogecoin: { ...dogecoin, baseAsset: dogecoin, feeAsset: dogecoin },
     }
 
-    assetsModule = {
+    assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
+    const assetsModule = {
       getAsset: (name) => assets[name],
       getAssets: () => assets,
     }
@@ -125,7 +126,7 @@ describe('KnownAddresses', () => {
       txs: [{ ...transactions.dogecoin[0], id: 'doge-second-wallet-account' }],
     })
 
-    knownAddresses = createKnownAddresses({ txLogsAtom, assetsModule })
+    knownAddresses = createKnownAddresses({ txLogsAtom, assetsAtom })
     knownAddresses.start()
   })
 

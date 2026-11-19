@@ -1,19 +1,19 @@
 import type { Atom } from '@exodus/atoms'
 import { createInMemoryAtom } from '@exodus/atoms'
 
+import type { Application } from '../../modules/application.js'
+import type { LockHistoryEntry, Wallet } from '../../utils/types.js'
 import applicationReportDefinition from '../index.js'
-import type { Application } from '../modules/application.js'
-import type { LockHistoryEntry, Wallet } from '../utils/types.js'
 
 describe('applicationReport', () => {
-  const application: Application = {
+  const application = {
     isRestoring: async () => false,
     isBackedUp: async () => true,
-  }
-  const wallet: Wallet = {
+  } as unknown as Application
+  const wallet = {
     exists: async () => true,
     isLocked: async () => true,
-  }
+  } as unknown as Wallet
   let walletCreatedAtAtom: Atom<string>
   let lockHistoryAtom: Atom<LockHistoryEntry[]>
   const createdAt = new Date().toISOString()
@@ -86,6 +86,8 @@ describe('applicationReport', () => {
   })
 
   it('should handle gracefully when walletCreatedAtAtom is taking a while to fetch', async () => {
+    jest.useFakeTimers()
+
     // No default value to force getting a value indefinitely stuck
     const walletCreatedAtAtom = createInMemoryAtom()
     const report = applicationReportDefinition.factory({
@@ -96,9 +98,11 @@ describe('applicationReport', () => {
       walletCreatedAtAtom,
     })
 
-    const result = report
-      .getSchema()
-      .parse(await report.export({ isLocked: false, walletExists: true }))
+    const exportPromise = report.export({ isLocked: false, walletExists: true })
+    await jest.runAllTimersAsync()
+    const result = report.getSchema().parse(await exportPromise)
+
+    jest.useRealTimers()
 
     expect(result).toEqual({
       isLocked: false,

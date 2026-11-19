@@ -43,6 +43,7 @@ const createSequencedKeystoreAtom = ({
   })
 
   let cache: KeystoreValue[] | undefined
+  let isCachePopulated = false
 
   const getKey = (index: number) =>
     key.endsWith(separator) ? `${key}${index}` : `${key}${separator}${index}`
@@ -95,22 +96,23 @@ const createSequencedKeystoreAtom = ({
 
     if (isSoleWriter) {
       cache = value
+      isCachePopulated = true
       await notify(value)
     }
   }
 
   const get = async () => {
-    if (cache) return cache
+    if (isCachePopulated) return cache
 
     const items = await list()
-    const value = items.map((item) => item.value)
+    const value = items.length === 0 ? undefined : items.map((item) => item.value)
 
     if (isSoleWriter) {
       cache = value
+      isCachePopulated = true
     }
 
-    // let default value be used
-    return items.length === 0 ? undefined : value
+    return value
   }
 
   return enforceObservableRules({

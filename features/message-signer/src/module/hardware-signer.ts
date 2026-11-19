@@ -4,28 +4,29 @@ import KeyIdentifier from '@exodus/key-identifier'
 
 import type {
   AssetSources,
-  AssetsModule,
+  Asset,
   InternalSigner,
   HardwareSignerProvider,
   InternalSignMessageParams,
 } from './interfaces.js'
 import type { Definition } from '@exodus/dependency-types'
+import type { Atom } from '@exodus/atoms'
 
 const MODULE_ID = 'hardwareMessageSigner'
 
 type Dependencies = {
-  assetsModule: AssetsModule
+  assetsAtom: Atom<{ value: Record<string, Asset> }>
   hardwareWallets?: HardwareSignerProvider
   assetSources: AssetSources
 }
 
 class HardwareMessageSigner implements InternalSigner {
-  readonly #assetsModule
+  readonly #assetsAtom
   readonly #hardwareWallets
   readonly #assetSources
 
-  constructor({ assetsModule, hardwareWallets, assetSources }: Dependencies) {
-    this.#assetsModule = assetsModule
+  constructor({ assetsAtom, hardwareWallets, assetSources }: Dependencies) {
+    this.#assetsAtom = assetsAtom
     this.#hardwareWallets = hardwareWallets
     this.#assetSources = assetSources
   }
@@ -35,12 +36,11 @@ class HardwareMessageSigner implements InternalSigner {
     const { baseAssetName, message, walletAccount, purpose } = opts
 
     assert(typeof baseAssetName === 'string', 'baseAssetName is required')
-    /* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */
     assert(walletAccount && typeof walletAccount === 'object', 'walletAccount is required')
-    /* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */
     assert(message && typeof message === 'object', 'message is required')
 
-    const baseAsset = this.#assetsModule.getAsset(opts.baseAssetName)
+    const { value: assets } = await this.#assetsAtom.get()
+    const baseAsset = assets[opts.baseAssetName]!
     const compatibilityMode = walletAccount.compatibilityMode
 
     const purposes = await this.#assetSources.getSupportedPurposes({
@@ -72,7 +72,8 @@ class HardwareMessageSigner implements InternalSigner {
   signMessage = async (opts: InternalSignMessageParams) => {
     assert(this.#hardwareWallets, `hardwareWallets module not found`)
     const { baseAssetName, message, walletAccount } = opts
-    const baseAsset = this.#assetsModule.getAsset(baseAssetName)
+    const { value: assets } = await this.#assetsAtom.get()
+    const baseAsset = assets[baseAssetName]
 
     assert(baseAsset, `baseAsset not found`)
     assert(baseAsset.api.signMessage, `message signing not supported by asset ${baseAssetName}`)
@@ -95,7 +96,9 @@ const hardwareMessageSignerDefinition = {
   id: MODULE_ID,
   type: 'module',
   factory: createHardwareMessageSigner,
-  dependencies: ['assetsModule', 'assetSources', 'hardwareWallets?'],
+  dependencies: ['assetsAtom', 'assetSources', 'hardwareWallets?'],
 } as const satisfies Definition
+
+export type { HardwareMessageSigner }
 
 export default hardwareMessageSignerDefinition

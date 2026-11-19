@@ -136,29 +136,78 @@ describe('FetchFactory', () => {
     expect(pathRequestResult2).toEqual({})
   })
 
-  test('validate domains and subdomains on setHeaders', async () => {
+  test('setDefaultExodusIdentifierHeaders sets identifier headers for exodus-int.com', async () => {
     const fetchFactory = new FetchFactory(fetchFn)
 
-    expect(() => {
-      fetchFactory.setHeaders({ 'x-custom-header': 'custom-value' }, ['invalid_domain'])
-    }).toThrow('Not a domain or IPv4 address: invalid_domain')
+    fetchFactory.setDefaultExodusIdentifierHeaders({
+      appId: 'custom-id',
+      appVersion: '0.0.1',
+      appBuild: 'custom-build',
+    })
 
-    const invalidDomainHeadersResult = await fetchFactory.create()('https://invalid_domain')
-    expect(invalidDomainHeadersResult).toEqual({})
+    const identifierHeaders = {
+      'x-exodus-app-id': 'custom-id',
+      'x-exodus-version': '0.0.1',
+      'x-requested-with': 'custom-id 0.0.1 custom-build',
+    }
 
-    expect(() => {
-      fetchFactory.setHeaders({ 'x-custom-header': 'custom-value' }, ['example..com'])
-    }).toThrow('Not a domain or IPv4 address: example..com')
+    expect(await fetchFactory.create()('https://exodus-int.com')).toEqual(identifierHeaders)
+    expect(await fetchFactory.create()('https://a.exodus-int.com/path')).toEqual(identifierHeaders)
+    expect(await fetchFactory.create()('https://exodus.io')).toEqual(identifierHeaders)
+    expect(await fetchFactory.create()('https://exodus-int.com.evil.com')).toEqual({})
+    expect(await fetchFactory.create()('https://notexodus-int.com')).toEqual({})
 
-    const invalidDomainHeadersResult2 = await fetchFactory.create()('https://example..com')
-    expect(invalidDomainHeadersResult2).toEqual({})
+    const overrideResult = await fetchFactory.create()('https://a.exodus-int.com', {
+      headers: { 'x-exodus-version': '9.9.9' },
+    })
 
-    expect(() => {
-      fetchFactory.setHeaders({ 'x-custom-header': 'custom-value' }, ['-example.com'])
-    }).toThrow('Not a domain or IPv4 address: -example.com')
+    expect(overrideResult).toEqual({ ...identifierHeaders, 'x-exodus-version': '9.9.9' })
+  })
 
-    const invalidDomainHeadersResult3 = await fetchFactory.create()('https://-example.com')
-    expect(invalidDomainHeadersResult3).toEqual({})
+  test('host-specific headers do not leak between exodus.io and exodus-int.com', async () => {
+    const fetchFactory = new FetchFactory(fetchFn)
+
+    fetchFactory.setHeaders({ 'x-exodus-only': 'exodus' }, [hosts.EXODUS_HOST])
+    fetchFactory.setHeaders({ 'x-int-only': 'int' }, [hosts.EXODUS_INT_HOST])
+
+    fetchFactory.setDefaultExodusIdentifierHeaders({
+      appId: 'custom-id',
+      appVersion: '0.0.1',
+      appBuild: 'custom-build',
+    })
+
+    const identifierHeaders = {
+      'x-exodus-app-id': 'custom-id',
+      'x-exodus-version': '0.0.1',
+      'x-requested-with': 'custom-id 0.0.1 custom-build',
+    }
+
+    expect(await fetchFactory.create()('https://exodus.io')).toEqual({
+      ...identifierHeaders,
+      'x-exodus-only': 'exodus',
+    })
+    expect(await fetchFactory.create()('https://a.exodus-int.com')).toEqual({
+      ...identifierHeaders,
+      'x-int-only': 'int',
+    })
+  })
+
+  test('keys that cannot equal a parsed URL hostname never attach headers', async () => {
+    const fetchFactory = new FetchFactory(fetchFn)
+
+    fetchFactory.setHeaders({ 'x-custom-header': 'custom-value' }, ['https://exodus.io'])
+
+    const result = await fetchFactory.create()('https://exodus.io/resource')
+    expect(result).toEqual({})
+  })
+
+  test('matches single-label hostnames verbatim', async () => {
+    const fetchFactory = new FetchFactory(fetchFn)
+
+    fetchFactory.setHeaders({ 'x-custom-header': 'custom-value' }, ['internal-host'])
+
+    const result = await fetchFactory.create()('https://internal-host/resource')
+    expect(result).toEqual({ 'x-custom-header': 'custom-value' })
   })
 
   test('validate headers with different URL structures', async () => {
@@ -288,6 +337,54 @@ describe('FetchFactory', () => {
     expect(localhostHttps).toEqual({
       'x-custom-header': 'custom-value',
     })
+  })
+
+  test('does not leak host-specific headers to a spoofed userinfo host', async () => {
+    const fetchFactory = new FetchFactory(fetchFn)
+
+    fetchFactory.setHeaders({ 'x-custom-header': 'custom-value' }, [hosts.EXODUS_HOST])
+
+    const legitResult = await fetchFactory.create()('https://exodus.io/resource')
+    expect(legitResult).toEqual({ 'x-custom-header': 'custom-value' })
+
+    const portTrickResult = await fetchFactory.create()('https://exodus.io:x@evil.com/resource')
+    expect(portTrickResult).toEqual({})
+
+    const userinfoTrickResult = await fetchFactory.create()('https://exodus.io@evil.com/resource')
+    expect(userinfoTrickResult).toEqual({})
+  })
+
+  test('hostnames colliding with Object.prototype keys are plain keys', async () => {
+    const fetchFactory = new FetchFactory(fetchFn)
+
+    fetchFactory.setHeaders({ 'x-proto-header': 'proto-value' }, ['__proto__'])
+    fetchFactory.setHeaders({ 'x-ctor-header': 'ctor-value' }, ['constructor'])
+
+    expect(Object.getPrototypeOf(fetchFactory.headerConfigs)).toBe(null)
+
+    expect(await fetchFactory.create()('http://__proto__/')).toEqual({
+      'x-proto-header': 'proto-value',
+    })
+    expect(await fetchFactory.create()('http://constructor/')).toEqual({
+      'x-ctor-header': 'ctor-value',
+    })
+    expect(await fetchFactory.create()('https://exodus.io')).toEqual({})
+  })
+
+  test('header config maps never gain Object.prototype', () => {
+    const fetchFactory = new FetchFactory(fetchFn)
+
+    fetchFactory.setHeaders({ 'x-custom-header': 'custom-value' }, ['example.com'])
+    fetchFactory.setDefaultExodusIdentifierHeaders({
+      appId: 'custom-id',
+      appVersion: '0.0.1',
+      appBuild: 'custom-build',
+    })
+
+    expect(Object.getPrototypeOf(fetchFactory.headerConfigs)).toBe(null)
+    for (const config of Object.values(fetchFactory.headerConfigs)) {
+      expect(Object.getPrototypeOf(config)).toBe(null)
+    }
   })
 
   test('set hostname-specific headers for IPv4 addresses', async () => {

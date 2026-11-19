@@ -71,8 +71,6 @@ Some hooks receive parameters, if so, they are documented below.
 - `onDelete`: Triggered when a wallet is deleted.
 - `onRestore`: Triggered when a wallet (primary seed) restore process starts. Called with `{ backupType }`.
 - `onRestoreCompleted`: Triggered when a wallet seed restore process completes. Called with `{ backupType }`.
-- `onAddSeed`: Triggered when a new extra seed is added to the wallet. Called with `{ seedId, compatibilityMode }`.
-- `onRestoreSeed`: Triggered when a seed restore process starts. Called with `{ seedId, compatibilityMode }`.
 - `onAssetsSynced`: Triggered when the assets are synced.
 - `onChangePassphrase`: Triggered when the passphrase is changed.
 - `onLock`: Triggered when the application is locked.

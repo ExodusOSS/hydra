@@ -1,5 +1,5 @@
-/* eslint-disable unicorn/prefer-array-flat */
-/* eslint-disable unicorn/prefer-spread */
+/* oxlint-disable unicorn/prefer-array-flat */
+/* oxlint-disable unicorn/prefer-spread */
 
 import assert from 'minimalistic-assert'
 

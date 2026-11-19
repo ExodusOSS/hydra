@@ -1,4 +1,4 @@
-import assetSourcesDefinition from '@exodus/asset-sources/lib/module'
+import assetSources from '@exodus/asset-sources'
 import { createInMemoryAtom } from '@exodus/atoms'
 import { createAsset as createBitcoin } from '@exodus/bitcoin-plugin'
 import KeyIdentifier from '@exodus/key-identifier'
@@ -7,6 +7,10 @@ import { WalletAccount } from '@exodus/models'
 
 import type { PublicKeyProvider } from '../../module/public-key-provider.js'
 import publicKeyProviderApiDefinition from '../index.js'
+
+const assetSourcesDefinition = assetSources().definitions.find(
+  ({ definition }) => definition.id === 'assetSources'
+)!.definition as { factory: (...args: any[]) => any }
 
 const { factory: createAssetSources } = assetSourcesDefinition
 const { factory: createPublicKeyProviderApi } = publicKeyProviderApiDefinition
@@ -30,10 +34,6 @@ describe('api', () => {
       getExtendedPublicKey: jest.fn(),
     } as unknown as PublicKeyProvider
 
-    const assetsModule = {
-      getAsset: (assetName: keyof typeof assets) => assets[assetName],
-    }
-
     const assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
     const walletAccountsAtom = createInMemoryAtom({
       defaultValue: { [WalletAccount.DEFAULT_NAME]: WalletAccount.DEFAULT },
@@ -53,7 +53,7 @@ describe('api', () => {
       publicKeyProvider,
       walletAccountsAtom,
       assetSources,
-      assetsModule: assetsModule as never,
+      assetsAtom,
     }).publicKeyProvider
   })
 

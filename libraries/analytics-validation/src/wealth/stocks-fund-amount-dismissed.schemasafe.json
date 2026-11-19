@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "StocksFundAmountDismissed"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "amount_usd": {
+          "type": "number"
+        },
+        "button_ready": {
+          "type": "boolean"
+        },
+        "error_type": {
+          "type": "string",
+          "enum": [
+            "READ_ONLY_WALLET_ACCOUNT",
+            "EXCHANGE_UNAVAILABLE",
+            "MUST_OPT_IN",
+            "LOW_SOL_RENT_EXEMPT_AMOUNT",
+            "ZERO_BALANCE",
+            "NOT_ENOUGH_BALANCE",
+            "LOW_FROM_AMOUNT",
+            "HIGH_FROM_AMOUNT",
+            "NOT_ENOUGH_FEE_BALANCE",
+            "EXACT_OUT_QUOTE",
+            "MARKET_CLOSED",
+            "ASSET_PAUSED",
+            "INTERNAL_ERROR",
+            "HIGH_RISK_TOKENS",
+            "INVALID_ADDRESS",
+            "INSUFFICIENT_LIQUIDITY",
+            "UNSUPPORTED_SWAP_MODE",
+            "RESTRICTED_REGION",
+            "AMOUNT_ABOVE_LIMIT",
+            "AMOUNT_BELOW_LIMIT",
+            "PAIR_UNAVAILABLE",
+            "EOS_ACCOUNT_CREATION_IN_PROGRESS",
+            "TRANSACTION_STUCK"
+          ]
+        },
+        "balance_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "duration_s": {
+          "type": "number"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

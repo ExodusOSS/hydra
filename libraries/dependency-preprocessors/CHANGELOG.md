@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.3.4](https://github.com/ExodusMovement/exodus/compare/@exodus/dependency-preprocessors@6.3.3...@exodus/dependency-preprocessors@6.3.4) (2026-10-08)
+
+**Note:** Version bump only for package @exodus/dependency-preprocessors
+
+## [6.3.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/dependency-preprocessors@6.3.2...@exodus/dependency-preprocessors@6.3.3) (2026-04-02)
+
+### Bug Fixes
+
+- fix(dependency-preprocessors): pass correct property name to validateConfigType (#15796)
+
 ## [6.3.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/dependency-preprocessors@6.3.1...@exodus/dependency-preprocessors@6.3.2) (2024-12-06)
 
 ### License

@@ -68,4 +68,55 @@ describe('tokenizer', () => {
     const secondEntryStringValue = tokens[9]
     expect(secondEntryStringValue.range).toEqual([113, 125])
   })
+
+  describe('malformed input', () => {
+    test('terminates a comment that has no trailing newline (last line of section)', () => {
+      const tokens = tokenizer('# trailing comment without newline')
+
+      expect(tokens).toHaveLength(1)
+      expect(tokens[0]).toMatchObject({
+        type: 'comment',
+        value: 'trailing comment without newline',
+      })
+    })
+
+    test('terminates a section that ends with a comment after entries', () => {
+      const input = 'msgid "Hello"\nmsgstr "Hola"\n# trailing comment'
+      const tokens = tokenizer(input)
+
+      const lastToken = tokens[tokens.length - 1]
+      expect(lastToken.type).toEqual('comment')
+      expect(lastToken.value).toEqual('trailing comment')
+    })
+
+    test('throws on an unterminated string literal instead of looping forever', () => {
+      expect(() => tokenizer('msgid "unterminated')).toThrow(/pofile: Unterminated string literal/u)
+    })
+
+    test('handles an escaped backslash immediately before the closing quote', () => {
+      // PO source: msgstr "foo\\" — the value is `foo\`
+      const input = 'msgstr "foo\\\\"'
+      const tokens = tokenizer(input)
+
+      expect(tokens).toHaveLength(2)
+      expect(tokens[0]).toMatchObject({ type: 'name', value: 'msgstr' })
+      expect(tokens[1]).toMatchObject({ type: 'string', value: 'foo\\\\' })
+    })
+
+    test('terminates a name token at end-of-input', () => {
+      const tokens = tokenizer('msgid')
+
+      expect(tokens).toHaveLength(1)
+      expect(tokens[0]).toMatchObject({ type: 'name', value: 'msgid' })
+    })
+
+    test('handles an escaped quote inside a string', () => {
+      // PO source: msgstr "say \"hi\"" — value is `say \"hi\"`
+      const input = 'msgstr "say \\"hi\\""'
+      const tokens = tokenizer(input)
+
+      expect(tokens).toHaveLength(2)
+      expect(tokens[1]).toMatchObject({ type: 'string', value: 'say \\"hi\\"' })
+    })
+  })
 })

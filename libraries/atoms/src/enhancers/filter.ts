@@ -24,22 +24,21 @@ export default function filter<
   S extends AtomValue<A>,
   P extends Predicate<A, S>,
 >(atom: A, predicate: P): ResultAtom<A, P> {
-  const get = limitConcurrency(
-    () =>
-      new Promise<FilteredValue<A, P>>(async (resolve) => {
-        const value = await atom.get()
-        if (predicate(value)) {
-          return resolve(value)
-        }
+  const get = limitConcurrency(async () => {
+    const value = await atom.get()
+    if (predicate(value)) {
+      return value as FilteredValue<A, P>
+    }
 
-        const unsubscribe = atom.observe((value) => {
-          if (predicate(value)) {
-            unsubscribe()
-            resolve(value)
-          }
-        })
+    return new Promise<FilteredValue<A, P>>((resolve) => {
+      const unsubscribe = atom.observe((value) => {
+        if (predicate(value)) {
+          unsubscribe()
+          resolve(value)
+        }
       })
-  )
+    })
+  })
 
   const observe = (listener: Listener<FilteredValue<A, P>>) => {
     return atom.observe((value) => {

@@ -3,7 +3,6 @@ import assert from 'minimalistic-assert'
 import KeyIdentifier from '@exodus/key-identifier'
 import type {
   Asset,
-  AssetsModule,
   GetPublicKeyParams,
   InternalSigner,
   InternalSignTransactionParams,
@@ -11,26 +10,27 @@ import type {
   Signer,
 } from './interfaces.js'
 
-import type { AssetSources } from '@exodus/asset-sources/lib/module/asset-sources.js'
+import type { AssetSources } from '@exodus/asset-sources'
+import type { Atom } from '@exodus/atoms'
 import type { Definition } from '@exodus/dependency-types'
 import type { WalletAccount } from '@exodus/models'
 
 const MODULE_ID = 'seedBasedTransactionSigner'
 
 type Dependencies = {
-  assetsModule: AssetsModule
+  assetsAtom: Atom<{ value: Record<string, Asset> }>
   assetSources: AssetSources
   keychain: any
   walletSdk?: any
 }
 
 class SeedBasedTransactionSigner implements InternalSigner {
-  readonly #assetsModule
+  readonly #assetsAtom
   readonly #assetSources
   readonly #keychain
 
-  constructor({ assetsModule, assetSources, keychain }: Dependencies) {
-    this.#assetsModule = assetsModule
+  constructor({ assetsAtom, assetSources, keychain }: Dependencies) {
+    this.#assetsAtom = assetsAtom
     this.#assetSources = assetSources
     this.#keychain = keychain
   }
@@ -68,7 +68,14 @@ class SeedBasedTransactionSigner implements InternalSigner {
     return this.#createSigner({ seedId, getDefaultKeyIdentifier })
   }
 
-  async #getSignerForKeyId({ seedId, keyId }: { seedId?: string; keyId: KeyIdentifier }) {
+  async #getSignerForKeyId({
+    walletAccount,
+    keyId,
+  }: {
+    walletAccount: WalletAccount
+    keyId: KeyIdentifier
+  }): Promise<Signer> {
+    const { seedId } = walletAccount
     return this.#createSigner({ seedId, getDefaultKeyIdentifier: () => new KeyIdentifier(keyId) })
   }
 
@@ -95,11 +102,6 @@ class SeedBasedTransactionSigner implements InternalSigner {
     }: KeychainSignerParams): Promise<any> => {
       assert(KeyIdentifier.validate(keyId), 'signBuffer: invalid `keyId`')
 
-      if (!signatureType) {
-        // temporary because some assets (algorand) do not pass signatureType
-        signatureType = keyId.keyType === 'secp256k1' ? 'ecdsa' : 'ed25519'
-      }
-
       return this.#keychain.signBuffer({
         seedId,
         keyId,
@@ -116,7 +118,8 @@ class SeedBasedTransactionSigner implements InternalSigner {
 
   signTransaction = async (opts: InternalSignTransactionParams) => {
     const { baseAssetName, unsignedTx, walletAccount } = opts
-    const baseAsset = this.#assetsModule.getAsset(baseAssetName)
+    const { value: assets } = await this.#assetsAtom.get()
+    const baseAsset = assets[baseAssetName]
 
     if (!('compatibilityMode' in unsignedTx.txMeta)) {
       unsignedTx.txMeta.compatibilityMode = walletAccount.compatibilityMode
@@ -131,7 +134,7 @@ class SeedBasedTransactionSigner implements InternalSigner {
       `txMeta.accountIndex was not a valid integer`
     )
 
-    assert(baseAsset.api.features.signWithSigner, `asset ${baseAssetName} does not support signing`)
+    assert(baseAsset, `asset ${baseAssetName} not found`)
 
     const keyId = unsignedTx.txMeta?.keyId
     const signTx = baseAsset.api.signTx!
@@ -147,7 +150,7 @@ class SeedBasedTransactionSigner implements InternalSigner {
     // https://github.com/ExodusMovement/exodus-desktop/blob/82f1e284efed2bf1ff95798a9e8e89bc71e2ae40/src/app/ui/exodus-global/debug/ripple.js#L105
     assert(KeyIdentifier.validate(keyId), `txMeta.keyId must be a key identifier object`)
 
-    const signer = await this.#getSignerForKeyId({ seedId: walletAccount.seedId, keyId })
+    const signer = await this.#getSignerForKeyId({ walletAccount, keyId })
     return signTx({ unsignedTx, signer })
   }
 }
@@ -159,8 +162,10 @@ const seedBasedTransactionSignerDefinition = {
   id: MODULE_ID,
   type: 'module',
   factory: createSeedBasedTransactionSigner,
-  dependencies: ['assetsModule', 'assetSources', 'keychain'],
+  dependencies: ['assetsAtom', 'assetSources', 'keychain'],
   public: true,
 } as const satisfies Definition
+
+export type { SeedBasedTransactionSigner }
 
 export default seedBasedTransactionSignerDefinition

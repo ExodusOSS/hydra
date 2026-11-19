@@ -5,12 +5,12 @@
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/export-transactions",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/export-transactions",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aexport-transactions"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aexport-transactions"
   },
   "type": "module",
   "main": "index.js",
@@ -23,16 +23,17 @@
     "!**/__tests__/**"
   ],
   "scripts": {
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@exodus/assets": "^11.0.0",
-    "@exodus/assets-base": "^10.0.0",
+    "@exodus/assets-base": "^12.0.0",
     "@exodus/atoms": "workspace:^",
     "@exodus/basic-utils": "workspace:^",
     "@exodus/blockchain-metadata": "workspace:^",

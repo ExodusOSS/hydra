@@ -23,7 +23,7 @@ The [bip32] paths currently used are listed here along with their descriptions. 
 | `m/EXO'/4'/1'` | Used for signing & encrypting messages w.r.t username client                             |
 | `m/EXO'/5'/n'` | The last number `n` is reserved for seedless project, `0` is used for seedless backup id |
 | `m/EXO'/6'/0'` | Key used to derive auth key for fiat server                                              |
-| `m/EXO'/7'/0'` | Encryption key for encrypting extra seeds in a multi-seed wallet                         |
+| `m/EXO'/7'/0'` | Deprecated, do not re-use this path for anything                                         |
 | `m/EXO'/8'/0'` | Keypair used to binauth with pay server                                                  |
 
 [bip43]: https://github.com/bitcoin/bips/blob/master/bip-0043.mediawiki
@@ -91,3 +91,7 @@ February 28th, 2024 - Mark Vayngrib
 October 31, 2025 - Doğuhan Gümüşoğlu
 
 - Added `m/EXO'/8'/0'` path as keypair for pay binauth
+
+May 22, 2026 - Mark Vayngrib
+
+- Removed `EXTRA_SEEDS_ENCRYPTION` (`m/EXO'/7'/0'`) along with multi-seed support. The path is marked deprecated to prevent re-use.

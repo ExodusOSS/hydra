@@ -1,17 +1,18 @@
 {
   "name": "@exodus/fee-data-monitors",
-  "version": "5.0.5",
+  "version": "5.0.6",
   "description": "Fee monitor scheduler",
   "author": "Exodus Movement, Inc.",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/fee-data-monitors",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/fee-data-monitors",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afee-data-monitors"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Afee-data-monitors"
   },
   "scripts": {
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit"
   },
   "type": "module",
   "main": "index.js",
@@ -28,12 +29,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.0.1",
-    "@exodus/redux-dependency-injection": "^4.0.0",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/redux-dependency-injection": "workspace:^",
     "lodash": "^4.17.21",
     "make-concurrent": "^5.4.0",
     "p-defer": "^4.0.0",

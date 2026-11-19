@@ -1,7 +1,21 @@
 {
   "$schema": "packages/lerna/schemas/lerna-schema.json",
   "version": "independent",
-  "npmClient": "yarn",
+  "npmClient": "pnpm",
+  "packages": [
+    "libraries/*",
+    "tools/packages/*",
+    "tools/you-shall-not-pass/*",
+    "tools",
+    "features/*",
+    "adapters/*",
+    "sdks/*",
+    "apps/*",
+    "lint/*",
+    "docs",
+    "docs/*",
+    "ui/*"
+  ],
   "changelogPreset": "./changelog.config.js",
   "command": {
     "version": {

@@ -1,12 +1,11 @@
+import { fromWifStringSync } from '@exodus/bytes/wif.js'
 import * as secp256k1 from '@exodus/crypto/secp256k1'
-import wif from 'wif'
 
 // Import module to be tested
 import Address from '../../Address.js'
 
 function fromWIF(wifString: string) {
-  const { version, privateKey, compressed } = wif.decode(wifString)
-  if (version !== 0x80) throw new Error('Invalid network version') // Bitcoin
+  const { version, privateKey, compressed } = fromWifStringSync(wifString, 0x80)
   const publicKey = secp256k1.privateKeyToPublicKey({ privateKey, compressed, format: 'buffer' })
   return { version, privateKey, publicKey, compressed }
 }

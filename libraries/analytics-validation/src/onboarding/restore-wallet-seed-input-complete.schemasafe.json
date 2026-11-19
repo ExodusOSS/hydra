@@ -44,6 +44,12 @@
         },
         "restored_asset_3_time": {
           "type": "number"
+        },
+        "restore_foreground_ms": {
+          "type": "number"
+        },
+        "restore_background_ms": {
+          "type": "number"
         }
       },
       "unevaluatedProperties": false

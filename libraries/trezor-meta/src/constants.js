@@ -1,8 +1,20 @@
-const gte = require('semver').gte
-const coins = require('./data/coins')
+import { gte } from 'semver'
+import coins from './data/coins.js'
 
+/**
+ * The minimum firmware versions supported by this library.
+ */
 const MINIMUM_FIRMWARE_VERSIONS = { 'Safe 5': '2.7.2', 'Safe 3': '2.7.2', T: '2.7.2', 1: '1.13.0' }
+
+/**
+ * The latest available firmware versions known to this library.
+ */
 const LATEST_FIRMWARE_VERSIONS = { 'Safe 5': '2.8.7', 'Safe 3': '2.8.7', T: '2.8.8', 1: '1.13.0' }
+
+/**
+ * Export all asset data on a per-model basis as used by this library.
+ * @returns {object}
+ */
 const ASSETS_BY_MODEL = {
   'Safe 5': coins
     .filter(
@@ -28,6 +40,9 @@ const ASSETS_BY_MODEL = {
     .map((coin) => coin.exodus_name),
 }
 
+/**
+ * Helper function to check if the firmware is supported.
+ */
 const isSupportedFirmware = ({
   model,
   major_version: major,
@@ -35,50 +50,27 @@ const isSupportedFirmware = ({
   patch_version: patch,
 }) => gte([major, minor, patch].join('.'), MINIMUM_FIRMWARE_VERSIONS[model])
 
+/**
+ * List of all the support models.
+ */
 const SUPPORTED_MODELS = ['Safe 5', 'Safe 3', 'T', '1']
+/**
+ * Helper function to check if the model is supported.
+ */
 const isSupportedModel = (model) => SUPPORTED_MODELS.includes(model)
 
+/**
+ * Get the available assets known to trezor.
+ * @returns {Array} An array of asset names (exodus format).
+ */
 const assets = coins.map((coin) => coin.exodus_name)
 
-module.exports = {
-  /**
-   * Get the available assets known to trezor.
-   * @returns {Array} An array of asset names (exodus format).
-   */
+export {
   assets,
-
-  /**
-   * Determine if an asset is segwit-enabled on trezor or not.
-   * @param {string} coinName The asset's name.
-   * @returns {boolean}
-   */
-
-  /**
-    The minimum firmware versions supported by this library.
-   */
   MINIMUM_FIRMWARE_VERSIONS,
-
-  /**
-    The latest available firmware versions known to this library.
-   */
   LATEST_FIRMWARE_VERSIONS,
-
-  /**
-   * Export all asset data on a per-model basis as used by this library.
-   * @returns {object}
-   */
   ASSETS_BY_MODEL,
-
-  /**
-   * List of all the support models.
-   */
   SUPPORTED_MODELS,
-  /**
-   * Helper function to check if the model is supported.
-   */
   isSupportedModel,
-  /**
-   * Helper function to check if the firmware is supported.
-   */
   isSupportedFirmware,
 }

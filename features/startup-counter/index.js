@@ -1,4 +1,4 @@
-/* eslint-disable @exodus/hydra/missing-storage-namespace */
+/* oxlint-disable @exodus/oxlint-plugin-hydra/missing-storage-namespace */
 
 import walletStartupCountAtomDefinition from './atoms/index.js'
 import startupCounterPluginDefinition from './plugin/index.js'

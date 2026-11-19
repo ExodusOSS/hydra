@@ -1,19 +1,28 @@
-import { compute } from '@exodus/atoms'
+import { combine, compute, createStorageAtomFactory } from '@exodus/atoms'
 import { createFusionAtom } from '@exodus/fusion-atoms'
 
-const createLegacyAddressModeAtom = ({ fusion }) => {
+const createLegacyAddressModeAtom = ({ storage, fusion, logger }) => {
+  const storageAtom = createStorageAtomFactory({ storage, logger })({
+    key: 'legacyAddressMode',
+    defaultValue: {},
+    isSoleWriter: true,
+  })
+
   const bitcoinFusionAtom = createFusionAtom({
     fusion,
     path: `bitcoinLegacyAddressEnabled`,
   })
 
   const computedAtom = compute({
-    atom: bitcoinFusionAtom,
-    selector: (bitcoin) => (bitcoin === undefined ? {} : { bitcoin }),
+    atom: combine({ storage: storageAtom, bitcoin: bitcoinFusionAtom }),
+    selector: ({ storage, bitcoin }) => (bitcoin === undefined ? storage : { ...storage, bitcoin }),
   })
 
   const set = async (value) => {
-    const { bitcoin } = typeof value === 'function' ? value(await computedAtom.get()) : value
+    const { bitcoin, ...rest } =
+      typeof value === 'function' ? value(await computedAtom.get()) : value
+
+    await storageAtom.set(rest)
 
     const bitcoinPreviousValue = await bitcoinFusionAtom.get()
     if (bitcoinPreviousValue !== bitcoin) {
@@ -28,7 +37,7 @@ const legacyAddressModeAtomDefinition = {
   id: 'legacyAddressModeAtom',
   type: 'atom',
   factory: createLegacyAddressModeAtom,
-  dependencies: ['fusion'],
+  dependencies: ['storage', 'fusion', 'logger'],
   public: true,
 }
 

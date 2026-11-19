@@ -1,20 +1,20 @@
 {
   "name": "@exodus/app-process-mobile",
   "author": "Exodus Movement, Inc.",
-  "version": "3.10.0",
+  "version": "3.10.1",
   "license": "MIT",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/app-process-mobile",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/app-process-mobile",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aapp-process-mobile"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aapp-process-mobile"
   },
   "description": "Abstraction to monitor a mobile application's foreground or background status. Allows to manage app behavior based on its visibility status",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "scripts": {
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "test": "pnpm exec exodus-test --jest"
   },
   "type": "module",
   "main": "index.js",
@@ -31,11 +31,11 @@
     "!**/__tests__/**"
   ],
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/atoms": "^10.3.3",
+    "@exodus/basic-utils": "^5.0.0",
     "@exodus/netinfo": "^1.4.2",
-    "@exodus/redux-dependency-injection": "^4.0.3",
-    "@exodus/zod": "^3.24.2",
+    "@exodus/redux-dependency-injection": "^5.0.0",
+    "@exodus/zod": "^3.24.4",
     "lodash": "^4.17.21",
     "make-concurrent": "^5.4.0"
   },
@@ -45,10 +45,10 @@
     "redux": "^4.2.1"
   },
   "peerDependencies": {
-    "metro-react-native-babel-preset": "^0.64.0",
-    "react-native": "^0.64.0"
+    "react-native": ">=0.71.11 <0.79.0"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

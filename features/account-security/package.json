@@ -1,0 +1,42 @@
+{
+  "name": "@exodus/account-security",
+  "version": "1.1.1",
+  "description": "This Exodus SDK feature reports active account security warnings (GLOBAL_SCAM / LOST_PERMISSIONS) into the Safe Report.",
+  "author": "Exodus Movement, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/account-security",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aaccount-security"
+  },
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "report",
+    "index.d.ts",
+    "CHANGELOG.md",
+    "README.md",
+    "!**/__tests__/**"
+  ],
+  "scripts": {
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest"
+  },
+  "dependencies": {
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/errors": "workspace:^",
+    "@exodus/safe-string": "workspace:^",
+    "@exodus/zod": "^3.24.4"
+  },
+  "devDependencies": {
+    "@exodus/atoms": "workspace:^"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": false
+  }
+}

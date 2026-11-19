@@ -61,6 +61,7 @@ const FILTERED_FIELDS = [
   'primaryColor',
   'properName',
   'properTicker',
+  'tags',
   'ticker',
 ]
 

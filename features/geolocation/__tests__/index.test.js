@@ -66,7 +66,7 @@ describe('geolocation', () => {
       },
       getBuildMetadata,
     })
-    monitor.start()
+    void monitor.start()
     await new Promise((resolve) => setTimeout(resolve, 10))
     const result = await geolocationAtom.get()
 
@@ -98,7 +98,7 @@ describe('geolocation', () => {
       done()
     })
 
-    monitor.start()
+    void monitor.start()
   })
 
   it('should write error to atom', (done) => {
@@ -123,6 +123,6 @@ describe('geolocation', () => {
       done()
     })
 
-    monitor.start()
+    void monitor.start()
   })
 })

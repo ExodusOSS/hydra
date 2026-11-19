@@ -4,7 +4,7 @@ import { isNumberUnit } from '@exodus/currency'
 import assert from 'assert'
 import lodash from 'lodash'
 
-const { mapValues, isPlainObject, isArray, isString, compact, merge, isEqual } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { mapValues, isPlainObject, isArray, isString, compact, merge, isEqual } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 const assets = connectAssets(assetsBase)
 

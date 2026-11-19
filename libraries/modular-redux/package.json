@@ -5,7 +5,7 @@
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
   "main": "src/index.js",
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/modular-redux",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/modular-redux",
   "files": [
     "src",
     "CHANGELOG.md"
@@ -18,18 +18,19 @@
     "redux-watch": "*"
   },
   "scripts": {
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix"
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix"
   },
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Amodular-redux"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Amodular-redux"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   },
   "devDependencies": {
     "@types/minimalistic-assert": "^1.0.1"

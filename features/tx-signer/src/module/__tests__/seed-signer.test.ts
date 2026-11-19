@@ -1,16 +1,20 @@
-import assetSourcesModuleDefinition from '@exodus/asset-sources/lib/module'
+import assetSources from '@exodus/asset-sources'
 import { connectAssets } from '@exodus/assets'
 import { createInMemoryAtom } from '@exodus/atoms'
 import { mapValues } from '@exodus/basic-utils'
 import { mnemonicToSeed } from '@exodus/bip39'
 import * as bitcoinPlugin from '@exodus/bitcoin-plugin'
+import KeyIdentifier from '@exodus/key-identifier'
 import { getSeedId } from '@exodus/key-utils'
-import keychainDefinition, { KeyIdentifier } from '@exodus/keychain/module'
+import keychainFactory from '@exodus/keychain'
 import { WalletAccount } from '@exodus/models'
-import { EXODUS_SRC, SEED_SRC } from '@exodus/models/lib/wallet-account'
 import * as solanaPluginCJS from '@exodus/solana-plugin'
 
 import seedSignerDefinition from '../seed-signer.js'
+
+const assetSourcesModuleDefinition = assetSources().definitions.find(
+  ({ definition }) => definition.id === 'assetSources'
+)!.definition as { factory: (...args: any[]) => any }
 
 const bufferToSign = Buffer.from(
   '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f',
@@ -31,7 +35,7 @@ const solanaPlugin = solanaPluginCJS.default?.default || solanaPluginCJS.default
 
 const seedWalletAccount = new WalletAccount({
   index: 1,
-  source: SEED_SRC,
+  source: WalletAccount.SEED_SRC,
   seedId: 'wayne-enterprises',
 })
 
@@ -41,7 +45,7 @@ const seedId = await getSeedId(seed)
 const phantomWalletAccount = new WalletAccount({
   index: 1,
   compatibilityMode: 'phantom',
-  source: EXODUS_SRC,
+  source: WalletAccount.EXODUS_SRC,
   seedId,
 })
 
@@ -73,20 +77,18 @@ describe('SeedBasedTransactionSigner', () => {
       solana,
     })
 
-    const assetsModule = {
-      getAsset: (assetName: string) => assets[assetName],
-    }
-
     const assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
     const availableAssetNamesByWalletAccountAtom = createInMemoryAtom({
       defaultValue: mapValues(walletAccounts, () => Object.keys(assets)),
     })
 
-    const keychain = keychainDefinition.factory({
-      logger: console,
-    })
+    const { definition } = keychainFactory().definitions.find(
+      ({ definition }) => definition.id === 'keychain'
+    )!
+    if (definition.id !== 'keychain') throw new Error('expected keychain module definition')
+    const keychain = definition.factory({ logger: console })
 
-    await keychain.addSeed(seed)
+    await keychain.unlock(seed)
 
     const assetSources = assetSourcesModuleDefinition.factory({
       assetsAtom,
@@ -95,7 +97,7 @@ describe('SeedBasedTransactionSigner', () => {
     })
 
     const seedSigner = seedSignerDefinition.factory({
-      assetsModule,
+      assetsAtom,
       keychain,
       assetSources,
     })
@@ -110,7 +112,7 @@ describe('SeedBasedTransactionSigner', () => {
   test('signTx validates "data" to be a Uint8Array for all assets', async () => {
     const { seedSigner, assets } = await setup()
     const unsignedTx = { txData: {}, txMeta: {} }
-    const walletAccount = walletAccounts[WalletAccount.DEFAULT_NAME]
+    const walletAccount = walletAccounts[WalletAccount.DEFAULT_NAME]!
     for (const assetName of ['bitcoin', 'solana']) {
       jest
         .spyOn(assets[assetName].api, 'signTx')
@@ -164,13 +166,15 @@ describe('SeedBasedTransactionSigner', () => {
         })
       })
 
+      const signSchnorr = jest.fn()
       keychain.secp256k1 = {
-        signSchnorr: jest.fn(),
+        ...keychain.secp256k1,
+        signSchnorr,
       }
 
       await seedSigner.signTransaction(signTxOpts)
 
-      const { extraEntropy: suppliedEntropy } = keychain.secp256k1.signSchnorr.mock.calls[0][0]
+      const { extraEntropy: suppliedEntropy } = signSchnorr.mock.calls[0][0]
       expect(suppliedEntropy).toEqual(dummyExtraEntropy)
     })
 
@@ -207,11 +211,12 @@ describe('SeedBasedTransactionSigner', () => {
     const { keychain, seedSigner, assets } = await setup()
     const assetSignTx = jest.spyOn(assets.bitcoin.api, 'signTx')
     const unsignedTx = { txData: {}, txMeta: {} }
-    const walletAccount = walletAccounts[WalletAccount.DEFAULT_NAME]
+    const walletAccount = walletAccounts[WalletAccount.DEFAULT_NAME]!
 
     assetSignTx.mockImplementationOnce(async ({ signer }: any) => {
       await signer.sign({
         data: Buffer.from([1, 2, 3]),
+        signatureType: 'ecdsa',
       })
     })
 
@@ -224,12 +229,14 @@ describe('SeedBasedTransactionSigner', () => {
     ).rejects.toThrow(/got: 3/)
 
     keychain.secp256k1 = {
+      ...keychain.secp256k1,
       signBuffer: jest.fn(),
     }
 
     assetSignTx.mockImplementationOnce(async ({ signer }: any) => {
       await signer.sign({
         data: bufferToSign,
+        signatureType: 'ecdsa',
       })
     })
 

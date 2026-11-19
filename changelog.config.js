@@ -17,6 +17,7 @@ module.exports = config({
     { type: 'test', hidden: true },
   ],
 }).then((preset) => {
+  // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
   preset.conventionalChangelog.writerOpts.commitPartial = commitPartial
   return preset
 })

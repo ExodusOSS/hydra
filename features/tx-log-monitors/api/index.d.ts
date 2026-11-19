@@ -1,10 +1,10 @@
+import type { TxLogMonitors } from '../module/tx-log-monitors.d.ts'
+
 declare const txLogMonitorsApiDefinition: {
   id: 'txLogMonitorsApi'
   type: 'api'
   factory(): {
-    txLogMonitors: {
-      update(params: { assetName: string }): Promise<void>
-    }
+    txLogMonitors: Pick<TxLogMonitors, 'update'>
   }
 }
 

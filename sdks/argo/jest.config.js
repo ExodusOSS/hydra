@@ -4,7 +4,6 @@ import baseConfig from '../../jest.config.js'
 const config = {
   ...baseConfig,
   clearMocks: true,
-  testMatch: ['**/*.test.js'],
 }
 
 export default config

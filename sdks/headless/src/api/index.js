@@ -49,7 +49,6 @@ const createApi = ({ ioc, port, config, debug, logger }) => {
   }
 
   const applicationWalletApi = {
-    addSeed: application.addSeed,
     start: deprecated(application.start),
     stop: deprecated(application.stop),
     load: deprecated(application.load),

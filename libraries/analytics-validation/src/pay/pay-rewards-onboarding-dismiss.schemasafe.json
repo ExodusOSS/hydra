@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayRewardsOnboardingDismiss"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "step_name": {
+          "type": "string",
+          "enum": ["welcome_preview", "intro", "store", "benefits", "join", "welcome", "dashboard"]
+        },
+        "dismiss_method": {
+          "type": "string",
+          "enum": ["swipe_down", "back", "close", "not_now"]
+        },
+        "consent_toggled": {
+          "type": "boolean"
+        },
+        "entry_point": {
+          "type": "string",
+          "enum": [
+            "wallet_banner",
+            "pay_home_card",
+            "settings",
+            "dashboard_info",
+            "disable_sheet",
+            "cash_banner",
+            "profile",
+            "send_invitation",
+            "onboarding",
+            "swap_fee"
+          ]
+        },
+        "intro_variant": {
+          "type": "string",
+          "enum": ["new_user", "existing_pay_user"]
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

@@ -11,7 +11,8 @@ const combine = <T, U extends { [key: string]: AnyAtom<T> }>(
   atoms: U
 ): ReadonlyAtom<CombinedValue<U>> => {
   const { notify, observe: observeSimpleObserver } = createSimpleObserver<CombinedValue<U>>()
-  const countdownLock = createCountdownLock(Object.keys(atoms))
+  const atomKeys = Object.keys(atoms)
+  let countdownLock = createCountdownLock(atomKeys)
 
   let values: Partial<CombinedValue<U>> = {}
   let subscriptions: Unsubscribe[] = []
@@ -22,6 +23,8 @@ const combine = <T, U extends { [key: string]: AnyAtom<T> }>(
     if (subscribers > 0) return
     subscriptions.forEach((unsubscribe) => unsubscribe())
     subscriptions = []
+    values = {}
+    countdownLock = createCountdownLock(atomKeys)
   }
 
   const observe = (callback: Listener<CombinedValue<U>>) => {

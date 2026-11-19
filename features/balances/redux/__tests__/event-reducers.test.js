@@ -98,6 +98,52 @@ describe('eventReducers', () => {
     })
   })
 
+  test('uses mergeChanges optimization when balances are loaded and changes exist', () => {
+    // First: load initial balances via setAccounts
+    emitBalances({
+      changes: {},
+      balances: {
+        exodus_0: {
+          bitcoin: { balance: bitcoin.currency.defaultUnit(10) },
+        },
+      },
+    })
+
+    // Second: send changes for ethereum only, but payload.balances has a different bitcoin value.
+    // If mergeChanges is used: bitcoin stays at 10 (merged from existing state).
+    // If setAccounts is used: bitcoin becomes 20 (replaced from payload.balances).
+    emitBalances({
+      changes: {
+        exodus_0: {
+          ethereum: {
+            balance: {
+              from: ethereum.currency.defaultUnit(0),
+              to: ethereum.currency.defaultUnit(5),
+            },
+          },
+        },
+      },
+      balances: {
+        exodus_0: {
+          bitcoin: { balance: bitcoin.currency.defaultUnit(20) },
+          ethereum: { balance: ethereum.currency.defaultUnit(5) },
+        },
+      },
+    })
+
+    expect(store.getState().balances).toEqual({
+      hasBalance: false,
+      exodus_0: {
+        data: {
+          bitcoin: { balance: bitcoin.currency.defaultUnit(10) },
+          ethereum: { balance: ethereum.currency.defaultUnit(5) },
+        },
+        error: null,
+        loaded: true,
+      },
+    })
+  })
+
   test('ignore changes if state empty', () => {
     expect(store.getState().balances).toEqual(initialState)
 

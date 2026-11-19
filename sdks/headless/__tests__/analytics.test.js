@@ -3,10 +3,10 @@ import {
   persistedAnalyticsEventsAtomDefinition,
   persistedAnalyticsTraitsAtomDefinition,
   shareActivityAtomDefinition,
-} from '@exodus/analytics/atoms/index.js'
-import analyticsModule from '@exodus/analytics/module/index.js'
+} from '@exodus/analytics/atoms'
+import analyticsModule from '@exodus/analytics/module'
 
-import { validate as analyticsValidate } from '../../../libraries/analytics-validation/src/__tests__/mainschema.js'
+import { validate as analyticsValidate } from '../../../libraries/analytics-validation/src/__tests__/mainschema.ts'
 import createAdapters from './adapters/index.js'
 import _config from './config.js'
 import createExodus from './exodus.js'
@@ -136,6 +136,7 @@ describe('reporting', () => {
 
   test('should successfully export report (post-wallet-exists)', async () => {
     await exodus.application.start()
+    await exodus.application.load()
     await exodus.application.create()
     await exodus.application.unlock()
     await expect(exodus.wallet.exists()).resolves.toEqual(true)

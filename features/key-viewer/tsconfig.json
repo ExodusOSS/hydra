@@ -2,10 +2,12 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./lib",
-    "module": "ES2022",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "allowJs": true,
     "lib": ["esnext"],
-    "target": "es2022"
+    "target": "es2022",
+    "noEmit": true
   },
   "include": ["./**/*.ts"]
 }

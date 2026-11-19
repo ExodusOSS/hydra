@@ -34,7 +34,7 @@ class FiatRateConverter {
   }
 }
 
-const createFiatRateConverter = (args = {}) => new FiatRateConverter({ ...args })
+const createFiatRateConverter = (args = Object.create(null)) => new FiatRateConverter({ ...args })
 
 const fiatRateConverterDefinition = {
   id: MODULE_ID,

@@ -169,28 +169,6 @@ export interface ApplicationApi {
     restartAutoLockTimer: Application['restartAutoLockTimer']
 
     /**
-     * Adds an extra seed to the wallet.
-     * @remarks
-     * After the new seed is added, the application starts the restore process.
-     * @param opts - An object containing the mnemonic and compatibility mode.
-     * @example
-     * ```typescript
-     * await exodus.application.addSeed({ mnemonic: 'myMnemonic', compatibilityMode: 'metamask' })
-     * ```
-     */
-    addSeed: Application['addSeed']
-
-    /**
-     * Removes a seed by its id.
-     * @param seedId - The id of the seed to be removed.
-     * @example
-     * ```typescript
-     * await exodus.application.removeSeed('seedId')
-     * ```
-     */
-    removeSeed: Application['removeSeed']
-
-    /**
      * Restores the wallet from the current phrase.
      * @remarks
      * This is useful when you need to trigger a restore for the existing primary seed, without adding
@@ -232,8 +210,6 @@ const factory = ({ application, eventLog, passphraseCache }: FactoryParams): App
       changePassphrase: application.changePassphrase,
       changeLockTimer: application.changeLockTimer,
       restartAutoLockTimer: application.restartAutoLockTimer,
-      addSeed: application.addSeed,
-      removeSeed: application.removeSeed,
       restoreFromCurrentPhrase,
     },
   }

@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/ExodusMovement/exodus/compare/@exodus/timer@1.2.2...@exodus/timer@1.2.3) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/timer
+
+## [1.2.2](https://github.com/ExodusMovement/hydra/compare/@exodus/timer@1.2.1...@exodus/timer@1.2.2) (2025-05-19)
+
+### Bug Fixes
+
+- fix: do not explode timers on manual .tick call (#12533)
+
 ## [1.2.1](https://github.com/ExodusMovement/hydra/compare/@exodus/timer@1.2.0...@exodus/timer@1.2.1) (2024-11-01)
 
 Re-licensed under MIT license.

@@ -1,12 +1,13 @@
 import fs from 'fs-extra'
-import { decrypt, encrypt } from 'secure-container' // eslint-disable-line import/no-extraneous-dependencies
+import { decrypt, encrypt } from 'secure-container'
 
 // options: passphrase, blobKey, metdata, overwrite
 export async function write(file, data, options = {}) {
   options = { overwrite: false, ...options }
 
-  if (!options.overwrite && (await fs.pathExists(file)))
+  if (!options.overwrite && (await fs.pathExists(file))) {
     throw new Error(`${file} exists. Set 'overwrite' to true.`)
+  }
 
   const { encryptedData, blobKey, metadata } = await encrypt(data, options)
 

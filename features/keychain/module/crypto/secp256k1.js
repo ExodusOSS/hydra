@@ -3,8 +3,6 @@ import * as secp256k1 from '@exodus/crypto/secp256k1'
 import { mapValues } from '@exodus/basic-utils'
 
 import { tweakPrivateKey } from './tweak.js'
-import { schnorrZ } from './schnorr-z.js'
-
 export const create = ({ getPrivateHDKey }) => {
   const createInstance = () => ({
     signBuffer: async ({ seedId, keyId, data, enc = 'der', extraEntropy = null }) => {
@@ -40,14 +38,6 @@ export const create = ({ getPrivateHDKey }) => {
       const hdkey = getPrivateHDKey({ seedId, keyId })
       const privateKey = tweak ? tweakPrivateKey({ hdkey, tweak }) : hdkey.privateKey
       return secp256k1.schnorrSign({ data, privateKey, extraEntropy, format: 'buffer' })
-    },
-    signSchnorrZ: async ({ seedId, keyId, data }) => {
-      assert(
-        keyId.keyType === 'secp256k1',
-        `SchnorrZ signatures are not supported for ${keyId.keyType}`
-      )
-      const { privateKey } = getPrivateHDKey({ seedId, keyId })
-      return schnorrZ({ data, privateKey })
     },
   })
 

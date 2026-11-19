@@ -1,7 +1,7 @@
 import type { Storage } from '@exodus/storage-interface'
 import EventEmitter from 'events/events.js'
 import assert from 'minimalistic-assert'
-import proxyFreeze from 'proxy-freeze'
+import proxyFreeze from '@exodus/proxy-freeze'
 
 import { LifecycleHook as Hook } from '../constants/index.js'
 import type {
@@ -15,7 +15,6 @@ import type {
   ImportApplicationParams,
   WalletGetMnemonicParams,
   UnlockWalletParams,
-  AddSeedParams,
   StartApplicationParams,
   EventLog,
 } from '../utils/types.js'
@@ -207,7 +206,7 @@ export class Application extends EventEmitter {
     this.#hookNeedsSorting[hookName] = true
   }
 
-  private executeHooks = async (hooksFns: HookFn[], concurrent = false) => {
+  #executeHooks = async (hooksFns: HookFn[], concurrent = false) => {
     if (concurrent) {
       return Promise.allSettled(hooksFns.map((fn) => fn()))
     }
@@ -242,7 +241,7 @@ export class Application extends EventEmitter {
       }
     })
 
-    await this.executeHooks(hookFns, concurrent)
+    await this.#executeHooks(hookFns, concurrent)
     this.emit(hookName, params)
   }
 
@@ -313,34 +312,6 @@ export class Application extends EventEmitter {
 
   restart = async () => {
     await this.fire(Hook.Restart, { reason: 'restart-method' })
-  }
-
-  addSeed = async (opts: AddSeedParams): Promise<string> => {
-    this.#logger.log('adding seed to wallet')
-
-    await this.#applicationStarted
-
-    const { mnemonic, compatibilityMode } = opts
-    const seedId = await this.#wallet.addSeed({ mnemonic, compatibilityMode })
-    await this.fire(Hook.AddSeed, { seedId, compatibilityMode })
-
-    // restoreAssetsPlugin subscribes to this event and defers the execution
-    // of the next hook until the seed is fully restored.
-    await this.fire(Hook.RestoreSeed, { seedId, compatibilityMode })
-
-    this.fire(Hook.AssetsSynced).catch((e) => {
-      this.#logger.warn('failed to execute onAssetsSynced hooks', e)
-    })
-
-    return seedId
-  }
-
-  removeManySeeds = (seedIds: string[]) => {
-    return this.#wallet.removeManySeeds(seedIds)
-  }
-
-  removeSeed = (seedId: string) => {
-    return this.#wallet.removeSeed(seedId)
   }
 
   getMnemonic = async (opts: WalletGetMnemonicParams) => this.#wallet.getMnemonic(opts)

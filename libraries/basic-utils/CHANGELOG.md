@@ -3,45 +3,83 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [4.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@4.2.2...@exodus/basic-utils@4.3.0) (2025-07-10)
+## [5.2.1](https://github.com/ExodusMovement/exodus/compare/@exodus/basic-utils@5.2.0...@exodus/basic-utils@5.2.1) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/basic-utils
+
+## [5.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@5.1.0...@exodus/basic-utils@5.2.0) (2026-05-29)
 
 ### Features
 
-- feat: clone-deep-with (#13173)
+- **basic-utils:** add type-guard overload to partition ([#16876](https://github.com/ExodusMovement/exodus-hydra/issues/16876)) ([2c051aa](https://github.com/ExodusMovement/exodus-hydra/commit/2c051aa1a2010e23022cef3ac540461a3c7f43b3))
 
-## [4.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@4.2.1...@exodus/basic-utils@4.2.2) (2025-03-31)
+## [5.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@5.0.1...@exodus/basic-utils@5.1.0) (2026-05-22)
 
-### License
+### Features
 
-- license: re-license under MIT license (#11907)
+- **basic-utils:** add lazyFn and onceStrict ([#16627](https://github.com/ExodusMovement/exodus-hydra/issues/16627)) ([92f6a77](https://github.com/ExodusMovement/exodus-hydra/commit/92f6a776db2430bd3ae444813a7a45b20aef6ccb))
 
-## [4.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@4.2.0...@exodus/basic-utils@4.2.1) (2025-03-05)
+## [5.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@5.0.0...@exodus/basic-utils@5.0.1) (2026-05-04)
 
 ### Bug Fixes
 
-- fix(basic-utils): export pick-by-array-paths (#11665)
+- fix(basic-utils): strip all leading zeros in cleanInput (#16281)
 
-## [4.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@4.1.0...@exodus/basic-utils@4.2.0) (2025-03-04)
+- fix(tests): replace toThrowError with toThrow (removed in Jest 30) (#16055)
+
+## [5.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.7.6...@exodus/basic-utils@5.0.0) (2026-04-08)
+
+**Note:** Major version bump to align package versioning. No API or behavior changes were made in @exodus/basic-utils for this release.
+
+## [3.7.6](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.7.5...@exodus/basic-utils@3.7.6) (2026-04-08)
+
+### Bug Fixes
+
+- fix(basic-utils): prevent forEach from leaking mutable collection in ReadonlySet/ReadonlyMap (#15904)
+
+## [3.7.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.7.4...@exodus/basic-utils@3.7.5) (2026-03-01)
+
+### Bug Fixes
+
+- fix(basic-utils): correct pDebounce async return typing (#15407)
+
+## [3.7.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.7.3...@exodus/basic-utils@3.7.4) (2026-02-27)
+
+### Bug Fixes
+
+- fix(basic-utils): add types for restrictConcurrency export (#15406)
+
+## [3.7.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.7.2...@exodus/basic-utils@3.7.3) (2026-02-27)
+
+### Bug Fixes
+
+- fix(basic-utils): add types field for TypeScript declaration discovery (#15410)
+
+## [3.7.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.7.1...@exodus/basic-utils@3.7.2) (2025-11-04)
+
+### Bug Fixes
+
+- fix: export types referenced in memoize's signature (#14311)
+
+## [3.7.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.7.0...@exodus/basic-utils@3.7.1) (2025-10-24)
+
+Refactor to TypeScript
+
+## [3.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.6.0...@exodus/basic-utils@3.7.0) (2025-09-16)
 
 ### Features
 
-- feat(basic-utils): isEmpty util (#11644)
+- feat(basic-utils): remove leading zeros when cleaning input (#13795)
 
-## [4.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@4.0.0...@exodus/basic-utils@4.1.0) (2025-03-04)
-
-### Features
-
-- feat(basic-utils): pickByArrayPaths, a more performent replacement for 'pick' (#11643)
-
-## [4.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.5.1...@exodus/basic-utils@4.0.0) (2025-02-14)
-
-### ⚠ BREAKING CHANGES
-
-- support paths in lodash-like pick() (#11439)
+## [3.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@4.3.0...@exodus/basic-utils@3.6.0) (2025-07-29)
 
 ### Features
 
-- feat!: support paths in lodash-like pick() (#11439)
+- feat: implement deepPick (#13226)
+
+### Performance
+
+- perf: faster basic-utils pick() (#13227)
 
 ## [3.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/basic-utils@3.5.0...@exodus/basic-utils@3.5.1) (2025-02-07)
 

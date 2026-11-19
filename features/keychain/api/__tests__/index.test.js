@@ -8,13 +8,9 @@ import apiDefinition from '../index.js'
 
 let keychain
 const mnemonic = 'cousin access oak tragic entire dynamic marine expand govern enjoy honey tissue'
-const otherMnemonic =
-  'menu memory fury language physical wonder dog valid smart edge decrease worth'
 
 const seed = await mnemonicToSeed({ mnemonic })
-const otherSeed = await mnemonicToSeed({ mnemonic: otherMnemonic })
 const seedId = await getSeedId(seed)
-const otherSeedId = await getSeedId(otherSeed)
 const solanaKeyId = new KeyIdentifier({
   assetName: 'solana',
   derivationAlgorithm: 'BIP32',
@@ -26,7 +22,6 @@ const solanaKeyId = new KeyIdentifier({
 
 // const genFixtures = () => {
 //   const solanaKey = fromMasterSeed(seed).derive(solanaKeyId.derivationPath)
-//   const otherSeedSolanaKey = fromMasterSeed(otherSeed).derive(solanaKeyId.derivationPath)
 //   console.log(
 //     JSON.stringify(
 //       {
@@ -34,11 +29,6 @@ const solanaKeyId = new KeyIdentifier({
 //           ...solanaKey.toJSON(),
 //           privateKey: solanaKey.privateKey.toString('hex'),
 //           publicKey: solanaKey.publicKey.toString('hex'),
-//         },
-//         otherSeedSolanaKey: {
-//           ...otherSeedSolanaKey.toJSON(),
-//           privateKey: otherSeedSolanaKey.privateKey.toString('hex'),
-//           publicKey: otherSeedSolanaKey.publicKey.toString('hex'),
 //         },
 //       },
 //       null,
@@ -58,8 +48,7 @@ describe('keychain api', () => {
 
     keychain = moduleDefinition.factory()
     api = apiDefinition.factory({ keychain }).keychain
-    await keychain.addSeed(seed)
-    await keychain.addSeed(otherSeed)
+    await keychain.unlock(seed)
     return api
   })
 
@@ -79,21 +68,6 @@ describe('keychain api', () => {
         'xprvA3aSZco2ba6qU2FmVowiad82ZHahVhAo6RA9XX7APo9aCMhaJhEjJxRRAwCB6mojPMJKvuZmG1nKmuLZb2VgZF8WpjNA9QtBgAxnNshT1iN',
       xpub: 'xpub6GZny8KvRwf8gWLEbqUiwm4m7KRBu9teTe5kKuWmx8gZ5A2irEYyrkju2E3bcGXuW9fiqHURsYNuFJrzXQZZ27qTLrD7BWXjZddq4YqrBHp',
     })
-    await expect(
-      api.exportKey({ seedId: otherSeedId, keyId: solanaKeyId, exportPrivate: true })
-    ).resolves.toEqual({
-      privateKey: Buffer.from(
-        '107bfcb5d268f0c8a6d5ade844607a96e42796fcc4410e49f5438f517f82ea1a',
-        'hex'
-      ),
-      publicKey: Buffer.from(
-        '03c7f3033e6943eb432df4488c2f430498d3dda3fadfff643480029ba9203ba3da',
-        'hex'
-      ),
-      xpriv:
-        'xprvA3ZsPdqNsXe4VXohMHUmVcfUDqUG2et8Nia5wTQQGERE8S4uipLuNQjYzhMrN32rquhFhCoBZwHB1HuYw9p16UxF36DwJmiaDL3xDjfAZVD',
-      xpub: 'xpub6GZDo9NGhuCMi1tATK1mrkcCmsJkS7byjwVgjqp1pZxD1EQ4GMf9vD42r1jAM7teWuk63fPXDvWA8sBxrdVM9sEdhsbGH7jfCEgTg7mvVNh',
-    })
   })
 
   test('export privateKey without publicKey', async () => {
@@ -109,23 +83,6 @@ describe('keychain api', () => {
         'xprvA3aSZco2ba6qU2FmVowiad82ZHahVhAo6RA9XX7APo9aCMhaJhEjJxRRAwCB6mojPMJKvuZmG1nKmuLZb2VgZF8WpjNA9QtBgAxnNshT1iN',
       xpub: null,
     })
-    await expect(
-      api.exportKey({
-        seedId: otherSeedId,
-        keyId: solanaKeyId,
-        exportPrivate: true,
-        exportPublic: false,
-      })
-    ).resolves.toEqual({
-      privateKey: Buffer.from(
-        '107bfcb5d268f0c8a6d5ade844607a96e42796fcc4410e49f5438f517f82ea1a',
-        'hex'
-      ),
-      publicKey: null,
-      xpriv:
-        'xprvA3ZsPdqNsXe4VXohMHUmVcfUDqUG2et8Nia5wTQQGERE8S4uipLuNQjYzhMrN32rquhFhCoBZwHB1HuYw9p16UxF36DwJmiaDL3xDjfAZVD',
-      xpub: null,
-    })
   })
 
   test('export publicKey', async () => {
@@ -138,38 +95,22 @@ describe('keychain api', () => {
       xpriv: null,
       xpub: 'xpub6GZny8KvRwf8gWLEbqUiwm4m7KRBu9teTe5kKuWmx8gZ5A2irEYyrkju2E3bcGXuW9fiqHURsYNuFJrzXQZZ27qTLrD7BWXjZddq4YqrBHp',
     })
-
-    await expect(api.exportKey({ seedId: otherSeedId, keyId: solanaKeyId })).resolves.toEqual({
-      privateKey: null,
-      publicKey: Buffer.from(
-        '03c7f3033e6943eb432df4488c2f430498d3dda3fadfff643480029ba9203ba3da',
-        'hex'
-      ),
-      xpriv: null,
-      xpub: 'xpub6GZDo9NGhuCMi1tATK1mrkcCmsJkS7byjwVgjqp1pZxD1EQ4GMf9vD42r1jAM7teWuk63fPXDvWA8sBxrdVM9sEdhsbGH7jfCEgTg7mvVNh',
-    })
   })
 
   describe('arePrivateKeysLocked', () => {
-    test('returns false if no seeds are locked', async () => {
+    test('returns false when keychain is unlocked', async () => {
       expect(await api.arePrivateKeysLocked()).toBe(false)
     })
 
-    test('returns true if all seeds are locked', async () => {
+    test('returns true after lockPrivateKeys', async () => {
       keychain.lockPrivateKeys()
-      expect(await api.arePrivateKeysLocked([])).toBe(true)
-    })
-
-    test('returns true if some seeds are locked', async () => {
-      keychain.lockPrivateKeys()
-      await keychain.unlockPrivateKeys([seed])
       expect(await api.arePrivateKeysLocked()).toBe(true)
     })
 
-    test('returns false if targetted seed is unlocked', async () => {
+    test('returns false after lock + unlock', async () => {
       keychain.lockPrivateKeys()
-      await keychain.unlockPrivateKeys([seed])
-      expect(await api.arePrivateKeysLocked([seed])).toBe(false)
+      await keychain.unlockPrivateKeys()
+      expect(await api.arePrivateKeysLocked()).toBe(false)
     })
   })
 
@@ -179,6 +120,11 @@ describe('keychain api', () => {
     const keyId = new KeyIdentifier({
       derivationAlgorithm: 'BIP32',
       derivationPath: `m/${EXO}'/5'/0'`,
+      keyType: 'secp256k1',
+    })
+    const otherKeyId = new KeyIdentifier({
+      derivationAlgorithm: 'BIP32',
+      derivationPath: `m/${EXO}'/5'/1'`,
       keyType: 'secp256k1',
     })
 
@@ -195,7 +141,7 @@ describe('keychain api', () => {
     test('should encrypt and decrypt data with external keypair', async () => {
       const {
         box: { publicKey: toPublicKey },
-      } = await api.sodium.getKeysFromSeed({ seedId: otherSeedId, keyId })
+      } = await api.sodium.getKeysFromSeed({ seedId, keyId: otherKeyId })
 
       const data = Buffer.from("Harvey Dent's identity was revealed as the Riddler")
       const encrypted = await api.sodium.encryptBox({ seedId, keyId, data, toPublicKey })
@@ -207,8 +153,8 @@ describe('keychain api', () => {
       } = await api.sodium.getKeysFromSeed({ seedId, keyId })
 
       const decrypted = await api.sodium.decryptBox({
-        seedId: otherSeedId,
-        keyId,
+        seedId,
+        keyId: otherKeyId,
         data: encrypted,
         fromPublicKey,
       })

@@ -13,7 +13,7 @@ describe('createSortAssetsSelectorFactory', () => {
     'aave',
     'oneinch',
     'polygon',
-    'exit',
+    'algorand',
     'usdcoin',
     'busd',
     'mcd',
@@ -26,7 +26,7 @@ describe('createSortAssetsSelectorFactory', () => {
       aave: { balance: assets.aave.currency.defaultUnit(1) },
       oneinch: { balance: assets.oneinch.currency.defaultUnit(1) },
       polygon: { balance: assets.polygon.currency.defaultUnit(1) },
-      exit: { balance: assets.exit.currency.defaultUnit(1) },
+      algorand: { balance: assets.algorand.currency.defaultUnit(1) },
       usdcoin: { balance: assets.usdcoin.currency.defaultUnit(3) },
       busd: { balance: assets.busd.currency.defaultUnit(0) },
       mcd: { balance: assets.mcd.currency.defaultUnit(0) },
@@ -41,7 +41,7 @@ describe('createSortAssetsSelectorFactory', () => {
         aave: { balance: createFiatNumberUnit(99) },
         oneinch: { balance: createFiatNumberUnit(98) },
         polygon: { balance: createFiatNumberUnit(5) },
-        exit: { balance: createFiatNumberUnit(5) },
+        algorand: { balance: createFiatNumberUnit(5) },
         usdcoin: { balance: createFiatNumberUnit(3) },
         busd: { balance: createFiatNumberUnit(0) },
         mcd: { balance: createFiatNumberUnit(0) },
@@ -66,7 +66,7 @@ describe('createSortAssetsSelectorFactory', () => {
       [assets.polygon.ticker]: {
         cap: 50,
       },
-      [assets.exit.ticker]: {
+      [assets.algorand.ticker]: {
         cap: 10,
       },
       [assets.usdcoin.ticker]: {
@@ -101,7 +101,7 @@ describe('createSortAssetsSelectorFactory', () => {
       'polygon',
       'ethereum',
       'oneinch',
-      'exit',
+      'algorand',
       'usdcoin',
       'bitcoin',
       'busd',

@@ -1,12 +1,12 @@
 import addressProviderDefinition from '@exodus/address-provider/module/index.js'
 import { createInMemoryAtom } from '@exodus/atoms'
+import { mnemonicToSeed } from '@exodus/bip39'
 import ethereumPlugin from '@exodus/ethereum-plugin'
 import { getSeedId } from '@exodus/key-utils'
-import { Keychain } from '@exodus/keychain/module/index.js'
+import { Keychain } from '@exodus/keychain'
 import { WalletAccount } from '@exodus/models'
 import publicKeyProviderDefinition from '@exodus/public-key-provider/lib/module/index.js'
 import solanaPlugin from '@exodus/solana-plugin'
-import { mnemonicToSeedSync } from 'bip39'
 
 import createConnectedOriginsDefinition from '../index.js'
 
@@ -15,18 +15,19 @@ const ethereum = ethereumPlugin.createAsset({ assetClientInterface: {} })
 const { factory: createPublicKeyProvider } = publicKeyProviderDefinition
 const { factory: createAddressProvider } = addressProviderDefinition
 
-describe('connected origins module', () => {
+describe('connected origins module', async () => {
   let connectedOriginsAtom
   let connectedAccountsAtom
   let connectedOrigins
   let activeWalletAccountAtom
   let enabledWalletAccountsAtom
 
-  const seed = mnemonicToSeedSync(
-    'test memory fury language physical wonder dog valid smart edge decrease mirror'
-  )
+  const seed = await mnemonicToSeed({
+    mnemonic: 'test memory fury language physical wonder dog valid smart edge decrease mirror',
+    validate: false,
+  })
 
-  const seedId = getSeedId(seed)
+  const seedId = await getSeedId(seed)
 
   const walletAccounts = {
     exodus_0: WalletAccount.defaultWith({ seedId }),
@@ -38,7 +39,7 @@ describe('connected origins module', () => {
     enabledWalletAccountsAtom = walletAccountsAtom
 
     const keychain = new Keychain({})
-    keychain.addSeed(seed)
+    await keychain.unlock(seed)
 
     const publicKeyProvider = createPublicKeyProvider({
       keychain,
@@ -56,21 +57,14 @@ describe('connected origins module', () => {
     solana.baseAsset = solana
     ethereum.baseAsset = ethereum
 
-    const assetsModule = {
-      getAssets() {
-        return assets
-      },
-      getAsset(name) {
-        return assets[name]
-      },
-    }
+    const assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
 
     const addressCache = { get: async () => {}, set: async () => {} }
 
     const addressProvider = createAddressProvider({
       publicKeyProvider,
       assetSources,
-      assetsModule,
+      assetsAtom,
       addressCache,
     })
 

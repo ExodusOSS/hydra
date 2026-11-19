@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/ExodusMovement/exodus/compare/@exodus/application@4.0.0...@exodus/application@4.0.1) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/application
+
+## [4.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@3.0.1...@exodus/application@4.0.0) (2026-07-20)
+
+### ⚠ BREAKING CHANGES
+
+- move wallet state atoms to wallet (#17228)
+
+### Code Refactoring
+
+- move wallet state atoms to wallet ([#17228](https://github.com/ExodusMovement/exodus-hydra/issues/17228)) ([faba834](https://github.com/ExodusMovement/exodus-hydra/commit/faba834045ccac67f100659befd4685886ca9dee))
+
+## [3.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@3.0.0...@exodus/application@3.0.1) (2026-06-17)
+
+### Bug Fixes
+
+- fix(application): drive redux walletExists from an atom to survive stale load (#17215)
+
+## [3.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.15.4...@exodus/application@3.0.0) (2026-06-03)
+
+### ⚠ BREAKING CHANGES
+
+- remove multi-seed support from wallet/keychain (#16379)
+
+### Code Refactoring
+
+- remove multi-seed support from wallet/keychain ([#16379](https://github.com/ExodusMovement/exodus-hydra/issues/16379)) ([e63510f](https://github.com/ExodusMovement/exodus-hydra/commit/e63510f2b57b7bcb7704d993baf2e75d11edb3ad))
+
+## [2.15.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.15.3...@exodus/application@2.15.4) (2026-04-24)
+
+### Bug Fixes
+
+- fix(application): allow payload-less EventReducer callers (#16171)
+
+## [2.15.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.15.2...@exodus/application@2.15.3) (2026-04-24)
+
+### Bug Fixes
+
+- fix(application): follow lockedAtom for isLocked in redux (#16140)
+
+## [2.15.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.15.1...@exodus/application@2.15.2) (2026-04-11)
+
+**Note:** Version bump only for package @exodus/application
+
+## [2.15.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.15.0...@exodus/application@2.15.1) (2026-04-03)
+
+### Bug Fixes
+
+- fix: wallet createdAt atom defaultValue + document how it gets set (#15834)
+
 ## [2.15.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/application@2.14.0...@exodus/application@2.15.0) (2026-03-04)
 
 ### Features

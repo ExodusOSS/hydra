@@ -1,6 +1,6 @@
 import type { Storage } from '@exodus/storage-interface'
 import { StorageMobile } from './storage.js'
-import type { Dependencies } from './helpers/types'
+import type { Dependencies } from './helpers/types.js'
 import withFilesystemFallback from './helpers/with-filesystem-fallback.js'
 import { hashSync } from '@exodus/crypto/hash'
 import fs from '@exodus/react-native-fs'
@@ -30,12 +30,13 @@ const defaultAndroidFallback = {
   placeholder: '~',
   rootDir: fs.DocumentDirectoryPath + '/async-storage',
   hashString,
-  threshold: 1.9 * 1024 * 1024, // 2 megs, slightly lower to avoid the edge cases too close to the limit
+  threshold: 1.9 * 1024 * 1024, // UTF-8 bytes, with headroom below Android's 2 MiB row limit.
 }
 
 export default function createStorageMobile<Value>({
   asyncStorage,
   androidFallback,
+  errorTracking,
 }: Dependencies): Storage<Value> {
   if (androidFallback?.hashString) {
     assert(
@@ -47,6 +48,6 @@ export default function createStorageMobile<Value>({
   return withFilesystemFallback<Value>({
     ...defaultAndroidFallback,
     ...androidFallback,
-    storage: new StorageMobile<Value>(asyncStorage),
+    storage: new StorageMobile<Value>(asyncStorage, '', errorTracking),
   })
 }

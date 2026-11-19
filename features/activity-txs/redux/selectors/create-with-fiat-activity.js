@@ -2,7 +2,48 @@ import { memoize } from '@exodus/basic-utils'
 import { createSelector } from 'reselect'
 import assert from 'minimalistic-assert'
 import { TX_TYPES } from '../constants/tx-types.js'
-import { ORDER_STATUS, ORDER_TYPES } from '@exodus/models/lib/fiat-order/constants.js'
+import { FIAT_ORDER } from '@exodus/models'
+
+const { ORDER_STATUS, ORDER_TYPES } = FIAT_ORDER
+
+const ORDER_TX_MATCH_WINDOW_MS = 3 * 24 * 60 * 60 * 1000
+
+const NON_MATCHABLE_ORDER_STATUSES = new Set([
+  ORDER_STATUS.failed,
+  ORDER_STATUS.refunded,
+  ORDER_STATUS.expired,
+  ORDER_STATUS.error,
+])
+
+const findMatchingOrderIndex = ({ activityItem, ordersWithoutTx }) => {
+  const coinAmount = activityItem.tx?.coinAmount
+  if (!coinAmount) {
+    return -1
+  }
+
+  const txTime = activityItem.date?.getTime?.()
+  if (!Number.isFinite(txTime)) {
+    return -1
+  }
+
+  const absAmount = coinAmount.abs()
+
+  return ordersWithoutTx.findIndex((order) => {
+    const isSell = order.orderType === ORDER_TYPES.sell
+    if (isSell !== activityItem.tx.sent) {
+      return false
+    }
+
+    const orderAmount = isSell ? order.fromAmount : order.toAmount
+    if (!orderAmount || !absAmount.equals(orderAmount)) {
+      return false
+    }
+
+    const orderTime = order.date?.getTime?.()
+
+    return Number.isFinite(orderTime) && Math.abs(txTime - orderTime) <= ORDER_TX_MATCH_WINDOW_MS
+  })
+}
 
 const selectorFactory =
   (visibleOrdersSelector) =>
@@ -20,8 +61,8 @@ const selectorFactory =
           }
 
           let hasChanges = false
-          const pendingFiatOrdersWithoutTx = []
           const fiatOrdersWithoutTx = []
+          const matchableOrdersWithoutTx = []
 
           if (displayFiatOrdersWithoutTx) {
             for (const order of fiatOrders) {
@@ -34,8 +75,8 @@ const selectorFactory =
 
               if (isRelatedBuyOrder || isRelatedSellOrder) {
                 fiatOrdersWithoutTx.push(order)
-                if (order.exodusStatus === ORDER_STATUS.in_progress) {
-                  pendingFiatOrdersWithoutTx.push(order)
+                if (!NON_MATCHABLE_ORDER_STATUSES.has(order.exodusStatus)) {
+                  matchableOrdersWithoutTx.push(order)
                 }
               }
             }
@@ -57,24 +98,24 @@ const selectorFactory =
                   type: TX_TYPES.FIAT,
                 })
               }
-            } else {
-              if (activityItem.pending && pendingFiatOrdersWithoutTx.length > 0) {
-                const matchingOrderIndex = pendingFiatOrdersWithoutTx.findIndex((order) => {
-                  const orderAmount =
-                    order.orderType === ORDER_TYPES.sell ? order.fromAmount : order.toAmount
 
-                  return activityItem.tx?.coinAmount?.abs().equals(orderAmount)
-                })
-
-                if (matchingOrderIndex !== -1) {
-                  hasChanges = true
-                  pendingFiatOrdersWithoutTx.splice(matchingOrderIndex, 1)
-                  continue
-                }
-              }
-
-              resultActivity.push(activityItem)
+              continue
             }
+
+            if (matchableOrdersWithoutTx.length > 0) {
+              const matchingOrderIndex = findMatchingOrderIndex({
+                activityItem,
+                ordersWithoutTx: matchableOrdersWithoutTx,
+              })
+
+              if (matchingOrderIndex !== -1) {
+                matchableOrdersWithoutTx.splice(matchingOrderIndex, 1)
+                hasChanges = true
+                continue
+              }
+            }
+
+            resultActivity.push(activityItem)
           }
 
           for (const fiatOrder of fiatOrdersWithoutTx) {

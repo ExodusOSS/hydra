@@ -1,13 +1,12 @@
 import type { MockablePublicKeyProvider } from '../module/index.js'
-import type { Definition } from 'libraries/dependency-types/index.js'
-import type { AssetsModule, BlockchainMetadata } from '../module/utils/types.js'
+import type { Definition } from '@exodus/dependency-types'
+import type { BlockchainMetadata } from '../module/utils/types.js'
 import type { Atom } from '@exodus/atoms'
 
 type Dependencies = {
   publicKeyProvider: MockablePublicKeyProvider
   blockchainMetadata: BlockchainMetadata
   activeWalletAccountAtom: Atom<string>
-  assetsModule: AssetsModule
 }
 
 const factory = ({ blockchainMetadata }: Dependencies) => {

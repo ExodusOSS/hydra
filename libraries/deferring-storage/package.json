@@ -6,12 +6,12 @@
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/deferring-storage",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/deferring-storage",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Adeferring-storage"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Adeferring-storage"
   },
   "main": "lib/index.js",
   "exports": "./lib/index.js",
@@ -21,15 +21,19 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "run -T tsc --build tsconfig.build.json",
-    "clean": "run -T tsc --build --clean",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest --esbuild",
-    "prepublishOnly": "yarn run -T build --scope @exodus/deferring-storage"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/deferring-storage"
   },
   "dependencies": {
     "@exodus/storage-interface": "^1.0.0",
     "p-defer": "^4.0.0"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

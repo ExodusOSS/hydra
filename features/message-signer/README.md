@@ -5,7 +5,7 @@ The message signer delegates the unsigned message to the corresponding software 
 ## Install
 
 ```sh
-yarn add @exodus/message-signer
+pnpm add @exodus/message-signer
 ```
 
 ## Usage

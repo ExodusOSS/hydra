@@ -5,12 +5,12 @@
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/react-hooks",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/react-hooks",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Areact-hooks"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Areact-hooks"
   },
   "type": "module",
   "main": "index.js",
@@ -22,11 +22,11 @@
     "!**/__tests__/**"
   ],
   "scripts": {
-    "lint": "run -T eslint .",
-    "test": "run -T exodus-test --jest",
-    "lint:fix": "yarn lint --fix",
-    "docs": "node generate_docs.js common browser && yarn format",
-    "format": "run -T prettier --write \"**/*.md\" --loglevel warn"
+    "lint": "pnpm exec eslint .",
+    "test": "pnpm exec exodus-test --jest",
+    "lint:fix": "pnpm run lint --fix",
+    "docs": "node generate_docs.js common browser && pnpm run format",
+    "format": "pnpm exec prettier --write \"**/*.md\" --loglevel warn"
   },
   "dependencies": {
     "fuse.js": "^3.3.0",
@@ -34,11 +34,15 @@
   },
   "devDependencies": {
     "@babel/parser": "^7.22.7",
+    "@exodus/crypto": "^1.0.0-rc.26",
     "@testing-library/react-hooks": "^8.0.1"
   },
   "peerDependencies": {
     "lodash": "*",
     "ms": "*",
     "react": "^17 || ^18"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

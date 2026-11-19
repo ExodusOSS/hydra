@@ -28,7 +28,7 @@ this library was built.**
 ## Install
 
 ```sh
-yarn add @exodus/currency
+pnpm add @exodus/currency
 ```
 
 ## Important Concepts
@@ -253,21 +253,15 @@ const distance2 = distanceSI.parse('1000 m')
 distance1.gte(distance2) // true
 ```
 
-#### NumberUnit.prototype.isZero()
+#### NumberUnit.prototype.isZero
 
-Returns `true` or `false` depending upon whether the number is `0`.
-
-**Signature:** `isZero()`
-
-**Parameters:** (none)
-
-**Returns:** A `boolean` depending upon whether the number is `0`.
+`boolean` property, `true` if the number is `0`.
 
 **Example:**
 
 ```js
-bitcoin.BTC(0).isZero() // true
-bitcoin.BTC(-1).isZero() // false
+bitcoin.BTC(0).isZero // true
+bitcoin.BTC(-1).isZero // false
 ```
 
 #### NumberUnit.prototype.lt(numberUnit)

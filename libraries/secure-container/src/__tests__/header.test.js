@@ -1,5 +1,5 @@
 import test from '@exodus/test/tape'
-import { header } from 'secure-container' // eslint-disable-line import/no-extraneous-dependencies
+import { header } from 'secure-container'
 
 test('encode / decode header', (t) => {
   t.plan(1)

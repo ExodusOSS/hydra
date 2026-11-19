@@ -5,7 +5,7 @@ import type { UtxoCollectionJson } from '../utxo-collection/index.js'
 import UtxoCollection from '../utxo-collection/index.js'
 import createSerializeDeserialize from '@exodus/serialization'
 
-const { mapValues } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { mapValues } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 const unitTypeToJSON = (ut: UnitType) => mapValues(ut.units, (u) => u.power)
 
@@ -13,7 +13,6 @@ const typeDefinitions = [
   {
     type: 'numberunit',
     class: NumberUnit,
-    // @ts-expect-error -- toString without any arguments should not be used
     serialize: (v: NumberUnit) => ({ v: v.toString(), u: unitTypeToJSON(v.unitType) }),
     deserialize: (v: { v: string; u: Record<string, number> }) => UnitType.create(v.u).parse(v.v),
   },

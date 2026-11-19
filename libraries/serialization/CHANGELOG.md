@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.3](https://github.com/ExodusMovement/exodus/compare/@exodus/serialization@2.3.2...@exodus/serialization@2.3.3) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/serialization
+
+## [2.3.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/serialization@2.3.1...@exodus/serialization@2.3.2) (2026-06-01)
+
+### Bug Fixes
+
+- properly check for reversed key order ([#16917](https://github.com/ExodusMovement/exodus-hydra/issues/16917)) ([221b652](https://github.com/ExodusMovement/exodus-hydra/commit/221b65230cee7567e2b7c00a11fe52b096fc7500)), closes [#16901](https://github.com/ExodusMovement/exodus-hydra/issues/16901)
+- **serialization:** remove stale lint directive ([#16256](https://github.com/ExodusMovement/exodus-hydra/issues/16256)) ([9f35de4](https://github.com/ExodusMovement/exodus-hydra/commit/9f35de4cf2259c4d46160d3489cd8b6e90414a69))
+
 ## [2.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/serialization@2.3.0...@exodus/serialization@2.3.1) (2026-02-18)
 
 ### Bug Fixes

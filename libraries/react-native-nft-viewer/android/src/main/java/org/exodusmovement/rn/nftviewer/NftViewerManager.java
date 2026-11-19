@@ -2,7 +2,7 @@ package org.exodusmovement.rn.nftviewer;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.webkit.WebMessage;
 import android.webkit.WebMessagePort;
 import android.webkit.WebView;
@@ -30,7 +30,9 @@ public class NftViewerManager extends SimpleViewManager<WebView> {
   protected static final String BLANK_URL = "about:blank";
   protected static final String HTML_ENCODING = "UTF-8";
   protected static final String HTML_MIME_TYPE = "text/html";
-  protected static final String BASE_URL = "https://exodus.com";
+  protected static final String DEFAULT_BASE_URL = "https://exodus.com";
+
+  protected static String baseUrl;
 
   public static final int COMMAND_INJECT_JAVASCRIPT = 6;
 
@@ -73,7 +75,7 @@ public class NftViewerManager extends SimpleViewManager<WebView> {
         });
 
         view.postWebMessage(new WebMessage("", new WebMessagePort[]{channel[1]}),
-                Uri.parse(BASE_URL));
+                Uri.parse(DEFAULT_BASE_URL));
       }
     });
 
@@ -90,7 +92,12 @@ public class NftViewerManager extends SimpleViewManager<WebView> {
       return;
     }
 
-    view.loadDataWithBaseURL(BASE_URL, html, HTML_MIME_TYPE, HTML_ENCODING, null);
+    view.loadDataWithBaseURL(DEFAULT_BASE_URL, html, HTML_MIME_TYPE, HTML_ENCODING, null);
+  }
+
+  @ReactProp(name = "baseUrl")
+  public void setBaseUrl(WebView view, @Nullable String baseUrl) {
+    this.baseUrl = baseUrl != null ? baseUrl : DEFAULT_BASE_URL;
   }
 
   @ReactProp(name = "javaScriptEnabled", defaultBoolean = false)

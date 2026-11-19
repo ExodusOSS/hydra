@@ -1,0 +1,60 @@
+import isUnitType from './is-unit-type.js'
+import type NumberUnit from './number-unit.js'
+import type UnitType from './unit-type.js'
+import type { ConversionUnitFn } from './types.js'
+
+export interface ConversionByRateOpts {
+  unit1?: string
+  unit2?: string
+}
+
+export default function conversionByRate(
+  ut1: UnitType,
+  ut2: UnitType,
+  rate: number | string,
+  opts: ConversionByRateOpts = Object.create(null)
+): ConversionUnitFn {
+  // ut1 * rate = ut2
+
+  if (!isUnitType(ut1) || !isUnitType(ut2)) {
+    throw new Error('Must pass in an instance of UnitType for ut1 and ut2.')
+  }
+
+  const { unit1, unit2 } = {
+    unit1: String(ut1.defaultUnit),
+    unit2: String(ut2.defaultUnit),
+    ...opts,
+  } // allows you to specify what units the rate is for
+
+  const u1 = ut1.units[unit1]
+  const u2 = ut2.units[unit2]
+  if (!u1) throw new Error(`unit1 (${unit1}) is not from ut1`)
+  if (!u2) throw new Error(`unit2 (${unit2}) is not from ut2`)
+
+  return function converter(someNumberUnit: NumberUnit): NumberUnit {
+    const ut = someNumberUnit.unitType
+
+    if (ut.equals(ut1)) {
+      // means we have 1, want 2
+      const newUnit = ut2.baseUnit(someNumberUnit._number).mul(u2.multiplier).mul(rate)
+      newUnit._number = newUnit._number.div(u1.multiplier)
+      return newUnit.to(unit2)
+    }
+
+    if (ut.equals(ut2)) {
+      // means we have 2, want 1
+      let newUnit = ut1.baseUnit(someNumberUnit._number).mul(u1.multiplier)
+      try {
+        newUnit = newUnit.div(rate) // no throwing on division by 0, that would crash
+      } catch (err) {
+        if (String((err as Error).message) !== 'Invalid division by 0') throw err // unknown error, we should rethrow
+        newUnit = ut1.baseUnit(0)
+      }
+
+      newUnit._number = newUnit._number.div(u2.multiplier)
+      return newUnit.to(unit1)
+    }
+
+    throw new Error('Conversion error')
+  }
+}

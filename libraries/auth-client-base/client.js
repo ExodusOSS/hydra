@@ -1,6 +1,6 @@
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { pickBy } from '@exodus/basic-utils'
-import { fetch as exodusFetch } from '@exodus/fetch' // eslint-disable-line no-restricted-imports
 import typeforce from '@exodus/typeforce'
 
 const HTTP_METHODS = ['get', 'post', 'delete', 'put', 'patch']
@@ -28,8 +28,10 @@ const getHeadersFromMetadata = (metadata) =>
     (value) => value != null
   )
 
+const globalFetch = (res, opt) => fetch(res, opt)
+
 class Client {
-  constructor({ fetch = exodusFetch, config, metadata = {} }) {
+  constructor({ fetch = globalFetch, config, metadata = {} }) {
     typeforce(
       {
         keyPair: typeforce.maybe(typeforce.Object),

@@ -1,12 +1,13 @@
+import { defineSelectorResultFunction } from '@exodus/redux-dependency-injection'
 import type { WalletAccount } from '@exodus/models'
 
 // can't we just do Object.values(data) where data comes from { selector: 'data' }?
 const resultFunction = (
   walletAccounts: string[],
   get: (name: string) => WalletAccount | undefined
-) => walletAccounts.map(get)
+): (WalletAccount | undefined)[] => walletAccounts.map(get)
 
-export default {
+export default defineSelectorResultFunction({
   id: 'all',
   resultFunction,
   dependencies: [
@@ -14,4 +15,4 @@ export default {
     { selector: 'names' },
     { selector: 'get' },
   ],
-} as const
+})

@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
     "event": {
-      "const": "PayKYCEmailVerifyView"
+      "const": "PayKycEmailVerifyView"
     },
     "properties": {
       "allOf": [

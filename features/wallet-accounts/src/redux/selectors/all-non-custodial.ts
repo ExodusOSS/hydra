@@ -1,3 +1,4 @@
+import { defineSelectorFactory } from '@exodus/redux-dependency-injection'
 import { createSelector } from 'reselect'
 import type { WalletAccountsSelectors } from '../types.js'
 
@@ -11,11 +12,11 @@ const allNonCustodialSelectorFactory = (
   createSelector(
     namesSelector,
     isCustodialSelector,
-    (allWalletAccounts: string[], isCustodialWallet: (name: string) => boolean) =>
+    (allWalletAccounts: string[], isCustodialWallet: (name: string) => boolean): string[] =>
       allWalletAccounts.filter((walletAccount: string) => !isCustodialWallet(walletAccount))
   )
 
-const allNonCustodialSelectorDefinition = {
+const allNonCustodialSelectorDefinition = defineSelectorFactory({
   id: 'allNonCustodial',
   selectorFactory: allNonCustodialSelectorFactory,
   dependencies: [
@@ -23,6 +24,6 @@ const allNonCustodialSelectorDefinition = {
     { selector: 'names' },
     { selector: 'isCustodial' },
   ],
-} as const
+})
 
 export default allNonCustodialSelectorDefinition

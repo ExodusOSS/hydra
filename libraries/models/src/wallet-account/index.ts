@@ -1,11 +1,11 @@
-import proxyFreeze from 'proxy-freeze'
+import proxyFreeze from '@exodus/proxy-freeze'
 // eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import assert from 'minimalistic-assert'
 import { ModelIdSymbol } from '../constants.js'
 import { createIsInstance, omitUndefined } from '../utils.js'
 
-const { isEqual, isNil, merge } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { isEqual, isNil, merge } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 /* WalletAccount acts as a robust alternative to using strings
  * to identify and differentiate hardware/software wallet account
@@ -29,6 +29,7 @@ export const LEDGER_SRC = 'ledger'
 export const FTX_SRC = 'ftx'
 export const PASSKEY_SRC = 'passkey'
 export const POLYMARKET_SRC = 'polymarket'
+export const MPSWAPS_SRC = 'mpswaps'
 
 export type WalletAccountSource =
   | typeof EXODUS_SRC
@@ -38,11 +39,12 @@ export type WalletAccountSource =
   | typeof FTX_SRC
   | typeof PASSKEY_SRC
   | typeof POLYMARKET_SRC
+  | typeof MPSWAPS_SRC
 
 export const CUSTODIAL_SOURCES: WalletAccountSource[] = [FTX_SRC]
 export const HARDWARE_SOURCES: WalletAccountSource[] = [TREZOR_SRC, LEDGER_SRC]
 export const SOFTWARE_SEED_SOURCES: WalletAccountSource[] = [EXODUS_SRC, SEED_SRC, PASSKEY_SRC]
-export const EXTERNAL_SOURCES: WalletAccountSource[] = [POLYMARKET_SRC]
+export const EXTERNAL_SOURCES: WalletAccountSource[] = [POLYMARKET_SRC, MPSWAPS_SRC]
 
 export const DEFAULT_COLORS = Object.freeze({
   exodus: '#7b39ff',
@@ -52,6 +54,7 @@ export const DEFAULT_COLORS = Object.freeze({
   ftx: '#00b4c2',
   passkey: '#7b39ff',
   polymarket: '#7b39ff',
+  mpswaps: '#7b39ff',
 })
 
 export const DEFAULT_ICONS = Object.freeze({
@@ -62,6 +65,7 @@ export const DEFAULT_ICONS = Object.freeze({
   ftx: 'ftx',
   passkey: 'exodus',
   polymarket: 'exodus',
+  mpswaps: 'exodus',
 })
 
 export const LABEL_MAX_LENGTH = 100
@@ -76,7 +80,7 @@ export const getDefaultLabel = ({
   index?: number | null
 }) => (index === 0 ? capFirst(source) : '')
 
-const isColor = (str: unknown) => typeof str === 'string' && /^#[\dA-Fa-f]{3,6}$/u.test(str)
+const isColor = (str: unknown) => typeof str === 'string' && /^#(?:[\dA-Fa-f]{3}){1,2}$/u.test(str)
 
 const IMMUTABLE_PROPERTIES = ['id', 'source', 'index', 'isMultisig', 'delegated']
 
@@ -108,6 +112,7 @@ export default class WalletAccount {
   static readonly FTX_SRC = FTX_SRC
   static readonly PASSKEY_SRC = PASSKEY_SRC
   static readonly POLYMARKET_SRC = POLYMARKET_SRC
+  static readonly MPSWAPS_SRC = MPSWAPS_SRC
 
   source: WalletAccountSource
   index: number | null
@@ -274,7 +279,7 @@ export default class WalletAccount {
     }
 
     IMMUTABLE_PROPERTIES.forEach((immutable) => {
-      if (fields[immutable] && fields[immutable] !== this[immutable as keyof WalletAccount]) {
+      if (immutable in fields && fields[immutable] !== this[immutable as keyof WalletAccount]) {
         throw new Error(`property "${immutable}" is immutable`)
       }
     })

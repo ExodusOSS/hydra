@@ -5,7 +5,7 @@ This Exodus SDK feature provides a way to enable/disable assets, as well as auto
 ## Install
 
 ```sh
-yarn add @exodus/enabled-assets
+pnpm add @exodus/enabled-assets
 ```
 
 ## Usage

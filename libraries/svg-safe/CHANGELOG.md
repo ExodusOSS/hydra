@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/svg-safe@1.0.0-rc.3...@exodus/svg-safe@2.0.0) (2026-04-27)
+
+### ⚠ BREAKING CHANGES
+
+- strict validate rules, add validateTrusted (#15577)
+
+### Features
+
+- feat!: strict validate rules, add validateTrusted (#15577)
+
 ## [1.0.0-rc.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/svg-safe@1.0.0-rc.2...@exodus/svg-safe@1.0.0-rc.3) (2025-03-28)
 
 ### Bug Fixes

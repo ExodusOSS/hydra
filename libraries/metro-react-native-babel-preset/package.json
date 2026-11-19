@@ -9,7 +9,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "scripts": {
     "prepare-release": "test -d build && rm -rf src.real && mv src src.real && mv build src",
@@ -37,6 +37,7 @@
     "@babel/plugin-transform-computed-properties": "^7.0.0",
     "@babel/plugin-transform-destructuring": "^7.24.8",
     "@babel/plugin-transform-flow-strip-types": "^7.25.2",
+    "@babel/plugin-transform-for-of": "^7.24.1",
     "@babel/plugin-transform-function-name": "^7.0.0",
     "@babel/plugin-transform-literals": "^7.0.0",
     "@babel/plugin-transform-logical-assignment-operators": "^7.24.7",
@@ -54,6 +55,7 @@
     "@babel/plugin-transform-react-jsx": "^7.25.2",
     "@babel/plugin-transform-react-jsx-self": "^7.24.7",
     "@babel/plugin-transform-react-jsx-source": "^7.24.7",
+    "@babel/plugin-transform-regenerator": "^7.24.1",
     "@babel/plugin-transform-runtime": "^7.24.7",
     "@babel/plugin-transform-shorthand-properties": "^7.0.0",
     "@babel/plugin-transform-spread": "^7.0.0",
@@ -66,9 +68,12 @@
     "babel-plugin-transform-flow-enums": "^0.0.2",
     "react-refresh": "^0.14.0"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/metro-react-native-babel-preset",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/metro-react-native-babel-preset",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Ametro-react-native-babel-preset"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Ametro-react-native-babel-preset"
   },
-  "author": "Exodus Movement, Inc."
+  "author": "Exodus Movement, Inc.",
+  "publishConfig": {
+    "provenance": false
+  }
 }

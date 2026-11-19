@@ -5,7 +5,7 @@ Utils for formatting numbers, strings, and money.
 ## Installation
 
 ```bash
-yarn add @exodus/formatting
+pnpm add @exodus/formatting
 ```
 
 ## Usage

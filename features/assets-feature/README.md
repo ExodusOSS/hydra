@@ -5,7 +5,7 @@ This Exodus SDK feature provides access to instances of all blockchain asset ada
 ## Install
 
 ```sh
-yarn add @exodus/assets-feature
+pnpm add @exodus/assets-feature
 ```
 
 ## Usage
@@ -39,6 +39,8 @@ const myModule = {
 See [api/index.d.ts](./api/index.d.ts) for more details on the API and token validation/curation status.
 
 ### API Side
+
+`assetsModule.dynamicCombinedAssetOverrides` maps a token's asset name to the asset whose name and ticker should identify its dynamic combined group. For example, `{ cbbtc_basemainnet_58df8ab4: 'bitcoin' }` combines Base cbBTC with Bitcoin while preserving cbBTC's metadata and transaction identity. The target is the primary member; both assets must be loaded and eligible for dynamic grouping. Until the target is available and eligible, the token remains available individually and does not fall back to name/ticker grouping. Static grouping is unchanged.
 
 See [using the sdk](../../docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK and the API interface in the [type declaration](./api/index.d.ts).
 

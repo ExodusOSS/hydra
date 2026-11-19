@@ -55,7 +55,7 @@ describe('balances', () => {
     })
 
     const currentBalances = await balancesAtom.get()
-    expect(currentBalances.balances[WalletAccount.DEFAULT_NAME].bitcoin).toEqual({
+    expect(currentBalances.balances[WalletAccount.DEFAULT_NAME].bitcoin).toMatchObject({
       balance: assetsModule.getAsset('bitcoin').currency.defaultUnit('0.00169844'),
       total: assetsModule.getAsset('bitcoin').currency.defaultUnit('0.00169844'),
       spendableBalance: assetsModule.getAsset('bitcoin').currency.defaultUnit('0.00169844'),

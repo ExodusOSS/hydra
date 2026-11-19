@@ -78,6 +78,8 @@ describe('assets-feature', () => {
 
     container.use(terribleTickersFeature())
     const exodus = container.resolve()
+    await exodus.application.start()
     await expect(exodus.tickers.get('bitcoin')).resolves.toEqual('BTC')
+    await exodus.application.stop()
   })
 })

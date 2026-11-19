@@ -46,13 +46,14 @@ const createAssetSourceTxsSelector = memoize(
 const createActivityTxsAtom = ({
   txLogsAtom,
   accountStatesAtom,
-  assetsModule,
+  assetsAtom,
   logger,
   errorTracking,
 }) => {
   const inputAtom = combine({
     txLogs: txLogsAtom,
     accountStates: accountStatesAtom,
+    assetsAtomValue: assetsAtom,
   })
 
   let prevResult = Object.create(null)
@@ -70,16 +71,10 @@ const createActivityTxsAtom = ({
     return walletCache
   }
 
-  function processActivityForAsset(
-    walletAccount,
-    assetName,
-    assetTxSet,
-    accountStatesValue,
-    runId
-  ) {
+  function processActivityForAsset(walletAccount, asset, assetTxSet, accountStatesValue, runId) {
+    const assetName = asset.name
     const walletCache = getWalletCache(walletAccount)
     const cached = walletCache.get(assetName)
-    const asset = assetsModule.getAsset(assetName)
     const baseAssetName = asset.baseAsset.name
     const baseAssetAccountState = accountStatesValue?.[walletAccount]?.[baseAssetName]
 
@@ -171,10 +166,11 @@ const createActivityTxsAtom = ({
     return txs
   }
 
-  const selector = ({ txLogs, accountStates }) => {
+  const selector = ({ txLogs, accountStates, assetsAtomValue }) => {
     const runId = (runIdCounter += 1)
     const txLogsValue = txLogs?.value ?? Object.create(null)
     const accountStatesValue = accountStates?.value ?? Object.create(null)
+    const assets = assetsAtomValue?.value ?? Object.create(null)
 
     let activeCount = 0
 
@@ -199,13 +195,14 @@ const createActivityTxsAtom = ({
 
       if (prevWallet) {
         for (const assetName in accountTxLogs) {
+          if (!Object.prototype.hasOwnProperty.call(assets, assetName)) continue
           if (!Object.prototype.hasOwnProperty.call(accountTxLogs, assetName)) continue
           assetsCount += 1
           activeCount += 1
 
           const activityTxs = processActivityForAsset(
             walletAccount,
-            assetName,
+            assets[assetName],
             accountTxLogs[assetName],
             accountStatesValue,
             runId
@@ -236,12 +233,13 @@ const createActivityTxsAtom = ({
 
       const nextWallet = Object.create(null)
       for (const assetName in accountTxLogs) {
+        if (!Object.prototype.hasOwnProperty.call(assets, assetName)) continue
         if (!Object.prototype.hasOwnProperty.call(accountTxLogs, assetName)) continue
         activeCount += 1
 
         const activityTxs = processActivityForAsset(
           walletAccount,
-          assetName,
+          assets[assetName],
           accountTxLogs[assetName],
           accountStatesValue,
           runId
@@ -287,7 +285,7 @@ const activityTxsAtomDefinition = {
   id: 'activityTxsAtom',
   type: 'atom',
   factory: createActivityTxsAtom,
-  dependencies: ['txLogsAtom', 'accountStatesAtom', 'assetsModule', 'logger', 'errorTracking'],
+  dependencies: ['txLogsAtom', 'accountStatesAtom', 'assetsAtom', 'logger', 'errorTracking'],
   public: true,
 }
 

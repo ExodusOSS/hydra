@@ -5,7 +5,7 @@ This Exodus SDK feature provides an API to calculate fees for a draft transactio
 ## Install
 
 ```sh
-yarn add @exodus/fees
+pnpm add @exodus/fees
 ```
 
 ## Usage

@@ -1,22 +1,26 @@
 {
   "name": "@exodus/balances",
-  "version": "13.15.2",
+  "version": "13.16.1",
   "description": "Tracks crypto balances across enabled wallet accounts.",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix",
-    "format": "run -T prettier --write \"**/*.{json,md,yaml}\" --log-level warn",
-    "format:check": "run -T prettier --check \"**/*.{json,md,yaml}\" --log-level warn"
+    "test": "pnpm exec exodus-test --jest",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix",
+    "format": "pnpm exec prettier --write \"**/*.{json,md,yaml}\" --log-level warn",
+    "format:check": "pnpm exec prettier --check \"**/*.{json,md,yaml}\" --log-level warn"
   },
   "type": "module",
   "main": "index.js",
+  "types": "index.d.ts",
   "files": [
     "module",
     "atoms",
     "default-config.js",
+    "index.d.ts",
+    "tsconfig.json",
     "report",
     "plugins",
     "redux",
@@ -26,24 +30,25 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/balances",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/balances",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abalances"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Abalances"
   },
   "dependencies": {
-    "@exodus/atoms": "^10.0.0",
-    "@exodus/basic-utils": "^3.7.3",
-    "@exodus/core-selectors": "^4.0.0",
-    "@exodus/currency": "^5.0.2",
-    "@exodus/errors": "^3.0.0",
-    "@exodus/models": "^12.0.1",
-    "@exodus/multi-account-redux": "^2.0.1",
-    "@exodus/redux-dependency-injection": "^4.0.3",
-    "@exodus/safe-string": "^1.1.0",
-    "@exodus/typeforce": "^1.18.0",
-    "@exodus/zod": "^3.24.2",
+    "@exodus/asset-types": "^0.6.0",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/core-selectors": "workspace:^",
+    "@exodus/currency": "workspace:^",
+    "@exodus/errors": "workspace:^",
+    "@exodus/models": "workspace:^",
+    "@exodus/multi-account-redux": "workspace:^",
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "@exodus/safe-string": "workspace:^",
+    "@exodus/typeforce": "workspace:^",
+    "@exodus/zod": "^3.24.4",
     "lodash": "^4.17.21",
     "make-concurrent": "^4.0.0",
     "reselect": "^3.0.1"
@@ -53,7 +58,7 @@
   },
   "devDependencies": {
     "@exodus/assets": "^11.0.0",
-    "@exodus/assets-base": "^10.0.0",
+    "@exodus/assets-base": "^12.0.0",
     "@exodus/assets-feature": "workspace:^",
     "@exodus/available-assets": "workspace:^",
     "@exodus/bitcoin-meta": "^2.0.0",

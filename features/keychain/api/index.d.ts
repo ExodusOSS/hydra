@@ -28,8 +28,7 @@ export interface KeychainApi {
       enc: string
     } & KeySource
   ): Promise<Buffer>
-  arePrivateKeysLocked(seeds?: Buffer[]): Promise<boolean>
-  removeSeeds(seeds: Buffer[]): Promise<string[]>
+  arePrivateKeysLocked(): Promise<boolean>
   sodium: {
     sign(params: { data: Buffer } & KeySource): Promise<Buffer>
     signDetached(params: { data: Buffer } & KeySource): Promise<Buffer>
@@ -40,6 +39,7 @@ export interface KeychainApi {
     decryptSecretBox(params: { data: Buffer } & KeySource): Promise<Buffer>
     encryptBox(params: { data: Buffer; toPublicKey: Buffer } & KeySource): Promise<Buffer>
     decryptBox(params: { data: Buffer; fromPublicKey: Buffer } & KeySource): Promise<Buffer>
+    decryptSealedBox(params: { data: Buffer } & KeySource): Promise<Buffer>
   }
   ed25519: {
     signBuffer(params: { data: Buffer } & KeySource): Promise<Buffer>
@@ -50,7 +50,6 @@ export interface KeychainApi {
     signSchnorr(
       params: { data: Buffer; extraEntropy?: Buffer; tweak?: Buffer } & KeySource
     ): Promise<Buffer>
-    signSchnorrZ(params: { data: Buffer } & KeySource): Promise<Buffer>
   }
 }
 

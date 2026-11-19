@@ -1,5 +1,5 @@
 import * as bitcoin from '@exodus/bitcoinjs'
-import { tiny_secp256k1_compat as ecc } from '@exodus/crypto/secp256k1'
+import * as ecc from '@exodus/crypto/tiny-secp256k1-compat'
 import { ECPairFactory } from 'ecpair'
 
 // Import module to be tested
@@ -30,7 +30,7 @@ describe('BIP322 Test', () => {
     // Obtain the script public key
     const scriptPubKey = bitcoin.payments.p2wpkh({
       address: 'bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l',
-    }).output
+    }).output!
 
     // Act
     // Draft a toSpend transaction with empty message
@@ -45,6 +45,8 @@ describe('BIP322 Test', () => {
     expect(helloWorldToSpendTx.getId().toLowerCase()).toEqual(
       'b79d196740ad5217771c1098fc4a4b51e0535c32236c71f1ea4d61a2d603352b'
     )
+    expect(emptyStringToSpendTx.hasWitnesses()).toBe(false)
+    expect(helloWorldToSpendTx.hasWitnesses()).toBe(false)
   })
 
   it('Draft correct BIP-322 toSign transaction', () => {
@@ -53,7 +55,7 @@ describe('BIP322 Test', () => {
     // Obtain the script public key
     const scriptPubKey = bitcoin.payments.p2wpkh({
       address: 'bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l',
-    }).output
+    }).output!
     // Initialize private key used to sign the transaction
     const testPrivateKey = ECPair.fromWIF('L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k')
     const emptyStringToSpendTxId =
@@ -91,7 +93,7 @@ describe('BIP322 Test', () => {
     // Obtain the script public key
     const scriptPubKey = bitcoin.payments.p2wpkh({
       address: 'bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l',
-    }).output
+    }).output!
     // Initialize private key used to sign the transaction
     const testPrivateKey = ECPair.fromWIF('L3VFeEujGtevx9w18HD1fhRbCH67Az2dpCymeRE1SoPK6XQtaN2k')
     // Draft and sign a toSign transaction with Hello World
@@ -114,7 +116,7 @@ describe('BIP322 Test', () => {
     // Obtain the script public key
     const scriptPubKey = bitcoin.payments.p2wpkh({
       address: 'bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l',
-    }).output
+    }).output!
     // Draft a toSign transaction with Hello World
     const toSpendTxId = 'b79d196740ad5217771c1098fc4a4b51e0535c32236c71f1ea4d61a2d603352b'
     const toSignTx = BIP322.buildToSignTx(toSpendTxId, scriptPubKey)

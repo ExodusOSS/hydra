@@ -27,7 +27,7 @@ const createSortOptimisticAssetsSelectorFactoryDefinition = (config) => ({
   selectorFactory: createSelectorFactory(config),
   dependencies: [
     //
-    { selector: 'byAssetSource' },
+    { selector: 'optimisticByAssetSource' },
     { module: 'optimisticBalances', selector: 'getAccountAssetsBalanceSelector', optional: true },
     { module: 'rates', selector: 'fiatRates' },
     { module: 'favoriteAssets', selector: 'getIsFavorite', optional: true },

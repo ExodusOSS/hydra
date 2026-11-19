@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`pofile api should add comment to entry 1`] = `
 "# other comment
@@ -31,9 +31,9 @@ msgid "{exodus.account.active.name} balance"
 msgstr "{exodus.account.active.name} balance"
 
 #: src/Component.js:100
+msgctxt "stake.button"
 msgid "Stake {asset.displayTicker}"
 msgstr "Stake {asset.displayTicker}"
-msgctxt "stake.button"
 
 #: src/Component.js:1
 msgid "Stake {asset.displayTicker}"
@@ -70,9 +70,9 @@ msgid "{exodus.account.active.name} balance"
 msgstr "{exodus.account.active.name} balance"
 
 #: src/Component.js:100
+msgctxt "stake.button"
 msgid "Stake {asset.displayTicker}"
 msgstr "Stake {asset.displayTicker}"
-msgctxt "stake.button"
 
 #: src/Component.js:1
 msgid "Stake {asset.displayTicker}"
@@ -121,9 +121,9 @@ msgid "{exodus.account.active.name} balance"
 msgstr "{exodus.account.active.name} balance"
 
 #: src/Component.js:100
+msgctxt "stake.button"
 msgid "Stake {asset.displayTicker}"
 msgstr "Stake {asset.displayTicker}"
-msgctxt "stake.button"
 
 #: src/Component.js:1
 msgid "Stake {asset.displayTicker}"
@@ -161,9 +161,9 @@ msgid "{exodus.account.active.name} balance"
 msgstr "{exodus.account.active.name} balance"
 
 #: src/Component.js:100
+msgctxt "stake.button"
 msgid "Stake {asset.displayTicker}"
 msgstr "Stake {asset.displayTicker}"
-msgctxt "stake.button"
 
 #: src/Component.js:1
 msgid "Stake {asset.displayTicker}"
@@ -175,6 +175,11 @@ exports[`pofile api should escape entry successfully 1`] = `
 #, remote-config
 msgid "Welcome to \\"Exodus\\""
 msgstr "Bienvenido a \\"Exodus\\"""
+`;
+
+exports[`pofile api should escape literal newlines in id and value 1`] = `
+"msgid "Line one\\nLine two"
+msgstr "Línea uno\\nLínea dos""
 `;
 
 exports[`pofile api should merge duplicated entry 1`] = `
@@ -208,9 +213,9 @@ msgid "{exodus.account.active.name} balance"
 msgstr "{exodus.account.active.name} balance"
 
 #: src/Component.js:100
+msgctxt "stake.button"
 msgid "Stake {asset.displayTicker}"
 msgstr "Stake {asset.displayTicker}"
-msgctxt "stake.button"
 
 #: src/Component.js:1
 msgid "Stake {asset.displayTicker}"
@@ -247,9 +252,9 @@ msgid "{exodus.account.active.name} balance"
 msgstr "{exodus.account.active.name} balance"
 
 #: src/Component.js:100
+msgctxt "stake.button"
 msgid "Stake {asset.displayTicker}"
 msgstr "Stake {asset.displayTicker}"
-msgctxt "stake.button"
 
 #: src/Component.js:1
 msgid "Stake {asset.displayTicker}"
@@ -257,6 +262,12 @@ msgstr "{asset.displayTicker}-Staker"
 
 msgid "{another-var-in-another-context} balance"
 msgstr "{another-var-in-another-context} balance""
+`;
+
+exports[`pofile api should serialize msgctxt before msgid (gettext spec order) 1`] = `
+"msgctxt "stake.button"
+msgid "Stake {asset.displayTicker}"
+msgstr "Stake {asset.displayTicker}""
 `;
 
 exports[`pofile parse should successfully parse simple po file 1`] = `
@@ -289,9 +300,9 @@ msgid "{exodus.account.active.name} balance"
 msgstr "{exodus.account.active.name} balance"
 
 #: src/Component.js:100
+msgctxt "stake.button"
 msgid "Stake {asset.displayTicker}"
 msgstr "Stake {asset.displayTicker}"
-msgctxt "stake.button"
 
 #: src/Component.js:1
 msgid "Stake {asset.displayTicker}"

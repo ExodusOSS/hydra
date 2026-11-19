@@ -9,7 +9,7 @@ import { WalletAccount } from '@exodus/models'
 const lexicographicCompare = (a, b) => String(a).localeCompare(String(b))
 
 const createAddressProviderReport = ({
-  assetsModule,
+  assetsAtom,
   publicKeyProvider,
   enabledWalletAccountsAtom,
   availableAssetNamesByWalletAccountAtom,
@@ -20,8 +20,9 @@ const createAddressProviderReport = ({
   export: async ({ walletExists, isLocked } = Object.create(null)) => {
     if (!walletExists || isLocked) return null
 
+    const { value: assets } = await assetsAtom.get()
     const baseAssets = pickBy(
-      assetsModule.getAssets(),
+      assets,
       (asset) => asset.baseAsset.name === asset.name && !asset.isCombined
     )
 
@@ -71,10 +72,17 @@ const createAddressProviderReport = ({
     const getAssetSourceAddresses = async ({ assetName, walletAccountName }) => {
       const asset = baseAssets[assetName]
       const walletAccount = enabledWalletAccounts[walletAccountName]
-      const supportedPurposes = await addressProvider.getSupportedPurposes({
-        walletAccount,
-        assetName,
-      })
+
+      let supportedPurposes
+      try {
+        supportedPurposes = await addressProvider.getSupportedPurposes({
+          walletAccount,
+          assetName,
+        })
+      } catch (error) {
+        // report the failure instead of failing the whole export
+        return [[[walletAccountName, assetName], { error: SafeError.from(error) }]]
+      }
 
       return Promise.all(
         supportedPurposes.sort(lexicographicCompare).map(async (purpose) => {
@@ -82,7 +90,7 @@ const createAddressProviderReport = ({
           const addressData = Object.create(null)
 
           // TODO: remove when lightning becomes a regular asset
-          // eslint-disable-next-line @exodus/hydra/no-asset-conditions
+          // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-asset-conditions
           if (assetName === 'lightningnetwork') {
             return [
               [walletAccountName, assetName, purposeKey],
@@ -158,8 +166,11 @@ const createAddressProviderReport = ({
 
     const purposeKeys = z.record(z.string().regex(/^bip\d+/u), assetSource)
 
+    // when supported purposes cannot be determined, the error is reported at the asset level
+    const assetError = z.object({ error: z.instanceof(SafeError) }).strict()
+
     // Maps asset names (e.g., "bitcoin", "ethereum") to their purpose keys.
-    const assets = z.record(z.string(), purposeKeys)
+    const assets = z.record(z.string(), z.union([assetError, purposeKeys]))
 
     // Maps wallet accounts (e.g., "exodus_0") to their assets.
     return z
@@ -176,7 +187,7 @@ const addressProviderReportDefinition = {
   type: 'report',
   factory: createAddressProviderReport,
   dependencies: [
-    'assetsModule',
+    'assetsAtom',
     'enabledWalletAccountsAtom',
     'availableAssetNamesByWalletAccountAtom',
     'addressProvider',

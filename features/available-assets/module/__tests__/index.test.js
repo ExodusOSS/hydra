@@ -1,29 +1,30 @@
-import { createInMemoryAtom, waitUntil } from '@exodus/atoms'
-import { enabledAndDisabledAssetsAtomDefinition } from '@exodus/enabled-assets/atoms/index.js'
+import { createInMemoryAtom, createStorageAtomFactory, waitUntil } from '@exodus/atoms'
+import createInMemoryStorage from '@exodus/storage-memory'
+import ms from 'ms'
 
 import { availableAssetsAtomDefinition } from '../../atoms/index.js'
 import availableAssetsDefinition from '../index.js'
 
 const { factory: createAvailableAssets } = availableAssetsDefinition
-const { factory: createEnabledAndDisabledAssetsAtom } = enabledAndDisabledAssetsAtomDefinition
+
+// Same shape as @exodus/enabled-assets' enabledAndDisabledAssetsAtom, minus the workspace dependency.
+// A storage atom (not createInMemoryAtom) because `set` must await the module's async observer.
+const createEnabledAndDisabledAssetsAtom = () =>
+  createStorageAtomFactory({ storage: createInMemoryStorage() })({
+    key: 'data',
+    defaultValue: { disabled: Object.create(null) },
+  })
 
 describe('available-assets module', () => {
   let assetsModule
   let availableAssetsAtom
   let enabledAndDisabledAssetsAtom
-  let mockStorage
   let assetsAtom
   let expectedAssets
 
   beforeEach(() => {
     availableAssetsAtom = availableAssetsAtomDefinition.factory()
-
-    mockStorage = {
-      get: jest.fn(),
-      set: jest.fn(),
-      delete: jest.fn(),
-    }
-    enabledAndDisabledAssetsAtom = createEnabledAndDisabledAssetsAtom({ storage: mockStorage })
+    enabledAndDisabledAssetsAtom = createEnabledAndDisabledAssetsAtom()
 
     assetsModule = {
       getAsset: (assetName) => {
@@ -56,7 +57,7 @@ describe('available-assets module', () => {
       { assetName: 'rootstock', reason: 'default' },
     ]
 
-    availableAssets.start()
+    void availableAssets.start()
   })
 
   it('should filter default available assets when they are not defined on assetModule', async () => {
@@ -139,6 +140,33 @@ describe('available-assets module', () => {
     ])
   })
 
+  test('should not make delisted assets available', async () => {
+    await assetsAtom.set({
+      added: [],
+      updated: [],
+    })
+
+    await new Promise(setImmediate)
+
+    await assetsAtom.set({
+      added: [{ name: 'wayne' }],
+      updated: [{ name: 'exit', api: { features: { delisted: true } } }],
+    })
+
+    const assetNames = await waitUntil({
+      atom: availableAssetsAtom,
+      predicate: (array) => array.length === 3,
+    })
+
+    expect(assetNames).toEqual([
+      ...expectedAssets,
+      {
+        assetName: 'wayne',
+        reason: 'assets-add',
+      },
+    ])
+  })
+
   describe('built-in tokens', () => {
     test('make unavailable built-in tokens available', async () => {
       await assetsAtom.set({
@@ -186,9 +214,7 @@ describe('available-assets module', () => {
 
       const localAvailableAssetsAtom = availableAssetsAtomDefinition.factory()
       const localAssetsAtom = createInMemoryAtom({ added: [], updated: [] })
-      const localEnabledAndDisabledAssetsAtom = createEnabledAndDisabledAssetsAtom({
-        storage: mockStorage,
-      })
+      const localEnabledAndDisabledAssetsAtom = createEnabledAndDisabledAssetsAtom()
 
       const availableAssets = createAvailableAssets({
         assetsModule: localAssetsModule,
@@ -199,7 +225,7 @@ describe('available-assets module', () => {
         config: {
           defaultAvailableAssetNames: [
             'bitcoin',
-            'xous_solana_8ae2dcb8',
+            'xous_solana_2a78fea2',
             'another_solana_8ae2dcb8',
             'notCustomTokenName',
           ],
@@ -209,7 +235,7 @@ describe('available-assets module', () => {
       await availableAssets.load()
 
       expect(localAssetsModule.addRemoteTokens).toHaveBeenCalledWith({
-        tokenNames: ['xous_solana_8ae2dcb8', 'another_solana_8ae2dcb8'],
+        tokenNames: ['xous_solana_2a78fea2', 'another_solana_8ae2dcb8'],
         allowedStatusList: ['c'],
       })
     })
@@ -220,7 +246,7 @@ describe('available-assets module', () => {
           const assets = {
             bitcoin: { name: 'bitcoin', baseAsset: { name: 'bitcoin' } },
             solana: { name: 'solana', baseAsset: { name: 'solana' } },
-            xous_solana_8ae2dcb8: { name: 'xous_solana_8ae2dcb8', baseAsset: { name: 'solana' } },
+            xous_solana_2a78fea2: { name: 'xous_solana_2a78fea2', baseAsset: { name: 'solana' } },
           }
           return assets[assetName]
         },
@@ -229,9 +255,7 @@ describe('available-assets module', () => {
 
       const localAvailableAssetsAtom = availableAssetsAtomDefinition.factory()
       const localAssetsAtom = createInMemoryAtom({ added: [], updated: [] })
-      const localEnabledAndDisabledAssetsAtom = createEnabledAndDisabledAssetsAtom({
-        storage: mockStorage,
-      })
+      const localEnabledAndDisabledAssetsAtom = createEnabledAndDisabledAssetsAtom()
 
       const availableAssets = createAvailableAssets({
         assetsModule: localAssetsModule,
@@ -240,7 +264,7 @@ describe('available-assets module', () => {
         enabledAndDisabledAssetsAtom: localEnabledAndDisabledAssetsAtom,
         logger: { log: jest.fn(), error: jest.fn() },
         config: {
-          defaultAvailableAssetNames: ['bitcoin', 'solana', 'xous_solana_8ae2dcb8'],
+          defaultAvailableAssetNames: ['bitcoin', 'solana', 'xous_solana_2a78fea2'],
         },
       })
 
@@ -249,7 +273,7 @@ describe('available-assets module', () => {
       expect(localAssetsModule.addRemoteTokens).not.toHaveBeenCalled()
     })
 
-    test('only runs once due to lodash.once', async () => {
+    test('only runs once after it succeeds', async () => {
       const localAssetsModule = {
         getAsset: () => {},
         addRemoteTokens: jest.fn(async () => {}),
@@ -257,9 +281,7 @@ describe('available-assets module', () => {
 
       const localAvailableAssetsAtom = availableAssetsAtomDefinition.factory()
       const localAssetsAtom = createInMemoryAtom({ added: [], updated: [] })
-      const localEnabledAndDisabledAssetsAtom = createEnabledAndDisabledAssetsAtom({
-        storage: mockStorage,
-      })
+      const localEnabledAndDisabledAssetsAtom = createEnabledAndDisabledAssetsAtom()
 
       const availableAssets = createAvailableAssets({
         assetsModule: localAssetsModule,
@@ -277,6 +299,91 @@ describe('available-assets module', () => {
       await availableAssets.load()
 
       expect(localAssetsModule.addRemoteTokens).toHaveBeenCalledTimes(1)
+    })
+
+    describe('after a failure', () => {
+      let localAssetsModule
+      let logger
+      let availableAssets
+
+      beforeEach(() => {
+        jest.useFakeTimers()
+
+        localAssetsModule = {
+          getAsset: () => {},
+          addRemoteTokens: jest.fn(async () => {}),
+        }
+
+        logger = { log: jest.fn(), error: jest.fn() }
+
+        availableAssets = createAvailableAssets({
+          assetsModule: localAssetsModule,
+          assetsAtom: createInMemoryAtom({ added: [], updated: [] }),
+          availableAssetsAtom: availableAssetsAtomDefinition.factory(),
+          enabledAndDisabledAssetsAtom: createEnabledAndDisabledAssetsAtom(),
+          logger,
+          config: {
+            defaultAvailableAssetNames: ['another_solana_8ae2dcb8'],
+          },
+        })
+      })
+
+      afterEach(() => {
+        availableAssets.stop()
+        jest.useRealTimers()
+      })
+
+      test('retries with a growing delay until it succeeds', async () => {
+        const networkError = new Error('Network request failed')
+        localAssetsModule.addRemoteTokens
+          .mockRejectedValueOnce(networkError)
+          .mockRejectedValueOnce(networkError)
+
+        await expect(availableAssets.load()).rejects.toThrow('Network request failed')
+        expect(logger.error).toHaveBeenCalledTimes(1)
+
+        await jest.advanceTimersByTimeAsync(ms('5s'))
+        expect(localAssetsModule.addRemoteTokens).toHaveBeenCalledTimes(2)
+        expect(logger.error).toHaveBeenCalledTimes(2)
+
+        await jest.advanceTimersByTimeAsync(ms('5s'))
+        expect(localAssetsModule.addRemoteTokens).toHaveBeenCalledTimes(2)
+
+        await jest.advanceTimersByTimeAsync(ms('5s'))
+        expect(localAssetsModule.addRemoteTokens).toHaveBeenCalledTimes(3)
+
+        await jest.advanceTimersByTimeAsync(ms('1h'))
+        await availableAssets.load()
+        expect(localAssetsModule.addRemoteTokens).toHaveBeenCalledTimes(3)
+      })
+
+      test('retries tokens a failed run registered before it threw', async () => {
+        const registered = new Set()
+        localAssetsModule.getAsset = (name) => (registered.has(name) ? { name } : undefined)
+        localAssetsModule.addRemoteTokens.mockImplementationOnce(async ({ tokenNames }) => {
+          tokenNames.forEach((name) => registered.add(name))
+          throw new Error('storage write failed')
+        })
+
+        await expect(availableAssets.load()).rejects.toThrow('storage write failed')
+
+        await jest.advanceTimersByTimeAsync(ms('5s'))
+        expect(localAssetsModule.addRemoteTokens).toHaveBeenCalledTimes(2)
+        expect(localAssetsModule.addRemoteTokens).toHaveBeenLastCalledWith({
+          tokenNames: ['another_solana_8ae2dcb8'],
+          allowedStatusList: ['c'],
+        })
+      })
+
+      test('stops retrying when stopped', async () => {
+        localAssetsModule.addRemoteTokens.mockRejectedValue(new Error('Network request failed'))
+
+        await expect(availableAssets.load()).rejects.toThrow('Network request failed')
+        availableAssets.stop()
+
+        await jest.advanceTimersByTimeAsync(ms('1h'))
+        expect(localAssetsModule.addRemoteTokens).toHaveBeenCalledTimes(1)
+      })
     })
   })
 })

@@ -3,7 +3,7 @@ import createInMemoryAtom from '../factories/memory.js'
 import type { Atom, Listener, Unsubscribe } from '../utils/types.js'
 
 const optimisticNotifier = <T>(atom: Atom<T>): Atom<T | undefined> => {
-  const memoryAtom = createInMemoryAtom<T | undefined>() // eslint-disable-line @exodus/hydra/in-memory-atom-default-value
+  const memoryAtom = createInMemoryAtom<T | undefined>() // oxlint-disable-line @exodus/oxlint-plugin-hydra/in-memory-atom-default-value
 
   const set = makeConcurrent(async (newValue: T, fromRemote: boolean) => {
     let previous: T | undefined

@@ -11,23 +11,26 @@ import KeyIdentifier from '@exodus/key-identifier'
 const { get, merge } = lodash
 
 class MockableAddressProvider extends AddressProvider {
-  #assetsModule
+  #assetsAtom
   #storage
 
-  // eslint-disable-next-line @exodus/hydra/constructor-params
+  // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/constructor-params
   constructor({ addressCache = addressCacheMemoryModuleDefinition.factory(), ...rest }) {
     super({ addressCache, ...rest })
-    this.#assetsModule = rest.assetsModule
+    this.#assetsAtom = rest.assetsAtom
     this.#storage = rest.unsafeStorage.namespace('debug')
   }
 
-  #getAsset = (assetName) => this.#assetsModule.getAsset(assetName)
+  #getAsset = async (assetName) => {
+    const { value: assets } = await this.#assetsAtom.get()
+    return assets[assetName]
+  }
 
   async #getMockAddress({ purpose, assetName, walletAccount, chainIndex, addressIndex }) {
     const hasIndex = !isNil(addressIndex) && !isNil(chainIndex)
     const hasPurpose = !isNil(purpose)
 
-    const asset = this.#getAsset(assetName)
+    const asset = await this.#getAsset(assetName)
     const walletAccountName = walletAccount.toString()
     const mockAddresses = await this.#storage.get('mockableAddressProvider')
     const keyIdentifier = new KeyIdentifier(
@@ -149,6 +152,9 @@ class MockableAddressProvider extends AddressProvider {
       for (const assetName in report[walletAccount]) {
         addresses[walletAccount][assetName] = Object.create(null)
         for (const bip in report[walletAccount][assetName]) {
+          // assets whose purposes could not be determined are exported as { error }
+          if (bip === 'error') continue
+
           const { address } = report[walletAccount][assetName][bip]
           const purposeStr = bip.replace(/^bip/u, '')
           if (isNaN(purposeStr)) throw new Error(`Invalid bip: ${bip}`)
@@ -173,7 +179,7 @@ const mockableAddressProviderDefinition = {
   type: 'module',
   factory: createMockableAddressProvider,
   dependencies: [
-    'assetsModule',
+    'assetsAtom',
     'publicKeyProvider',
     'addressCache',
     'knownAddresses',
@@ -182,6 +188,7 @@ const mockableAddressProviderDefinition = {
     'unsafeStorage',
     'logger',
     'multisigAtom?',
+    'externalWalletAddressesAtom',
   ],
   public: true,
 }

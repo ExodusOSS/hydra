@@ -4,7 +4,7 @@ import { createFeatureControl } from '@exodus/feature-control'
 
 import { convertConfigToFeatureControlFormat } from '../shared/format-config.js'
 
-// eslint-disable-next-line @exodus/export-default/named
+// oxlint-disable-next-line @exodus/oxlint-plugin-hydra/export-default-named
 export default {
   id: 'featureFlagAtoms',
   type: 'atom-collection',

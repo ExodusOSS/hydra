@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayPredictionsSellSuccess"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        },
+        {
+          "$ref": "common-properties#/definitions/predictionsProperties"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "position_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "market_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "sell_amount_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "fee_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "builder_fee_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "platform_fee_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "realized_pnl_usd": {
+          "type": "number"
+        },
+        "is_first_sell": {
+          "type": "boolean"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

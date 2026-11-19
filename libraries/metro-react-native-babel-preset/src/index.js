@@ -8,11 +8,11 @@
  * @oncall react_native
  */
 
-"use strict";
+'use strict'
 
-const main = require("./configs/main");
+const main = require('./configs/main')
 module.exports = function (babel, options) {
-  return main(options);
-};
-module.exports.getPreset = main.getPreset;
-module.exports.passthroughSyntaxPlugins = require("./passthrough-syntax-plugins");
+  return main(options)
+}
+module.exports.getPreset = main.getPreset
+module.exports.passthroughSyntaxPlugins = require('./passthrough-syntax-plugins')

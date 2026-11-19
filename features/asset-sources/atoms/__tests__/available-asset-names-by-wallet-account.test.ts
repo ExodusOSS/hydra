@@ -637,4 +637,117 @@ describe('availableAssetNamesByWalletAccountAtom', () => {
       expect(delegatedAssets).not.toContain('cardano')
     })
   })
+
+  describe('allowedBaseAssetNamesByWalletAccount', () => {
+    const createAtom = ({
+      walletAccounts,
+      availableAssetNames,
+      allowedBaseAssetNamesByWalletAccount,
+      testAssets = assets,
+    }: {
+      walletAccounts: WalletAccount[]
+      availableAssetNames: string[]
+      allowedBaseAssetNamesByWalletAccount: Record<string, string[]>
+      testAssets?: Assets
+    }) =>
+      availableAssetNamesByWalletAccountAtomDefinition.factory({
+        assetsAtom: createInMemoryAtom({ defaultValue: { value: testAssets } }),
+        availableAssetNamesAtom: createInMemoryAtom({ defaultValue: availableAssetNames }),
+        enabledWalletAccountsAtom: createInMemoryAtom({
+          defaultValue: Object.fromEntries(
+            walletAccounts.map((walletAccount) => [walletAccount.toString(), walletAccount])
+          ),
+        }),
+        config: { ...defaultConfig, allowedBaseAssetNamesByWalletAccount },
+      })
+
+    it('limits a listed wallet account to the assets on its networks, tokens and multi-chain assets included', async () => {
+      const polymarketAccount = new WalletAccount({
+        source: WalletAccount.POLYMARKET_SRC,
+        index: 0,
+      })
+      const exodusAccount = new WalletAccount({ source: WalletAccount.EXODUS_SRC, index: 0 })
+      const availableAssetNames = ['bitcoin', 'ethereum', 'usdcoin', '_usdcoin', 'solana']
+
+      const atom = createAtom({
+        walletAccounts: [polymarketAccount, exodusAccount],
+        availableAssetNames,
+        allowedBaseAssetNamesByWalletAccount: { polymarket_0: ['ethereum'] },
+      })
+
+      const result = await atom.get()
+
+      expect(result.polymarket_0).toEqual(['ethereum', 'usdcoin', '_usdcoin'])
+      expect(result.exodus_0).toEqual(availableAssetNames)
+    })
+
+    it('never adds a network the wallet account does not support', async () => {
+      const trezorAccount = new WalletAccount({
+        source: WalletAccount.TREZOR_SRC,
+        id: 'trezor_123',
+        model: 'T',
+        index: 0,
+      })
+
+      const atom = createAtom({
+        walletAccounts: [trezorAccount],
+        availableAssetNames: ['bitcoin', 'ethereum', 'solana'],
+        allowedBaseAssetNamesByWalletAccount: { [trezorAccount.toString()]: ['bitcoin', 'solana'] },
+      })
+
+      const result = await atom.get()
+
+      expect(result[trezorAccount.toString()]).toEqual(['bitcoin'])
+    })
+
+    it('drops a multi-chain asset when no child is both supported and on an allowed network', async () => {
+      const passkeyAccount = new WalletAccount({
+        source: WalletAccount.PASSKEY_SRC,
+        index: 0,
+        seedId: 'passkey_789',
+      })
+      const unsignableBaseAsset = {
+        ...assets.bitcoin!.baseAsset,
+        api: {
+          ...assets.bitcoin!.baseAsset.api,
+          features: { ...assets.bitcoin!.baseAsset.api?.features, signWithSigner: false },
+        },
+      }
+      const testAssets: Assets = {
+        ...assets,
+        testcoin: { ...assets.bitcoin!, name: 'testcoin', baseAsset: unsignableBaseAsset },
+        _mixed: {
+          ...assets.bitcoin!,
+          name: '_mixed',
+          isCombined: true,
+          combinedAssetNames: ['testcoin', 'solana'],
+          baseAsset: unsignableBaseAsset,
+        },
+      }
+
+      const atom = createAtom({
+        walletAccounts: [passkeyAccount],
+        availableAssetNames: ['testcoin', 'solana', '_mixed'],
+        allowedBaseAssetNamesByWalletAccount: { [passkeyAccount.toString()]: ['bitcoin'] },
+        testAssets,
+      })
+
+      const result = await atom.get()
+
+      expect(result[passkeyAccount.toString()]).toEqual([])
+    })
+
+    it.each([[true], [42], [null], [[]], [{ polymarket_0: 'matic' }]])(
+      'rejects a malformed config: %j',
+      (allowedBaseAssetNamesByWalletAccount) => {
+        expect(() =>
+          createAtom({
+            walletAccounts: [],
+            availableAssetNames: [],
+            allowedBaseAssetNamesByWalletAccount: allowedBaseAssetNamesByWalletAccount as any,
+          })
+        ).toThrow(/allowedBaseAssetNamesByWalletAccount/)
+      }
+    )
+  })
 })

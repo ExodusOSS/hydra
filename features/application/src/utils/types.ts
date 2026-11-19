@@ -28,9 +28,6 @@ export type UnlockWalletParams = {
 export type Wallet = {
   create: (opts?: CreateWalletParams) => Promise<any>
   import: (opts: CreateWalletParams) => Promise<any>
-  addSeed: (opts: AddSeedParams) => Promise<string>
-  removeManySeeds: (seedIds: string[]) => Promise<void>
-  removeSeed: (seedId: string) => Promise<void>
   getMnemonic: (opts: WalletGetMnemonicParams) => Promise<string>
   lock: () => Promise<void>
   unlock: (opts?: UnlockWalletParams) => Promise<void>
@@ -39,11 +36,6 @@ export type Wallet = {
   clear: () => Promise<void>
   exists: () => Promise<boolean>
   changePassphrase: (opts: WalletChangePassphraseParams) => Promise<void>
-}
-
-export type AddSeedParams = {
-  mnemonic: string
-  compatibilityMode?: string | null
 }
 
 export type WalletGetMnemonicParams = {

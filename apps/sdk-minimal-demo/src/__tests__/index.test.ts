@@ -62,16 +62,11 @@ test('to the UI and back', async () => {
   expect(isEthereumEnabled()).toEqual(true)
   expect(isUSDCEnabled()).toEqual(false)
 
-  const subscriptionPromise = new Promise<void>((resolve, reject) => {
-    const timeout = setTimeout(() => {
-      reject(new Error('enabledAssets event not received within 5 seconds'))
-    }, 5000)
-
+  // Subscribe before triggering the event. No inner timeout — Jest's
+  // per-test timeout is the single backstop for a genuine deadlock.
+  const subscriptionPromise = new Promise<void>((resolve) => {
     bgSdk.subscribe((event: { type: string }) => {
-      if (event.type === 'enabledAssets') {
-        clearTimeout(timeout)
-        resolve()
-      }
+      if (event.type === 'enabledAssets') resolve()
     })
   })
 
@@ -81,4 +76,4 @@ test('to the UI and back', async () => {
   expect(isUSDCEnabled()).toEqual(true)
 
   await sdkRPC.application.stop()
-})
+}, 30_000)

@@ -59,7 +59,7 @@ describe('personal-notes module', () => {
   it('should update atom when personal notes from fusion received', async () => {
     const { channelOptions, personalNotesAtom } = await prepare()
     await channelOptions.processBatch(personalNotesBatch)
-    expect(personalNotesAtom.set).toBeCalledWith(personalNotesBatchData)
+    expect(personalNotesAtom.set).toHaveBeenCalledWith(personalNotesBatchData)
   })
 
   it('should update atom and push update to fusion when note created by user', async () => {
@@ -68,7 +68,7 @@ describe('personal-notes module', () => {
       txId: 'tx-id-3',
       message: 'test-3',
     })
-    expect(personalNotesAtom.set).toBeCalledWith(
+    expect(personalNotesAtom.set).toHaveBeenCalledWith(
       PersonalNoteSet.fromArray([
         {
           txId: 'tx-id-3',
@@ -107,7 +107,7 @@ describe('personal-notes module', () => {
       message: 'test-2-changed',
     })
 
-    expect(personalNotesAtom.set).toBeCalledTimes(2)
+    expect(personalNotesAtom.set).toHaveBeenCalledTimes(2)
     expect(pushToFusion.mock.calls.length).toEqual(1)
     expect(pushToFusion.mock.calls[0][0]).toEqual({
       type: 'personalNote',
@@ -126,7 +126,7 @@ describe('personal-notes module', () => {
       txId: 'tx-id-2',
       message: '',
     })
-    expect(personalNotesAtom.set).toBeCalledTimes(2)
+    expect(personalNotesAtom.set).toHaveBeenCalledTimes(2)
     expect(pushToFusion.mock.calls.length).toEqual(1)
     expect(pushToFusion.mock.calls[0][0]).toEqual({
       type: 'personalNote',
@@ -233,7 +233,7 @@ describe('personal-notes module', () => {
       },
     })
 
-    expect(personalNotesAtom.set).toBeCalledTimes(4)
+    expect(personalNotesAtom.set).toHaveBeenCalledTimes(4)
     expect(pushToFusion.mock.calls.length).toEqual(3)
     expect(pushToFusion.mock.calls[0][0].data).toEqual({
       dapp: {
@@ -293,7 +293,7 @@ describe('personal-notes module', () => {
       username: 'new',
     })
 
-    expect(personalNotesAtom.set).toBeCalledTimes(4)
+    expect(personalNotesAtom.set).toHaveBeenCalledTimes(4)
     expect(pushToFusion.mock.calls.length).toEqual(3)
     expect(pushToFusion.mock.calls[0][0].data).toEqual({
       message: 'test-1',
@@ -358,7 +358,7 @@ describe('personal-notes module', () => {
       },
     })
 
-    expect(personalNotesAtom.set).toBeCalledTimes(4)
+    expect(personalNotesAtom.set).toHaveBeenCalledTimes(4)
     expect(pushToFusion.mock.calls.length).toEqual(3)
     expect(pushToFusion.mock.calls[0][0].data).toEqual({
       txId: 'tx-id-1',
@@ -432,7 +432,7 @@ describe('personal-notes module', () => {
       },
     })
 
-    expect(personalNotesAtom.set).toBeCalledTimes(4)
+    expect(personalNotesAtom.set).toHaveBeenCalledTimes(4)
     expect(pushToFusion.mock.calls.length).toEqual(3)
     expect(pushToFusion.mock.calls[0][0].data).toEqual({
       txId: 'tx-id-1',
@@ -502,7 +502,7 @@ describe('personal-notes module', () => {
       },
     })
 
-    expect(personalNotesAtom.set).toBeCalledTimes(4)
+    expect(personalNotesAtom.set).toHaveBeenCalledTimes(4)
     expect(pushToFusion.mock.calls.length).toEqual(3)
     expect(pushToFusion.mock.calls[0][0].data).toEqual({
       txId: 'tx-id-1',

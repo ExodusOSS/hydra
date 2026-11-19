@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/ExodusMovement/exodus/compare/@exodus/storage-mobile@1.2.1...@exodus/storage-mobile@1.2.2) (2026-10-05)
+
+### Bug Fixes
+
+- **storage-mobile:** handle corrupt JSON in batchGet instead of throwing SyntaxError ([#43114](https://github.com/ExodusMovement/exodus/issues/43114)) ([f60f251](https://github.com/ExodusMovement/exodus/commit/f60f25147bff0a04903ac6806f7f12ee1db5e31d))
+- **storage-mobile:** prevent unreadable Unicode values on Android ([#46388](https://github.com/ExodusMovement/exodus/issues/46388)) ([bf46631](https://github.com/ExodusMovement/exodus/commit/bf466318d9faf6b68e5e718a50b421b90fb6a1dd))
+
+## [1.2.1](https://github.com/ExodusMovement/hydra/compare/@exodus/storage-mobile@1.2.0...@exodus/storage-mobile@1.2.1) (2026-06-01)
+
+### Features
+
+- **typescript:** enable erasableSyntaxOnly across the monorepo ([#16435](https://github.com/ExodusMovement/hydra/issues/16435)) ([6055ee5](https://github.com/ExodusMovement/hydra/commit/6055ee57210c9b9a6a67dc0d7b8821077da121e0))
+
+### Bug Fixes
+
+- **storage-mobile:** reject sentinel-equal writes in withFilesystemFallback ([#16330](https://github.com/ExodusMovement/hydra/issues/16330)) ([41cb91e](https://github.com/ExodusMovement/hydra/commit/41cb91e29291ddcca67360e16a253bbdfb4a201f))
+
 ## [1.2.0](https://github.com/ExodusMovement/hydra/compare/@exodus/storage-mobile@1.1.0...@exodus/storage-mobile@1.2.0) (2025-07-25)
 
 ### Features

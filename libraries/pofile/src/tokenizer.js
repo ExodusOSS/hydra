@@ -34,7 +34,12 @@ const tokenizer = (input) => {
 
       let value = ''
 
-      while (char !== '\n') {
+      // A comment is terminated by a newline OR end-of-input. The caller
+      // splits sections on '\n\n', so the last comment in a section may have
+      // no trailing newline; without the bounds check this would loop forever
+      // because input[current] becomes undefined and `undefined !== '\n'` is
+      // always true.
+      while (current < input.length && char !== '\n') {
         value += char
         char = input[++current]
       }
@@ -68,10 +73,18 @@ const tokenizer = (input) => {
       // We'll skip the opening double quote in our token.
       char = input[++current]
 
-      while (char !== '"' || escaped) {
-        escaped = char === '\\'
+      // The bounds check guards against infinite loops on unterminated
+      // strings. The `&& !escaped` makes the flag toggle correctly so that
+      // a literal backslash sequence ('\\\\') doesn't cause the next char
+      // (e.g., the closing quote) to be treated as escaped.
+      while (current < input.length && (char !== '"' || escaped)) {
+        escaped = char === '\\' && !escaped
         value += char
         char = input[++current]
+      }
+
+      if (char !== '"') {
+        throw new TypeError('pofile: Unterminated string literal')
       }
 
       // Skip the closing double quote.
@@ -93,7 +106,10 @@ const tokenizer = (input) => {
     if (LETTERS.test(char)) {
       let value = ''
 
-      while (LETTERS.test(char)) {
+      // The bounds check guards against an infinite loop when the input
+      // ends mid-name: `LETTERS.test(undefined)` is true because undefined
+      // stringifies to "undefined", which matches the [a-z] character class.
+      while (current < input.length && LETTERS.test(char)) {
         value += char
         char = input[++current]
       }

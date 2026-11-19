@@ -1,25 +1,22 @@
-import { connectAssets } from '@exodus/assets'
-import assetsBase from '@exodus/assets-base'
 import assetsReduxModule from '@exodus/assets-feature/redux/index.js'
+import { combinedAssetsList, testAssets } from '@exodus/assets-test-meta'
 import { keyBy } from '@exodus/basic-utils'
-import combinedAssetsList from '@exodus/combined-assets-meta'
 import { setupRedux } from '@exodus/redux-dependency-injection'
 import { combineReducers, createStore } from 'redux'
 
 import availableAssetsReduxDefinition from '../index.js'
 
-const combinedAssets = keyBy(combinedAssetsList, ({ name }) => name)
+const combinedAsset = combinedAssetsList.find((a) => a.combinedAssetNames.includes('usdcoin'))
+
 export const {
   bitcoin,
   ethereum,
-  _usdcoin: usdcoin,
   usdcoin: usdcoinEthereum,
   usdcoin_solana: usdcoinSolana,
   usdcoin_algorand: usdcoinAlgorand,
-} = connectAssets({
-  ...combinedAssets,
-  ...assetsBase,
-})
+} = testAssets
+
+export const usdcoin = testAssets[combinedAsset.name]
 
 export function setup({ dependencies = [] } = {}) {
   const allDependencies = [...dependencies, assetsReduxModule, availableAssetsReduxDefinition]

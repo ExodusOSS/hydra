@@ -1,4 +1,12 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["index.d.ts", "api/index.d.ts"]
+  "compilerOptions": {
+    "outDir": "./lib",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "allowJs": true,
+    "lib": ["esnext"]
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["./lib/**/*", "./node_modules/**/*"]
 }

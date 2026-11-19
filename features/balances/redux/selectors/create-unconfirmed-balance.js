@@ -3,7 +3,7 @@ import lodash from 'lodash'
 import { createSelector } from 'reselect'
 import { getUnconfirmedBalance } from './get-unconfirmed-balance.js'
 
-const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { memoize } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 const selectorFactory = (createAssetSelector, createAssetSourceSelector) =>
   memoize(

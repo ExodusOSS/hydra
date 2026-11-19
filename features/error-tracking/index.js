@@ -1,9 +1,17 @@
 import typeforce from '@exodus/typeforce'
 
 import { errorTrackingApiDefinition } from './api/index.js'
-import { errorsAtomDefinition, remoteErrorTrackingEnabledAtomDefinition } from './atoms/index.js'
+import {
+  errorsAtomDefinition,
+  remoteErrorTrackingEnabledAtomDefinition,
+  unsafeRemoteErrorTrackingEnabledAtomDefinition,
+} from './atoms/index.js'
 import errorTrackingReportDefinition from './report/index.js'
-import { errorTrackingDefinition, remoteErrorTrackingDefinition } from './module/index.js'
+import {
+  errorTrackingDefinition,
+  remoteErrorTrackingDefinition,
+  unsafeErrorTrackingDefinition,
+} from './module/index.js'
 import errorTrackingPluginDefinition from './plugin/index.js'
 
 const defaultConfig = {
@@ -47,6 +55,9 @@ const errorTracking = (config = Object.create(null)) => {
         definition: remoteErrorTrackingEnabledAtomDefinition,
       },
       {
+        definition: unsafeRemoteErrorTrackingEnabledAtomDefinition,
+      },
+      {
         definition: errorTrackingApiDefinition,
       },
       {
@@ -57,6 +68,10 @@ const errorTracking = (config = Object.create(null)) => {
         if: remoteErrorTrackingAvailable,
         definition: remoteErrorTrackingDefinition,
         config: sentryConfig,
+      },
+      {
+        if: remoteErrorTrackingAvailable,
+        definition: unsafeErrorTrackingDefinition,
       },
       // deprecated, errors will go to sentry
       {

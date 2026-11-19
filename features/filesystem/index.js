@@ -1,6 +1,6 @@
-import { filesystemStatsAtomDefinition } from './atoms'
-import filesystemMonitorDefinition from './monitor'
-import filesystemPluginDefinition from './plugin'
+import { filesystemStatsAtomDefinition } from './atoms/index.js'
+import filesystemMonitorDefinition from './monitor/index.js'
+import filesystemPluginDefinition from './plugin/index.js'
 
 const filesystem = () => {
   return {

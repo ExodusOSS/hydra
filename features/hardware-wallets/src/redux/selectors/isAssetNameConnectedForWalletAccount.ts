@@ -1,5 +1,5 @@
 import { memoize } from '@exodus/basic-utils'
-import { MY_STATE } from '@exodus/redux-dependency-injection'
+import { MY_STATE, type SelectorDefinition } from '@exodus/redux-dependency-injection'
 import { createSelector } from 'reselect'
 
 import type { HardwareWalletsState } from '../initial-state.js'
@@ -24,6 +24,6 @@ const isAssetNameConnectedForWalletAccountSelectorDefinition = {
   id: 'isAssetNameConnectedForWalletAccount',
   selectorFactory,
   dependencies: [{ selector: MY_STATE }],
-} as const
+} as const satisfies SelectorDefinition
 
 export default isAssetNameConnectedForWalletAccountSelectorDefinition

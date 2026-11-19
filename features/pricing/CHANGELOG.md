@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.1](https://github.com/ExodusMovement/exodus/compare/@exodus/pricing@1.10.0...@exodus/pricing@1.10.1) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/pricing
+
 ## [1.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/pricing@1.9.0...@exodus/pricing@1.10.0) (2025-04-14)
 
 ### Features

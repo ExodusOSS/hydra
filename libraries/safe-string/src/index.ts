@@ -1,5 +1,4 @@
 import indexToSafeArg from './allowlist.js'
-import { isTraceId } from './capture-trace-id.js'
 
 import type { SafeString } from './types.js'
 
@@ -12,7 +11,6 @@ const safeArgsInfix = ' ; SafeArgs: '
 const MAX_INTERPOLATED_VALUES = 2
 
 export function safeString(strings: TemplateStringsArray, ...values: unknown[]): SafeString {
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!strings.raw) {
     throw new TypeError(
       // eslint-disable-next-line no-template-curly-in-string
@@ -82,13 +80,11 @@ export function isSafe(value: string) {
     return true
   }
 
-  return safeArgAllowlist.has(value) || nonInterpolableAllowlist.has(value) || isTraceId(value)
+  return safeArgAllowlist.has(value) || nonInterpolableAllowlist.has(value)
 }
 
 export function getAllowlist() {
   return [...indexToSafeArg, ...nonInterpolableAllowlist]
 }
-
-export { captureTraceId } from './capture-trace-id.js'
 
 export type { SafeString } from './types.js'

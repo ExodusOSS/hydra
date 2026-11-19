@@ -162,4 +162,6 @@ const publicKeyStoreDefinition = {
   public: true,
 } as const satisfies Definition
 
+export type { PublicKeyStore }
+
 export default publicKeyStoreDefinition

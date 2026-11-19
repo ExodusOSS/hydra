@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.4.2](https://github.com/ExodusMovement/exodus/compare/@exodus/currency@6.4.1...@exodus/currency@6.4.2) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/currency
+
+## [6.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/currency@6.4.0...@exodus/currency@6.4.1) (2026-06-08)
+
+### Bug Fixes
+
+- **currency:** floor/round/ceil produce wrong results for negative fractional values ([#15786](https://github.com/ExodusMovement/exodus-hydra/issues/15786)) ([3d413d7](https://github.com/ExodusMovement/exodus-hydra/commit/3d413d7deba3d08d590933b8c221b272cce6685d))
+
+## [6.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/currency@6.3.2...@exodus/currency@6.4.0) (2026-06-03)
+
+### Features
+
+- **currency:** convert package to TypeScript ([#16681](https://github.com/ExodusMovement/exodus-hydra/issues/16681)) ([f29ae97](https://github.com/ExodusMovement/exodus-hydra/commit/f29ae970808bd940498cbb9220c6215365ec79b9)), closes [#16686](https://github.com/ExodusMovement/exodus-hydra/issues/16686) [#16394](https://github.com/ExodusMovement/exodus-hydra/issues/16394)
+
+## [6.3.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/currency@6.3.1...@exodus/currency@6.3.2) (2026-04-20)
+
+### Bug Fixes
+
+- fix(currency): instanceof across copies of the library (#16011)
+
+- fix(tests): replace toThrowError with toThrow (removed in Jest 30) (#16055)
+
 ## [6.3.1](https://github.com/ExodusMovement/hydra/compare/@exodus/currency@6.3.0...@exodus/currency@6.3.1) (2025-10-21)
 
 ### Bug Fixes

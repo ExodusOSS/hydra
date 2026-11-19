@@ -1,16 +1,16 @@
 {
   "name": "@exodus/activity-txs",
-  "version": "6.1.1",
+  "version": "6.1.9",
   "description": "The activity-txs feature",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/activity-txs",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/activity-txs",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aactivity-txs"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aactivity-txs"
   },
   "type": "module",
   "main": "index.js",
@@ -27,25 +27,26 @@
     "!**/*.test.js"
   ],
   "scripts": {
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.7.3",
-    "@exodus/core-selectors": "^4.0.0",
-    "@exodus/models": "^12.0.1",
-    "@exodus/multi-account-redux": "^2.0.1",
-    "@exodus/safe-string": "^1.3.0",
-    "@exodus/typeforce": "^1.19.0",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/core-selectors": "workspace:^",
+    "@exodus/models": "workspace:^",
+    "@exodus/multi-account-redux": "workspace:^",
+    "@exodus/safe-string": "workspace:^",
+    "@exodus/typeforce": "workspace:^",
     "lodash": "^4.17.21",
     "minimalistic-assert": "^1.0.1",
     "reselect": "^3.0.1"
   },
   "devDependencies": {
     "@exodus/assets": "^11.0.0",
-    "@exodus/assets-base": "^10.0.0",
+    "@exodus/assets-base": "^12.0.0",
     "@exodus/assets-feature": "workspace:^",
     "@exodus/available-assets": "workspace:^",
     "@exodus/bitcoin-plugin": "^2.0.0",

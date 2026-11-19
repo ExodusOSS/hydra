@@ -3,7 +3,7 @@ import lodash from 'lodash'
 import type { Asset } from '../types.js'
 import currencies from './_fixtures-currencies.js'
 
-const { mapValues } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { mapValues } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 const _assets = mapValues(currencies, (currency, name) => {
   const basicAsset: Record<string, any> = { name, currency }

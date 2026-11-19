@@ -1,17 +1,23 @@
 {
   "name": "@exodus/sentry-client",
-  "version": "6.2.0",
+  "version": "6.5.0",
   "description": "API client for sanitizing and sending errors to Sentry.io",
   "author": "Exodus Movement, Inc.",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/sentry-client",
-  "license": "UNLICENSED",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/sentry-client",
+  "license": "MIT",
+  "keywords": [
+    "sentry",
+    "error-tracking",
+    "monitoring",
+    "logging"
+  ],
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asentry-client"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Asentry-client"
   },
   "main": "lib/index.js",
   "files": [
@@ -20,16 +26,18 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --esbuild --jest",
-    "test:integration": "RUN_TESTS=integration run test",
-    "build": "run -T tsc -p tsconfig.build.json",
-    "prepublishOnly": "yarn run -T build --scope @exodus/sentry-client"
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --esbuild --jest",
+    "test:integration": "RUN_TESTS=integration pnpm run test",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/sentry-client"
   },
   "devDependencies": {
     "@exodus/basic-utils": "workspace:^",
-    "@exodus/safe-string": "workspace:^"
+    "@exodus/safe-string": "workspace:^",
+    "@exodus/traceparent": "workspace:^"
   },
   "dependencies": {
     "@exodus/crypto": "^1.0.0-rc.16",
@@ -37,6 +45,7 @@
     "@exodus/typeforce": "^1.18.0"
   },
   "publishConfig": {
+    "access": "public",
     "provenance": false
   }
 }

@@ -58,7 +58,9 @@ const attemptToCompile = (
 ) => {
   const resolvedSchemaPath = path.resolve(path.parse(fileName).dir, moduleName)
 
-  if (globs.some((glob) => minimatch(resolvedSchemaPath, glob) !== true)) return
+  // `dot: true` lets `*`/`**` cross leading-dot dirs (e.g. pnpm's `.pnpm` store under nodeLinker:isolated);
+  // without it, schemas resolved through such a path never match and stay uncompiled.
+  if (globs.some((glob) => minimatch(resolvedSchemaPath, glob, { dot: true }) !== true)) return
 
   const nodes = babelPath.node.specifiers.map((specifier) =>
     createValidatorDeclaration({
@@ -73,7 +75,7 @@ const attemptToCompile = (
 }
 
 // Detects all schema imports and replaces them with a generated validator code.
-module.exports = (babel, { options = [] } = {}) => {
+module.exports = function schemasafeBabelPlugin(babel, { options = [] } = {}) {
   return {
     visitor: {
       ImportDeclaration(babelPath) {

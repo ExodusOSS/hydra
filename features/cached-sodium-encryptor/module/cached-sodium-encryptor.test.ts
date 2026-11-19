@@ -1,8 +1,7 @@
-import assert from 'node:assert/strict'
-import * as crypto from 'node:crypto'
-import type { Mock } from 'node:test'
+import type { Mock, TestContext } from 'node:test'
 import { beforeEach, describe, mock, test } from 'node:test'
 
+import { randomBytes } from '@exodus/crypto/randomBytes'
 import KeyIdentifier from '@exodus/key-identifier'
 import { EXODUS_KEY_IDS } from '@exodus/key-ids'
 import type { ZodError } from '@exodus/zod'
@@ -23,7 +22,7 @@ describe('CachedSodiumEncryptor', () => {
   beforeEach(() => {
     keychain = {
       exportKey: mock.fn(async () => ({
-        privateKey: crypto.randomBytes(32),
+        privateKey: randomBytes(32),
       })),
     }
 
@@ -32,15 +31,15 @@ describe('CachedSodiumEncryptor', () => {
     })
   })
 
-  test('derives keys only once', async () => {
+  test('derives keys only once', async (t: TestContext) => {
     const result = await cachedSodiumEncryptor.encryptSecretBox({
       seedId,
       keyId,
       data: Buffer.from('Batman is Bruce Wayne - or is he Harvey Dent?', 'utf8'),
     })
 
-    assert(result instanceof Buffer, 'result is not a buffer')
-    assert.equal(keychain.exportKey.mock.callCount(), 1)
+    t.assert.ok(result instanceof Buffer, 'result is not a buffer')
+    t.assert.equal(keychain.exportKey.mock.callCount(), 1)
 
     await cachedSodiumEncryptor.encryptSecretBox({
       seedId,
@@ -48,17 +47,18 @@ describe('CachedSodiumEncryptor', () => {
       data: Buffer.from('Batman is Bruce Wayne - or is he Harvey Dent?', 'utf8'),
     })
 
-    assert.equal(keychain.exportKey.mock.callCount(), 1)
+    t.assert.equal(keychain.exportKey.mock.callCount(), 1)
   })
 
-  test('throws on non-allowed key ids', async () => {
-    const keyIds = Object.values(EXODUS_KEY_IDS) as KeyIdentifier[]
+  test('throws on non-allowed key ids', async (t: TestContext) => {
+    const keyIds = Object.values(EXODUS_KEY_IDS)
 
     for (const keyId of keyIds) {
-      if (ALLOWED_KEY_IDS.some((allowedKeyId) => KeyIdentifier.compare(allowedKeyId, keyId)))
+      if (ALLOWED_KEY_IDS.some((allowedKeyId) => KeyIdentifier.compare(allowedKeyId, keyId))) {
         continue
+      }
 
-      await assert.rejects(
+      await t.assert.rejects(
         cachedSodiumEncryptor.encryptSecretBox({
           seedId,
           keyId,
@@ -69,7 +69,7 @@ describe('CachedSodiumEncryptor', () => {
     }
   })
 
-  test('supports encrypting with secret key', async () => {
+  test('supports encrypting with secret key', async (t: TestContext) => {
     const data = Buffer.from('Batman is Bruce Wayne - or is he Harvey Dent?', 'utf8')
 
     const encrypted = await cachedSodiumEncryptor.encryptSecretBox({
@@ -85,10 +85,10 @@ describe('CachedSodiumEncryptor', () => {
       deriveSecret: true,
     })
 
-    assert(Buffer.compare(encrypted, encryptedWithDerivedSecret) !== 0)
-    assert(Buffer.compare(encryptedWithDerivedSecret, data) !== 0)
+    t.assert.ok(Buffer.compare(encrypted, encryptedWithDerivedSecret) !== 0)
+    t.assert.ok(Buffer.compare(encryptedWithDerivedSecret, data) !== 0)
 
-    await assert.rejects(
+    await t.assert.rejects(
       cachedSodiumEncryptor.decryptSecretBox({
         seedId,
         keyId,
@@ -104,7 +104,7 @@ describe('CachedSodiumEncryptor', () => {
       deriveSecret: true,
     })
 
-    assert(Buffer.compare(decrypted, data) === 0)
+    t.assert.ok(Buffer.compare(decrypted, data) === 0)
   })
 
   describe('param validation', () => {
@@ -123,8 +123,8 @@ describe('CachedSodiumEncryptor', () => {
       return issue.code === 'unrecognized_keys' && issue.keys[0] === 'xrp'
     }
 
-    test('encryptSecretBox does not allow passing additional params', async () => {
-      assert.throws(
+    test('encryptSecretBox does not allow passing additional params', async (t: TestContext) => {
+      t.assert.throws(
         () =>
           cachedSodiumEncryptor.encryptSecretBox({
             ...allowedParams,
@@ -136,8 +136,8 @@ describe('CachedSodiumEncryptor', () => {
       )
     })
 
-    test('decryptSecretBox does not allow passing additional params', async () => {
-      assert.throws(
+    test('decryptSecretBox does not allow passing additional params', async (t: TestContext) => {
+      t.assert.throws(
         () =>
           cachedSodiumEncryptor.decryptSecretBox({
             ...allowedParams,
@@ -149,12 +149,12 @@ describe('CachedSodiumEncryptor', () => {
       )
     })
 
-    test('encryptBox does not allow passing additional params', async () => {
-      assert.throws(
+    test('encryptBox does not allow passing additional params', async (t: TestContext) => {
+      t.assert.throws(
         () =>
           cachedSodiumEncryptor.encryptBox({
             ...allowedParams,
-            toPublicKey: crypto.randomBytes(32),
+            toPublicKey: randomBytes(32),
             // @ts-expect-error testing additional invalid params
             xrp: 'is a disgrace',
           }),
@@ -162,12 +162,12 @@ describe('CachedSodiumEncryptor', () => {
       )
     })
 
-    test('decryptBox does not allow passing additional params', async () => {
-      assert.throws(
+    test('decryptBox does not allow passing additional params', async (t: TestContext) => {
+      t.assert.throws(
         () =>
           cachedSodiumEncryptor.decryptBox({
             ...allowedParams,
-            fromPublicKey: crypto.randomBytes(32),
+            fromPublicKey: randomBytes(32),
             // @ts-expect-error testing additional invalid params
             xrp: 'is a disgrace',
           }),

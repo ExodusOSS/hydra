@@ -90,10 +90,7 @@ describe('auto-enable-assets', () => {
       ...opts.config,
     }
 
-    const assetsModule = {
-      getAsset: (assetName) => assets[assetName],
-      getBaseAssetNames: () => Object.keys(assets),
-    }
+    const assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
 
     const defaultEnabledAssetNamesAtom = createInMemoryAtom({
       defaultValue: config.defaultEnabledAssetNames,
@@ -116,7 +113,7 @@ describe('auto-enable-assets', () => {
 
     const autoEnabledAssets = createAutoEnableAssets({
       nonDustBalanceAssetNamesAtom,
-      assetsModule,
+      assetsAtom,
       defaultEnabledAssetNamesAtom,
       enabledAssets,
       ordersAtom,
@@ -140,14 +137,14 @@ describe('auto-enable-assets', () => {
     await jest.advanceTimersByTimeAsync(50)
 
     // Check if enable was called directly instead of waiting for event
-    expect(enable).toBeCalledTimes(1)
-    expect(enable).toBeCalledWith(config.defaultEnabledAssetNames)
+    expect(enable).toHaveBeenCalledTimes(1)
+    expect(enable).toHaveBeenCalledWith(config.defaultEnabledAssetNames)
     enable.mockClear()
     return {
       emitter,
       enable,
       assets,
-      assetsModule,
+      assetsAtom,
       nonDustBalanceAssetNamesAtom,
       enabledAssets,
       ordersAtom,
@@ -185,7 +182,7 @@ describe('auto-enable-assets', () => {
     await jest.advanceTimersByTimeAsync(50)
     await promiseEmitted
 
-    expect(enable).toBeCalledTimes(1)
+    expect(enable).toHaveBeenCalledTimes(1)
     expect(enable).toHaveBeenCalledWith(['builtInToken'])
   })
 
@@ -313,7 +310,7 @@ describe('auto-enable-assets', () => {
     )
 
     await jest.advanceTimersByTimeAsync(8)
-    expect(enable).toBeCalledTimes(0)
+    expect(enable).toHaveBeenCalledTimes(0)
 
     ordersAtom.set(
       OrderSet.fromArray([
@@ -328,9 +325,9 @@ describe('auto-enable-assets', () => {
     )
 
     await jest.advanceTimersByTimeAsync(8)
-    expect(enable).toBeCalledTimes(0)
+    expect(enable).toHaveBeenCalledTimes(0)
     await jest.advanceTimersByTimeAsync(20)
-    expect(enable).toBeCalledTimes(1)
+    expect(enable).toHaveBeenCalledTimes(1)
     expect(enable).toHaveBeenCalledWith(['builtInBaseAsset', 'builtInToken', 'customToken'])
   })
 
@@ -479,6 +476,85 @@ describe('auto-enable-assets', () => {
 
       expect(enable).toHaveBeenCalledTimes(1)
       expect(enable).toHaveBeenCalledWith(['jokercoin'])
+    })
+  })
+
+  describe('ignored wallet accounts', () => {
+    const config = {
+      defaultEnabledAssetNames: ['builtInBaseAsset'],
+      ignoredWalletAccounts: ['polymarket_0'],
+    }
+
+    it('enables only the side of an order outside an ignored wallet account', async () => {
+      const { emitter, enable, ordersAtom } = await prepare({ config })
+
+      const promiseEmitted = once(emitter, 'enabled')
+      await ordersAtom.set(
+        OrderSet.fromArray([
+          Order.fromJSON({
+            orderId: '0',
+            fromAmount: assetsMock.builtInToken.currency.defaultUnit(1),
+            fromAsset: 'builtInToken',
+            fromWalletAccount: 'exodus_0',
+            toAmount: assetsMock.customToken.currency.defaultUnit(1),
+            toAsset: 'customToken',
+            toWalletAccount: 'polymarket_0',
+          }),
+        ])
+      )
+
+      await jest.advanceTimersByTimeAsync(50)
+      await promiseEmitted
+
+      expect(enable).toHaveBeenCalledWith(['builtInToken'])
+    })
+
+    it('ignores synced balances of an ignored wallet account', async () => {
+      const { enable, syncedBalancesAtom, availableAssetNamesAtom } = await prepare({ config })
+
+      await availableAssetNamesAtom.set(['customToken', 'cosmos'])
+      await syncedBalancesAtom.set({
+        exodus_0: { cosmos: assetsMock.cosmos.currency.defaultUnit(1) },
+        polymarket_0: { customToken: assetsMock.customToken.currency.defaultUnit(1) },
+      })
+      await jest.advanceTimersByTimeAsync(50)
+
+      expect(enable).toHaveBeenCalledTimes(1)
+      expect(enable).toHaveBeenCalledWith(['cosmos'])
+    })
+
+    it('ignores fiat orders of an ignored wallet account', async () => {
+      const fiatOrdersAtom = createInMemoryAtom({ defaultValue: FiatOrderSet.EMPTY })
+      const { enable } = await prepare({
+        config,
+        fiatOrdersAtom,
+        assets: { ...assetsMock, waynecoin: { name: 'waynecoin' } },
+      })
+
+      await fiatOrdersAtom.set(
+        FiatOrderSet.fromArray([
+          {
+            orderId: 'buy1',
+            provider: 'moonpay',
+            orderType: 'buy',
+            status: 'completed',
+            fromAsset: 'EUR',
+            fromAmount: 10,
+            toAmount: 1,
+            fiatValue: 100,
+            providerRate: 10,
+            exodusRate: 10,
+            toAsset: 'waynecoin',
+            fromAddress: null,
+            toAddress: null,
+            fromWalletAccount: null,
+            toWalletAccount: 'polymarket_0',
+          },
+        ])
+      )
+      await jest.advanceTimersByTimeAsync(50)
+
+      expect(enable).not.toHaveBeenCalled()
     })
   })
 })

@@ -1,15 +1,15 @@
 {
   "name": "@exodus/assets-feature",
-  "version": "9.0.1",
+  "version": "9.7.1",
   "license": "MIT",
   "description": "This Exodus SDK feature provides access to instances of all blockchain asset adapters supported by the wallet, and enables you to search for and add custom tokens at runtime.",
   "type": "module",
   "main": "index.js",
   "author": "Exodus Movement, Inc.",
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix"
+    "test": "pnpm exec exodus-test --jest",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix"
   },
   "files": [
     "api",
@@ -26,24 +26,25 @@
     "README.md",
     "!**/__tests__/**"
   ],
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/assets-feature",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/assets-feature",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aassets-feature"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aassets-feature"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "dependencies": {
     "@exodus/asset-legacy-token-name-mapping": "^1.4.0",
     "@exodus/asset-lib": "^5.3.0",
-    "@exodus/asset-schema-validation": "^1.0.1",
+    "@exodus/asset-schema-validation": "^1.2.0",
+    "@exodus/asset-types": "^0.5.0",
     "@exodus/assets": "^11.3.0",
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.6.0",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "workspace:^",
     "@exodus/fetch": "^1.3.0",
-    "@exodus/fusion-atoms": "^1.4.0",
-    "@exodus/timer": "^1.1.2",
+    "@exodus/fusion-atoms": "workspace:^",
+    "@exodus/timer": "workspace:^",
     "lodash": "^4.17.21",
     "make-concurrent": "^5.4.0",
     "minimalistic-assert": "^1.0.1",
@@ -51,20 +52,18 @@
     "reselect": "^3.0.1"
   },
   "devDependencies": {
-    "@exodus/available-assets": "workspace:^",
+    "@exodus/bip32": "workspace:^",
     "@exodus/bip39": "workspace:^",
-    "@exodus/bip44-constants": "^195.0.0",
+    "@exodus/bip44-constants": "workspace:^",
     "@exodus/bitcoin-meta": "^2.0.0",
-    "@exodus/bitcoin-plugin": "^1.29.1",
-    "@exodus/bitcoinregtest-plugin": "^1.11.0",
-    "@exodus/bitcointestnet-plugin": "^1.13.1",
-    "@exodus/blockchain-metadata": "workspace:^",
+    "@exodus/bitcoin-plugin": "^2.0.0",
+    "@exodus/bitcoinregtest-plugin": "^2.0.0",
+    "@exodus/bitcointestnet-plugin": "^2.0.0",
     "@exodus/cardano-lib": "^4.0.0",
-    "@exodus/combined-assets-meta": "^3.0.0",
     "@exodus/cosmos-plugin": "^1.3.3",
-    "@exodus/ethereum-lib": "^5.0.0",
+    "@exodus/ethereum-lib": "^5.26.0",
     "@exodus/ethereum-meta": "^2.0.0",
-    "@exodus/ethereum-plugin": "^2.7.4",
+    "@exodus/ethereum-plugin": "^3.1.1",
     "@exodus/fusion-local": "workspace:^",
     "@exodus/keychain": "workspace:^",
     "@exodus/logger": "workspace:^",
@@ -74,7 +73,7 @@
     "@exodus/redux-dependency-injection": "workspace:^",
     "@exodus/storage-memory": "workspace:^",
     "@exodus/wallet-accounts": "workspace:^",
-    "@exodus/wild-emitter": "^1.0.0",
+    "@exodus/wild-emitter": "workspace:^",
     "events": "^3.3.0",
     "msw": "^2.0.0",
     "redux": "^4.0.0"

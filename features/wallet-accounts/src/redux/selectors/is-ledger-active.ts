@@ -1,7 +1,11 @@
-const resultFunction = (activeWalletAccount: string, isLedger: (name: string) => boolean) =>
-  isLedger(activeWalletAccount)
+import { defineSelectorResultFunction } from '@exodus/redux-dependency-injection'
 
-const isLedgerActiveSelector = {
+const resultFunction = (
+  activeWalletAccount: string,
+  isLedger: (name: string) => boolean
+): boolean => isLedger(activeWalletAccount)
+
+const isLedgerActiveSelector = defineSelectorResultFunction({
   id: 'isLedgerActive',
   resultFunction,
   dependencies: [
@@ -9,6 +13,6 @@ const isLedgerActiveSelector = {
     { selector: 'active' },
     { selector: 'isLedger' },
   ],
-} as const
+})
 
 export default isLedgerActiveSelector

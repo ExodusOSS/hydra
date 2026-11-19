@@ -16,6 +16,18 @@ describe('data', () => {
     ).toEqual([])
   })
 
+  it('should return empty data with a limit when the asset is missing from the assets registry', () => {
+    const { store, selectors } = setup()
+
+    expect(
+      selectors.activityTxs.createLimitedAssetSourceSelector({
+        walletAccount: 'exodus_0',
+        assetName: 'unregistered-token',
+        limit: 1,
+      })(store.getState())
+    ).toEqual([])
+  })
+
   it('should return data when loaded', () => {
     const { store, selectors, handleEvent } = setup()
 

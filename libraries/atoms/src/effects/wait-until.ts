@@ -1,7 +1,7 @@
-import type { Atom, Unsubscribe } from '../utils/types.js'
+import type { AnyAtom, Unsubscribe } from '../utils/types.js'
 
 type Params<T> = {
-  atom: Atom<T>
+  atom: AnyAtom<T>
   predicate: (value: T) => boolean
   rejectAfter?: number
 }

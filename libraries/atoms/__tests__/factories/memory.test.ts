@@ -41,14 +41,14 @@ describe('createInMemoryAtom', () => {
       const subscriber = jest.fn()
       identityAtom.observe(subscriber)
       await new Promise(setImmediate)
-      expect(subscriber).toBeCalledTimes(0)
+      expect(subscriber).toHaveBeenCalledTimes(0)
       void identityAtom.set(undefined)
       await new Promise(setImmediate)
-      expect(subscriber).toBeCalledTimes(0)
+      expect(subscriber).toHaveBeenCalledTimes(0)
 
       void identityAtom.set('Bruce Wayne')
       await new Promise(setImmediate)
-      expect(subscriber).toBeCalledTimes(1)
+      expect(subscriber).toHaveBeenCalledTimes(1)
     })
 
     it('should allow using set with callback', async () => {

@@ -11,17 +11,38 @@ const getNetworks = (assetNames, assets) =>
       .filter((assetName) => !!assetName && !assets[assetName].isCombined)
   )
 
+const assertWalletAccountNames = (walletAccounts) => {
+  if (
+    !Array.isArray(walletAccounts) ||
+    !walletAccounts.every((walletAccount) => typeof walletAccount === 'string')
+  ) {
+    throw new TypeError('alwaysMonitorWalletAccounts must be an array of wallet account names')
+  }
+}
+
 const createBaseAssetNamesToMonitorAtom = ({
   assetsModule,
   enabledAssetsAtom,
   restoreAtom,
   availableAssetNamesAtom,
-  config: { ignoreAssetNames = [] } = Object.create(null),
+  availableAssetNamesByWalletAccountAtom,
+  config: { ignoreAssetNames = [], alwaysMonitorWalletAccounts = [] } = Object.create(null),
 }) => {
+  assertWalletAccountNames(alwaysMonitorWalletAccounts)
   const ignoreAssetNamesSet = new Set(ignoreAssetNames)
 
-  const selector = ({ isRestore, enabledAssets, availableAssetNames }) => {
-    const assetNames = isRestore ? availableAssetNames : Object.keys(enabledAssets)
+  const selector = ({
+    isRestore,
+    enabledAssets,
+    availableAssetNames,
+    availableAssetNamesByWalletAccount = Object.create(null),
+  }) => {
+    const assetNames = [
+      ...(isRestore ? availableAssetNames : Object.keys(enabledAssets)),
+      ...alwaysMonitorWalletAccounts.flatMap(
+        (walletAccount) => availableAssetNamesByWalletAccount[walletAccount] ?? []
+      ),
+    ]
     return getNetworks(assetNames, assetsModule.getAssets()).filter(
       (assetName) => !ignoreAssetNamesSet.has(assetName)
     )
@@ -33,13 +54,16 @@ const createBaseAssetNamesToMonitorAtom = ({
         isRestore: restoreAtom,
         enabledAssets: enabledAssetsAtom,
         availableAssetNames: availableAssetNamesAtom,
+        ...(alwaysMonitorWalletAccounts.length > 0 && {
+          availableAssetNamesByWalletAccount: availableAssetNamesByWalletAccountAtom,
+        }),
       }),
       selector,
     })
   )
 }
 
-// eslint-disable-next-line @exodus/export-default/named
+// oxlint-disable-next-line @exodus/oxlint-plugin-hydra/export-default-named
 export default {
   id: 'baseAssetNamesToMonitorAtom',
   type: 'atom',
@@ -47,6 +71,7 @@ export default {
   dependencies: [
     'assetsModule',
     'availableAssetNamesAtom',
+    'availableAssetNamesByWalletAccountAtom',
     'enabledAssetsAtom',
     'restoreAtom',
     'config?',

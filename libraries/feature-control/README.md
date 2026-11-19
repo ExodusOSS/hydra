@@ -176,6 +176,12 @@ const enabledRegions = {
 }
 ```
 
+###### rollout
+
+Type: `number`
+
+Integer from `0` to `100`. The feature is on only when the `rolloutBucket` option is less than `rollout`. Any other value disables the feature.
+
 ###### shutdownSemver
 
 Type: `string`
@@ -227,6 +233,12 @@ Geolocation to use when enabling or disabling the application in certain jurisdi
 }
 ```
 
+##### rolloutBucket
+
+Type: `number`
+
+Integer from `0` to `99` that is stable for each user and feature. Used with `rollout` for a gradual rollout. If it is not set, the feature is off unless `rollout` is `100`.
+
 #### enabledModules?
 
 Type: `object<string, boolean>`
@@ -234,6 +246,7 @@ Type: `object<string, boolean>`
 Specify which modules to use. Available modules sorted by priority in which the feature determines it's availability are:
 
 - `enabledOverride`
+- `rollout`
 - `geolocation`
 - `shutdownSemver`
 

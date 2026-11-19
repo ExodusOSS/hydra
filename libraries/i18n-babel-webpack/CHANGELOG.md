@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.5](https://github.com/ExodusMovement/exodus/compare/@exodus/i18n-babel-webpack@1.1.4...@exodus/i18n-babel-webpack@1.1.5) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/i18n-babel-webpack
+
+## [1.1.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n-babel-webpack@1.1.3...@exodus/i18n-babel-webpack@1.1.4) (2025-12-03)
+
+**Note:** Version bump only for package @exodus/i18n-babel-webpack
+
 ## [1.1.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n-babel-webpack@1.1.2...@exodus/i18n-babel-webpack@1.1.3) (2025-02-21)
 
 ### Performance

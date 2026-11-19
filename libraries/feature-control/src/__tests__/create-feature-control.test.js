@@ -50,6 +50,18 @@ describe('createFeatureControl validation', () => {
     ).toThrow(/geolocation must be an object/)
   })
 
+  test('validates rolloutBucket', async () => {
+    for (const rolloutBucket of [-1, 100, 1.5, '5']) {
+      expect(() =>
+        createFeatureControl({ enabled: true, ready: true, rolloutBucket }, { rollout: true })
+      ).toThrow(/rolloutBucket must be an integer in \[0, 99]/)
+    }
+
+    expect(() =>
+      createFeatureControl({ enabled: true, ready: true }, { rollout: true })
+    ).not.toThrow()
+  })
+
   test("doesn't validate disabled modules opts", async () => {
     expect(() =>
       createFeatureControl(
@@ -386,6 +398,103 @@ describe('createFeatureControl', () => {
       })
     ).toBe(false)
   })
+
+  test('enabledRegions only gates countries listed in it', async () => {
+    const featureControlFrance = createFeatureControl(
+      {
+        enabled: true,
+        ready: true,
+        geolocation: {
+          countryCode: 'FR',
+          countryName: 'France',
+          regionCode: 'PAC',
+          regionName: 'Provence-Alpes-Côte d’Azur',
+        },
+      },
+      { geolocation: true }
+    )
+
+    const config = {
+      countries: { FR: 'France', US: 'United States of America' },
+      enabledRegions: { US: { TX: 'Texas' } },
+    }
+
+    expect(featureControlFrance.getIsOn({ geolocation: config })).toBe(true)
+
+    const featureControlUsTexas = createFeatureControl(
+      {
+        enabled: true,
+        ready: true,
+        geolocation: { countryCode: 'US', regionCode: 'TX', regionName: 'Texas' },
+      },
+      { geolocation: true }
+    )
+    expect(featureControlUsTexas.getIsOn({ geolocation: config })).toBe(true)
+
+    const featureControlUsNewYork = createFeatureControl(
+      {
+        enabled: true,
+        ready: true,
+        geolocation: { countryCode: 'US', regionCode: 'NY', regionName: 'New York' },
+      },
+      { geolocation: true }
+    )
+    expect(featureControlUsNewYork.getIsOn({ geolocation: config })).toBe(false)
+
+    expect(
+      featureControlFrance.getIsOn({
+        geolocation: { countries: { FR: 'France' }, enabledRegions: { FR: {} } },
+      })
+    ).toBe(false)
+  })
+
+  test('enabledRegions fails closed when per-country value is not a plain object', async () => {
+    const featureControlUsTexas = createFeatureControl(
+      {
+        enabled: true,
+        ready: true,
+        geolocation: { countryCode: 'US', regionCode: 'TX', regionName: 'Texas' },
+      },
+      { geolocation: true }
+    )
+
+    for (const invalid of ['all', [], ['TX'], null, 0, true]) {
+      expect(
+        featureControlUsTexas.getIsOn({
+          geolocation: { countries: 'all', enabledRegions: { US: invalid } },
+        })
+      ).toBe(false)
+    }
+  })
+})
+
+describe('rollout', () => {
+  const create = (rolloutBucket) =>
+    createFeatureControl({ enabled: true, ready: true, rolloutBucket }, { rollout: true })
+
+  test('is on only for buckets under rollout', async () => {
+    expect(create(24).getIsOn({ rollout: 25 })).toBe(true)
+    expect(create(25).getIsOn({ rollout: 25 })).toBe(false)
+    expect(create(25).getUnavailableReason({ rollout: 25 })).toBe('rollout')
+    expect(create(0).getIsOn({ rollout: 0 })).toBe(false)
+    expect(create(99).getIsOn({ rollout: 100 })).toBe(true)
+  })
+
+  test('does not restrict when remote config has no rollout', async () => {
+    expect(create(99).getIsOn()).toBe(true)
+    expect(create(99).getIsOn({ rollout: null })).toBe(true)
+  })
+
+  test('fails closed when rollout is invalid', async () => {
+    for (const rollout of ['25', -1, 101, 12.5, Number.NaN, true, {}]) {
+      expect(create(0).getIsOn({ rollout })).toBe(false)
+    }
+  })
+
+  test('is off without a bucket unless rollout is 100', async () => {
+    expect(create().getIsOn({ rollout: 99 })).toBe(false)
+    expect(create().getIsOn({ rollout: 100 })).toBe(true)
+  })
 })
 
 describe('modules interaction', () => {
@@ -439,5 +548,24 @@ describe('modules interaction', () => {
         shutdownSemver: '1.x',
       })
     ).toBe(false)
+  })
+
+  test("rollout including the user doesn't take precedence over enabled=false", async () => {
+    const featureControlWithRollout = createFeatureControl(
+      { enabled: true, ready: true, rolloutBucket: 0 },
+      { enabledOverride: true, rollout: true }
+    )
+
+    expect(featureControlWithRollout.getIsOn({ rollout: 100, enabled: false })).toBe(false)
+    expect(featureControlWithRollout.getIsOn({ rollout: 100, enabled: true })).toBe(true)
+  })
+
+  test('rollout excluding the user takes precedence over enabled=true', async () => {
+    const featureControlWithRollout = createFeatureControl(
+      { enabled: false, ready: true, rolloutBucket: 50 },
+      { enabledOverride: true, rollout: true }
+    )
+
+    expect(featureControlWithRollout.getIsOn({ rollout: 50, enabled: true })).toBe(false)
   })
 })

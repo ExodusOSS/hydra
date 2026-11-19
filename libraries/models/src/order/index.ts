@@ -1,15 +1,14 @@
 import assert from 'minimalistic-assert'
 // eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
-import type NumberUnit from '@exodus/currency'
-import { isNumberUnit } from '@exodus/currency'
+import NumberUnit, { isNumberUnit } from '@exodus/currency'
 import { serialize, deserialize } from '../account-state/index.js'
 import WalletAccount from '../wallet-account/index.js'
 import { ModelIdSymbol } from '../constants.js'
 import type { Asset } from '../types.js'
 import { createIsInstance, omitUndefined } from '../utils.js'
 
-const { get, isPlainObject, isString } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { get, isEqual, isPlainObject, isString } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 function coerceToObject(obj: Order | Partial<OrderProps> | Partial<SerializedOrder>) {
   return obj instanceof Order ? obj.toJSON() : obj
@@ -56,6 +55,7 @@ const FACTORY_SYMBOL = Symbol('Order')
 
 export type OrderProps = {
   orderId: string
+  appName?: string
   fromAmount?: NumberUnit
   toAmount?: NumberUnit
   status?: string
@@ -102,6 +102,7 @@ export type DenormalizedOrder = Omit<OrderProps, 'fromAmount' | 'toAmount'> & {
 export default class Order implements OrderProps {
   _version: number
   orderId: string
+  appName?: string
   status: string
   errorDetails?: Record<string, any>
   fromTxId?: string
@@ -129,6 +130,8 @@ export default class Order implements OrderProps {
 
     this.orderId = props.orderId
     assert(typeof this.orderId === 'string', `orderId must be a string, received: ${this.orderId}`)
+
+    if (typeof props.appName === 'string') this.appName = props.appName
 
     if (props.fromAmount !== undefined && !isNumberUnit(props.fromAmount)) {
       throw new Error('fromAmount must be of type: NumberUnit')
@@ -237,6 +240,7 @@ export default class Order implements OrderProps {
 
     return omitUndefined({
       orderId: this.orderId,
+      appName: this.appName,
       date: this.date.toISOString(),
       displaySvc: this.displaySvc,
       fromAmount,
@@ -272,6 +276,41 @@ export default class Order implements OrderProps {
     delete obj._version
 
     return obj
+  }
+
+  equals(other: Order): boolean {
+    if (this === other) return true
+    return (
+      this.orderId === other.orderId &&
+      this.appName === other.appName &&
+      this.status === other.status &&
+      this.synced === other.synced &&
+      this.toTxId === other.toTxId &&
+      this.fromTxId === other.fromTxId &&
+      this.message === other.message &&
+      this.fromAsset === other.fromAsset &&
+      this.toAsset === other.toAsset &&
+      this.fromWalletAccount === other.fromWalletAccount &&
+      this.toWalletAccount === other.toWalletAccount &&
+      this.toAddress === other.toAddress &&
+      this.svc === other.svc &&
+      this.displaySvc === other.displaySvc &&
+      this.region === other.region &&
+      this.slippage === other.slippage &&
+      this.date.getTime() === other.date.getTime() &&
+      (this.fromAmount === other.fromAmount ||
+        (this.fromAmount instanceof NumberUnit &&
+          other.fromAmount instanceof NumberUnit &&
+          this.fromAmount.equals(other.fromAmount))) &&
+      (this.toAmount === other.toAmount ||
+        (this.toAmount instanceof NumberUnit &&
+          other.toAmount instanceof NumberUnit &&
+          this.toAmount.equals(other.toAmount))) &&
+      isEqual(this.errorDetails, other.errorDetails) &&
+      isEqual(this.svcOptions, other.svcOptions) &&
+      isEqual(this.potentialToTxIds, other.potentialToTxIds) &&
+      isEqual(this.txIds, other.txIds)
+    )
   }
 
   toString() {

@@ -1,12 +1,19 @@
 {
   "name": "@exodus/bip39",
-  "version": "1.0.3",
+  "version": "1.1.1",
   "description": "Exodus BIP39 module",
   "type": "module",
   "main": "src/index.js",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/bip39",
+  "keywords": [
+    "bip39",
+    "mnemonic",
+    "seed",
+    "crypto",
+    "bitcoin"
+  ],
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/bip39",
   "exports": {
     ".": "./src/index.js",
     "./wordlists/english": "./wordlists/english.js"
@@ -18,6 +25,7 @@
     "!**/__tests__/**"
   ],
   "dependencies": {
+    "@exodus/bytes": "^1.0.0",
     "@exodus/crypto": "^1.0.0-rc.26",
     "minimalistic-assert": "^1.0.1"
   },
@@ -25,15 +33,19 @@
     "@exodus/test": "^1.0.0-rc.76"
   },
   "scripts": {
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abip39"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Abip39"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": false
   }
 }

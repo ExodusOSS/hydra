@@ -10,13 +10,10 @@ function mockResponse(json) {
   }
 }
 
-const passphrase = 'my-password-manager-generated-this'
-
 describe('pricingClient', () => {
   let adapters
   let container
   let fetch
-  let exodus
 
   beforeEach(async () => {
     fetch = jest.fn().mockImplementation(async (url) => {
@@ -27,14 +24,9 @@ describe('pricingClient', () => {
     adapters = createAdapters({ fetch })
     container = createExodus({ adapters, config })
 
-    exodus = container.resolve()
-
-    await exodus.application.start()
-    await exodus.application.create({ passphrase })
-    await exodus.application.unlock({ passphrase })
+    container.resolve()
+    await container.get('remoteConfigAtom').set({ config: {} })
   })
-
-  afterEach(() => exodus.application.stop())
 
   test('pricingClient is available', async () => {
     const { pricingClient } = container.getAll()

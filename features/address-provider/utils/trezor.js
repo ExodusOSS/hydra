@@ -2,7 +2,7 @@
 import lodash from 'lodash'
 import { createMeta } from '@exodus/trezor-meta'
 
-const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { memoize } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 export const getTrezorMeta = memoize(
   (asset) =>

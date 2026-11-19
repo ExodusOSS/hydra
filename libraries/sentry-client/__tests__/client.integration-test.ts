@@ -11,14 +11,8 @@ if (!process.env.SENTRY_PUBLIC_KEY) {
   )
 }
 
-if (!process.env.SENTRY_AUTH_TOKEN) {
-  throw new Error(
-    'SENTRY_AUTH_TOKEN env var is required, get it from : https://exodus-movement-inc.sentry.io/settings/developer-settings/sentry-client-integration-testing-fc551a/'
-  )
-}
-
 const config = {
-  dsnUrl: 'https://o169923.ingest.us.sentry.io',
+  dsnUrl: 'https://sentry.a.exodus.io',
   publicKey: process.env.SENTRY_PUBLIC_KEY,
   projectId: '1321706',
   environment: 'staging',

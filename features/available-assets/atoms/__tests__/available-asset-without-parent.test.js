@@ -1,32 +1,30 @@
-import assetsBase from '@exodus/assets-base'
+import { baseAssets, combinedAssetsList } from '@exodus/assets-test-meta'
 import { createInMemoryAtom } from '@exodus/atoms'
-import { when } from 'jest-when'
 
 import { availableAssetNamesWithoutParentCombinedAtomDefinition } from '../index.js'
 
 describe('availableAssetNamesWithoutParentCombinedAtom', () => {
-  const { bitcoin, eden } = assetsBase
-  const availableAssetNames = [bitcoin.name, eden.name]
+  const { bitcoin } = baseAssets
+  const combinedAsset = combinedAssetsList[0]
+  const availableAssetNames = [bitcoin.name, combinedAsset.name]
 
-  let assetsModule
+  let assetsAtom
   let availableAssetNamesAtom
   let availableAssetNamesWithoutParentCombinedAtom
 
   beforeEach(() => {
-    assetsModule = {
-      getAsset: jest.fn(),
-    }
-    when(assetsModule.getAsset)
-      .calledWith(bitcoin.name)
-      .mockReturnValue({ ...bitcoin, isCombined: false })
-    when(assetsModule.getAsset)
-      .calledWith(eden.name)
-      .mockReturnValue({ ...eden, isCombined: true })
-
+    assetsAtom = createInMemoryAtom({
+      defaultValue: {
+        value: {
+          [bitcoin.name]: { ...bitcoin, isCombined: false },
+          [combinedAsset.name]: { ...combinedAsset, isCombined: true },
+        },
+      },
+    })
     availableAssetNamesAtom = createInMemoryAtom({ defaultValue: availableAssetNames })
     availableAssetNamesWithoutParentCombinedAtom =
       availableAssetNamesWithoutParentCombinedAtomDefinition.factory({
-        assetsModule,
+        assetsAtom,
         availableAssetNamesAtom,
       })
   })

@@ -1,7 +1,7 @@
+import { getSeedId } from '@exodus/bip32'
 import { mnemonicToSeed } from '@exodus/bip39'
 import { createAsset as createBitcoin } from '@exodus/bitcoin-plugin'
-import { getSeedId } from '@exodus/keychain/module/crypto/seed-id.js'
-import { KeyIdentifier } from '@exodus/keychain/module/index.js'
+import KeyIdentifier from '@exodus/key-identifier'
 import { createNoopLogger } from '@exodus/logger'
 import { WalletAccount } from '@exodus/models'
 

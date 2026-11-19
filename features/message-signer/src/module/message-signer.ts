@@ -75,4 +75,6 @@ const messageSignerDefinition = {
   public: true,
 } as const satisfies Definition
 
+export type { MessageSigner }
+
 export default messageSignerDefinition

@@ -11,8 +11,8 @@ exports[`units object of units 1`] = `
   "ARS": {
     "label": "Argentine peso",
     "name": "ARS",
-    "rightSideSymbol": false,
-    "symbol": "Ar",
+    "rightSideSymbol": true,
+    "symbol": "ARS",
   },
   "AUD": {
     "label": "Australian Dollar",

@@ -11,7 +11,6 @@ class Address {
    */
   public static isP2PKH(address: string) {
     // Check if the provided address is a P2PKH address
-    // eslint-disable-next-line sonarjs/prefer-single-boolean-return
     if (address[0] === '1' || address[0] === 'm' || address[0] === 'n') {
       return true // P2PKH address
     }
@@ -41,7 +40,6 @@ class Address {
       // Convert the address into a scriptPubKey
       const scriptPubKey = this.convertAdressToScriptPubkey(address)
       // Check if the scriptPubKey is exactly 22 bytes since P2WPKH scriptPubKey should be 0014<20-BYTE-PUBKEY-HASH>
-      // eslint-disable-next-line sonarjs/prefer-single-boolean-return
       if (scriptPubKey.byteLength === 22) {
         return true // P2WPKH
       }

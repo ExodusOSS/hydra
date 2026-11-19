@@ -38,12 +38,12 @@ describe('nfts', () => {
 
       const nfts = nftsDefinition.factory({ fusion, nftsConfigAtom, logger, nftsOptimisticAtom })
 
-      expect(fusion.channel).toBeCalledTimes(0)
+      expect(fusion.channel).toHaveBeenCalledTimes(0)
       await nfts.load()
-      expect(fusion.channel).toBeCalledTimes(1)
+      expect(fusion.channel).toHaveBeenCalledTimes(1)
 
       await nfts.load()
-      expect(fusion.channel).toBeCalledTimes(1)
+      expect(fusion.channel).toHaveBeenCalledTimes(1)
     })
 
     it('should resolve subsequent load promises after load finished', async () => {
@@ -53,7 +53,7 @@ describe('nfts', () => {
 
       const nfts = nftsDefinition.factory({ fusion, nftsConfigAtom, nftsOptimisticAtom, logger })
 
-      expect(fusion.channel).toBeCalledTimes(0)
+      expect(fusion.channel).toHaveBeenCalledTimes(0)
       const firstLoad = nfts.load()
       const secondLoad = nfts.load()
 
@@ -61,7 +61,7 @@ describe('nfts', () => {
       expect(resolvedEarly).toBe('too early')
 
       await firstLoad
-      expect(fusion.channel).toBeCalledTimes(1)
+      expect(fusion.channel).toHaveBeenCalledTimes(1)
 
       const resolved = await Promise.race([secondLoad, Promise.resolve('not yet')])
       expect(resolved).not.toBe('not yet')

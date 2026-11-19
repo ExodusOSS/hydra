@@ -20,7 +20,7 @@ describe('enabledAssets', () => {
 
   const passphrase = 'my-password-manager-generated-this'
 
-  const setup = async ({ createWallet = true } = {}) => {
+  const setup = async ({ createWallet = true, load = false } = {}) => {
     adapters = createAdapters()
 
     port = adapters.port
@@ -32,6 +32,7 @@ describe('enabledAssets', () => {
     reportNode = container.getByType('report').enabledAssetsReport
 
     await exodus.application.start()
+    if (load) await exodus.application.load()
     if (createWallet) {
       await exodus.application.create({ passphrase })
       await exodus.application.unlock({ passphrase })
@@ -106,6 +107,9 @@ describe('enabledAssets', () => {
   })
 
   test('should successfully export report (post-wallet-exists)', async () => {
+    await exodus.application.stop() // stop the instance from beforeEach
+    await setup({ load: true })
+
     await exodus.application.unlock({ passphrase })
     await expect(exodus.wallet.exists()).resolves.toBe(true)
     await expect(exodus.reporting.export()).resolves.toMatchObject({

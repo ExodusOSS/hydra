@@ -22,7 +22,7 @@ const createHasBalanceAtom = ({ balancesAtom, storage }) => {
     isSoleWriter: true,
   })
   const computedAtom = createComputedAtom({ balancesAtom })
-  // eslint-disable-next-line @exodus/hydra/no-eternal-subscription
+  // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-eternal-subscription
   computedAtom.observe((value) => storageAtom.set(value))
 
   return storageAtom

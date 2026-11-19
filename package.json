@@ -2,64 +2,60 @@
   "name": "root",
   "private": true,
   "license": "UNLICENSED",
-  "workspaces": {
-    "packages": [
-      "modules/*",
-      "libraries/*",
-      "tools/packages/*",
-      "tools/you-shall-not-pass/*",
-      "tools",
-      "features/*",
-      "adapters/*",
-      "sdks/*",
-      "apps/*",
-      "lint/*",
-      "docs",
-      "docs/*",
-      "ui/*"
-    ]
-  },
   "engines": {
-    "node": ">=24.14.0",
-    "yarn": ">=3"
+    "node": ">=24.14.0"
   },
   "scripts": {
+    "preinstall": "node tools/scripts/check-auth.js",
     "lerna:run": "NODE_OPTIONS=--max-old-space-size=8192 lerna run",
     "lint:fast": "oxlint -c .oxlintrc.json",
-    "lint": "yarn build --scope @exodus/basic-utils && LINTER=true yarn lerna:run lint --reject-cycles",
-    "lint:fix": "yarn build --scope @exodus/basic-utils && LINTER=true yarn lerna:run lint:fix --no-bail --reject-cycles",
-    "lint:rust": "yarn lerna:run lint:rust --reject-cycles",
-    "test": "yarn lerna:run test --reject-cycles",
+    "lint:type-aware": "oxlint -c .oxlintrc.json --type-aware",
+    "lint": "LINTER=true pnpm exec eslint .",
+    "lint:fix": "LINTER=true pnpm exec eslint . --fix",
+    "lint:rust": "pnpm run lerna:run lint:rust --reject-cycles",
+    "lint:entrypoints": "node tools/scripts/check-entrypoints.mjs",
+    "lint:workspace-dependencies": "node tools/scripts/check-workspace-dependencies.mjs",
+    "verify:publish-rewrite": "node tools/scripts/verify-publish-rewrite.mjs",
+    "test": "pnpm run lerna:run test --reject-cycles",
+    "typecheck": "pnpm run lerna:run typecheck --reject-cycles",
     "test:integration": "lerna run test:integration",
-    "test:rust": "yarn lerna:run test:rust --reject-cycles",
-    "build": "yarn lerna:run build",
-    "format": "prettier --write \"**/*.{json,md,yaml}\" --log-level warn",
-    "format:check": "prettier --check \"**/*.{json,md,yaml}\" --log-level warn",
+    "test:rust": "pnpm run lerna:run test:rust --reject-cycles",
+    "build": "pnpm run lerna:run build",
+    "format": "prettier --experimental-cli --write \"**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts,json,md,yaml,yml}\" --log-level warn",
+    "format:check": "prettier --experimental-cli --check \"**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts,json,md,yaml,yml}\" --log-level warn",
     "cache:delete": "node ./tools/scripts/cache/delete",
     "generate": "tools/scripts/generate.js",
     "postmigrate": "node tools/scripts/postmigrate/index.js",
     "release": "lerna-release-action",
     "jsvu": "jsvu --engines=hermes",
     "sync": "./tools/scripts/sync.js",
-    "sync:mobile": "DEFAULT_REPOSITORY_PATH=../exodus-mobile/src ./tools/scripts/sync.js",
-    "sync:browser": "DEFAULT_REPOSITORY_PATH=../exodus-browser/apps/browser/src ./tools/scripts/sync.js"
+    "sync:mobile": "DEFAULT_REPOSITORY_PATH=../apps/mobile/src ./tools/scripts/sync.js",
+    "sync:browser": "DEFAULT_REPOSITORY_PATH=../../exodus-browser/apps/browser/src ./tools/scripts/sync.js"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-flow": "^7.18.6",
+    "@exodus/eslint-config-exodus": "workspace:*",
+    "@exodus/eslint-parser-markdown": "workspace:*",
+    "@exodus/eslint-plugin-docs": "workspace:*",
+    "@exodus/eslint-plugin-package": "workspace:*",
+    "@exodus/eslint-plugin-tsconfig": "workspace:*",
     "@exodus/lerna-release-action-cli": "^1.4.0",
-    "@exodus/lerna-utils": "^1.5.0",
+    "@exodus/lerna-utils": "workspace:^",
     "@exodus/oxlint-plugin-hydra": "workspace:*",
+    "@exodus/oxlint-plugin-no-unstable-nested-components": "workspace:*",
+    "@exodus/oxlint-plugin-require-extensions": "workspace:*",
     "@exodus/oxlint-plugin-restricted-imports": "workspace:*",
-    "@exodus/prettier": "^1.0.0",
+    "@exodus/oxlint-plugin-simple-import-sort": "workspace:*",
+    "@exodus/prettier": "workspace:^",
     "@exodus/solana-api": "^3.30.4",
     "@exodus/test": "^1.0.0-rc.105",
     "@types/debug": "^4.1.7",
-    "@types/eslint": "^9.6.1",
     "@types/jest": "^29.4.0",
     "@types/jsdom": "^20.0.0",
     "@types/node": "^24.0.0",
+    "concurrently": "^9.2.1",
     "conventional-changelog-conventionalcommits": "^5.0.0",
     "eslint": "^9.9.1",
     "jsdom": "^24.1.0",
@@ -67,44 +63,11 @@
     "knip": "^5.33.1",
     "lerna": "^9.0.3",
     "oxlint": "^1.53.0",
-    "prettier": "^3.3.3",
+    "oxlint-tsgolint": "0.23.0",
+    "prettier": "^3.6.0",
+    "tsc-alias": "^1.8.17",
     "typescript": "^5.7.0"
   },
-  "resolutions": {
-    "@exodus/models": "^13.0.0",
-    "@exodus/currency": "^6.0.0",
-    "@types/react": "^17.0.0",
-    "@puppeteer/browsers/proxy-agent": "npm:@hydra/you-shall-not-pass.proxy-agent@workspace:^",
-    "domain-browser": "npm:@hydra/you-shall-not-pass.object@workspace:^",
-    "@docusaurus/types/react-helmet-async": "npm:@hydra/you-shall-not-pass.object@workspace:^",
-    "grpc": "npm:@hydra/you-shall-not-pass.object@workspace:^",
-    "react-native/@react-native-community/cli": "npm:@exodus/react-native-community-cli@5.0.1-exodus.1",
-    "react-native/@react-native-community/cli-platform-ios": "npm:@exodus/cli-platform-ios@5.0.1-exodus.5",
-    "react-native/@react-native-community/cli-platform-android": "npm:@exodus/cli-platform-android@5.0.1-exodus.5"
-  },
-  "dependenciesMeta": {
-    "bigint-buffer": {
-      "built": false
-    },
-    "blake-hash": {
-      "built": false
-    },
-    "bufferutil": {
-      "built": false
-    },
-    "cbor-extract": {
-      "built": false
-    },
-    "keccak": {
-      "built": false
-    },
-    "secp256k1": {
-      "built": false
-    },
-    "utf-8-validate": {
-      "built": false
-    }
-  },
   "prettier": "@exodus/prettier",
-  "packageManager": "yarn@4.3.0"
+  "packageManager": "pnpm@11.28.4+sha512.f905a61563f89b49a292634d3d87d024cfdea9dccf5c66b2ccc261675fa7b2774320a959db472e6caa7f9ff7314709cd50d06c8fd64addb60647377a78d250ff"
 }

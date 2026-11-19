@@ -5,7 +5,7 @@ This Exodus SDK feature tracks fiat-denominated balances for all enabled wallet 
 ## Install
 
 ```sh
-yarn add @exodus/fiat-balances
+pnpm add @exodus/fiat-balances
 ```
 
 ## Usage

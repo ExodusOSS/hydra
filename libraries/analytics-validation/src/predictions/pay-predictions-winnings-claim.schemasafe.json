@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayPredictionsWinningsClaim"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        },
+        {
+          "$ref": "common-properties#/definitions/predictionsProperties"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "position_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "market_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "payout_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "claim_method": {
+          "enum": ["auto", "manual"]
+        },
+        "is_first_claim": {
+          "type": "boolean"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

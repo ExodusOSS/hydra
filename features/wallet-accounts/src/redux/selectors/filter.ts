@@ -1,10 +1,11 @@
 // eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
+import { defineSelectorFactory } from '@exodus/redux-dependency-injection'
 import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect'
 import { WalletAccount } from '@exodus/models'
 import type { WalletAccountsSelectors } from '../types.js'
 
-const { isEqual, isMatch, memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { isEqual, isMatch, memoize } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 // TODO: move to core-selectors
 const createDeepEqualSelector = createSelectorCreator(defaultMemoize, (a, b) => {
@@ -13,10 +14,13 @@ const createDeepEqualSelector = createSelectorCreator(defaultMemoize, (a, b) => 
 })
 
 // TODO: move to core-selectors
-// Reselect's createSelector typing doesn't support dynamic argument forwarding, requiring `any` casts here
-const createDeepEqualOutputSelector = (...args: any[]) => {
-  const selector = (createSelector as (...a: any[]) => any)(...args)
-  return createDeepEqualSelector(selector, (result) => result)
+const createDeepEqualOutputSelector = <A, B, R>(
+  selectorA: (state: unknown) => A,
+  selectorB: (state: unknown) => B,
+  combiner: (a: A, b: B) => R
+): ((state: unknown) => R) => {
+  const inner = createSelector(selectorA, selectorB, combiner)
+  return createDeepEqualSelector(inner, (result: R): R => result)
 }
 
 const selectorFactory = (
@@ -28,11 +32,12 @@ const selectorFactory = (
       createDeepEqualOutputSelector(
         allWalletAccountInstancesSelector,
         activeWalletAccountSelector,
-        (walletAccounts: WalletAccount[], activeWalletAccountName: string) => {
+        (walletAccounts: WalletAccount[], activeWalletAccountName: string): WalletAccount[] => {
           return walletAccounts.filter((walletAccount: WalletAccount) => {
             const status = {
               enabled: !!walletAccount.enabled,
               custodial: !!walletAccount.isCustodial,
+              external: !!walletAccount.isExternal,
               readOnly: !!(walletAccount.isHardware || walletAccount.is2FA),
               hardware: !!walletAccount.isHardware,
               ledger: walletAccount.source === WalletAccount.LEDGER_SRC,
@@ -47,7 +52,7 @@ const selectorFactory = (
     (options) => JSON.stringify(options)
   )
 
-export default {
+export default defineSelectorFactory({
   id: 'filter',
   selectorFactory,
   dependencies: [
@@ -55,4 +60,4 @@ export default {
     { selector: 'all' },
     { selector: 'active' },
   ],
-} as const
+})

@@ -5,10 +5,21 @@ import oldToNewStyleTokenNames from '@exodus/asset-legacy-token-name-mapping'
 
 const { throttle } = lodash
 
+const createIgnoredWalletAccounts = (ignoredWalletAccounts = []) => {
+  if (
+    !Array.isArray(ignoredWalletAccounts) ||
+    !ignoredWalletAccounts.every((walletAccount) => typeof walletAccount === 'string')
+  ) {
+    throw new TypeError('ignoredWalletAccounts must be an array of wallet account names')
+  }
+
+  return new Set(ignoredWalletAccounts)
+}
+
 // auto-enable tokens that are available and either built-in assets or verified custom tokens
 // do NOT auto-enable assets the user has explicitly disabled
 class AutoEnableAssets {
-  #assetsModule
+  #assetsAtom
   #enabledAssetsModule
   #defaultEnabledAssetNamesAtom
   #defaultEnabledAssetNames = []
@@ -20,6 +31,7 @@ class AutoEnableAssets {
   #fiatOrdersAtom
   #syncedBalancesAtom
   #availableAssetNamesAtom
+  #ignoredWalletAccounts
   #logger
   #errorTracking
   #oldToNewStyleTokenNames
@@ -29,7 +41,7 @@ class AutoEnableAssets {
   #subscriptions = []
 
   constructor({
-    assetsModule,
+    assetsAtom,
     enabledAssets,
     defaultEnabledAssetNamesAtom,
     enabledAndDisabledAssetsAtom,
@@ -43,7 +55,7 @@ class AutoEnableAssets {
     logger,
     errorTracking,
   }) {
-    this.#assetsModule = assetsModule
+    this.#assetsAtom = assetsAtom
     this.#enabledAssetsModule = enabledAssets
     this.#defaultEnabledAssetNamesAtom = defaultEnabledAssetNamesAtom
     this.#nonDustBalanceAssetNamesAtom = nonDustBalanceAssetNamesAtom
@@ -53,6 +65,7 @@ class AutoEnableAssets {
     this.#enabledAssetsAtom = enabledAssetsAtom
     this.#availableAssetNamesAtom = availableAssetNamesAtom
     this.#alwaysAutoEnable = config.alwaysAutoEnable ?? true
+    this.#ignoredWalletAccounts = createIgnoredWalletAccounts(config.ignoredWalletAccounts)
     this.#oldToNewStyleTokenNames = config.oldToNewStyleTokenNames || oldToNewStyleTokenNames
     this.#enabledAndDisabledAssetsAtom = enabledAndDisabledAssetsAtom
     this.#flush = throttle(this.#flush, config.throttleInterval, { leading: false })
@@ -82,14 +95,14 @@ class AutoEnableAssets {
         if (this.#alwaysAutoEnable) {
           this.#enqueue(assetNames)
         } else {
-          this.#maybeAutoEnable(assetNames)
+          void this.#maybeAutoEnable(assetNames)
         }
       }),
       this.#ordersAtom?.observe(this.#handleOrders),
       this.#fiatOrdersAtom?.observe(this.#handleFiatOrders),
       this.#syncedBalancesAtom?.observe(this.#handleSyncedBalances),
       this.#enabledAndDisabledAssetsAtom.observe((value) => {
-        this.#handleFormerBultInTokens(value)
+        void this.#handleFormerBuiltInTokens(value)
       }),
     ].filter(Boolean)
 
@@ -100,7 +113,7 @@ class AutoEnableAssets {
         if (this.#alwaysAutoEnable) {
           this.#enqueue(currentAssetNames)
         } else {
-          this.#maybeAutoEnable(currentAssetNames)
+          void this.#maybeAutoEnable(currentAssetNames)
         }
       }
     }
@@ -112,12 +125,14 @@ class AutoEnableAssets {
     this.#flush.cancel()
   }
 
-  #filterAutoEnableable = async (assetNames) =>
-    filterAsync(assetNames, async (assetName) => {
+  #filterAutoEnableable = async (assetNames) => {
+    const { value: assets } = await this.#assetsAtom.get()
+
+    return filterAsync(assetNames, async (assetName) => {
       // user knows best
       if (await this.#enabledAssetsModule.wasChangedByUser(assetName)) return false
 
-      const asset = this.#assetsModule.getAsset(assetName)
+      const asset = assets[assetName]
       if (!asset) {
         this.#logger.debug(`Can't get asset for assetName=${assetName}`)
         return false
@@ -125,6 +140,7 @@ class AutoEnableAssets {
 
       return !asset.isCombined
     })
+  }
 
   #maybeAutoEnable = async (assetNames) => {
     assetNames = [...new Set(assetNames)]
@@ -144,7 +160,7 @@ class AutoEnableAssets {
 
   #enqueue = (assetNames) => {
     assetNames.forEach((name) => this.#queuedToEnable.add(name))
-    this.#flush()
+    void this.#flush()
   }
 
   #flush = async () => {
@@ -157,7 +173,10 @@ class AutoEnableAssets {
 
   // enable assets to make order show up faster
   #handleOrders = async (orderSet) => {
-    const assetNamesToEnable = [...orderSet].flatMap((order) => [order.fromAsset, order.toAsset])
+    const assetNamesToEnable = [...orderSet].flatMap((order) => [
+      ...(this.#ignoredWalletAccounts.has(order.fromWalletAccount) ? [] : [order.fromAsset]),
+      ...(this.#ignoredWalletAccounts.has(order.toWalletAccount) ? [] : [order.toAsset]),
+    ])
 
     await this.#maybeAutoEnable(assetNamesToEnable)
   }
@@ -165,21 +184,26 @@ class AutoEnableAssets {
   #handleFiatOrders = async (orders) => {
     if (!orders) return
 
-    const assetNamesToEnable = [...orders].map((order) =>
-      order.orderType === 'buy' ? order.toAsset : order.fromAsset
-    )
+    const assetNamesToEnable = [...orders]
+      .filter(
+        (order) =>
+          !this.#ignoredWalletAccounts.has(order.fromWalletAccount) &&
+          !this.#ignoredWalletAccounts.has(order.toWalletAccount)
+      )
+      .map((order) => (order.orderType === 'buy' ? order.toAsset : order.fromAsset))
 
     await this.#maybeAutoEnable(assetNamesToEnable)
   }
 
-  #handleFormerBultInTokens = async (value) => {
+  #handleFormerBuiltInTokens = async (value) => {
+    const { value: assets } = await this.#assetsAtom.get()
     const newTokenNamesToEnable = Object.keys(value.disabled)
       .map((assetName) => {
         const newStyleTokenName = this.#oldToNewStyleTokenNames[assetName]
         if (!newStyleTokenName) return // undefined
 
-        const asset = this.#assetsModule.getAsset(assetName)
-        const newAsset = this.#assetsModule.getAsset(newStyleTokenName)
+        const asset = assets[assetName]
+        const newAsset = assets[newStyleTokenName]
         const assetDisabledInConfig = value.disabled[assetName] === true
         const newAssetDisabledInConfig = value.disabled[newStyleTokenName] === true
 
@@ -199,19 +223,21 @@ class AutoEnableAssets {
     const availableAssetNames = new Set(await this.#availableAssetNamesAtom.get())
     const notEnabledAssetNamesWithSyncedBalance = new Set()
 
-    Object.values(byAssetSource).forEach((byAssetName) => {
-      Object.entries(byAssetName)
-        .filter(([assetName]) => !enabledAssets[assetName] && availableAssetNames.has(assetName))
-        .forEach(([assetName, balance]) => {
-          if (!balance.isZero) {
-            notEnabledAssetNamesWithSyncedBalance.add(assetName)
-          }
-        })
-    })
+    Object.entries(byAssetSource)
+      .filter(([walletAccount]) => !this.#ignoredWalletAccounts.has(walletAccount))
+      .forEach(([, byAssetName]) => {
+        Object.entries(byAssetName)
+          .filter(([assetName]) => !enabledAssets[assetName] && availableAssetNames.has(assetName))
+          .forEach(([assetName, balance]) => {
+            if (!balance.isZero) {
+              notEnabledAssetNamesWithSyncedBalance.add(assetName)
+            }
+          })
+      })
 
     const notEnabledAssetNamesWithSyncedBalanceList = [...notEnabledAssetNamesWithSyncedBalance]
 
-    this.#maybeAutoEnable(notEnabledAssetNamesWithSyncedBalanceList)
+    void this.#maybeAutoEnable(notEnabledAssetNamesWithSyncedBalanceList)
   }
 }
 
@@ -222,7 +248,7 @@ const autoEnableAssetsPluginDefinition = {
   type: 'plugin',
   factory: createAutoEnableAssets,
   dependencies: [
-    'assetsModule',
+    'assetsAtom',
     'enabledAssets',
     'defaultEnabledAssetNamesAtom',
     'enabledAndDisabledAssetsAtom',

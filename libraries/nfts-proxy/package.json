@@ -20,24 +20,26 @@
     "lib"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "scripts": {
-    "lint": "run -T eslint .",
-    "test": "run -T exodus-test --jest --esbuild",
-    "build": "rm -rf ../../.cache/nfts-proxy lib && run -T tsc --build tsconfig.build.json",
-    "prepublishOnly": "yarn run -T build --scope @exodus/nfts-proxy"
+    "lint": "pnpm exec eslint .",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "build": "rm -rf ../../.cache/nfts-proxy lib && pnpm exec tsc -p tsconfig.build.json",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/nfts-proxy"
   },
   "dependencies": {
     "@exodus/fetch": "^1.3.0"
   },
   "gitHead": "f36e3a0f8a6b6461f310b81042e572fedf13c932",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/nfts-proxy",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/nfts-proxy",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Anfts-proxy"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Anfts-proxy"
   }
 }

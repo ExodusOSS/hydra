@@ -4,11 +4,13 @@ import assert from 'minimalistic-assert'
 import _isShutDown from './modules/is-shut-down.js'
 import _getUnavailableStatus from './modules/get-unavailable-status.js'
 import _isEnabledInGeolocation from './modules/is-enabled-in-geolocation.js'
+import _isInRollout from './modules/is-in-rollout.js'
 
 const modules = {
   SHUT_DOWN_SEMVER: 'shutdownSemver',
   GEOLOCATION: 'geolocation',
   ENABLED_OVERRIDE: 'enabledOverride',
+  ROLLOUT: 'rollout',
 }
 
 const _getEnabledStatus = (featureConfig, opts, enabledModules) => {
@@ -18,6 +20,10 @@ const _getEnabledStatus = (featureConfig, opts, enabledModules) => {
 
   if (enabledModules.geolocation && !_isEnabledInGeolocation(featureConfig, opts)) {
     return { isOn: false, module: modules.GEOLOCATION }
+  }
+
+  if (enabledModules.rollout && !_isInRollout(featureConfig, opts)) {
+    return { isOn: false, module: modules.ROLLOUT }
   }
 
   if (enabledModules.enabledOverride && typeof featureConfig?.enabled === 'boolean') {
@@ -39,7 +45,7 @@ const _getUnavailableReason = (featureConfig, opts, enabledModules) => {
 }
 
 const validateOpts = (opts, enabledModules) => {
-  const { versionSemver, ready, enabled, geolocation } = opts
+  const { versionSemver, ready, enabled, geolocation, rolloutBucket } = opts
 
   assert(typeof ready === 'boolean', 'ready must be a boolean')
   assert(typeof enabled === 'boolean', 'enabled must be a boolean')
@@ -53,9 +59,16 @@ const validateOpts = (opts, enabledModules) => {
   if (enabledModules.geolocation) {
     assert(typeof geolocation === 'object', 'geolocation must be an object')
   }
+
+  if (enabledModules.rollout && rolloutBucket !== undefined) {
+    assert(
+      Number.isInteger(rolloutBucket) && rolloutBucket >= 0 && rolloutBucket < 100,
+      'rolloutBucket must be an integer in [0, 99]'
+    )
+  }
 }
 
-const availableModules = new Set(['shutdownSemver', 'geolocation', 'enabledOverride'])
+const availableModules = new Set(['shutdownSemver', 'geolocation', 'enabledOverride', 'rollout'])
 const validateModules = (enabledModules) => {
   Object.keys(enabledModules).forEach((module) =>
     assert(

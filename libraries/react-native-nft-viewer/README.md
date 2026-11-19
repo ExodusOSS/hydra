@@ -11,7 +11,7 @@ A react-native webview for displaying an NFT in a safe container.
 
 ### First step(Download)
 
-Run `yarn add @exodus/react-native-nft-viewer`
+Run `pnpm add @exodus/react-native-nft-viewer`
 
 ### Second step(Plugin Installation)
 

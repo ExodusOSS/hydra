@@ -8,7 +8,7 @@ import lodash from 'lodash'
 import { ModelIdSymbol } from '../constants.js'
 import { createIsInstance, omitUndefined } from '../utils.js'
 
-const { isEqual, set } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { isEqual, set } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 // NOTE: should treat as immutable
 
@@ -16,13 +16,13 @@ const coerceToObject = (obj: PersonalNote | object) =>
   obj instanceof PersonalNote ? obj.toJSON() : obj
 
 const cleanUpNoteJSON = ({ personalNote, to }: { personalNote: PersonalNoteJson; to: string }) => {
-  delete personalNote.message // eslint-disable-line @exodus/mutable/no-param-reassign-prop-only
+  delete personalNote.message // oxlint-disable-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
 
   if (personalNote.sends) {
     // check if there's an existing message for a mixed case address, and delete it
     Object.keys(personalNote.sends || Object.create(null)).forEach((address) => {
       const lower = address.toLowerCase()
-      if (address !== lower && lower === to) {
+      if (address !== lower && lower === to.toLowerCase()) {
         set(personalNote, ['sends', address, 'message'], null)
       }
     })

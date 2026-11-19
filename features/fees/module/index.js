@@ -27,7 +27,7 @@ function createFees({
   feeMonitors,
   accountStatesAtom,
   txLogsAtom,
-  assetsModule,
+  assetsAtom,
   addressProvider,
   walletAccountsAtom,
   logger,
@@ -40,7 +40,8 @@ function createFees({
       toAddress: providedToAddress,
       ...rest
     }) => {
-      const asset = await assetsModule.getAsset(assetName)
+      const assetsAtomValue = await assetsAtom.get()
+      const asset = assetsAtomValue.value[assetName]
 
       const notLoadedYetDefault = { fee: asset.feeAsset.currency.ZERO }
       const baseAsset = asset.baseAsset
@@ -138,7 +139,7 @@ const feesModuleDefinition = {
     'feeMonitors',
     'accountStatesAtom',
     'txLogsAtom',
-    'assetsModule',
+    'assetsAtom',
     'addressProvider',
     'walletAccountsAtom',
     'logger',

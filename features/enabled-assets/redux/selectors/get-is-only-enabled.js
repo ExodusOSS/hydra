@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 
-const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { memoize } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 const resultFunction = (assets, enabledAssets) =>
   memoize((assetName) => {
@@ -22,7 +22,7 @@ const resultFunction = (assets, enabledAssets) =>
 const getIsOnlyEnabledSelector = {
   id: 'getIsOnlyEnabled',
   resultFunction,
-  dependencies: [{ module: 'assets', selector: 'all' }, { selector: 'data' }],
+  dependencies: [{ module: 'availableAssets', selector: 'all' }, { selector: 'data' }],
 }
 
 export default getIsOnlyEnabledSelector

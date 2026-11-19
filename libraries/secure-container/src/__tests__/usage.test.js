@@ -1,6 +1,6 @@
 import { randomBytes } from '@exodus/crypto/randomBytes'
 import test from '@exodus/test/tape'
-import { blob as secoBlob, file, header, metadata } from 'secure-container' // eslint-disable-line import/no-extraneous-dependencies
+import { blob as secoBlob, file, header, metadata } from 'secure-container'
 
 import * as scCrypto from '../crypto.js'
 

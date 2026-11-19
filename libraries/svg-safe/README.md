@@ -5,7 +5,7 @@ Validates that a string is a valid SVG XML.
 ## Install
 
 ```sh
-yarn add @exodus/svg-safe
+pnpm add @exodus/svg-safe
 ```
 
 ## Usage

@@ -1,3 +1,4 @@
+// example.js self-imports the package to mirror consumer-side usage; pnpm's strict isolation doesn't link a package to itself.
 import { createClient } from '@exodus/auth-client-base'
 
 class MyClient {

@@ -91,7 +91,7 @@ export class PortTransport extends EventEmitter {
 
 export const createProcessRPC = (thread: Thread) => {
   const transport = new PortTransport({ thread, serialize, deserialize })
-  // eslint-disable-next-line  @exodus/mutable/no-param-reassign-prop-only, unicorn/prefer-add-event-listener
+  // oxlint-disable-next-line  @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only, unicorn/prefer-add-event-listener
   thread.onmessage = transport.onMessage
 
   const rpc = new RPC({ transport, serialize: noopSerialization, deserialize: noopSerialization })
@@ -103,8 +103,8 @@ export const createProcessRPC = (thread: Thread) => {
 }
 
 export const connectThreads = (a: Thread, b: Thread) => {
-  // eslint-disable-next-line  @exodus/mutable/no-param-reassign-prop-only
+  // oxlint-disable-next-line  @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
   a.postMessage = b.onmessage
-  // eslint-disable-next-line  @exodus/mutable/no-param-reassign-prop-only
+  // oxlint-disable-next-line  @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
   b.postMessage = a.onmessage
 }

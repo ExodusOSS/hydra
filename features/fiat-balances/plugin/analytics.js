@@ -39,7 +39,7 @@ const createFiatBalancesAnalyticsPlugin = ({
 
   const onStart = () => {
     const unsubscribe = assetsTotalWalletAmountsAtom.observe((cryptoBalancesByAsset) => {
-      setBalanceProperties(cryptoBalancesByAsset)
+      void setBalanceProperties(cryptoBalancesByAsset)
     })
 
     subscriptions = [unsubscribe]

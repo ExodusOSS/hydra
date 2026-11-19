@@ -15,7 +15,7 @@ jest.doMock(
   { virtual: true }
 )
 
-jest.doMock('@exodus/netinfo', () => ({
+jest.doMock('@react-native-community/netinfo', () => ({
   __esModule: true,
   default: {
     addEventListener: jest.fn(() => ({ remove: jest.fn() })),

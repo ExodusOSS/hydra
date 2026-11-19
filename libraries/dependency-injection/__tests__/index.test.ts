@@ -424,7 +424,7 @@ describe('unhappy sadness', () => {
     const registerA = () => container.register({ id: 'a', factory: () => ({}) })
     registerA()
 
-    expect(registerA).toThrowError(AlreadyRegisteredError)
+    expect(registerA).toThrow(AlreadyRegisteredError)
   })
 })
 

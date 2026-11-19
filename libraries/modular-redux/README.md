@@ -18,7 +18,7 @@ With Modular Redux, each Redux module is responsible for registering itself with
 ## Installation
 
 ```sh
-yarn add @exodus/modular-redux
+pnpm add @exodus/modular-redux
 ```
 
 ## Quick start

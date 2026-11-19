@@ -5,5 +5,5 @@ module.exports = {
   ...baseConfig,
   rootDir: './',
   setupFiles: ['<rootDir>/__tests__/setup/index.js'],
-  setupFilesAfterEnv: ['<rootDir>/__tests__/setup/http.js'],
+  setupFilesAfterEnv: [...baseConfig.setupFilesAfterEnv, '<rootDir>/__tests__/setup/http.js'],
 }

@@ -1,4 +1,5 @@
 import createCurrencyAtom from './currency.js'
+import createCurrencyFusionAtom from './currency-fusion.js'
 import createLanguageAtom from './language.js'
 import createLanguageFusionAtom from './language-fusion.js'
 
@@ -6,7 +7,15 @@ export const currencyAtomDefinition = {
   id: 'currencyAtom',
   type: 'atom',
   factory: createCurrencyAtom,
-  dependencies: ['fusion', 'config'],
+  dependencies: ['storage', 'config'],
+  public: true,
+}
+
+export const currencyFusionAtomDefinition = {
+  id: 'currencyFusionAtom',
+  type: 'atom',
+  factory: createCurrencyFusionAtom,
+  dependencies: ['fusion'],
   public: true,
 }
 

@@ -1,4 +1,5 @@
 import makeConcurrent from 'make-concurrent'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { pickBy } from '@exodus/basic-utils'
 import { PersonalNote } from '@exodus/models'

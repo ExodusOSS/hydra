@@ -27,7 +27,11 @@ const ENV_CONFIG = {
 
 const geolocation = ({ sandbox = false, ...configOverrides } = Object.create(null)) => {
   const environmentConfig = sandbox ? ENV_CONFIG.sandbox : ENV_CONFIG.production
-  const { apiUrl, fetchInterval } = { ...DEFAULT_CONFIG, ...environmentConfig, ...configOverrides }
+  const { apiUrl, fetchInterval, fetchIntervalUntilFirstSuccess } = {
+    ...DEFAULT_CONFIG,
+    ...environmentConfig,
+    ...configOverrides,
+  }
 
   return {
     id: 'geolocation',
@@ -35,7 +39,7 @@ const geolocation = ({ sandbox = false, ...configOverrides } = Object.create(nul
       { definition: geolocationAtomDefinition },
       {
         definition: geolocationMonitorDefinition,
-        config: { apiUrl, fetchInterval },
+        config: { apiUrl, fetchInterval, fetchIntervalUntilFirstSuccess },
       },
       { definition: geolocationPluginDefinition },
       {

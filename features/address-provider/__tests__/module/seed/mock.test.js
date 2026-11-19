@@ -17,7 +17,7 @@ let expectAddress
 
 const setup = async (opts) => {
   const {
-    assetsModule,
+    assetsAtom,
     publicKeyProvider,
     knownAddresses,
     addressCache,
@@ -26,7 +26,7 @@ const setup = async (opts) => {
     ...rest
   } = await _setup(opts)
   const addressProviderMock = createMockableAddressProvider({
-    assetsModule,
+    assetsAtom,
     publicKeyProvider,
     knownAddresses,
     addressCache,
@@ -37,7 +37,7 @@ const setup = async (opts) => {
 
   return {
     ...rest,
-    assetsModule,
+    assetsAtom,
     publicKeyProvider,
     knownAddresses,
     addressCache,
@@ -322,7 +322,7 @@ test('mockAddress without chain/address index sets default for all chain/address
 
 test('importReport', async () => {
   const {
-    assetsModule,
+    assetsAtom,
     walletAccountsAtom,
     accountStatesAtom,
     availableAssetNamesByWalletAccountAtom,
@@ -331,7 +331,7 @@ test('importReport', async () => {
   } = await setup()
 
   const reportNode = reportDefinition.factory({
-    assetsModule,
+    assetsAtom,
     enabledWalletAccountsAtom: walletAccountsAtom,
     availableAssetNamesByWalletAccountAtom,
     addressProvider,

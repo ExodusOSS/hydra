@@ -23,7 +23,7 @@ const useCurrentEffect = (effectFn, deps = []) => {
       isCurrent = false
       cleanupFn && cleanupFn()
     }
-  }, deps) // eslint-disable-line react-hooks/exhaustive-deps
+  }, deps) // oxlint-disable-line react/exhaustive-deps
 }
 
 export default useCurrentEffect

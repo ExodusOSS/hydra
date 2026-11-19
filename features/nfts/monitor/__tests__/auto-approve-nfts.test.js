@@ -98,14 +98,14 @@ const prepare = ({ config = {} } = {}) => {
       name: 'bitcoin',
 
       api: {
-        hasFeature: (feature) => feature === 'nfts',
+        features: { nfts: true },
         nfts: { getNftsAddresses: getNftsAddressesMock },
       },
     },
-    solana: { name: 'solana', api: { hasFeature: (feature) => feature === 'nfts' } },
+    solana: { name: 'solana', api: { features: { nfts: true } } },
   }
 
-  const assetsModule = { getAsset: (assetName) => assets[assetName] }
+  const assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
 
   nftsModule = {
     load: jest.fn(),
@@ -118,7 +118,7 @@ const prepare = ({ config = {} } = {}) => {
 
   const nftsMonitor = nftsMonitorDefinition.factory({
     addressProvider: addressProviderMock,
-    assetsModule,
+    assetsAtom,
     enabledWalletAccountsAtom,
     activeWalletAccountAtom,
     nftsAtom,

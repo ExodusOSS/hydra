@@ -21,7 +21,7 @@ const createAssetsPlugin = ({
     const payload = {
       assets,
       defaultAccountStates: mapValues(
-        pickBy(assets, (asset) => asset.api?.hasFeature?.('accountState')),
+        pickBy(assets, (asset) => asset.api?.features?.accountState),
         (asset) => asset.api.createAccountState().create()
       ),
     }
@@ -100,6 +100,7 @@ const createAssetsPlugin = ({
   const onStop = () => {
     observers.forEach((observer) => observer.unregister())
     subscribers.forEach((unsubscribe) => unsubscribe())
+    subscribers.length = 0
     customTokensMonitor?.stop()
   }
 

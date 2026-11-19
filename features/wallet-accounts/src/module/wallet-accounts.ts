@@ -1,4 +1,4 @@
-import { WalletAccount, WalletAccountSet } from '@exodus/models'
+import { WalletAccount, WalletAccountSet, type WalletAccountParams } from '@exodus/models'
 import type { Definition } from '@exodus/dependency-types'
 import type { ReadonlyAtom } from '@exodus/atoms'
 import type { Logger } from '@exodus/logger'
@@ -28,8 +28,7 @@ import {
   getUniqueTagForWalletAccount,
   shouldDeriveIndex,
 } from './utils.js'
-import proxyFreeze from 'proxy-freeze'
-import { EXODUS_SRC, type WalletAccountParams } from '@exodus/models/lib/wallet-account/index.js'
+import proxyFreeze from '@exodus/proxy-freeze'
 
 const { groupBy } = lodash
 
@@ -45,7 +44,7 @@ const walletAccountsChannel = {
 const updateWalletAccount = (
   walletAccounts: Record<string, WalletAccount> = Object.create(null),
   walletAccount: string,
-  newData: Record<string, unknown>
+  newData: Partial<WalletAccountParams>
 ) => {
   const before = walletAccounts[walletAccount]
 
@@ -60,12 +59,8 @@ const updateWalletAccount = (
     ...newData,
   })
 
-  for (const key of ['source', 'id', 'index']) {
-    assert(
-      (before as unknown as Record<string, unknown>)[key] ===
-        (after as unknown as Record<string, unknown>)[key],
-      `cannot change account ${key}`
-    )
+  for (const key of ['source', 'id', 'index'] as const) {
+    assert(before[key] === after[key], `cannot change account ${key}`)
   }
 
   assert(
@@ -248,7 +243,7 @@ export class WalletAccounts {
       walletAccounts,
       accounts,
     }: {
-      walletAccounts: Record<string, Record<string, unknown>>
+      walletAccounts: Record<string, Partial<WalletAccountParams>>
       accounts?: HardwareWalletPublicKeys
     }) => {
       // This will replace all the locally stored hardware wallet public keys
@@ -269,11 +264,11 @@ export class WalletAccounts {
       const afterByName = Object.entries(walletAccounts).reduce(
         (
           instances: Record<string, WalletAccount>,
-          [name, fields]: [string, Record<string, unknown>]
+          [name, fields]: [string, Partial<WalletAccountParams>]
         ) => {
           instances[name] = new WalletAccount({
             ...fields,
-            ...(fields.source === EXODUS_SRC && {
+            ...(fields.source === WalletAccount.EXODUS_SRC && {
               seedId: primarySeedId,
               compatibilityMode:
                 currentWalletAccounts[WalletAccount.DEFAULT_NAME]?.compatibilityMode,
@@ -326,11 +321,11 @@ export class WalletAccounts {
     { concurrency: 1 }
   )
 
-  update = async (name: string, data: Record<string, unknown>) => {
+  update = async (name: string, data: Partial<WalletAccountParams>) => {
     await this.updateMany({ [name]: data })
   }
 
-  updateMany = async (dataByName: Record<string, Record<string, unknown>>) => {
+  updateMany = async (dataByName: Record<string, Partial<WalletAccountParams>>) => {
     const currentWalletAccounts = await this.#getInternalWalletAccountsWithFallback()
     const updated = Object.entries(dataByName).map(([name, data]) => {
       const walletAccount = updateWalletAccount(currentWalletAccounts, name, data)
@@ -426,6 +421,7 @@ export class WalletAccounts {
     if (walletAccountNames.length === 0) return
 
     const walletAccounts = { ...currentWalletAccounts }
+    const hardwareWalletPublicKeys = { ...this.#hardwareWalletPublicKeys }
 
     await this.setActive((oldValue) =>
       walletAccountNames.includes(oldValue) ? WalletAccount.DEFAULT_NAME : oldValue
@@ -434,11 +430,13 @@ export class WalletAccounts {
     for (const walletAccount of walletAccountNames) {
       if (walletAccounts[walletAccount].isHardware) {
         delete walletAccounts[walletAccount]
-        delete this.#hardwareWalletPublicKeys[walletAccount]
+        delete hardwareWalletPublicKeys[walletAccount]
       } else {
         walletAccounts[walletAccount] = this.#disableWalletAccount(walletAccounts, walletAccount)
       }
     }
+
+    this.#hardwareWalletPublicKeys = hardwareWalletPublicKeys
 
     if (equalWalletAccounts(currentWalletAccounts, walletAccounts)) return
 
@@ -456,6 +454,7 @@ export class WalletAccounts {
 
     const currentWalletAccounts = await this.#getInternalWalletAccountsWithFallback()
     const walletAccounts = { ...currentWalletAccounts }
+    const hardwareWalletPublicKeys = { ...this.#hardwareWalletPublicKeys }
     const active = await this.#activeWalletAccountAtom.get()
 
     for (const name of names) {
@@ -463,9 +462,11 @@ export class WalletAccounts {
         throw new Error("Can't remove default walletAccount")
       }
 
-      if (walletAccounts[name]?.isHardware) delete this.#hardwareWalletPublicKeys[name]
+      if (walletAccounts[name]?.isHardware) delete hardwareWalletPublicKeys[name]
       delete walletAccounts[name]
     }
+
+    this.#hardwareWalletPublicKeys = hardwareWalletPublicKeys
 
     if (equalWalletAccounts(currentWalletAccounts, walletAccounts)) return
 
@@ -650,7 +651,7 @@ interface Fusion {
 }
 
 interface FusionData {
-  walletAccounts?: Record<string, Record<string, unknown>>
+  walletAccounts?: Record<string, Partial<WalletAccountParams>>
   accounts?: HardwareWalletPublicKeys
   [key: string]: unknown
 }

@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/ExodusMovement/hydra/compare/@exodus/fusion-merge@2.0.0...@exodus/fusion-merge@2.0.1) (2024-11-01)
+
+Re-licensed under MIT license.
+
 ## [2.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fusion-merge@1.0.2...@exodus/fusion-merge@2.0.0) (2024-08-14)
 
 ### ⚠ BREAKING CHANGES

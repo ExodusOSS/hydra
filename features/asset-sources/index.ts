@@ -3,11 +3,14 @@ import assetSourcesApiDefinition from './api/index.js'
 import { availableAssetNamesByWalletAccountAtomDefinition } from './atoms/index.js'
 import assetSourcesLifecyclePluginDefinition from './plugin/lifecycle.js'
 import defaultConfig from './default-config.js'
+import type { AllowedBaseAssetNamesByWalletAccount } from './atoms/available-asset-names-by-wallet-account.js'
 
 export { type AssetSources } from './module/index.js'
+export type { WalletAccounts } from './types.js'
 
 type AssetSourcesConfig = {
   delegatedAllowedAssetNames?: string[]
+  allowedBaseAssetNamesByWalletAccount?: AllowedBaseAssetNamesByWalletAccount
 }
 
 const assetSources = (walletConfig: AssetSourcesConfig = Object.create(null)) => {
@@ -15,6 +18,10 @@ const assetSources = (walletConfig: AssetSourcesConfig = Object.create(null)) =>
     ...defaultConfig,
     delegatedAllowedAssetNames:
       walletConfig.delegatedAllowedAssetNames || defaultConfig.delegatedAllowedAssetNames,
+    allowedBaseAssetNamesByWalletAccount:
+      walletConfig.allowedBaseAssetNamesByWalletAccount === undefined
+        ? defaultConfig.allowedBaseAssetNamesByWalletAccount
+        : walletConfig.allowedBaseAssetNamesByWalletAccount,
   }
 
   return {

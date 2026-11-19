@@ -1,6 +1,7 @@
+import process from 'node:process'
 import fs from 'fs/promises'
 import path from 'path'
-import babelParser from '@babel/parser' // eslint-disable-line import/no-extraneous-dependencies
+import babelParser from '@babel/parser'
 
 const directories = process.argv.slice(2)
 
@@ -77,4 +78,4 @@ const run = async () => {
   })
 }
 
-run()
+await run()

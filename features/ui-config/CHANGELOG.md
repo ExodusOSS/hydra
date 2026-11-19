@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.13.4](https://github.com/ExodusMovement/exodus/compare/@exodus/ui-config@3.13.3...@exodus/ui-config@3.13.4) (2026-09-28)
+
+### Performance Improvements
+
+- **ui-config:** drop the redundant load-phase observer pass ([#45991](https://github.com/ExodusMovement/exodus/issues/45991)) ([e4125d2](https://github.com/ExodusMovement/exodus/commit/e4125d2c9587a05a22e2fbcba8164a69f78599f4))
+
 ## [3.13.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/ui-config@3.13.2...@exodus/ui-config@3.13.3) (2026-01-29)
 
 ### Bug Fixes

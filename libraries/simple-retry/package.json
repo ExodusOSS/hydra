@@ -1,6 +1,6 @@
 {
   "name": "@exodus/simple-retry",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Simple Retry",
   "main": "src/index.js",
   "type": "module",
@@ -10,26 +10,27 @@
   ],
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/simple-retry",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/simple-retry",
   "scripts": {
-    "format": "run -T prettier --write '**/*.js'",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest",
-    "test:watch": "yarn test --watch"
+    "format": "pnpm exec prettier --write '**/*.js'",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest",
+    "test:watch": "pnpm run test --watch"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   },
   "dependencies": {
     "delay": "^4.0.1",
     "ms": "^2.1.1"
   },
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asimple-retry"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Asimple-retry"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   }
 }

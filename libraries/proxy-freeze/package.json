@@ -1,0 +1,35 @@
+{
+  "name": "@exodus/proxy-freeze",
+  "description": "Simple way to freeze JavaScript objects and know of attempted modifications",
+  "version": "3.0.2",
+  "author": "Exodus Movement, Inc.",
+  "bugs": {
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aproxy-freeze"
+  },
+  "devDependencies": {
+    "tap-spec": "^4.0.2",
+    "tape": "^4.0.0"
+  },
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/proxy-freeze",
+  "keywords": [
+    "proxy",
+    "freeze",
+    "Object.freeze"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
+  },
+  "scripts": {
+    "lint": "pnpm exec eslint",
+    "test": "tape test.js | tap-spec"
+  },
+  "files": [
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

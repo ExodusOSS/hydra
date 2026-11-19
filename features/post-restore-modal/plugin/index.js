@@ -40,7 +40,7 @@ const createRestoreModalPlugin = ({
         return
       }
 
-      const { balances = {} } = await balancesAtom.get()
+      const { balances = Object.create(null) } = await balancesAtom.get()
       const hasBalance = getHasBalance(balances)
       if (hasBalance) {
         await shouldShowPostRestoredModalAtom.set(true)

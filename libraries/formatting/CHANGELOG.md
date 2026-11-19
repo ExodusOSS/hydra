@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.1.1](https://github.com/ExodusMovement/exodus/compare/@exodus/formatting@11.1.0...@exodus/formatting@11.1.1) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/formatting
+
+## [11.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/formatting@11.0.0...@exodus/formatting@11.1.0) (2026-05-18)
+
+### Features
+
+- feat: expose public entrypoints to replace deep /lib/ imports (#16590)
+
+## [11.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/formatting@9.3.1...@exodus/formatting@11.0.0) (2026-04-23)
+
+### ⚠ BREAKING CHANGES
+
+- fix!(formatting): always truncate displayed amounts to prevent rounding up (#15988)
+
 ## [9.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/formatting@9.3.0...@exodus/formatting@9.3.1) (2026-04-06)
 
 ### Bug Fixes

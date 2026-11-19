@@ -15,7 +15,7 @@ const selectorFactory = (allAssetsSelector) =>
         return (
           asset.name === asset.baseAsset.name &&
           (Boolean(asset.api?.getTokens) ||
-            asset.api?.hasFeature('customTokens') ||
+            asset.api?.features?.customTokens ||
             hasAssetsOnOtherChains)
         )
       }

@@ -1,17 +1,17 @@
 {
   "name": "@exodus/error-tracking",
-  "version": "3.3.2",
+  "version": "3.6.1",
   "type": "module",
   "description": "A simple error tracking package to let any feature collect errors and create the report",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/error-tracking",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/error-tracking",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aerror-tracking"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aerror-tracking"
   },
   "main": "index.js",
   "exports": "./index.js",
@@ -27,21 +27,22 @@
     "!**/__tests__/**"
   ],
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix"
+    "test": "pnpm exec exodus-test --jest",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix"
   },
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.0.1",
-    "@exodus/errors": "^3.7.0",
-    "@exodus/safe-string": "^1.4.0",
-    "@exodus/sentry-client": "^6.2.0",
-    "@exodus/typeforce": "^1.19.0",
-    "@exodus/zod": "^3.24.2"
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/errors": "workspace:^",
+    "@exodus/safe-string": "workspace:^",
+    "@exodus/sentry-client": "workspace:^",
+    "@exodus/typeforce": "workspace:^",
+    "@exodus/zod": "^3.24.4"
   },
   "devDependencies": {
-    "@exodus/traceparent": "^2.0.0"
+    "@exodus/traceparent": "workspace:^"
   },
   "publishConfig": {
     "access": "public",

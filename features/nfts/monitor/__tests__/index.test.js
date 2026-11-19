@@ -120,7 +120,7 @@ const baseAssetNamesToMonitorAtomMockValue = ['solana', 'bitcoin']
 
 const withoutOwnerAddress = (arr) =>
   arr.map((item) => {
-    const { ownerAddress, ...rest } = item
+    const { ownerAddress, sent, ...rest } = item
     return rest
   })
 
@@ -165,23 +165,23 @@ const prepare = ({ config = defaultConfig } = {}) => {
       name: 'bitcoin',
 
       api: {
-        hasFeature: (feature) => feature === 'nfts',
+        features: { nfts: true },
         nfts: { getNftsAddresses: getNftsAddressesMock },
       },
     },
-    solana: { name: 'solana', api: { hasFeature: (feature) => feature === 'nfts' } },
+    solana: { name: 'solana', api: { features: { nfts: true } } },
   }
 
   const nftsConfigAtom = createAtomMock({
     defaultValue: {},
   })
 
-  const assetsModule = { getAsset: (assetName) => assets[assetName] }
+  const assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
   const nftsMonitorStatusAtom = createInMemoryAtom({ defaultValue: {} })
 
   const nftsMonitor = nftsMonitorDefinition.factory({
     addressProvider: addressProviderMock,
-    assetsModule,
+    assetsAtom,
     enabledWalletAccountsAtom,
     activeWalletAccountAtom,
     nfts: {},
@@ -217,7 +217,7 @@ describe('nftsMonitor', () => {
       .spyOn(nftsProxyMock.solana, 'getNftsTransactionsByAddress')
       .mockImplementation(async () => mockTransactionsResults.solana)
 
-    nftsMonitor.start()
+    void nftsMonitor.start()
 
     await advance(fetchInterval + 50)
 
@@ -252,7 +252,7 @@ describe('nftsMonitor', () => {
       .spyOn(nftsProxyMock.solana, 'getNftsTransactionsByAddress')
       .mockImplementation(async () => mockTransactionsResults.solana)
 
-    nftsMonitor.start()
+    void nftsMonitor.start()
 
     // Initial fetch for first account
     await advance(0)
@@ -293,7 +293,7 @@ describe('nftsMonitor', () => {
       expect(withoutOwnerAddress(receivedDataArray)).toEqual(mockTransactionsResults.solana)
     }
 
-    nftsMonitor.start()
+    void nftsMonitor.start()
 
     await advance(fetchInterval + 50)
 
@@ -355,7 +355,7 @@ describe('nftsMonitor', () => {
       return Promise.resolve(result)
     })
 
-    nftsMonitor.start()
+    void nftsMonitor.start()
 
     await advance(fetchInterval + 50)
 
@@ -399,7 +399,7 @@ describe('nftsMonitor', () => {
       ),
     }
 
-    nftsMonitor.start()
+    void nftsMonitor.start()
 
     await advance(fetchInterval + 50)
 
@@ -450,7 +450,7 @@ describe('nftsMonitor', () => {
       Promise.resolve(mockNftsResults.solana[address])
     )
 
-    nftsMonitor.start()
+    void nftsMonitor.start()
 
     await expect(nftsAtom.get()).resolves.toEqual({})
 
@@ -503,7 +503,7 @@ describe('nftsMonitor', () => {
       .spyOn(nftsProxyMock.bitcoin, 'getNftsByOwner')
       .mockImplementation(async () => mockTransactionsResults.bitcoin)
 
-    nftsMonitor.start()
+    void nftsMonitor.start()
 
     await advance(minInterval + 50)
 
@@ -548,7 +548,7 @@ describe('nftsMonitor', () => {
       .spyOn(nftsProxyMock.bitcoin, 'getNftsByOwner')
       .mockImplementation(async () => mockTransactionsResults.bitcoin)
 
-    nftsMonitor.start()
+    void nftsMonitor.start()
 
     await advance(fetchInterval)
 
@@ -589,7 +589,7 @@ describe('nftsMonitor', () => {
       .spyOn(nftsProxyMock.solana, 'getNftsByOwner')
       .mockImplementation(async () => [])
 
-    nftsMonitor.start()
+    void nftsMonitor.start()
 
     // First fetch happens immediately
     await advance(fetchInterval)
@@ -635,7 +635,7 @@ describe('nftsMonitor', () => {
       .spyOn(nftsProxyMock.solana, 'getNftsByOwner')
       .mockImplementation(async () => mockNftsResults.solana.solanaAddress)
 
-    nftsMonitor.start()
+    void nftsMonitor.start()
 
     // Should not fetch immediately due to recent fetch status
     await advance(fetchInterval / 2)
@@ -679,7 +679,7 @@ describe('nftsMonitor', () => {
       .spyOn(nftsProxyMock.solana, 'getNftsByOwner')
       .mockImplementation(async () => mockNftsResults.solana.solanaAddress)
 
-    nftsMonitor.start()
+    void nftsMonitor.start()
 
     // Shouldn't fetch due to recent fetch status
     await advance(50)

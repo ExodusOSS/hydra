@@ -1,0 +1,47 @@
+import updateAccountStateReducer from '../../../batching/reducer/update-account-state.js'
+import {
+  AccountStates,
+  createAction,
+  createEmptyChanges,
+  createReducerContext,
+} from '../../test-utils.js'
+
+const TestAccountState = AccountStates.bitcoin
+
+describe('updateAccountStateReducer', () => {
+  it('should merge data of previous changes', () => {
+    const changes = {
+      ...createEmptyChanges(),
+      accountStates: {
+        exodus_0: {
+          bitcoin: TestAccountState.create({ cursor: 'the cursor' }),
+        },
+      },
+    }
+
+    const payload = {
+      walletAccount: 'exodus_0',
+      assetName: 'bitcoin',
+      newData: {
+        balance: '3 BTC',
+      },
+    }
+
+    const result = updateAccountStateReducer(
+      changes,
+      createAction(payload),
+      createReducerContext({
+        getCachedAccountState: () => TestAccountState.create(),
+      })
+    )
+
+    expect(result.accountStates.exodus_0?.bitcoin?.toJSON()).toEqual({
+      t: 'object',
+      v: {
+        _version: 1,
+        balance: '3 BTC',
+        cursor: 'the cursor',
+      },
+    })
+  })
+})

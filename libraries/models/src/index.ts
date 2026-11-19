@@ -7,6 +7,7 @@ export { default as PersonalNoteSet } from './personal-note-set/index.js'
 export { default as PersonalNote } from './personal-note/index.js'
 export { default as WalletAccountSet } from './wallet-account-set/index.js'
 export { default as WalletAccount } from './wallet-account/index.js'
+export type { WalletAccountSource, WalletAccountParams } from './wallet-account/index.js'
 export { default as Order } from './order/index.js'
 export { default as OrderSet } from './order-set/index.js'
 export {

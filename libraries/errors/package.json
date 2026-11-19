@@ -1,17 +1,17 @@
 {
   "name": "@exodus/errors",
   "type": "module",
-  "version": "3.8.0",
+  "version": "3.8.2",
   "description": "Utilities for error handling in client code, such as sanitization",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/errors",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/errors",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aerrors"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aerrors"
   },
   "main": "lib/index.js",
   "exports": {
@@ -24,20 +24,21 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "run -T tsc -p tsconfig.build.json",
-    "prepublishOnly": "yarn run -T build --scope @exodus/errors",
-    "clean": "run -T tsc --build --clean",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "yarn run test:v8 && yarn run test:hermes",
-    "test:v8": "run -T exodus-test --esbuild --jest src/__tests__/v8/*.test.ts src/__tests__/engine-agnostic/*.test.ts",
-    "test:hermes": "EXODUS_TEST_COVERAGE=0 run -T exodus-test --engine hermes:bundle --esbuild --jest src/__tests__/hermes/*.test.ts src/__tests__/engine-agnostic/*.test.ts"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/errors",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm run test:v8 && pnpm run test:hermes",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "test:v8": "pnpm exec exodus-test --esbuild --jest src/__tests__/v8/*.test.ts src/__tests__/engine-agnostic/*.test.ts",
+    "test:hermes": "EXODUS_TEST_COVERAGE=0 pnpm exec exodus-test --engine hermes:bundle --esbuild --jest src/__tests__/hermes/*.test.ts src/__tests__/engine-agnostic/*.test.ts"
   },
   "dependencies": {
-    "@exodus/basic-utils": "^3.0.1",
-    "@exodus/safe-string": "^1.4.1",
-    "@exodus/traceparent": "^3.0.0",
-    "@exodus/zod": "^3.24.2",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/safe-string": "workspace:^",
+    "@exodus/traceparent": "workspace:^",
+    "@exodus/zod": "^3.24.4",
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {

@@ -3,8 +3,7 @@ import {
   availableAssetsAtomDefinition,
 } from '@exodus/available-assets/atoms/index.js'
 import createIOC from '@exodus/dependency-injection'
-import preprocess from '@exodus/dependency-preprocessors'
-import logify from '@exodus/dependency-preprocessors/src/preprocessors/logify.js'
+import preprocess, { logify } from '@exodus/dependency-preprocessors'
 import createInMemoryStorage from '@exodus/storage-memory'
 
 import { enabledAndDisabledAssetsAtomDefinition, enabledAssetsAtomDefinition } from '../index.js'

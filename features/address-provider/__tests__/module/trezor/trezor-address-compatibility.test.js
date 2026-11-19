@@ -1,6 +1,6 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 import KeyIdentifier from '@exodus/key-identifier'
-import { PublicKeyProvider } from '@exodus/public-key-provider/lib/module/public-key-provider.js'
+import { PublicKeyProvider } from '@exodus/public-key-provider'
 import publicKeyStoreDefinition from '@exodus/public-key-provider/lib/module/store/index.js'
 
 import addressProviderDefinition from '../../../module/address-provider.js'
@@ -36,23 +36,25 @@ describe('Trezor Address Compatibility', async () => {
   })
 
   const { assets } = createAssetsForTesting()
+  const assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
   const publicKeyProvider = new PublicKeyProvider({
     publicKeyStore,
     walletAccountsAtom,
     getBuildMetadata: jest.fn().mockResolvedValue({ dev: false }),
   })
-  const { assetSources, assetsModule, addressCache } = await setup({
+  const { assetSources, addressCache } = await setup({
     assets,
+    assetsAtom,
     walletAccountsAtom,
     publicKeyProvider,
   })
 
   const addressProvider = createAddressProvider({
     publicKeyProvider,
-    assetsModule,
+    assetsAtom,
     knownAddresses: createKnownAddresses({
       txLogsAtom: createTxLogsAtom(),
-      assetsModule,
+      assetsAtom,
     }),
     addressCache,
     logger: mockLogger,

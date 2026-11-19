@@ -1,4 +1,4 @@
-declare module 'proxy-freeze'
+declare module '@exodus/proxy-freeze'
 declare module 'make-concurrent'
 declare module 'minimalistic-assert'
 declare module 'events/'

@@ -1,4 +1,4 @@
-const Tracker = require('../index')
+import Tracker from '../index.js'
 
 class SchemaSafeValidationError extends Error {
   constructor(message, { keyword, instanceLocation }) {
@@ -15,6 +15,8 @@ const createTracker = ({
   apiBaseUrl = 'https://fake-segment-api-url',
   validateEvent,
   fetch,
+  preserveEventNames = [],
+  preservePropertyKeys = {},
 } = {}) => {
   return new Tracker({
     writeKey: '',
@@ -29,6 +31,8 @@ const createTracker = ({
       dev,
     }),
     logger: console,
+    preserveEventNames,
+    preservePropertyKeys,
   })
 }
 
@@ -359,6 +363,69 @@ describe('track', () => {
     await tracker.track({ event: 'SomeEvent', properties: { some_prop: 'some-value' } })
 
     expect(fetch).toHaveBeenCalledWith(new URL('track', apiBaseUrl), expect.anything())
+  })
+
+  it('should preserve event name when in preserveEventNames', async () => {
+    tracker = createTracker({ fetch, preserveEventNames: ['$experiment_started'] })
+
+    await tracker.track({ event: '$experiment_started' })
+    const body = JSON.parse(fetch.mock.calls[0][1].body)
+
+    expect(body.event).toBe('$experiment_started')
+  })
+
+  it('should still PascalCase event names not in preserveEventNames', async () => {
+    tracker = createTracker({ fetch, preserveEventNames: ['$experiment_started'] })
+
+    await tracker.track({ event: 'someOtherEvent' })
+    const body = JSON.parse(fetch.mock.calls[0][1].body)
+
+    expect(body.event).toBe('SomeOtherEvent')
+  })
+
+  it('should preserve property keys when in preservePropertyKeys for that event', async () => {
+    tracker = createTracker({
+      fetch,
+      preserveEventNames: ['$experiment_started'],
+      preservePropertyKeys: {
+        $experiment_started: ['Experiment name', 'Variant name'],
+      },
+    })
+
+    await tracker.track({
+      event: '$experiment_started',
+      properties: {
+        'Experiment name': 'button-color-test',
+        'Variant name': 'variant_a',
+        otherProp: 'value',
+      },
+    })
+    const body = JSON.parse(fetch.mock.calls[0][1].body)
+
+    expect(body.properties['Experiment name']).toBe('button-color-test')
+    expect(body.properties['Variant name']).toBe('variant_a')
+    expect(body.properties.other_prop).toBe('value')
+  })
+
+  it('should snake_case all property keys when event not in preservePropertyKeys', async () => {
+    tracker = createTracker({
+      fetch,
+      preservePropertyKeys: {
+        $experiment_started: ['Experiment name'],
+      },
+    })
+
+    await tracker.track({
+      event: 'someOtherEvent',
+      properties: {
+        'Experiment name': 'test',
+        someProp: 'value',
+      },
+    })
+    const body = JSON.parse(fetch.mock.calls[0][1].body)
+
+    expect(body.properties.experiment_name).toBe('test')
+    expect(body.properties.some_prop).toBe('value')
   })
 })
 

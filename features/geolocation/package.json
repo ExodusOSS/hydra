@@ -1,16 +1,16 @@
 {
   "name": "@exodus/geolocation",
-  "version": "4.5.2",
+  "version": "4.6.1",
   "description": "Geolocation monitor",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/geolocation",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/geolocation",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Ageolocation"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Ageolocation"
   },
   "type": "module",
   "main": "index.js",
@@ -26,15 +26,16 @@
     "!**/__tests__/**"
   ],
   "scripts": {
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "workspace:^",
     "@exodus/fetch": "^1.3.0",
-    "@exodus/simple-retry": "^1.0.1",
+    "@exodus/simple-retry": "workspace:^",
     "lodash": "^4.17.21",
     "ms": "^2.1.3",
     "p-defer": "^4.0.0",
@@ -45,6 +46,7 @@
     "redux": "^4.2.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

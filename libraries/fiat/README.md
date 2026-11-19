@@ -4,7 +4,7 @@ Fiat currency metadata. You should probably consume this through the [@exodus/fi
 
 ## Install
 
-yarn add @exodus/fiat
+pnpm add @exodus/fiat
 
 ## Usage
 

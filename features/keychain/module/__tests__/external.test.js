@@ -125,7 +125,7 @@ test('removeExternalPrivateKey and exportKey', async () => {
   )
   await expect(async () =>
     keychain.exportKey({ seedId, keyId, exportPrivate: true })
-  ).rejects.toThrow(`cannot check lock state for unknown seed "${seedId}"`)
+  ).rejects.toThrow(`seed with id "${seedId}" is not initialized`)
 })
 
 test('removeExternalPrivateKey and signBuffer', async () => {
@@ -134,7 +134,7 @@ test('removeExternalPrivateKey and signBuffer', async () => {
   await keychain.removeExternalPrivateKey(seedId)
   await expect(async () =>
     keychain.signBuffer({ seedId, keyId, signatureType: 'ed25519', data })
-  ).rejects.toThrow(`cannot check lock state for unknown seed "${seedId}"`)
+  ).rejects.toThrow(`seed with id "${seedId}" is not initialized`)
 })
 
 test('addExternalPrivateKey produces different seedIds for different derivationAlgorithms', async () => {
@@ -160,13 +160,22 @@ test('addExternalPrivateKey produces different seedIds for different derivationA
     keyType: 'nacl',
   })
 
-  const seedIdBIP32 = await keychain.addExternalPrivateKey({ privateKey: PRIVATE_KEY, keyId: keyIdBIP32 })
-  const seedIdSLIP10 = await keychain.addExternalPrivateKey({ privateKey: PRIVATE_KEY, keyId: keyIdSLIP10 })
+  const seedIdBIP32 = await keychain.addExternalPrivateKey({
+    privateKey: PRIVATE_KEY,
+    keyId: keyIdBIP32,
+  })
+  const seedIdSLIP10 = await keychain.addExternalPrivateKey({
+    privateKey: PRIVATE_KEY,
+    keyId: keyIdSLIP10,
+  })
 
   // The seed IDs should be different because derivationAlgorithm is used in the hash
   expect(seedIdBIP32).not.toBe(seedIdSLIP10)
 
   // The seed IDs should be the same when using the same derivationAlgorithm
-  const seedIdBIP32Again = await keychain2.addExternalPrivateKey({ privateKey: PRIVATE_KEY, keyId: keyIdBIP32 })
+  const seedIdBIP32Again = await keychain2.addExternalPrivateKey({
+    privateKey: PRIVATE_KEY,
+    keyId: keyIdBIP32,
+  })
   expect(seedIdBIP32).toBe(seedIdBIP32Again)
 })

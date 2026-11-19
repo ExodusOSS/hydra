@@ -8,20 +8,20 @@ import { createFiatNumberUnit, setup } from '../../utils.js'
 const assets = connectAssets(_assets)
 
 describe('sorted assets selectors', () => {
-  const assetsList = ['ethereum', 'aave', 'exit', 'solana', 'usdcoin']
+  const assetsList = ['ethereum', 'aave', 'algorand', 'solana', 'usdcoin']
 
   const balances = {
     exodus_0: {
       ethereum: { total: assets.ethereum.currency.defaultUnit(10) },
       aave: { total: assets.aave.currency.defaultUnit(20) },
-      exit: { total: assets.exit.currency.defaultUnit(30) },
+      algorand: { total: assets.algorand.currency.defaultUnit(30) },
       solana: { total: assets.solana.currency.defaultUnit(0) },
       usdcoin: { total: assets.usdcoin.currency.defaultUnit(0) },
     },
     exodus_1: {
       ethereum: { total: assets.ethereum.currency.defaultUnit(5) },
       aave: { total: assets.aave.currency.defaultUnit(3) },
-      exit: { total: assets.exit.currency.defaultUnit(2) },
+      algorand: { total: assets.algorand.currency.defaultUnit(2) },
       solana: { total: assets.solana.currency.defaultUnit(0) },
       usdcoin: { total: assets.usdcoin.currency.defaultUnit(0) },
     },
@@ -32,14 +32,14 @@ describe('sorted assets selectors', () => {
       exodus_0: {
         ethereum: { balance: createFiatNumberUnit(100) },
         aave: { balance: createFiatNumberUnit(99) },
-        exit: { balance: createFiatNumberUnit(5) },
+        algorand: { balance: createFiatNumberUnit(5) },
         solana: { balance: createFiatNumberUnit(0) },
         usdcoin: { balance: createFiatNumberUnit(0) },
       },
       exodus_1: {
         ethereum: { balance: createFiatNumberUnit(5) },
         aave: { balance: createFiatNumberUnit(8) },
-        exit: { balance: createFiatNumberUnit(51) },
+        algorand: { balance: createFiatNumberUnit(51) },
         solana: { balance: createFiatNumberUnit(0) },
         usdcoin: { balance: createFiatNumberUnit(0) },
       },
@@ -102,8 +102,8 @@ describe('sorted assets selectors', () => {
         formattedFiatValue: '$100.00',
       }),
       expect.objectContaining({
-        name: 'exit',
-        balance: assets.exit.currency.defaultUnit(30),
+        name: 'algorand',
+        balance: assets.algorand.currency.defaultUnit(30),
         fiatValue: createFiatNumberUnit(5),
         formattedFiatValue: '$5.00',
       }),
@@ -143,8 +143,8 @@ describe('sorted assets selectors', () => {
         formattedFiatValue: '$100.00',
       }),
       expect.objectContaining({
-        name: 'exit',
-        balance: assets.exit.currency.defaultUnit(30),
+        name: 'algorand',
+        balance: assets.algorand.currency.defaultUnit(30),
         fiatValue: createFiatNumberUnit(5),
         formattedFiatValue: '$5.00',
       }),
@@ -182,8 +182,8 @@ describe('sorted assets selectors', () => {
         formattedFiatValue: '$105.00',
       }),
       expect.objectContaining({
-        name: 'exit',
-        balance: assets.exit.currency.defaultUnit(32),
+        name: 'algorand',
+        balance: assets.algorand.currency.defaultUnit(32),
         fiatValue: createFiatNumberUnit(56),
         formattedFiatValue: '$56.00',
       }),
@@ -248,8 +248,8 @@ describe('sorted assets selectors', () => {
     })
 
     test('returns unverified tokens', () => {
-      emitEnabledAssets({ ethereum: true, exit: true })
-      setUnverifiedToken('exit')
+      emitEnabledAssets({ ethereum: true, algorand: true })
+      setUnverifiedToken('algorand')
 
       const assetsWithBalance = selectors.fiatBalances.sortedEnabledAssetsWithBalanceInActiveAccount
       const result = assetsWithBalance(store.getState())
@@ -262,8 +262,8 @@ describe('sorted assets selectors', () => {
           formattedFiatValue: '$100.00',
         }),
         expect.objectContaining({
-          name: 'exit',
-          balance: assets.exit.currency.defaultUnit(30),
+          name: 'algorand',
+          balance: assets.algorand.currency.defaultUnit(30),
           fiatValue: createFiatNumberUnit(5),
           formattedFiatValue: '$5.00',
         }),

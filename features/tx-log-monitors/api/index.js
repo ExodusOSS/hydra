@@ -1,8 +1,9 @@
-const createTxLogMonitorsApi = ({ txLogMonitors }) => ({
+const createTxLogMonitorsApi = ({ txLogMonitors, restoreAssetsTracker }) => ({
   txLogMonitors: {
     update: txLogMonitors.update,
-    // @deprecated
-    refreshMonitor: txLogMonitors.refreshMonitor,
+  },
+  restoreProgressTracker: {
+    restoreAsset: restoreAssetsTracker.restoreAsset,
   },
 })
 
@@ -10,7 +11,7 @@ const txLogMonitorsApiDefinition = {
   id: 'txLogMonitorsApi',
   type: 'api',
   factory: createTxLogMonitorsApi,
-  dependencies: ['txLogMonitors'],
+  dependencies: ['txLogMonitors', 'restoreAssetsTracker'],
 }
 
 export default txLogMonitorsApiDefinition

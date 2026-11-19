@@ -9,7 +9,7 @@ test('Timer should not hang while is stopped', async () => {
   const callback = async () => sleep(30)
   await timer.start(callback)
   await sleep(50)
-  timer.setNewInterval(100)
+  void timer.setNewInterval(100)
   await sleep(10)
   await timer.stop()
   await sleep(10)

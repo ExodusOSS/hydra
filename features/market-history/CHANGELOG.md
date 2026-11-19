@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.7.1...@exodus/market-history@10.8.0) (2026-06-08)
+
+### Features
+
+- **market-history:** add fetchAssets for non-enabled assets ([#17075](https://github.com/ExodusMovement/exodus-hydra/issues/17075)) ([faf4427](https://github.com/ExodusMovement/exodus-hydra/commit/faf44275bcb96ec92ce58b97f0a2f5fec0b11d3e))
+
+## [10.7.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.7.0...@exodus/market-history@10.7.1) (2026-05-04)
+
+**Note:** Version bump only for package @exodus/market-history
+
+## [10.7.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.6.3...@exodus/market-history@10.7.0) (2026-05-01)
+
+### Features
+
+- feat(market-history): hydrate prices from cache on start (#16273)
+
+## [10.6.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.6.2...@exodus/market-history@10.6.3) (2026-04-08)
+
+### Bug Fixes
+
+- fix(market-history): crop minute history to prevent unbounded growth (#15898)
+
+## [10.6.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.6.1...@exodus/market-history@10.6.2) (2026-04-07)
+
+### Bug Fixes
+
+- fix(market-history): use Map for PriceRecord to avoid Hermes property limit crash (#15897)
+
 ## [10.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/market-history@10.6.0...@exodus/market-history@10.6.1) (2026-02-24)
 
 ### Performance

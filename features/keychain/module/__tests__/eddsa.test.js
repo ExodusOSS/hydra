@@ -11,10 +11,6 @@ const seed = await mnemonicToSeed({
 
 const seedId = await getSeedId(seed)
 
-const secondSeed = await mnemonicToSeed({
-  mnemonic: 'wine system mean beyond filter human meat rubber episode wash stomach aunt',
-})
-
 const fusionKeyId = createKeyIdentifierForExodus({ exoType: 'FUSION' })
 const plaintextMessage = Buffer.from('I really love keychains')
 const plaintextTx = Buffer.from(
@@ -87,51 +83,5 @@ describe('EdDSA Signer', () => {
         data: plaintext,
       })
     ).rejects.toThrow('ED25519 signatures are not supported for secp256k1')
-  })
-})
-
-describe.each([
-  // reduce fixtures by switching seeds
-  {
-    primarySeed: seed,
-    secondarySeed: secondSeed,
-    seedId,
-  },
-  {
-    primarySeed: secondSeed,
-    secondarySeed: seed,
-    seedId,
-  },
-])('EdDSA Signer (multi-seed-keychain)', async ({ primarySeed, secondarySeed, seedId }) => {
-  const solanaKeyId = new KeyIdentifier({
-    assetName: 'solana',
-    derivationAlgorithm: 'SLIP10',
-    derivationPath: "m/44'/501'/0'/0'/0'",
-  })
-
-  const keychain = await createKeychain({ seed: primarySeed })
-  await keychain.addSeed(secondarySeed)
-
-  it('should signBuffer (using ed25519 instance)', async () => {
-    const signature = await keychain.ed25519.signBuffer({
-      keyId: fusionKeyId,
-      data: plaintextMessage,
-      seedId,
-    })
-    const expected =
-      'a929fd6e7e37524320e9f422caef1fefa14d9a70740626116b3570eac7e992893bea708c1b9004e222a779400c7ccabbd344c2399a2e4508f1de1cc602b0590a'
-    expect(signature.toString('hex')).toBe(expected)
-  })
-
-  it('should signBuffer with solana key (using ed25519 instance)', async () => {
-    const signature = await keychain.ed25519.signBuffer({
-      keyId: solanaKeyId,
-      data: plaintextTx,
-      seedId,
-    })
-
-    const expected =
-      '90ff0a2a3311957e2920223e1c5b495b731f00834ea431769a5b21cc194a6a7aa14377f1736060f5a685202efe152c18b2db87be300f93fd6a75552464567b00'
-    expect(signature.toString('hex')).toBe(expected)
   })
 })

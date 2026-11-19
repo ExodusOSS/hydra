@@ -24,6 +24,9 @@ const formatTranslation = (string, mappings) => {
   for (const token of tokens) {
     if (isSelfClosingTag(token)) {
       const name = token.match(/<([^<>]*?)\/>/u)[1]?.trim()
+      // Mapping should always be present as it's passed automatically, but prepare for the worst
+      if (!mappings[name]) continue
+
       const element = React.cloneElement(mappings[name], { key: name })
       children.push(element)
 

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayPredictionsMarketResolve"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        },
+        {
+          "$ref": "common-properties#/definitions/predictionsProperties"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "position_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "market_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "outcome": {
+          "enum": ["won", "lost", "void"]
+        },
+        "payout_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cost_basis_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "realized_pnl_usd": {
+          "type": "number"
+        },
+        "source": {
+          "enum": ["client"]
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

@@ -1,7 +1,7 @@
 import type { Storage } from '@exodus/storage-interface'
 import delay from 'delay'
 
-jest.doMock('proxy-freeze', () => (obj: any) => ({
+jest.doMock('@exodus/proxy-freeze', () => (obj: any) => ({
   ...obj,
   _freezes: (obj._freezes || 0) + 1,
 }))
@@ -47,7 +47,7 @@ describe('enforceObservableRules', () => {
     atomWithObserveLaterThanGet.observe(listenerMock)
 
     setTimeout(() => {
-      expect(listenerMock).toBeCalledTimes(1)
+      expect(listenerMock).toHaveBeenCalledTimes(1)
       done()
     }, 100)
   })
@@ -88,6 +88,6 @@ describe('enforceObservableRules', () => {
 
     await atom.get()
 
-    expect(listener).toBeCalledTimes(0)
+    expect(listener).toHaveBeenCalledTimes(0)
   })
 })

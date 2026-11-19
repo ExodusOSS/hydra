@@ -1,16 +1,16 @@
 {
   "name": "@exodus/startup-counter",
-  "version": "1.2.0",
-  "description": "Tracks how many times app started",
+  "version": "1.2.1",
+  "description": "This Exodus SDK feature tracks the number of times the application has been started.",
   "author": "Exodus Movement, Inc.",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/startup-counter",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/startup-counter",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Astartup-counter"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Astartup-counter"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "type": "module",
   "main": "index.js",
@@ -23,18 +23,19 @@
     "!**/__tests__/**"
   ],
   "scripts": {
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest"
   },
   "dependencies": {
-    "@exodus/atoms": "^9.0.0"
+    "@exodus/atoms": "workspace:^"
   },
   "devDependencies": {
     "@exodus/redux-dependency-injection": "workspace:^",
     "redux": "^4.2.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

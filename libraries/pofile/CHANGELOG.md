@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.0](https://github.com/ExodusMovement/exodus/compare/@exodus/pofile@3.3.3...@exodus/pofile@3.4.0) (2026-09-09)
+
+### Features
+
+- **pofile:** raw parse with fail-fast on wrapped strings and unknown markers ([#44049](https://github.com/ExodusMovement/exodus/issues/44049)) ([b2fc923](https://github.com/ExodusMovement/exodus/commit/b2fc9233a8e64c44ac5db71e958a3e0dde32dcb9))
+
+## [3.3.3](https://github.com/ExodusMovement/exodus/compare/@exodus/pofile@3.3.2...@exodus/pofile@3.3.3) (2026-08-05)
+
+### Bug Fixes
+
+- **pofile:** spec-compliant .po serialization (msgctxt order + escaping) ([#42389](https://github.com/ExodusMovement/exodus/issues/42389)) ([799ae8a](https://github.com/ExodusMovement/exodus/commit/799ae8a7ddf2a1bdb6a9f6480e385acddbcc8741))
+
+## [3.3.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/pofile@3.3.1...@exodus/pofile@3.3.2) (2026-06-05)
+
+### Bug Fixes
+
+- **pofile:** prevent tokenizer infinite loops on truncated input ([#16306](https://github.com/ExodusMovement/exodus-hydra/issues/16306)) ([7d8ea37](https://github.com/ExodusMovement/exodus-hydra/commit/7d8ea37bb071baf59cabd846d11075dd11cc0c65))
+- **tests:** replace toThrowError with toThrow (removed in Jest 30) ([#16055](https://github.com/ExodusMovement/exodus-hydra/issues/16055)) ([0e482cc](https://github.com/ExodusMovement/exodus-hydra/commit/0e482cc4dceae501cbb58d4c640a0f1dbac839b6)), closes [#16008](https://github.com/ExodusMovement/exodus-hydra/issues/16008)
+
 ## [3.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/pofile@3.3.0...@exodus/pofile@3.3.1) (2025-03-07)
 
 ### Bug Fixes

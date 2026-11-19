@@ -1,15 +1,12 @@
 import { mapValues } from '@exodus/basic-utils'
-import { WalletAccount } from '@exodus/models'
-import type { WalletAccountParams } from '@exodus/models/lib/wallet-account/index.js'
+import { WalletAccount, type WalletAccountParams } from '@exodus/models'
 
 import id from './id.js'
 import initialState, { type WalletAccountsReduxState } from './initial-state.js'
 import createSelectorDefinitions from './selectors/index.js'
 
-const coerceToWalletAccount = (walletAccount: WalletAccount | Record<string, unknown>) =>
-  walletAccount instanceof WalletAccount
-    ? walletAccount
-    : new WalletAccount(walletAccount as WalletAccountParams)
+const coerceToWalletAccount = (walletAccount: WalletAccount | WalletAccountParams) =>
+  walletAccount instanceof WalletAccount ? walletAccount : new WalletAccount(walletAccount)
 
 const checkLoaded = (state: WalletAccountsReduxState) =>
   state.multipleWalletAccountsEnabledLoaded &&
@@ -49,7 +46,7 @@ const createWalletAccountsReduxDefinition = (config?: ReduxConfig) =>
       },
       walletAccounts: (
         state: WalletAccountsReduxState,
-        walletAccounts: Record<string, WalletAccount | Record<string, unknown>>
+        walletAccounts: Record<string, WalletAccount | WalletAccountParams>
       ) => {
         const newState = {
           ...state,

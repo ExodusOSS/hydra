@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [18.0.1](https://github.com/ExodusMovement/exodus/compare/@exodus/wallet@18.0.0...@exodus/wallet@18.0.1) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/wallet
+
+## [18.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@17.0.1...@exodus/wallet@18.0.0) (2026-07-20)
+
+### ⚠ BREAKING CHANGES
+
+- move wallet state atoms to wallet (#17228)
+
+### Code Refactoring
+
+- move wallet state atoms to wallet ([#17228](https://github.com/ExodusMovement/exodus-hydra/issues/17228)) ([faba834](https://github.com/ExodusMovement/exodus-hydra/commit/faba834045ccac67f100659befd4685886ca9dee))
+
+## [17.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@17.0.0...@exodus/wallet@17.0.1) (2026-06-16)
+
+### ⚠ BREAKING CHANGES
+
+- **keychain:** `keychain.addSeed` is renamed to `keychain.unlock` and
+  `keychain.removeAllSeeds` to `keychain.lock`. Unlocking a different seed without
+  an intervening `lock()` now throws. Note the deliberate adjacency to the
+  soft-path `lockPrivateKeys()`/`unlockPrivateKeys()` pair, documented in the README.
+
+### Code Refactoring
+
+- **keychain:** rename addSeed/removeAllSeeds to unlock/lock ([#17038](https://github.com/ExodusMovement/exodus-hydra/issues/17038)) ([f8f960b](https://github.com/ExodusMovement/exodus-hydra/commit/f8f960b7d046018eec317d68f8a3f95363e5b957)), closes [#16379](https://github.com/ExodusMovement/exodus-hydra/issues/16379)
+
+## [17.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@16.0.2...@exodus/wallet@17.0.0) (2026-06-03)
+
+### ⚠ BREAKING CHANGES
+
+- remove multi-seed support from wallet/keychain (#16379)
+
+### Features
+
+- **keychain:** expose needed exports at the root ([#16638](https://github.com/ExodusMovement/exodus-hydra/issues/16638)) ([30b1e96](https://github.com/ExodusMovement/exodus-hydra/commit/30b1e9644d476958f8a8c53e36a87dec3d27c7fb)), closes [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361) [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361)
+
+### Bug Fixes
+
+- improve error message from wallet.getMnemonic ([#16900](https://github.com/ExodusMovement/exodus-hydra/issues/16900)) ([51bef9c](https://github.com/ExodusMovement/exodus-hydra/commit/51bef9c9e779116f1207114367f1cf64de900ce5))
+- **wallet:** don't brick wallet on crash mid-changePassphrase ([#16377](https://github.com/ExodusMovement/exodus-hydra/issues/16377)) ([314ed5d](https://github.com/ExodusMovement/exodus-hydra/commit/314ed5db1ac1c12beef543eea3f644f96cc47860))
+
+### Code Refactoring
+
+- remove multi-seed support from wallet/keychain ([#16379](https://github.com/ExodusMovement/exodus-hydra/issues/16379)) ([e63510f](https://github.com/ExodusMovement/exodus-hydra/commit/e63510f2b57b7bcb7704d993baf2e75d11edb3ad))
+
+## [16.0.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@16.0.1...@exodus/wallet@16.0.2) (2026-04-10)
+
+### Bug Fixes
+
+- fix: don't mutate internal atom data (#15844)
+
 ## [16.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/wallet@16.0.0...@exodus/wallet@16.0.1) (2025-10-22)
 
 ### Bug Fixes

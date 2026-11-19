@@ -46,21 +46,6 @@ class DummyFeeMonitor {
   }
 }
 
-const bitcoin = {
-  ...createBitcoinAsset({
-    assetClientInterface: { createLogger: createNoopLogger },
-    allowUnconfirmedRbfEnabledUtxos: true,
-  }),
-  get baseAsset() {
-    return bitcoin
-  },
-  get feeAsset() {
-    return bitcoin
-  },
-}
-bitcoin.api.getBalances = getBalancesFromTxLogs
-bitcoin.api.createAccountState = () => createAccountStateClass('BTC')
-
 const ethereum = {
   ...ethereumMeta,
   keys: {
@@ -103,11 +88,6 @@ const ethereum = {
     signTx: () => {},
     signMessage,
     getBalances: getBalancesFromTxLogs,
-    hasFeature: (feature) =>
-      ({
-        feesApi: true,
-        nfts: true,
-      })[feature],
     features: {
       feesApi: true,
       nfts: true,
@@ -132,7 +112,7 @@ const someCustomToken = {
     getBalances: ({ accountState }) => ({
       balance: accountState.tokenBalances?.someCustomToken,
     }),
-    hasFeature: () => false,
+    features: {},
   },
 }
 
@@ -181,11 +161,6 @@ const solana = {
       const balance = accountState?.tokenBalances?.[asset.name]
       return balance ? { balance } : null
     },
-    hasFeature: (feature) =>
-      ({
-        feesApi: true,
-        nfts: false,
-      })[feature],
     features: {
       feesApi: true,
       nfts: false,
@@ -217,10 +192,6 @@ const algorand = {
         keyType: 'nacl',
       }
     },
-    hasFeature: (feature) =>
-      ({
-        feesApi: true,
-      })[feature],
     features: {
       feesApi: true,
       signMessageWithSigner: true,
@@ -231,7 +202,33 @@ const algorand = {
 }
 
 const assetPlugins = {
-  bitcoin: { createAsset: () => bitcoin },
+  bitcoin: {
+    createAsset: () => {
+      const bitcoin = {
+        ...createBitcoinAsset({
+          assetClientInterface: { createLogger: createNoopLogger },
+          allowUnconfirmedRbfEnabledUtxos: true,
+        }),
+        get baseAsset() {
+          return bitcoin
+        },
+        get feeAsset() {
+          return bitcoin
+        },
+      }
+      bitcoin.api.getBalances = getBalancesFromTxLogs
+      bitcoin.api.createAccountState = () => createAccountStateClass('BTC')
+      const bitcoinMonitor = {
+        start: jest.fn(),
+        stop: jest.fn(),
+        update: jest.fn(),
+        addHook: jest.fn(),
+      }
+      bitcoin.api.createHistoryMonitor = () => bitcoinMonitor
+
+      return bitcoin
+    },
+  },
   ethereum: { createAsset: () => ethereum },
   solana: { createAsset: () => solana },
   algorand: { createAsset: () => algorand },

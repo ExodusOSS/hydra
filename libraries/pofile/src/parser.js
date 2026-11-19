@@ -13,25 +13,39 @@ const parser = (tokens) => {
 
   while (current < tokens.length) {
     const token = tokens[current]
-    const nextToken = tokens[current + 1]
 
     switch (token.type) {
-      case 'comment':
+      case 'comment': {
         const storage = storageByModifier[token.modifier]
+        if (!storage) {
+          throw new TypeError(
+            `pofile: unsupported comment marker ${JSON.stringify(`#${token.modifier}`)}`
+          )
+        }
+
         storage.push(token.value)
-
         current++
-
         break
+      }
 
-      case 'name':
-        const key = token.value
-        const value = nextToken.value
+      case 'name': {
+        const value = tokens[current + 1]
+        if (value?.type !== 'string') {
+          throw new TypeError(`pofile: expected a quoted string after "${token.value}"`)
+        }
 
+        // Only the header spreads a value over several quoted lines, and the
+        // header is removed before parsing. Lokalise splits translations at
+        // line breaks without a `\n` escape, so concatenating would drop them.
+        if (tokens[current + 2]?.type === 'string') {
+          throw new TypeError(`pofile: wrapped strings are not supported ("${token.value}")`)
+        }
+
+        values[token.value] = value.value
         current += 2
-
-        values[key] = value
         break
+      }
+
       default:
         throw new TypeError(`Invalid type ${token.type}`)
     }

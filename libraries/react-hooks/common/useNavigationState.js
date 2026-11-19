@@ -60,7 +60,7 @@ const useNavigationState = ({
         routes.forEach(({ params, state }) => {
           if (params) {
             Object.keys(params).forEach((param) => {
-              // eslint-disable-next-line @exodus/mutable/no-param-reassign-prop-only
+              // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
               if (ignoredParams.includes(param)) params[param] = undefined
             })
           }

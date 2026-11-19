@@ -14,16 +14,16 @@
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/browser-extension-rpc",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/browser-extension-rpc",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abrowser-extension-rpc"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Abrowser-extension-rpc"
   },
   "dependencies": {
     "@exodus/browser-extension-channels": "^1.1.5",
-    "@exodus/json-rpc": "^1.9.0",
+    "@exodus/json-rpc": "^2.0.0",
     "@exodus/sdk-rpc": "^1.0.0",
     "@exodus/window-rpc-transport": "^1.0.0",
     "eventemitter3": "^4.0.7",
@@ -36,9 +36,10 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "lint": "yarn run -T eslint ."
+    "lint": "pnpm exec eslint ."
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

@@ -22,8 +22,10 @@ export const struct = varstruct(
 )
 
 export function decode(headerBlob) {
-  if (headerBlob.byteLength > HEADER_LEN_BYTES)
+  if (headerBlob.byteLength > HEADER_LEN_BYTES) {
     console.warn(`header greater than ${HEADER_LEN_BYTES} bytes, are you sure this is the header?`)
+  }
+
   return struct.decode(headerBlob)
 }
 
@@ -38,7 +40,7 @@ export function serialize(header) {
 }
 
 // TODO: fetch parent module and include this info by default
-// eslint-disable-next-line unicorn/no-object-as-default-parameter
+// oxlint-disable-next-line unicorn/no-object-as-default-parameter
 export function create({ appName, appVersion } = { appName: '', appVersion: '' }) {
   return {
     magic: MAGIC,

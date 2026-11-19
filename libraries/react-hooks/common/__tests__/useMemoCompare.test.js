@@ -1,5 +1,4 @@
-import crypto from 'node:crypto'
-
+import { randomUUID } from '@exodus/crypto/randomUUID'
 import { renderHook } from '@testing-library/react-hooks'
 
 import useMemoCompare from '../useMemoCompare.js'
@@ -21,7 +20,7 @@ describe('useMemoCompare', () => {
 
   it('should recompute memo if deps keep changing', async () => {
     const { result, rerender } = setup({
-      getDependencies: () => [{ id: 1, name: crypto.randomUUID() }],
+      getDependencies: () => [{ id: 1, name: randomUUID() }],
     })
 
     expect(result.current).toBe(0)
@@ -33,7 +32,7 @@ describe('useMemoCompare', () => {
     const isEqual = (prev, next) => prev.id === next.id
 
     const { result, rerender } = setup({
-      getDependencies: () => [{ id: 1, name: crypto.randomUUID() }],
+      getDependencies: () => [{ id: 1, name: randomUUID() }],
       compareFcts: [isEqual],
     })
 
@@ -49,8 +48,8 @@ describe('useMemoCompare', () => {
 
       const { result, rerender } = setup({
         getDependencies: () => [
-          { id: 1, name: crypto.randomUUID() },
-          { id: 42, ...(changesBetweenRenders && { name: crypto.randomUUID() }) },
+          { id: 1, name: randomUUID() },
+          { id: 42, ...(changesBetweenRenders && { name: randomUUID() }) },
         ],
         compareFcts: [customIsEqual],
       })

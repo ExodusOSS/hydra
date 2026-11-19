@@ -24,13 +24,13 @@ const useCurrentCallback = (callbackFactory, deps) => {
   // useEffect clean up to react to the dependencies changing
   useEffect(
     () => () => {
-      isCurrent = false // eslint-disable-line react-hooks/exhaustive-deps
+      isCurrent = false // oxlint-disable-line react/exhaustive-deps
     },
     deps
   )
 
   // create the callback using the factory function, injecting the current check function
-  return useCallback(callbackFactory(currentCheck), deps) // eslint-disable-line react-hooks/exhaustive-deps
+  return useCallback(callbackFactory(currentCheck), deps) // oxlint-disable-line react/exhaustive-deps
 }
 
 export default useCurrentCallback

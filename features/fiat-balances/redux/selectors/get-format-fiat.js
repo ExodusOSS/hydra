@@ -1,5 +1,5 @@
 import { isNumberUnit } from '@exodus/currency'
-import { formatPrice, getFiatAdaptiveFraction } from '@exodus/formatting/lib/price'
+import { formatPrice, getFiatAdaptiveFraction } from '@exodus/formatting'
 
 const resultFunction =
   (currency) =>

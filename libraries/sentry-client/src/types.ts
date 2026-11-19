@@ -1,7 +1,7 @@
 import type { SafeError } from '@exodus/errors'
 
 export type JsEngine = 'jsc' | 'hermes'
-export type Environment = 'staging' | 'production'
+export type Environment = 'development' | 'staging' | 'production'
 
 export interface SentryConfig {
   publicKey: string
@@ -42,13 +42,22 @@ export interface SentryError {
   }
   environment: Environment
   exception: {
-    values: {
-      type: string
-      value?: string
-      stacktrace: {
-        frames: SentryStackFrame[]
-      }
-    }[]
+    values: SentryExceptionValue[]
+  }
+}
+
+// https://develop.sentry.dev/sdk/data-model/event-payloads/exception/
+// Linked errors (an error's `cause` chain) are represented as multiple values
+// ordered oldest first; the `mechanism` describes how each cause was acquired.
+export interface SentryExceptionValue {
+  type: string
+  value?: string
+  stacktrace: {
+    frames: SentryStackFrame[]
+  }
+  mechanism?: {
+    type: string
+    source?: string
   }
 }
 
@@ -57,7 +66,7 @@ export type UnsafeContext = unknown
 export interface ToSentryErrorParams {
   unsafeError: Error
   config: SentryConfig
-  unsafeContext: UnsafeContext
+  unsafeContext?: UnsafeContext
 }
 
 export interface SentryConstructorOptions {

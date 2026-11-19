@@ -5,7 +5,7 @@ Module for tracking filesystem info
 ## Install
 
 ```sh
-yarn add @exodus/filesystem
+pnpm add @exodus/filesystem
 ```
 
 ## Usage

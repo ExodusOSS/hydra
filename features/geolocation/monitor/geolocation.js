@@ -1,4 +1,5 @@
 import pDefer from 'p-defer'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import { retry } from '@exodus/simple-retry'
 import createFetchival from '@exodus/fetch/experimental/create-fetchival'

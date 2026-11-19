@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.0](https://github.com/ExodusMovement/exodus/compare/@exodus/fetch-factory@2.4.2...@exodus/fetch-factory@2.5.0) (2026-10-26)
+
+### Features
+
+- **fetch-factory:** send identifier headers to exodus-int.com ([#47748](https://github.com/ExodusMovement/exodus/issues/47748)) ([b523248](https://github.com/ExodusMovement/exodus/commit/b523248ffbe22589711a064a401b3f8e2ac7d955))
+
+## [2.4.2](https://github.com/ExodusMovement/exodus/compare/@exodus/fetch-factory@2.4.1...@exodus/fetch-factory@2.4.2) (2026-10-09)
+
+### Bug Fixes
+
+- **fetch-factory:** resolve URL hostname via WHATWG parser ([#43308](https://github.com/ExodusMovement/exodus/issues/43308)) ([f8824d4](https://github.com/ExodusMovement/exodus/commit/f8824d47a8b86332af2fc8fa42a92b75aaa9c2d9))
+
 ## [2.4.1](https://github.com/ExodusMovement/hydra/compare/@exodus/fetch-factory@2.4.0...@exodus/fetch-factory@2.4.1) (2025-12-05)
 
 ### Bug Fixes

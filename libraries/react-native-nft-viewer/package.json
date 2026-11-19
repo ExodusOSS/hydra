@@ -1,23 +1,24 @@
 {
   "name": "@exodus/react-native-nft-viewer",
-  "version": "0.5.0",
+  "version": "1.0.3",
   "description": "A webview for displaying an NFT in a safe container.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "pnpm exec eslint"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/react-native-nft-viewer.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "files": [
-    "android/src/main/AndroidManifest.xml",
-    "android/src/main/java/",
-    "android/build.gradle",
-    "ios/*.h",
-    "ios/*.m",
+    "android/src/main/java",
+    "CHANGELOG.md",
+    "RNNFTViewer.podspec",
+    "index.jsx",
     "ios/RNNFTViewer.xcodeproj/project.pbxproj",
-    "index.js",
-    "RNNFTViewer.podspec"
+    "ios/*.m",
+    "ios/*.h",
+    "android/build.gradle",
+    "android/src/main/AndroidManifest.xml"
   ],
   "keywords": [
     "react-native",
@@ -34,11 +35,16 @@
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/react-native-nft-viewer/issues"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Areact-native-nft-viewer"
   },
-  "homepage": "https://github.com/ExodusMovement/react-native-nft-viewer#readme",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/react-native-nft-viewer",
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-native": ">=0.57.0"
+  },
+  "devDependencies": {},
+  "publishConfig": {
+    "access": "public",
+    "provenance": false
   }
 }

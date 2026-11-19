@@ -5,6 +5,8 @@ const initialState = {
   hasPin: false,
   hasBioAuth: false,
   hasDeviceAuth: false,
+  deviceAuthEnabled: false,
+  deviceAuthUnavailable: false,
   biometry: null,
 }
 

@@ -3,8 +3,10 @@ import { randomUUID } from '@exodus/crypto/randomUUID'
 import formatStackFrames from './format-stack.js'
 import { createEnvelope } from './envelope.js'
 import type {
+  JsEngine,
   SentryConfig,
   SentryError,
+  SentryExceptionValue,
   ToSentryErrorParams,
   SentryConstructorOptions,
   SubmitEnvelopeFunction,
@@ -12,6 +14,7 @@ import type {
 } from './types.js'
 import { asRelativePath } from './utils.js'
 import { SafeError, SafeContext } from '@exodus/errors'
+import type { SafeContextType } from '@exodus/errors'
 
 export type {
   JsEngine,
@@ -22,24 +25,71 @@ export type {
   UnsafeContext,
 } from './types.js'
 
+const SPAN_ID_HEX_LENGTH = 16
+
+const generateSpanId = (): string => randomUUID().replace(/-/gu, '').slice(0, SPAN_ID_HEX_LENGTH)
+
+// Promote `context.traceId` into Sentry's `contexts.trace` so the trace id is indexed and
+// searchable. A bare `contexts.traceId` is treated as decorative metadata and ignored by Sentry.
+// https://develop.sentry.dev/sdk/data-model/event-payloads/contexts/#trace-context
+const toSentryContexts = (safeContexts: SafeContextType) => {
+  if (!safeContexts) return
+
+  const { traceId, ...rest } = safeContexts
+  if (!traceId) return safeContexts
+
+  return {
+    ...rest,
+    trace: {
+      trace_id: traceId.toString().toLowerCase(),
+      span_id: generateSpanId(),
+    },
+  }
+}
+
+const toExceptionValue = (
+  safeError: SafeError,
+  jsEngine: JsEngine,
+  mechanism?: SentryExceptionValue['mechanism']
+): SentryExceptionValue => ({
+  type: safeError.name,
+  value: safeError.hint,
+  // https://develop.sentry.dev/sdk/event-payloads/stacktrace/
+  stacktrace: {
+    frames: formatStackFrames({ frames: safeError.stackFrames ?? [], jsEngine }),
+  },
+  ...(mechanism && { mechanism }),
+})
+
 export const toSentryError = ({
   unsafeError,
   config,
   unsafeContext,
 }: ToSentryErrorParams): SentryError | undefined => {
   const safeError = SafeError.from(unsafeError)
-  if (safeError.stackFrames?.length === 0) {
+  if (!safeError.stackFrames?.length) {
     console.warn('Empty stack trace, see the `@exodus/errors` library for troubleshooting.')
     return
   }
 
-  // https://develop.sentry.dev/sdk/event-payloads/
-  const frames = formatStackFrames({
-    frames: safeError.stackFrames!,
-    jsEngine: config.jsEngine,
-  })
+  const contexts = toSentryContexts(SafeContext.parse(unsafeContext))
 
-  const contexts = SafeContext.parse(unsafeContext)
+  // Sentry's Exception Interface expects chained exceptions ordered oldest first, so the
+  // root cause leads and the thrown error is last. Keeping the thrown error last preserves
+  // issue grouping, which keys off the final value.
+  // https://develop.sentry.dev/sdk/data-model/event-payloads/exception/
+  const exceptionValues: SentryExceptionValue[] = [
+    ...(safeError.linkedErrors ?? [])
+      // `source: 'cause'` tags each entry as acquired from the parent error's `cause`, so
+      // Sentry renders the "caused by" relationship. `type` identifies the capturing
+      // mechanism and must be 'generic' for user-invoked captures.
+      // https://develop.sentry.dev/sdk/telemetry/errors/#exception-mechanism
+      .map((linkedError) =>
+        toExceptionValue(linkedError, config.jsEngine, { type: 'generic', source: 'cause' })
+      )
+      .reverse(),
+    toExceptionValue(safeError, config.jsEngine),
+  ]
 
   return {
     event_id: randomUUID().replace(/-/gu, ''),
@@ -69,16 +119,7 @@ export const toSentryError = ({
     // Sentry's Exception Interface
     // https://develop.sentry.dev/sdk/event-payloads/exception/
     exception: {
-      values: [
-        {
-          type: safeError.name,
-          value: safeError.hint,
-          // https://develop.sentry.dev/sdk/event-payloads/stacktrace/
-          stacktrace: {
-            frames,
-          },
-        },
-      ],
+      values: exceptionValues,
     },
   }
 }
@@ -92,7 +133,8 @@ class Sentry {
         config: {
           publicKey: 'String',
           projectId: 'String',
-          environment: (value: unknown) => ['staging', 'production'].includes(value as string),
+          environment: (value: unknown) =>
+            ['development', 'staging', 'production'].includes(value as string),
           dsnUrl: 'String',
           os: 'String',
           osVersion: 'String',
@@ -128,7 +170,7 @@ class Sentry {
     context: unsafeContext,
   }: {
     error: Error
-    context: UnsafeContext
+    context?: UnsafeContext
   }): Promise<{ eventId: string }> => {
     if (!(unsafeError instanceof Error)) {
       throw new TypeError("'error' must be an Error instance.")

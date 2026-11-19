@@ -46,6 +46,7 @@ describe('assets-serialization', () => {
         (p) => expect(deserialized).toHaveProperty(p)
       )
 
+      expect(deserialized.api).toHaveProperty('features')
       expect(deserialized.api).toHaveProperty('hasFeature')
       expect(deserialized.api).not.toHaveProperty('assetId')
 
@@ -107,6 +108,11 @@ describe('assets-serialization', () => {
     it('hasFeature returns correct results', async () => {
       expect(await deserialized.api.hasFeature('accountState')).toBe(true)
       expect(await deserialized.api.hasFeature('foobar')).toBe(false)
+    })
+
+    it('features contains expected fields', async () => {
+      expect(await deserialized.api.features.accountState).toBe(true)
+      expect(await deserialized.api.features.foobar).toBe(undefined)
     })
 
     it('validateAssetId returns correct results', async () => {

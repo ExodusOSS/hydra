@@ -1,45 +1,48 @@
 {
   "name": "@exodus/models",
-  "version": "13.1.0",
+  "version": "13.3.3",
   "description": "Containers for common business objects in the wild world of Exodus wallets",
   "type": "module",
   "main": "lib/index.js",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/models",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/models",
   "files": [
     "lib",
     "!**/__tests__/**",
     "CHANGELOG.md"
   ],
   "dependencies": {
-    "@exodus/currency": "^6.0.0",
-    "@exodus/serialization": "^2.1.0",
+    "@exodus/currency": "workspace:^",
+    "@exodus/proxy-freeze": "workspace:^",
+    "@exodus/serialization": "workspace:^",
     "bip32-path": "^0.4.2",
     "lodash": "^4.17.11",
-    "minimalistic-assert": "^1.0.1",
-    "proxy-freeze": "^1.0.0"
+    "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {
     "@exodus/assets": "^11.0.0",
-    "@exodus/assets-base": "^10.0.0",
-    "@exodus/bytes": "^1.0.0-rc.6"
+    "@exodus/assets-base": "^12.0.0",
+    "@exodus/bytes": "^1.0.0-rc.6",
+    "@types/lodash": "^4.17.0",
+    "@types/minimalistic-assert": "^1.0.1"
   },
   "scripts": {
-    "test": "run -T exodus-test --jest --esbuild",
-    "build": "yarn run -T tsc -p tsconfig.build.json",
-    "build:watch": "yarn run -T tsc -p tsconfig.build.json --watch",
-    "clean": "yarn run -T tsc --build --clean",
-    "prepublishOnly": "yarn run -T build --scope @exodus/models",
-    "lint": "run -T tsc --noEmit && run -T eslint .",
-    "lint:fix": "yarn lint --fix"
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "build:watch": "pnpm exec tsc -p tsconfig.build.json --watch",
+    "clean": "pnpm exec tsc --build --clean",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/models",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Amodels"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Amodels"
   },
   "publishConfig": {
     "access": "public",

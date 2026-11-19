@@ -5,12 +5,19 @@ type Params<T, S> = {
   atom: Atom<S>
   serialize: (value: T) => S | Promise<S>
   deserialize: (serialized: S) => T | Promise<T>
+  /**
+   * When true, setters are assumed to be pure (non-mutating): if a setter returns
+   * the same reference it received, serialization and the underlying storage write
+   * are both skipped. Do NOT enable this if any setter mutates the value in-place.
+   */
+  pure?: boolean
 }
 
 const withSerialization = <T, S>({
   atom,
   serialize: customSerialize,
   deserialize: customDeserialize,
+  pure = false,
 }: Params<T, S>): Atom<T> => {
   const serialize = (value: T) =>
     (value === undefined ? undefined : customSerialize(value)) as Promise<S>
@@ -24,9 +31,12 @@ const withSerialization = <T, S>({
 
   const set = async (value: T | Setter<T>) => {
     if (isSetter(value)) {
-      return atom.set(async (previousValue) =>
-        serialize(await value(await deserialize(previousValue)))
-      )
+      return atom.set(async (previousValue) => {
+        const deserialized = await deserialize(previousValue)
+        const updated = await value(deserialized)
+        if (pure && updated === deserialized) return previousValue
+        return serialize(updated)
+      })
     }
 
     const serialized = await serialize(value)

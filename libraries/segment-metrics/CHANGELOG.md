@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1](https://github.com/ExodusMovement/exodus/compare/@exodus/segment-metrics@5.1.0...@exodus/segment-metrics@5.1.1) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/segment-metrics
+
+## [5.1.0](https://github.com/ExodusMovement/hydra/compare/@exodus/segment-metrics@5.0.0...@exodus/segment-metrics@5.1.0) (2026-05-08)
+
+### Features
+
+- feat: implement mixpanel feature flag and experimentation provider (#15782)
+
+## [5.0.0](https://github.com/ExodusMovement/hydra/compare/@exodus/segment-metrics@4.0.3...@exodus/segment-metrics@5.0.0) (2025-05-24)
+
+### ⚠ BREAKING CHANGES
+
+- switch segment-metrics to ESM (#12319)
+
+### Features
+
+- feat!: switch segment-metrics to ESM (#12319)
+
 ## [4.0.3](https://github.com/ExodusMovement/hydra/compare/@exodus/segment-metrics@4.0.2...@exodus/segment-metrics@4.0.3) (2024-11-01)
 
 Re-licensed under MIT license.

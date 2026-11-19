@@ -1,4 +1,5 @@
 import type addressProvider from '@exodus/address-provider'
+import type accountSecurity from '@exodus/account-security'
 import type application from '@exodus/application'
 import type { type Node, Argo, Definition, Feature, InstanceById } from '@exodus/argo'
 import type assetSources from '@exodus/asset-sources'
@@ -59,7 +60,6 @@ type DefinitionsDebug<D extends Definition> = UnionToIntersection<
 >
 
 export interface ApplicationWalletApi {
-  addSeed(params: { mnemonic: string; compatibilityMode: string }): Promise<string>
   start(): Promise<void>
   stop(): Promise<void>
   load(): Promise<void>
@@ -102,6 +102,7 @@ type ReportSlice<F extends FeatureFactory> = Record<
 >
 
 export type Report = ReportSlice<typeof txSigner> &
+  ReportSlice<typeof accountSecurity> &
   ReportSlice<typeof messageSigner> &
   ReportSlice<typeof walletAccounts> &
   ReportSlice<typeof addressProvider> &
@@ -160,8 +161,10 @@ type Params = {
   debug?: boolean
 }
 
-interface ArgoWithApiResolver<D extends Definition>
-  extends Omit<Argo<D>, 'use' | 'registerMultiple' | 'register' | 'resolve'> {
+interface ArgoWithApiResolver<D extends Definition> extends Omit<
+  Argo<D>,
+  'use' | 'registerMultiple' | 'register' | 'resolve'
+> {
   register<N extends Node>(node: N): ArgoWithApiResolver<D | N['definition']>
   registerMultiple<N extends Node>(node: readonly N[]): ArgoWithApiResolver<D | N['definition']>
   use<F extends Feature>(
@@ -170,5 +173,4 @@ interface ArgoWithApiResolver<D extends Definition>
   resolve(): ExodusApi & DefinitionsApi<D> & DefinitionsDebug<D>
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export default function createExodus(params: Params): ArgoWithApiResolver<{}>

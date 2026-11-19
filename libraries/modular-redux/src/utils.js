@@ -1,5 +1,3 @@
-/* eslint-disable import/no-unresolved */
-
 import reduxWatch from 'redux-watch'
 import { bindActionCreators as _bindActionCreators } from 'redux'
 

@@ -2,20 +2,21 @@
   "name": "@exodus/domain-serialization",
   "type": "module",
   "version": "1.8.1",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/domain-serialization",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/domain-serialization",
   "description": "Serialization library on top of @exodus/serialization that adds serialization handlers for domain objects",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Adomain-serialization"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Adomain-serialization"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "scripts": {
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit"
   },
   "author": "Exodus Movement, Inc.",
   "files": [
@@ -27,11 +28,11 @@
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "dependencies": {
-    "@exodus/asset-types": "^0.2.0",
-    "@exodus/basic-utils": "^3.0.1",
-    "@exodus/currency": "^5.0.2",
+    "@exodus/asset-types": "^0.5.0",
+    "@exodus/basic-utils": "^5.0.0",
+    "@exodus/currency": "^6.0.0",
     "@exodus/key-identifier": "^1.2.1",
-    "@exodus/models": "^12.3.0",
+    "@exodus/models": "^13.0.0",
     "@exodus/serialization": "^2.1.0",
     "bn.js": "^5.2.1",
     "minimalistic-assert": "^1.0.1"
@@ -39,7 +40,7 @@
   "devDependencies": {
     "@exodus/assets-feature": "workspace:^",
     "@exodus/atoms": "workspace:^",
-    "@exodus/bitcoin-plugin": "^1.26.0",
+    "@exodus/bitcoin-plugin": "^2.0.0",
     "@exodus/ethereum-plugin": "^2.4.1",
     "@exodus/solana-plugin": "^1.15.0",
     "@exodus/storage-memory": "workspace:^"

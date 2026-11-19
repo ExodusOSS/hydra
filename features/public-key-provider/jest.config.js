@@ -4,7 +4,6 @@ import baseConfig from '../../jest.config.js'
 const config = {
   ...baseConfig,
   testTimeout: 10_000,
-  modulePathIgnorePatterns: ['<rootDir>/lib'],
 }
 
 export default config

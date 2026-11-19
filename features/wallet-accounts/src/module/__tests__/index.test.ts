@@ -1,6 +1,5 @@
 import { createAtomMock } from '@exodus/atoms'
-import { WalletAccount } from '@exodus/models'
-import { SEED_SRC, type WalletAccountParams } from '@exodus/models/lib/wallet-account/index.js'
+import { WalletAccount, type WalletAccountParams } from '@exodus/models'
 import createInMemoryStorage from '@exodus/storage-memory'
 import pDefer from 'p-defer'
 
@@ -11,7 +10,7 @@ import createWalletAccountsInternalAtom, {
 import type { HardwareWalletPublicKeys, WalletAccountsData } from '../../types.js'
 import { create as createWalletAccounts } from '../index.js'
 
-const { TREZOR_SRC, EXODUS_SRC, FTX_SRC, DEFAULT_NAME } = WalletAccount
+const { TREZOR_SRC, EXODUS_SRC, FTX_SRC, SEED_SRC, DEFAULT_NAME } = WalletAccount
 
 describe('WalletAccounts', () => {
   const primarySeedId = 'aGkgbWFyaw=='
@@ -719,7 +718,7 @@ describe('WalletAccounts', () => {
 
         await walletAccounts.disable('exodus_1')
 
-        // eslint-disable-next-line unicorn/no-await-expression-member
+        // oxlint-disable-next-line unicorn/no-await-expression-member
         expect((await walletAccounts.get('exodus_1')).enabled).toBe(false)
       })
 
@@ -961,7 +960,7 @@ describe('WalletAccounts', () => {
             },
           },
         }) // down sync is assumed to be the one we just sent up
-        // eslint-disable-next-line unicorn/no-await-expression-member
+        // oxlint-disable-next-line unicorn/no-await-expression-member
         expect((await walletAccounts.get('exodus_0')).label).toEqual('the account') // local change should not have been overwritten
 
         await channelOptions.processOne({
@@ -972,7 +971,7 @@ describe('WalletAccounts', () => {
             },
           },
         })
-        // eslint-disable-next-line unicorn/no-await-expression-member
+        // oxlint-disable-next-line unicorn/no-await-expression-member
         expect((await walletAccounts.get('exodus_0')).label).toEqual('Wayne Foundation') // no down sync pending, apply remote update
       })
 
@@ -1073,6 +1072,96 @@ describe('WalletAccounts', () => {
           exodus_1: expect.objectContaining({ ...stored.exodus_1, compatibilityMode }),
         })
       })
+
+      it('should not disable locally-created accounts absent from incoming fusion data', async () => {
+        const { walletAccounts, channelOptions } = await prepare()
+
+        await walletAccounts.create({
+          label: 'New Portfolio',
+          color: '#ff0000',
+          icon: 'exodus',
+        } as WalletAccountsData)
+
+        // oxlint-disable-next-line unicorn/no-await-expression-member
+        expect((await walletAccounts.get('exodus_2')).enabled).toBe(true)
+
+        await channelOptions.processOne({
+          data: {
+            walletAccounts: stored,
+          },
+        })
+
+        // oxlint-disable-next-line unicorn/no-await-expression-member
+        expect((await walletAccounts.get('exodus_2')).enabled).toBe(true)
+      })
+
+      it('should still disable accounts that are explicitly disabled in incoming fusion data', async () => {
+        const { walletAccounts, channelOptions } = await prepare()
+
+        // oxlint-disable-next-line unicorn/no-await-expression-member
+        expect((await walletAccounts.get('exodus_1')).enabled).toBe(true)
+
+        await channelOptions.processOne({
+          data: {
+            walletAccounts: {
+              ...stored,
+              exodus_1: { ...stored.exodus_1, enabled: false },
+            },
+          },
+        })
+
+        // oxlint-disable-next-line unicorn/no-await-expression-member
+        expect((await walletAccounts.get('exodus_1')).enabled).toBe(false)
+      })
+
+      it('should not revert a local disable when stale fusion data arrives', async () => {
+        const { walletAccounts, channelOptions } = await prepare()
+
+        await walletAccounts.disable('exodus_1')
+        // oxlint-disable-next-line unicorn/no-await-expression-member
+        expect((await walletAccounts.get('exodus_1')).enabled).toBe(false)
+
+        await channelOptions.processOne({
+          data: {
+            walletAccounts: stored,
+          },
+        })
+
+        // oxlint-disable-next-line unicorn/no-await-expression-member
+        expect((await walletAccounts.get('exodus_1')).enabled).toBe(false)
+      })
+
+      it('should not revert a local enable when stale fusion data with disable arrives', async () => {
+        const { walletAccounts, channelOptions } = await prepare()
+
+        await channelOptions.processOne({
+          data: {
+            walletAccounts: {
+              ...stored,
+              exodus_1: { ...stored.exodus_1, enabled: false },
+            },
+          },
+        })
+
+        // oxlint-disable-next-line unicorn/no-await-expression-member
+        expect((await walletAccounts.get('exodus_1')).enabled).toBe(false)
+
+        await walletAccounts.enable('exodus_1')
+        // oxlint-disable-next-line unicorn/no-await-expression-member
+        expect((await walletAccounts.get('exodus_1')).enabled).toBe(true)
+
+        await channelOptions.processOne({
+          data: {
+            walletAccounts: {
+              ...stored,
+              exodus_1: { ...stored.exodus_1, enabled: false },
+            },
+          },
+        })
+
+        // oxlint-disable-next-line unicorn/no-await-expression-member
+        expect((await walletAccounts.get('exodus_1')).enabled).toBe(true)
+      })
     })
 
     describe('enable', () => {
@@ -1082,7 +1171,7 @@ describe('WalletAccounts', () => {
         await walletAccounts.disable('exodus_1')
 
         await walletAccounts.enable('exodus_1')
-        // eslint-disable-next-line unicorn/no-await-expression-member
+        // oxlint-disable-next-line unicorn/no-await-expression-member
         expect((await walletAccounts.get('exodus_1')).enabled).toBe(true)
       })
     })

@@ -1,6 +1,7 @@
 import type { WalletAccount } from '@exodus/models'
 // eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
+import { defineSelectorFactory } from '@exodus/redux-dependency-injection'
 import { createSelector } from 'reselect'
 import {
   capitalize,
@@ -9,7 +10,7 @@ import {
 } from './get-proper-name.js'
 import type { WalletAccountsSelectors } from '../types.js'
 
-const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { memoize } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 const createProperNameSelectorFactory = (
   walletAccountsSelector: WalletAccountsSelectors['data'],
@@ -20,7 +21,10 @@ const createProperNameSelectorFactory = (
       createSelector(
         walletAccountsSelector,
         getMemoizedSelector(walletAccountName),
-        (walletAccounts: Record<string, WalletAccount>, walletAccount: WalletAccount) => {
+        (
+          walletAccounts: Record<string, WalletAccount>,
+          walletAccount: WalletAccount
+        ): string | null => {
           if (!walletAccounts[walletAccountName]) return null
 
           const { source, label, id } = walletAccount
@@ -48,7 +52,7 @@ const createProperNameSelectorFactory = (
     (...args) => JSON.stringify(args)
   )
 
-const createProperNameSelectorDefinition = {
+const createProperNameSelectorDefinition = defineSelectorFactory({
   id: 'createProperNameSelector',
   selectorFactory: createProperNameSelectorFactory,
   dependencies: [
@@ -56,7 +60,7 @@ const createProperNameSelectorDefinition = {
     { selector: 'data' },
     { selector: 'getMemoized' },
   ],
-} as const
+})
 
 type GetMemoizedSelector = (name: string) => (state: unknown) => WalletAccount
 

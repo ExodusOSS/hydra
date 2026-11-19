@@ -192,7 +192,7 @@ const useRangeSlider = ({
           if (typeof ref === 'function') {
             ref(el)
           } else {
-            // eslint-disable-next-line @exodus/mutable/no-param-reassign-prop-only
+            // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
             ref.current = el
           }
         }

@@ -1,42 +1,53 @@
 {
   "name": "@exodus/redux-dependency-injection",
-  "version": "4.1.2",
+  "version": "5.0.0",
   "type": "module",
   "description": "Dependency-injection container for redux modules",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/redux-dependency-injection",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/redux-dependency-injection",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aredux-dependency-injection"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aredux-dependency-injection"
   },
-  "main": "src/index.js",
-  "types": "src/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
-    "src",
+    "lib",
     "README.md",
     "CHANGELOG.md"
   ],
   "scripts": {
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest && yarn test:types",
-    "test:types": "run -T tsc"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "build:watch": "pnpm exec tsc -w -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/redux-dependency-injection"
   },
   "dependencies": {
-    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/basic-utils": "^5.0.0",
     "@exodus/dependency-injection": "^3.2.1",
     "@exodus/dependency-types": "^2.0.0",
     "@exodus/logger": "^1.2.2",
     "@exodus/typeforce": "^1.18.0",
     "lodash": "^4.17.11",
-    "redux": "^4.0.0",
     "reselect": "^3.0.1"
   },
+  "peerDependencies": {
+    "redux": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.24",
+    "redux": "^4.0.0"
+  },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

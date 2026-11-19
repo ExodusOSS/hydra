@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/ExodusMovement/exodus/compare/@exodus/retry@1.3.0...@exodus/retry@1.3.1) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/retry
+
+## [1.3.0](https://github.com/ExodusMovement/hydra/compare/@exodus/retry@1.2.1...@exodus/retry@1.3.0) (2026-05-26)
+
+### Features
+
+- **retry:** typescript ([#16725](https://github.com/ExodusMovement/hydra/issues/16725)) ([3a5c79a](https://github.com/ExodusMovement/hydra/commit/3a5c79a4350aa994bef5701fb1c0df8d9f2ad376))
+
 ## [1.2.1](https://github.com/ExodusMovement/hydra/compare/@exodus/retry@1.2.0...@exodus/retry@1.2.1) (2024-11-01)
 
 Re-licensed under MIT license.

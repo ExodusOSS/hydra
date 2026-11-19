@@ -1,4 +1,4 @@
-import EventEmitter from 'events' // eslint-disable-line @exodus/restricted-imports/no-node-core-events
+import EventEmitter from 'events' // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/no-node-core-events
 
 jest.setTimeout(15_000)
 

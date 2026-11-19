@@ -3,7 +3,7 @@
 ## Install
 
 ```sh
-    yarn add @exodus/atoms
+    pnpm add @exodus/atoms
 ```
 
 ## What is an atom?

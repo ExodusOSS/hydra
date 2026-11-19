@@ -1,6 +1,6 @@
 {
   "name": "@exodus/atoms",
-  "version": "10.2.0",
+  "version": "10.3.5",
   "description": "Abstraction for encapsulating a piece of data behind a simple unified interface: get, set, observe",
   "type": "module",
   "main": "lib/index.js",
@@ -10,13 +10,14 @@
   },
   "author": "Exodus Movement, Inc.",
   "scripts": {
-    "build": "run -T tsc -p tsconfig.build.json",
-    "clean": "run -T tsc --build --clean",
-    "test": "run -T exodus-test --jest --esbuild && run test:types",
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "test": "pnpm exec exodus-test --jest --esbuild && pnpm run test:types",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
     "test:types": "tsc -p tsconfig.json --noEmit",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "prepublishOnly": "yarn run -T build --scope @exodus/atoms"
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/atoms"
   },
   "files": [
     "lib",
@@ -24,23 +25,23 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/atoms",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/atoms",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aatoms"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aatoms"
   },
   "dependencies": {
-    "@exodus/storage-interface": "^1.0.0",
+    "@exodus/proxy-freeze": "workspace:^",
+    "@exodus/storage-interface": "workspace:^",
     "delay": "^5.0.0",
     "eventemitter3": "^4.0.7",
     "json-stringify-safe": "^5.0.1",
     "lodash": "^4.17.21",
     "make-concurrent": ">=4 <6",
     "minimalistic-assert": "^1.0.1",
-    "p-defer": "^4.0.0",
-    "proxy-freeze": "^1.0.0"
+    "p-defer": "^4.0.0"
   },
   "devDependencies": {
     "@exodus/atom-tests": "workspace:^",

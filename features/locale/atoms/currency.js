@@ -1,13 +1,10 @@
-import { createFusionAtom } from '@exodus/fusion-atoms'
-import { optimisticNotifier } from '@exodus/atoms'
+import { createStorageAtomFactory } from '@exodus/atoms'
 
-const createCurrencyAtom = ({ fusion, config }) =>
-  optimisticNotifier(
-    createFusionAtom({
-      fusion,
-      path: 'private.currency',
-      defaultValue: config.defaultValue,
-    })
-  )
+const createCurrencyAtom = ({ storage, config }) =>
+  createStorageAtomFactory({ storage })({
+    key: 'currency',
+    defaultValue: config.defaultValue,
+    isSoleWriter: true,
+  })
 
 export default createCurrencyAtom

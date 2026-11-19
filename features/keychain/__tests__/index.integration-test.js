@@ -1,4 +1,5 @@
 import createIOC from '@exodus/argo'
+
 import keychain from '../index.js'
 
 // 2. Create ioc container

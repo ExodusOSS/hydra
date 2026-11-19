@@ -1,12 +1,11 @@
 import { type Atom, createInMemoryAtom } from '@exodus/atoms'
-import BIP32 from '@exodus/bip32'
+import BIP32, { getSeedId } from '@exodus/bip32'
+import { mnemonicToSeed } from '@exodus/bip39'
 import { createAsset as createBitcoin } from '@exodus/bitcoin-plugin'
 import KeyIdentifier from '@exodus/key-identifier'
-import { Keychain } from '@exodus/keychain/module'
-import { getSeedId } from '@exodus/keychain/module/crypto/seed-id'
+import { Keychain } from '@exodus/keychain'
 import { createNoopLogger, type Logger } from '@exodus/logger'
 import { WalletAccount } from '@exodus/models'
-import { mnemonicToSeedSync } from 'bip39'
 import { when } from 'jest-when'
 
 import type { GetBuildMetadata, PublicKeyProvider } from '../public-key-provider.js'
@@ -16,11 +15,11 @@ import type { IPublicKeyStore } from '../store/types.js'
 const bitcoin = createBitcoin({ assetClientInterface: { createLogger: createNoopLogger } })
 const logger = { warn: jest.fn(), debug: jest.fn() } as unknown as Logger
 
-describe('PublicKeyProvider', () => {
-  const seed = mnemonicToSeedSync(
-    'menu memory fury language physical wonder dog valid smart edge decrease worth'
-  )
-  const seedId = getSeedId(seed)
+describe('PublicKeyProvider', async () => {
+  const seed = await mnemonicToSeed({
+    mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
+  })
+  const seedId = await getSeedId(seed)
   const xpub =
     'xpub6C7J9BSRbgyMtjVG244dKHAPweZGuowQRExT9xDhgDpW65Ki92DV3RL2VLMFSqUcPs5G7Ti8nucmBNagY6a9cu9w7ooLt5EtYDi29CM9Xi1'
 
@@ -50,11 +49,11 @@ describe('PublicKeyProvider', () => {
     })
   }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     getBuildMetadata = jest.fn().mockResolvedValue({ dev: true })
     publicKeyStore = { get: jest.fn(), add: jest.fn() } as unknown as IPublicKeyStore
     keychain = new Keychain({})
-    keychain.addSeed(seed)
+    await keychain.unlock(seed)
 
     walletAccountsAtom = createInMemoryAtom()
     buildPublicKeyProvider()
@@ -199,7 +198,6 @@ describe('PublicKeyProvider', () => {
         keyIdentifier,
       })
 
-      // eslint-disable-next-line sonarjs/no-base-to-string
       expect(publicKey!.toString('hex')).toBe(
         '02b0681b906bdb21cc9ef138491b99ab11721fed0757d8375e98724a5154475390'
       )
@@ -245,7 +243,6 @@ describe('PublicKeyProvider', () => {
         keyIdentifier,
       })
 
-      // eslint-disable-next-line sonarjs/no-base-to-string
       expect(publicKey!.toString('hex')).toBe(
         '02b0681b906bdb21cc9ef138491b99ab11721fed0757d8375e98724a5154475390'
       )
@@ -261,7 +258,6 @@ describe('PublicKeyProvider', () => {
         keyIdentifier,
       })
 
-      // eslint-disable-next-line sonarjs/no-base-to-string
       expect(publicKey!.toString('hex')).toBe(
         '02b0681b906bdb21cc9ef138491b99ab11721fed0757d8375e98724a5154475390'
       )
@@ -323,11 +319,9 @@ describe('PublicKeyProvider', () => {
           walletAccount: walletAccount.toString(),
           keyIdentifier,
         })
-      ).rejects.toThrow(
-        `No public key found for ${walletAccount.toString()} and key identifier ${
-          keyIdentifier.derivationPath
-        } (${keyIdentifier.derivationAlgorithm})`
-      )
+      ).rejects.toMatchObject({
+        name: 'PublicKeyNotFoundError',
+      })
     })
   })
 })

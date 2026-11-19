@@ -213,6 +213,40 @@ describe('address cache', () => {
     jest.useRealTimers()
   })
 
+  it('respects fusionPushDelay config', async () => {
+    jest.useFakeTimers()
+    addressCache = addressCacheModuleDefinition.factory({
+      logger: console,
+      addressCacheAtom,
+      fusion,
+      enabledWalletAccountsAtom: {
+        get: () => ({ exodus_0: 'test', exodus_1: 'test' }),
+        observe: (f) => {
+          f({ exodus_0: 'test', exodus_1: 'test' })
+        },
+      },
+      storage,
+      config: { fusionPushDelay: 5000 },
+    })
+
+    await addressCache.load()
+
+    await addressCache.set({
+      walletAccountName: 'exodus_0',
+      baseAssetName: 'bitcoin',
+      derivationPath: btcFirstPath,
+      address: receiveAddresses.bitcoin,
+    })
+
+    // Should not have pushed yet before the configured delay
+    await jest.advanceTimersByTimeAsync(4000)
+    expect(fusionChannel.push).toHaveBeenCalledTimes(0)
+
+    // After the configured 5s delay, push should have happened
+    await jest.advanceTimersByTimeAsync(1000)
+    expect(fusionChannel.push).toHaveBeenCalledTimes(1)
+  })
+
   it('supports batching addresses in fusion push', async () => {
     await addressCache.load()
     jest.useFakeTimers()

@@ -1,5 +1,5 @@
-const constants = require('./constants')
-const coinUtil = require('./coin-util')
+import * as constants from './constants.js'
+import * as compatibilityUtils from './compatibility-utils.js'
 
 const uniq = (arr) => [...new Set(arr)]
 const difference = (arr1, arr2) => {
@@ -7,57 +7,31 @@ const difference = (arr1, arr2) => {
   return arr1.filter((x) => !set2.has(x))
 }
 
-const getTrezorMeta = (assets) => {
-  const ERC20_TOKEN_NAMES = Object.keys(assets).filter(
-    (assetName) => assets[assetName].assetType === 'ETHEREUM_ERC20'
-  )
+const { MODEL_1, MODEL_T, MODEL_SAFE_3, MODEL_SAFE_5, MODEL_SAFE_7 } = compatibilityUtils
 
-  const SOLANA_TOKEN_NAMES = Object.keys(assets).filter(
-    (assetName) => assets[assetName].baseAsset?.name === 'solana'
-  )
+const getTrezorMeta = (assets) => {
+  const getNamesSupportingAllModels = (...models) => {
+    return Object.entries(assets)
+      .filter(
+        ([, asset]) =>
+          models.filter((model) => compatibilityUtils.isTrezorSupported({ asset, model }))
+            .length === models.length
+      )
+      .map(([name]) => name)
+      .sort()
+  }
 
   // Assets supported by all trezor models on Exodus
-  const BASE_SUPPORTED_ASSETS = [
-    'bitcoin',
-    'bitcoinregtest',
-    'ethereum',
-    'dogecoin',
-    'litecoin',
-    'bcash',
-    'ethereumclassic',
-    'zcash',
-    'stellar',
-    ...ERC20_TOKEN_NAMES,
-  ].sort()
-
-  // Trezor Safe 3 has deprecated support for some assets
-  const BASE_SUPPORTED_TREZOR_ONE_AND_T = [...BASE_SUPPORTED_ASSETS, 'dash', 'decred', 'digibyte']
+  // NOTE, it's only used on desktop, it can be removed once migrated to compatibility utils
+  const BASE_SUPPORTED_ASSETS = getNamesSupportingAllModels(MODEL_1, MODEL_SAFE_3)
 
   // Assets supported by specific Trezor models on Exodus.
   const ASSETS_BY_MODEL = {
-    'Safe 7': [
-      'bitcoin',
-      'bitcoinregtest',
-      'ethereum',
-      'solana',
-      'ripple',
-      ...ERC20_TOKEN_NAMES,
-      ...SOLANA_TOKEN_NAMES,
-    ].sort(),
-    'Safe 5': [...BASE_SUPPORTED_ASSETS, 'cardano', 'ripple'].sort(),
-    'Safe 3': [...BASE_SUPPORTED_ASSETS, 'cardano', 'ripple'].sort(),
-    T: [...BASE_SUPPORTED_TREZOR_ONE_AND_T, 'cardano', 'ripple'].sort(),
-    1: [...BASE_SUPPORTED_TREZOR_ONE_AND_T],
-  }
-
-  // An object of asset names sorted by the device model which supports them.
-  // Indicates assets supported on the firmware, but not necessarily
-  // supported by our trezor integration yet
-  const FIRMWARE_ASSETS_BY_MODEL = {
-    'Safe 5': [...constants.ASSETS_BY_MODEL['Safe 5'], ...ERC20_TOKEN_NAMES],
-    'Safe 3': [...constants.ASSETS_BY_MODEL['Safe 3'], ...ERC20_TOKEN_NAMES],
-    T: [...constants.ASSETS_BY_MODEL.T, ...ERC20_TOKEN_NAMES],
-    1: [...constants.ASSETS_BY_MODEL['1'], ...ERC20_TOKEN_NAMES],
+    'Safe 7': getNamesSupportingAllModels(MODEL_SAFE_7),
+    'Safe 5': getNamesSupportingAllModels(MODEL_SAFE_5),
+    'Safe 3': getNamesSupportingAllModels(MODEL_SAFE_3),
+    T: getNamesSupportingAllModels(MODEL_T),
+    1: getNamesSupportingAllModels(MODEL_1),
   }
 
   // Assets supported by Trezor but may differ between models.
@@ -67,15 +41,19 @@ const getTrezorMeta = (assets) => {
   const SUPPORTED_ONLY_BY_MODEL_T = difference(ASSETS_BY_MODEL.T, ASSETS_BY_MODEL['1'])
 
   // Assets we are planning to support in future.
-  const FUTURE_SUPPORTED_ASSETS = ['tezos', 'ravencoin']
+  const FUTURE_SUPPORTED_ASSETS = Object.entries(compatibilityUtils.supportedNetworks)
+    .filter(([, config]) => config.futureSupport)
+    .map(([network]) => network)
+    .sort()
 
   const isSegwit = (assetName) =>
-    assets[assetName].assetType !== 'ETHEREUM_ERC20' && coinUtil.isSegwit(assetName)
+    compatibilityUtils.getTrezorConfiguration({ asset: assets[assetName] }).isSegwit
 
-  // eslint-disable-next-line @exodus/hydra/no-asset-conditions
-  const isBip84 = (assetName) => ['bitcoin', 'bitcoinregtest', 'litecoin'].includes(assetName)
+  const isBip84 = (assetName) =>
+    compatibilityUtils.getTrezorConfiguration({ asset: assets[assetName] }).isBip84
 
-  const isSupportedByTrezor = (assetName) => SUPPORTED_ASSETS.includes(assetName)
+  const isSupportedByTrezor = (assetName) =>
+    compatibilityUtils.isTrezorSupported({ asset: assets[assetName] })
 
   // Assets supported exclusively on model T.
   const isSupportedOnlyByModelT = (assetName) => SUPPORTED_ONLY_BY_MODEL_T.includes(assetName)
@@ -85,7 +63,6 @@ const getTrezorMeta = (assets) => {
     SUPPORTED_MODELS: constants.SUPPORTED_MODELS,
     BASE_SUPPORTED_ASSETS,
     ASSETS_BY_MODEL,
-    FIRMWARE_ASSETS_BY_MODEL,
     SUPPORTED_ASSETS,
     SUPPORTED_ONLY_BY_MODEL_T,
     FUTURE_SUPPORTED_ASSETS,
@@ -96,4 +73,4 @@ const getTrezorMeta = (assets) => {
   }
 }
 
-module.exports = getTrezorMeta
+export default getTrezorMeta

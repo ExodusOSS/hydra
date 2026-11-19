@@ -1,4 +1,5 @@
 import type { WalletAccount } from '@exodus/models'
+import { defineSelectorFactory } from '@exodus/redux-dependency-injection'
 import { createSelector } from 'reselect'
 import type { WalletAccountsSelectors } from '../types.js'
 
@@ -12,13 +13,16 @@ const selectorFactory = (
   createSelector(
     walletAccountNamesSelector,
     getWalletAccountSelector,
-    (walletAccountNames: string[], getWalletAccount: (name: string) => WalletAccount | undefined) =>
+    (
+      walletAccountNames: string[],
+      getWalletAccount: (name: string) => WalletAccount | undefined
+    ): string[] =>
       walletAccountNames.filter(
         (walletAccount: string) => getWalletAccount(walletAccount)?.isHardware
       )
   )
 
-const hardwareSelectorDefinition = {
+const hardwareSelectorDefinition = defineSelectorFactory({
   id: 'hardware',
   selectorFactory,
   dependencies: [
@@ -26,6 +30,6 @@ const hardwareSelectorDefinition = {
     { selector: 'names' },
     { selector: 'get' },
   ],
-} as const
+})
 
 export default hardwareSelectorDefinition

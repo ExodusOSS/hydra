@@ -5,7 +5,7 @@ A simple namespaces error tracking package to let any feature collect errors and
 ## Install
 
 ```sh
-yarn add @exodus/error-tracking
+pnpm add @exodus/error-tracking
 ```
 
 ## Usage

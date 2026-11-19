@@ -4,7 +4,10 @@
     "outDir": "./lib",
     "allowJs": true,
     "target": "es2022",
-    "removeComments": false
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "removeComments": false,
+    "noEmit": true
   },
   "include": ["./**/*.ts"]
 }

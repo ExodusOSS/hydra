@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/slip10@2.2.2...@exodus/slip10@2.3.0) (2026-06-03)
+
+### Features
+
+- **slip10:** convert to TypeScript ([#16870](https://github.com/ExodusMovement/exodus-hydra/issues/16870)) ([cdbf9e7](https://github.com/ExodusMovement/exodus-hydra/commit/cdbf9e75e5645a96ab9bda85e8bbae8c0c95a74c))
+
 ## [2.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/slip10@2.2.1...@exodus/slip10@2.2.2) (2025-06-11)
 
 **Note:** Version bump only for package @exodus/slip10

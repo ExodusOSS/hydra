@@ -3,7 +3,7 @@ import lodash from 'lodash'
 import { MY_STATE } from '@exodus/redux-dependency-injection'
 import { createSelector } from 'reselect'
 
-const { memoize } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { memoize } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 const createBalanceSelectorFactory = ({ field, id }) => {
   const selectorFactory = (createAssetSelector, selfSelector) =>

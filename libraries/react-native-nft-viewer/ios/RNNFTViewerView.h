@@ -7,9 +7,10 @@
 @interface RNNFTViewerView : RCTView
 
 @property(nonatomic, copy) NSString *html;
+@property(nonatomic, copy) NSString *baseUrl;
 @property(nonatomic, assign) BOOL javaScriptEnabled;
-@property (nonatomic, assign) BOOL hideKeyboardAccessoryView;
-@property (nonatomic, assign) UIKeyboardAppearance keyboardAppearance;
+@property(nonatomic, assign) BOOL hideKeyboardAccessoryView;
+@property(nonatomic, assign) UIKeyboardAppearance keyboardAppearance;
 
 - (void)injectJavaScript:(NSString *_Nullable)script;
 

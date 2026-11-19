@@ -1,6 +1,14 @@
 import { createAtomObserver } from '@exodus/atoms'
 
-const createFeatureFlagsLifecyclePlugin = ({ featureFlags, port, featureFlagsAtom }) => {
+const createFeatureFlagsLifecyclePlugin = ({
+  featureFlags,
+  port,
+  featureFlagsAtom,
+  appProcessAtom,
+  logger,
+}) => {
+  let unobserveAppProcess
+
   const featureFlagsAtomObserver = createAtomObserver({
     port,
     atom: featureFlagsAtom,
@@ -8,12 +16,29 @@ const createFeatureFlagsLifecyclePlugin = ({ featureFlags, port, featureFlagsAto
   })
   featureFlagsAtomObserver.register()
 
-  const onStart = () => {
-    featureFlags.load()
+  const subscribeToAppProcessChanges = () => {
+    if (!appProcessAtom) return
+
+    let previousMode
+
+    unobserveAppProcess = appProcessAtom.observe(({ mode }) => {
+      const wasBackground = previousMode !== undefined && previousMode !== 'active'
+      const isBackFromBackground = wasBackground && mode === 'active'
+
+      if (isBackFromBackground) {
+        void featureFlags.refresh().catch((error) => {
+          logger?.error('Failed to refresh feature flags', error)
+        })
+      }
+
+      previousMode = mode
+    })
   }
 
-  const onLoad = async () => {
+  const onStart = () => {
     featureFlagsAtomObserver.start()
+    featureFlags.load()
+    subscribeToAppProcessChanges()
   }
 
   const onClear = async () => {
@@ -22,17 +47,18 @@ const createFeatureFlagsLifecyclePlugin = ({ featureFlags, port, featureFlagsAto
 
   const onStop = () => {
     featureFlagsAtomObserver.unregister()
+    unobserveAppProcess?.()
     featureFlags.stop()
   }
 
-  return { onStart, onLoad, onClear, onStop }
+  return { onStart, onClear, onStop }
 }
 
 const featureFlagsLifecyclePluginDefinition = {
   id: 'featureFlagsLifecyclePlugin',
   type: 'plugin',
   factory: createFeatureFlagsLifecyclePlugin,
-  dependencies: ['featureFlags', 'port', 'featureFlagsAtom'],
+  dependencies: ['featureFlags', 'port', 'featureFlagsAtom', 'appProcessAtom?', 'logger?'],
   public: true,
 }
 

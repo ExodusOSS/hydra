@@ -7,28 +7,28 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
-    "test": "run -T exodus-test --jest"
+    "test": "pnpm exec exodus-test --jest"
   },
   "files": [
     "CHANGELOG.md",
     "client.js"
   ],
   "dependencies": {
-    "@exodus/basic-utils": "^3.2.0",
-    "@exodus/fetch": "^1.2.0",
+    "@exodus/basic-utils": "^5.0.0",
     "@exodus/typeforce": "^1.18.0",
     "lodash": "^4.17.11"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/auth-client-base",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/auth-client-base",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aauth-client-base"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aauth-client-base"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "author": "Exodus Movement, Inc.",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

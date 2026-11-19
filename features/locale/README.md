@@ -5,7 +5,7 @@ Module for tracking users locale data such as language and currency
 ## Install
 
 ```sh
-yarn add @exodus/locale
+pnpm add @exodus/locale
 ```
 
 ## Usage

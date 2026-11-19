@@ -1,4 +1,4 @@
-import type { KeychainApi } from '@exodus/keychain/api'
+import type { KeychainApi } from '@exodus/keychain'
 import type KeyIdentifier from '@exodus/key-identifier'
 
 export type Keychain = KeychainApi

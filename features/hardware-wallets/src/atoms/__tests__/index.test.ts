@@ -4,15 +4,17 @@ import { createHardwareWalletConnectedAssetNamesAtom } from '../index.js'
 
 describe('createHardwareWalletConnectedAssetNamesAtom', () => {
   // Mock dependencies
-  const assetsModule = {
-    getAssets: jest.fn().mockReturnValue({
-      bitcoin: { name: 'bitcoin', baseAsset: { name: 'bitcoin', bip44: 0x80_00_00_00 } },
-      ethereum: { name: 'ethereum', baseAsset: { name: 'ethereum', bip44: 0x80_00_00_3c } },
-      litecoin: { name: 'litecoin', baseAsset: { name: 'litecoin', bip44: 0x80_00_00_02 } },
-    }),
-  }
+  const assetsAtom = createInMemoryAtom({
+    defaultValue: {
+      value: {
+        bitcoin: { name: 'bitcoin', baseAsset: { name: 'bitcoin', bip44: 0x80_00_00_00 } },
+        ethereum: { name: 'ethereum', baseAsset: { name: 'ethereum', bip44: 0x80_00_00_3c } },
+        litecoin: { name: 'litecoin', baseAsset: { name: 'litecoin', bip44: 0x80_00_00_02 } },
+      },
+    },
+  })
 
-  const hardwareWalletPublicKeysAtom = createInMemoryAtom({
+  const hardwareWalletPublicKeysAtom = createInMemoryAtom<Record<string, Record<string, string>>>({
     defaultValue: {
       'Wallet Account 1': {
         "m/44'/0'/0'": 'publicKey1',
@@ -38,7 +40,7 @@ describe('createHardwareWalletConnectedAssetNamesAtom', () => {
 
   // Call the function
   const result = createHardwareWalletConnectedAssetNamesAtom({
-    assetsModule,
+    assetsAtom,
     hardwareWalletPublicKeysAtom,
     walletAccountsAtom,
     availableAssetNamesAtom,

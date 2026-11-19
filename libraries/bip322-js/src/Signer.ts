@@ -6,8 +6,8 @@ import * as bitcoinMessage from '@exodus/bitcoinjs/message'
 import * as secp256k1 from '@exodus/crypto/secp256k1'
 import { hash } from '@exodus/crypto/hash'
 import assert from 'minimalistic-assert'
-import wif from 'wif'
-import type { Signer as AssetSigner } from '@exodus/asset-types/src/signer'
+import { fromWifStringSync } from '@exodus/bytes/wif.js'
+import type { Signer as AssetSigner } from '@exodus/asset-types'
 
 type ToAsyncSignerParams = {
   publicKey: Buffer
@@ -22,9 +22,8 @@ type ToAsyncSignerParams = {
 export const createSigner = (encodedKey: string | Buffer, network: bitcoin.Network) => {
   let decoded
   if (typeof encodedKey === 'string') {
-    decoded = wif.decode(encodedKey)
-    const version = decoded.version
-    if (version !== network.wif) throw new Error('Invalid network version')
+    assert(network.wif !== undefined, 'Invalid network version')
+    decoded = fromWifStringSync(encodedKey, network.wif)
   } else {
     decoded = { privateKey: encodedKey, compressed: true }
   }
@@ -50,8 +49,8 @@ export const createSigner = (encodedKey: string | Buffer, network: bitcoin.Netwo
         })
       }
 
-      assert(signatureType === 'ecdsa')
-      assert(enc === 'sig' || enc === 'sig,rec')
+      assert(signatureType === 'ecdsa', 'Invalid signature type')
+      assert(enc === 'sig' || enc === 'sig,rec', 'Invalid encoding')
       return secp256k1.ecdsaSignHash({
         hash: data,
         privateKey,
@@ -110,7 +109,7 @@ class Signer {
     const publicKey = await signer.getPublicKey()
 
     assert(
-      this.checkPubKeyCorrespondToAddress(publicKey, address),
+      this.#checkPubKeyCorrespondToAddress(publicKey, address),
       `Invalid signer for address "${address}".`
     )
 
@@ -168,7 +167,7 @@ class Signer {
    * @param claimedAddress Address claimed to be derived based on the provided public key
    * @returns True if the claimedAddress can be derived by the provided publicKey, false if otherwise
    */
-  private static checkPubKeyCorrespondToAddress(publicKey: Buffer, claimedAddress: string) {
+  static #checkPubKeyCorrespondToAddress(publicKey: Buffer, claimedAddress: string) {
     // Derive the same address type from the provided public key
     let derivedAddresses: { mainnet?: string; testnet?: string }
     if (Address.isP2PKH(claimedAddress)) {

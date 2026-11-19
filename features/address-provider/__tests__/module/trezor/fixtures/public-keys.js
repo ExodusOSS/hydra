@@ -21,10 +21,6 @@ export const fixture = {
       chain: [0, 0, 0],
       xpub: 'xpub6DTfofe2QgtmnSDZ7ELSjQwNvuhnd2xvL7KXFWLQ5t7Dxx69qgBvWALEhBo4PdE8iE6vpw4nZyKJSpxkubEHfmDFUEpuXzr3eCzW3zK7QRB',
     },
-    "m/49'/156'/0'": {
-      chain: [0, 0, 0],
-      xpub: 'xpub6CkLHbzUMhSEzbXrBFyGaUHaAuovfCWTyB71Ggx4ZHmVQwS2uv3qyx64cdowECGnjLNPworfKBPBxtWQtFDqC4dSZB5BeYUJZU8mW9QYPaN',
-    },
     "m/1852'/1815'/0'/0/0": {
       publicKey:
         'de13ea33103de0a733add683e80e240d4ac64c9d91acaebbc329c4c257f14c584f0038a0cf2f0fe1b10f524ee4cd7f792bb28123163e7551521ee337ca2c0d32',
@@ -58,14 +54,6 @@ export const fixture = {
     "m/49'/2'/0'": {
       chain: [0, 0, 0],
       xpub: 'xpub6CXdhPGHmDTbrAeBbuLuqrSCZyGLAKvkzPGsyxM1nXgKBvhLt2TgCPtVZzKKmfi6kK9KHpiJt6n3YCBfdkec1WQqXzV3sEH7YoDuhkVfjKL',
-    },
-    "m/44'/128'/0'": {
-      publicKey: {
-        spendPub: '228e68216d3b30e2c1432dca51a6af375b9ef4faa742dac5dcc7a31ca6614a70',
-        viewPub: 'b0744fdfa92ddc441fd2b24d3f9122938d6273cd336db044df02c3f8670fbb19',
-        viewPriv: '5d23dea2bbfdd9180e419545b60c08427aaa3f10757767da60099d6c0bdb140f',
-      },
-      chain: [0, 0, 0],
     },
     "m/44'/148'/0'": {
       publicKey: 'ea2c7b3f7435e9745303041f96838b8947c90b5bf04188c9d230414e94284ad4',

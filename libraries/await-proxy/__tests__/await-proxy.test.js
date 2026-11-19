@@ -1,14 +1,15 @@
 import delay from 'delay'
+import pDefer from 'p-defer'
 
 import awaitProxy from '../index.js'
 
 // dummy module to wrap for testing
 const dummyModule = {
   async asyncNoop() {},
-  delay(time) {
+  waitFor(promise) {
     return {
       async add(...args) {
-        await delay(time)
+        await promise
         return args.reduce((a, b) => a + b, 0)
       },
     }
@@ -16,36 +17,34 @@ const dummyModule = {
 }
 
 test('async methods', async () => {
-  let resolveInitializePromise
-  const initializePromise = new Promise((resolve) => (resolveInitializePromise = resolve))
-
-  const proxy = awaitProxy({ object: dummyModule, delayUntil: initializePromise })
+  const initializeDeferred = pDefer()
+  const proxy = awaitProxy({ object: dummyModule, delayUntil: initializeDeferred.promise })
 
   const mockFn = jest.fn()
   proxy.asyncNoop().then(mockFn)
   await delay(0)
   expect(mockFn).not.toHaveBeenCalled()
-  resolveInitializePromise()
+  initializeDeferred.resolve()
   await delay(0)
   expect(mockFn).toHaveBeenCalled()
 })
 
 test('sync methods that return object with async function', async () => {
-  let resolveInitializePromise
-  const initializePromise = new Promise((resolve) => (resolveInitializePromise = resolve))
-
+  const initializeDeferred = pDefer()
   const proxy = awaitProxy({
     object: dummyModule,
-    delayUntil: initializePromise,
-    synchronousMethods: ['delay'],
+    delayUntil: initializeDeferred.promise,
+    synchronousMethods: ['waitFor'],
   })
 
   const mockFn = jest.fn()
-  proxy.delay(5).add(2, 2).then(mockFn)
-  await delay(10)
+  const secondDeferred = pDefer()
+  proxy.waitFor(secondDeferred.promise).add(2, 2).then(mockFn)
+  secondDeferred.resolve()
+  await delay(0)
   expect(mockFn).not.toHaveBeenCalled()
-  resolveInitializePromise()
-  await delay(10)
+  initializeDeferred.resolve()
+  await delay(0)
   expect(mockFn).toHaveBeenCalledWith(4)
 })
 
@@ -53,30 +52,30 @@ test('sync methods that return object can be awaited', async () => {
   const proxy = awaitProxy({
     object: dummyModule,
     delayUntil: Promise.resolve(),
-    synchronousMethods: ['delay'],
+    synchronousMethods: ['waitFor'],
   })
 
-  async function getDelay5() {
+  const deferred = pDefer()
+
+  async function getWait() {
     // unnecessary await
-    // eslint-disable-next-line sonarjs/prefer-immediate-return
-    const delay = await proxy.delay(5)
+    const delay = await proxy.waitFor(deferred.promise)
     return delay
   }
 
-  const d = await getDelay5()
+  const w = await getWait()
   const mockFn = jest.fn()
-  d.add(2, 2).then(mockFn)
-  await delay(10)
+  w.add(2, 2).then(mockFn)
+  deferred.resolve()
+  await delay(0)
   expect(mockFn).toHaveBeenCalledWith(4)
 })
 
 test('allowed methods should be called independently of defer promise', async () => {
-  let resolveInitializePromise
-  const initializePromise = new Promise((resolve) => (resolveInitializePromise = resolve))
-
+  const initializeDeferred = pDefer()
   const proxy = awaitProxy({
     object: dummyModule,
-    delayUntil: initializePromise,
+    delayUntil: initializeDeferred.promise,
     allowedMethods: ['asyncNoop'],
   })
 
@@ -84,5 +83,5 @@ test('allowed methods should be called independently of defer promise', async ()
   proxy.asyncNoop().then(mockFn)
   await delay(0)
   expect(mockFn).toHaveBeenCalled()
-  resolveInitializePromise()
+  initializeDeferred.resolve()
 })

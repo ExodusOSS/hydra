@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.0](https://github.com/ExodusMovement/hydra/compare/@exodus/hw-common@3.4.2...@exodus/hw-common@3.5.0) (2026-07-07)
+
+### Features
+
+- add Ledger Nano Gen5 ([#17489](https://github.com/ExodusMovement/hydra/issues/17489)) ([daf46f5](https://github.com/ExodusMovement/hydra/commit/daf46f5d2dca0b8d22b0b57f80e2aeb9d1656557))
+
+## [3.4.2](https://github.com/ExodusMovement/hydra/compare/@exodus/hw-common@3.4.1...@exodus/hw-common@3.4.2) (2026-06-09)
+
+### Bug Fixes
+
+- **hw-ledger:** disambiguate ERC-20 vs NFT clear-signing with an isNft hint ([#17014](https://github.com/ExodusMovement/hydra/issues/17014)) ([723a0e4](https://github.com/ExodusMovement/hydra/commit/723a0e4a845ef9463ba6994f52005ee4f5d1faca))
+
 ## [3.4.1](https://github.com/ExodusMovement/hydra/compare/@exodus/hw-common@3.4.0...@exodus/hw-common@3.4.1) (2026-02-22)
 
 ### Bug Fixes

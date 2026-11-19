@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.2](https://github.com/ExodusMovement/exodus/compare/@exodus/storage-interface@1.0.1...@exodus/storage-interface@1.0.2) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/storage-interface
+
 ## [1.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/storage-interface@1.0.0...@exodus/storage-interface@1.0.1) (2024-09-13)
 
 **Note:** Version bump only for package @exodus/storage-interface

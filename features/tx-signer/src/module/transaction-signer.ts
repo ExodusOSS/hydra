@@ -65,4 +65,6 @@ const transactionSignerDefinition = {
   public: true,
 } as const satisfies Definition
 
+export type { TransactionSigner }
+
 export default transactionSignerDefinition

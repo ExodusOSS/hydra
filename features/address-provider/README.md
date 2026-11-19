@@ -14,7 +14,7 @@ Address derivation can be pretty expensive on certain platforms (\*cough, mobile
 ## Install
 
 ```sh
-yarn add @exodus/address-provider
+pnpm add @exodus/address-provider
 ```
 
 ## Usage
@@ -53,6 +53,32 @@ const unusedReceiveAddress = await exodus.addressProvider.getReceiveAddress({
 ```
 
 If you're building a feature that requires the wallet's addresses, add a dependency on the `addressProvider` module, which provides almost the same API as the external `exodus.addressProvider` [API](./api/index.js) (caveat: the module expects `WalletAccount` instances, while the API expects WalletAccount names like `'exodus_0'`).
+
+### External Wallet Addresses
+
+For wallet accounts that don't derive addresses from a seed (e.g. smart contract wallets), the address provider resolves addresses from the `externalWalletAddressesAtom`. Register addresses via the `walletAccounts` module:
+
+```js
+await exodus.walletAccounts.setExternalAddress({
+  walletAccount: 'polymarket_0',
+  assetName: 'matic',
+  address: '0x1234...abcd',
+})
+
+// The address provider now returns this address for the external wallet account
+const address = await exodus.addressProvider.getReceiveAddress({
+  assetName: 'matic',
+  walletAccount: 'polymarket_0',
+})
+
+// To remove
+await exodus.walletAccounts.removeExternalAddress({
+  walletAccount: 'polymarket_0',
+  assetName: 'matic',
+})
+```
+
+This only applies to wallet accounts where `isExternal` is `true`. For all other accounts, normal key derivation is used.
 
 ### UI Side
 

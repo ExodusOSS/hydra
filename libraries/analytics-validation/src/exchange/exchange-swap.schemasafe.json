@@ -30,6 +30,9 @@
         },
         "user_amount_from_usd": {
           "type": "number"
+        },
+        "rewards_points_estimate": {
+          "type": ["number", "null"]
         }
       },
       "unevaluatedProperties": false

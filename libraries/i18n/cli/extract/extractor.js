@@ -46,12 +46,6 @@ const isTJSXElement = (node) => {
   return isJSXElement(node) && isJSXIdentifier(node.openingElement.name, { name: 'T' })
 }
 
-const BABEL_PLUGINS = [
-  'proposal-decorators',
-  'proposal-export-default-from',
-  'transform-export-namespace-from',
-]
-
 const getNodeId = (node) => {
   if (isStringLiteral(node)) return node.value
 
@@ -132,21 +126,14 @@ const extractFile = (fileName, options) => {
 
   const extractPlugin = () => ({ visitor: { JSXElement: jsxElementVisitor } })
 
-  // we don't directly specify the plugins by name because they can be either under /node_modules or /src/node_modules
-  // or maybe even somewhere entirely different, this saves us having to locate where they are.
-  const plugins = (options.babelrc.plugins ?? []).filter((plugin) => {
-    const name = typeof plugin === 'string' ? plugin : plugin[0]
-    return BABEL_PLUGINS.some((it) => name.endsWith(it))
-  })
-
   const { ast } = transformFileSync(fileName, {
     ast: true,
     babelrc: false,
     configFile: false,
     envName: 'development',
-    presets: options.babelrc.presets,
+    presets: options.babelConfig.presets,
     plugins: [
-      ...plugins,
+      ...options.babelConfig.plugins,
       [
         transformPlugin,
         {

@@ -2,15 +2,15 @@
   "name": "@exodus/auth-mobile",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
-  "version": "6.8.0",
+  "version": "6.9.6",
   "description": "Module to simplify dealing with mobile device authentication mechanisms",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/auth-mobile",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/auth-mobile",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aauth-mobile"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aauth-mobile"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "type": "module",
   "main": "index.js",
@@ -27,22 +27,24 @@
     "!**/__tests__/**"
   ],
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.0.1",
-    "@exodus/react-native-biometrics": "^0.3.0",
-    "@exodus/react-native-keychain": "^4.0.7",
-    "@exodus/zod": "^3.24.3",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/react-native-biometrics": "^0.4.0",
+    "@exodus/react-native-keychain": "^9.2.3",
+    "@exodus/safe-string": "workspace:^",
+    "@exodus/zod": "^3.24.4",
     "lodash": "^4.17.21"
   },
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint -c ../../eslint.config.mjs"
+    "test": "pnpm exec exodus-test --jest",
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs"
   },
   "devDependencies": {
+    "@exodus/error-tracking": "workspace:^",
     "react-native": "^0.71.11"
   },
   "peerDependencies": {
-    "react-native": "^0.71.11"
+    "react-native": ">=0.71.11 <0.79.0"
   },
   "publishConfig": {
     "access": "public",

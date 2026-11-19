@@ -1,9 +1,10 @@
 {
   "name": "@exodus/pofile",
   "description": "Simple PO file parser",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   },
   "author": "Exodus Movement, Inc.",
   "main": "src/index.js",
@@ -12,13 +13,13 @@
     "./parser-eslint": "./src/parser-eslint.js"
   },
   "license": "MIT",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/pofile",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/pofile",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Apofile"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Apofile"
   },
   "files": [
     "src",
@@ -27,8 +28,8 @@
     "!**/__tests__/**"
   ],
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint:fix": "yarn lint --fix",
-    "lint": "run -T eslint"
+    "test": "pnpm exec exodus-test --jest",
+    "lint:fix": "pnpm run lint --fix",
+    "lint": "pnpm exec eslint"
   }
 }

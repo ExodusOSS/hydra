@@ -7,12 +7,12 @@
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/apps/sdk-minimal-demo",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/apps/sdk-minimal-demo",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asdk-minimal-demo"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Asdk-minimal-demo"
   },
   "files": [
     "src",
@@ -22,34 +22,35 @@
     "!**/*.test.js"
   ],
   "scripts": {
-    "build": "run -T tsc -p tsconfig.build.json",
-    "clean": "run -T tsc --build --clean tsconfig.build.json",
-    "watch": "run -T tsc --watch tsconfig.build.json",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test:integration": "run -T exodus-test --jest --esbuild=.ts --forceExit"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean tsconfig.build.json",
+    "watch": "pnpm exec tsc --watch tsconfig.build.json",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test:integration": "pnpm exec exodus-test --jest --esbuild=.ts --forceExit",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@exodus/basic-utils": "workspace:^",
     "@exodus/deferring-storage": "workspace:^",
-    "@exodus/domain-serialization": "workspace:^",
-    "@exodus/ethereum-plugin": "^2.7.3",
+    "@exodus/ethereum-plugin": "^3.1.1",
     "@exodus/event-log": "workspace:^",
     "@exodus/fusion-local": "workspace:^",
     "@exodus/headless": "workspace:^",
     "@exodus/logger": "workspace:^",
-    "@exodus/models": "^13.0.0",
-    "@exodus/prettier": "^1.0.0",
-    "@exodus/sdk-rpc": "workspace:^",
+    "@exodus/prettier": "workspace:^",
     "@exodus/storage-memory": "workspace:^",
     "@exodus/sync-time": "workspace:^",
     "@exodus/transform-storage": "workspace:^",
-    "@exodus/wild-emitter": "^1.1.0",
-    "buffer-json": "^2.0.0",
-    "eventemitter3": "^4.0.7"
+    "@exodus/wild-emitter": "workspace:^",
+    "buffer-json": "^2.0.0"
   },
   "devDependencies": {
+    "@exodus/domain-serialization": "workspace:^",
+    "@exodus/models": "workspace:^",
+    "@exodus/sdk-rpc": "workspace:^",
     "@exodus/storage-interface": "workspace:^",
-    "@types/buffer-json": "^2.0.1"
+    "@types/buffer-json": "^2.0.1",
+    "eventemitter3": "^4.0.7"
   }
 }

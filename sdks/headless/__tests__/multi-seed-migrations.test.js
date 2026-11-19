@@ -2,7 +2,6 @@ import { fromMasterSeed } from '@exodus/bip32'
 import { mnemonicToSeed } from '@exodus/bip39'
 import createDeferringStorage from '@exodus/deferring-storage'
 import { WalletAccount } from '@exodus/models'
-import { TREZOR_SRC } from '@exodus/models/lib/wallet-account/index.js'
 import createUnsafeStorage from '@exodus/storage-memory'
 import multiSeedWalletAccountsMigration from '@exodus/wallet-accounts/migrations/multi-seed-wallet-accounts.js'
 
@@ -155,7 +154,7 @@ describe('multi-seed wallet accounts migration', async () => {
       },
       softwareAndHardwareWalletAccount: {
         [WalletAccount.DEFAULT_NAME]: WalletAccount.DEFAULT,
-        trezor_0_abc: new WalletAccount({ source: TREZOR_SRC, index: 0, id: 'abc' }),
+        trezor_0_abc: new WalletAccount({ source: WalletAccount.TREZOR_SRC, index: 0, id: 'abc' }),
       },
     },
   }

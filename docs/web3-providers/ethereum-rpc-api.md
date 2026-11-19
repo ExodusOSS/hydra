@@ -68,9 +68,7 @@ See the list of
 #### Parameters
 
 - `Array`
-
-  0. `SwitchEthereumChainParameter` - Metadata about the chain that Exodus will
-     switch to.
+  - `[0]` `SwitchEthereumChainParameter` - Metadata about the chain that Exodus will switch to.
 
 ```typescript
 interface SwitchEthereumChainParameter {

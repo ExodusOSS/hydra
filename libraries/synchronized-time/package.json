@@ -6,21 +6,24 @@
   "main": "index.js",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/synchronized-time",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/synchronized-time",
   "files": [
     "CHANGELOG.md",
     "!**/__tests__/**"
   ],
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix"
+    "test": "pnpm exec exodus-test --jest",
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asynchronized-time"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Asynchronized-time"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

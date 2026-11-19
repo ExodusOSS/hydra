@@ -19,7 +19,7 @@ Selectors and utilities for managing state with the following shape:
 ## Install
 
 ```sh
-yarn add @exodus/multi-account-redux
+pnpm add @exodus/multi-account-redux
 ```
 
 ## Usage

@@ -1,6 +1,6 @@
 # @exodus/wallet
 
-Exodus SDK feature that manages [bip39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) mnemonic phrase(s) for a single-seed or multi-seed wallet.
+Exodus SDK feature that manages a [bip39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) mnemonic phrase for a wallet.
 
 > [!IMPORTANT]
 > This feature uses the injected `seedStorage` implementation to store mnemonic phrases. It passes the `passphrase` provided to `wallet.create|import|changePassphrase` down to `seedStorage.set`, e.g. `seedStorage.set(value, { passphrase })`. Depending on the security of the platform where you're running the wallet, and the media that `seedStorage` uses on that platform, you may want to use a `seedStorage` implementation that supports encryption, e.g. [storage-seco](../../adapters/storage-seco).
@@ -8,7 +8,7 @@ Exodus SDK feature that manages [bip39](https://github.com/bitcoin/bips/blob/mas
 ## Install
 
 ```sh
-yarn add @exodus/wallet
+pnpm add @exodus/wallet
 ```
 
 ## Usage

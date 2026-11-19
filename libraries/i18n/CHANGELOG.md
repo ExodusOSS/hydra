@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.6](https://github.com/ExodusMovement/exodus/compare/@exodus/i18n@5.3.5...@exodus/i18n@5.3.6) (2026-11-17)
+
+### Bug Fixes
+
+- **i18n:** do not add a period after other sentence end marks ([#49469](https://github.com/ExodusMovement/exodus/issues/49469)) ([37c2735](https://github.com/ExodusMovement/exodus/commit/37c2735d140de21815092081c727319df4b25a0f))
+
+## [5.3.5](https://github.com/ExodusMovement/exodus/compare/@exodus/i18n@5.3.4...@exodus/i18n@5.3.5) (2026-11-17)
+
+### Bug Fixes
+
+- **i18n:** do not repeat trailing punctuation the translation has ([#49412](https://github.com/ExodusMovement/exodus/issues/49412)) ([32ae072](https://github.com/ExodusMovement/exodus/commit/32ae07228a8f11e1190e311c7ad5b1d1b90ff0ef))
+
+## [5.3.4](https://github.com/ExodusMovement/exodus/compare/@exodus/i18n@5.3.3...@exodus/i18n@5.3.4) (2026-11-06)
+
+### Bug Fixes
+
+- **i18n:** load babel config through babel in the extract cli ([#48762](https://github.com/ExodusMovement/exodus/issues/48762)) ([3766a50](https://github.com/ExodusMovement/exodus/commit/3766a50ffd579fb71f57fd0fa352da60750c210d))
+
+## [5.3.3](https://github.com/ExodusMovement/exodus/compare/@exodus/i18n@5.3.2...@exodus/i18n@5.3.3) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/i18n
+
+## [5.3.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.3.1...@exodus/i18n@5.3.2) (2026-05-28)
+
+### Bug Fixes
+
+- check for missing self-closing tag ([#16852](https://github.com/ExodusMovement/exodus-hydra/issues/16852)) ([cc6ddc2](https://github.com/ExodusMovement/exodus-hydra/commit/cc6ddc25ab63efce76552e3e47264390a6feb7a4))
+
+## [5.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.3.0...@exodus/i18n@5.3.1) (2026-05-04)
+
+### Bug Fixes
+
+- fix(i18n): avoid currency method collision with class field (#16291)
+
+- fix(tests): replace toThrowError with toThrow (removed in Jest 30) (#16055)
+
 ## [5.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/i18n@5.2.1...@exodus/i18n@5.3.0) (2026-03-30)
 
 ### Features

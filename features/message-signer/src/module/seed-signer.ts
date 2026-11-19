@@ -4,30 +4,31 @@ import KeyIdentifier from '@exodus/key-identifier'
 import type {
   KeychainSignerParams,
   AssetSources,
-  AssetsModule,
+  Asset,
   InternalSigner,
   InternalSignMessageParams,
 } from './interfaces.js'
 
 import type { WalletAccount } from '@exodus/models'
-import type { Keychain } from '@exodus/keychain/module'
+import type { Keychain } from '@exodus/keychain'
 import type { Definition } from '@exodus/dependency-types'
+import type { Atom } from '@exodus/atoms'
 
 const MODULE_ID = 'seedBasedMessageSigner'
 
 type Dependencies = {
-  assetsModule: AssetsModule
+  assetsAtom: Atom<{ value: Record<string, Asset> }>
   keychain: Keychain
   assetSources: AssetSources
 }
 
 class SeedBasedMessageSigner implements InternalSigner {
-  readonly #assetsModule
+  readonly #assetsAtom
   readonly #keychain
   readonly #assetSources
 
-  constructor({ assetsModule, keychain, assetSources }: Dependencies) {
-    this.#assetsModule = assetsModule
+  constructor({ assetsAtom, keychain, assetSources }: Dependencies) {
+    this.#assetsAtom = assetsAtom
     this.#keychain = keychain
     this.#assetSources = assetSources
   }
@@ -36,12 +37,11 @@ class SeedBasedMessageSigner implements InternalSigner {
     const { baseAssetName, message, walletAccount, purpose } = opts
 
     assert(typeof baseAssetName === 'string', 'baseAssetName is required')
-    /* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */
     assert(walletAccount && typeof walletAccount === 'object', 'walletAccount is required')
-    /* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */
     assert(message && typeof message === 'object', 'message is required')
 
-    const baseAsset = this.#assetsModule.getAsset(opts.baseAssetName)
+    const { value: assets } = await this.#assetsAtom.get()
+    const baseAsset = assets[opts.baseAssetName]!
     const compatibilityMode = walletAccount.compatibilityMode
 
     const purposes = await this.#assetSources.getSupportedPurposes({
@@ -63,7 +63,7 @@ class SeedBasedMessageSigner implements InternalSigner {
       accountIndex: walletAccount.index!,
       addressIndex,
       chainIndex,
-      compatibilityMode: walletAccount.compatibilityMode,
+      compatibilityMode,
     })
 
     return new KeyIdentifier(keyId)
@@ -88,13 +88,14 @@ class SeedBasedMessageSigner implements InternalSigner {
           enc,
           tweak,
           extraEntropy,
-        }),
+        }) as Promise<Buffer>,
     }
   }
 
   signMessage = async (opts: InternalSignMessageParams) => {
     const { baseAssetName, message, walletAccount } = opts
-    const baseAsset = this.#assetsModule.getAsset(baseAssetName)
+    const { value: assets } = await this.#assetsAtom.get()
+    const baseAsset = assets[baseAssetName]
 
     assert(baseAsset, `baseAsset not found`)
     assert(
@@ -117,7 +118,9 @@ const seedBasedMessageSignerDefinition = {
   id: MODULE_ID,
   type: 'module',
   factory: createSeedBasedMessageSigner,
-  dependencies: ['assetsModule', 'keychain', 'assetSources'],
+  dependencies: ['assetsAtom', 'keychain', 'assetSources'],
 } as const satisfies Definition
+
+export type { SeedBasedMessageSigner }
 
 export default seedBasedMessageSignerDefinition

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.8.0](https://github.com/ExodusMovement/exodus/compare/@exodus/fiat-balances@13.7.5...@exodus/fiat-balances@13.8.0) (2026-11-08)
+
+### Features
+
+- **enabled-assets,fiat-balances:** ignore configured wallet accounts ([#48791](https://github.com/ExodusMovement/exodus/issues/48791)) ([8d69151](https://github.com/ExodusMovement/exodus/commit/8d6915133d8f3c58424157dfd644adb2b998c164))
+
+## [13.7.5](https://github.com/ExodusMovement/exodus/compare/@exodus/fiat-balances@13.7.4...@exodus/fiat-balances@13.7.5) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/fiat-balances
+
+## [13.7.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.7.3...@exodus/fiat-balances@13.7.4) (2026-05-19)
+
+### Features
+
+- **optimistic-balances:** reconcile pending EVM receives ([#16013](https://github.com/ExodusMovement/exodus-hydra/issues/16013)) ([3c122f2](https://github.com/ExodusMovement/exodus-hydra/commit/3c122f23ee505e9f3dbdc83111312b4f62481a4c))
+
 ## [13.7.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-balances@13.7.2...@exodus/fiat-balances@13.7.3) (2026-03-05)
 
 ### Performance

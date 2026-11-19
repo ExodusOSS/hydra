@@ -5,6 +5,7 @@ jest.doMock('redux', () => {
   return {
     __esModule: true,
     combineReducers,
+    createStore,
     legacy_createStore: createStore,
   }
 })

@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.2](https://github.com/ExodusMovement/exodus/compare/@exodus/errors@3.8.1...@exodus/errors@3.8.2) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/errors
+
+## [3.8.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/errors@3.8.0...@exodus/errors@3.8.1) (2026-05-05)
+
+### Bug Fixes
+
+- fix(exchange): track errors to Sentry with generic server notification (#16075)
+
 ## [3.8.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/errors@3.7.1...@exodus/errors@3.8.0) (2026-02-24)
 
 ### Features

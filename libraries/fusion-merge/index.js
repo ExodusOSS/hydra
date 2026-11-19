@@ -11,8 +11,9 @@
 // e.g. merge({ foo: { bar: 0 } }, { foo: {} }) => { foo: {} }
 
 module.exports = function fusionMerge(a, b) {
-  if (typeof a !== typeof b || a === undefined || a === null || b === undefined || b === null)
+  if (typeof a !== typeof b || a === undefined || a === null || b === undefined || b === null) {
     return b
+  }
 
   // check if both values are objects (including null prototype objects)
   if (
@@ -20,8 +21,9 @@ module.exports = function fusionMerge(a, b) {
       [Object.prototype, null].includes(Object.getPrototypeOf(a)) &&
       [Object.prototype, null].includes(Object.getPrototypeOf(b))
     )
-  )
+  ) {
     return b
+  }
 
   const entries = Object.entries(b)
   // empty objects replace

@@ -1,6 +1,6 @@
 declare module '@exodus/bitcoin-plugin'
 declare module '@exodus/bip32'
+declare module '@exodus/bip39'
 declare module '@exodus/asset-lib'
 declare module '@exodus/keychain/module/crypto/seed-id'
 declare module 'bip32-path'
-declare module 'bip39'

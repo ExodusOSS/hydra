@@ -10,7 +10,7 @@ By default, it uses remote config to get exodus server url, but you can override
 ```
 pricing({
     pricingServerPath: 'infrastructure.price-server.server', // path to remove config prop
-    defaultPricingServerUrl: 'https://pricing-s.a.exodus.io', // if remote config not available
+    defaultPricingServerUrl: 'https://pricing-s.a.exodus-int.com', // if remote config not available
   })
 ```
 

@@ -1,7 +1,7 @@
 import { TxSet } from '@exodus/models'
 
 import { ORDERS_COUNT_WITH_GUARANTEED_MATCH } from '../constants.js'
-import findOptimisticOrders from '../index.js'
+import findOptimisticOrders, { matchOrdersAndTxs } from '../index.js'
 import Order from './order.js'
 
 const OrderSet = {
@@ -769,5 +769,87 @@ describe('findOptimisticOrders return collection of orders and txIds', () => {
     // With line 86-88 in place (normal operation), line 104 is unreachable
     // Line 86 returns early since smallest order (6 ETH) > tx (5 ETH)
     expect(optimisticOrders.length).toBe(0)
+  })
+
+  // Regression for exodus-desktop#19477: a payout receipt was glued onto an
+  // unrelated order because the slippage matcher used findIndex without
+  // disambiguating multiple in-flight orders that shared a similar toAmount.
+  test('does not optimistic-complete when multiple pending orders share toAmount within slippage', () => {
+    const postTxs = TxSet.fromArray([
+      createTx({
+        txId: 'foreign-receipt',
+        coinAmount: '0.2 ETH',
+      }),
+    ])
+
+    const incomingOrders = OrderSet.fromArray([
+      createOrder({ orderId: 'order-1', toAmount: '0.2 ETH' }),
+      createOrder({ orderId: 'order-2', toAmount: '0.2 ETH' }),
+      createOrder({ orderId: 'order-3', toAmount: '0.2 ETH' }),
+    ])
+
+    const optimisticOrders = findOptimisticOrders({
+      incomingOrders,
+      postTxs,
+      preTxs: emptyPreTxs,
+    })
+
+    // Three same-amount candidates: ambiguous. None should be marked
+    // optimistic-complete with the foreign receipt's txId.
+    expect(optimisticOrders.every((o) => o.status !== 'optimistic-complete')).toBe(true)
+    expect(optimisticOrders.every((o) => o.toTxId !== 'foreign-receipt')).toBe(true)
+  })
+
+  // Sanity: a single in-flight order with matching toAmount still completes.
+  test('completes when exactly one pending order matches toAmount within slippage', () => {
+    const postTxs = TxSet.fromArray([
+      createTx({
+        txId: 'real-receipt',
+        coinAmount: '0.2 ETH',
+      }),
+    ])
+
+    const incomingOrders = OrderSet.fromArray([
+      createOrder({ orderId: 'unique-amount', toAmount: '0.2 ETH' }),
+      createOrder({ orderId: 'different-amount', toAmount: '5 ETH' }),
+    ])
+
+    const optimisticOrders = findOptimisticOrders({
+      incomingOrders,
+      postTxs,
+      preTxs: emptyPreTxs,
+    })
+
+    expect(optimisticOrders.length).toBe(1)
+    expect(optimisticOrders[0].orderId).toBe('unique-amount')
+    expect(optimisticOrders[0].status).toBe('optimistic-complete')
+    expect(optimisticOrders[0].toTxId).toBe('real-receipt')
+  })
+
+  // Read-only consumers pass plain refs, so the core must not require Order model methods.
+  test('matchOrdersAndTxs matches plain order objects without model methods', () => {
+    const postTxs = TxSet.fromArray([
+      createTx({
+        txId: 'tx-2',
+        coinAmount: '0.2 ETH',
+      }),
+    ])
+
+    const plainOrder = { ...new Order(createOrder({ toAmount: '0.2 ETH' })) }
+
+    const { assignments, matchedTxIds } = matchOrdersAndTxs({
+      receivedTxs: [...postTxs],
+      orders: [plainOrder],
+      txLog: postTxs,
+    })
+
+    expect(matchedTxIds).toEqual(['tx-2'])
+    expect(assignments.length).toBe(1)
+    expect(assignments[0].order).toBe(plainOrder)
+    expect(assignments[0].update).toEqual({
+      status: 'optimistic-complete',
+      toTxId: 'tx-2',
+      potentialToTxIds: [],
+    })
   })
 })

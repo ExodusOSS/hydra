@@ -9,10 +9,11 @@ const createRpc = ({ port, methods, serialize, deserialize, onData }) => {
   const transport = new PortTransport({ port })
   const rpc = new RPC({ transport, serialize, deserialize })
 
-  if (onData)
+  if (onData) {
     transport.on('data', (data) => {
       onData(typeof data === 'string' ? deserialize(data) : data)
     })
+  }
 
   if (methods) {
     rpc.exposeMethods(methods)

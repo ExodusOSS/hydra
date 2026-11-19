@@ -1,4 +1,4 @@
-import buildMetadata from '../constants/build-metadata'
+import buildMetadata from '../constants/build-metadata.js'
 
 const config = {
   addressProvider: {

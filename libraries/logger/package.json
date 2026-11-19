@@ -1,17 +1,17 @@
 {
   "name": "@exodus/logger",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "type": "module",
   "description": "A simple logger for all things hydra",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/logger",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/logger",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Alogger"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Alogger"
   },
   "main": "lib/index.js",
   "exports": {
@@ -25,14 +25,18 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "yarn run -T tsc --build tsconfig.build.json",
-    "prepublishOnly": "yarn run -T build --scope @exodus/logger",
-    "clean": "yarn run -T tsc --build --clean",
-    "lint": "yarn run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "yarn run -T jest"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/logger",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "debug": "^4.3.5"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

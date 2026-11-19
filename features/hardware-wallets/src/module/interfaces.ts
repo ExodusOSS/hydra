@@ -79,7 +79,7 @@ export interface ScanParams {
   assetName: string
   accountIndexes: number[]
   addressLimit?: number
-  addressOffset: number
+  addressOffset?: number
 }
 
 export type ScannedAccount = {

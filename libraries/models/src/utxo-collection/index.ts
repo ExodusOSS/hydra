@@ -47,10 +47,10 @@ export type UtxoCollectionJson = Record<string, { address: string; path: string;
 
 export default class UtxoCollection {
   readonly currency?: UnitType
-  private _data: Record<string, Utxo[]> | null = null
-  private _addresses?: AddressSet
-  private _value?: NumberUnit
-  private _size?: number
+  #data: Record<string, Utxo[]> | null = null
+  #addresses?: AddressSet
+  #value?: NumberUnit
+  #size?: number
 
   // never call with 'new' outside of this class
   constructor({ currency }: ConstructorParams = Object.create(null)) {
@@ -102,7 +102,7 @@ export default class UtxoCollection {
         utxo.address instanceof Address || addressMap,
         'Must pass addressMap if utxo.address is not of type Address'
       )
-      utxo.address = utxo.address instanceof Address ? utxo.address : addressMap![utxo.address]! // eslint-disable-line @exodus/mutable/no-param-reassign-prop-only
+      utxo.address = utxo.address instanceof Address ? utxo.address : addressMap![utxo.address]! // oxlint-disable-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
       return {
         ...utxo,
         value: isNumberUnit(utxo.value) ? utxo.value : currency!.parse(utxo.value as string),
@@ -110,7 +110,7 @@ export default class UtxoCollection {
     })
 
     const col = new UtxoCollection({ currency })
-    col._data = Object.freeze(groupBy(utxos, (utxo) => utxo.address.toString()))
+    col.#data = Object.freeze(groupBy(utxos, (utxo) => utxo.address.toString()))
     return col
   }
 
@@ -133,7 +133,7 @@ export default class UtxoCollection {
     })
 
     const col = new UtxoCollection({ currency })
-    col._data = Object.freeze(utxoData)
+    col.#data = Object.freeze(utxoData)
     return col
   }
 
@@ -171,8 +171,8 @@ export default class UtxoCollection {
   }
 
   getAddressUtxos(address: string | Address) {
-    assert(address.toString() in this._data!, `${address} is not present in this UTXO collection`)
-    return UtxoCollection.fromArray(this._data![address.toString()]!, { ...this })
+    assert(address.toString() in this.#data!, `${address} is not present in this UTXO collection`)
+    return UtxoCollection.fromArray(this.#data![address.toString()]!, { ...this })
   }
 
   getTxIdUtxos(txId: string) {
@@ -196,7 +196,7 @@ export default class UtxoCollection {
   }
 
   hasAddressUtxos(address: string) {
-    return String(address) in this._data!
+    return String(address) in this.#data!
   }
 
   inspect() {
@@ -204,14 +204,14 @@ export default class UtxoCollection {
   }
 
   isEmpty() {
-    return this._data == null || Object.keys(this._data).length === 0
+    return this.#data == null || Object.keys(this.#data).length === 0
   }
 
   // any utxos associated with an address replace current address utxos
   // the use case is from checking a blockchain API
   // future use case: SPV and then would need to merge individual utxos
   merge(utxoCol: UtxoCollection) {
-    let currentUtxos: UtxoCollection = this // eslint-disable-line unicorn/no-this-assignment, @typescript-eslint/no-this-alias
+    let currentUtxos: UtxoCollection = this // oxlint-disable-line unicorn/no-this-assignment, typescript/no-this-alias
     for (const address of utxoCol.addresses) {
       currentUtxos = currentUtxos.setAddressUtxos(address, utxoCol.getAddressUtxos(address))
     }
@@ -220,10 +220,10 @@ export default class UtxoCollection {
   }
 
   removeAddressUtxos(address: Address | string) {
-    const newData = { ...this._data }
+    const newData = { ...this.#data }
     delete newData[address.toString()]
     const col = new UtxoCollection({ ...this })
-    col._data = Object.freeze(newData)
+    col.#data = Object.freeze(newData)
     return col
   }
 
@@ -321,7 +321,7 @@ export default class UtxoCollection {
     return UtxoCollection.fromArray(
       this.toArray().map((utxo) => {
         const tx = txs.find((tx) => tx.txId === utxo.txId)
-        if (tx) utxo.confirmations = tx.confirmations // eslint-disable-line @exodus/mutable/no-param-reassign-prop-only
+        if (tx) utxo.confirmations = tx.confirmations // oxlint-disable-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
         return utxo
       }),
       { ...this }
@@ -329,7 +329,7 @@ export default class UtxoCollection {
   }
 
   addUtxo(utxo: Utxo, addressMap: AddressMap) {
-    return UtxoCollection.fromArray([...this.toArray(), utxo], { addressMap })
+    return UtxoCollection.fromArray([...this.toArray(), utxo], { ...this, addressMap })
   }
 
   setAddressUtxos(
@@ -339,20 +339,20 @@ export default class UtxoCollection {
   ) {
     if (Array.isArray(utxos)) {
       if (utxos.length === 0) return this.removeAddressUtxos(address)
-      return UtxoCollection.fromArray(utxos, { ...this, addressMap })
+      utxos = UtxoCollection.fromArray(utxos, { ...this, addressMap })
     }
 
     assert(utxos instanceof UtxoCollection, 'utxos must be an Array or UtxoCollection')
     if (utxos.size === 0) return this.removeAddressUtxos(address)
 
-    const newUtxos = { ...this._data, [address.toString()]: utxos.toArray() }
+    const newData = { ...this.#data, [address.toString()]: utxos.toArray() }
     const col = new UtxoCollection({ ...this })
-    col._data = Object.freeze(newUtxos)
+    col.#data = Object.freeze(newData)
     return col
   }
 
   toArray(): Utxo[] {
-    return Object.values(this._data!).flat()
+    return Object.values(this.#data!).flat()
   }
 
   toPriorityOrderedArray(descending = false) {
@@ -375,7 +375,7 @@ export default class UtxoCollection {
     > = Object.create(null)
     ;[...this.addresses].forEach((addr) => {
       const address = addr.toString()
-      const sortedUtxos = sortBy(this._data![address], (utxo) => utxo.value.toDefaultNumber())
+      const sortedUtxos = sortBy(this.#data![address], (utxo) => utxo.value.toDefaultNumber())
       jsonMap[address] = {
         address,
         path: addr.meta.path,
@@ -410,10 +410,10 @@ export default class UtxoCollection {
   }
 
   get addresses() {
-    if (this._addresses) return this._addresses
+    if (this.#addresses) return this.#addresses
 
     const addrs: Address[] = []
-    Object.entries(this._data!).forEach(([addr, utxos]) => {
+    Object.entries(this.#data!).forEach(([addr, utxos]) => {
       if (!Array.isArray(utxos)) return
       if (utxos.length === 0) return
       addrs.push(utxos[0]!.address || Address.create(addr))
@@ -421,25 +421,25 @@ export default class UtxoCollection {
 
     // condition shouldn't happen, but just in case
     if (addrs.length === 0) {
-      this._addresses = AddressSet.EMPTY
-      return this._addresses
+      this.#addresses = AddressSet.EMPTY
+      return this.#addresses
     }
 
     addrs.sort(AddressSet.PATH_SORTER)
 
-    this._addresses = AddressSet.fromArray(addrs)
-    return this._addresses
+    this.#addresses = AddressSet.fromArray(addrs)
+    return this.#addresses
   }
 
   // TODO: DEPRECATE
   get empty() {
-    return this._data == null || Object.keys(this._data).length === 0
+    return this.#data == null || Object.keys(this.#data).length === 0
   }
 
   get size() {
-    if (typeof this._size === 'number') return this._size
-    this._size = this.toArray().length
-    return this._size
+    if (typeof this.#size === 'number') return this.#size
+    this.#size = this.toArray().length
+    return this.#size
   }
 
   get txIds() {
@@ -448,10 +448,10 @@ export default class UtxoCollection {
 
   get value() {
     // Since a UtxoCollection is immutable, this is memoized
-    if (this._value) return this._value
+    if (this.#value) return this.#value
 
-    this._value = this.toArray().reduce((sum, utxo) => sum.add(utxo.value), this.currency!.ZERO)
-    return this._value
+    this.#value = this.toArray().reduce((sum, utxo) => sum.add(utxo.value), this.currency!.ZERO)
+    return this.#value
   }
 
   *[Symbol.iterator]() {

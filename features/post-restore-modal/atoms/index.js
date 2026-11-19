@@ -1,1 +1,1 @@
-export { default as shouldShowPostRestoredModalAtomDefinition } from './should-show-post-restore-modal'
+export { default as shouldShowPostRestoredModalAtomDefinition } from './should-show-post-restore-modal.js'

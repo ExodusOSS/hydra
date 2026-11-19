@@ -5,6 +5,7 @@ import { resolve } from 'path'
 import { argv, cwd, exit } from 'process'
 import { getArgumentValue, getPositionalArguments } from './utils/process.js'
 
+import { loadBabelConfig } from './babel-config.js'
 import { readConfig } from './config.js'
 import extract from './extract/index.js'
 import merge from './merge/index.js'
@@ -13,9 +14,10 @@ const command = argv[2]
 
 const rootDir = cwd()
 
-const babelConfigPath = resolve(rootDir, getArgumentValue('--babel-config') ?? 'babel.config.js')
-const babelrcModule = await import(babelConfigPath)
-const babelrc = babelrcModule.default || babelrcModule
+const babelConfig = await loadBabelConfig({
+  rootDir,
+  configFile: resolve(rootDir, getArgumentValue('--babel-config') ?? 'babel.config.js'),
+})
 
 const { locales, additionalModules, additionalDecorators, ignoreRegex, scopedLocales } = readConfig(
   rootDir,
@@ -27,7 +29,7 @@ if (command === 'extract') {
 
   const options = {
     rootDir,
-    babelrc,
+    babelConfig,
     additionalModules,
     additionalDecorators,
     ignoreRegex,

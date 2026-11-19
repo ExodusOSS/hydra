@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.0](https://github.com/ExodusMovement/exodus/compare/@exodus/feature-control@2.4.1...@exodus/feature-control@2.5.0) (2026-10-09)
+
+### Features
+
+- **feature-flags:** add gradual rollout via remote config ([#46584](https://github.com/ExodusMovement/exodus/issues/46584)) ([28c3f31](https://github.com/ExodusMovement/exodus/commit/28c3f31b4992ebeb7d7c323dd8a33af7f8c66c58))
+
+## [2.4.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/feature-control@2.4.0...@exodus/feature-control@2.4.1) (2026-04-29)
+
+### Bug Fixes
+
+- fix(feature-control): only gate enabledRegions for listed countries (#16245)
+
 ## [2.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/feature-control@2.3.0...@exodus/feature-control@2.4.0) (2025-12-29)
 
 ### Features

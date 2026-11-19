@@ -1,6 +1,7 @@
 import {
   ErrorTrackingAbExperiment,
   whyIsRemoteTrackingDisabled,
+  whyIsUnsafeRemoteTrackingDisabled,
 } from '../why-is-remote-tracking-disabled.js'
 
 const paramsWhenEnabled = {
@@ -189,7 +190,7 @@ describe('funded wallets', () => {
       ...paramsWhenEnabledForFundedWallets,
       remoteErrorTrackingFundedWalletsABExperimentId: null,
     })
-    expect(result).toBe('missing-funded-wallets-ab-experiment-id')
+    expect(result).toBe('funded-wallets-missing-ab-experiment-id')
   })
 
   test('it is disabled when experiment is not enabled', () => {
@@ -330,5 +331,66 @@ describe('ErrorTrackingAbExperiment', () => {
     expect(errorTrackingAbExperiment1.enabled).toBe(true)
     expect(errorTrackingAbExperiment1.variant).toBe('disabled')
     expect(logger.debug).not.toHaveBeenCalled()
+  })
+})
+
+describe('whyIsUnsafeRemoteTrackingDisabled', () => {
+  const baseParams = {
+    remoteErrorTrackingABExperimentId: 'sentry',
+    abTesting: {
+      experiments: { sentry: { enabled: true } },
+      variants: { sentry: { value: 'enabled', type: 'remote' } },
+    },
+    buildMetadata: { build: 'production' },
+    logger: { debug: jest.fn() },
+  }
+
+  test('is disabled in dev mode', () => {
+    expect(whyIsUnsafeRemoteTrackingDisabled({ ...baseParams, buildMetadata: { dev: true } })).toBe(
+      'dev-mode'
+    )
+  })
+
+  test('is disabled when missing experiment id', () => {
+    expect(
+      whyIsUnsafeRemoteTrackingDisabled({
+        ...baseParams,
+        remoteErrorTrackingABExperimentId: null,
+      })
+    ).toBe('missing-ab-experiment-id')
+  })
+
+  test('is disabled when ab experiment is disabled', () => {
+    expect(
+      whyIsUnsafeRemoteTrackingDisabled({
+        ...baseParams,
+        abTesting: { experiments: { sentry: { enabled: false } } },
+      })
+    ).toBe('ab-experiment-disabled')
+  })
+
+  test('is disabled when ab experiment variant is not enabled', () => {
+    expect(
+      whyIsUnsafeRemoteTrackingDisabled({
+        ...baseParams,
+        abTesting: {
+          experiments: { sentry: { enabled: true } },
+          variants: { sentry: { value: 'disabled', type: 'remote' } },
+        },
+      })
+    ).toBe('ab-experiment-variant-disabled')
+  })
+
+  test('is enabled for funded wallet when ab experiment is enabled', () => {
+    expect(
+      whyIsUnsafeRemoteTrackingDisabled({
+        ...baseParams,
+        earliestTxDate: new Date('2023-06-01'),
+      })
+    ).toBe(undefined)
+  })
+
+  test('is enabled for unfunded wallet when ab experiment is enabled', () => {
+    expect(whyIsUnsafeRemoteTrackingDisabled(baseParams)).toBe(undefined)
   })
 })

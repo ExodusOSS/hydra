@@ -1,9 +1,9 @@
 {
   "name": "@exodus/wallet-accounts",
-  "version": "20.4.0",
+  "version": "20.4.12",
   "description": "CRUD interface for managing wallet accounts, a.k.a. portfolios.",
   "author": "Exodus Movement, Inc.",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/wallet-accounts",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/wallet-accounts",
   "license": "MIT",
   "type": "module",
   "main": "lib/index.js",
@@ -17,51 +17,56 @@
   },
   "files": [
     "lib/",
+    "redux.js",
+    "migrations/",
     "CHANGELOG.md",
     "!**/__tests__/**"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "scripts": {
-    "build": "run -T tsc -p tsconfig.build.json",
-    "build:watch": "run -T tsc -p tsconfig.build.json --watch",
-    "clean": "run -T tsc --build --clean",
-    "lint": "run -T tsc --noEmit && run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest --esbuild",
-    "prepublishOnly": "yarn run -T build --scope @exodus/wallet-accounts"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "build:watch": "pnpm exec tsc -p tsconfig.build.json --watch",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/wallet-accounts"
   },
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Awallet-accounts"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Awallet-accounts"
   },
   "dependencies": {
-    "@exodus/atoms": "^10.0.0",
-    "@exodus/basic-utils": "^3.7.3",
-    "@exodus/core-selectors": "^4.0.0",
-    "@exodus/dependency-types": "^2.1.1",
-    "@exodus/fusion-atoms": "^1.2.1",
-    "@exodus/logger": "^1.2.3",
-    "@exodus/models": "^12.18.0",
-    "@exodus/safe-string": "^1.1.0",
-    "@exodus/storage-interface": "^1.0.1",
-    "@exodus/typeforce": "^1.19.0",
-    "@exodus/zod": "^3.24.2",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/core-selectors": "workspace:^",
+    "@exodus/dependency-types": "workspace:^",
+    "@exodus/fusion-atoms": "workspace:^",
+    "@exodus/logger": "workspace:^",
+    "@exodus/models": "workspace:^",
+    "@exodus/proxy-freeze": "workspace:^",
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "@exodus/safe-string": "workspace:^",
+    "@exodus/storage-interface": "workspace:^",
+    "@exodus/typeforce": "workspace:^",
+    "@exodus/zod": "^3.24.4",
     "lodash": "^4.17.21",
     "make-concurrent": "^5.3.0",
     "minimalistic-assert": "^1.0.1",
     "p-defer": "^4.0.0",
-    "proxy-freeze": "^1.0.0",
     "reselect": "^3.0.1"
   },
   "devDependencies": {
     "@exodus/argo": "workspace:^",
     "@exodus/dependency-injection": "workspace:^",
     "@exodus/fusion-local": "workspace:^",
-    "@exodus/redux-dependency-injection": "workspace:^",
     "@exodus/storage-memory": "workspace:^",
-    "delay": "^6.0.0",
+    "@types/lodash": "^4.17.0",
+    "@types/minimalistic-assert": "^1.0.1",
+    "@types/jest-when": "^3.5.5",
     "jest-when": "^3.5.2",
     "redux": "^4.0.0"
   },

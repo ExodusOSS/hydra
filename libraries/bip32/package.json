@@ -1,38 +1,52 @@
 {
   "name": "@exodus/bip32",
-  "version": "4.2.0",
+  "version": "4.3.1",
   "description": "Exodus BIP32 modules.",
   "type": "module",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    }
+  },
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/bip32",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/bip32",
   "files": [
-    "src",
-    "CHANGELOG.md",
-    "!**/__tests__/**"
+    "lib",
+    "CHANGELOG.md"
   ],
   "dependencies": {
-    "@exodus/basic-utils": "^3.0.1",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/bytes": "^1.0.0-rc.6",
     "@exodus/crypto": "^1.0.0-rc.11",
-    "bs58check": "^3.0.1",
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {
     "@exodus/bip39": "workspace:^",
+    "@types/minimalistic-assert": "^1.0.1",
     "bigi": "^1.1.0",
     "ecurve": "^1.0.0"
   },
   "scripts": {
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/bip32",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "typecheck": "pnpm exec tsc --noEmit"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Abip32"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Abip32"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

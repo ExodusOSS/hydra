@@ -4,6 +4,7 @@ const baseFeatureType = typeforce.compile({
   localDefaults: {
     available: '?Boolean',
     enabled: '?Boolean',
+    geolocationValue: '?Object',
   },
   remoteConfig: typeforce.maybe({
     path: 'String',
@@ -11,6 +12,7 @@ const baseFeatureType = typeforce.compile({
       geolocation: '?Boolean',
       enabled: '?Boolean',
       shutdownSemver: '?Boolean',
+      rollout: '?Boolean',
     },
   }),
   featureFlagPlugin: '?String',

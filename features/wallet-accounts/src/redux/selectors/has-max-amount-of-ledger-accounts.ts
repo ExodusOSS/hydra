@@ -1,3 +1,5 @@
+import type { WalletAccount } from '@exodus/models'
+import { defineSelectorFactory } from '@exodus/redux-dependency-injection'
 import { createSelector } from 'reselect'
 import type { WalletAccountsSelectors } from '../types.js'
 
@@ -6,18 +8,17 @@ const hasMaxAmountOfLedgerAccountsSelectorFactory =
   (filter: WalletAccountsSelectors['filter']) =>
     createSelector(
       filter({ enabled: true, ledger: true }),
-      (currentAccounts) => currentAccounts.length >= maxAmountOfAccounts
+      (currentAccounts: WalletAccount[]): boolean => currentAccounts.length >= maxAmountOfAccounts
     )
 
-const createHasMaxAmountOfAccountsSelectorDefinition = (config: {
-  maxAmountOfAccounts?: number
-}) => ({
-  id: 'hasMaxAmountOfLedgerAccounts',
-  selectorFactory: hasMaxAmountOfLedgerAccountsSelectorFactory(config),
-  dependencies: [
-    //
-    { selector: 'filter' },
-  ],
-})
+const createHasMaxAmountOfAccountsSelectorDefinition = (config: { maxAmountOfAccounts?: number }) =>
+  defineSelectorFactory({
+    id: 'hasMaxAmountOfLedgerAccounts',
+    selectorFactory: hasMaxAmountOfLedgerAccountsSelectorFactory(config),
+    dependencies: [
+      //
+      { selector: 'filter' },
+    ],
+  })
 
 export default createHasMaxAmountOfAccountsSelectorDefinition

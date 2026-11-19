@@ -54,7 +54,6 @@ const createUiConfigPluginDefinition = ({ configValues }) => {
 
     let unsubscribeSyncAtoms = () => {}
     return {
-      onLoad: () => items.forEach(({ observer }) => observer.start()),
       onStart: () => {
         items.forEach(({ observer }) => observer.start())
         unsubscribeSyncAtoms = syncAtoms()

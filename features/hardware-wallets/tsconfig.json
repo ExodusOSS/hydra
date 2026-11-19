@@ -3,6 +3,8 @@
   "compilerOptions": {
     "noEmit": true,
     "outDir": "./lib",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "allowJs": true,
     "lib": ["esnext"],
     "target": "es2022"

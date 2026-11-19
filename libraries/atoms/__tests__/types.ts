@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* oxlint-disable no-unused-vars */
 import type { Atom } from '../src/index.js'
 import { createInMemoryAtom, filter } from '../src/index.js'
 

@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.2](https://github.com/ExodusMovement/exodus/compare/@exodus/remote-config@3.5.1...@exodus/remote-config@3.5.2) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/remote-config
+
 ## [3.5.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/remote-config@3.5.0...@exodus/remote-config@3.5.1) (2026-03-11)
 
 **Note:** Version bump only for package @exodus/remote-config

@@ -1,6 +1,6 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 
-// eslint-disable-next-line @exodus/hydra/in-memory-atom-default-value
+// oxlint-disable-next-line @exodus/oxlint-plugin-hydra/in-memory-atom-default-value
 const createOptimisticFiatBalancesAtom = () => createInMemoryAtom()
 
 export default createOptimisticFiatBalancesAtom

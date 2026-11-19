@@ -29,6 +29,33 @@ describe('legacy address mode atom', () => {
     await expect(fusion.getProfile()).resolves.toMatchObject({ bitcoinLegacyAddressEnabled: true })
   })
 
+  it('should keep other bitcoin networks in storage', async () => {
+    await legacyAddressModeAtom.set({ bitcoin: true, bitcointestnet: true, bitcoinregtest: false })
+
+    await expect(legacyAddressModeAtom.get()).resolves.toEqual({
+      bitcoin: true,
+      bitcointestnet: true,
+      bitcoinregtest: false,
+    })
+    await expect(storage.get('legacyAddressMode')).resolves.toEqual({
+      bitcointestnet: true,
+      bitcoinregtest: false,
+    })
+    await expect(fusion.getProfile()).resolves.toMatchObject({ bitcoinLegacyAddressEnabled: true })
+  })
+
+  it('should keep bitcoin when updating another network', async () => {
+    await legacyAddressModeAtom.set({ bitcoin: true })
+    await legacyAddressModeAtom.set((value) => ({ ...value, bitcointestnet: true }))
+    await expect(legacyAddressModeAtom.get()).resolves.toEqual({
+      bitcoin: true,
+      bitcointestnet: true,
+    })
+
+    await legacyAddressModeAtom.set(({ bitcointestnet, ...value }) => value)
+    await expect(legacyAddressModeAtom.get()).resolves.toEqual({ bitcoin: true })
+  })
+
   it('should observe when bitcoin asset change in fusion', async () => {
     const listener = jest.fn()
     legacyAddressModeAtom.observe(listener)

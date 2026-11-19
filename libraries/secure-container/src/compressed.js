@@ -1,6 +1,7 @@
 import { decrypt, encrypt } from './index.js'
 import { randomBytes, randomFill } from '@exodus/crypto/randomBytes'
 import { gunzip, gzip } from '@exodus/crypto/compress'
+import { utf8fromString } from '@exodus/bytes/utf8.js'
 
 const SIZE_32K = 2 ** 15
 
@@ -20,16 +21,29 @@ export async function encryptCompressed(
   data,
   { header, passphrase, metadata, blobKey, expandTo32k = false }
 ) {
-  const databuffer = Buffer.from(data) // copy, destroyed later
-  const gzipped = await gzip(databuffer, { format: 'buffer' })
-  const expanded = expandTo32k ? expand32k(gzipped) : gzipped
-  const result = await encrypt(expanded, { header, passphrase, metadata, blobKey })
+  let scrub = false
+  if (typeof data === 'string') {
+    data = utf8fromString(data) // throws on invalid strings
+    scrub = true
+  } else if (!(data instanceof Uint8Array)) {
+    throw new TypeError('data must be a string or an Uint8Array instance')
+  }
 
-  randomFill(databuffer)
-  randomFill(gzipped)
-  if (expanded !== gzipped) randomFill(expanded)
-
-  return result
+  try {
+    const gzipped = await gzip(data, { format: 'buffer' })
+    try {
+      const expanded = expandTo32k ? expand32k(gzipped) : gzipped
+      try {
+        return await encrypt(expanded, { header, passphrase, metadata, blobKey })
+      } finally {
+        if (expanded !== gzipped) randomFill(expanded)
+      }
+    } finally {
+      randomFill(gzipped)
+    }
+  } finally {
+    if (scrub) randomFill(data)
+  }
 }
 
 export async function decryptCompressed(encryptedData, passphrase, { expandTo32k = false } = {}) {

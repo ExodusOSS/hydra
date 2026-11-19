@@ -1,13 +1,14 @@
 import { resolve } from 'path'
 
+import { loadBabelConfig } from '../../babel-config.js'
 import extractFiles from '../../extract/extractor.js'
 
 const __dirname = import.meta.dirname
 
-const babelrc = {
-  presets: ['@babel/preset-react'],
-  plugins: [['@babel/plugin-proposal-decorators', { version: 'legacy' }]],
-}
+const BABEL_CONFIGS = [
+  { description: 'direct config', dir: './babel/direct' },
+  { description: 'config extending another folder', dir: './babel/extends' },
+]
 
 const SCENARIOS = [
   {
@@ -121,12 +122,22 @@ const SCENARIOS = [
   },
 ]
 
-describe('extractor', () => {
+describe.each(BABEL_CONFIGS)('extractor with $description', ({ dir }) => {
+  let babelConfig
+
+  beforeAll(async () => {
+    const babelDir = resolve(__dirname, dir)
+    babelConfig = await loadBabelConfig({
+      rootDir: babelDir,
+      configFile: resolve(babelDir, 'babel.config.cjs'),
+    })
+  })
+
   test.each(SCENARIOS)('should extract $description', (scenario) => {
     const fileNames = [resolve(__dirname, scenario.file)]
     const entries = extractFiles(fileNames, {
       rootDir: __dirname,
-      babelrc,
+      babelConfig,
       additionalModules: scenario.additionalModules,
       hocDecorators: scenario.hocDecorators,
     })
@@ -141,7 +152,7 @@ describe('extractor', () => {
     expect(
       extractFiles(fileNames, {
         rootDir: __dirname,
-        babelrc,
+        babelConfig,
         additionalModules: ['#/localization', './dependencies/with-i18n.js'],
         hocDecorators: ['withI18n'],
       })

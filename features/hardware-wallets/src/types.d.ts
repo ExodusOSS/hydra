@@ -1,9 +1,16 @@
+declare namespace jest {
+  namespace exodus {
+    namespace mock {
+      function timersSpeedup(timer: number): void
+    }
+  }
+}
+
 declare module '@exodus/storage-memory'
 declare module '@exodus/dependency-injection'
 declare module '@exodus/dependency-preprocessors'
 declare module '@exodus/dependency-preprocessors/*'
 declare module '@exodus/asset-lib'
-declare module '@exodus/basic-utils'
 declare module '@exodus/bip32'
 declare module '@exodus/key-utils'
 declare module '@exodus/assets'

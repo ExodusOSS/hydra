@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.1](https://github.com/ExodusMovement/exodus/compare/@exodus/error-tracking@3.6.0...@exodus/error-tracking@3.6.1) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/error-tracking
+
+## [3.6.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@3.5.0...@exodus/error-tracking@3.6.0) (2026-06-23)
+
+### Features
+
+- disable tracking in Dev ([#17297](https://github.com/ExodusMovement/exodus-hydra/issues/17297)) ([8fcc592](https://github.com/ExodusMovement/exodus-hydra/commit/8fcc5921fb88704735aecc299bbe16fb27362cce))
+
+## [3.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@3.4.0...@exodus/error-tracking@3.5.0) (2026-05-13)
+
+### Features
+
+- feat: enable tracking errors in dev (#16510)
+
+## [3.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@3.3.2...@exodus/error-tracking@3.4.0) (2026-04-03)
+
+### Features
+
+- feat: add `unsafe__errorTracking` module (#15400)
+
 ## [3.3.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/error-tracking@3.3.1...@exodus/error-tracking@3.3.2) (2026-02-12)
 
 ### Bug Fixes

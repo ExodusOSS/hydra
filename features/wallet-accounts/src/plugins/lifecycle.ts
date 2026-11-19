@@ -1,6 +1,5 @@
 import type { Atom } from '@exodus/atoms'
 import { createAtomObserver } from '@exodus/atoms'
-import { SEED_SRC } from '@exodus/models/lib/wallet-account/index.js'
 import { WalletAccount } from '@exodus/models'
 import { safeString } from '@exodus/safe-string'
 
@@ -9,7 +8,6 @@ import type {
   WalletAccountsAtom,
   MultipleWalletAccountsEnabledAtom,
   Port,
-  Wallet,
   ErrorTracking,
 } from '../types.js'
 
@@ -21,7 +19,6 @@ const createWalletAccountsPlugin = ({
   hardwareWalletPublicKeysAtom,
   multipleWalletAccountsEnabledAtom,
   walletAccountsAtom,
-  wallet,
   errorTracking,
 }: Dependencies) => {
   let createAccountParams: CreateAccountParams | null = null
@@ -85,26 +82,6 @@ const createWalletAccountsPlugin = ({
     }
   }
 
-  const ensureEachSeedHasAccount = async () => {
-    const extraSeedIdsWithoutAccounts = new Set(await wallet.getExtraSeedIds())
-
-    const accounts = Object.values(await walletAccountsAtom.get())
-    accounts.forEach((account: WalletAccount) => {
-      if (account.enabled && account.seedId) {
-        extraSeedIdsWithoutAccounts.delete(account.seedId)
-      }
-    })
-
-    const newAccounts = [...extraSeedIdsWithoutAccounts].map((seedId) => ({
-      label: config.defaultLabel,
-      source: SEED_SRC,
-      seedId,
-      index: 0,
-    }))
-
-    if (newAccounts.length > 0) await walletAccounts.createMany(newAccounts)
-  }
-
   const onLoad = async ({ isLocked }: { isLocked: boolean }) => {
     if (isLocked) return
 
@@ -121,7 +98,6 @@ const createWalletAccountsPlugin = ({
     await walletAccounts.load()
 
     await ensureActiveAccountEnabled()
-    void ensureEachSeedHasAccount()
   }
 
   const onClear = async () => {
@@ -136,22 +112,6 @@ const createWalletAccountsPlugin = ({
     atomObservers.forEach((observer) => observer.unregister())
   }
 
-  const onAddSeed = async ({
-    seedId,
-    compatibilityMode,
-  }: {
-    seedId: string
-    compatibilityMode?: string
-  }) => {
-    await walletAccounts.create({
-      label: config.defaultLabel,
-      source: SEED_SRC,
-      seedId,
-      compatibilityMode,
-      index: 0,
-    })
-  }
-
   const onCreate = async (params: CreateAccountParams) => {
     createAccountParams = params
   }
@@ -160,7 +120,7 @@ const createWalletAccountsPlugin = ({
     createAccountParams = params
   }
 
-  return { onLoad, onUnlock, onClear, onStart, onStop, onAddSeed, onCreate, onImport }
+  return { onLoad, onUnlock, onClear, onStart, onStop, onCreate, onImport }
 }
 
 type Dependencies = {
@@ -171,7 +131,6 @@ type Dependencies = {
   hardwareWalletPublicKeysAtom: Atom<Record<string, unknown>>
   multipleWalletAccountsEnabledAtom: MultipleWalletAccountsEnabledAtom
   walletAccountsAtom: WalletAccountsAtom
-  wallet: Wallet
   errorTracking: ErrorTracking
 }
 

@@ -1,7 +1,8 @@
-import { describe, test } from '@exodus/test/node'
+import { describe, test } from 'node:test'
+
 import { readFileSync } from 'fs'
 import { join } from 'path'
-import { decrypt, encrypt } from 'secure-container' // eslint-disable-line import/no-extraneous-dependencies
+import { decrypt, encrypt } from 'secure-container'
 
 describe('encrypt / decrypt', { concurrency: true }, () => {
   test('encrypt / decrypt', async ({ assert: t }) => {

@@ -1,17 +1,17 @@
 {
   "name": "@exodus/formatting",
   "type": "module",
-  "version": "9.3.1",
+  "version": "11.1.1",
   "description": "Utils for formatting numbers, strings and money.",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/formatting",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/formatting",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aformatting"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aformatting"
   },
   "exports": {
     ".": "./lib/index.js",
@@ -25,17 +25,18 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "run -T tsc -p tsconfig.build.json",
-    "build:watch": "run -T tsc -w -p tsconfig.build.json",
-    "clean": "run -T tsc --build --clean",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest --esbuild",
-    "prepublishOnly": "yarn run -T build --scope @exodus/formatting"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "build:watch": "pnpm exec tsc -w -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/formatting"
   },
   "dependencies": {
-    "@exodus/currency": "^6.0.0",
-    "@exodus/fiat-currencies": "^1.0.5",
+    "@exodus/currency": "workspace:^",
+    "@exodus/fiat-currencies": "workspace:^",
     "bn.js": "^5.2.1"
   },
   "devDependencies": {

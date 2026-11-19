@@ -3,6 +3,113 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.7.1](https://github.com/ExodusMovement/exodus/compare/@exodus/assets-feature@9.7.0...@exodus/assets-feature@9.7.1) (2026-11-10)
+
+**Note:** Version bump only for package @exodus/assets-feature
+
+## [9.7.0](https://github.com/ExodusMovement/exodus/compare/@exodus/assets-feature@9.6.0...@exodus/assets-feature@9.7.0) (2026-11-06)
+
+### Features
+
+- **assets-feature:** tick only the wallet accounts that monitor a network ([#48644](https://github.com/ExodusMovement/exodus/issues/48644)) ([677c0ce](https://github.com/ExodusMovement/exodus/commit/677c0cef246b6f5a01d77ee00e72815e9c89e512))
+
+## [9.6.0](https://github.com/ExodusMovement/exodus/compare/@exodus/assets-feature@9.5.0...@exodus/assets-feature@9.6.0) (2026-10-28)
+
+### Features
+
+- **assets-feature:** allow bitcoin testnet and regtest address modes ([#47982](https://github.com/ExodusMovement/exodus/issues/47982)) ([e242c66](https://github.com/ExodusMovement/exodus/commit/e242c6627965e7f1f78a44e1a4538752af16c51b))
+
+## [9.5.0](https://github.com/ExodusMovement/exodus/compare/@exodus/assets-feature@9.4.0...@exodus/assets-feature@9.5.0) (2026-10-12)
+
+### Features
+
+- **assets:** configure dynamic combined asset overrides ([#46749](https://github.com/ExodusMovement/exodus/issues/46749)) ([582f204](https://github.com/ExodusMovement/exodus/commit/582f20416509431e63b2d5a47160e4ff6a5296d1))
+
+## [9.4.0](https://github.com/ExodusMovement/exodus/compare/@exodus/assets-feature@9.3.3...@exodus/assets-feature@9.4.0) (2026-10-07)
+
+### Features
+
+- **assets-feature:** add getRuntimeConfig to asset client interface ([#46606](https://github.com/ExodusMovement/exodus/issues/46606)) ([d4e0969](https://github.com/ExodusMovement/exodus/commit/d4e096901d753541928a9e6e8331a25a3765d375))
+
+## [9.3.3](https://github.com/ExodusMovement/exodus/compare/@exodus/assets-feature@9.3.2...@exodus/assets-feature@9.3.3) (2026-09-11)
+
+### Bug Fixes
+
+- **assets-feature:** exclude testnet assets from dynamic combined assets ([#44957](https://github.com/ExodusMovement/exodus/issues/44957)) ([00c8d84](https://github.com/ExodusMovement/exodus/commit/00c8d849a93e8c5c9537bddf4d6b8707d6e91a32))
+
+## [9.3.2](https://github.com/ExodusMovement/exodus/compare/@exodus/assets-feature@9.3.1...@exodus/assets-feature@9.3.2) (2026-09-02)
+
+### Bug Fixes
+
+- **assets:** sort testnet variants last in dynamic combined assets ([#44481](https://github.com/ExodusMovement/exodus/issues/44481)) ([d2726b9](https://github.com/ExodusMovement/exodus/commit/d2726b9dc3cba1d440ce0f34d50d26c76848034b))
+
+## [9.3.1](https://github.com/ExodusMovement/exodus/compare/@exodus/assets-feature@9.3.0...@exodus/assets-feature@9.3.1) (2026-08-26)
+
+### Bug Fixes
+
+- **assets:** accumulate changes in load() before single flush ([#44228](https://github.com/ExodusMovement/exodus/issues/44228)) ([401680e](https://github.com/ExodusMovement/exodus/commit/401680ef721d736a349d54e89b044ec54a469b0c))
+
+## [9.3.0](https://github.com/ExodusMovement/exodus/compare/@exodus/assets-feature@9.2.6...@exodus/assets-feature@9.3.0) (2026-08-25)
+
+### Features
+
+- **assets:** add dynamic combined assets generation ([#44197](https://github.com/ExodusMovement/exodus/issues/44197)) ([f107abe](https://github.com/ExodusMovement/exodus/commit/f107abece571af407df3b7154518aa689b8c1a04))
+
+## [9.2.6](https://github.com/ExodusMovement/exodus/compare/@exodus/assets-feature@9.2.5...@exodus/assets-feature@9.2.6) (2026-07-30)
+
+### Bug Fixes
+
+- **accounts:** restrict delegated account monitoring ([#42728](https://github.com/ExodusMovement/exodus/issues/42728)) ([d61617f](https://github.com/ExodusMovement/exodus/commit/d61617f04013ffa8ecfa9aaf0ea2be61d76099cd))
+
+## [9.2.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@9.2.4...@exodus/assets-feature@9.2.5) (2026-07-01)
+
+### Performance
+
+- perf(assets-feature): make search-based asset loading non-blocking (#17431)
+
+## [9.2.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@9.2.3...@exodus/assets-feature@9.2.4) (2026-06-26)
+
+### Bug Fixes
+
+- **assets-feature:** preserve tags in filterBuiltInProps ([#17372](https://github.com/ExodusMovement/exodus-hydra/issues/17372)) ([8435a56](https://github.com/ExodusMovement/exodus-hydra/commit/8435a565b133d84aa9f938b4707d7c14718e70e0))
+
+## [9.2.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@9.2.2...@exodus/assets-feature@9.2.3) (2026-06-02)
+
+### Features
+
+- **keychain:** expose needed exports at the root ([#16638](https://github.com/ExodusMovement/exodus-hydra/issues/16638)) ([30b1e96](https://github.com/ExodusMovement/exodus-hydra/commit/30b1e9644d476958f8a8c53e36a87dec3d27c7fb)), closes [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361) [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361)
+- **typescript:** enable erasableSyntaxOnly across the monorepo ([#16435](https://github.com/ExodusMovement/exodus-hydra/issues/16435)) ([6055ee5](https://github.com/ExodusMovement/exodus-hydra/commit/6055ee57210c9b9a6a67dc0d7b8821077da121e0))
+
+### Bug Fixes
+
+- restore precise public types in exchange & assets-feature apis ([#16938](https://github.com/ExodusMovement/exodus-hydra/issues/16938)) ([0c767ee](https://github.com/ExodusMovement/exodus-hydra/commit/0c767ee5fd13990f4cf87445b91f599fdf2b753b)), closes [#16940](https://github.com/ExodusMovement/exodus-hydra/issues/16940)
+
+## [9.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@9.2.1...@exodus/assets-feature@9.2.2) (2026-04-22)
+
+### Bug Fixes
+
+- fix(assets-feature): clear subscribers on stop to prevent stale unsubscribes (#15814)
+
+## [9.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@9.2.0...@exodus/assets-feature@9.2.1) (2026-04-16)
+
+**Note:** Version bump only for package @exodus/assets-feature
+
+## [9.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@9.1.0...@exodus/assets-feature@9.2.0) (2026-04-15)
+
+### Features
+
+- feat(assets-feature): add searchBasedAssetLoaderPlugin (#16016)
+
+## [9.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@9.0.1...@exodus/assets-feature@9.1.0) (2026-04-14)
+
+### Features
+
+- feat(assets): add tags parameter to searchTokens (#15984)
+
+### Bug Fixes
+
+- fix: add protection from malformed remote asset config during startup (#15650)
+
 ## [9.0.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/assets-feature@9.0.0...@exodus/assets-feature@9.0.1) (2026-02-20)
 
 ### Bug Fixes

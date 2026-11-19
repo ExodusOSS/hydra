@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.7](https://github.com/ExodusMovement/exodus/compare/@exodus/key-viewer@1.1.6...@exodus/key-viewer@1.1.7) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/key-viewer
+
+## [1.1.6](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-viewer@1.1.5...@exodus/key-viewer@1.1.6) (2026-05-27)
+
+### Features
+
+- **keychain:** expose needed exports at the root ([#16638](https://github.com/ExodusMovement/exodus-hydra/issues/16638)) ([30b1e96](https://github.com/ExodusMovement/exodus-hydra/commit/30b1e9644d476958f8a8c53e36a87dec3d27c7fb)), closes [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361) [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361)
+
+### Bug Fixes
+
+- optimize keychain operations ([#11081](https://github.com/ExodusMovement/exodus-hydra/issues/11081)) ([fcd5757](https://github.com/ExodusMovement/exodus-hydra/commit/fcd5757298d3fddfb5c98b13b1151fa3c3bd69d1))
+- **public-key-provider:** drop @exodus/keychain devDep leak from public types ([#16114](https://github.com/ExodusMovement/exodus-hydra/issues/16114)) ([00911b0](https://github.com/ExodusMovement/exodus-hydra/commit/00911b0720d81ae2ef7cddaed67730056634ef6c))
+
 ## [1.1.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-viewer@1.1.4...@exodus/key-viewer@1.1.5) (2024-12-06)
 
 ### License

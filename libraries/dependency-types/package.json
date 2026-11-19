@@ -9,19 +9,23 @@
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/dependency-types",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/dependency-types",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Adependency-types"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Adependency-types"
   },
   "files": [
     "CHANGELOG.md",
     "README.md"
   ],
   "scripts": {
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix"
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

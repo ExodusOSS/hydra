@@ -1,17 +1,17 @@
 {
   "name": "@exodus/personal-notes",
-  "version": "3.9.0",
+  "version": "3.9.1",
   "description": "CRUD interface for personal notes (user-generated off-chain transaction metadata)",
   "author": "Exodus Movement, Inc.",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/personal-notes",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/personal-notes",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Apersonal-notes"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Apersonal-notes"
   },
   "files": [
     "api",
@@ -27,14 +27,15 @@
     "!**/__tests__/**"
   ],
   "scripts": {
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.0.1",
-    "@exodus/models": "^12.0.1",
+    "@exodus/atoms": "^10.0.0",
+    "@exodus/basic-utils": "^5.0.0",
+    "@exodus/models": "^13.0.0",
     "lodash": "^4.17.21",
     "make-concurrent": "^5.4.0"
   },
@@ -45,6 +46,7 @@
     "redux": "4.0.0"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

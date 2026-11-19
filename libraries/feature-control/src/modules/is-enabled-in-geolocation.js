@@ -50,21 +50,27 @@ const isEnabledInGeolocation = (featureConfig, { geolocation }) => {
 
     if (!countryCode) return false
 
-    const enabledRegionsForCountry =
-      typeof enabledRegionsConfig[countryCode] === 'object' &&
-      !Array.isArray(enabledRegionsConfig[countryCode])
-        ? enabledRegionsConfig[countryCode]
-        : enabledRegionsConfig
+    if (Object.prototype.hasOwnProperty.call(enabledRegionsConfig, countryCode)) {
+      const enabledRegionsForCountry = enabledRegionsConfig[countryCode]
+      // Country is keyed; value must be a plain region map. Fail closed on mis-config.
+      if (
+        enabledRegionsForCountry === null ||
+        typeof enabledRegionsForCountry !== 'object' ||
+        Array.isArray(enabledRegionsForCountry)
+      ) {
+        return false
+      }
 
-    const enabledRegionCodes = Object.keys(enabledRegionsForCountry)
-    const enabledRegionNames = Object.values(enabledRegionsForCountry)
+      const enabledRegionCodes = Object.keys(enabledRegionsForCountry)
+      const enabledRegionNames = Object.values(enabledRegionsForCountry)
 
-    const isEnabledInRegion = regionCandidates.some(
-      (candidate) =>
-        enabledRegionCodes.includes(candidate) || enabledRegionNames.includes(candidate)
-    )
-    if (!isEnabledInRegion) {
-      return false
+      const isEnabledInRegion = regionCandidates.some(
+        (candidate) =>
+          enabledRegionCodes.includes(candidate) || enabledRegionNames.includes(candidate)
+      )
+      if (!isEnabledInRegion) {
+        return false
+      }
     }
   }
 

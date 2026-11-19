@@ -5,7 +5,7 @@ import { mapValues } from '@exodus/basic-utils'
 // eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import helper from './multi-account-helper.js'
-import { setAccounts } from '@exodus/multi-account-redux/src/common.js'
+import { setAccounts } from '@exodus/multi-account-redux'
 
 const { merge } = lodash
 
@@ -42,7 +42,7 @@ const balancesReduxDefinition = {
   eventReducers: {
     balances: (state, payload) => {
       const { hasBalance, ...walletAccountBalances } = state
-      const balancesLoaded = Object.keys(walletAccountBalances).every((value) => value.loaded)
+      const balancesLoaded = Object.values(walletAccountBalances).every((value) => value.loaded)
 
       if (balancesLoaded && payload.changes && Object.keys(payload.changes).length > 0) {
         return mergeChanges(state, payload.changes)

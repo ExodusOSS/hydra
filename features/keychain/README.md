@@ -6,17 +6,17 @@ In its current state, this library aims to provide a good interface for working 
 
 - Private key material is passed directly to asset libraries which can contain code by third party developers. This is on our roadmap to eliminate by refactoring asset libraries to accept signing functions instead of keys.
 - Private keys _can_ be exported, via `keychain.exportKey`
-- `keychain.removeAllSeeds()` does not guarantee that private keys get completely cleared from memory
+- `keychain.lock()` does not guarantee that private keys get completely cleared from memory
 
 ## Install
 
 ```
-yarn add @exodus/keychain
+pnpm add @exodus/keychain
 ```
 
 ## Usage
 
-See examples in [./modules/\_\_tests\_\_/example.test.js](./module/__tests__/example.test.js).
+See examples in [./module/\_\_tests\_\_/example.integration-test.js](./module/__tests__/example.integration-test.js).
 
 ### Documented Usage Paths
 
@@ -39,23 +39,30 @@ const keyId = new KeyIdentifier({
 
 ### Seed Identifier
 
-Because the keychain supports managing multiple seeds at once, most operations require passing in a seed identifier (`seedId`) in addition to a `KeyIdentifier`. A `seedId` is a hex-encoded BIP32 identifier of seed's master key (see [./module/crypto/seed-id.js](./module/crypto/seed-id.js)).
+Most keychain operations require passing in a seed identifier (`seedId`) in addition to a `KeyIdentifier`. A `seedId` is a hex-encoded BIP32 identifier of the seed's master key (see [./module/crypto/seed-id.js](./module/crypto/seed-id.js)).
 
 ### Adding/Removing Seeds
 
-Before you can perform keychain operations, you must provide it one or more `seed`s via `keychain.addSeed(seed)`. Calling `keychain.removeAllSeeds()` will remove all previously added seeds and any derived cryptographic material from its internal fields.
+Before you can perform keychain operations, you must provide it a `seed` via `keychain.unlock(seed)`. A keychain holds a single seed: re-`unlock`ing the same seed is idempotent, and unlocking a _different_ seed replaces the current one (last-write-wins) — any external private keys added via `addExternalPrivateKey` survive the swap. Calling `keychain.lock()` will remove the seed and any derived cryptographic material from its internal fields.
 
 ```js
 const seed = await mnemonicToSeed({
   mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
 })
 
-await keychain.addSeed(seed)
-await keychain.addSeed(secondSeed)
-await keychain.addSeed(thirdSeed)
+await keychain.unlock(seed)
 // ...
-keychain.removeAllSeeds()
+keychain.lock()
 ```
+
+### Lock State
+
+The keychain has two distinct lifecycle primitives:
+
+- **`unlock(seed)` / `lock()`** — the hard path. `unlock` installs derived master keys and **transitions the keychain into the unlocked state**; `lock` wipes all master keys (both mnemonic-derived and external) from memory and resets lock state. Used by `wallet.unlock` / `wallet.lock`.
+- **`lockPrivateKeys()` / `unlockPrivateKeys()` / `arePrivateKeysLocked()`** — the soft path. Flips an internal lock flag without wiping mnemonic-derived masters, so unlock doesn't have to re-derive. Note: `lockPrivateKeys()` also **hard-deletes** any external (`ext:`) keys added via `addExternalPrivateKey`; they will not return on `unlockPrivateKeys()` and must be re-added.
+
+When the keychain is locked, calls that need private key material (`signBuffer`, `exportKey` with `exportPrivate: true`, the asset-specific signers) throw `private keys are locked`. Public-only operations (`getPublicKey`, `exportKey` without `exportPrivate`) work while locked.
 
 ### Sign a transaction
 

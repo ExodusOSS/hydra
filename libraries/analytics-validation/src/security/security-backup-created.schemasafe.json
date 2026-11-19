@@ -16,7 +16,7 @@
       "properties": {
         "backup_type": {
           "type": "string",
-          "enum": ["passkeys", "seed-phrase"]
+          "enum": ["passkeys", "seed-phrase", "v3"]
         }
       },
       "unevaluatedProperties": false

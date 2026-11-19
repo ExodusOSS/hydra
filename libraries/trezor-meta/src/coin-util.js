@@ -1,4 +1,4 @@
-const coins = require('./data/coins')
+import coins from './data/coins.js'
 
 /**
  * Finds the coin data from src/data/coins.json for a given name.
@@ -26,7 +26,4 @@ const findCoin = (rawName) => {
 
 const isSegwit = (coinName) => !!findCoin(coinName).segwit
 
-module.exports = {
-  findCoin,
-  isSegwit,
-}
+export { findCoin, isSegwit }

@@ -147,7 +147,7 @@ const feeHandlers = [
   ),
   http.get('https://neo-mag.a.exodus.io/insight/v2/fees', jsonResponse({ fee: '0.001' })),
   http.get(
-    'https://btc-regtest-d.a.exodus.io/insight/v2/fees',
+    'https://btc-regtest-d.a.exodus-int.com/insight/v2/fees',
     jsonResponse({
       fastestFee: 12,
       halfHourFee: 10,
@@ -158,7 +158,7 @@ const feeHandlers = [
     })
   ),
   http.get(
-    'https://btc-testnet-d.a.exodus.io/insight/v2/fees',
+    'https://btc-testnet-d.a.exodus-int.com/insight/v2/fees',
     jsonResponse({
       fastestFee: 12,
       halfHourFee: 10,

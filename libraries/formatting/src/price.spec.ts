@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/numeric-separators-style */
+/* oxlint-disable unicorn/numeric-separators-style */
 import { formatAmount, formatAssetPrice, formatPrice } from './price.js'
 
 describe('price', () => {

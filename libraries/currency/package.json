@@ -1,36 +1,48 @@
 {
   "name": "@exodus/currency",
-  "version": "6.3.1",
+  "version": "6.4.2",
   "description": "Currency support.",
   "type": "module",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    }
+  },
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/currency",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/currency",
   "files": [
-    "src",
-    "CHANGELOG.md",
-    "!**/__tests__/**"
+    "lib",
+    "CHANGELOG.md"
   ],
   "dependencies": {
-    "@exodus/bigint": "^4.0.0",
+    "@exodus/bigint": "workspace:^",
     "lodash": "^4.17.11",
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {
+    "@types/bn.js": "^5.2.0",
+    "@types/lodash": "^4.17.0",
     "bn.js": "^5.2.1"
   },
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/currency"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Acurrency"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Acurrency"
   },
   "publishConfig": {
     "access": "public",

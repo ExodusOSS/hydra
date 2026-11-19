@@ -1,30 +1,36 @@
 {
   "name": "@exodus/key-ids",
-  "version": "1.5.0",
+  "version": "2.1.1",
   "type": "module",
   "description": "This package holds key identifiers for Exodus' own BIP43 purpose",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/key-ids",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/key-ids",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Akey-ids"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Akey-ids"
   },
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
-    "src",
+    "lib",
     "CHANGELOG.md"
   ],
   "scripts": {
-    "lint": "run -T eslint .",
-    "test": "run -T exodus-test --jest",
-    "lint:fix": "yarn lint --fix"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/key-ids",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc --noEmit"
   },
   "dependencies": {
-    "@exodus/key-identifier": "^1.2.1",
+    "@exodus/bytes": "^1.0.0",
+    "@exodus/key-identifier": "workspace:^",
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {

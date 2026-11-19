@@ -11,7 +11,7 @@ the `now()` function that returns that time.
 ## Install
 
 ```sh
-yarn add @exodus/synchronized-time
+pnpm add @exodus/synchronized-time
 ```
 
 ## Usage

@@ -1,5 +1,5 @@
 import { omit } from '@exodus/basic-utils'
-import { OrderSet, Tx } from '@exodus/models'
+import { OrderSet, Tx, TxSet } from '@exodus/models'
 
 import { setup } from '../utils.js'
 
@@ -12,6 +12,19 @@ describe('createAssetSourceBaseActivity', () => {
     })
 
     expect(empty(store.getState())).toEqual([])
+  })
+
+  test('should return empty activity when the asset is missing from the assets registry', () => {
+    const { store, selectors } = setup()
+
+    // multi-account-redux returns a null tx source for assets missing from the
+    // registry; the selector must yield empty activity instead of crashing.
+    const selector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'unregistered-token',
+      walletAccount: 'exodus_0',
+    })
+
+    expect(selector(store.getState())).toEqual([])
   })
 
   test('should group txs with same order', () => {
@@ -79,6 +92,43 @@ describe('createAssetSourceBaseActivity', () => {
     expect(result[0].id).toEqual('swap.ethereum.btc-eth-order')
     expect(result[0].type).toEqual('exchange')
     expect(result).toMatchSnapshot()
+  })
+
+  test('should handle a TxSet (iterable) tx source without throwing', () => {
+    const { store, selectors, handleEvent, assets } = setup()
+
+    const txs = [
+      {
+        txId: 'iterable-receive-tx',
+        error: null,
+        date: '2020-07-22T13:54:28.000Z',
+        confirmations: 1,
+        meta: {},
+        token: null,
+        dropped: false,
+        coinAmount: '1 ETH',
+        coinName: 'ethereum',
+        feeCoinName: 'ethereum',
+        feeAmount: '0.000189 ETH',
+        currencies: { ethereum: assets.ethereum.currency },
+      },
+    ].map((tx) => Tx.fromJSON(tx))
+
+    handleEvent('activityTxs', {
+      exodus_0: {
+        ethereum: TxSet.fromArray(txs),
+      },
+    })
+
+    const selector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'ethereum',
+      walletAccount: 'exodus_0',
+    })
+
+    const result = selector(store.getState())
+
+    expect(result.length).toEqual(1)
+    expect(result[0].id).toEqual('ethereum.iterable-receive-tx')
   })
 
   test('should add orders only related to provided account', () => {
@@ -728,6 +778,402 @@ describe('createAssetSourceBaseActivity', () => {
     expect(result).toMatchSnapshot()
   })
 
+  test('should suppress bridge-asset legs of a chained swap', () => {
+    const { store, selectors, handleEvent, assets } = setup()
+
+    // Simulate a chained swap ALGO -> ETH (bridge) -> FLR.
+    // The bridge asset (ETH) lands in and leaves the wallet on the same on-chain
+    // txs as the first/last legs, so it must not surface as send/receive rows.
+    const CHAINED_ORDER = {
+      orderId: 'chained-algo-flr',
+      status: 'complete-verified',
+      fromAsset: 'algorand',
+      toAsset: 'flare',
+      fromTxId: 'leg1-tx',
+      toTxId: 'leg2-tx',
+      txIds: [
+        { txType: 'depositTransaction', txId: 'leg1-tx' },
+        { txType: 'payoutTransaction', txId: 'leg2-tx' },
+      ],
+      date: '2025-10-01T13:54:28.000Z',
+      fromWalletAccount: 'exodus_0',
+      toWalletAccount: 'exodus_0',
+      fromAmount: assets.algorand.currency.defaultUnit(100),
+      toAmount: assets.flare.currency.defaultUnit(1000),
+      svc: 'chained',
+      synced: true,
+      region: 'INTL',
+      displaySvc: 'chained',
+      potentialToTxIds: [],
+      _version: 1,
+    }
+
+    const txLogFixtures = {
+      algorand: [
+        {
+          txId: 'leg1-tx',
+          error: null,
+          date: '2025-10-01T13:54:28.000Z',
+          confirmations: 1,
+          meta: {},
+          token: null,
+          dropped: false,
+          coinAmount: '-100 ALGO',
+          coinName: 'algorand',
+          feeCoinName: 'algorand',
+          feeAmount: '0.001 ALGO',
+          currencies: { algorand: assets.algorand.currency },
+        },
+      ],
+      // Bridge asset movements: received on leg 1, sent on leg 2. Both noise.
+      ethereum: [
+        {
+          txId: 'leg1-tx',
+          error: null,
+          date: '2025-10-01T13:54:28.000Z',
+          confirmations: 1,
+          meta: {},
+          token: null,
+          dropped: false,
+          coinAmount: '5 ETH',
+          coinName: 'ethereum',
+          feeCoinName: 'ethereum',
+          feeAmount: '0 ETH',
+          currencies: { ethereum: assets.ethereum.currency },
+        },
+        {
+          txId: 'leg2-tx',
+          error: null,
+          date: '2025-10-01T13:54:28.000Z',
+          confirmations: 1,
+          meta: {},
+          token: null,
+          dropped: false,
+          coinAmount: '-5 ETH',
+          coinName: 'ethereum',
+          feeCoinName: 'ethereum',
+          feeAmount: '0 ETH',
+          currencies: { ethereum: assets.ethereum.currency },
+        },
+      ],
+      flare: [
+        {
+          txId: 'leg2-tx',
+          error: null,
+          date: '2025-10-01T13:54:28.000Z',
+          confirmations: 1,
+          meta: {},
+          token: null,
+          dropped: false,
+          coinAmount: '1000 FLR',
+          coinName: 'flare',
+          feeCoinName: 'flare',
+          feeAmount: '0 FLR',
+          currencies: { flare: assets.flare.currency },
+        },
+      ],
+    }
+
+    handleEvent('activityTxs', {
+      exodus_0: {
+        algorand: txLogFixtures.algorand.map((tx) => Tx.fromJSON(tx)),
+        ethereum: txLogFixtures.ethereum.map((tx) => Tx.fromJSON(tx)),
+        flare: txLogFixtures.flare.map((tx) => Tx.fromJSON(tx)),
+      },
+    })
+    handleEvent('orders', OrderSet.fromArray([CHAINED_ORDER]))
+
+    // Bridge asset (ETH): both legs suppressed, nothing shown.
+    const ethSelector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'ethereum',
+      walletAccount: 'exodus_0',
+    })
+    expect(ethSelector(store.getState())).toEqual([])
+
+    // Source asset (ALGO): single swap row.
+    const algoSelector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'algorand',
+      walletAccount: 'exodus_0',
+    })
+    const algoResult = algoSelector(store.getState())
+    expect(algoResult.length).toEqual(1)
+    expect(algoResult[0].type).toEqual('exchange')
+    expect(algoResult[0].id).toEqual('swap.algorand.chained-algo-flr')
+
+    // Destination asset (FLR): single swap row.
+    const flrSelector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'flare',
+      walletAccount: 'exodus_0',
+    })
+    const flrResult = flrSelector(store.getState())
+    expect(flrResult.length).toEqual(1)
+    expect(flrResult[0].type).toEqual('exchange')
+    expect(flrResult[0].id).toEqual('swap.flare.chained-algo-flr')
+  })
+
+  test('should suppress an orphaned bridge leg when the server linked only one leg', () => {
+    const { store, selectors, handleEvent, assets } = setup()
+
+    const CHAINED_ORDER = {
+      orderId: 'chained-orphan-leg',
+      status: 'complete-verified',
+      fromAsset: 'algorand',
+      toAsset: 'flare',
+      fromTxId: 'leg2-tx',
+      toTxId: 'leg2-tx',
+      txIds: [{ txType: 'payoutTransaction', txId: 'leg2-tx' }],
+      date: '2025-10-01T13:54:28.000Z',
+      fromWalletAccount: 'exodus_0',
+      toWalletAccount: 'exodus_0',
+      fromAmount: assets.algorand.currency.defaultUnit(100),
+      toAmount: assets.flare.currency.defaultUnit(1000),
+      svc: 'chained',
+      synced: true,
+      region: 'INTL',
+      displaySvc: 'chained',
+      potentialToTxIds: [],
+      _version: 1,
+    }
+
+    handleEvent('activityTxs', {
+      exodus_0: {
+        ethereum: [
+          {
+            txId: 'leg1-tx',
+            error: null,
+            date: '2025-10-01T13:54:28.000Z',
+            confirmations: 1,
+            meta: {},
+            token: null,
+            dropped: false,
+            coinAmount: '5 ETH',
+            coinName: 'ethereum',
+            feeCoinName: 'ethereum',
+            feeAmount: '0 ETH',
+            currencies: { ethereum: assets.ethereum.currency },
+          },
+          {
+            txId: 'leg2-tx',
+            error: null,
+            date: '2025-10-01T13:54:28.000Z',
+            confirmations: 1,
+            meta: {},
+            token: null,
+            dropped: false,
+            coinAmount: '-5 ETH',
+            coinName: 'ethereum',
+            feeCoinName: 'ethereum',
+            feeAmount: '0 ETH',
+            currencies: { ethereum: assets.ethereum.currency },
+          },
+          {
+            txId: 'unrelated-tx',
+            error: null,
+            date: '2025-10-02T13:54:28.000Z',
+            confirmations: 1,
+            meta: {},
+            token: null,
+            dropped: false,
+            coinAmount: '3 ETH',
+            coinName: 'ethereum',
+            feeCoinName: 'ethereum',
+            feeAmount: '0 ETH',
+            currencies: { ethereum: assets.ethereum.currency },
+          },
+        ].map((tx) => Tx.fromJSON(tx)),
+      },
+    })
+    handleEvent('orders', OrderSet.fromArray([CHAINED_ORDER]))
+
+    const ethSelector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'ethereum',
+      walletAccount: 'exodus_0',
+    })
+    const ethResult = ethSelector(store.getState())
+
+    expect(ethResult.length).toEqual(1)
+    expect(ethResult[0].id).toEqual('ethereum.unrelated-tx')
+  })
+
+  test('should not hide an unrelated same-amount receive for a normally-linked chained swap', () => {
+    const { store, selectors, handleEvent, assets } = setup()
+
+    const CHAINED_ORDER = {
+      orderId: 'chained-both-linked',
+      status: 'complete-verified',
+      fromAsset: 'algorand',
+      toAsset: 'flare',
+      fromTxId: 'leg1-tx',
+      toTxId: 'leg2-tx',
+      txIds: [
+        { txType: 'depositTransaction', txId: 'leg1-tx' },
+        { txType: 'payoutTransaction', txId: 'leg2-tx' },
+      ],
+      date: '2025-10-01T13:54:28.000Z',
+      fromWalletAccount: 'exodus_0',
+      toWalletAccount: 'exodus_0',
+      fromAmount: assets.algorand.currency.defaultUnit(100),
+      toAmount: assets.flare.currency.defaultUnit(1000),
+      svc: 'chained',
+      synced: true,
+      region: 'INTL',
+      displaySvc: 'chained',
+      potentialToTxIds: [],
+      _version: 1,
+    }
+
+    handleEvent('activityTxs', {
+      exodus_0: {
+        ethereum: [
+          { txId: 'leg1-tx', coinAmount: '5 ETH' },
+          { txId: 'leg2-tx', coinAmount: '-5 ETH' },
+          { txId: 'gift-tx', coinAmount: '5 ETH' },
+        ].map((tx) =>
+          Tx.fromJSON({
+            error: null,
+            date: '2025-10-02T13:54:28.000Z',
+            confirmations: 1,
+            meta: {},
+            token: null,
+            dropped: false,
+            coinName: 'ethereum',
+            feeCoinName: 'ethereum',
+            feeAmount: '0 ETH',
+            currencies: { ethereum: assets.ethereum.currency },
+            ...tx,
+          })
+        ),
+      },
+    })
+    handleEvent('orders', OrderSet.fromArray([CHAINED_ORDER]))
+
+    const ethSelector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'ethereum',
+      walletAccount: 'exodus_0',
+    })
+    const ethResult = ethSelector(store.getState())
+
+    expect(ethResult.length).toEqual(1)
+    expect(ethResult[0].id).toEqual('ethereum.gift-tx')
+  })
+
+  test('should keep bridge-asset leg visible while a chained swap is not complete', () => {
+    const { store, selectors, handleEvent, assets } = setup()
+
+    // Chained swap ALGO -> ETH(bridge) -> FLR that stalled after leg 1: the
+    // bridge asset (ETH) was received but not yet sent. The user is genuinely
+    // holding ETH, so the receive must stay visible — only completed swaps net
+    // to zero and may be suppressed.
+    const CHAINED_ORDER = {
+      orderId: 'chained-stalled',
+      status: 'in-progress',
+      fromAsset: 'algorand',
+      toAsset: 'flare',
+      fromTxId: 'leg1-tx',
+      txIds: [{ txType: 'depositTransaction', txId: 'leg1-tx' }],
+      date: '2025-10-01T13:54:28.000Z',
+      fromWalletAccount: 'exodus_0',
+      toWalletAccount: 'exodus_0',
+      fromAmount: assets.algorand.currency.defaultUnit(100),
+      toAmount: assets.flare.currency.defaultUnit(1000),
+      svc: 'chained',
+      synced: true,
+      region: 'INTL',
+      displaySvc: 'chained',
+      potentialToTxIds: [],
+      _version: 1,
+    }
+
+    handleEvent('activityTxs', {
+      exodus_0: {
+        ethereum: [
+          {
+            txId: 'leg1-tx',
+            error: null,
+            date: '2025-10-01T13:54:28.000Z',
+            confirmations: 1,
+            meta: {},
+            token: null,
+            dropped: false,
+            coinAmount: '5 ETH',
+            coinName: 'ethereum',
+            feeCoinName: 'ethereum',
+            feeAmount: '0 ETH',
+            currencies: { ethereum: assets.ethereum.currency },
+          },
+        ].map((tx) => Tx.fromJSON(tx)),
+      },
+    })
+    handleEvent('orders', OrderSet.fromArray([CHAINED_ORDER]))
+
+    const ethSelector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'ethereum',
+      walletAccount: 'exodus_0',
+    })
+    const ethResult = ethSelector(store.getState())
+
+    expect(ethResult.length).toEqual(1)
+    expect(ethResult[0].type).not.toEqual('exchange')
+    expect(ethResult[0].id).toEqual('ethereum.leg1-tx')
+  })
+
+  test('should keep base-asset fee tx visible for a chained swap', () => {
+    const { store, selectors, handleEvent, assets } = setup()
+
+    // Chained swap ALGO -> FLR where the source-chain swap pays gas in the base
+    // asset (ETH). The fee-only ETH tx is "neither from nor to asset" but is a
+    // real one-way balance change, so it must NOT be suppressed like a bridge leg.
+    const CHAINED_ORDER = {
+      orderId: 'chained-with-fee',
+      fromAsset: 'algorand',
+      toAsset: 'flare',
+      txIds: [{ txId: 'swap-tx-id' }],
+      date: '2025-10-01T13:54:28.000Z',
+      fromWalletAccount: 'exodus_0',
+      toWalletAccount: 'exodus_0',
+      fromAmount: assets.algorand.currency.defaultUnit(100),
+      toAmount: assets.flare.currency.defaultUnit(1000),
+      svc: 'chained',
+      synced: true,
+      region: 'INTL',
+      displaySvc: 'chained',
+      potentialToTxIds: [],
+      _version: 1,
+    }
+
+    handleEvent('activityTxs', {
+      exodus_0: {
+        ethereum: [
+          {
+            txId: 'swap-tx-id',
+            error: null,
+            date: '2025-10-01T13:54:28.000Z',
+            confirmations: 1,
+            meta: {},
+            token: null,
+            dropped: false,
+            coinAmount: '0 ETH',
+            coinName: 'ethereum',
+            feeCoinName: 'ethereum',
+            feeAmount: '0.002 ETH',
+            currencies: { ethereum: assets.ethereum.currency },
+          },
+        ].map((tx) => Tx.fromJSON(tx)),
+      },
+    })
+    handleEvent('orders', OrderSet.fromArray([CHAINED_ORDER]))
+
+    const ethSelector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'ethereum',
+      walletAccount: 'exodus_0',
+    })
+    const ethResult = ethSelector(store.getState())
+
+    expect(ethResult.length).toEqual(1)
+    expect(ethResult[0].type).not.toEqual('exchange')
+    expect(ethResult[0].id).toEqual('ethereum.swap-tx-id')
+  })
+
   test('should not treat base asset gas fee tx as swap activity', () => {
     const { store, selectors, handleEvent, assets } = setup()
 
@@ -846,5 +1292,125 @@ describe('createAssetSourceBaseActivity', () => {
     expect(flrResult.length).toEqual(1)
     expect(flrResult[0].type).toEqual('exchange')
     expect(flrResult[0].id).toEqual('swap.flare.algo-flr-swap')
+  })
+
+  test('should represent a swap by its swap leg even when a cleanup leg is newer', () => {
+    const { store, selectors, handleEvent, assets } = setup()
+
+    const BTC_ETH_ORDER = {
+      orderId: 'btc-eth-cleanup-order',
+      fromAsset: 'bitcoin',
+      toAsset: 'ethereum',
+      txIds: [
+        { txType: 'swapTransaction', txId: 'swap-leg-tx' },
+        { txType: 'cleanupTransaction', txId: 'cleanup-leg-tx' },
+      ],
+      date: '2025-10-01T13:54:28.000Z',
+      fromWalletAccount: 'exodus_0',
+      toWalletAccount: 'exodus_0',
+      fromAmount: assets.bitcoin.currency.defaultUnit(0.1),
+      toAmount: assets.ethereum.currency.defaultUnit(3),
+    }
+
+    handleEvent('activityTxs', {
+      exodus_0: {
+        bitcoin: [
+          {
+            txId: 'swap-leg-tx',
+            error: null,
+            date: '2025-10-01T13:54:28.000Z',
+            confirmations: 1,
+            meta: {},
+            token: null,
+            dropped: false,
+            coinAmount: '-0.1 BTC',
+            coinName: 'bitcoin',
+            feeCoinName: 'bitcoin',
+            feeAmount: '0.00002 BTC',
+            currencies: { bitcoin: assets.bitcoin.currency },
+          },
+          {
+            txId: 'cleanup-leg-tx',
+            error: null,
+            date: '2025-10-01T14:10:00.000Z',
+            confirmations: 1,
+            meta: {},
+            token: null,
+            dropped: false,
+            coinAmount: '-0.001 BTC',
+            coinName: 'bitcoin',
+            feeCoinName: 'bitcoin',
+            feeAmount: '0.00002 BTC',
+            currencies: { bitcoin: assets.bitcoin.currency },
+          },
+        ].map((tx) => Tx.fromJSON(tx)),
+      },
+    })
+    handleEvent('orders', OrderSet.fromArray([BTC_ETH_ORDER]))
+
+    const selector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'bitcoin',
+      walletAccount: 'exodus_0',
+    })
+
+    const result = selector(store.getState())
+
+    expect(result.length).toEqual(1)
+    expect(result[0].id).toEqual('swap.bitcoin.btc-eth-cleanup-order')
+    expect(result[0].type).toEqual('exchange')
+    expect(result[0].tx.txId).toEqual('swap-leg-tx')
+    expect(result[0].date).toEqual(new Date('2025-10-01T13:54:28.000Z'))
+  })
+
+  test('should keep an in-flight swap visible as exchange when only the approval leg is indexed', () => {
+    const { store, selectors, handleEvent, assets } = setup()
+
+    const ETH_BTC_ORDER = {
+      orderId: 'eth-btc-approval-order',
+      status: 'in-progress',
+      fromAsset: 'ethereum',
+      toAsset: 'bitcoin',
+      txIds: [{ txType: 'setupTransaction', txId: 'approval-leg-tx' }],
+      date: '2025-10-01T13:54:28.000Z',
+      fromWalletAccount: 'exodus_0',
+      toWalletAccount: 'exodus_0',
+      fromAmount: assets.ethereum.currency.defaultUnit(1),
+      toAmount: assets.bitcoin.currency.defaultUnit(0.05),
+    }
+
+    handleEvent('activityTxs', {
+      exodus_0: {
+        ethereum: [
+          {
+            txId: 'approval-leg-tx',
+            error: null,
+            date: '2025-10-01T13:54:28.000Z',
+            confirmations: 1,
+            meta: {},
+            token: null,
+            dropped: false,
+            coinAmount: '0 ETH',
+            coinName: 'ethereum',
+            feeCoinName: 'ethereum',
+            feeAmount: '0.002 ETH',
+            currencies: { ethereum: assets.ethereum.currency },
+          },
+        ].map((tx) => Tx.fromJSON(tx)),
+      },
+    })
+    handleEvent('orders', OrderSet.fromArray([ETH_BTC_ORDER]))
+
+    const selector = selectors.activityTxs.createAssetSourceBaseActivity({
+      assetName: 'ethereum',
+      walletAccount: 'exodus_0',
+      displayOrderWithoutTx: true,
+    })
+
+    const result = selector(store.getState())
+
+    expect(result.length).toEqual(1)
+    expect(result[0].id).toEqual('swap.ethereum.eth-btc-approval-order')
+    expect(result[0].type).toEqual('exchange')
+    expect(result[0].pending).toEqual(true)
   })
 })

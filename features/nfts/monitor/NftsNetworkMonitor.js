@@ -162,7 +162,7 @@ class NftsNetworkMonitor extends EventEmitter {
       )
     }
 
-    Promise.all(fetchPromises)
+    await Promise.all(fetchPromises)
   }
 
   #tick = async ({ walletAccounts, force = false } = Object.create(null)) => {
@@ -275,7 +275,7 @@ class NftsNetworkMonitor extends EventEmitter {
     const timeSinceLastTick = Date.now() - this.#previousTick
 
     if (timeSinceLastTick > this.#interval) {
-      this.#tick()
+      void this.#tick()
     }
   }
 }

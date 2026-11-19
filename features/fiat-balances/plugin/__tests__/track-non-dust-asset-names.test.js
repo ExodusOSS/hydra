@@ -62,15 +62,12 @@ const assets = {
   },
 }
 
-const createAssetsModule = (assets) => ({
-  getAsset: (assetName) => assets[assetName],
-  getAssets: () => assets,
-})
-
 describe('trackNonDisableableAssetsPlugin', () => {
   const prepare = ({ config, ...opts } = {}) => {
     const fiatBalancesAtom = createInMemoryAtom()
-    const assetsModule = opts.assets ? createAssetsModule(opts.assets) : createAssetsModule(assets)
+    const assetsAtom = createInMemoryAtom({
+      defaultValue: { value: opts.assets ?? assets },
+    })
     const nonDustBalanceAssetNamesAtom = createInMemoryAtom({
       defaultValue: [],
     })
@@ -78,7 +75,7 @@ describe('trackNonDisableableAssetsPlugin', () => {
     const plugin = pluginDefinition.factory({
       fiatBalancesAtom,
       fiatRateConverter,
-      assetsModule,
+      assetsAtom,
       nonDustBalanceAssetNamesAtom,
       enabledAssetsAtom: createInMemoryAtom({ defaultValue: [] }),
       config: { ...defaultNonDustAssetsConfig, ...config },
@@ -281,6 +278,29 @@ describe('trackNonDisableableAssetsPlugin', () => {
           exodus_0: {
             ethereum: { balance: fiatCurrencies.USD.defaultUnit(0.01) },
             solana: { balance: fiatCurrencies.USD.defaultUnit(0.001) },
+          },
+        },
+      },
+    })
+
+    await waitUntil({
+      atom: nonDustBalanceAssetNamesAtom,
+      predicate: (assetNames) => isEqual(assetNames, ['ethereum']),
+    })
+  })
+
+  it('ignores balances of an ignored wallet account', async () => {
+    const { fiatBalancesAtom, nonDustBalanceAssetNamesAtom } = prepare({
+      config: { ignoredWalletAccounts: ['polymarket_0'] },
+    })
+
+    await fiatBalancesAtom.set({
+      balances: {
+        byAssetSource: {
+          exodus_0: { ethereum: { balance: fiatCurrencies.USD.defaultUnit(1) } },
+          polymarket_0: {
+            ethereum: { balance: fiatCurrencies.USD.defaultUnit(1) },
+            solana: { balance: fiatCurrencies.USD.defaultUnit(1) },
           },
         },
       },

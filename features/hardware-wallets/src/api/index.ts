@@ -3,12 +3,12 @@ import type { HardwareWallets } from '../module/hardware-wallets.js'
 
 const createHardwareWalletsApi = ({
   hardwareWallets,
-  restoreProgressTracker,
+  restoreAssetsTracker,
   txLogMonitors,
 }: {
   hardwareWallets: HardwareWallets
   txLogMonitors: any
-  restoreProgressTracker: any
+  restoreAssetsTracker: any
 }) => {
   hardwareWallets.events.subscribe(({ type, payload }) => {
     if (type !== 'syncAssets') return
@@ -17,17 +17,17 @@ const createHardwareWalletsApi = ({
     // assetClientInterface -> transactionSigner -> hardwareWallets -> txLogMonitors -> assetClientInterface
     // https://github.com/ExodusMovement/assets/issues/3139
     for (const assetName of assetNames) {
-      // eslint-disable-next-line @exodus/hydra/no-asset-conditions
+      // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-asset-conditions
       if (assetName === 'ethereum' || assetName === 'matic') {
         // Ethereum, matic and other EVMs may share the same address so syncing one
         // may also syncs the others. We do a little bit of magic here to make that happen.
         // TODO: generalize this logic so we don't need asset name logic
-        restoreProgressTracker.restoreAsset('ethereum')
-        restoreProgressTracker.restoreAsset('matic')
+        restoreAssetsTracker.restoreAsset('ethereum')
+        restoreAssetsTracker.restoreAsset('matic')
         txLogMonitors.update({ assetName: 'ethereum', refresh: true })
         txLogMonitors.update({ assetName: 'matic', refresh: true })
       } else {
-        restoreProgressTracker.restoreAsset(assetName)
+        restoreAssetsTracker.restoreAsset(assetName)
         txLogMonitors.update({ assetName, refresh: true })
       }
     }
@@ -57,7 +57,7 @@ const hardwareWalletsApiDefinition = {
   id: 'hardwareWalletsApi',
   type: 'api',
   factory: createHardwareWalletsApi,
-  dependencies: ['hardwareWallets', 'txLogMonitors', 'restoreProgressTracker'],
+  dependencies: ['hardwareWallets', 'txLogMonitors', 'restoreAssetsTracker'],
 } as const satisfies Definition
 
 export default hardwareWalletsApiDefinition

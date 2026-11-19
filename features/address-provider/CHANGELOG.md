@@ -3,6 +3,144 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.15.5](https://github.com/ExodusMovement/exodus/compare/@exodus/address-provider@12.15.4...@exodus/address-provider@12.15.5) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/address-provider
+
+## [12.15.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.15.3...@exodus/address-provider@12.15.4) (2026-07-08)
+
+### ⚠ BREAKING CHANGES
+
+- **keychain:** `keychain.addSeed` is renamed to `keychain.unlock` and
+  `keychain.removeAllSeeds` to `keychain.lock`. Unlocking a different seed without
+  an intervening `lock()` now throws. Note the deliberate adjacency to the
+  soft-path `lockPrivateKeys()`/`unlockPrivateKeys()` pair, documented in the README.
+
+Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+- fix(wallet): adopt keychain unlock/lock rename
+
+wallet.unlock now calls keychain.unlock(seed) (was addSeed). keychain.unlock is
+idempotent for the same seed, so repeated unlocks need no special handling.
+
+Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+- fix(wallet-compatibility-modes): adopt keychain unlock/lock rename
+
+detect() now calls keychain.unlock(seed) (was addSeed).
+
+Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+- test: adopt keychain unlock/lock rename across consumer suites
+
+Mechanical rename of keychain.addSeed -> keychain.unlock in downstream test
+setups and the keychain type declarations they rely on (fusion, seedless).
+No behavior change; not published code.
+
+Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+- test(keychain): cover re-unlock clearing the private-keys lock
+
+Pin the behavior that unlocking the same seed re-enables private keys after
+lockPrivateKeys() — unlock always transitions into the unlocked state.
+
+Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+- test(storage-encrypted): adopt keychain unlock rename
+
+Missed in the original rename, which only swept features/libraries/sdks. The
+spec called keychain.addSeed, which no longer exists -> "addSeed is not a
+function" at runtime.
+
+Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+- refactor(fusion): type keychain.unlock as Promise<string>
+
+unlock returns the seedId; the local keychain declaration typed it Promise<void>.
+
+Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+- refactor(seedless): type keychain.unlock as Promise<string>
+
+unlock is async and returns the seedId; the local declaration typed it sync void.
+
+Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+- fix(keychain): serialize unlock so the single-seed invariant can't be raced
+
+Wrap unlock in restrictConcurrency from @exodus/basic-utils (concurrency 1, the
+default). Two concurrent unlock() calls with different seeds could otherwise both
+clear the invariant assert before either wrote to #masters, installing two
+non-external seeds. As a per-instance class field the queue is per-keychain.
+
+Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+- fix(keychain): make unlock replace the current seed (last-write-wins)
+
+Unlocking a different seed now replaces the current hard seed instead of
+throwing, re-deriving masters on every unlock (as the pre-multi-seed
+keychain did). External private keys (addExternalPrivateKey) are keyed
+separately and survive the swap. unlock stays serialized via
+restrictConcurrency so the replace-and-derive can't be raced.
+
+This keeps the single-seed invariant (one hard seed at a time, never
+accumulated) while restoring tolerance for the import/restore-then-restart
+flow: in multi-process mode the keychain lives in a shared walletSdk
+process, so the post-restart unlock legitimately hands it a new seed.
+
+Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+- fix(wallet): stop masking keychain errors as "Wrong password"
+
+Split unlock() so only seed-decryption failures map to "Wrong password.
+Try again."; a keychain.unlock() failure now throws "Failed to unlock
+keychain" instead of being indistinguishable from a bad passphrase.
+
+Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+### Features
+
+- **keychain:** expose needed exports at the root ([#16638](https://github.com/ExodusMovement/exodus-hydra/issues/16638)) ([30b1e96](https://github.com/ExodusMovement/exodus-hydra/commit/30b1e9644d476958f8a8c53e36a87dec3d27c7fb)), closes [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361) [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361)
+- **oxlint-plugin-hydra:** port @exodus/\* eslint rules to oxlint jsPlugins ([#17280](https://github.com/ExodusMovement/exodus-hydra/issues/17280)) ([76e483c](https://github.com/ExodusMovement/exodus-hydra/commit/76e483cf8afa7035ce98279ae2ff80deb4ae6a50)), closes [#17278](https://github.com/ExodusMovement/exodus-hydra/issues/17278)
+
+### Bug Fixes
+
+- **address-provider:** harden report export against unsynced hardware assets ([#17483](https://github.com/ExodusMovement/exodus-hydra/issues/17483)) ([fda0839](https://github.com/ExodusMovement/exodus-hydra/commit/fda0839d04695f6b8a3b3ea101491493387669d4))
+
+### Code Refactoring
+
+- **keychain:** rename addSeed/removeAllSeeds to unlock/lock ([#17038](https://github.com/ExodusMovement/exodus-hydra/issues/17038)) ([f8f960b](https://github.com/ExodusMovement/exodus-hydra/commit/f8f960b7d046018eec317d68f8a3f95363e5b957)), closes [#16379](https://github.com/ExodusMovement/exodus-hydra/issues/16379)
+
+## [12.15.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.15.2...@exodus/address-provider@12.15.3) (2026-05-18)
+
+### Bug Fixes
+
+- **address-provider:** resolve external addresses by base asset ([#16603](https://github.com/ExodusMovement/exodus-hydra/issues/16603)) ([167dd87](https://github.com/ExodusMovement/exodus-hydra/commit/167dd87dab40c0099b520b698b7f2f0a5e8105e8))
+
+## [12.15.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.15.1...@exodus/address-provider@12.15.2) (2026-04-10)
+
+### Bug Fixes
+
+- fix(address-provider): evaluate fusionPushDelay config at construction time (#15950)
+
+## [12.15.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.15.0...@exodus/address-provider@12.15.1) (2026-04-06)
+
+### Bug Fixes
+
+- fix(address-provider): handle undefined args in addressCache without TypeError (#15855)
+
+- fix: update transitive deps to versions using @exodus/models@^13.x (#15702)
+
+## [12.15.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.14.1...@exodus/address-provider@12.15.0) (2026-03-24)
+
+### Features
+
+- feat(prediction): add external wallet address support (#15615)
+
+## [12.14.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.14.1...@exodus/address-provider@12.14.2) (2026-02-09)
+
+**Note:** Version bump only for package @exodus/address-provider
+
 ## [12.14.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/address-provider@12.14.0...@exodus/address-provider@12.14.1) (2026-02-06)
 
 ### Bug Fixes

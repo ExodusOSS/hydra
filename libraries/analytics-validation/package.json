@@ -1,31 +1,45 @@
 {
   "name": "@exodus/analytics-validation",
-  "version": "2.66.1",
+  "version": "3.20.0",
+  "type": "module",
   "description": "JSON schemas for analytics events, to prevent sensitive data from being sent up to the infamous cloud",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/analytics-validation",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/analytics-validation",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aanalytics-validation"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aanalytics-validation"
   },
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
-    "src",
-    "!**/__tests__/**",
+    "lib/",
     "schemasafe.config.js",
+    "schemasafe.config.cjs",
     "README.md",
     "CHANGELOG.md"
   ],
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./schemasafe.config.js": "./schemasafe.config.js",
+    "./schemasafe.config.cjs": "./schemasafe.config.cjs"
+  },
   "scripts": {
-    "build": "node scripts/build-schemasafe.js",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "yarn build && run -T exodus-test --jest",
-    "prepublishOnly": "yarn run -T build --scope @exodus/analytics-validation"
+    "build:generated": "node scripts/build-schemasafe.mjs && node scripts/build-types.mjs",
+    "build": "pnpm run build:generated && pnpm exec tsc -p tsconfig.build.json",
+    "build:watch": "pnpm run build -- -w",
+    "clean": "pnpm exec tsc --build --clean",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/analytics-validation",
+    "test": "node scripts/build-schemasafe.mjs && pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm run build:generated && pnpm exec tsc --noEmit",
+    "lint": "pnpm run build:generated && pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix"
   },
   "devDependencies": {
     "@exodus/schemasafe": "^1.0.0"
@@ -34,7 +48,8 @@
     "targets": {
       "build": {
         "outputs": [
-          "{projectRoot}/src/main.schemasafe.json"
+          "{projectRoot}/src/main.schemasafe.json",
+          "{projectRoot}/lib"
         ]
       }
     }

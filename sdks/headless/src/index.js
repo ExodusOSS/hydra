@@ -1,3 +1,4 @@
+import accountSecurity from '@exodus/account-security'
 import addressProvider from '@exodus/address-provider'
 import application from '@exodus/application'
 import createIOC from '@exodus/argo'
@@ -20,19 +21,17 @@ import pricing from '@exodus/pricing'
 import publicKeyProvider from '@exodus/public-key-provider'
 import rates from '@exodus/rates-monitor'
 import remoteConfig from '@exodus/remote-config'
-import restoreProgressTracker from '@exodus/restore-progress-tracker'
 import startupCounter from '@exodus/startup-counter'
 import txLogMonitors from '@exodus/tx-log-monitors'
 import transactionSigner from '@exodus/tx-signer'
 import typeforce from '@exodus/typeforce'
-import wallet from '@exodus/wallet'
+import wallet, { walletRpc } from '@exodus/wallet'
 import walletAccounts from '@exodus/wallet-accounts'
 import ms from 'ms'
 
 import createApi from './api/index.js'
 import createDependencies from './dependencies/index.js'
 import keychainRpc from './features/keychain-rpc/index.js'
-import walletRpc from './features/wallet-rpc/index.js'
 import attachMigrations from './migrations/attach.js'
 import attachPlugins from './plugins/attach.js'
 import { makeChainable } from './utils/ioc.js'
@@ -71,6 +70,7 @@ const createExodus = (opts) => {
 
   ioc.use(application(config.application))
   ioc.use(errorTracking(config.errorTracking))
+  ioc.use(accountSecurity(config.accountSecurity))
   ioc.use(addressProvider(config.addressProvider))
   ioc.use(assetsFeature(config.assets))
   ioc.use(availableAssets(config.availableAssets))
@@ -89,7 +89,6 @@ const createExodus = (opts) => {
   ioc.use(publicKeyProvider(config.publicKeyProvider))
   ioc.use(rates(config.rates))
   ioc.use(remoteConfig(config.remoteConfig))
-  ioc.use(restoreProgressTracker(config.restoreProgressTracker))
   ioc.use(startupCounter(config.startupCounter))
   ioc.use(transactionSigner(config.transactionSigner))
   ioc.use(txLogMonitors(config.txLogMonitors))
@@ -140,15 +139,6 @@ const createExodus = (opts) => {
     application.on('change-passphrase', () => port.emit('passphrase-changed'))
 
     application.on('import', () => port.emit('import', { walletExists: true }))
-
-    application.on('add-seed', () => port.emit('add-seed'))
-
-    application.on(
-      'restore-seed',
-      () =>
-        ({ seedId, compatibilityMode } = Object.create(null)) =>
-          port.emit('restore-seed', { seedId, compatibilityMode })
-    )
 
     application.hook('unlock', async () => {
       if (typeof storage.unlock === 'function') unlockEncryptedStorage(storage)

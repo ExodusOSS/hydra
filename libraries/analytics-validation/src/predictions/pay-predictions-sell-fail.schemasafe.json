@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayPredictionsSellFail"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        },
+        {
+          "$ref": "common-properties#/definitions/predictionsProperties"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "position_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "market_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "sell_amount_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "failure_reason": {
+          "enum": ["provider_error", "network", "market_closed", "price_changed", "other"]
+        },
+        "error_code": {
+          "type": "string",
+          "format": "any-string"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

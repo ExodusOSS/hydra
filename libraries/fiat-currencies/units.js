@@ -1,7 +1,7 @@
 import fiat from '@exodus/fiat'
 
-// Symbol doesn't look right, so we use AED and SAR code directly
-const WITH_CODE_INSTEAD_OF_SYMBOL = new Set(['AED', 'SAR'])
+// Symbol doesn't look right, so we use the currency code directly
+const WITH_CODE_INSTEAD_OF_SYMBOL = new Set(['AED', 'ARS', 'SAR'])
 
 // Currencies with these symbols should be displayed on right side
 const WITH_RIGHT_SIDE_SYMBOLS = new Set([

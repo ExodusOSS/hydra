@@ -21,7 +21,7 @@ const createProxy = (rpc: RPC, target: any, path: string[] = []) => {
       // is called as the property here, and we don't want to append 'apply'.
       // TODO: investigate why rpc proxying calls the get trap with 'apply'
       if (typeof object[property] === 'function' && !isReservedMethod(property)) {
-        return (applyTarget: any, ...args: any[]) => {
+        return (_applyTarget: any, ...args: any[]) => {
           const method = serializePath(path)
           return rpc.callMethod(method, args)
         }

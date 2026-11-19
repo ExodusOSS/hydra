@@ -2,7 +2,7 @@
 import lodash from 'lodash'
 import { ModelIdSymbol } from './constants.js'
 
-const { omitBy } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { omitBy } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 export const omitUndefined = <T extends object>(obj: T) =>
   omitBy(obj, (value) => value === undefined) as T

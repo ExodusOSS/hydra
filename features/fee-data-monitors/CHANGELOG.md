@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.6](https://github.com/ExodusMovement/exodus/compare/@exodus/fee-data-monitors@5.0.5...@exodus/fee-data-monitors@5.0.6) (2026-09-29)
+
+### Performance Improvements
+
+- **fee-data-monitors:** publish a remote-config payload once, not once per asset ([#45993](https://github.com/ExodusMovement/exodus/issues/45993)) ([9150994](https://github.com/ExodusMovement/exodus/commit/915099470e925fbb3ba1621a48cb696558c69fd7))
+
 ## [5.0.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fee-data-monitors@5.0.4...@exodus/fee-data-monitors@5.0.5) (2026-02-24)
 
 **Note:** Version bump only for package @exodus/fee-data-monitors

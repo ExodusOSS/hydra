@@ -9,5 +9,4 @@ dayjs.extend(relativeTime)
 dayjs.extend(utc)
 dayjs.extend(duration)
 
-// eslint-disable-next-line unicorn/prefer-export-from
 export default dayjs

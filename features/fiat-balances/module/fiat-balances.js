@@ -51,7 +51,7 @@ export const cloneBalances = (wrapper) => {
 
 class FiatBalances {
   #logger
-  #assetsModule
+  #assetsAtom
   #balanceFields
   #fiatCurrency
   #cachedRates
@@ -67,7 +67,7 @@ class FiatBalances {
   #subscriptions = []
 
   constructor({
-    assetsModule,
+    assetsAtom,
     logger,
     balancesAtom,
     config: { balanceFields },
@@ -76,7 +76,7 @@ class FiatBalances {
     currencyAtom,
   }) {
     this.#logger = logger
-    this.#assetsModule = assetsModule
+    this.#assetsAtom = assetsAtom
     this.#balanceFields = balanceFields
     this.#fiatBalancesAtom = fiatBalancesAtom
     this.#balancesAtom = balancesAtom
@@ -127,12 +127,13 @@ class FiatBalances {
   }
 
   #maybeRecompute = () => {
-    if (this.#isReady()) this.#recompute()
+    if (this.#isReady()) void this.#recompute()
   }
 
   #recompute = async () => {
     this.#reset()
 
+    const { value: assets } = await this.#assetsAtom.get()
     const balances = this.#latestAssetBalances
     const { byAssetSource, byBaseAssetSource, byWalletAccount, byAsset } = this.#balances
     const fiatZero = fiatCurrencies[this.#fiatCurrency].ZERO
@@ -163,7 +164,7 @@ class FiatBalances {
       for (const assetName in walletAccountBalances) {
         const assetBalances = walletAccountBalances[assetName]
         if (!assetBalances) continue
-        const asset = this.#assetsModule.getAsset(assetName)
+        const asset = assets[assetName]
         const baseAssetName = asset.baseAsset.name
 
         let byAssetSourceAssetRef = byAssetSourceWalletRef[assetName]
@@ -207,7 +208,7 @@ class FiatBalances {
     this.#recomputeWalletTotals()
   }
 
-  #setBalances = ({ balances, changes }) => {
+  #setBalances = async ({ balances, changes }) => {
     const needsRecompute =
       !this.#balances.byWalletAccount ||
       !changes ||
@@ -221,6 +222,7 @@ class FiatBalances {
 
     this.#logger.log('recomputing based on new balances')
 
+    const { value: assets } = await this.#assetsAtom.get()
     const fiatZero = fiatCurrencies[this.#fiatCurrency].ZERO
 
     // TODO set changes to fiatBalancesAtom as well
@@ -230,7 +232,7 @@ class FiatBalances {
       const walletAccountBalances = byWalletAccount[walletAccount]
       Object.entries(walletAccountBalancesChanges).forEach(
         ([assetName, assetSourceBalancesChanges]) => {
-          const asset = this.#assetsModule.getAsset(assetName)
+          const asset = assets[assetName]
           const baseAssetName = asset.baseAsset.name
           this.#balanceFields.forEach((field) => {
             // we may not be interested in all fields from `balances`
@@ -270,7 +272,7 @@ class FiatBalances {
                 set(byAssetSource, [walletAccount, assetName, field], fiatZero)
               }
 
-              // eslint-disable-next-line @exodus/mutable/no-param-reassign-prop-only
+              // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
               byAssetSource[walletAccount][assetName][field] = byAssetSource[walletAccount][
                 assetName
               ][field]
@@ -332,7 +334,7 @@ const fiatBalancesDefinition = {
   type: 'module',
   factory: createFiatBalances,
   dependencies: [
-    'assetsModule',
+    'assetsAtom',
     'logger',
     'balancesAtom',
     'fiatBalancesAtom',

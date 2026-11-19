@@ -1,7 +1,65 @@
 import { BUY_ORDER, SELL_ORDER } from '@exodus/fiat-ramp/redux/__tests__/fixture.js'
-import { FiatOrderSet, Tx } from '@exodus/models'
+import { FIAT_ORDER, FiatOrderSet, Tx } from '@exodus/models'
 
 import { setup } from '../utils.js'
+
+const { MOONPAY_ORDER_STATUS, ORDER_STATUS, RAMP_ORDER_STATUS } = FIAT_ORDER
+
+const TX_DATE = '2024-01-15T10:00:00.000Z'
+const ORDER_DATE = '2024-01-15T09:55:00.000Z'
+
+const makeBtcTx = ({ assets, txId, coinAmount, confirmations = 0, date = TX_DATE }) =>
+  Tx.fromJSON({
+    txId,
+    error: null,
+    date,
+    confirmations,
+    meta: {},
+    token: null,
+    dropped: false,
+    coinAmount,
+    coinName: 'bitcoin',
+    feeCoinName: 'bitcoin',
+    feeAmount: '0.0001 BTC',
+    currencies: { bitcoin: assets.bitcoin.currency },
+  })
+
+const makeBtcOrder = ({
+  assets,
+  orderType,
+  status,
+  amountBtc,
+  orderId,
+  date = ORDER_DATE,
+  walletAccount = 'exodus_0',
+  provider, // optional override; otherwise inherited from SELL_ORDER/BUY_ORDER fixture (ramp)
+}) => {
+  const base = orderType === 'sell' ? SELL_ORDER : BUY_ORDER
+  const amount = assets.bitcoin.currency.BTC(amountBtc)
+  return {
+    ...base,
+    ...(provider && { provider }),
+    date: date instanceof Date ? date : new Date(date),
+    txId: null,
+    orderId,
+    status,
+    ...(orderType === 'sell'
+      ? { fromWalletAccount: walletAccount, toWalletAccount: null, fromAmount: amount }
+      : {
+          toWalletAccount: walletAccount,
+          fromWalletAccount: null,
+          toAsset: 'bitcoin',
+          toAmount: amount,
+        }),
+  }
+}
+
+const runBitcoinSelector = ({ store, selectors, walletAccount = 'exodus_0' }) => {
+  const selector = selectors.activityTxs.createWithFiatActivity({
+    createActivitySelector: selectors.activityTxs.createAssetSourceBaseActivity,
+  })({ assetName: 'bitcoin', walletAccount, displayFiatOrdersWithoutTx: true })
+  return selector(store.getState())
+}
 
 describe('createWithFiatActivity', () => {
   test('should return empty array of activities in wallet', () => {
@@ -207,195 +265,341 @@ describe('createWithFiatActivity', () => {
     expect(result[2].date).toEqual(new Date('2023-02-11T15:10:42.226Z'))
   })
 
+  // Cases where the on-chain tx must collapse into the matching fiat order
+  // (i.e. the duplicate row must disappear).
   test.each([
     {
-      description: 'sell order with pending send tx',
+      description: 'pending send tx + in-progress sell order (ramp PAYMENT_IN_PROGRESS)',
       orderType: 'sell',
-      baseOrder: SELL_ORDER,
-      orderOverrides: {
-        fromWalletAccount: 'exodus_0',
-        toWalletAccount: null,
-        txId: null,
-        orderId: 'pending-sell-order',
-        status: 'in-progress',
-        fromAmount: 1,
-      },
+      provider: 'ramp',
+      rawStatus: RAMP_ORDER_STATUS.payment_in_progress,
+      expectedPending: true,
       txCoinAmount: '-1 BTC',
-    },
-    {
-      description: 'buy order with pending receive tx',
-      orderType: 'buy',
-      baseOrder: BUY_ORDER,
-      orderOverrides: {
-        toWalletAccount: 'exodus_0',
-        fromWalletAccount: null,
-        txId: null,
-        orderId: 'pending-buy-order',
-        status: 'in-progress',
-        toAsset: 'bitcoin',
-      },
-      txCoinAmount: '0.5 BTC',
-    },
-  ])(
-    'should hide pending tx when matching $description exists',
-    ({ baseOrder, orderOverrides, orderType, txCoinAmount }) => {
-      const { store, selectors, handleEvent, assets } = setup()
-
-      const pendingTx = {
-        txId: 'pending-tx',
-        error: null,
-        date: '2024-01-15T10:00:00.000Z',
-        confirmations: 0,
-        meta: {},
-        token: null,
-        dropped: false,
-        coinAmount: txCoinAmount,
-        coinName: 'bitcoin',
-        feeCoinName: 'bitcoin',
-        feeAmount: '0.0001 BTC',
-        currencies: { bitcoin: assets.bitcoin.currency },
-      }
-
-      const orderAmount = Math.abs(Number.parseFloat(txCoinAmount))
-      const order = {
-        ...baseOrder,
-        ...orderOverrides,
-        ...(orderType === 'sell'
-          ? { fromAmount: assets.bitcoin.currency.BTC(orderAmount) }
-          : { toAmount: assets.bitcoin.currency.BTC(orderAmount) }),
-      }
-
-      handleEvent('fiatOrders', FiatOrderSet.fromArray([order]))
-      handleEvent('activityTxs', { exodus_0: { bitcoin: [Tx.fromJSON(pendingTx)] } })
-
-      const selector = selectors.activityTxs.createWithFiatActivity({
-        createActivitySelector: selectors.activityTxs.createAssetSourceBaseActivity,
-      })({ assetName: 'bitcoin', walletAccount: 'exodus_0', displayFiatOrdersWithoutTx: true })
-
-      const result = selector(store.getState())
-
-      expect(result.length).toEqual(1)
-      expect(result[0].id).toEqual(`bitcoin.fiat-order-without-tx.${orderOverrides.orderId}`)
-      expect(result[0].type).toEqual('fiat')
-      expect(result[0].pending).toEqual(true)
-    }
-  )
-
-  test.each([
-    {
-      description: 'amount does not match',
-      txCoinAmount: '-0.5 BTC',
-      orderAmount: 1,
       confirmations: 0,
-      expectedTxId: 'bitcoin.test-tx',
+      amountBtc: 1,
     },
     {
-      description: 'tx is confirmed',
+      description: 'confirmed send tx + completed sell order (ramp RELEASED)',
+      orderType: 'sell',
+      provider: 'ramp',
+      rawStatus: RAMP_ORDER_STATUS.released,
+      expectedPending: false,
       txCoinAmount: '-1 BTC',
-      orderAmount: 1,
-      confirmations: 6,
-      expectedTxId: 'bitcoin.test-tx',
+      confirmations: 3,
+      amountBtc: 1,
+    },
+    {
+      description: 'confirmed receive tx + completed buy order (ramp RELEASED)',
+      orderType: 'buy',
+      provider: 'ramp',
+      rawStatus: RAMP_ORDER_STATUS.released,
+      expectedPending: false,
+      txCoinAmount: '0.5 BTC',
+      confirmations: 3,
+      amountBtc: 0.5,
+    },
+    {
+      description: 'pending send tx + action-required sell order (moonpay waitingForDeposit)',
+      orderType: 'sell',
+      provider: 'moonpay',
+      rawStatus: MOONPAY_ORDER_STATUS.waiting_deposit,
+      expectedPending: false,
+      txCoinAmount: '-1 BTC',
+      confirmations: 0,
+      amountBtc: 1,
+    },
+    {
+      description: 'send tx + refunding sell order (path-2 future fiat-server)',
+      orderType: 'sell',
+      provider: 'ramp',
+      rawStatus: ORDER_STATUS.refunding,
+      expectedPending: false,
+      txCoinAmount: '-1 BTC',
+      confirmations: 1,
+      amountBtc: 1,
     },
   ])(
-    'should not hide tx when $description',
-    ({ txCoinAmount, orderAmount, confirmations, expectedTxId }) => {
+    'should collapse tx into matching fiat order: $description',
+    ({
+      orderType,
+      provider,
+      rawStatus,
+      expectedPending,
+      txCoinAmount,
+      confirmations,
+      amountBtc,
+    }) => {
       const { store, selectors, handleEvent, assets } = setup()
-
-      const tx = {
-        txId: 'test-tx',
-        error: null,
-        date: '2024-01-15T10:00:00.000Z',
-        confirmations,
-        meta: {},
-        token: null,
-        dropped: false,
-        coinAmount: txCoinAmount,
-        coinName: 'bitcoin',
-        feeCoinName: 'bitcoin',
-        feeAmount: '0.0001 BTC',
-        currencies: { bitcoin: assets.bitcoin.currency },
-      }
+      const orderId = `${orderType}-${rawStatus}-order`
 
       handleEvent(
         'fiatOrders',
         FiatOrderSet.fromArray([
-          {
-            ...SELL_ORDER,
-            fromWalletAccount: 'exodus_0',
-            toWalletAccount: null,
-            txId: null,
-            orderId: 'pending-sell-order',
-            status: 'in-progress',
-            fromAmount: assets.bitcoin.currency.BTC(orderAmount),
-          },
+          makeBtcOrder({ assets, orderType, provider, status: rawStatus, amountBtc, orderId }),
         ])
       )
-      handleEvent('activityTxs', { exodus_0: { bitcoin: [Tx.fromJSON(tx)] } })
+      handleEvent('activityTxs', {
+        exodus_0: {
+          bitcoin: [
+            makeBtcTx({ assets, txId: 'tx-under-test', coinAmount: txCoinAmount, confirmations }),
+          ],
+        },
+      })
 
-      const selector = selectors.activityTxs.createWithFiatActivity({
-        createActivitySelector: selectors.activityTxs.createAssetSourceBaseActivity,
-      })({ assetName: 'bitcoin', walletAccount: 'exodus_0', displayFiatOrdersWithoutTx: true })
+      const result = runBitcoinSelector({ store, selectors })
 
-      const result = selector(store.getState())
+      expect(result.length).toEqual(1)
+      expect(result[0].id).toEqual(`bitcoin.fiat-order-without-tx.${orderId}`)
+      expect(result[0].type).toEqual('fiat')
+      expect(result[0].pending).toEqual(expectedPending)
+    }
+  )
+
+  // Cases where the tx and the fiat order must be shown side-by-side
+  // (no false collapse).
+  test.each([
+    {
+      description: 'amount does not match',
+      orderType: 'sell',
+      amountBtc: 1,
+      txCoinAmount: '-0.5 BTC',
+      txDate: TX_DATE,
+      orderDate: ORDER_DATE,
+    },
+    {
+      description: 'sell order with same-amount incoming tx (direction mismatch)',
+      orderType: 'sell',
+      amountBtc: 1,
+      txCoinAmount: '1 BTC',
+      txDate: TX_DATE,
+      orderDate: ORDER_DATE,
+    },
+    {
+      description: 'buy order with same-amount outgoing tx (direction mismatch)',
+      orderType: 'buy',
+      amountBtc: 0.5,
+      txCoinAmount: '-0.5 BTC',
+      txDate: TX_DATE,
+      orderDate: ORDER_DATE,
+    },
+    {
+      description: 'tx is outside the order match time window',
+      orderType: 'sell',
+      amountBtc: 1,
+      txCoinAmount: '-1 BTC',
+      txDate: '2024-06-15T10:00:00.000Z',
+      orderDate: ORDER_DATE,
+    },
+  ])(
+    'should not hide tx when $description',
+    ({ orderType, amountBtc, txCoinAmount, txDate, orderDate }) => {
+      const { store, selectors, handleEvent, assets } = setup()
+      const orderId = 'unrelated-order'
+      const txId = 'unrelated-tx'
+
+      handleEvent(
+        'fiatOrders',
+        FiatOrderSet.fromArray([
+          makeBtcOrder({
+            assets,
+            orderType,
+            provider: 'ramp',
+            status: RAMP_ORDER_STATUS.payment_in_progress,
+            amountBtc,
+            orderId,
+            date: orderDate,
+          }),
+        ])
+      )
+      handleEvent('activityTxs', {
+        exodus_0: {
+          bitcoin: [makeBtcTx({ assets, txId, coinAmount: txCoinAmount, date: txDate })],
+        },
+      })
+
+      const result = runBitcoinSelector({ store, selectors })
 
       expect(result.length).toEqual(2)
-      expect(result.some((item) => item.id === expectedTxId)).toEqual(true)
-      expect(
-        result.some((item) => item.id === 'bitcoin.fiat-order-without-tx.pending-sell-order')
-      ).toEqual(true)
+      const ids = result.map((item) => item.id)
+      expect(ids).toContain(`bitcoin.${txId}`)
+      expect(ids).toContain(`bitcoin.fiat-order-without-tx.${orderId}`)
+    }
+  )
+
+  test('should not hide tx when fiat order date is not a finite timestamp (conservative)', () => {
+    const { store, selectors, handleEvent, assets } = setup()
+    const orderId = 'invalid-date-order'
+    const txId = 'send-with-valid-date'
+
+    handleEvent(
+      'fiatOrders',
+      FiatOrderSet.fromArray([
+        makeBtcOrder({
+          assets,
+          orderType: 'sell',
+          provider: 'ramp',
+          status: RAMP_ORDER_STATUS.payment_in_progress,
+          amountBtc: 1,
+          orderId,
+          date: new Date(Number.NaN),
+        }),
+      ])
+    )
+    handleEvent('activityTxs', {
+      exodus_0: {
+        bitcoin: [makeBtcTx({ assets, txId, coinAmount: '-1 BTC', date: TX_DATE })],
+      },
+    })
+
+    const result = runBitcoinSelector({ store, selectors })
+
+    expect(result.length).toEqual(2)
+    const ids = result.map((item) => item.id)
+    expect(ids).toContain(`bitcoin.${txId}`)
+    expect(ids).toContain(`bitcoin.fiat-order-without-tx.${orderId}`)
+  })
+
+  // Orders in terminal/error states must never swallow a same-amount tx -
+  // there is no on-chain counterpart anymore.
+  test.each([
+    {
+      label: 'ramp PAYMENT_FAILED -> failed',
+      provider: 'ramp',
+      rawStatus: RAMP_ORDER_STATUS.payment_failed,
+    },
+    {
+      label: 'ramp EXPIRED -> expired',
+      provider: 'ramp',
+      rawStatus: RAMP_ORDER_STATUS.expired,
+    },
+    {
+      label: 'refunded (path-2 future fiat-server)',
+      provider: 'ramp',
+      rawStatus: ORDER_STATUS.refunded,
+    },
+    {
+      label: 'error (path-2 future fiat-server)',
+      provider: 'ramp',
+      rawStatus: ORDER_STATUS.error,
+    },
+  ])(
+    'should not hide tx with matching amount when fiat order is $label',
+    ({ provider, rawStatus }) => {
+      const { store, selectors, handleEvent, assets } = setup()
+      const orderId = `terminal-sell-order-${rawStatus}`
+      const txId = 'unrelated-send'
+
+      handleEvent(
+        'fiatOrders',
+        FiatOrderSet.fromArray([
+          makeBtcOrder({
+            assets,
+            orderType: 'sell',
+            provider,
+            status: rawStatus,
+            amountBtc: 1,
+            orderId,
+          }),
+        ])
+      )
+      handleEvent('activityTxs', {
+        exodus_0: { bitcoin: [makeBtcTx({ assets, txId, coinAmount: '-1 BTC' })] },
+      })
+
+      const result = runBitcoinSelector({ store, selectors })
+
+      expect(result.length).toEqual(2)
+      const ids = result.map((item) => item.id)
+      expect(ids).toContain(`bitcoin.${txId}`)
+      expect(ids).toContain(`bitcoin.fiat-order-without-tx.${orderId}`)
     }
   )
 
   test('should only hide one pending tx per matching fiat order', () => {
     const { store, selectors, handleEvent, assets } = setup()
 
-    const createPendingTx = (txId, date) => ({
-      txId,
-      error: null,
-      date,
-      confirmations: 0,
-      meta: {},
-      token: null,
-      dropped: false,
-      coinAmount: '-1 BTC',
-      coinName: 'bitcoin',
-      feeCoinName: 'bitcoin',
-      feeAmount: '0.0001 BTC',
-      currencies: { bitcoin: assets.bitcoin.currency },
-    })
-
     handleEvent(
       'fiatOrders',
       FiatOrderSet.fromArray([
-        {
-          ...SELL_ORDER,
-          fromWalletAccount: 'exodus_0',
-          toWalletAccount: null,
-          txId: null,
+        makeBtcOrder({
+          assets,
+          orderType: 'sell',
+          provider: 'ramp',
+          status: RAMP_ORDER_STATUS.payment_in_progress,
+          amountBtc: 1,
           orderId: 'pending-sell-order',
-          status: 'in-progress',
-          fromAmount: assets.bitcoin.currency.BTC(1),
-        },
+        }),
       ])
     )
     handleEvent('activityTxs', {
       exodus_0: {
         bitcoin: [
-          Tx.fromJSON(createPendingTx('pending-send-tx-1', '2024-01-15T10:00:00.000Z')),
-          Tx.fromJSON(createPendingTx('pending-send-tx-2', '2024-01-15T11:00:00.000Z')),
+          makeBtcTx({ assets, txId: 'pending-send-tx-1', coinAmount: '-1 BTC' }),
+          makeBtcTx({
+            assets,
+            txId: 'pending-send-tx-2',
+            coinAmount: '-1 BTC',
+            date: '2024-01-15T11:00:00.000Z',
+          }),
         ],
       },
     })
 
-    const selector = selectors.activityTxs.createWithFiatActivity({
-      createActivitySelector: selectors.activityTxs.createAssetSourceBaseActivity,
-    })({ assetName: 'bitcoin', walletAccount: 'exodus_0', displayFiatOrdersWithoutTx: true })
-
-    const result = selector(store.getState())
+    const result = runBitcoinSelector({ store, selectors })
 
     expect(result.length).toEqual(2)
-    const txIds = result.map((item) => item.id)
-    expect(txIds).toContain('bitcoin.fiat-order-without-tx.pending-sell-order')
-    expect(txIds.some((id) => id.startsWith('bitcoin.pending-send-tx'))).toEqual(true)
+    const ids = result.map((item) => item.id)
+    expect(ids).toContain('bitcoin.fiat-order-without-tx.pending-sell-order')
+    expect(ids.some((id) => id.startsWith('bitcoin.pending-send-tx'))).toEqual(true)
+  })
+
+  test('should hide both txs when two same-amount sell orders match two send txs', () => {
+    // Edge case: two simultaneous sell orders for the same amount, two matching send txs.
+    // Each order should consume exactly one tx slot; both order rows should be displayed.
+    const { store, selectors, handleEvent, assets } = setup()
+
+    handleEvent(
+      'fiatOrders',
+      FiatOrderSet.fromArray([
+        makeBtcOrder({
+          assets,
+          orderType: 'sell',
+          provider: 'ramp',
+          status: RAMP_ORDER_STATUS.payment_in_progress,
+          amountBtc: 1,
+          orderId: 'sell-order-a',
+          date: '2024-01-15T09:50:00.000Z',
+        }),
+        makeBtcOrder({
+          assets,
+          orderType: 'sell',
+          provider: 'ramp',
+          status: RAMP_ORDER_STATUS.payment_in_progress,
+          amountBtc: 1,
+          orderId: 'sell-order-b',
+        }),
+      ])
+    )
+    handleEvent('activityTxs', {
+      exodus_0: {
+        bitcoin: [
+          makeBtcTx({ assets, txId: 'send-tx-1', coinAmount: '-1 BTC' }),
+          makeBtcTx({
+            assets,
+            txId: 'send-tx-2',
+            coinAmount: '-1 BTC',
+            date: '2024-01-15T10:05:00.000Z',
+          }),
+        ],
+      },
+    })
+
+    const result = runBitcoinSelector({ store, selectors })
+
+    const ids = result.map((item) => item.id).sort()
+    expect(ids).toEqual([
+      'bitcoin.fiat-order-without-tx.sell-order-a',
+      'bitcoin.fiat-order-without-tx.sell-order-b',
+    ])
   })
 })

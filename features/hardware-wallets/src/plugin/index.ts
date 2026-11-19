@@ -1,7 +1,7 @@
 import { createAtomObserver } from '@exodus/atoms'
 
 import type { Atom } from '@exodus/atoms'
-import type { Port } from '../shared/types'
+import type { Port } from '../shared/types.js'
 import type { Definition } from '@exodus/dependency-types'
 import type { WalletAccountNameToConnectedAssetNamesMap } from '../atoms/index.js'
 import type { SigningRequestState } from '../module/interfaces.js'

@@ -1,6 +1,6 @@
 import { getPublicKey as getAlgorandPublicKey } from '@exodus/algorand-lib'
 import { getPublicKey as getCardanoPublicKey } from '@exodus/cardano-lib'
-import keychainDefinition from '@exodus/keychain/module/index.js'
+import keychainFactory from '@exodus/keychain'
 import { getPublicKey as getSolanaPublicKey } from '@exodus/solana-lib'
 // NON-HDKEY ASSETS
 
@@ -12,8 +12,10 @@ const ASSET_PRIV_TO_PUB = Object.assign(Object.create(null), {
 
 // We create a keychain with the legacy priv to pub mappers
 export const createKeychain = async ({ seed }) => {
-  const keychain = keychainDefinition.factory({ legacyPrivToPub: ASSET_PRIV_TO_PUB })
-  await keychain.addSeed(seed)
+  const keychain = keychainFactory()
+    .definitions.find(({ definition }) => definition.id === 'keychain')
+    .definition.factory({ legacyPrivToPub: ASSET_PRIV_TO_PUB })
+  await keychain.unlock(seed)
 
   return keychain
 }

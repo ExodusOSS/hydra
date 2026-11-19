@@ -82,9 +82,9 @@ const prepare = () => {
   txLogsAtomMock = createInMemoryAtom({ defaultValue: {} })
 
   const assets = {
-    ethereum: { name: 'ethereum', api: { hasFeature: (feature) => feature === 'nfts' } },
+    ethereum: { name: 'ethereum', api: { features: { nfts: true } } },
 
-    solana: { name: 'solana', api: { hasFeature: (feature) => feature === 'nfts' } },
+    solana: { name: 'solana', api: { features: { nfts: true } } },
   }
 
   const nftsConfigAtom = createAtomMock({
@@ -92,10 +92,10 @@ const prepare = () => {
   })
   const nftsMonitorStatusAtom = createInMemoryAtom({ defaultValue: {} })
 
-  const assetsModule = { getAsset: (assetName) => assets[assetName] }
+  const assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
   const nftsMonitor = nftsMonitorDefinition.factory({
     addressProvider: addressProviderMock,
-    assetsModule,
+    assetsAtom,
     enabledWalletAccountsAtom,
     activeWalletAccountAtom,
     nfts: {},
@@ -175,7 +175,7 @@ describe('nfts Batch Monitor', () => {
 
     jest.setSystemTime(new Date('2020-01-01'))
 
-    nftsMonitor.start()
+    void nftsMonitor.start()
 
     await advance(fetchInterval + 50)
 
@@ -338,7 +338,7 @@ describe('nfts Batch Monitor', () => {
 
     jest.setSystemTime(new Date('2020-01-01'))
 
-    nftsMonitor.start()
+    void nftsMonitor.start()
 
     await verifyOldTxs()
 
@@ -462,7 +462,7 @@ describe('nfts Batch Monitor', () => {
     }
 
     jest.setSystemTime(new Date('2020-01-01'))
-    nftsMonitor.start()
+    void nftsMonitor.start()
 
     await advance(fetchInterval + 50)
 

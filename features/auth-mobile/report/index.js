@@ -10,10 +10,17 @@ const createAuthReport = ({ authAtom }) => ({
 
     if (!auth) return null
 
+    let deviceAuthStatus = 'disabled'
+    if (auth.deviceAuthEnabled) {
+      deviceAuthStatus = auth.deviceAuthUnavailable ? 'unavailable' : 'available'
+    }
+
     return {
       biometry: auth.biometry,
       hasPin: auth.hasPin,
       hasBioAuth: auth.hasBioAuth,
+      hasDeviceAuth: auth.hasDeviceAuth,
+      deviceAuthStatus,
     }
   },
   getSchema: memoize(() =>
@@ -22,6 +29,8 @@ const createAuthReport = ({ authAtom }) => ({
         biometry: z.string().nullish(),
         hasPin: z.boolean().nullish(),
         hasBioAuth: z.boolean().nullish(),
+        hasDeviceAuth: z.boolean().nullish(),
+        deviceAuthStatus: z.enum(['disabled', 'available', 'unavailable']),
       })
       .nullable()
   ),

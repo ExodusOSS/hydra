@@ -103,7 +103,7 @@ describe('sequenced-keystore atom', () => {
   test('throws if set() non array value', async () => {
     const { atom } = await factory({ key: 'a.b.c' })
 
-    await expect(atom.set(1 as never)).rejects.toThrowError(/must be an array/)
+    await expect(atom.set(1 as never)).rejects.toThrow(/must be an array/)
   })
 
   test('set(undefined) should clear sequence', async () => {
@@ -119,6 +119,39 @@ describe('sequenced-keystore atom', () => {
     expect(await storage.get('a.b.c.0')).toEqual(undefined)
     expect(await storage.get('a.b.c.1')).toEqual(undefined)
     expect(await storage.get('a.b.c.2')).toEqual(undefined)
+  })
+
+  test('get() is idempotent on empty keystore', async () => {
+    const { atom } = await factory({ key: 'test', defaultValue: ['default'] })
+
+    const first = await atom.get()
+    const second = await atom.get()
+
+    expect(first).toEqual(second)
+  })
+
+  test('get() is idempotent after set(undefined)', async () => {
+    const { atom } = await factory({ key: 'test' })
+
+    await atom.set([1, 2, 3])
+    await atom.set(undefined)
+
+    const first = await atom.get()
+    const second = await atom.get()
+
+    expect(first).toEqual(second)
+  })
+
+  test('get() is idempotent with data', async () => {
+    const { atom } = await factory({ key: 'test' })
+
+    await atom.set([1, 2])
+
+    const first = await atom.get()
+    const second = await atom.get()
+
+    expect(first).toEqual([1, 2])
+    expect(first).toEqual(second)
   })
 
   test('set() should write sequentially in storage', async () => {

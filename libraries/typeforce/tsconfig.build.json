@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "./lib",
+    "declaration": true,
+    "module": "nodenext",
+    "erasableSyntaxOnly": false
+  },
+  "include": ["src"]
+}

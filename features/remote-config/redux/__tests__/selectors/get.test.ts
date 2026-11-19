@@ -5,7 +5,7 @@ describe('code', () => {
     const { store, selectors } = setup()
 
     expect(selectors.remoteConfig).toBeDefined()
-    expect(selectors.remoteConfig!.get('hogwarts.isOpen')(store.getState())).toEqual(undefined)
+    expect(selectors.remoteConfig.get('hogwarts.isOpen')(store.getState())).toEqual(undefined)
   })
 
   it('should return undefined for missing path', () => {
@@ -14,7 +14,7 @@ describe('code', () => {
     handleEvent('remoteConfig', { hogwarts: { isSafe: false } })
 
     expect(selectors.remoteConfig).toBeDefined()
-    expect(selectors.remoteConfig!.get('hogwarts.isOpen')(store.getState())).toEqual(undefined)
+    expect(selectors.remoteConfig.get('hogwarts.isOpen')(store.getState())).toEqual(undefined)
   })
 
   it('should return selected path', () => {
@@ -22,6 +22,6 @@ describe('code', () => {
 
     handleEvent('remoteConfig', { hogwarts: { isSafe: false } })
 
-    expect(selectors.remoteConfig?.get('hogwarts.isSafe')(store.getState())).toEqual(false)
+    expect(selectors.remoteConfig.get('hogwarts.isSafe')(store.getState())).toEqual(false)
   })
 })

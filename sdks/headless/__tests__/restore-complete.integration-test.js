@@ -118,7 +118,7 @@ describe('restore-complete', () => {
     await expect(newExodus.wallet.exists()).resolves.toBe(true)
     await newExodus.application.unlock({ passphrase })
 
-    expect(listener).toBeCalledTimes(1)
+    expect(listener).toHaveBeenCalledTimes(1)
     expect(listener.mock.calls[0][0]).toEqual({ bitcoin: true, ethereum: true })
 
     const expectBitcoinRestored = expectEvent({
@@ -193,12 +193,12 @@ describe('restore-complete', () => {
 
     const { listener: firstRestartListener } = await restartWallet()
 
-    expect(firstRestartListener).toBeCalledTimes(1)
+    expect(firstRestartListener).toHaveBeenCalledTimes(1)
     expect(firstRestartListener.mock.calls[0][0]).toEqual({ bitcoin: true, ethereum: true })
 
     const { newPort, newContainer, listener: secondRestartListener } = await restartWallet()
 
-    expect(secondRestartListener).toBeCalledTimes(1)
+    expect(secondRestartListener).toHaveBeenCalledTimes(1)
     expect(secondRestartListener.mock.calls[0][0]).toEqual({ bitcoin: true, ethereum: true })
 
     const expectBitcoinRestored = expectEvent({

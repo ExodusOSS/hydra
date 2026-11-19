@@ -1,8 +1,24 @@
 import { createInMemoryAtom } from '@exodus/atoms'
+import fusionLocalDefinition from '@exodus/fusion-local/module'
+import { createNoopLogger } from '@exodus/logger'
+import createInMemoryStorage from '@exodus/storage-memory'
 
+import legacyAddressModeAtomDefinition from '../../atoms/legacy-address-mode.js'
+import taprootAddressModeAtomDefinition from '../../atoms/taproot-address-mode.js'
 import assetPreferencesDefinition from '../asset-preferences.js'
+import assetPlugins from './supported-assets-list.js'
 
 const createAssetPreferences = assetPreferencesDefinition.factory
+
+const assetClientInterface = { createLogger: () => createNoopLogger() }
+const assets = Object.fromEntries(
+  ['bitcoin', 'bitcoinregtest', 'bitcointestnet', 'ethereum'].map((assetName) => [
+    assetName,
+    assetPlugins[assetName].createAsset({ assetClientInterface }),
+  ])
+)
+const assetsModule = { getAsset: (assetName) => assets[assetName] }
+const bitcoinAssetNames = ['bitcoin', 'bitcoinregtest', 'bitcointestnet']
 
 describe('asset preferences', () => {
   let assetPreferences
@@ -14,10 +30,14 @@ describe('asset preferences', () => {
   beforeEach(() => {
     disabledPurposesAtom = createInMemoryAtom({ defaultValue: {} })
     multiAddressModeAtom = createInMemoryAtom({ defaultValue: {} })
-    legacyAddressModeAtom = createInMemoryAtom({ defaultValue: {} })
-    taprootAddressModeAtom = createInMemoryAtom({ defaultValue: {} })
+    const storage = createInMemoryStorage()
+    const fusion = fusionLocalDefinition.factory({ storage })
+    const logger = createNoopLogger()
+    legacyAddressModeAtom = legacyAddressModeAtomDefinition.factory({ storage, fusion, logger })
+    taprootAddressModeAtom = taprootAddressModeAtomDefinition.factory({ storage, fusion, logger })
 
     assetPreferences = createAssetPreferences({
+      assetsModule,
       disabledPurposesAtom,
       multiAddressModeAtom,
       legacyAddressModeAtom,
@@ -36,49 +56,51 @@ describe('asset preferences', () => {
     await expect(multiAddressModeAtom.get()).resolves.toEqual({ ethereum: false, bitcoin: false })
   })
 
-  it('should enable legacy address mode for bitcoin', async () => {
-    await assetPreferences.enableLegacyAddressMode({ assetNames: ['bitcoin'] })
-    await expect(legacyAddressModeAtom.get()).resolves.toEqual({ bitcoin: true })
+  it.each(bitcoinAssetNames)('should enable legacy address mode for %s', async (assetName) => {
+    await assetPreferences.enableLegacyAddressMode({ assetNames: [assetName] })
+    await expect(legacyAddressModeAtom.get()).resolves.toEqual({ [assetName]: true })
   })
 
-  it('should throw when non-bitcoin taproot address is enabled', async () => {
-    await expect(
-      assetPreferences.enableTaprootAddressMode({ assetNames: ['ethereum'] })
-    ).rejects.toThrow()
+  it.each(bitcoinAssetNames)('should disable legacy address mode for %s', async (assetName) => {
+    await assetPreferences.enableLegacyAddressMode({ assetNames: bitcoinAssetNames })
+    await assetPreferences.disableLegacyAddressMode({ assetNames: [assetName] })
+
+    const value = await legacyAddressModeAtom.get()
+    expect(value[assetName]).toBeFalsy()
+    for (const otherAssetName of bitcoinAssetNames.filter((name) => name !== assetName)) {
+      expect(value[otherAssetName]).toBe(true)
+    }
   })
 
-  it('should disable legacy address mode for bitcoin', async () => {
-    await legacyAddressModeAtom.set({ bitcoin: true })
-    await assetPreferences.disableLegacyAddressMode({ assetNames: ['bitcoin'] })
+  it.each(bitcoinAssetNames)('should enable taproot address mode for %s', async (assetName) => {
+    await assetPreferences.enableTaprootAddressMode({ assetNames: [assetName] })
+    await expect(taprootAddressModeAtom.get()).resolves.toEqual({ [assetName]: true })
+  })
+
+  it.each(bitcoinAssetNames)('should disable taproot address mode for %s', async (assetName) => {
+    await assetPreferences.enableTaprootAddressMode({ assetNames: bitcoinAssetNames })
+    await assetPreferences.disableTaprootAddressMode({ assetNames: [assetName] })
+
+    const value = await taprootAddressModeAtom.get()
+    expect(value[assetName]).toBeFalsy()
+    for (const otherAssetName of bitcoinAssetNames.filter((name) => name !== assetName)) {
+      expect(value[otherAssetName]).toBe(true)
+    }
+  })
+
+  it.each([
+    'enableLegacyAddressMode',
+    'disableLegacyAddressMode',
+    'enableTaprootAddressMode',
+    'disableTaprootAddressMode',
+  ])('%s should reject assets without bitcoin address types', async (method) => {
+    await expect(assetPreferences[method]({ assetNames: ['ethereum'] })).rejects.toThrow(
+      `${method} does not support ethereum`
+    )
+    await expect(assetPreferences[method]({ assetNames: ['bitcoin', 'ethereum'] })).rejects.toThrow(
+      `${method} does not support ethereum`
+    )
     await expect(legacyAddressModeAtom.get()).resolves.toEqual({})
-  })
-
-  it('should throw when non-bitcoin legacy address is disabled', async () => {
-    await expect(
-      assetPreferences.disableLegacyAddressMode({ assetNames: ['ethereum'] })
-    ).rejects.toThrow()
-  })
-
-  it('should enable taproot address mode for bitcoin', async () => {
-    await assetPreferences.enableTaprootAddressMode({ assetNames: ['bitcoin'] })
-    await expect(taprootAddressModeAtom.get()).resolves.toEqual({ bitcoin: true })
-  })
-
-  it('should throw when non-bitcoin taproot address is enabled', async () => {
-    await expect(
-      assetPreferences.enableTaprootAddressMode({ assetNames: ['ethereum'] })
-    ).rejects.toThrow()
-  })
-
-  it('should disable taproot address mode for bitcoin', async () => {
-    await taprootAddressModeAtom.set({ bitcoin: true })
-    await assetPreferences.disableTaprootAddressMode({ assetNames: ['bitcoin'] })
     await expect(taprootAddressModeAtom.get()).resolves.toEqual({})
-  })
-
-  it('should throw when non-bitcoin taproot address is disabled', async () => {
-    await expect(
-      assetPreferences.disableTaprootAddressMode({ assetNames: ['ethereum'] })
-    ).rejects.toThrow()
   })
 })

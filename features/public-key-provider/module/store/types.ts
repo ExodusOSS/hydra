@@ -1,4 +1,4 @@
-import type { KeyIdentifier } from '@exodus/keychain/module'
+import type KeyIdentifier from '@exodus/key-identifier'
 import type { PublicKeyBuffer, MoneroPublicKeyBuffer, XPUB } from './formats/serialization/index.js'
 import type { WalletAccount } from '@exodus/models'
 

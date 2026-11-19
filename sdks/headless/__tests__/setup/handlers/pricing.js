@@ -36,9 +36,9 @@ const invalidPairs = ({ from, to }) => {
 }
 
 const pricingHandlers = [
-  http.get('https://pricing-s.a.exodus.io/staking/rewards', jsonResponse([])),
-  http.get('https://pricing-s.a.exodus.io/real-time-pricing', jsonResponse([])),
-  http.get('https://pricing-s.a.exodus.io/current-price', ({ request }) => {
+  http.get('https://pricing-s.a.exodus-int.com/staking/rewards', jsonResponse([])),
+  http.get('https://pricing-s.a.exodus-int.com/real-time-pricing', jsonResponse([])),
+  http.get('https://pricing-s.a.exodus-int.com/current-price', ({ request }) => {
     const { from, to } = getPairs(request)
 
     if (!from || !to) {
@@ -53,7 +53,7 @@ const pricingHandlers = [
       })
     )
   }),
-  http.get('https://pricing-s.a.exodus.io/ticker', ({ request }) => {
+  http.get('https://pricing-s.a.exodus-int.com/ticker', ({ request }) => {
     const { from, to } = getPairs(request)
 
     if (!from || !to) {
@@ -72,7 +72,7 @@ const pricingHandlers = [
       })
     )
   }),
-  http.get('https://pricing-s.a.exodus.io/historical-price', ({ request }) => {
+  http.get('https://pricing-s.a.exodus-int.com/historical-price', ({ request }) => {
     const { from, to } = getPairs(request)
 
     if (!from || !to) {

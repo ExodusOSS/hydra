@@ -1,17 +1,17 @@
 {
   "name": "@exodus/storage-mobile",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "type": "module",
   "description": "Implementation of storage-spec interface for react-native on mobile",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/adapters/storage-mobile",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/adapters/storage-mobile",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Astorage-mobile"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Astorage-mobile"
   },
   "main": "lib/index",
   "files": [
@@ -20,22 +20,26 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "run -T tsc -p tsconfig.build.json",
-    "clean": "run -T tsc --build --clean",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest --esbuild",
-    "prepublishOnly": "yarn run -T build --scope @exodus/storage-mobile"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/storage-mobile"
   },
   "dependencies": {
     "@exodus/crypto": "^1.0.0-rc.14",
     "@exodus/react-native-fs": "^2.21.0",
-    "@exodus/storage-interface": "^1.0.0",
+    "@exodus/storage-interface": "workspace:^",
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {
-    "@exodus/storage-spec": "^3.2.1",
+    "@exodus/storage-spec": "workspace:^",
     "@react-native-async-storage/async-storage": "^1.4.0",
     "@types/minimalistic-assert": "^1.0.1"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

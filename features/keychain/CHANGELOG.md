@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.1.0](https://github.com/ExodusMovement/exodus/compare/@exodus/keychain@12.0.0...@exodus/keychain@12.1.0) (2026-09-18)
+
+### Features
+
+- **pay-auth:** claim the fusion key by challenge ([#45213](https://github.com/ExodusMovement/exodus/issues/45213)) ([7e80ee5](https://github.com/ExodusMovement/exodus/commit/7e80ee55f52c9dde4dade797a6107faab8fd48d3))
+
+## [12.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@11.0.0...@exodus/keychain@12.0.0) (2026-06-16)
+
+### ⚠ BREAKING CHANGES
+
+- **keychain:** `keychain.addSeed` is renamed to `keychain.unlock` and
+  `keychain.removeAllSeeds` to `keychain.lock`. Unlocking a different seed without
+  an intervening `lock()` now throws. Note the deliberate adjacency to the
+  soft-path `lockPrivateKeys()`/`unlockPrivateKeys()` pair, documented in the README.
+
+### Code Refactoring
+
+- **keychain:** rename addSeed/removeAllSeeds to unlock/lock ([#17038](https://github.com/ExodusMovement/exodus-hydra/issues/17038)) ([f8f960b](https://github.com/ExodusMovement/exodus-hydra/commit/f8f960b7d046018eec317d68f8a3f95363e5b957)), closes [#16379](https://github.com/ExodusMovement/exodus-hydra/issues/16379)
+
+## [11.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@10.1.0...@exodus/keychain@11.0.0) (2026-06-03)
+
+### ⚠ BREAKING CHANGES
+
+- remove multi-seed support from wallet/keychain (#16379)
+
+### Code Refactoring
+
+- remove multi-seed support from wallet/keychain ([#16379](https://github.com/ExodusMovement/exodus-hydra/issues/16379)) ([e63510f](https://github.com/ExodusMovement/exodus-hydra/commit/e63510f2b57b7bcb7704d993baf2e75d11edb3ad))
+
+## [10.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@10.0.0...@exodus/keychain@10.1.0) (2026-05-27)
+
+### Features
+
+- **keychain:** expose needed exports at the root ([#16638](https://github.com/ExodusMovement/exodus-hydra/issues/16638)) ([30b1e96](https://github.com/ExodusMovement/exodus-hydra/commit/30b1e9644d476958f8a8c53e36a87dec3d27c7fb)), closes [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361) [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361)
+
+## [10.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@9.0.3...@exodus/keychain@10.0.0) (2026-05-11)
+
+### ⚠ BREAKING CHANGES
+
+- remove schnorrZ signing support (Zilliqa decommissioned) (#15771)
+
+### Features
+
+- feat!: remove schnorrZ signing support (Zilliqa decommissioned) (#15771)
+
+### Bug Fixes
+
+- fix(keychain): detach Cardano Byron chainCode from private seed buffer (#16436)
+
 ## [9.0.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/keychain@9.0.2...@exodus/keychain@9.0.3) (2026-02-09)
 
 ### Bug Fixes

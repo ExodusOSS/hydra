@@ -1,7 +1,7 @@
 import { createInMemoryAtom } from '@exodus/atoms'
 import KeyIdentifier from '@exodus/key-identifier'
 import { WalletAccount } from '@exodus/models'
-import { PublicKeyProvider } from '@exodus/public-key-provider/lib/module/public-key-provider.js'
+import { PublicKeyProvider } from '@exodus/public-key-provider'
 import publicKeyStoreDefinition from '@exodus/public-key-provider/lib/module/store/index.js'
 
 import createAddressCache from '../../../module/address-cache/memory-test.js'
@@ -25,7 +25,8 @@ const { factory: createPublicKeyStore } = publicKeyStoreDefinition
 describe('hardware wallet addresses', () => {
   const assetName = 'bitcoin'
 
-  const { assetsModule, assets } = createAssetsForTesting()
+  const { assets } = createAssetsForTesting()
+  const assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
 
   const walletAccount = new WalletAccount({
     source: WalletAccount.TREZOR_SRC,
@@ -58,7 +59,7 @@ describe('hardware wallet addresses', () => {
     })
 
     const txLogsAtom = createTxLogsAtom()
-    const knownAddresses = createKnownAddresses({ txLogsAtom, assetsModule })
+    const knownAddresses = createKnownAddresses({ txLogsAtom, assetsAtom })
 
     addressCache = createAddressCache()
     assetSources = {
@@ -72,7 +73,7 @@ describe('hardware wallet addresses', () => {
         walletAccountsAtom,
         getBuildMetadata: jest.fn().mockResolvedValue({ dev: false }),
       }),
-      assetsModule,
+      assetsAtom,
       knownAddresses,
       addressCache,
       logger: mockLogger,
@@ -528,30 +529,6 @@ describe('hardware wallet addresses', () => {
         Buffer.from(account.publicKey, 'hex'),
         { purpose: 1852 },
         Buffer.from(accountStaking.publicKey, 'hex')
-      )
-    })
-
-    it('should work with Monero public key format', async () => {
-      assetSources.isSupported.mockResolvedValue(true)
-      assetSources.getSupportedPurposes.mockResolvedValue([44])
-
-      await addressProvider.getAddress({
-        assetName: 'monero',
-        purpose: 44,
-        addressIndex: 0,
-        chainIndex: 0,
-        walletAccount,
-      })
-
-      const account = publicKeys[walletAccount.toString()]["m/44'/128'/0'"]
-      expect(assets.monero.keys.encodePublic).toHaveBeenCalledWith(
-        {
-          spendPub: Buffer.from(account.publicKey.spendPub, 'hex'),
-          viewPriv: Buffer.from(account.publicKey.viewPriv, 'hex'),
-          viewPub: Buffer.from(account.publicKey.viewPub, 'hex'),
-        },
-        { purpose: 44 },
-        account.stakingPublicKey
       )
     })
 

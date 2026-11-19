@@ -1,5 +1,4 @@
-import assert from 'node:assert/strict'
-import { describe, test } from 'node:test'
+import { describe, test, type TestContext } from 'node:test'
 
 import KeyIdentifier from '@exodus/key-identifier'
 import { EXODUS_KEY_IDS } from '@exodus/key-ids'
@@ -28,10 +27,9 @@ describe('getCacheKey', () => {
   ] as const
 
   for (const [{ keyId, seedId }, expected] of cases) {
-    // eslint-disable-next-line sonarjs/no-base-to-string
-    test(`computes cache key for ${new KeyIdentifier(keyId).toString()}`, () => {
+    test(`computes cache key for ${new KeyIdentifier(keyId).toString()}`, (t: TestContext) => {
       const cacheKey = getCacheKey({ keyId, seedId })
-      assert.equal(cacheKey, expected)
+      t.assert.equal(cacheKey, expected)
     })
   }
 })

@@ -5,7 +5,7 @@ Wildcard emitter implementation
 ## Install
 
 ```sh
-    yarn add @exodus/wild-emitter
+    pnpm add @exodus/wild-emitter
 ```
 
 ## Usage

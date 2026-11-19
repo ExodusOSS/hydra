@@ -5,7 +5,7 @@ Provides compatibility info and metadata about asset sources. An asset source is
 ## Install
 
 ```sh
-yarn add @exodus/asset-sources
+pnpm add @exodus/asset-sources
 ```
 
 ## Usage

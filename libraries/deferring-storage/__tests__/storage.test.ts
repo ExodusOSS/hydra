@@ -21,10 +21,10 @@ describe('DeferringStorage', () => {
   })
 
   test('defers {get,batchGet,set,batchSet} until release()', async () => {
-    deferringStorage.get('theKey')
-    deferringStorage.set('theKey', 'abc')
-    deferringStorage.batchGet(['theKey', 'theOtherKey'])
-    deferringStorage.batchSet({ theKey: 'abc' })
+    void deferringStorage.get('theKey')
+    void deferringStorage.set('theKey', 'abc')
+    void deferringStorage.batchGet(['theKey', 'theOtherKey'])
+    void deferringStorage.batchSet({ theKey: 'abc' })
     await new Promise(setImmediate)
 
     expect(storage.get).not.toHaveBeenCalled()
@@ -42,21 +42,21 @@ describe('DeferringStorage', () => {
   })
 
   test('does not defer clearing', async () => {
-    deferringStorage.clear()
+    void deferringStorage.clear()
     await new Promise(setImmediate)
 
     expect(storage.clear).toHaveBeenCalled()
   })
 
   test('does not defer setting an undefined value', async () => {
-    deferringStorage.set('theKeyToRuleThemAll', undefined)
+    void deferringStorage.set('theKeyToRuleThemAll', undefined)
     await new Promise(setImmediate)
 
     expect(storage.set).toHaveBeenCalledWith('theKeyToRuleThemAll', undefined)
   })
 
   test('does not defer deleting', async () => {
-    deferringStorage.delete('abc')
+    void deferringStorage.delete('abc')
     await new Promise(setImmediate)
 
     expect(storage.delete).toHaveBeenCalledWith('abc')

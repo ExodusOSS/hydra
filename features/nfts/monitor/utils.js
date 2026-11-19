@@ -60,7 +60,8 @@ export const handleNftsOnImport = async ({ nfts }, { nftsModule, nftsConfigAtom,
 }
 
 export const doesWalletAccountSupportNFTs = (walletAccount) =>
-  walletAccount.isSoftware || walletAccount.source === WalletAccount.LEDGER_SRC
+  !walletAccount.delegated &&
+  (walletAccount.isSoftware || walletAccount.source === WalletAccount.LEDGER_SRC)
 
 export const updateNetworkFetchStatus = async ({ atom, network, walletAccountName, type }) => {
   await atom.set((state) => {

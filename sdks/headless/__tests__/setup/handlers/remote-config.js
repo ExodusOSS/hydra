@@ -123,7 +123,7 @@ const GENESIS = {
         },
       },
       bitcoin: {
-        insightServers: ['https://bitcoin-s.a.exodus.io/insight/'],
+        insightServers: ['https://bitcoin-s.a.exodus-int.com/insight/'],
         rbfEnabled: true,
         feeData: { multiplier: 1.05 },
         feeMultiplier: 1.05,
@@ -771,7 +771,7 @@ const GENESIS = {
     },
     infrastructure: {
       'price-server': {
-        server: 'https://pricing-s.a.exodus.io',
+        server: 'https://pricing-s.a.exodus-int.com',
         jitter: 45_000,
         'activate-failover': true,
         'outlier-threshold': 85,

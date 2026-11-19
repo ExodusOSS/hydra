@@ -1,16 +1,21 @@
-import { compute } from '@exodus/atoms'
+import { combine, compute } from '@exodus/atoms'
 
 const createAvailableAssetsWithoutParentCombinedAtom = ({
-  assetsModule,
+  assetsAtom,
   availableAssetNamesAtom,
 }) => {
-  const selector = (availableAssetNames) =>
-    availableAssetNames.filter((assetName) => {
-      const asset = assetsModule.getAsset(assetName)
+  const selector = ({ availableAssetNames, assetsAtomValue }) => {
+    const assets = assetsAtomValue.value
+    return availableAssetNames.filter((assetName) => {
+      const asset = assets[assetName]
       return !asset.isCombined
     })
+  }
 
-  return compute({ atom: availableAssetNamesAtom, selector })
+  return compute({
+    atom: combine({ availableAssetNames: availableAssetNamesAtom, assetsAtomValue: assetsAtom }),
+    selector,
+  })
 }
 
 export default createAvailableAssetsWithoutParentCombinedAtom

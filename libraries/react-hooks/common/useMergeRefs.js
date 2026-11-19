@@ -11,7 +11,7 @@ const useMergeRefs = (refs) => (value) => {
     if (typeof ref === 'function') {
       ref(value)
     } else if (ref != null) {
-      // eslint-disable-next-line @exodus/mutable/no-param-reassign-prop-only
+      // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only
       ref.current = value
     }
   })

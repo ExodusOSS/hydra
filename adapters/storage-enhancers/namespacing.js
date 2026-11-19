@@ -17,8 +17,10 @@ module.exports = function addNamespacing(storage) {
       batchDelete: async (keys) => storage.batchDelete(keys.map((key) => processKey(key))),
       clear: async () => storage.clear(prefix),
       namespace: (childPrefix) => {
-        if (childPrefix.includes('!'))
+        if (childPrefix.includes('!')) {
           throw new Error(`prefixes cannot contain !; recieved ${childPrefix}`)
+        }
+
         return createAPI(`${prefix}!${childPrefix}!`)
       },
     }

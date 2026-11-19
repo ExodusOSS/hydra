@@ -1,5 +1,5 @@
 import type { WalletAccount } from '@exodus/models'
-import type { KeyIdentifier } from '@exodus/keychain/module'
+import type KeyIdentifier from '@exodus/key-identifier'
 import type { HardwareWalletDevice } from '@exodus/hw-common'
 
 export type Bytes = Readonly<Uint8Array>
@@ -38,7 +38,7 @@ export interface SignMessageParams {
   message: IUnsignedMessage
 }
 
-interface Asset {
+export interface Asset {
   name: string
   api: {
     features: { [x: string]: boolean }
@@ -55,10 +55,6 @@ interface Asset {
       signer?: { sign: (params: KeychainSignerParams) => Promise<Buffer> }
     }) => ISignedMessage
   }
-}
-
-export interface AssetsModule {
-  getAsset: (assetName: string) => Asset
 }
 
 export interface AssetSources {

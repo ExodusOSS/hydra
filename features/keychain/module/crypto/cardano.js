@@ -29,8 +29,11 @@ async function seedToCardanoV1Seed(seed) {
 
   for (let i = 1; i <= 1000; i++) {
     const digest = await hmac('sha512', seed, `Root Seed Chain ${i}`, 'uint8')
-    const privateKey = digest.subarray(0, 32)
-    const chainCode = digest.subarray(32, 64)
+    // Use `slice` (not `subarray`) so each half owns its own ArrayBuffer.
+    // Otherwise `chainCode.buffer` would alias the private seed bytes, and
+    // `privateKey.buffer` would alias the chain code.
+    const privateKey = digest.slice(0, 32)
+    const chainCode = digest.slice(32, 64)
 
     const raw = await hash('sha512', privateKey, 'uint8')
     if (raw[31] & 0x20) continue

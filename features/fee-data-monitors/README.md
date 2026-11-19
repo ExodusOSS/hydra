@@ -11,7 +11,7 @@ The `feeData` returned by this monitor MAY be assembled from several parts:
 ## Install
 
 ```sh
-yarn add @exodus/fee-data-monitors
+pnpm add @exodus/fee-data-monitors
 ```
 
 ## Usage

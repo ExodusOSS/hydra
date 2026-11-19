@@ -1,7 +1,7 @@
 import createReduxIOC from '@exodus/headless/redux'
 import { createRPCClient } from '@exodus/sdk-rpc'
 
-import { createProcessRPC, Thread } from './multi-process'
+import { createProcessRPC, Thread } from './multi-process.js'
 
 const setupUI = () => {
   const reduxIoc = createReduxIOC({

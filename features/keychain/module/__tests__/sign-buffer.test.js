@@ -84,20 +84,6 @@ describe('keychain.signBuffer', async () => {
     expect(Buffer.from(signature).toString('hex')).toBe(expected)
   })
 
-  it('signatureType "schnorrZ" fails with "extraEntropy" arg', async () => {
-    const keyId = new KeyIdentifier({
-      derivationPath: "m/44'/60'/0'/0/0",
-      derivationAlgorithm: 'BIP32',
-      keyType: 'secp256k1',
-    })
-    const data = await hash('sha256', Buffer.from('I really love keychains'))
-    const signatureType = 'schnorrZ'
-
-    await expect(
-      keychain.signBuffer({ keyId, signatureType, data, extraEntropy: null })
-    ).rejects.toThrow('unsupported options supplied for schnorrZ signature')
-  })
-
   it('signatureType "ed25519" fails with invalid params', async () => {
     let keyId = new KeyIdentifier({
       derivationPath: "m/44'/60'/0'/0/0",

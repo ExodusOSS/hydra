@@ -71,6 +71,30 @@ describe('createWalletAccountsInternalAtom', () => {
     })
   })
 
+  it('returns the same deserialized instances while storage is unchanged', async () => {
+    const walletAccount = new WalletAccount({
+      ...WalletAccount.DEFAULT,
+      label: 'Wayne Portfolio',
+      index: 42,
+    })
+    await storage.set('walletAccounts', { exodus_42: walletAccount.toJSON() })
+
+    const walletAccountsAtom = createWalletAccountsInternalAtom({ storage })
+
+    const first = await walletAccountsAtom.get()
+    const second = await walletAccountsAtom.get()
+
+    expect(second).toBe(first)
+    expect(Object.isFrozen(first)).toBe(true)
+
+    const updated = new WalletAccount({ ...walletAccount.toJSON(), label: 'Other Portfolio' })
+    await walletAccountsAtom.set({ exodus_42: updated })
+    const third = await walletAccountsAtom.get()
+
+    expect(third).not.toBe(first)
+    expect(third?.exodus_42?.label).toBe('Other Portfolio')
+  })
+
   it('clears storage when receiving an empty object', async () => {
     const walletAccountsAtom = createWalletAccountsInternalAtom({ storage })
 

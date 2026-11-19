@@ -14,7 +14,7 @@ import createParentCombinedNetworkAssetsSelector, {
   createWithParentCombinedNetworkAssetsSelector,
 } from '../index.js'
 
-const { keyBy, mapValues } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { keyBy, mapValues } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 describe('networks selectors', () => {
   const allAssetsSelector = () => {
@@ -101,57 +101,21 @@ describe('networks selectors', () => {
         primary: true,
       },
       {
-        assetName: 'usdcoin_algorand',
-        name: 'algorand',
-        primary: false,
-      },
-      {
         assetName: 'usdcoin_solana',
         name: 'solana',
         primary: false,
       },
       {
-        assetName: 'usdcoin_bsc',
-        name: 'bsc',
-        primary: false,
-      },
-      {
-        assetName: 'usdc_matic_0a883d9b',
-        name: 'matic',
-        primary: false,
-      },
-      {
-        assetName: 'usdc_avalanchec_185c8bd7',
-        name: 'avalanchec',
-        primary: false,
-      },
-      {
-        assetName: 'usdc_ethereumarbone_2e1129c4',
-        name: 'ethereumarbone',
-        primary: false,
-      },
-      {
-        assetName: 'usdc_optimism_68bb70cd',
-        name: 'optimism',
-        primary: false,
-      },
-      {
-        assetName: 'usdc_basemainnet_b5a52617',
-        name: 'basemainnet',
+        assetName: 'usdcoin_algorand',
+        name: 'algorand',
         primary: false,
       },
     ]
     const result = createNetworksByAssetSelector({ allAssetsSelector })(state)
     expect(result).toEqual({
       usdcoin: usdcoinNetworks,
-      usdcoin_algorand: usdcoinNetworks,
-      usdcoin_bsc: usdcoinNetworks,
       usdcoin_solana: usdcoinNetworks,
-      usdc_avalanchec_185c8bd7: usdcoinNetworks,
-      usdc_ethereumarbone_2e1129c4: usdcoinNetworks,
-      usdc_matic_0a883d9b: usdcoinNetworks,
-      usdc_optimism_68bb70cd: usdcoinNetworks,
-      usdc_basemainnet_b5a52617: usdcoinNetworks,
+      usdcoin_algorand: usdcoinNetworks,
     })
   })
 
@@ -191,50 +155,14 @@ describe('networks selectors', () => {
         available: true,
       },
       {
-        assetName: 'usdcoin_algorand',
-        name: 'algorand',
-        primary: false,
-        available: true,
-      },
-      {
         assetName: 'usdcoin_solana',
         name: 'solana',
         primary: false,
         available: false,
       },
       {
-        assetName: 'usdcoin_bsc',
-        name: 'bsc',
-        primary: false,
-        available: true,
-      },
-      {
-        assetName: 'usdc_matic_0a883d9b',
-        available: true,
-        primary: false,
-        name: 'matic',
-      },
-      {
-        assetName: 'usdc_avalanchec_185c8bd7',
-        name: 'avalanchec',
-        primary: false,
-        available: true,
-      },
-      {
-        assetName: 'usdc_ethereumarbone_2e1129c4',
-        name: 'ethereumarbone',
-        primary: false,
-        available: true,
-      },
-      {
-        assetName: 'usdc_optimism_68bb70cd',
-        name: 'optimism',
-        primary: false,
-        available: true,
-      },
-      {
-        assetName: 'usdc_basemainnet_b5a52617',
-        name: 'basemainnet',
+        assetName: 'usdcoin_algorand',
+        name: 'algorand',
         primary: false,
         available: true,
       },
@@ -245,14 +173,8 @@ describe('networks selectors', () => {
     })(state)
     expect(result).toEqual({
       usdcoin: usdcoinNetworks,
-      usdcoin_algorand: usdcoinNetworks,
-      usdcoin_bsc: usdcoinNetworks,
       usdcoin_solana: usdcoinNetworks,
-      usdc_avalanchec_185c8bd7: usdcoinNetworks,
-      usdc_matic_0a883d9b: usdcoinNetworks,
-      usdc_ethereumarbone_2e1129c4: usdcoinNetworks,
-      usdc_optimism_68bb70cd: usdcoinNetworks,
-      usdc_basemainnet_b5a52617: usdcoinNetworks,
+      usdcoin_algorand: usdcoinNetworks,
     })
   })
 

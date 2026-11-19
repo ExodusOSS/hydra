@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/ExodusMovement/exodus/compare/@exodus/multi-account-redux@3.0.0...@exodus/multi-account-redux@3.0.1) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/multi-account-redux
+
+## [3.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/multi-account-redux@2.1.1...@exodus/multi-account-redux@3.0.0) (2026-05-13)
+
+### ⚠ BREAKING CHANGES
+
+- **multi-account-redux:** migrate to TypeScript, drop /src/common.js subpath (#16529)
+
+### Code Refactoring
+
+- **multi-account-redux:** migrate to TypeScript, drop /src/common.js subpath ([#16529](https://github.com/ExodusMovement/exodus-hydra/issues/16529)) ([0d7bb82](https://github.com/ExodusMovement/exodus-hydra/commit/0d7bb826ec4a7aa4fe8bae59f8b4becd0bf0f0d2)), closes [#16394](https://github.com/ExodusMovement/exodus-hydra/issues/16394) [#16423](https://github.com/ExodusMovement/exodus-hydra/issues/16423)
+
 ## [2.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/multi-account-redux@2.1.0...@exodus/multi-account-redux@2.1.1) (2024-12-06)
 
 ### License

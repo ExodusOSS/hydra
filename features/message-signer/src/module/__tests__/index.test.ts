@@ -6,6 +6,8 @@ import { UnsupportedWalletAccountSource } from '../errors.js'
 import type { IMessageSigner } from '../interfaces.js'
 import messageSignerDefinition from '../message-signer.js'
 
+type WalletAccountSource = ConstructorParameters<typeof WalletAccount>[0]['source']
+
 const mockSeedBasedMessageSigner = {
   signMessage: jest.fn(),
 }
@@ -31,7 +33,7 @@ describe('MessageSigner', () => {
     })
   })
 
-  describe.each([
+  describe.each<[WalletAccountSource, typeof mockSeedBasedMessageSigner]>([
     ['exodus', mockSeedBasedMessageSigner],
     ['seed', mockSeedBasedMessageSigner],
     ['ledger', mockHardwareMessageSigner],
@@ -120,42 +122,44 @@ describe('MessageSigner without hardware wallets', () => {
     })
   })
 
-  it.each([['exodus', mockSeedBasedMessageSigner]])(
-    'should call the %s signer',
-    async (source, signer) => {
-      const walletAccount = new WalletAccount({
-        source,
-        index: accountIndex,
-      })
-
-      await walletAccountsAtom.set({ [walletAccount.toString()]: walletAccount })
-
-      await messageSigner.signMessage({
-        baseAssetName,
-        message: message as never,
-        walletAccount,
-      })
-      expect(signer.signMessage).toHaveBeenCalledWith({
-        baseAssetName,
-        message,
-        walletAccount,
-      })
-    }
-  )
-
-  it.each([['ledger'], ['trezor']])('should call the %s wallet', async (source) => {
+  it.each<[WalletAccountSource, typeof mockSeedBasedMessageSigner]>([
+    ['exodus', mockSeedBasedMessageSigner],
+  ])('should call the %s signer', async (source, signer) => {
     const walletAccount = new WalletAccount({
       source,
       index: accountIndex,
-      id: '123',
     })
 
-    await expect(
-      messageSigner.signMessage({
-        baseAssetName,
-        message: message as never,
-        walletAccount,
-      })
-    ).rejects.toThrow(UnsupportedWalletAccountSource)
+    await walletAccountsAtom.set({ [walletAccount.toString()]: walletAccount })
+
+    await messageSigner.signMessage({
+      baseAssetName,
+      message: message as never,
+      walletAccount,
+    })
+    expect(signer.signMessage).toHaveBeenCalledWith({
+      baseAssetName,
+      message,
+      walletAccount,
+    })
   })
+
+  it.each<[WalletAccountSource]>([['ledger'], ['trezor']])(
+    'should call the %s wallet',
+    async (source) => {
+      const walletAccount = new WalletAccount({
+        source,
+        index: accountIndex,
+        id: '123',
+      })
+
+      await expect(
+        messageSigner.signMessage({
+          baseAssetName,
+          message: message as never,
+          walletAccount,
+        })
+      ).rejects.toThrow(UnsupportedWalletAccountSource)
+    }
+  )
 })

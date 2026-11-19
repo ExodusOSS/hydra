@@ -1,14 +1,19 @@
-import type { Keychain } from '@exodus/keychain/module'
+import type { Keychain } from '@exodus/keychain'
 import KeyIdentifier from '@exodus/key-identifier'
-import assert from 'minimalistic-assert'
 import { derivationPathsWithHardenedPrefix } from './utils/bip32.js'
 import BIP32 from '@exodus/bip32'
 import BipPath from 'bip32-path'
 import type { Atom } from '@exodus/atoms'
 import type { WalletAccount } from '@exodus/models'
 import type { Definition } from '@exodus/dependency-types'
+import type { Logger } from '@exodus/logger'
 import type { GetParams, GetReturn, IPublicKeyStore } from './store/types.js'
-import type { Logger } from 'libraries/atoms/lib/utils/types.js'
+import {
+  MissingWalletAccountParamError,
+  MissingKeyIdentifierParamError,
+  WalletAccountNotFoundError,
+  PublicKeyNotFoundError,
+} from '../errors/errors.js'
 
 export type BuildMetadata = {
   dev?: boolean
@@ -113,18 +118,25 @@ export class PublicKeyProvider {
     walletAccount: walletAccountName,
     keyIdentifier,
   }: GetPublicKeyParams): Promise<PublicKeys> => {
-    assert(walletAccountName, 'Missing required param "walletAccount"')
-    assert(keyIdentifier, 'Missing required param "keyIdentifier"')
+    if (!walletAccountName) {
+      throw new MissingWalletAccountParamError()
+    }
+
+    if (!keyIdentifier) {
+      throw new MissingKeyIdentifierParamError()
+    }
 
     // backwards compat for callers that today pass a WalletAccount instance
     if (typeof walletAccountName !== 'string') {
       this.#logger.warn('expected walletAccount to be a string', walletAccountName)
-      walletAccountName = (<WalletAccount>walletAccountName).toString()
+      walletAccountName = (walletAccountName as WalletAccount).toString()
     }
 
     const walletAccounts = await this.#walletAccountsAtom.get()
     const walletAccount = walletAccounts[walletAccountName]
-    assert(walletAccount, `Wallet account with name ${walletAccountName} does not exist`)
+    if (!walletAccount) {
+      throw new WalletAccountNotFoundError(walletAccountName)
+    }
 
     // Ensure key identifier is of the right type and frozen
     keyIdentifier = new KeyIdentifier(keyIdentifier)
@@ -145,6 +157,7 @@ export class PublicKeyProvider {
       const { publicKey, xpub } = await this.#keychain.exportKey({
         keyId: keyIdentifier,
         seedId: walletAccount.seedId,
+        exportPrivate: false,
       })
 
       // Don't wait to avoid extra latency
@@ -157,8 +170,10 @@ export class PublicKeyProvider {
       return { publicKey, xpub }
     }
 
-    throw new Error(
-      `No public key found for ${walletAccountName} and key identifier ${keyIdentifier.derivationPath} (${keyIdentifier.derivationAlgorithm})`
+    throw new PublicKeyNotFoundError(
+      walletAccountName,
+      keyIdentifier.derivationPath,
+      keyIdentifier.derivationAlgorithm
     )
   }
 }

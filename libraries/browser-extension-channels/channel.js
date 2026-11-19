@@ -1,5 +1,5 @@
 class Channel {
-  /* eslint-disable @exodus/mutable/no-param-reassign-prop-only */
+  /* oxlint-disable @exodus/oxlint-plugin-hydra/no-param-reassign-prop-only */
   constructor({ name }) {
     this.name = name
   }
@@ -22,8 +22,9 @@ class Channel {
   call = async (data, options) => {
     const response = await this.#send(data, options, true)
 
-    if (!response || !response.success)
+    if (!response || !response.success) {
       throw new Error(`Failed to call with: ${JSON.stringify(data)}`)
+    }
 
     return response.data
   }
@@ -62,7 +63,7 @@ class Channel {
       }
 
       if (message.async && this.name === message.channel) {
-        handleMessage()
+        void handleMessage()
         return true
       }
 

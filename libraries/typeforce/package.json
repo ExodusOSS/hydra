@@ -1,6 +1,6 @@
 {
   "name": "@exodus/typeforce",
-  "version": "1.19.1",
+  "version": "1.19.5",
   "description": "Another biased type checking solution for Javascript",
   "keywords": [
     "typeforce",
@@ -10,9 +10,9 @@
     "exceptions",
     "force"
   ],
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/typeforce",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/typeforce",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Atypeforce"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Atypeforce"
   },
   "license": "MIT",
   "author": "Exodus Movement, Inc.",
@@ -20,26 +20,47 @@
     "Daniel Cousens"
   ],
   "main": "index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./index.js"
+    },
+    "./async.js": {
+      "types": "./lib/async.d.ts",
+      "default": "./async.js"
+    },
+    "./nothrow.js": {
+      "types": "./lib/nothrow.d.ts",
+      "default": "./nothrow.js"
+    }
+  },
   "files": [
-    "CHANGELOG.md",
+    "lib",
     "async.js",
-    "errors.js",
-    "extra.js",
-    "native.js",
-    "nothrow.js"
+    "nothrow.js",
+    "CHANGELOG.md"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "scripts": {
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
     "bench": "node bench/index.js",
-    "test": "run -T exodus-test test/*.js",
-    "lint": "run -T eslint"
+    "test": "pnpm run build && pnpm exec exodus-test test/*.js",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "lint": "pnpm exec eslint",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/typeforce"
   },
   "devDependencies": {
+    "@types/node": "^24.0.0",
     "benchmark": "^1.0.0",
     "tape": "^4.6.1",
     "typeforce": "^1.11.1"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

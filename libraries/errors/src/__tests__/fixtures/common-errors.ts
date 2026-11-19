@@ -6,7 +6,7 @@ export const commonErrorCases: [Error, { name: string; hint: string; missingStac
       const a = {}
       try {
         // @ts-expect-error need to test wrong types
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        // oxlint-disable-next-line no-unused-expressions
         a.b.c
       } catch (e) {
         return e

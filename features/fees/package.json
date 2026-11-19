@@ -1,18 +1,19 @@
 {
   "name": "@exodus/fees",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Fees module",
   "type": "module",
   "author": "Exodus Movement, Inc.",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/fees",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/fees",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afees"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Afees"
   },
   "scripts": {
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit"
   },
   "main": "index.js",
   "files": [
@@ -25,10 +26,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "dependencies": {
-    "@exodus/currency": "^5.0.2",
+    "@exodus/currency": "^6.0.0",
     "minimalistic-assert": "^1.0.1"
   },
   "devDependencies": {
@@ -39,6 +40,7 @@
     "@exodus/models": "workspace:^"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

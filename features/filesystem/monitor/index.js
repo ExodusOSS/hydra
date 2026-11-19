@@ -1,4 +1,5 @@
 import delay from 'delay'
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import ms from 'ms'
 
@@ -15,9 +16,9 @@ const createFilesystemMonitor = ({ filesystemStatsAtom, getFilesystemInfo, logge
           filesystemStatsAtom.get(),
         ])
 
-        if (isEqual(previousValue, fsInfo)) continue
-
-        await filesystemStatsAtom.set(fsInfo)
+        if (!isEqual(previousValue, fsInfo)) {
+          await filesystemStatsAtom.set(fsInfo)
+        }
       } catch (error) {
         logger.warn('failed to get filesystem stats', error)
       }

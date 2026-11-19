@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.6](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fees@1.2.5...@exodus/fees@1.2.6) (2026-06-05)
+
+### Bug Fixes
+
+- **fees:** widen getFees API typing to match runtime params ([#17032](https://github.com/ExodusMovement/exodus-hydra/issues/17032)) ([71b09a0](https://github.com/ExodusMovement/exodus-hydra/commit/71b09a0c208878c97ca0c52a1bf710d1f781f0eb))
+
 ## [1.2.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fees@1.2.4...@exodus/fees@1.2.5) (2025-09-03)
 
 ### Bug Fixes

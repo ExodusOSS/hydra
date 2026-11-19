@@ -1,37 +1,37 @@
 {
   "name": "@exodus/find-optimistic-orders",
-  "version": "3.1.1",
+  "version": "3.1.3",
   "description": "Util to match orders with specific amount (solve n-sum problem)",
   "type": "module",
   "main": "src/index.js",
   "author": "Exodus Movement, Inc.",
   "license": "MIT",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/find-optimistic-orders",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/find-optimistic-orders",
   "files": [
     "src",
     "CHANGELOG.md",
     "!**/__tests__"
   ],
   "dependencies": {
-    "@exodus/currency": "^5.0.1",
+    "@exodus/currency": "workspace:^",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
     "@exodus/assets": "^11.0.0",
-    "@exodus/assets-base": "^10.0.0",
+    "@exodus/assets-base": "^12.0.0",
     "@exodus/models": "workspace:^"
   },
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "NODE_ENV=test run -T eslint .",
-    "lint:fix": "yarn lint --fix"
+    "test": "pnpm exec exodus-test --jest",
+    "lint": "NODE_ENV=test pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afind-optimistic-orders"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Afind-optimistic-orders"
   },
   "publishConfig": {
     "access": "public",

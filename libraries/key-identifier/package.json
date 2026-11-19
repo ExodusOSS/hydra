@@ -1,38 +1,46 @@
 {
   "name": "@exodus/key-identifier",
-  "version": "1.4.0",
+  "version": "1.5.1",
   "type": "module",
   "description": "Provides a KeyIdentifier class that helps to define how a key is derived",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/key-identifier",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/key-identifier",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Akey-identifier"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Akey-identifier"
   },
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    }
+  },
   "files": [
-    "src",
-    "README.md",
+    "lib/",
     "CHANGELOG.md"
   ],
   "scripts": {
-    "lint": "yarn run -T eslint",
-    "lint:fix": "yarn lint --fix",
-    "test": "yarn run -T exodus-test --jest",
-    "todo:reenable:test:integration": "yarn run -T exodus-test --jest '**/*.integration-test.js'"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/key-identifier",
+    "todo:reenable:test:integration": "RUN_TESTS=integration pnpm run test"
   },
   "dependencies": {
-    "@exodus/key-utils": "^3.7.0",
+    "@exodus/key-utils": "workspace:^",
     "minimalistic-assert": "^1.0.1"
   },
-  "devDependencies": {
-    "@exodus/key-ids": "^1.2.2"
-  },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

@@ -1,5 +1,5 @@
+import { getSeedId } from '@exodus/bip32'
 import { mnemonicToSeed } from '@exodus/bip39'
-import { getSeedId } from '@exodus/keychain/module/crypto/seed-id.js'
 import { WalletAccount } from '@exodus/models'
 
 import createAdapters from './adapters/index.js'

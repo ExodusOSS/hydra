@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.10.0...@exodus/app-process-mobile@3.10.1) (2026-05-06)
+
+### Bug Fixes
+
+- fix(app-process-mobile): preserve state in appProcess reducer (#16326)
+
 ## [3.10.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/app-process-mobile@3.9.1...@exodus/app-process-mobile@3.10.0) (2025-07-18)
 
 ### Features

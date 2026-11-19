@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.2.2](https://github.com/ExodusMovement/exodus/compare/@exodus/blockchain-metadata@17.2.1...@exodus/blockchain-metadata@17.2.2) (2026-11-09)
+
+### Performance Improvements
+
+- **blockchain-metadata:** reduce startup storage work ([#48883](https://github.com/ExodusMovement/exodus/issues/48883)) ([0e3bff2](https://github.com/ExodusMovement/exodus/commit/0e3bff25713c080675f336b8a13235e90a9e0add))
+
+## [17.2.1](https://github.com/ExodusMovement/exodus/compare/@exodus/blockchain-metadata@17.2.0...@exodus/blockchain-metadata@17.2.1) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/blockchain-metadata
+
+## [17.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@17.1.1...@exodus/blockchain-metadata@17.2.0) (2026-06-18)
+
+### Features
+
+- **blockchain-metadata:** migrate to TypeScript ([#16378](https://github.com/ExodusMovement/exodus-hydra/issues/16378)) ([156246d](https://github.com/ExodusMovement/exodus-hydra/commit/156246da0b143f96e42b4b9fe7f94dead35f4bbc)), closes [#16249](https://github.com/ExodusMovement/exodus-hydra/issues/16249) [#16560](https://github.com/ExodusMovement/exodus-hydra/issues/16560) [exodus/models#16572](https://github.com/exodus/models/issues/16572)
+
+## [17.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@17.1.0...@exodus/blockchain-metadata@17.1.1) (2026-04-11)
+
+**Note:** Version bump only for package @exodus/blockchain-metadata
+
 ## [17.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/blockchain-metadata@17.0.0...@exodus/blockchain-metadata@17.1.0) (2025-11-27)
 
 ### Features

@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.2](https://github.com/ExodusMovement/exodus/compare/@exodus/tx-signer@3.2.1...@exodus/tx-signer@3.2.2) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/tx-signer
+
+## [3.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-signer@3.2.0...@exodus/tx-signer@3.2.1) (2026-05-27)
+
+### Features
+
+- **keychain:** expose needed exports at the root ([#16638](https://github.com/ExodusMovement/exodus-hydra/issues/16638)) ([30b1e96](https://github.com/ExodusMovement/exodus-hydra/commit/30b1e9644d476958f8a8c53e36a87dec3d27c7fb)), closes [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361) [#16361](https://github.com/ExodusMovement/exodus-hydra/issues/16361)
+
+## [3.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-signer@3.1.0...@exodus/tx-signer@3.2.0) (2026-05-18)
+
+### Features
+
+- feat: export types (#14809)
+
+- feat: expose public entrypoints to replace deep /lib/ imports (#16590)
+
 ## [3.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/tx-signer@3.0.0...@exodus/tx-signer@3.1.0) (2025-09-09)
 
 ### Features

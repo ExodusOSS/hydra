@@ -1,6 +1,6 @@
 import { randomBytes } from '@exodus/crypto/randomBytes'
 import test from '@exodus/test/tape'
-import { metadata } from 'secure-container' // eslint-disable-line import/no-extraneous-dependencies
+import { metadata } from 'secure-container'
 
 import { IV_LEN_BYTES } from '../crypto.js'
 

@@ -33,3 +33,16 @@ client.captureError({
   error: new Error(safeString`Failed to send recovery email: ${email}`),
 })
 ```
+
+### Linked errors
+
+An error's `cause` chain (up to 5 levels deep) is captured automatically and sent to Sentry
+as a chain of linked exceptions, so the root cause is preserved alongside the thrown error.
+
+```js
+client.captureError({
+  error: new Error(safeString`Failed to sync wallet`, {
+    cause: new Error(safeString`Network request failed`),
+  }),
+})
+```

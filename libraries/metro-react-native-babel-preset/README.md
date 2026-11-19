@@ -18,10 +18,10 @@ with `npm`:
 npm i metro-react-native-babel-preset --save-dev
 ```
 
-or with `yarn`:
+or with `pnpm`:
 
 ```sh
-yarn add -D metro-react-native-babel-preset
+pnpm add -D metro-react-native-babel-preset
 ```
 
 ### Configuring Babel

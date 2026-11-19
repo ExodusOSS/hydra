@@ -1,16 +1,16 @@
 {
   "name": "@exodus/timer",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "author": "Exodus Movement, Inc.",
   "description": "Timer that allows you to schedule tasks at fixed intervals",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/hydra/tree/master/libraries/timer",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/timer",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/hydra/issues?q=is%3Aissue+is%3Aopen+label%3Atimer"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Atimer"
   },
   "type": "module",
   "main": "src/index.js",
@@ -20,8 +20,11 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix"
+    "test": "pnpm exec exodus-test --jest",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

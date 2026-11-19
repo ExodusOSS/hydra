@@ -11,12 +11,12 @@ import lodash from 'lodash'
 import { types } from './validation.js'
 import BIP32 from '@exodus/bip32'
 import BipPath from 'bip32-path'
-import { UnsupportedAssetSourceError } from '../errors/index.js'
+import { ExternalAddressNotFoundError, UnsupportedAssetSourceError } from '../errors/index.js'
 
 const { uniqBy } = lodash
 
 export class AddressProvider {
-  #assetsModule
+  #assetsAtom
   #publicKeyProvider
   #addressCache
   #knownAddresses
@@ -24,9 +24,10 @@ export class AddressProvider {
   #assetSources
   #logger
   #multisigAtom
+  #externalWalletAddressesAtom
 
   constructor({
-    assetsModule,
+    assetsAtom,
     addressCache,
     knownAddresses,
     accountStatesAtom,
@@ -34,8 +35,9 @@ export class AddressProvider {
     publicKeyProvider,
     logger,
     multisigAtom,
+    externalWalletAddressesAtom,
   }) {
-    this.#assetsModule = assetsModule
+    this.#assetsAtom = assetsAtom
     this.#addressCache = addressCache
     this.#knownAddresses = knownAddresses
     this.#accountStatesAtom = accountStatesAtom
@@ -43,9 +45,24 @@ export class AddressProvider {
     this.#publicKeyProvider = publicKeyProvider
     this.#logger = logger
     this.#multisigAtom = multisigAtom
+    this.#externalWalletAddressesAtom = externalWalletAddressesAtom
   }
 
-  #getAsset = (assetName) => this.#assetsModule.getAsset(assetName)
+  #getExternalAddress = async ({ assetName, walletAccount }) => {
+    const external = await this.#externalWalletAddressesAtom.get()
+    const { baseAsset } = await this.#getAsset(assetName)
+    const address = external?.[walletAccount]?.[baseAsset.name]
+    if (!address) {
+      throw new ExternalAddressNotFoundError({ assetName, walletAccount })
+    }
+
+    return new Address(address, { path: 'm/0/0', walletAccount: String(walletAccount) })
+  }
+
+  #getAsset = async (assetName) => {
+    const { value: assets } = await this.#assetsAtom.get()
+    return assets[assetName]
+  }
 
   // Note: don't use arrow function to allow sub-classing
   async getAddress(opts) {
@@ -72,6 +89,11 @@ export class AddressProvider {
       multisigDataIndex,
       useCache = true,
     } = opts
+
+    if (walletAccount.isExternal) {
+      return this.#getExternalAddress({ assetName, walletAccount })
+    }
+
     const walletAccountName = walletAccount.toString()
     await this.#assertAssetSourceIsSupported({ walletAccount: walletAccountName, assetName })
 
@@ -87,7 +109,7 @@ export class AddressProvider {
       )
     }
 
-    const asset = this.#getAsset(assetName)
+    const asset = await this.#getAsset(assetName)
 
     const { baseAsset } = asset
 
@@ -166,7 +188,7 @@ export class AddressProvider {
       opts
     )
 
-    const { baseAsset } = this.#getAsset(assetName)
+    const { baseAsset } = await this.#getAsset(assetName)
     const walletAccountName = walletAccount.toString()
     const keyIdentifier = baseAsset.api.getKeyIdentifier({
       purpose,
@@ -212,7 +234,7 @@ export class AddressProvider {
     const walletAccountName = walletAccount.toString()
 
     if (asset.api.features?.abstractAccounts) {
-      const accountName = await this.#getMainAccountName({ walletAccount, assetName: asset.name })
+      const accountName = await this.#getMainAccountName({ walletAccount, asset })
       return new Address(accountName, {
         path: createPath({ chainIndex, addressIndex }),
         walletAccount: walletAccountName,
@@ -314,7 +336,7 @@ export class AddressProvider {
       true
     )
 
-    const asset = this.#getAsset(assetName)
+    const asset = await this.#getAsset(assetName)
 
     const defaults = getDefaultPathIndexes({
       asset,
@@ -451,7 +473,7 @@ export class AddressProvider {
     multiAddressMode,
     ...rest
   }) => {
-    const asset = this.#getAsset(assetName)
+    const asset = await this.#getAsset(assetName)
 
     const defaultPurpose = getDefaultPurpose({
       asset,
@@ -592,7 +614,7 @@ export class AddressProvider {
       return AddressSet.fromArray([address])
     }
 
-    const { baseAsset } = this.#getAsset(assetName)
+    const { baseAsset } = await this.#getAsset(assetName)
 
     const addresses = await this.#knownAddresses
       .get({
@@ -633,12 +655,9 @@ export class AddressProvider {
     return AddressSet.fromArray(uniqueAddresses)
   }
 
-  #getMainAccountName = async ({ walletAccount, assetName }) => {
+  #getMainAccountName = async ({ walletAccount, asset }) => {
     const { value: accountStates } = await this.#accountStatesAtom.get()
-    return (
-      accountStates[walletAccount]?.[assetName]?.mainAccountName ||
-      this.#getAsset(assetName).noAccountYet
-    )
+    return accountStates[walletAccount]?.[asset.name]?.mainAccountName || asset.noAccountYet
   }
 
   async isOwnAddress({ address, chainIndex = 0, walletAccount, assetName, ...opts }) {
@@ -655,10 +674,10 @@ export class AddressProvider {
       true
     )
 
-    const asset = this.#getAsset(assetName)
+    const asset = await this.#getAsset(assetName)
 
     if (asset.api.features.abstractAccounts) {
-      const mainAccountName = await this.#getMainAccountName({ walletAccount, assetName })
+      const mainAccountName = await this.#getMainAccountName({ walletAccount, asset })
       return address === mainAccountName
     }
 
@@ -674,7 +693,7 @@ const addressProviderDefinition = {
   type: 'module',
   factory: createAddressProvider,
   dependencies: [
-    'assetsModule',
+    'assetsAtom',
     'publicKeyProvider',
     'addressCache',
     'knownAddresses',
@@ -682,6 +701,7 @@ const addressProviderDefinition = {
     'assetSources',
     'logger',
     'multisigAtom?',
+    'externalWalletAddressesAtom',
   ],
   public: true,
 }

@@ -1,5 +1,5 @@
 import type { WalletAccount } from '@exodus/models'
-import type { KeyIdentifier } from '@exodus/keychain/module'
+import type KeyIdentifier from '@exodus/key-identifier'
 
 export interface ISignedTransaction {
   rawTx: Buffer
@@ -70,9 +70,6 @@ export interface AssetSignTxParams {
 
 export type AssetSignTx = (params: AssetSignTxParams) => Promise<any>
 
-export interface AssetsModule {
-  getAsset: (assetName: string) => Asset
-}
 export interface Signer {
   sign: (params: KeychainSignerParams) => Promise<any>
   getPublicKey: (params?: GetPublicKeyParams) => Promise<Buffer>

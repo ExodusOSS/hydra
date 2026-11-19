@@ -73,23 +73,7 @@ const createExodus = ({ adapters = createAdapters(), config = defaultConfig, deb
 
   container.use(eventLog())
 
-  const resolve = () => {
-    const instance = container.resolve()
-
-    // HACK: Bitcoin monitor makes test fails as it's not turning off gracefuly
-    // TODO: remove this once bitcoin monitor is fixed
-    const { bitcoin } = container.get('assetsModule').getAssets()
-    bitcoin.api.createHistoryMonitor = jest.fn(() => ({
-      start: jest.fn(),
-      stop: jest.fn(),
-      update: jest.fn(),
-      addHook: jest.fn(),
-    }))
-
-    return instance
-  }
-
-  return { ...container, resolve }
+  return container
 }
 
 export default createExodus

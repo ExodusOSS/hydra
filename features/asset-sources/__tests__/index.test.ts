@@ -7,7 +7,7 @@ import ethereumPlugin from '@exodus/ethereum-plugin'
 import { createNoopLogger } from '@exodus/logger'
 import { WalletAccount } from '@exodus/models'
 import solanaPlugin from '@exodus/solana-plugin'
-import { EventEmitter } from 'events' // eslint-disable-line @exodus/restricted-imports/no-node-core-events -- might resolve to Node.js but we are in tests so fine. ts screams at events/events.js
+import { EventEmitter } from 'events' // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/no-node-core-events -- might resolve to Node.js but we are in tests so fine. ts screams at events/events.js
 
 import type assetSourcesApiDefinition from '../api/index.js'
 import type { availableAssetNamesByWalletAccountAtomDefinition } from '../atoms/available-asset-names-by-wallet-account.js'

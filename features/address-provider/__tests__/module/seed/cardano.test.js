@@ -5,10 +5,10 @@ const cardanoFixture = wallets.valid[0].bip44.coins.find((c) => c.coin === 'card
 const expectedCardanoAddress = cardanoFixture.chains[0].addresses[0].address
 
 let addressProvider
-let assetsModule
+let assetsAtom
 
 beforeEach(async () => {
-  ;({ addressProvider, assetsModule } = await setup())
+  ;({ addressProvider, assetsAtom } = await setup())
 })
 
 afterEach(() => {
@@ -25,7 +25,8 @@ test('getReceiveAddress() should return the same address for cardano asset', asy
 })
 
 test('getReceiveAddress() should return a different address when different getReceiveAddressPath', async () => {
-  const cardano = assetsModule.getAsset('cardano')
+  const { value: assets } = await assetsAtom.get()
+  const cardano = assets['cardano']
   expect(cardano).toBeDefined()
 
   const cardanoAddressOriginal = await addressProvider.getReceiveAddress({

@@ -6,7 +6,7 @@ import { isNumberUnit } from '@exodus/currency'
 import Order from './index.js'
 import type { Asset, Assets } from '../types.js'
 
-const { isPlainObject, isString } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { isPlainObject, isString } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 export const orderFromJSONLegacy = (json: any, { assets }: { assets: Assets }) => {
   assert(

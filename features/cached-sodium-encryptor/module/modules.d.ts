@@ -1,5 +1,5 @@
-declare module '@exodus/key-ids'
 declare module '@exodus/crypto/sodium-compat'
+declare module '@exodus/crypto/randomBytes'
 
 declare module 'features/wallet/module' {
   export interface Wallet {
@@ -19,12 +19,4 @@ declare module '@exodus/keychain/module/crypto/sodium.js' {
   }
 
   export function create(params: { getPrivateHDKey: GetPrivateKey }): SodiumEncryptor
-}
-
-declare module '@exodus/basic-utils' {
-  export function memoize<T extends (...args: any[]) => any>(
-    func: T,
-    resolver?: (...args: Parameters<T>) => string,
-    timeout?: number
-  ): T
 }

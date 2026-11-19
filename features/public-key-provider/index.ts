@@ -27,4 +27,7 @@ const publicKeyProvider = ({ debug }: Dependencies = {}) => {
   } as const
 }
 
+export type { IPublicKeyStore } from './module/store/types.js'
+export { PublicKeyProvider } from './module/public-key-provider.js'
+
 export default publicKeyProvider

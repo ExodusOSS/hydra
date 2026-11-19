@@ -1,4 +1,9 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["index.d.ts", "api/index.d.ts"]
+  "compilerOptions": {
+    "module": "esnext",
+    "noEmit": true
+  },
+  "include": ["src"],
+  "exclude": ["lib"]
 }

@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.5.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/sentry-client@6.4.0...@exodus/sentry-client@6.5.0) (2026-07-01)
+
+### Features
+
+- include linked error cause chain in Sentry events ([#17404](https://github.com/ExodusMovement/exodus-hydra/issues/17404)) ([0c91a42](https://github.com/ExodusMovement/exodus-hydra/commit/0c91a4293aaf2202de7cd6a34708bbb40e81dc54))
+
+## [6.4.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/sentry-client@6.3.0...@exodus/sentry-client@6.4.0) (2026-06-18)
+
+### Features
+
+- **sentry-client:** promote context.traceId to Sentry trace context ([#17235](https://github.com/ExodusMovement/exodus-hydra/issues/17235)) ([a6ae21f](https://github.com/ExodusMovement/exodus-hydra/commit/a6ae21f3e8fa270fd09d2682f6c5d671427010f7))
+
+## [6.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/sentry-client@6.2.3...@exodus/sentry-client@6.3.0) (2026-05-13)
+
+### Features
+
+- feat: enable tracking errors in dev (#16510)
+
+## [6.2.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/sentry-client@6.2.2...@exodus/sentry-client@6.2.3) (2026-05-04)
+
+### Bug Fixes
+
+- fix(sentry-client): make context optional, typecheck tests (#16251)
+
+## [6.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/sentry-client@6.2.1...@exodus/sentry-client@6.2.2) (2026-04-03)
+
+### Bug Fixes
+
+- fix(sentry-client): handle undefined stackFrames in toSentryError guard (#15827)
+
+## [6.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/sentry-client@6.2.0...@exodus/sentry-client@6.2.1) (2025-12-03)
+
+**Note:** Version bump only for package @exodus/sentry-client
+
 ## [6.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/sentry-client@6.1.1...@exodus/sentry-client@6.2.0) (2025-10-14)
 
 ### Features

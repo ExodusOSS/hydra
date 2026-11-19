@@ -3,6 +3,102 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.3.3](https://github.com/ExodusMovement/exodus/compare/@exodus/models@13.3.2...@exodus/models@13.3.3) (2026-10-22)
+
+### Performance Improvements
+
+- **models:** warn once per getMutations call instead of once per negative tx ([#47631](https://github.com/ExodusMovement/exodus/issues/47631)) ([82c7789](https://github.com/ExodusMovement/exodus/commit/82c77897e342a5e1462adc55abb8670bc7db8add))
+
+## [13.3.2](https://github.com/ExodusMovement/exodus/compare/@exodus/models@13.3.1...@exodus/models@13.3.2) (2026-09-17)
+
+### Bug Fixes
+
+- **exchange:** preserve app name on saved orders ([#45223](https://github.com/ExodusMovement/exodus/issues/45223)) ([917d641](https://github.com/ExodusMovement/exodus/commit/917d641d1bc6c29cd2c3e9fc227b5d43e76f6b3d))
+
+## [13.3.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@13.3.0...@exodus/models@13.3.1) (2026-06-03)
+
+### Features
+
+- **currency:** convert package to TypeScript ([#16681](https://github.com/ExodusMovement/exodus-hydra/issues/16681)) ([f29ae97](https://github.com/ExodusMovement/exodus-hydra/commit/f29ae970808bd940498cbb9220c6215365ec79b9)), closes [#16686](https://github.com/ExodusMovement/exodus-hydra/issues/16686) [#16394](https://github.com/ExodusMovement/exodus-hydra/issues/16394)
+
+## [13.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@13.2.5...@exodus/models@13.3.0) (2026-05-28)
+
+### Features
+
+- **models:** add MPSWAPS_SRC wallet account source ([#16799](https://github.com/ExodusMovement/exodus-hydra/issues/16799)) ([4212e7d](https://github.com/ExodusMovement/exodus-hydra/commit/4212e7dca1c6d1473224e3646340a873ba11ffde))
+
+## [13.2.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@13.2.4...@exodus/models@13.2.5) (2026-05-18)
+
+**Note:** Version bump only for package @exodus/models
+
+## [13.2.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@13.2.3...@exodus/models@13.2.4) (2026-05-18)
+
+### Features
+
+- expose public entrypoints to replace deep /lib/ imports ([#16590](https://github.com/ExodusMovement/exodus-hydra/issues/16590)) ([ad56d6e](https://github.com/ExodusMovement/exodus-hydra/commit/ad56d6e78e2e2aa820e4749bdc1571ac71f3393c))
+
+### Bug Fixes
+
+- **models:** widen Tx.update / TxSet.updateTxsProperties types to what it actually accepts ([#16572](https://github.com/ExodusMovement/exodus-hydra/issues/16572)) ([9553209](https://github.com/ExodusMovement/exodus-hydra/commit/95532094b02421786efe03272dcd4fae6328b1ab))
+
+## [13.2.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@13.2.2...@exodus/models@13.2.3) (2026-05-14)
+
+### Bug Fixes
+
+- **models:** widen TxSet.updateTxsProperties to accept Tx instances ([#16560](https://github.com/ExodusMovement/exodus-hydra/issues/16560)) ([e976992](https://github.com/ExodusMovement/exodus-hydra/commit/e976992568014edcd8e25bd1e148c548689cdcfc))
+
+## [13.2.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@13.2.1...@exodus/models@13.2.2) (2026-04-22)
+
+### Bug Fixes
+
+- fix(models): make ensureCurrencies produce consistent currencies shape (#15798)
+
+## [13.2.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@13.2.0...@exodus/models@13.2.1) (2026-04-16)
+
+### Bug Fixes
+
+- fix(models): case-insensitive address cleanup in cleanUpNoteJSON (#15809)
+
+## [13.2.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@13.1.5...@exodus/models@13.2.0) (2026-04-14)
+
+### Features
+
+- feat(models): Order.equals() (#15942)
+
+## [13.1.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@13.1.4...@exodus/models@13.1.5) (2026-04-11)
+
+### Bug Fixes
+
+- fix(models): correct error message in sortByDesc (#15776)
+
+- fix(models): propagate currency in UtxoCollection.addUtxo (#15850)
+
+## [13.1.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@13.1.3...@exodus/models@13.1.4) (2026-04-06)
+
+### Bug Fixes
+
+- fix(models): wrap data.path in AddressMeta object in Address.fromJSON (#15856)
+
+## [13.1.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@13.1.2...@exodus/models@13.1.3) (2026-04-06)
+
+### Bug Fixes
+
+- fix(models): restrict isColor to valid 3 and 6 hex digit colors (#15849)
+
+## [13.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@13.1.1...@exodus/models@13.1.2) (2026-04-02)
+
+### Bug Fixes
+
+- fix(models): immutability guard in WalletAccount.update() bypassed by falsy values (#15792)
+
+- fix(models): preserve existing UTXOs when setAddressUtxos receives an Array (#15779)
+
+## [13.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@13.1.0...@exodus/models@13.1.1) (2026-04-02)
+
+### Bug Fixes
+
+- fix(models): return `this` from FiatOrderSet `add`/`delete` when no-op (#15781)
+
 ## [13.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/models@13.0.0...@exodus/models@13.1.0) (2026-03-24)
 
 ### Features

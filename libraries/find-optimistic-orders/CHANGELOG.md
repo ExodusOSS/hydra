@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.3](https://github.com/ExodusMovement/exodus/compare/@exodus/find-optimistic-orders@3.1.2...@exodus/find-optimistic-orders@3.1.3) (2026-08-27)
+
+### Bug Fixes
+
+- fix(optimistic-balances): stop double-counting swap payouts via read-time tx matching (#44047)
+
+## [3.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/find-optimistic-orders@3.1.1...@exodus/find-optimistic-orders@3.1.2) (2026-05-06)
+
+### Bug Fixes
+
+- fix(find-optimistic-orders): skip match when multiple orders fit slippage window (#16333)
+
 ## [3.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/find-optimistic-orders@3.1.0...@exodus/find-optimistic-orders@3.1.1) (2026-01-30)
 
 ### Bug Fixes

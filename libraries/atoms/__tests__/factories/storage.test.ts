@@ -1,5 +1,5 @@
 import createDeferringStorage from '@exodus/deferring-storage'
-import _createEncryptedStorage from '@exodus/storage-encrypted/lib/storage'
+import _createEncryptedStorage from '@exodus/storage-encrypted'
 import type { Storage } from '@exodus/storage-interface'
 import createInMemoryStorage from '@exodus/storage-memory'
 import pDefer from 'p-defer'

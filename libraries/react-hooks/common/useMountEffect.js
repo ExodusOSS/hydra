@@ -7,6 +7,6 @@ import { useEffect } from 'react'
 //     ...some code for mounted state only
 // })
 // ```
-const useMountEffect = (callback) => useEffect(callback, []) // eslint-disable-line react-hooks/exhaustive-deps
+const useMountEffect = (callback) => useEffect(callback, []) // oxlint-disable-line react/exhaustive-deps
 
 export default useMountEffect

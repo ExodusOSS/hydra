@@ -5,7 +5,7 @@ This package ships types for dependency injection definitions, nodes, and featur
 ## Install
 
 ```sh
-yarn add @exodus/dependency-types
+pnpm add @exodus/dependency-types
 ```
 
 Consider using the `-D` flag in JS projects or TS projects that don't re-export any types from this package.

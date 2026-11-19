@@ -1,22 +1,20 @@
 import { mnemonicToSeed } from '@exodus/bip39'
 import { getShelleyAddress as getCardanoAddress } from '@exodus/cardano-lib'
 import { encodePublic as encodePublicEthereum } from '@exodus/ethereum-lib'
-import { getAddressFromPublicKey as encodePublicSolana } from '@exodus/solana-lib'
 import KeyIdentifier from '@exodus/key-identifier'
 import { EXODUS_KEY_IDS } from '@exodus/key-ids'
+import { getAddressFromPublicKey as encodePublicSolana } from '@exodus/solana-lib'
 
 import { getSeedId } from '../crypto/seed-id.js'
 import keychainDefinition, { Keychain } from '../keychain.js'
 
-const { factory: createMultiSeedKeychain } = keychainDefinition
+const { factory: createKeychain } = keychainDefinition
 
 const seed = await mnemonicToSeed({
   mnemonic: 'menu memory fury language physical wonder dog valid smart edge decrease worth',
 })
 
-const secondSeed = await mnemonicToSeed({
-  mnemonic: 'wine system mean beyond filter human meat rubber episode wash stomach aunt',
-})
+const seedId = await getSeedId(seed)
 
 const thirdSeed = await mnemonicToSeed({
   mnemonic: 'element input zero deny move siege stable screen catch like alley shoot',
@@ -24,40 +22,17 @@ const thirdSeed = await mnemonicToSeed({
 
 const thirdSeedId = await getSeedId(thirdSeed)
 
-describe.each([
-  // reduce fixtures by switching seeds
-  {
-    primarySeed: seed,
-    secondarySeed: secondSeed,
-    ternarySeed: thirdSeed,
-    seedId: await getSeedId(seed),
-  },
-  {
-    primarySeed: secondSeed,
-    secondarySeed: seed,
-    ternarySeed: thirdSeed,
-    seedId: await getSeedId(seed),
-  },
-  {
-    primarySeed: thirdSeed,
-    secondarySeed: seed,
-    ternarySeed: thirdSeed,
-    seedId: await getSeedId(seed),
-  },
-])('multi-seed-keychain', ({ primarySeed, secondarySeed, ternarySeed, seedId }) => {
+describe('keychain', () => {
   let keychain
 
   it('should construct correctly', () => {
     expect(keychainDefinition.factory()).toBeInstanceOf(Keychain)
   })
 
-  // eslint-disable-next-line jest/prefer-hooks-on-top
+  // oxlint-disable-next-line jest/prefer-hooks-on-top
   beforeEach(async () => {
-    keychain = createMultiSeedKeychain()
-
-    await keychain.addSeed(primarySeed)
-    await keychain.addSeed(secondarySeed)
-    await keychain.addSeed(ternarySeed)
+    keychain = createKeychain()
+    await keychain.unlock(seed)
   })
 
   describe('exportKeys', () => {
@@ -221,6 +196,9 @@ describe.each([
       const VALID_SIGNATURE =
         '810cdc7d804dcfab90147e50c40b0afe1f9d01fa6933739032d761f7fca4226389d348d70478560845ae9e90a940ef4173e17690b9d93122aadd56fa56b8b609'
 
+      const keychain = createKeychain()
+      await keychain.unlock(thirdSeed)
+
       const result = await keychain.signBuffer({
         seedId: thirdSeedId,
         keyId,
@@ -248,8 +226,8 @@ describe.each([
     })
 
     it('should return locked instance', async () => {
-      const keychain = createMultiSeedKeychain()
-      await keychain.addSeed(seed)
+      const keychain = createKeychain()
+      await keychain.unlock(seed)
       const clone = keychain.clone()
 
       await expect(
@@ -270,10 +248,10 @@ describe.each([
     it('should have parent legacyPrivToPub config', async () => {
       const legacyPrivToPub = { cardano: jest.fn() }
 
-      const keychain = createMultiSeedKeychain({ legacyPrivToPub })
+      const keychain = createKeychain({ legacyPrivToPub })
 
       const clone = keychain.clone()
-      await clone.addSeed(seed)
+      await clone.unlock(seed)
 
       await clone.exportKey({
         seedId,

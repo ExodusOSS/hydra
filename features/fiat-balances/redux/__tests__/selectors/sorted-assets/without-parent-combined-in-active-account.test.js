@@ -7,7 +7,7 @@ import { createFiatNumberUnit, setup } from '../../utils.js'
 const assets = connectAssets(_assets)
 
 describe('sortedAssetsWithoutParentCombinedInActiveAccount', () => {
-  const assetsList = ['ethereum', 'aave', 'exit', 'usdcoin']
+  const assetsList = ['ethereum', 'aave', 'algorand', 'usdcoin']
   const waynecoin = {
     name: 'waynecoin',
     isCombined: true,
@@ -20,7 +20,7 @@ describe('sortedAssetsWithoutParentCombinedInActiveAccount', () => {
     exodus_0: {
       ethereum: { total: assets.ethereum.currency.defaultUnit(1) },
       aave: { total: assets.aave.currency.defaultUnit(1) },
-      exit: { total: assets.exit.currency.defaultUnit(1) },
+      algorand: { total: assets.algorand.currency.defaultUnit(1) },
       usdcoin: { total: assets.usdcoin.currency.defaultUnit(0) },
     },
   }
@@ -30,7 +30,7 @@ describe('sortedAssetsWithoutParentCombinedInActiveAccount', () => {
       exodus_0: {
         ethereum: createFiatNumberUnit(100),
         aave: createFiatNumberUnit(99),
-        exit: createFiatNumberUnit(5),
+        algorand: createFiatNumberUnit(5),
         usdcoin: createFiatNumberUnit(0),
       },
     },
@@ -44,7 +44,7 @@ describe('sortedAssetsWithoutParentCombinedInActiveAccount', () => {
       [assets.aave.ticker]: {
         cap: 99,
       },
-      [assets.exit.ticker]: {
+      [assets.algorand.ticker]: {
         cap: 10,
       },
       [assets.usdcoin.ticker]: {
@@ -78,6 +78,6 @@ describe('sortedAssetsWithoutParentCombinedInActiveAccount', () => {
 
     const result = sortedAssetsSelector(store.getState())
 
-    expect(result.map((a) => a.name)).toEqual(['aave', 'ethereum', 'exit', 'usdcoin'])
+    expect(result.map((a) => a.name)).toEqual(['aave', 'ethereum', 'algorand', 'usdcoin'])
   })
 })

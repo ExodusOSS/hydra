@@ -1,5 +1,8 @@
 import { difference, intersection, keyBy } from '@exodus/basic-utils'
-import { CUSTODIAL_SOURCES } from '@exodus/models/lib/wallet-account/index.js'
+import {
+  CUSTODIAL_SOURCES,
+  SOFTWARE_SEED_SOURCES,
+} from '@exodus/models/lib/wallet-account/index.js'
 import type { WalletAccount } from '@exodus/models'
 
 const getName = (walletAccount: WalletAccount) => walletAccount.toString()
@@ -29,7 +32,7 @@ export const getChanges = ({
     disabled: difference(
       difference(namesEnabledBefore, namesEnabledAfter),
       removedHardwareWalletAccounts
-    ),
+    ).filter((name) => namesAfter.includes(name)),
     added: difference(namesAfter, namesBefore),
     updated: intersection(namesBefore, namesAfter).filter(
       (name) => !byNameBefore[name]!.equals(byNameAfter[name]!)
@@ -95,8 +98,12 @@ export const equalWalletAccounts = (
   return false
 }
 
-export const getUniqueTagForWalletAccount = ({ id, seedId, index }: UniqueTagParams) =>
-  ['id', id, 'seedId', seedId, 'index', index].join('_')
+export const getUniqueTagForWalletAccount = ({ source, id, seedId, index }: UniqueTagParams) => {
+  // software-seed sources share a derivation domain (same seedId+index = same key), so omit source
+  const isSoftwareSeed = !!source && (SOFTWARE_SEED_SOURCES as readonly string[]).includes(source)
+  const normalizedSource = isSoftwareSeed ? '' : (source ?? '')
+  return ['source', normalizedSource, 'id', id, 'seedId', seedId, 'index', index].join('_')
+}
 
 type GetChangesParams = {
   walletAccountInstancesBefore: WalletAccount[]
@@ -113,6 +120,7 @@ type GetNextIndexParams = {
 }
 
 type UniqueTagParams = {
+  source?: string
   id?: string | number
   seedId?: string
   index?: number | null

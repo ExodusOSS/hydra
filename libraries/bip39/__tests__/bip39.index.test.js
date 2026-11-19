@@ -1,8 +1,8 @@
 // From https://www.npmjs.com/package/bip39, ISC
 // Changed for API
 
-import * as bip39 from '@exodus/bip39' // eslint-disable-line import/no-extraneous-dependencies
-import english from '@exodus/bip39/wordlists/english' // eslint-disable-line import/no-extraneous-dependencies
+import * as bip39 from '@exodus/bip39'
+import english from '@exodus/bip39/wordlists/english'
 import { test } from '@exodus/test/tape'
 // our eslint config breaks on json imports, so we do this
 import { readFileSync } from 'fs'

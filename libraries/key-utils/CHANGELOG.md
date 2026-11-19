@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/ExodusMovement/exodus/compare/@exodus/key-utils@4.1.0...@exodus/key-utils@4.1.1) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/key-utils
+
+## [4.1.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-utils@3.7.3...@exodus/key-utils@4.1.0) (2026-06-18)
+
+### Features
+
+- **key-utils:** migrate to TypeScript ([#17237](https://github.com/ExodusMovement/exodus-hydra/issues/17237)) ([9920438](https://github.com/ExodusMovement/exodus-hydra/commit/992043890b1a2fc8631dff17f3a8909f776ae288))
+
+### Bug Fixes
+
+- **key-utils:** validate hardened indices in parseDerivationPath ([#15785](https://github.com/ExodusMovement/exodus-hydra/issues/15785)) ([64fd6d4](https://github.com/ExodusMovement/exodus-hydra/commit/64fd6d47359b2be3ad81cb84719065a2303ee6af))
+
+## [4.0.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-utils@3.7.3...@exodus/key-utils@4.0.0) (2025-07-29)
+
+### Features
+
+- feat!: make seed methods async ([#13300](https://github.com/ExodusMovement/exodus-hydra/pull/13300))
+
+### Bug Fixes
+
+- fix: error message typo ([#13155](https://github.com/ExodusMovement/exodus-hydra/pull/13155))
+
+### Other
+
+- refactor: re-export getSeedId from exodus/bip32 ([#13387](https://github.com/ExodusMovement/exodus-hydra/pull/13387))
+
+## [3.7.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-utils@3.7.2...@exodus/key-utils@3.7.3) (2025-07-08)
+
+### Bug Fixes
+
+- fix: error message typo (#13155)
+
 ## [3.7.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/key-utils@3.7.1...@exodus/key-utils@3.7.2) (2025-03-10)
 
 ### Bug Fixes

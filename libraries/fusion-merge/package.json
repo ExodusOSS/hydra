@@ -1,16 +1,16 @@
 {
   "name": "@exodus/fusion-merge",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "The fusion-merge library",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/fusion-merge",
-  "license": "UNLICENSED",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/fusion-merge",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Afusion-merge"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Afusion-merge"
   },
   "main": "index.js",
   "files": [
@@ -18,8 +18,11 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

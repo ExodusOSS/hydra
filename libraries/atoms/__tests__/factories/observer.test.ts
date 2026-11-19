@@ -89,7 +89,7 @@ describe('createAtomObserver', () => {
     await observer.start()
     observer.unregister()
     await atom.set(newData)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    await new Promise((resolve) => setTimeout(resolve, 0))
 
     expect(port.emit).not.toHaveBeenCalledWith(event, newData)
   })

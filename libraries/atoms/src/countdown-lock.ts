@@ -9,16 +9,18 @@ const createCountdownLock = (keys: string[]) => {
     }
   }
 
+  const uniqueKeys = new Set(keys)
+
   const deferred = pDefer()
 
-  const unlockedKeys: string[] = []
+  const unlockedKeys = new Set<string>()
 
   return {
     promise: deferred.promise,
     unlock: (key: string) => {
-      if (!unlockedKeys.includes(key)) unlockedKeys.push(key)
+      if (uniqueKeys.has(key)) unlockedKeys.add(key)
 
-      if (unlockedKeys.length === keys.length) {
+      if (unlockedKeys.size === uniqueKeys.size) {
         deferred.resolve()
         return true
       }

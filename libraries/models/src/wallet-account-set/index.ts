@@ -5,17 +5,17 @@ import WalletAccount from '../wallet-account/index.js'
 import { ModelIdSymbol } from '../constants.js'
 import { createIsInstance } from '../utils.js'
 
-const { mapValues, mergeWith } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { mapValues, mergeWith } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 const coerceToWalletAccount = (
   walletAccount: WalletAccount | ConstructorParameters<typeof WalletAccount>[0]
 ) => (walletAccount instanceof WalletAccount ? walletAccount : new WalletAccount(walletAccount))
 
 class WalletAccountSet {
-  private readonly _byName: Record<string, WalletAccount>
+  readonly #byName: Record<string, WalletAccount>
 
   constructor(byName = {}) {
-    this._byName = mapValues(byName, coerceToWalletAccount)
+    this.#byName = mapValues(byName, coerceToWalletAccount)
   }
 
   static get [ModelIdSymbol]() {
@@ -37,23 +37,23 @@ class WalletAccountSet {
   static readonly EMPTY = new WalletAccountSet()
 
   toJSON() {
-    return mapValues(this._byName, (walletAccount) => walletAccount.toJSON())
+    return mapValues(this.#byName, (walletAccount) => walletAccount.toJSON())
   }
 
   toRedactedJSON() {
-    return mapValues(this._byName, (walletAccount) => walletAccount.toRedactedJSON())
+    return mapValues(this.#byName, (walletAccount) => walletAccount.toRedactedJSON())
   }
 
   get(name: string | WalletAccount) {
     if (name instanceof WalletAccount) name = name.toString()
 
-    if (this._byName.hasOwnProperty(name)) {
-      return this._byName[name]
+    if (this.#byName.hasOwnProperty(name)) {
+      return this.#byName[name]
     }
   }
 
   names() {
-    return Object.keys(this._byName)
+    return Object.keys(this.#byName)
   }
 
   update(
@@ -66,7 +66,7 @@ class WalletAccountSet {
         ? walletAccountsByName.toJSON()
         : walletAccountsByName
 
-    const updatedByName = mergeWith({ ...this._byName }, byName, (existing, updated) =>
+    const updatedByName = mergeWith({ ...this.#byName }, byName, (existing, updated) =>
       existing ? existing.update(updated) : coerceToWalletAccount(updated)
     )
 
@@ -76,8 +76,8 @@ class WalletAccountSet {
   equals(walletAccountsByName: WalletAccountSet) {
     if (this === walletAccountsByName) return true
 
-    const keys = Object.keys(walletAccountsByName.toJSON()).sort() // eslint-disable-line sonarjs/no-alphabetical-sort
-    const myKeys = this.names().sort() // eslint-disable-line sonarjs/no-alphabetical-sort
+    const keys = Object.keys(walletAccountsByName.toJSON()).sort()
+    const myKeys = this.names().sort()
     if (keys.length !== myKeys.length) return false
 
     return myKeys.every((name) => {

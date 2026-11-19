@@ -20,12 +20,12 @@ const createSyncTimePlugin = ({
 
   const onLoad = () => {
     observer.start()
-    timer.start(updateTime)
+    void timer.start(updateTime)
   }
 
   const onStop = () => {
     observer.unregister()
-    timer.stop()
+    void timer.stop()
   }
 
   return { onLoad, onStop }

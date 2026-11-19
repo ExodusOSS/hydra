@@ -13,9 +13,10 @@ const parse = (input) => {
     sections.shift()
   }
 
+  // Values stay in raw PO-escaped form: runtime translation ids are computed
+  // from these bytes, so `\n` must remain two characters.
   const entries = sections.map((section) => {
-    const tokens = tokenizer(section)
-    const entry = parser(tokens)
+    const entry = parser(tokenizer(section))
 
     return new POEntry({
       id: entry.msgid,

@@ -1,7 +1,9 @@
-const resultFunction = (active: string, isCustodial: (name: string) => boolean) =>
+import { defineSelectorResultFunction } from '@exodus/redux-dependency-injection'
+
+const resultFunction = (active: string, isCustodial: (name: string) => boolean): boolean =>
   isCustodial(active)
 
-export default {
+export default defineSelectorResultFunction({
   id: 'activeIsCustodial',
   resultFunction,
   dependencies: [
@@ -9,4 +11,4 @@ export default {
     { selector: 'active' },
     { selector: 'isCustodial' },
   ],
-} as const
+})

@@ -27,7 +27,7 @@ const assets = {
     api: {
       ..._assets.solana.api,
       getBalances: ({ accountState }) => pick(accountState, ['balance']),
-      hasFeature: () => false,
+      features: {},
       createAccountState: () => SolanaTestAccountState,
     },
   },
@@ -38,7 +38,7 @@ const assets = {
       getBalances: ({ accountState }) => ({
         balance: accountState.tokenBalances.raydium,
       }),
-      hasFeature: () => false,
+      features: {},
     },
   },
 }
@@ -47,6 +47,10 @@ const defaultAvailableAssetNames = Object.keys(assets)
 const createAvailableAssetNamesAtom = () =>
   createInMemoryAtom({
     defaultValue: defaultAvailableAssetNames,
+  })
+const createAssetsAtom = () =>
+  createInMemoryAtom({
+    defaultValue: { value: assets },
   })
 
 class SolanaTestAccountState extends AccountState {
@@ -103,6 +107,7 @@ const initialRates = {
 
 const setupModules = async ({ balanceFields, fiatBalanceFields }) => {
   const storage = createStorage()
+  const assetsAtom = createAssetsAtom()
   assetsModule = createAssetsModule()
   fiatBalancesAtom = createFiatBalancesAtom()
   blockchainMetadataAtom = blockchainMetadataAtomDefinition.factory()
@@ -124,7 +129,7 @@ const setupModules = async ({ balanceFields, fiatBalanceFields }) => {
   blockchainMetadata.load()
   balancesAtom = createBalancesAtom()
   balances = createBalances({
-    assetsModule,
+    assetsAtom,
     availableAssetNamesAtom: createAvailableAssetNamesAtom(),
     enabledWalletAccountsAtom,
     blockchainMetadata,
@@ -145,7 +150,7 @@ const setupModules = async ({ balanceFields, fiatBalanceFields }) => {
   ratesAtom = createInMemoryAtom()
   currencyAtom = createInMemoryAtom({ defaultValue: 'USD' })
   fiatBalancesModule = createFiatBalances({
-    assetsModule,
+    assetsAtom: createInMemoryAtom({ defaultValue: { value: assets } }),
     balancesAtom,
     config: { balanceFields: fiatBalanceFields },
     ratesAtom,

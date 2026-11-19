@@ -1,16 +1,17 @@
 import { signMessage as signMessageWithSignerAlgorand } from '@exodus/algorand-lib'
+import { createInMemoryAtom } from '@exodus/atoms'
+import { getSeedId } from '@exodus/bip32'
 import { mnemonicToSeed } from '@exodus/bip39'
 import bip44Constants from '@exodus/bip44-constants/by-ticker.js'
 import { signMessageWithSigner as signMessageWithSignerBitcoin } from '@exodus/bitcoin-api'
 import { signMessage as signMessageWithSignerCardano } from '@exodus/cardano-lib'
 import { signMessageWithSigner as signMessageWithSignerEthereum } from '@exodus/ethereum-lib'
 import { createGetKeyIdentifier } from '@exodus/key-utils'
-import keychainDefinition from '@exodus/keychain/module'
-import { getSeedId } from '@exodus/keychain/module/crypto/seed-id'
+import keychainFactory from '@exodus/keychain'
 import { WalletAccount } from '@exodus/models'
-import { SEED_SRC } from '@exodus/models/lib/wallet-account'
 import { signMessageWithSigner as signMessageWithSignerSolana } from '@exodus/solana-lib'
 
+import type { Asset } from '../interfaces.js'
 import seedSignerDefinition from '../seed-signer.js'
 
 // See the patches in https://github.com/ExodusMovement/exodus-hydra/pull/13835 for updating these fixtures.
@@ -109,7 +110,7 @@ const assets = {
     get baseAsset() {
       return assets.ethereum
     },
-  },
+  } as unknown as Asset,
   bitcoin: {
     api: {
       defaultAddressPath: 'm/0/0',
@@ -131,7 +132,7 @@ const assets = {
     get baseAsset() {
       return assets.bitcoin
     },
-  },
+  } as unknown as Asset,
   solana: {
     api: {
       defaultAddressPath: 'm/0/0',
@@ -154,7 +155,7 @@ const assets = {
     get baseAsset() {
       return assets.solana
     },
-  },
+  } as unknown as Asset,
   cardano: {
     api: {
       defaultAddressPath: 'm/0/0',
@@ -176,7 +177,7 @@ const assets = {
     get baseAsset() {
       return assets.cardano
     },
-  },
+  } as unknown as Asset,
   algorand: {
     api: {
       defaultAddressPath: 'm/0/0',
@@ -199,21 +200,21 @@ const assets = {
     get baseAsset() {
       return assets.algorand
     },
-  },
+  } as unknown as Asset,
 }
 
-const assetsModule = {
-  getAsset: (assetName: keyof typeof assets) => assets[assetName],
-}
+const assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
 
 const setup = async () => {
-  const keychain = keychainDefinition.factory({
-    logger: console,
-  })
+  const { definition } = keychainFactory().definitions.find(
+    ({ definition }) => definition.id === 'keychain'
+  )!
+  if (definition.id !== 'keychain') throw new Error('expected keychain module definition')
+  const keychain = definition.factory({ logger: console })
 
-  await keychain.addSeed(SEED)
+  await keychain.unlock(SEED)
   const seedSigner = seedSignerDefinition.factory({
-    assetsModule: assetsModule as never,
+    assetsAtom,
     keychain,
     assetSources: {
       getSupportedPurposes: async () => [44],
@@ -231,7 +232,7 @@ describe('SeedBasedMessageSigner', () => {
     for (const index of PORTFOLIO_INDEXES) {
       const messageToSign = 'hello world'
       const { seedSigner } = await setup()
-      const walletAccount = new WalletAccount({ index, source: SEED_SRC, seedId })
+      const walletAccount = new WalletAccount({ index, source: WalletAccount.SEED_SRC, seedId })
       const signedMessage = await seedSigner.signMessage({
         baseAssetName: 'ethereum',
         walletAccount,
@@ -274,7 +275,7 @@ describe('SeedBasedMessageSigner', () => {
         },
       }
       const { seedSigner } = await setup()
-      const walletAccount = new WalletAccount({ index, source: SEED_SRC, seedId })
+      const walletAccount = new WalletAccount({ index, source: WalletAccount.SEED_SRC, seedId })
       const signedMessage = await seedSigner.signMessage({
         baseAssetName: 'ethereum',
         walletAccount,
@@ -293,7 +294,7 @@ describe('SeedBasedMessageSigner', () => {
   it('signs a message with the signer (Bitcoin Native SegWit)', async () => {
     for (const index of PORTFOLIO_INDEXES) {
       const messageToSign = 'hello world'
-      const walletAccount = new WalletAccount({ index, source: SEED_SRC, seedId })
+      const walletAccount = new WalletAccount({ index, source: WalletAccount.SEED_SRC, seedId })
 
       const { seedSigner } = await setup()
 
@@ -316,7 +317,7 @@ describe('SeedBasedMessageSigner', () => {
     for (const index of PORTFOLIO_INDEXES) {
       const messageToSign = 'hello world'
       const { seedSigner } = await setup()
-      const walletAccount = new WalletAccount({ index, source: SEED_SRC, seedId })
+      const walletAccount = new WalletAccount({ index, source: WalletAccount.SEED_SRC, seedId })
 
       const signedMessage = await seedSigner.signMessage({
         baseAssetName: 'solana',
@@ -334,9 +335,9 @@ describe('SeedBasedMessageSigner', () => {
     for (const index of PORTFOLIO_INDEXES) {
       const messageToSign = 'hello world'
       const { seedSigner } = await setup()
-      const walletAccount = new WalletAccount({ index, source: SEED_SRC, seedId })
+      const walletAccount = new WalletAccount({ index, source: WalletAccount.SEED_SRC, seedId })
 
-      const { signature, key } = await seedSigner.signMessage({
+      const { signature, key } = (await seedSigner.signMessage({
         baseAssetName: 'cardano',
         walletAccount,
         message: {
@@ -345,7 +346,7 @@ describe('SeedBasedMessageSigner', () => {
             payload: Buffer.from(messageToSign, 'utf8'),
           },
         },
-      })
+      })) as { signature: Buffer; key: Buffer }
 
       expect(signature.toString('hex')).toEqual(fixtures.cardano.signatures[index])
       expect(key.toString('hex')).toEqual(fixtures.cardano.keys[index])
@@ -356,7 +357,7 @@ describe('SeedBasedMessageSigner', () => {
     for (const index of PORTFOLIO_INDEXES) {
       const messageToSign = 'hello world'
       const { seedSigner } = await setup()
-      const walletAccount = new WalletAccount({ index, source: SEED_SRC, seedId })
+      const walletAccount = new WalletAccount({ index, source: WalletAccount.SEED_SRC, seedId })
 
       const signedMessage = await seedSigner.signMessage({
         baseAssetName: 'algorand',

@@ -30,6 +30,9 @@
             "Wallet Connect",
             "WalletConnect"
           ]
+        },
+        "is_dismissed": {
+          "type": "boolean"
         }
       },
       "unevaluatedProperties": false

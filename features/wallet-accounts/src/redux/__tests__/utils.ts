@@ -1,8 +1,8 @@
 import { WalletAccount } from '@exodus/models'
-import { setupRedux } from '@exodus/redux-dependency-injection'
-import { combineReducers, createStore, type Reducer, type StoreEnhancer } from 'redux'
+import { type ContainerDependency, setupRedux } from '@exodus/redux-dependency-injection'
+import { createStore } from 'redux'
 
-import walletAccountsReduxModule, { type WalletAccountsSelectors } from '../index.js'
+import walletAccountsReduxModule from '../index.js'
 
 export const WALLET_ACCOUNTS_STATE = {
   [WalletAccount.DEFAULT_NAME]: WalletAccount.DEFAULT,
@@ -32,34 +32,24 @@ export const WALLET_ACCOUNTS_STATE = {
   }),
 }
 
-export function setup({
+export function setup<const Deps extends readonly ContainerDependency[] = readonly []>({
   config = { readOnlyHardwareModels: ['T'] },
-  dependencies = [],
+  dependencies,
 }: {
   config?: { readOnlyHardwareModels?: string[]; maxAmountOfAccounts?: number }
-  dependencies?: { id: string; [key: string]: unknown }[]
+  dependencies?: Deps
 } = {}) {
-  const allDependencies = [...dependencies, walletAccountsReduxModule(config)]
-
-  // StoreEnhancer expects (createStore) => createStore, but setupRedux passes a { [slice]: Reducer }
-  // object for reducers instead of a single Reducer. Redux's types don't support this shape, so the
-  // enhancer params must be `any` to accept the untyped reducers object and forward it to combineReducers.
-
-  const enhancers = ((cs: any) => (reducers: any, initialState: any, enhancer: any) => {
-    const reducer = combineReducers(reducers as Record<string, Reducer>)
-    return cs(reducer, initialState, enhancer)
-  }) as StoreEnhancer
+  const allDependencies = [...(dependencies ?? []), walletAccountsReduxModule(config)]
 
   const redux = setupRedux({
     // override default deps with provided by de-duping
     dependencies: allDependencies.filter(
-      (dep: { id: string }, i: number) =>
-        allDependencies.findIndex((other: { id: string }) => dep.id === other.id) === i
+      (dep, i) => allDependencies.findIndex((other) => dep.id === other.id) === i
     ),
   })
 
-  const { createHandleEvent, reducers, initialState } = redux
-  const store = createStore(reducers as unknown as Reducer, initialState, enhancers)
+  const { createHandleEvent, combinedReducer } = redux
+  const store = createStore(combinedReducer)
   const handleEvent = createHandleEvent(store)
 
   const emitWalletAccounts = (
@@ -75,11 +65,8 @@ export function setup({
 
   return {
     ...redux,
-
-    // setupRedux infers selectors via conditional mapped types that TS cannot narrow to concrete shapes.
-    // Casting to a known selector map avoids `as any` on every test call site.
-    selectors: redux.selectors as unknown as { walletAccounts: WalletAccountsSelectors },
     store,
+    handleEvent,
     emitWalletAccounts,
     enableMultipleWalletAccounts,
     emitActiveWalletAccount,

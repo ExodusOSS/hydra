@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/personal-notes@3.9.0...@exodus/personal-notes@3.9.1) (2026-07-01)
+
+### Features
+
+- bump atoms for importers of observer factory ([#14057](https://github.com/ExodusMovement/exodus-hydra/issues/14057)) ([a94779d](https://github.com/ExodusMovement/exodus-hydra/commit/a94779d10feb420a9186e2c8380209e3975cd469))
+- **oxlint-plugin-hydra:** port @exodus/\* eslint rules to oxlint jsPlugins ([#17280](https://github.com/ExodusMovement/exodus-hydra/issues/17280)) ([76e483c](https://github.com/ExodusMovement/exodus-hydra/commit/76e483cf8afa7035ce98279ae2ff80deb4ae6a50)), closes [#17278](https://github.com/ExodusMovement/exodus-hydra/issues/17278)
+
+### Bug Fixes
+
+- **personal-notes:** prefer top-level message over stale sends when tx.to is undefined ([#17083](https://github.com/ExodusMovement/exodus-hydra/issues/17083)) ([b14a8f9](https://github.com/ExodusMovement/exodus-hydra/commit/b14a8f9f4c3b4fc6fba335680b27463e590914a5))
+
 ## [3.9.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/personal-notes@3.8.0...@exodus/personal-notes@3.9.0) (2025-08-15)
 
 ### Features

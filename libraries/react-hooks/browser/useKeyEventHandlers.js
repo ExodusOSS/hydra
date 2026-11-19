@@ -4,6 +4,7 @@
 //  ...
 // }
 
+// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import throttle from 'lodash/throttle'
 import { useEffect, useMemo, useRef } from 'react'
 

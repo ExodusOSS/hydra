@@ -5,12 +5,12 @@ Export an asset's encoded private key for software wallet accounts
 ## Install
 
 ```sh
-yarn add @exodus/key-viewer
+pnpm add @exodus/key-viewer
 ```
 
 ## Usage
 
-This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md).
+This feature is designed to be used together with `@exodus/headless`. See [using the sdk](../../docs/development/using-the-sdk.md).
 
 ### Play with it
 
@@ -20,7 +20,7 @@ This feature is designed to be used together with `@exodus/headless`. See [using
 
 ### API Side
 
-See [using the sdk](../../docs/docs-website/docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK and the API interface in the [type declaration](./api/index.ts).
+See [using the sdk](../../docs/development/using-the-sdk.md#setup-the-api-side) for more details on how features plug into the SDK and the API interface in the [type declaration](./api/index.ts).
 
 ```js
 // hex encoded private key

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "AdjustAttribution"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "network": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "campaign": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "adgroup": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "creative": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "tracker_token": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "tracker_name": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "click_label": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "cost_type": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "cost_amount": {
+          "type": "number"
+        },
+        "cost_currency": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "fb_install_referrer": {
+          "type": "string",
+          "format": "any-string"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

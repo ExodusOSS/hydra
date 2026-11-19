@@ -13,7 +13,7 @@ flowchart TD
 ## Install
 
 ```sh
-yarn add @exodus/public-key-provider
+pnpm add @exodus/public-key-provider
 ```
 
 ## Usage

@@ -14,30 +14,23 @@ import loadFixture from './load-fixture.cjs'
 const ordersFixtures = loadFixture('orders-fixtures')
 const fixtures = loadFixture('tx-log-fixtures')
 
-const assets = connectAssets(assetsBase)
-
-const txFixtures = mapValues(fixtures, (json) => normalizeTxsJSON({ json, assets }))
-
-const getAssetSpecificConstants = (asset) => {
-  const constants = {}
-
+const addAssetSpecificConstants = (asset) => {
   if (asset.name === 'cardano') {
-    constants.ADA_KEY_DEPOSIT_FEE = assets[asset.name].currency.defaultUnit('2')
+    asset = { ...asset, ADA_KEY_DEPOSIT_FEE: asset.currency.defaultUnit('2') }
   }
 
-  return constants
+  return asset
 }
+
+const assets = mapValues(connectAssets(assetsBase), addAssetSpecificConstants)
+
+const txFixtures = mapValues(fixtures, (json) => normalizeTxsJSON({ json, assets }))
 
 const { factory: createBlockchainMetadata } = blockchainMetadataDefinition
 const createAssetsModule = () =>
   Object.assign(new EventEmitter(), {
     getAssets: () => assets,
-    getAsset: (assetName) => {
-      return {
-        ...assets[assetName],
-        ...getAssetSpecificConstants(assets[assetName]),
-      }
-    },
+    getAsset: (assetName) => assets[assetName],
   })
 
 const personalNotesAtomMock = {
@@ -71,6 +64,7 @@ describe('export-transactions', () => {
   let enabledWalletAccountsAtom
   let blockchainMetadata
   let assetsModule
+  let assetsAtom
   let exportTransactions
   let ordersAtom
   let multipleWalletAccountsEnabledAtom
@@ -79,6 +73,8 @@ describe('export-transactions', () => {
   beforeEach(async () => {
     const storage = createStorage()
     assetsModule = createAssetsModule()
+
+    assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
 
     enabledWalletAccountsAtom = createInMemoryAtom({
       defaultValue: walletAccountsData,
@@ -104,7 +100,7 @@ describe('export-transactions', () => {
 
     exportTransactions = createExportTransactions({
       blockchainMetadata,
-      assetsModule,
+      assetsAtom,
       personalNotesAtom: personalNotesAtomMock,
       enabledWalletAccountsAtom,
       multipleWalletAccountsEnabledAtom,

@@ -12,7 +12,7 @@ describe('config', () => {
   test('sandbox', () => {
     const def = featureFactory({ sandbox: true })
     expect(def.definitions.find((d) => d.definition.id === 'pricingServerUrlAtom').config).toEqual({
-      defaultPricingServerUrl: 'https://pricing-s.a.exodus.io',
+      defaultPricingServerUrl: 'https://pricing-s.a.exodus-int.com',
       pricingServerPath: 'infrastructure.price-server.server',
     })
   })

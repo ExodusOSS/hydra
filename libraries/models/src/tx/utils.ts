@@ -5,7 +5,7 @@ import type { UnitType } from '@exodus/currency'
 import type { TxProps } from './index.js'
 import type { Asset } from '../types.js'
 
-const { mapValues, uniqBy, isEmpty, isArray } = lodash // eslint-disable-line @exodus/basic-utils/prefer-basic-utils
+const { mapValues, uniqBy, isEmpty, isArray } = lodash // oxlint-disable-line @exodus/oxlint-plugin-restricted-imports/prefer-basic-utils
 
 export const unitTypeToJSON = (ut: UnitType) => mapValues(ut.units, (u) => u.power)
 
@@ -56,7 +56,10 @@ export const ensureCurrencies = (json: TxProps, assets: { [assetName: string]: A
   assert(json.coinName, 'ensureCurrencies: expected `json.coinName`')
   assert(assets[json.coinName], `ensureCurrencies: asset not found for ${json.coinName}`)
 
-  return { ...json, currencies: currenciesForAsset(assets[json.coinName]) }
+  return {
+    ...json,
+    currencies: mapValues(currenciesForAsset(assets[json.coinName]), unitTypeToJSON),
+  }
 }
 
 function assetsForAsset(asset: Asset) {

@@ -7,7 +7,7 @@ Hydra-specific TypeScript patterns for features, modules, atoms, selectors, and 
 1. Use `as const satisfies Definition` for IoC definitions.
 2. Use `as const satisfies SelectorDefinition` for selectors.
 3. Use `as const satisfies ReduxModuleDefinition<State>` for Redux modules.
-4. Validate the emitted public `.d.ts` surface after `yarn build --scope @exodus/<pkg>`.
+4. Validate the emitted public `.d.ts` surface after `pnpm run build --scope @exodus/<pkg>`.
 5. Inspect `lib/index.d.ts` and any emitted `lib/api/*.d.ts`, `lib/module/*.d.ts`, `lib/plugin/*.d.ts`, and `lib/redux/*.d.ts`.
 6. Public declarations must not expose private class fields (`__#...`), concrete implementation classes, workspace-only import paths, or degraded `(...args: any[]) => any` method signatures unless those are intentionally part of the API.
 7. Preserve consumer-facing type inference while hiding implementation details.
@@ -43,4 +43,4 @@ Hydra-specific TypeScript patterns for features, modules, atoms, selectors, and 
 
 ## Reference examples
 
-Use `application`, `tx-signer`, `exchange`, and `address-book` as examples of feature packages that already follow the expected TypeScript structure.
+Use `application`, `tx-signer`, and `exchange` as examples of feature packages that already follow the expected TypeScript structure.

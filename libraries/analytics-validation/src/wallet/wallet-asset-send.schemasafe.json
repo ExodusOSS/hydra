@@ -61,6 +61,35 @@
         },
         "is_repeated_address": {
           "type": "boolean"
+        },
+        "energy_sponsored": {
+          "type": "boolean"
+        },
+        "exodus_fee_amount": {
+          "type": "number",
+          "minimum": 0
+        },
+        "sponsorship_result": {
+          "type": "string",
+          "enum": [
+            "sponsored",
+            "no_client",
+            "flag_off",
+            "no_capabilities",
+            "service_off",
+            "token_unsupported",
+            "not_software_wallet",
+            "recently_declined",
+            "price_expired",
+            "zero_amount",
+            "quote_failed",
+            "standard_cheaper"
+          ]
+        },
+        "sponsorship_quote_failed_reason": {
+          "type": "string",
+          "format": "any-string",
+          "maxLength": 30
         }
       },
       "unevaluatedProperties": false

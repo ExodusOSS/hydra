@@ -1,9 +1,5 @@
-const constants = require('./constants')
-const coinUtil = require('./coin-util')
-const createMeta = require('./meta')
+export * as constants from './constants.js'
+export * as compatibilityUtils from './compatibility-utils.js'
+export * as coinUtil from './coin-util.js'
 
-module.exports = {
-  constants,
-  coinUtil,
-  createMeta,
-}
+export { default as createMeta } from './meta.js'

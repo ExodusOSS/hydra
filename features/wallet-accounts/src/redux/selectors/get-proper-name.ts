@@ -1,4 +1,5 @@
 import type { WalletAccount } from '@exodus/models'
+import { defineSelectorFactory } from '@exodus/redux-dependency-injection'
 import { createSelector } from 'reselect'
 import type { WalletAccountsSelectors } from '../types.js'
 
@@ -56,7 +57,7 @@ const getProperNameSelectorFactory = (
     namesSelector,
     getSelector,
     (walletAccountNames: string[], getWalletAccount: (name: string) => WalletAccount) =>
-      (walletAccountName: string, { maxLength }: { maxLength?: number } = {}) => {
+      (walletAccountName: string, { maxLength }: { maxLength?: number } = {}): string | null => {
         if (!walletAccountNames.includes(walletAccountName)) return null
         const walletAccount = getWalletAccount(walletAccountName)
         const allWalletAccountObjects = walletAccountNames.map(getWalletAccount)
@@ -84,7 +85,7 @@ const getProperNameSelectorFactory = (
       }
   )
 
-const getProperNameSelectorDefinition = {
+const getProperNameSelectorDefinition = defineSelectorFactory({
   id: 'getProperName',
   selectorFactory: getProperNameSelectorFactory,
   dependencies: [
@@ -92,7 +93,7 @@ const getProperNameSelectorDefinition = {
     { selector: 'names' },
     { selector: 'get' },
   ],
-} as const
+})
 
 type SameLabelParams = {
   displayLabel: string

@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.16.1](https://github.com/ExodusMovement/exodus/compare/@exodus/balances@13.16.0...@exodus/balances@13.16.1) (2026-10-09)
+
+**Note:** Version bump only for package @exodus/balances
+
+## [13.16.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.15.5...@exodus/balances@13.16.0) (2026-05-19)
+
+### Features
+
+- **balances:** publish balances atom types ([#16631](https://github.com/ExodusMovement/exodus-hydra/issues/16631)) ([826e09d](https://github.com/ExodusMovement/exodus-hydra/commit/826e09d99701b7e2de43f1a7d6c122d656c4b838))
+
+## [13.15.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.15.4...@exodus/balances@13.15.5) (2026-05-13)
+
+**Note:** Version bump only for package @exodus/balances
+
+## [13.15.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.15.3...@exodus/balances@13.15.4) (2026-04-10)
+
+### Bug Fixes
+
+- fix(balances): use Object.values() to check balancesLoaded state (#15939)
+
+## [13.15.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.15.2...@exodus/balances@13.15.3) (2026-03-11)
+
+### Performance
+
+- perf(balances): optimize clone and incremental asset computation (#15480)
+
 ## [13.15.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/balances@13.15.1...@exodus/balances@13.15.2) (2026-03-03)
 
 ### Bug Fixes

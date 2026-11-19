@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": { "const": "RebalancingBroadcast" },
+    "properties": {
+      "allOf": [{ "$ref": "common-properties#" }],
+      "type": "object",
+      "required": ["source_asset", "target_asset", "amount_usd", "attempt_number", "duration_ms"],
+      "properties": {
+        "source_asset": { "type": "string", "format": "any-string" },
+        "target_asset": { "type": "string", "format": "any-string" },
+        "amount_usd": { "type": "number", "exclusiveMinimum": 0 },
+        "attempt_number": { "type": "integer", "minimum": 1 },
+        "duration_ms": { "type": "integer", "minimum": 0 },
+        "pay_order_id": {
+          "type": "string",
+          "pattern": "^[0-9a-z]{20,32}$"
+        },
+        "confirmed_by": { "enum": ["broadcast", "chain", "pay_order"] }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

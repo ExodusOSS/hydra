@@ -7,32 +7,18 @@ const FINAL_ORDER_STATUS = {
   success: 'complete',
 }
 
-const EXODEX_TX_TYPES = {
+export const EXODEX_TX_TYPES = {
   PRE_SETUP: 'preSetupTransaction',
   SETUP: 'setupTransaction',
   SWAP: 'swapTransaction',
   CLEANUP: 'cleanupTransaction',
 }
 
-const UI_TX_TYPE_FROM_EXODEX = new Map([
-  [EXODEX_TX_TYPES.PRE_SETUP, TX_TYPES.APPROVAL],
-  [EXODEX_TX_TYPES.SETUP, TX_TYPES.APPROVAL],
-  [EXODEX_TX_TYPES.SWAP, TX_TYPES.EXCHANGE],
-  [EXODEX_TX_TYPES.CLEANUP, TX_TYPES.CLEANUP],
-])
-
 function getSwapDisplayAmount({ tx, order }) {
   if (tx.coinName === order.fromAsset && order.fromAmount) return order.fromAmount.abs()
   if (tx.coinName === order.toAsset && order.toAmount) return order.toAmount.abs()
   if (tx.coinAmount?.abs) return tx.coinAmount.abs()
   return null
-}
-
-function getOrderType({ order, tx }) {
-  const txInfoFromOrder = tx
-    ? order.txIds?.find((txFromOrder) => txFromOrder.txId === tx.txId)
-    : null
-  return UI_TX_TYPE_FROM_EXODEX.get(txInfoFromOrder?.txType) || TX_TYPES.EXCHANGE
 }
 
 const getSwapSharedProps = ({
@@ -52,7 +38,7 @@ const getSwapSharedProps = ({
       date,
       id: `swap.${assetName}.${order?.orderId || txId}`,
       assetName,
-      type: getOrderType({ tx, order }),
+      type: TX_TYPES.EXCHANGE,
       pending,
       failed,
       sent: order.fromAsset === assetName,

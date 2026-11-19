@@ -15,6 +15,13 @@ export const errorsAtomDefinition = {
 export const remoteErrorTrackingEnabledAtomDefinition = {
   id: 'remoteErrorTrackingEnabledAtom',
   type: 'atom',
-  // eslint-disable-next-line @exodus/hydra/in-memory-atom-default-value
+  // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/in-memory-atom-default-value
+  factory: () => createInMemoryAtom(),
+}
+
+export const unsafeRemoteErrorTrackingEnabledAtomDefinition = {
+  id: 'unsafeRemoteErrorTrackingEnabledAtom',
+  type: 'atom',
+  // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/in-memory-atom-default-value
   factory: () => createInMemoryAtom(),
 }

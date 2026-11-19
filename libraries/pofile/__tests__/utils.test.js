@@ -2,15 +2,11 @@ const { createEntryId, parseEntryId } = require('../src/utils')
 
 describe('createEntryId', () => {
   it('should throw an error if id is not a string', () => {
-    expect(() => createEntryId({ id: 1 })).toThrowError(
-      'pofile: entry id must be a string. Got number'
-    )
+    expect(() => createEntryId({ id: 1 })).toThrow('pofile: entry id must be a string. Got number')
   })
 
   it('should throw an error if id is an empty string', () => {
-    expect(() => createEntryId({ id: '' })).toThrowError(
-      'pofile: entry id must be a non-empty string'
-    )
+    expect(() => createEntryId({ id: '' })).toThrow('pofile: entry id must be a non-empty string')
   })
 
   it('should return the id if context is not provided', () => {

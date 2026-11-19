@@ -109,6 +109,61 @@ describe('combine', () => {
     expect(observer).toHaveBeenCalledTimes(1)
   })
 
+  it('should notify new observers after resubscription when atoms change', async () => {
+    await nameAtom.set('Bob')
+    await occupationAtom.set('Farmer')
+
+    expect(observer).toHaveBeenCalledWith({ name: 'Bob', occupation: 'Farmer' })
+
+    // Unsubscribe all observers
+    unsubscribe()
+
+    // Change atom values while no observers
+    await nameAtom.set('Alice')
+
+    // Subscribe new observer
+    const handler = jest.fn()
+    nameAndOccupationAtom.observe(handler)
+
+    // Wait for initial get + observe emissions to settle
+    await new Promise((resolve) => setTimeout(resolve, 50))
+
+    // New observer should eventually receive current combined state
+    expect(handler).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'Alice', occupation: 'Farmer' })
+    )
+
+    // Now change name again — the new observer must be notified
+    handler.mockReset()
+    await nameAtom.set('Charlie')
+
+    expect(handler).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'Charlie', occupation: 'Farmer' })
+    )
+  })
+
+  it('should not notify with stale values from previous subscription cycle', async () => {
+    await nameAtom.set('Bob')
+    await occupationAtom.set('Farmer')
+
+    // Unsubscribe all observers — lock is fully resolved, values = {name: 'Bob', occupation: 'Farmer'}
+    unsubscribe()
+
+    // Change occupation while no observers
+    await occupationAtom.set('Engineer')
+
+    // Subscribe new observer
+    const handler = jest.fn()
+    nameAndOccupationAtom.observe(handler)
+
+    await new Promise((resolve) => setTimeout(resolve, 50))
+
+    // Should never have been called with stale 'Farmer' occupation
+    for (const call of handler.mock.calls) {
+      expect(call[0]).not.toEqual(expect.objectContaining({ name: 'Bob', occupation: 'Farmer' }))
+    }
+  })
+
   it('should be able to call get on combined atom without observers', async () => {
     const nameAtom = createInMemoryAtom({ defaultValue: 'Bruce Wayne' })
     const occupationAtom = createInMemoryAtom({ defaultValue: 'Batman' })

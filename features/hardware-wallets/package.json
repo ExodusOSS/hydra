@@ -1,41 +1,48 @@
 {
   "name": "@exodus/hardware-wallets",
-  "version": "3.6.2",
+  "version": "3.6.5",
   "description": "An Exodus SDK feature that provides a high level abstraction for interacting with hardware wallet devices",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/hardware-wallets",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/hardware-wallets",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Ahardware-wallets"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Ahardware-wallets"
   },
   "main": "lib/index.js",
   "type": "module",
+  "exports": {
+    ".": "./lib/index.js",
+    "./redux": "./lib/redux/index.js",
+    "./lib/redux": "./lib/redux/index.js"
+  },
   "files": [
     "lib/",
+    "redux.js",
     "CHANGELOG.md",
     "!**/__tests__/**"
   ],
   "scripts": {
-    "build": "run -T tsc -p tsconfig.build.json",
-    "clean": "run -T tsc --build --clean",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest --esbuild",
-    "prepublishOnly": "yarn run -T build --scope @exodus/hardware-wallets"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/hardware-wallets"
   },
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.2.0",
-    "@exodus/bip32": "^4.0.2",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/bip32": "workspace:^",
     "@exodus/crypto": "^1.0.0-rc.14",
-    "@exodus/hw-common": "^3.4.1",
-    "@exodus/models": "^12.18.0",
-    "@exodus/redux-dependency-injection": "^4.0.0",
-    "@exodus/wild-emitter": "^1.1.0",
+    "@exodus/hw-common": "workspace:^",
+    "@exodus/models": "workspace:^",
+    "@exodus/redux-dependency-injection": "workspace:^",
+    "@exodus/wild-emitter": "workspace:^",
     "delay": "^5.0.0",
     "make-concurrent": "^5.4.0",
     "minimalistic-assert": "^1.0.1",
@@ -44,9 +51,10 @@
   },
   "devDependencies": {
     "@exodus/dependency-types": "workspace:^",
-    "@exodus/key-identifier": "^1.3.0",
+    "@exodus/key-identifier": "workspace:^",
     "@exodus/logger": "workspace:^",
     "@exodus/public-key-provider": "workspace:^",
+    "@types/minimalistic-assert": "^1.0.1",
     "redux": "^4.2.1"
   },
   "publishConfig": {

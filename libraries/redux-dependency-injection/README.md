@@ -74,6 +74,40 @@ Here is an example redux module definition written by JK Rowling:
 }
 ```
 
+### TypeScript helper APIs
+
+For TypeScript code, prefer helper APIs over raw `satisfies` definitions:
+
+```ts
+import {
+  defineReduxModule,
+  defineSelectorFactory,
+  defineSelectorResultFunction,
+} from '@exodus/redux-dependency-injection'
+import { createSelector } from 'reselect'
+
+const selectorDefinitions = [
+  defineSelectorResultFunction({
+    id: 'loaded',
+    resultFunction: (data: { loaded: boolean }) => data.loaded,
+    dependencies: [{ selector: 'data' }],
+  }),
+  defineSelectorFactory({
+    id: 'createById',
+    selectorFactory: (dataSelector: (state: unknown) => { id: string }[]) => (id: string) =>
+      createSelector(dataSelector, (items) => items.find((item) => item.id === id)),
+    dependencies: [{ selector: 'data' }],
+  }),
+] as const
+
+export default defineReduxModule({
+  id: 'example',
+  initialState: { data: [] as { id: string }[] },
+  eventReducers: {},
+  selectorDefinitions,
+} as const)
+```
+
 Let's dive a little deeper.
 
 ### Selectors

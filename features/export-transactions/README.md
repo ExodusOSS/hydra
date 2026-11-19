@@ -5,7 +5,7 @@ This Exodus SDK feature provides an API to calculate export-transactions for a d
 ## Install
 
 ```sh
-yarn add @exodus/export-transactions
+pnpm add @exodus/export-transactions
 ```
 
 ## Usage

@@ -30,6 +30,12 @@ class NftsTransactionsNetworkMonitor extends EventEmitter {
     this.emit('txs', payload)
   }
 
+  #determineSent = (tx, ownerAddress) => {
+    if (!tx?.from || !ownerAddress) return false
+
+    return tx.from.toLowerCase() === ownerAddress.toLowerCase()
+  }
+
   #getTxsData = async ({ walletAccount }) => {
     try {
       const assetName = this.#asset.name
@@ -59,7 +65,10 @@ class NftsTransactionsNetworkMonitor extends EventEmitter {
       const validTxsLists = txsLists
         .map((txList, index) => {
           const ownerAddress = addresses[index].toString()
-          return txList.map((tx) => ({ ...tx, ownerAddress }))
+          return txList.map((tx) => {
+            const sent = this.#determineSent(tx, ownerAddress)
+            return { ...tx, ownerAddress, sent }
+          })
         })
         .filter(Boolean)
 

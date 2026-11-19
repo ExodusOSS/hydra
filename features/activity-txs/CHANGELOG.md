@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.1.9](https://github.com/ExodusMovement/exodus/compare/@exodus/activity-txs@6.1.8...@exodus/activity-txs@6.1.9) (2026-09-02)
+
+### Bug Fixes
+
+- **activity-txs:** tolerate null tx source in limited and by-id selectors ([#44450](https://github.com/ExodusMovement/exodus/issues/44450)) ([6e371b1](https://github.com/ExodusMovement/exodus/commit/6e371b1394b456decd58e9ded1125f0f8fa1a816))
+
+## [6.1.8](https://github.com/ExodusMovement/exodus/compare/@exodus/activity-txs@6.1.7...@exodus/activity-txs@6.1.8) (2026-08-27)
+
+### Bug Fixes
+
+- **activity-txs:** return empty activity when tx source selector returns null ([#44246](https://github.com/ExodusMovement/exodus/issues/44246)) ([3d62429](https://github.com/ExodusMovement/exodus/commit/3d62429dea3711c7bde0893db9d4d3975ce6eeaa))
+
+## [6.1.7](https://github.com/ExodusMovement/exodus/compare/@exodus/activity-txs@6.1.6...@exodus/activity-txs@6.1.7) (2026-08-03)
+
+### Bug Fixes
+
+- **activity-txs:** type grouped swap rows as exchange via their swap leg ([#42988](https://github.com/ExodusMovement/exodus/issues/42988)) ([f8309b8](https://github.com/ExodusMovement/exodus/commit/f8309b8f071b2884093a110e7a1c8823d43ac60c))
+
+## [6.1.6](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@6.1.5...@exodus/activity-txs@6.1.6) (2026-06-27)
+
+### Bug Fixes
+
+- **activity-txs:** handle iterable (TxSet) tx source in groupTxsWithSameOrder ([#17380](https://github.com/ExodusMovement/exodus-hydra/issues/17380)) ([9ad4b9f](https://github.com/ExodusMovement/exodus-hydra/commit/9ad4b9f3ffc9f01708498ebf1286c932b0b7a999))
+
+## [6.1.5](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@6.1.4...@exodus/activity-txs@6.1.5) (2026-06-25)
+
+### Bug Fixes
+
+- **activity-txs:** suppress orphaned chained-swap bridge leg ([#17354](https://github.com/ExodusMovement/exodus-hydra/issues/17354)) ([328b41a](https://github.com/ExodusMovement/exodus-hydra/commit/328b41af15695bf4e4c3057360354fa7b7897d04))
+
+## [6.1.4](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@6.1.3...@exodus/activity-txs@6.1.4) (2026-06-24)
+
+### Bug Fixes
+
+- **activity-txs:** collapse chained swap bridge legs into one row ([#17326](https://github.com/ExodusMovement/exodus-hydra/issues/17326)) ([befd253](https://github.com/ExodusMovement/exodus-hydra/commit/befd253a6853bcc15ddf64ba8212adde1ad53c33))
+
+## [6.1.3](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@6.1.2...@exodus/activity-txs@6.1.3) (2026-05-13)
+
+**Note:** Version bump only for package @exodus/activity-txs
+
+## [6.1.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@6.1.1...@exodus/activity-txs@6.1.2) (2026-05-08)
+
+### Bug Fixes
+
+- fix(activity-txs): fiat order duplicates (#16369)
+
 ## [6.1.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/activity-txs@6.1.0...@exodus/activity-txs@6.1.1) (2026-03-24)
 
 ### Bug Fixes

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayPredictionsBuyOptionChange"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        },
+        {
+          "$ref": "common-properties#/definitions/predictionsProperties"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "market_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "from_option_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "to_option_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "from_option_price": {
+          "type": "number"
+        },
+        "to_option_price": {
+          "type": "number"
+        },
+        "amount_entered_usd": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.2](https://github.com/ExodusMovement/exodus/compare/@exodus/fiat-currencies@1.3.1...@exodus/fiat-currencies@1.3.2) (2026-11-17)
+
+### Bug Fixes
+
+- **fiat-currencies:** show ARS code instead of Ar symbol ([#49487](https://github.com/ExodusMovement/exodus/issues/49487)) ([151f276](https://github.com/ExodusMovement/exodus/commit/151f276e70258a6084adcf5345fe28a23725d660))
+
+## [1.3.1](https://github.com/ExodusMovement/exodus/compare/@exodus/fiat-currencies@1.3.0...@exodus/fiat-currencies@1.3.1) (2026-08-05)
+
+**Note:** Version bump only for package @exodus/fiat-currencies
+
 ## [1.3.0](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/fiat-currencies@1.2.3...@exodus/fiat-currencies@1.3.0) (2026-02-27)
 
 ### Features

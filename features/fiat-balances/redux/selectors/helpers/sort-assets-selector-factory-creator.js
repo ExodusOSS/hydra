@@ -1,5 +1,4 @@
 import { keyBy, memoize, orderBy } from '@exodus/basic-utils'
-import { isDustAmount } from '@exodus/formatting/lib/asset'
 import { createSelector } from 'reselect'
 import { isMultiNetworkAsset } from '../utils.js'
 
@@ -72,7 +71,7 @@ const sortAssetsSelectorFactoryCreator = ({
               isBaseAsset: asset.baseAsset.name === asset.name,
               fiatBalance,
               hasBalance: balance > 0,
-              isDust: isDustAmount(balance),
+              isDust: balance > 0 && balance < 1e-6,
               cap: (!ignoreMarketCapAssets.includes(asset.baseAsset.name) && cap) || 0,
             },
           }

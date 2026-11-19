@@ -5,7 +5,7 @@ This module provides simplified access to remote config values
 ## Install
 
 ```sh
-yarn add @exodus/remote-config
+pnpm add @exodus/remote-config
 ```
 
 ## Usage

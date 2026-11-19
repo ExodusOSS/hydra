@@ -21,7 +21,7 @@ const timeoutObservers = <T>({ atom, timeout }: Params<T>): Atom<T> => {
         //
         observer(...args),
         timeoutPromise,
-      ]).then(() => timeoutPromise.clear())
+      ]).finally(() => timeoutPromise.clear())
     })
 
   return {

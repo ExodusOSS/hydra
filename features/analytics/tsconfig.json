@@ -1,7 +1,11 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["api/index.d.ts", "index.d.ts"],
+  "include": ["src", "__tests__"],
   "compilerOptions": {
-    "removeComments": false
+    "target": "ES2022",
+    "module": "nodenext",
+    "noEmit": true,
+    "removeComments": false,
+    "moduleResolution": "nodenext"
   }
 }

@@ -1,6 +1,6 @@
-import postRestoreModalApiDefinition from './api'
-import { shouldShowPostRestoredModalAtomDefinition } from './atoms'
-import postRestoreModalPluginDefinition from './plugin'
+import postRestoreModalApiDefinition from './api/index.js'
+import { shouldShowPostRestoredModalAtomDefinition } from './atoms/index.js'
+import postRestoreModalPluginDefinition from './plugin/index.js'
 
 const postRestoreModal = () => ({
   id: 'postRestoreModal',

@@ -8,7 +8,7 @@ React Native specific implementation of the [unified storage spec](../storage-sp
 ## Install
 
 ```sh
-yarn add @exodus/storage-mobile
+pnpm add @exodus/storage-mobile
 ```
 
 ## Usage
@@ -35,7 +35,7 @@ const storage = createStorageMobile({
     placeholder: '~', // will be written to the async storage for files larger than the threshold
     rootDir: fs.DocumentDirectoryPath + '/async-storage',
     hashString,
-    threshold: 1.9 * 1024 * 1024, // 2 megs, slightly lower to avoid the edge cases too close to the limit
+    threshold: 1.9 * 1024 * 1024, // JSON-serialized UTF-8 bytes, below Android's 2 MiB row limit
   },
 })
 

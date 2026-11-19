@@ -5,8 +5,8 @@
 To version your packages, either:
 
 - merge a PR with eligible commit type. The following don't trigger a release: `chore`, `docs`, `test`, `ci`
-- run `yarn release` and select the package(s) you want to release
-- run `yarn release` and supply packages as a positional argument: `yarn release networking-mobile,kyc,storage-mobile`
+- run `pnpm run release` and select the package(s) you want to release
+- run `pnpm run release` and supply packages as a positional argument: `pnpm run release networking-mobile,kyc,storage-mobile`
 
 All of these derive version bumps from the conventional commit history and create a release PR, labeled with `publish-on-merge`. Make sure that the checks on the release PR pass, especially when releasing packages that depend on other packages from this repository.
 
@@ -46,8 +46,7 @@ The chain was merged by applying the `action/merge-chain` label to the child PR.
 If your package requires referencing one of the packages maintained in this mono repo and you want
 to consume the latest unpublished changes without having to set a specific version, you have to
 manually add that dependency to `package.json` and set the version to `*`. This manual step is
-currently required because of an incompatibility between more recent yarn versions (berry) and
-lerna.
+currently required because of a nuance in how pnpm and lerna interact.
 
 Latest code changes are automatically reflected in the import and versioning/publishing
 takes care of keeping the version in the module's `package.json` up-to-date.

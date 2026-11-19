@@ -5,7 +5,7 @@ RPC and client specifically tailored to allow for easy consumption of the Exodus
 ## Install
 
 ```
-yarn add @exodus/sdk-rpc
+pnpm add @exodus/sdk-rpc
 ```
 
 ## Usage

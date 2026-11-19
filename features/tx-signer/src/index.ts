@@ -4,6 +4,12 @@ import {
 } from './module/index.js'
 import transactionSignerApiDefinition from './api/index.js'
 
+export type {
+  ITransactionSigner,
+  UnsignedTransaction,
+  SignTransactionParams,
+} from './module/index.js'
+
 const transactionSigner = () => {
   return {
     id: 'transactionSigner',

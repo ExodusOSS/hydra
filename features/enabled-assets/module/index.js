@@ -84,7 +84,7 @@ class EnabledAssets {
       baseAssetName && storageData.disabled[baseAssetName] !== false && r.push(baseAssetName)
       return r
     }, [])
-    assetNamesToUse.unshift(...baseAssetsToEnable)
+    assetNamesToUse = [...baseAssetsToEnable, ...assetNamesToUse]
 
     const boolDict = assetNamesToBoolDict(assetNamesToUse, true)
     return this.#setAssetsEnabled(boolDict)

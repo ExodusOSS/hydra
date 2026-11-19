@@ -5,7 +5,7 @@ Simple PO file parser
 ## Install
 
 ```sh
-yarn add @exodus/pofile
+pnpm add @exodus/pofile
 ```
 
 ## Usage

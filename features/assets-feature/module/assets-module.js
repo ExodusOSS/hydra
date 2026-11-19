@@ -4,7 +4,7 @@ import {
   CT_STATUS as STATUS,
   CT_UPDATEABLE_PROPERTIES,
 } from '@exodus/assets'
-import { keyBy, mapValues, partition, pickBy, difference } from '@exodus/basic-utils'
+import { keyBy, mapValues, partition, pickBy, difference, pick } from '@exodus/basic-utils'
 // eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
 import lodash from 'lodash'
 import assert from 'minimalistic-assert'
@@ -23,12 +23,17 @@ import {
   isDisabledCustomToken,
 } from './utils.js'
 import createFetchival from '@exodus/fetch/create-fetchival'
-import { validateCustomToken, isValidCustomToken } from '@exodus/asset-schema-validation'
+import { validateCustomToken } from '@exodus/asset-schema-validation'
 import makeConcurrent from 'make-concurrent'
 import oldToNewStyleTokenNames from '@exodus/asset-legacy-token-name-mapping'
+import {
+  createDynamicCombinedAssetDefinitions,
+  shouldTokenJoinCombinedAsset,
+  findDynamicCombinedAssetForToken,
+  getDynamicCombinedAssetKey,
+} from './dynamic-combined-assets.js'
 
-// eslint-disable-next-line @exodus/basic-utils/prefer-basic-utils
-const { get, isEmpty, once, uniq, chunk, pick } = lodash
+const { get, isEmpty, once, uniq, chunk } = lodash
 
 const getFetchCacheKey = (baseAssetName, assetId) => `${assetId}-${baseAssetName}`
 
@@ -37,8 +42,8 @@ const _isDisabledCustomToken = (token) => token.lifecycleStatus === STATUS.DISAB
 const normalizeToken = (token) => ({
   ...token,
   name: token.name || token.assetName,
-  displayName: token.displayName || token.properName, // eslint-disable-line @exodus/hydra/no-asset-proper
-  displayTicker: token.displayTicker || token.properTicker, // eslint-disable-line @exodus/hydra/no-asset-proper
+  displayName: token.displayName || token.properName, // oxlint-disable-line @exodus/oxlint-plugin-hydra/no-asset-proper
+  displayTicker: token.displayTicker || token.properTicker, // oxlint-disable-line @exodus/oxlint-plugin-hydra/no-asset-proper
 })
 
 const initialAssetRegistry = {
@@ -79,6 +84,8 @@ export class AssetsModule {
   #fetchival
   #logger
   #invalidTokenNames
+  #useDynamicCombinedAssets
+  #dynamicCombinedAssetOverrides
 
   constructor({
     storage,
@@ -118,6 +125,9 @@ export class AssetsModule {
       ),
       ...(config.invalidTokenNames || []),
     ])
+    this.#useDynamicCombinedAssets = config.useDynamicCombinedAssets ?? false
+    this.#dynamicCombinedAssetOverrides =
+      config.dynamicCombinedAssetOverrides ?? Object.create(null)
   }
 
   #setRegistry = (registry) => {
@@ -140,17 +150,43 @@ export class AssetsModule {
     const { assetsConfig: defaultAssetsConfig = Object.create(null) } = this.#config
     const assetsList = Object.entries(this.#assetPlugins)
       .map(([name, assetPlugin]) => {
-        const config = { ...defaultAssetsConfig[name], ...assetsConfig?.[name]?.config }
-        const asset = assetPlugin.createAsset({ assetClientInterface, config })
+        let asset
+
+        try {
+          const config = { ...defaultAssetsConfig[name], ...assetsConfig?.[name]?.config }
+          asset = assetPlugin.createAsset({ assetClientInterface, config })
+        } catch (e) {
+          this.#logger.error(
+            `failed to createAsset ${name} using custom assetsConfig: ${e.message}, using default configuration`,
+            e
+          )
+
+          asset = assetPlugin.createAsset({
+            assetClientInterface,
+            config: defaultAssetsConfig[name],
+          })
+        }
+
         if (asset.name === name) return asset
         console.warn(`Incorrectly referenced supported asset ${name}. Expected ${asset.name}.`)
       })
       .filter(Boolean)
+
+    const combinedAssets = this.#useDynamicCombinedAssets ? [] : this.#combinedAssetsList
+
     this.#setRegistry(
       createAssetRegistry({
-        supportedAssetsList: [...assetsList, ...this.#combinedAssetsList],
+        supportedAssetsList: [...assetsList, ...combinedAssets],
       })
     )
+
+    // Only flush static combined assets - dynamic ones are flushed in load()
+    if (!this.#useDynamicCombinedAssets) {
+      const allCombined = Object.values(this.#registry.getAssets()).filter((a) => a.isCombined)
+      if (allCombined.length > 0) {
+        this.#flushChanges({ added: allCombined })
+      }
+    }
   })
 
   getAssets = () => this.#registry.getAssets()
@@ -171,11 +207,15 @@ export class AssetsModule {
   getBaseAssetNames = () => this.#getAssetNamesBy((asset) => asset.baseAsset.name === asset.name)
 
   load = once(async () => {
+    const allAdded = []
+    const allUpdated = []
+
     try {
       const storedTokens = await this.#readCustomTokens()
+
       const tokens = pickBy(storedTokens, ({ baseAssetName }) => {
         const baseAsset = this.getAsset(baseAssetName)
-        return baseAsset?.api?.hasFeature?.('customTokens')
+        return baseAsset?.api?.features?.customTokens
       })
 
       // tokens may be:
@@ -184,11 +224,49 @@ export class AssetsModule {
       // 3. both of the above from a network that has feature flag customTokens === false
       // It is OK to add all of these to the assets registry
       const { added, updated } = this.#handleFetchedTokens(Object.values(tokens))
-      this.#flushChanges({ added, updated })
+      allAdded.push(...added)
+      allUpdated.push(...updated)
     } catch (e) {
       this.#logger.error('error reading custom tokens from storage: ' + e.message, e)
     }
+
+    if (this.#useDynamicCombinedAssets) {
+      try {
+        const { added, updated } = this.#createDynamicCombinedAssets()
+        allAdded.push(...added)
+        allUpdated.push(...updated)
+      } catch (e) {
+        this.#logger.error('error creating dynamic combined assets: ' + e.message, e)
+      }
+    }
+
+    this.#flushChanges({ added: allAdded, updated: allUpdated })
   })
+
+  #createDynamicCombinedAssets = () => {
+    const allAssets = this.getAssets()
+    const definitions = createDynamicCombinedAssetDefinitions(allAssets, {
+      overrides: this.#dynamicCombinedAssetOverrides,
+    })
+
+    const newlyCreatedNames = []
+    for (const definition of definitions) {
+      const existingCombined = this.getAsset(definition.name)
+      if (existingCombined) continue
+
+      this.#registry.addCombinedAsset(definition)
+      newlyCreatedNames.push(definition.name)
+    }
+
+    if (newlyCreatedNames.length > 0) {
+      const newCombinedAssets = newlyCreatedNames.map((name) => this.getAsset(name)).filter(Boolean)
+      const childAssetNames = new Set(newCombinedAssets.flatMap((c) => c.combinedAssetNames))
+      const childAssets = [...childAssetNames].map((name) => this.getAsset(name)).filter(Boolean)
+      return { added: newCombinedAssets, updated: childAssets }
+    }
+
+    return { added: [], updated: [] }
+  }
 
   // Custom tokens API
 
@@ -219,17 +297,10 @@ export class AssetsModule {
     }
 
     const _token = await fetchTokenAndCacheError()
-    if (this.#shouldValidateCustomToken) {
-      try {
-        validateCustomToken(_token)
-      } catch (e) {
-        this.#logger.warn(
-          `Token did not pass validation ${baseAssetName} ${assetId}. Error: ${e.message}`
-        )
-        const err = new Error('Token did not pass validation')
-        this.#setCache(key, { cachedError: err })
-        throw err
-      }
+    if (!this.#isValidCustomToken(_token)) {
+      const err = new Error('Token did not pass validation')
+      this.#setCache(key, { cachedError: err })
+      throw err
     }
 
     const token = normalizeToken(_token)
@@ -262,21 +333,7 @@ export class AssetsModule {
         'tokens'
       )
 
-      let validTokens = []
-      if (this.#shouldValidateCustomToken) {
-        for (const token of _tokens) {
-          try {
-            validateCustomToken(token)
-            validTokens.push(token)
-          } catch (e) {
-            this.#logger.warn(
-              `Token did not pass validation ${token.baseAssetName} ${token.assetId}. Error: ${e.message}`
-            )
-          }
-        }
-      } else {
-        validTokens = _tokens
-      }
+      const validTokens = _tokens.filter(this.#isValidCustomToken)
 
       const tokens = validTokens.map((token) => normalizeToken(token))
 
@@ -322,15 +379,15 @@ export class AssetsModule {
 
     try {
       const token = await this.fetchToken(assetId, baseAssetName)
-      const { asset, isAdded, updates } = this.#handleFetchedToken(token)
-      const updated = updates.map(this.getAsset)
+      const { asset, isAdded, combinedUpdates, combinedCreated } = this.#handleFetchedToken(token)
+      const updated = combinedUpdates.map(this.getAsset)
+      const added = isAdded ? [asset, ...combinedCreated] : combinedCreated
 
       if (isAdded) {
         await this.#storeCustomTokens([token])
-        this.#flushChanges({ added: [asset], updated })
-      } else {
-        this.#flushChanges({ updated: [asset, ...updated] })
       }
+
+      this.#flushChanges({ added, updated: isAdded ? updated : [asset, ...updated] })
 
       return asset
     } catch (err) {
@@ -436,7 +493,7 @@ export class AssetsModule {
     const versionedAssetNames = await this.#getVersionedAssetNames()
     const updatableAssetNames = versionedAssetNames.filter(({ assetName }) => {
       const asset = this.getAsset(assetName)
-      return !asset?.isBuiltIn && asset?.baseAsset.api?.hasFeature?.('customTokens')
+      return !asset?.isBuiltIn && asset?.baseAsset.api?.features?.customTokens
     })
     if (updatableAssetNames.length === 0) return
 
@@ -460,6 +517,7 @@ export class AssetsModule {
     baseAssetName,
     lifecycleStatus,
     query,
+    tags,
     excludeTags = ['offensive'],
     pageNumber,
     pageSize,
@@ -482,7 +540,15 @@ export class AssetsModule {
 
     const tokens = await this.#fetch(
       'search',
-      { baseAssetName: baseAssetNames, lifecycleStatus, query, excludeTags, pageNumber, pageSize },
+      {
+        baseAssetName: baseAssetNames,
+        lifecycleStatus,
+        query,
+        tags,
+        excludeTags,
+        pageNumber,
+        pageSize,
+      },
       'tokens'
     )
     const validTokens = tokens.filter(this.#isValidCustomToken)
@@ -496,8 +562,8 @@ export class AssetsModule {
   }
 
   #getCustomTokensNetworkNames = () =>
-    this.getBaseAssetNames().filter((assetName) =>
-      this.getAsset(assetName).api?.hasFeature?.('customTokens')
+    this.getBaseAssetNames().filter(
+      (assetName) => this.getAsset(assetName).api?.features?.customTokens
     )
 
   #fetchTokensByNames = async ({ tokenNames, allowedStatusList }) => {
@@ -574,6 +640,10 @@ export class AssetsModule {
   }
 
   #handleCombinedParents = ({ name, parents }) => {
+    if (this.#useDynamicCombinedAssets) {
+      return []
+    }
+
     if (!parents) return []
     assert(Array.isArray(parents), 'Array expected')
 
@@ -600,59 +670,123 @@ export class AssetsModule {
     return uniq(updatedCombinedAssetNames)
   }
 
+  #handleDynamicCombinedAssetUpdate = (token) => {
+    if (!this.#useDynamicCombinedAssets) return { updated: [], created: [], members: [] }
+    if (!shouldTokenJoinCombinedAsset(token)) return { updated: [], created: [], members: [] }
+
+    const allAssets = this.getAssets()
+    const combinedAssets = Object.values(allAssets).filter((a) => a.isCombined)
+    const options = { assets: allAssets, overrides: this.#dynamicCombinedAssetOverrides }
+    const matchingCombined = findDynamicCombinedAssetForToken(token, combinedAssets, options)
+
+    if (matchingCombined) {
+      if (!matchingCombined.combinedAssetNames.includes(token.name)) {
+        this.#registry.updateCombinedAsset(matchingCombined.name, { addMembers: [token.name] })
+        return { updated: [matchingCombined.name], created: [], members: [] }
+      }
+    } else {
+      const tokenKey = getDynamicCombinedAssetKey(token, options)
+      if (!tokenKey) return { updated: [], created: [], members: [] }
+      const matchingAssets = Object.values(allAssets).filter(
+        (a) =>
+          !a.isCombined &&
+          getDynamicCombinedAssetKey(a, options) === tokenKey &&
+          shouldTokenJoinCombinedAsset(a)
+      )
+
+      if (matchingAssets.length >= 2) {
+        const definitions = createDynamicCombinedAssetDefinitions(matchingAssets, options)
+        if (definitions.length > 0) {
+          const newCombined = this.#registry.addCombinedAsset(definitions[0])
+          const memberNames = matchingAssets.map((a) => a.name).filter((n) => n !== token.name)
+          return { updated: [], created: [newCombined], members: memberNames }
+        }
+      }
+    }
+
+    return { updated: [], created: [], members: [] }
+  }
+
   #handleFetchedToken = (token) => {
     const asset = this.getAsset(token.name)
-    if (asset) return { asset, isAdded: false, updates: [] }
+    if (asset) {
+      const dynamicResult = this.#handleDynamicCombinedAssetUpdate(asset)
+      return {
+        asset,
+        isAdded: false,
+        combinedUpdates: dynamicResult.updated,
+        combinedCreated: dynamicResult.created,
+        combinedMembers: dynamicResult.members,
+      }
+    }
 
-    const { name } = this.#registry.addCustomToken(token) // add to registry
-    const updates = this.#handleCombinedParents(token)
+    const { name } = this.#registry.addCustomToken(token)
+    const staticUpdates = this.#handleCombinedParents(token)
+    const dynamicResult = this.#handleDynamicCombinedAssetUpdate(this.getAsset(name))
+    const combinedUpdates = [...staticUpdates, ...dynamicResult.updated]
 
     this.#logger.log('Custom token added:', name)
-    return { asset: this.getAsset(name), isAdded: true, updates }
+    return {
+      asset: this.getAsset(name),
+      isAdded: true,
+      combinedUpdates,
+      combinedCreated: dynamicResult.created,
+      combinedMembers: dynamicResult.members,
+    }
   }
 
   #handleFetchedTokens = (tokens) => {
     const fetchedAndHandledTokens = []
     const added = []
     const updated = []
-    const parentNames = []
+    const combinedUpdateNames = []
+    const combinedCreated = []
+    const combinedMemberNames = []
+
     for (const token of tokens) {
       try {
-        const { asset, isAdded, updates } = this.#handleFetchedToken(token)
+        const result = this.#handleFetchedToken(token)
 
-        if (isAdded) {
-          added.push(asset)
+        if (result.isAdded) {
+          added.push(result.asset)
           fetchedAndHandledTokens.push(token)
         } else {
-          updated.push(asset)
+          updated.push(result.asset)
         }
 
-        if (updates.length > 0) {
-          parentNames.push(...updates)
+        if (result.combinedUpdates.length > 0) {
+          combinedUpdateNames.push(...result.combinedUpdates)
+        }
+
+        if (result.combinedCreated.length > 0) {
+          combinedCreated.push(...result.combinedCreated)
+        }
+
+        if (result.combinedMembers.length > 0) {
+          combinedMemberNames.push(...result.combinedMembers)
         }
       } catch (err) {
         this.#logger.error('Handle fetched custom tokens error: ' + err.message, err)
       }
     }
 
-    updated.push(...uniq(parentNames).map(this.getAsset))
+    const createdNames = new Set(combinedCreated.map((a) => a.name))
+    const dedupedUpdateNames = uniq(combinedUpdateNames).filter((name) => !createdNames.has(name))
+    const dedupedMemberNames = uniq(combinedMemberNames).filter((name) => !createdNames.has(name))
+    updated.push(...dedupedUpdateNames.map(this.getAsset).filter(Boolean))
+    updated.push(...dedupedMemberNames.map(this.getAsset).filter(Boolean))
+    added.push(...combinedCreated.map((a) => this.getAsset(a.name)).filter(Boolean))
 
     return { fetchedAndHandledTokens, added, updated }
   }
 
-  #fetchIcon = memoizeLruCache(
+  #fetchIconToken = memoizeLruCache(
     async (assetName) => {
-      const tokenNames = [assetName]
-
-      const tokens = await this.#fetch(
-        'tokens',
-        { tokenNames, lifecycleStatus: ['c', 'v', 'u'] },
-        'tokens'
-      )
-      const token = tokens[0]
-      if (token?.icon) {
-        return this.#iconsStorage.unzipIcon(token.icon)
-      }
+      const tokens = await this.#fetchTokensByNames({
+        tokenNames: [assetName],
+        allowedStatusList: ['c', 'v', 'u'],
+      })
+      return tokens[0]
     },
     (assetName) => assetName,
     { max: 100 }
@@ -663,11 +797,21 @@ export class AssetsModule {
 
     const asset = await this.getAsset(assetName)
     if (asset) {
-      return this.#iconsStorage.getIcon(assetName)
+      try {
+        const storedIcon = await this.#iconsStorage.getIcon(assetName)
+        if (storedIcon) return storedIcon
+      } catch (e) {
+        this.#logger.warn(`Failed to read stored icon for ${assetName}. ${e.message}`, e)
+      }
+
+      if (asset.isBuiltIn) return
     }
 
     try {
-      return await this.#fetchIcon(assetName)
+      const token = await this.#fetchIconToken(assetName)
+      if (!token?.icon) return
+      if (asset) await this.#storeIcons([token])
+      return this.#iconsStorage.unzipIcon(token.icon)
     } catch (e) {
       this.#logger.error(`Cannot load icon for ${assetName} from CTR. ${e.message}`, e)
     }
@@ -688,7 +832,7 @@ export class AssetsModule {
 
   #assertSupportsCustomTokens = (baseAssetName) => {
     const baseAsset = this.getAsset(baseAssetName)
-    if (!baseAsset?.api?.hasFeature('customTokens')) {
+    if (!baseAsset?.api?.features?.customTokens) {
       const reason = `BUG: network ${baseAsset?.name} does not support custom tokens.`
       this.#logger.warn(reason)
       throw new Error(reason)
@@ -751,7 +895,15 @@ export class AssetsModule {
       return true
     }
 
-    return isValidCustomToken(token)
+    try {
+      validateCustomToken(token)
+      return true
+    } catch (e) {
+      this.#logger.warn(
+        `Token ${token.name ?? token.assetName} did not pass validation: ${e.message}`
+      )
+      return false
+    }
   }
 
   clear = async () =>

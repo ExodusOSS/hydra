@@ -13,7 +13,19 @@
       ],
       "type": "object",
       "required": [],
-      "properties": {},
+      "properties": {
+        "origin": {
+          "type": "string",
+          "enum": [
+            "default-region",
+            "invite-code",
+            "xo-cash",
+            "wallet-banner",
+            "classic-wallet-menu",
+            "spend-card-promo"
+          ]
+        }
+      },
       "unevaluatedProperties": false
     }
   },

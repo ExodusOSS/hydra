@@ -1,5 +1,5 @@
 import type { WalletAccount } from '@exodus/models'
-import type { AddressProvider, AssetsModule, Keychain } from './interfaces.js'
+import type { AddressProvider, Asset, Keychain } from './interfaces.js'
 import assert from 'minimalistic-assert'
 import { getDefaultPathIndexes } from '@exodus/asset-lib'
 import KeyIdentifier from '@exodus/key-identifier'
@@ -10,7 +10,7 @@ import type { AssetSources } from '@exodus/asset-sources'
 type Dependencies = {
   keychain: Keychain
   assetSources: AssetSources
-  assetsModule: AssetsModule
+  assetsAtom: Atom<{ value: Record<string, Asset> }>
   walletAccountsAtom: Atom<{ [name: string]: WalletAccount }>
   addressProvider: AddressProvider
 }
@@ -30,20 +30,20 @@ type GetEncodedPrivateKeyReturnValue = Promise<[PrivateKeyDescriptor, ...Private
 
 export class KeyViewer {
   readonly #keychain: Dependencies['keychain']
-  readonly #assetsModule: Dependencies['assetsModule']
+  readonly #assetsAtom: Dependencies['assetsAtom']
   readonly #walletAccountsAtom: Dependencies['walletAccountsAtom']
   readonly #addressProvider: Dependencies['addressProvider']
   readonly #assetSources: Dependencies['assetSources']
 
   constructor({
     keychain,
-    assetsModule,
+    assetsAtom,
     walletAccountsAtom,
     addressProvider,
     assetSources,
   }: Dependencies) {
     this.#keychain = keychain
-    this.#assetsModule = assetsModule
+    this.#assetsAtom = assetsAtom
     this.#walletAccountsAtom = walletAccountsAtom
     this.#addressProvider = addressProvider
     this.#assetSources = assetSources
@@ -62,7 +62,8 @@ export class KeyViewer {
       `can only view encoded private key of software wallet accounts, got ${walletAccountName}`
     )
 
-    const asset = this.#assetsModule.getAsset(baseAssetName)
+    const { value: assets } = await this.#assetsAtom.get()
+    const asset = assets[baseAssetName]
     const purpose = await this.#assetSources.getDefaultPurpose({
       assetName: baseAssetName,
       walletAccount: walletAccountName,
@@ -87,6 +88,7 @@ export class KeyViewer {
       seedId: walletAccount.seedId!,
       keyId,
       exportPrivate: true,
+      exportPublic: false,
     })
 
     const addressExport = this.#addressProvider.getDefaultAddress({
@@ -116,13 +118,7 @@ const keyViewerDefinition = {
   id: 'keyViewer',
   type: 'module',
   factory: createKeyViewer,
-  dependencies: [
-    'keychain',
-    'assetsModule',
-    'walletAccountsAtom',
-    'addressProvider',
-    'assetSources',
-  ],
+  dependencies: ['keychain', 'assetsAtom', 'walletAccountsAtom', 'addressProvider', 'assetSources'],
 } as const satisfies Definition
 
 export default keyViewerDefinition

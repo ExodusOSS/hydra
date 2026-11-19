@@ -2,15 +2,18 @@ import type { AsyncStorageStatic } from '@react-native-async-storage/async-stora
 import type { Storage } from '@exodus/storage-interface'
 import assert from 'minimalistic-assert'
 import { assertDefined, assertString, assertValidIdentifier } from './helpers/assertions.js'
+import type { ErrorTracking } from './helpers/types.js'
 
 export class StorageMobile<Value> implements Storage<Value> {
   readonly #asyncStorage: AsyncStorageStatic
   readonly #prefix: string
+  readonly #errorTracking?: ErrorTracking
 
-  constructor(asyncStorage: AsyncStorageStatic, prefix = '') {
+  constructor(asyncStorage: AsyncStorageStatic, prefix = '', errorTracking?: ErrorTracking) {
     assert(asyncStorage, 'expected "asyncStorage"')
     this.#asyncStorage = asyncStorage
     this.#prefix = prefix
+    this.#errorTracking = errorTracking
   }
 
   get = async (key: string): Promise<Value | undefined> =>
@@ -39,7 +42,11 @@ export class StorageMobile<Value> implements Storage<Value> {
 
   namespace = <Value>(prefix: string): Storage<Value> => {
     assertValidIdentifier(prefix)
-    return new StorageMobile<Value>(this.#asyncStorage, `${this.#prefix}!${prefix}!`)
+    return new StorageMobile<Value>(
+      this.#asyncStorage,
+      `${this.#prefix}!${prefix}!`,
+      this.#errorTracking
+    )
   }
 
   batchDelete = async (keys: string[]) => {
@@ -48,7 +55,14 @@ export class StorageMobile<Value> implements Storage<Value> {
 
   batchGet = async (keys: string[]): Promise<(Value | undefined)[]> => {
     const values = await this.#asyncStorage.multiGet(keys.map((key) => this.#normalizeKey(key)))
-    return values.map(([, value]) => (value ? JSON.parse(value) : undefined))
+    return values.map(([, value]) => {
+      if (!value) return
+      try {
+        return JSON.parse(value) as Value
+      } catch (error) {
+        void this.#errorTracking?.track({ error: error as Error })
+      }
+    })
   }
 
   batchSet = async (obj: { [p: string]: Value }) => {

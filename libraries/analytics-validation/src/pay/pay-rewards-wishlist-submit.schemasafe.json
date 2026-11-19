@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayRewardsWishlistSubmit"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "store_selected": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "wishlist_selected": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "entry_point": {
+          "type": "string",
+          "enum": [
+            "wallet_banner",
+            "pay_home_card",
+            "settings",
+            "dashboard_info",
+            "disable_sheet",
+            "cash_banner",
+            "profile",
+            "send_invitation",
+            "onboarding",
+            "swap_fee"
+          ]
+        },
+        "intro_variant": {
+          "type": "string",
+          "enum": ["new_user", "existing_pay_user"]
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

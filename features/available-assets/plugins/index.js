@@ -15,7 +15,8 @@ const createAvailableAssetsPlugin = ({ port, availableAssetNamesAtom, availableA
 
   const onLoad = () => {
     observers.forEach((observer) => observer.start())
-    availableAssets.load()
+    // load logs a failure and retries on its own.
+    availableAssets.load().catch(() => {})
   }
 
   const onStop = () => {

@@ -1,17 +1,17 @@
 {
   "name": "@exodus/public-key-provider",
-  "version": "4.1.1",
+  "version": "4.3.2",
   "description": "Handles unified access to public keys from software and different hardware wallets",
   "author": "Exodus Movement, Inc.",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/public-key-provider",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/public-key-provider",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Apublic-key-provider"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Apublic-key-provider"
   },
   "main": "lib/index.js",
   "files": [
@@ -20,35 +20,38 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "run -T tsc --build tsconfig.build.json",
-    "clean": "run -T tsc --build --clean",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest --esbuild",
-    "prepublishOnly": "yarn run -T build --scope @exodus/public-key-provider"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/public-key-provider"
   },
   "dependencies": {
     "@exodus/asset-lib": "^5.2.1",
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/bip32": "^4.0.2",
-    "@exodus/key-identifier": "^1.2.2",
-    "@exodus/models": "^12.3.0",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/bip32": "workspace:^",
+    "@exodus/key-identifier": "workspace:^",
+    "@exodus/models": "workspace:^",
+    "@exodus/safe-string": "workspace:^",
     "bip32-path": "^0.4.2",
     "minimalistic-assert": "^1.0.1",
     "p-defer": "^4.0.0"
   },
   "devDependencies": {
     "@exodus/asset-sources": "workspace:^",
-    "@exodus/bitcoin-plugin": "^1.8.0",
+    "@exodus/bip39": "workspace:^",
+    "@exodus/bitcoin-plugin": "^2.0.0",
     "@exodus/dependency-types": "workspace:^",
-    "@exodus/keychain": "^7.3.0",
+    "@exodus/keychain": "workspace:^",
     "@exodus/logger": "workspace:^",
     "@types/jest-when": "^3.5.2",
     "@types/minimalistic-assert": "^1.0.1",
-    "bip39": "^3.1.0",
     "jest-when": "^3.6.0"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

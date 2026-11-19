@@ -1,5 +1,10 @@
-import { combineReducers, legacy_createStore as createStore } from 'redux'
+import * as reduxLib from 'redux'
 import { setupRedux, setupActions } from '@exodus/redux-dependency-injection'
+
+// redux ships CJS without statically-detectable named exports; read through the
+// CJS-interop default so it resolves under the node:test ESM engine whether it
+// hits real redux or a test mock.
+const { combineReducers, legacy_createStore: createStore } = reduxLib.default ?? reduxLib
 
 function createReduxIOC({
   createLogger,
@@ -25,6 +30,8 @@ function createReduxIOC({
     }
 
     reduxNodes.set(node.id, node)
+
+    return ioc
   }
 
   const resolve = () => {
@@ -34,7 +41,6 @@ function createReduxIOC({
 
     const { selectors, createHandleEvent, reducers, ioc, initialState } = setupRedux({
       reducers: baseReducers,
-      initialState: {},
       dependencies: [...reduxNodes.values()],
       createLogger,
     })
@@ -47,10 +53,12 @@ function createReduxIOC({
     return { selectors, actionCreators, handleEvent, store }
   }
 
-  return {
+  const ioc = {
     use,
     resolve,
   }
+
+  return ioc
 }
 
 export default createReduxIOC

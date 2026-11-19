@@ -1,8 +1,11 @@
-import { utils } from '@noble/secp256k1'
 import { publicKeyToX } from '@exodus/crypto/secp256k1'
+import KeyIdentifier from '@exodus/key-identifier'
+import { sha256 } from '@noble/hashes/sha256'
+import { utils } from '@noble/secp256k1'
 
 import { create } from '../crypto/secp256k1.js'
-import KeyIdentifier from '@exodus/key-identifier'
+
+utils.sha256Sync = (...msgs) => sha256(utils.concatBytes(...msgs))
 
 const fixtures = [
   {

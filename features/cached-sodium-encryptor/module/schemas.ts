@@ -5,7 +5,7 @@ type KeyIdentifierLike = ConstructorParameters<typeof KeyIdentifier>[0] | KeyIde
 
 const keyIdentifierLikeSchema = z
   .custom<KeyIdentifierLike>((value) => KeyIdentifier.validate(value))
-  .transform((value) => (value instanceof KeyIdentifier ? value : new KeyIdentifier(value)))
+  .transform((value) => new KeyIdentifier(value))
 
 export const keySourceSchema = z.strictObject({
   keyId: keyIdentifierLikeSchema,

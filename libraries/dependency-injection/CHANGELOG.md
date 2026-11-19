@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.1](https://github.com/ExodusMovement/exodus/compare/@exodus/dependency-injection@3.3.0...@exodus/dependency-injection@3.3.1) (2026-10-13)
+
+**Note:** Version bump only for package @exodus/dependency-injection
+
+## [3.3.0](https://github.com/ExodusMovement/hydra/compare/@exodus/dependency-injection@3.2.1...@exodus/dependency-injection@3.3.0) (2026-04-24)
+
+### Features
+
+- feat: refactor redux-dependency-injection to use typed helpers (#15607)
+
+### Bug Fixes
+
+- fix: missing deps for exporting types (#16158)
+
+- fix(tests): replace toThrowError with toThrow (removed in Jest 30) (#16055)
+
 ## [3.2.1](https://github.com/ExodusMovement/hydra/compare/@exodus/dependency-injection@3.2.0...@exodus/dependency-injection@3.2.1) (2025-08-13)
 
 **Note:** Version bump only for package @exodus/dependency-injection

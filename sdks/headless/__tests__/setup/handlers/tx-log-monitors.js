@@ -3,9 +3,9 @@ import { http } from 'msw'
 import { jsonResponse } from './utils.js'
 
 const txLogMonitorsHandlers = [
-  http.post('https://bitcoin-s.a.exodus.io/insight/addrs/txs', jsonResponse({ items: [] })),
+  http.post('https://bitcoin-s.a.exodus-int.com/insight/addrs/txs', jsonResponse({ items: [] })),
   http.get(
-    'https://bitcoin-s.a.exodus.io/insight/v2/fees',
+    'https://bitcoin-s.a.exodus-int.com/insight/v2/fees',
     jsonResponse({
       fastestFee: 8,
       halfHourFee: 8,

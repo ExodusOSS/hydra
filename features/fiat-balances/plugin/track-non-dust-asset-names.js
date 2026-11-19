@@ -4,23 +4,37 @@ import fiatCurrencies from '@exodus/fiat-currencies'
 const { USD } = fiatCurrencies
 
 const createTrackNonDustAssetNamesPlugin = ({
-  assetsModule,
+  assetsAtom,
   fiatBalancesAtom,
   fiatRateConverter,
   nonDustBalanceAssetNamesAtom,
-  config: { balanceThresholdsUsd, balanceThresholdByChainUsd, defaultBalanceThresholdUsd },
+  config: {
+    balanceThresholdsUsd,
+    balanceThresholdByChainUsd,
+    defaultBalanceThresholdUsd,
+    ignoredWalletAccounts = [],
+  },
 }) => {
+  if (
+    !Array.isArray(ignoredWalletAccounts) ||
+    !ignoredWalletAccounts.every((walletAccount) => typeof walletAccount === 'string')
+  ) {
+    throw new TypeError('ignoredWalletAccounts must be an array of wallet account names')
+  }
+
+  const ignoredWalletAccountsSet = new Set(ignoredWalletAccounts)
+
   const handleFiatBalancesChanged = async ({ balances }) => {
     const { byAssetSource } = balances
     if (!byAssetSource) return
 
-    const balancesByAssetSource = flattenToPaths(byAssetSource).map(
-      ([walletAccount, assetName, _balanceField, balance]) => ({
+    const balancesByAssetSource = flattenToPaths(byAssetSource)
+      .map(([walletAccount, assetName, _balanceField, balance]) => ({
         walletAccount,
         assetName,
         balance,
-      })
-    )
+      }))
+      .filter(({ walletAccount }) => !ignoredWalletAccountsSet.has(walletAccount))
 
     const aboveThreshold = await filterAsync(
       balancesByAssetSource,
@@ -50,7 +64,7 @@ const createTrackNonDustAssetNamesPlugin = ({
   const onLoad = () => {
     unobserveFiatBalancesAtom = fiatBalancesAtom.observe((data) => {
       // don't block processing
-      handleFiatBalancesChanged(data)
+      void handleFiatBalancesChanged(data)
     })
   }
 
@@ -64,7 +78,8 @@ const createTrackNonDustAssetNamesPlugin = ({
     defaultBalanceThresholdUsd
 
   const isAboveEnableThreshold = async ({ assetName, usdBalance }) => {
-    const asset = assetsModule.getAsset(assetName)
+    const { value: assets } = await assetsAtom.get()
+    const asset = assets[assetName]
     const reserve = asset.accountReserve || asset.currency.ZERO
     const configuredThreshold = resolveConfiguredThreshold(asset)
     const reserveUsd = asset.accountReserve
@@ -92,7 +107,7 @@ const trackNonDustAssetsNamesPluginDefinition = {
     'nonDustBalanceAssetNamesAtom',
     'fiatBalancesAtom',
     'fiatRateConverter',
-    'assetsModule',
+    'assetsAtom',
     'config?',
   ],
   public: true,

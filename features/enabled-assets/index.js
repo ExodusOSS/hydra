@@ -10,10 +10,11 @@ import {
 import autoEnableAssetsPluginDefinition from './plugin/auto-enable-assets.js'
 import enabledAssetsAnalyticsPluginDefinition from './plugin/analytics.js'
 import enabledAssetsReportDefinition from './report/index.js'
+import { safeString } from '@exodus/safe-string'
 
 const enabledAssets = (config = Object.create(null)) => {
   return {
-    id: 'enabledAssets',
+    id: safeString`enabledAssets`,
     definitions: [
       {
         definition: enabledAssetsModuleDefinition,
@@ -34,6 +35,7 @@ const enabledAssets = (config = Object.create(null)) => {
         config: {
           alwaysAutoEnable: config.alwaysAutoEnable,
           throttleInterval: config.throttleInterval ?? 500,
+          ignoredWalletAccounts: config.autoEnableIgnoredWalletAccounts,
         },
       },
       {

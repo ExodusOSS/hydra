@@ -20,7 +20,6 @@ describe('assetsPlugin', () => {
   const waynecoin = {
     name: 'waynecoin',
     ticker: 'WC',
-    api: { hasFeature: jest.fn() },
   }
 
   beforeEach(() => {
@@ -87,8 +86,29 @@ describe('assetsPlugin', () => {
     })
   })
 
+  describe('stop/start cycle', () => {
+    it('should not call stale unsubscribe functions from a previous onStart after a stop/start cycle', async () => {
+      const firstUnsubscribe = jest.fn()
+      const secondUnsubscribe = jest.fn()
+      jest
+        .spyOn(assetsAtom, 'observe')
+        .mockReturnValueOnce(firstUnsubscribe)
+        .mockReturnValueOnce(secondUnsubscribe)
+
+      await plugin.onStart()
+      plugin.onStop()
+
+      await plugin.onStart()
+      plugin.onStop()
+
+      // Each unsubscribe should be called exactly once (not twice due to stale references)
+      expect(firstUnsubscribe).toHaveBeenCalledTimes(1)
+      expect(secondUnsubscribe).toHaveBeenCalledTimes(1)
+    })
+  })
+
   describe('assetsAtom', () => {
-    const waynecoin = { name: 'waynecoin', api: { hasFeature: jest.fn() } }
+    const waynecoin = { name: 'waynecoin', api: {} }
     const gothamcoin = { ...waynecoin, name: 'gothamcoin' }
 
     it('should listen to changes and emit after start', async () => {

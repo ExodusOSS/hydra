@@ -5,13 +5,14 @@
   "author": "Exodus Movement, Inc.",
   "type": "module",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Asecure-container"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Asecure-container"
   },
   "contributors": [
     "JP Richardson",
     "Kirill Fomichev"
   ],
   "dependencies": {
+    "@exodus/bytes": "^1.0.0-rc.4",
     "@exodus/crypto": "^1.0.0-rc.25",
     "varstruct": "^5.2.0"
   },
@@ -25,7 +26,7 @@
     "CHANGELOG.md",
     "!**/__tests__/**"
   ],
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/secure-container",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/secure-container",
   "keywords": [
     "secure"
   ],
@@ -41,15 +42,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "scripts": {
-    "lint": "run -T eslint",
-    "test": "run -T exodus-test"
+    "lint": "pnpm exec eslint",
+    "test": "pnpm exec exodus-test"
   },
   "devDependencies": {
     "@exodus/test": "^1.0.0-rc.76",
     "aw": "^0.1.0",
     "fs-extra": "^10.0.0"
+  },
+  "publishConfig": {
+    "provenance": false
   }
 }

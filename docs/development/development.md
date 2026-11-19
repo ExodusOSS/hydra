@@ -4,11 +4,11 @@ _Note: see also [troubleshooting](troubleshooting.md)._
 
 ## Setup
 
-Run `yarn npm login`, as this repository uses a modern version of yarn that doesn't support `.npmrc` files anymore and you'll be installing tons of Exodus' private packages. This has to be done once only. After that, you can install dependencies as usual.
+Ensure you have npm authentication configured. Add `//registry.npmjs.org/:_authToken=<token>` to your `~/.npmrc`, as you'll be installing Exodus' private packages. This has to be done once only. After that, you can install dependencies with `pnpm install`.
 
 ## Creating a new package
 
-Run `yarn generate` to see a list of available templates and scaffold a library/feature/module/etc.
+Run `pnpm run generate` to see a list of available templates and scaffold a library/feature/module/etc.
 
 ## Code Snippets
 
@@ -27,7 +27,7 @@ While developing a package in this monorepo, you may want to test it in a repo t
 To link your module to a client repo, run:
 
 ```
-yarn run -T sync module-name,other-module-name /path/to/client-repo
+pnpm run sync module-name,other-module-name /path/to/client-repo
 ```
 
 This will start a watch process that syncs the specified modules to `src/node_modules` in that repo.
@@ -38,19 +38,19 @@ Examples:
 
 ```
 # test one library
-yarn test --scope @exodus/address-provider
+pnpm run test --scope @exodus/address-provider
 ```
 
 ```
 # test one file
 # check exact arguments like "--jest" in corresponding feature
-yarn run -T exodus-test --jest sdks/headless/__tests__/attach.test.js
+pnpm exec exodus-test --jest sdks/headless/__tests__/attach.test.js
 ```
 
 Update Snapshots:
 
 ```
-yarn test --scope @exodus/address-provider -- --write-snapshots
+pnpm run test --scope @exodus/address-provider -- --write-snapshots
 ```
 
 ## Build
@@ -62,8 +62,8 @@ Examples:
 
 ```
 # build all
-yarn build
+pnpm run build
 
 # build one library
-yarn build --scope @exodus/address-provider
+pnpm run build --scope @exodus/address-provider
 ```

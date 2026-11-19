@@ -3,7 +3,6 @@
 ## Just show me the code, Schneebly
 
 - The [sdk-minimal-demo](https://github.com/ExodusOSS/hydra/tree/master/apps/sdk-minimal-demo/) has examples of the minimal setup required to use the SDK.
-- The [sdk-playground](https://github.com/ExodusOSS/hydra/tree/master/apps/sdk-playground/) is a simple single-process web app where you can play with the SDK right in your browser.
 
 And [actually, it's Schnay-blay](https://www.youtube.com/watch?v=MKUH-TZcSqE).
 
@@ -30,7 +29,7 @@ In the meantime, you'll have to do a bit more wiring:
 
 The SDK is designed to be platform-agnostic and thus must accept a number of platform-specific adapters for storage, network, build metadata, a port for connecting to the UI side, etc. The runtime environment dependent ones will soon be prepackaged as `@exodus/adapters-web`, `@exodus/adapters-mobile`, etc. for convenience, but the app-specific ones you'll always have to inject yourself, e.g. the asset plugins (`@exodus/bitcoin-plugin`, `@exodus/ethereum-plugin`, etc).
 
-See the [sdk-playground](https://github.com/ExodusOSS/hydra/tree/master/apps/sdk-playground/src/background/adapters/index.ts) for (roughly) what will soon be packaged as `@exodus/adapters-web`
+See the [sdk-minimal-demo](https://github.com/ExodusOSS/hydra/tree/master/apps/sdk-minimal-demo/src/background/adapters/index.ts) for (roughly) what will soon be packaged as `@exodus/adapters-web`
 
 #### Choose your features
 

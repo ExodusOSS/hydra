@@ -1,7 +1,8 @@
+import { createInMemoryAtom } from '@exodus/atoms'
 import { mapValuesAsync } from '@exodus/basic-utils'
 import createIOC from '@exodus/dependency-injection'
 import createInMemoryStorage from '@exodus/storage-memory'
-import { once } from 'events/events.js'
+import pDefer from 'p-defer'
 
 import {
   featureFlagAtomsDefinition,
@@ -17,11 +18,15 @@ const setup = ({ features, remoteConfigValue }) => {
   const ioc = createIOC({ logger })
   ioc.registerMultiple([
     {
+      id: 'remoteConfigAtom',
+      factory: () => createInMemoryAtom({ defaultValue: {} }),
+      public: true,
+    },
+    {
       id: 'remoteConfig',
-      factory: () =>
-        createRemoteConfigWithData({
-          data: remoteConfigValue,
-        }),
+      factory: ({ remoteConfigAtom }) =>
+        createRemoteConfigWithData({ data: remoteConfigValue, remoteConfigAtom }),
+      dependencies: ['remoteConfigAtom'],
       public: true,
     },
     {
@@ -89,7 +94,7 @@ describe('remoteConfigFeatureFlagsAtom', () => {
   ])(
     'should return the value at the path for each atom: $detail',
     async ({ remoteValue, result }) => {
-      const { remoteConfig, remoteConfigFeatureFlagAtoms } = setup({
+      const { remoteConfig, remoteConfigAtom, remoteConfigFeatureFlagAtoms } = setup({
         features: {
           dogeMode: {
             localDefaults: {
@@ -109,8 +114,11 @@ describe('remoteConfigFeatureFlagsAtom', () => {
         },
       })
 
+      const initialized = pDefer()
+      remoteConfigAtom.observe(({ config }) => config && initialized.resolve())
+
       remoteConfig.load()
-      await once(remoteConfig, 'sync')
+      await initialized.promise
 
       expect(await remoteConfigFeatureFlagAtoms.dogeMode.get()).toEqual(result)
 

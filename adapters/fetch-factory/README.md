@@ -9,7 +9,7 @@ This module allows you to configure default headers for specific host domains an
 - Set global headers applicable to all requests.
 - Configure headers for specific host domains.
 - Merge custom headers with existing ones for each request.
-- Supports setting default headers for exodus.io.
+- Supports setting default identifier headers for exodus.io and exodus-int.com.
 
 # Installation
 
@@ -54,7 +54,7 @@ Sets custom headers for the specified host domains.
 - allowedHostDomains (Array): List of domains or subdomains to which these headers should apply. Headers set for a domain will also apply to its subdomains.
 
 `setDefaultExodusIdentifierHeaders({ appId, appVersion, appBuild }): FetchFactory`
-Sets default headers for the exodus.io domain.
+Sets default identifier headers (`x-exodus-app-id`, `x-exodus-version`, `x-requested-with`) for the exodus.io and exodus-int.com domains and their subdomains. Exported as `hosts.EXODUS_HOST` and `hosts.EXODUS_INT_HOST`.
 
 - appId (String): The application ID.
 - appVersion (String): The application version.

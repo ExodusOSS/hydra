@@ -65,7 +65,7 @@ typings/
 # Output of 'npm pack'
 *.tgz
 
-# Yarn Integrity file
+# Yarn Integrity file (legacy)
 .yarn-integrity
 
 # dotenv environment variables file
@@ -164,12 +164,6 @@ DerivedData
 npm-debug.log
 yarn-error.log
 
-.yarn/*
-!.yarn/patches
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
 .pnp.*
 
 # BUCK
@@ -202,3 +196,7 @@ tmp
 # local AI config
 .claude/settings.local.json
 CLAUDE.local.md
+ai/skills/hydra-js-feature-to-typescript/TEST-REPORT.md
+**/private-seed.js
+**/private-seed.cjs
+**/private-seed.mjs

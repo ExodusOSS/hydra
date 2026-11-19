@@ -1,3 +1,5 @@
+import { typedView } from '@exodus/bytes/array.js'
+import { toHex } from '@exodus/bytes/hex.js'
 import { hash } from '@exodus/crypto/hash'
 import { pbkdf2 } from '@exodus/crypto/pbkdf2'
 import { randomBytes } from '@exodus/crypto/randomBytes'
@@ -23,13 +25,17 @@ function toBinary(arr, width = 8) {
 }
 
 function fromBinary(str, width = 8) {
-  assert(typeof str === 'string' && str.length % width === 0 && /^[01]+$/u.test(str))
+  assert(
+    typeof str === 'string' && str.length % width === 0 && /^[01]+$/u.test(str),
+    'Invalid binary string'
+  )
   const res = []
   for (let i = 0; i < str.length; i += width) res.push(parseInt(str.slice(i, i + width), 2))
   return res
 }
 
-const assertWordlist = (wordlist) => assert(Array.isArray(wordlist) && wordlist.length === 2048) // 2**11
+const assertWordlist = (wordlist) =>
+  assert(Array.isArray(wordlist) && wordlist.length === 2048, 'Invalid wordlist') // 2**11
 
 function assertEntropy(entropy) {
   assert(entropy instanceof Uint8Array, 'Invalid entropy, must be an Uint8Array')
@@ -88,10 +94,9 @@ export async function mnemonicToEntropy({ mnemonic, wordlist = english, format =
   }
 
   if (format === 'uint8') return entropy
-  if (format === 'buffer' || format === 'hex') {
-    const buffer = Buffer.from(entropy.buffer, entropy.byteOffset, entropy.length)
-    if (format === 'buffer') return buffer
-    const hex = buffer.toString('hex')
+  if (format === 'buffer') return typedView(entropy, 'buffer')
+  if (format === 'hex') {
+    const hex = toHex(entropy)
     entropy.fill(0)
     return hex
   }

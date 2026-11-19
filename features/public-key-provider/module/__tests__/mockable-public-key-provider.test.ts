@@ -1,8 +1,10 @@
+import { createInMemoryAtom } from '@exodus/atoms'
 import KeyIdentifier from '@exodus/key-identifier'
 import { WalletAccount } from '@exodus/models'
 
 import type { MockablePublicKeyProviderDependencies } from '../mockable-public-key-provider.js'
 import { MockablePublicKeyProvider } from '../mockable-public-key-provider.js'
+import type { Asset } from '../utils/types.js'
 
 const xpubs = {
   exodus_0: {
@@ -34,28 +36,24 @@ const getKeyIdentifierFactory =
     })
   }
 
-const assetsModule = {
-  getAsset: jest.fn().mockImplementation((name) => {
-    switch (name) {
-      case 'bitcoin':
-        return {
-          baseAsset: {
-            api: {
-              getKeyIdentifier: getKeyIdentifierFactory('bitcoin', 0),
-            },
-          },
-        }
-      case 'litecoin':
-        return {
-          baseAsset: {
-            api: {
-              getKeyIdentifier: getKeyIdentifierFactory('litecoin', 2),
-            },
-          },
-        }
-    }
-  }),
+const assets = {
+  bitcoin: {
+    baseAsset: {
+      api: {
+        getKeyIdentifier: getKeyIdentifierFactory('bitcoin', 0),
+      },
+    },
+  },
+  litecoin: {
+    baseAsset: {
+      api: {
+        getKeyIdentifier: getKeyIdentifierFactory('litecoin', 2),
+      },
+    },
+  },
 }
+
+const assetsAtom = createInMemoryAtom({ defaultValue: { value: assets } })
 
 const publicKeyStore = {
   add: jest.fn().mockImplementation(async () => {}),
@@ -85,7 +83,7 @@ const walletAccountsAtom = {
 }
 
 const deps = {
-  assetsModule,
+  assetsAtom,
   publicKeyStore,
   logger,
   walletAccountsAtom,
@@ -181,6 +179,32 @@ describe('MockablePublicKeyProvider', () => {
         await instance.onReady
       }).rejects.toThrow('mocking xpubs is currently only supported for software walletAccounts')
     })
+
+    it('skips entries when asset has no baseAsset.api', async () => {
+      // Regression: previously we passed `{ keyIdentifier: undefined }` to addMany
+      // for assets where baseAsset.api was missing, which would crash inside the
+      // store. flatMap should drop those entries entirely.
+      const assetsAtomWithoutApi = createInMemoryAtom({
+        defaultValue: {
+          value: {
+            bitcoin: {
+              baseAsset: {
+                /* api intentionally missing */
+              } as Asset,
+            } as Asset,
+          },
+        },
+      })
+
+      instance = new MockablePublicKeyProvider({
+        ...deps,
+        assetsAtom: assetsAtomWithoutApi,
+        config: { xpubs: { exodus_0: { bitcoin: { 44: 'xpub01' } } } },
+      })
+      await instance.onReady
+
+      expect(publicKeyStore.addMany).toHaveBeenCalledWith(expect.objectContaining({ keys: [] }))
+    })
   })
 
   describe('.mockXPub()', () => {
@@ -188,12 +212,12 @@ describe('MockablePublicKeyProvider', () => {
     const payload = {
       walletAccount,
       xpub: 'xpub05',
-      keyIdentifier: {
+      keyIdentifier: new KeyIdentifier({
         assetName: 'bitcoin',
         keyType: 'secp256k1',
         derivationAlgorithm: 'BIP32',
         derivationPath: "m/44'/0'/0'",
-      },
+      }),
     }
 
     it('mocks a single xpub', async () => {
@@ -219,12 +243,12 @@ describe('MockablePublicKeyProvider', () => {
   describe('unmockXPub', () => {
     const payload = {
       walletAccountName: 'exodus_0',
-      keyIdentifier: {
+      keyIdentifier: new KeyIdentifier({
         assetName: 'bitcoin',
         keyType: 'secp256k1',
         derivationAlgorithm: 'BIP32',
         derivationPath: "m/44'/0'/0'",
-      },
+      }),
     }
 
     it('clears a single xpub mock', async () => {

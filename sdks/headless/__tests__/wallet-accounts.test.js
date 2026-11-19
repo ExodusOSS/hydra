@@ -1,5 +1,5 @@
+import { getSeedId } from '@exodus/bip32'
 import { mnemonicToSeed } from '@exodus/bip39'
-import { getSeedId } from '@exodus/keychain/module/crypto/seed-id.js'
 import { WalletAccount } from '@exodus/models'
 import Emitter from '@exodus/wild-emitter'
 
@@ -16,12 +16,11 @@ describe('wallet-accounts', async () => {
   let reportNode
 
   const mnemonic = 'menu memory fury language physical wonder dog valid smart edge decrease worth'
-  const otherMnemonic = 'excuse fly local lyrics tattoo hub way range globe put supreme glass'
   const seed = await mnemonicToSeed({ mnemonic })
   const seedId = await getSeedId(seed)
   const passphrase = 'my-password-manager-generated-this'
 
-  const setup = async ({ importWallet = true } = {}) => {
+  const setup = async ({ importWallet = true, load = false } = {}) => {
     adapters = createAdapters()
 
     port = adapters.port
@@ -32,6 +31,7 @@ describe('wallet-accounts', async () => {
     reportNode = container.getByType('report').walletAccountsReport
 
     await exodus.application.start()
+    if (load) await exodus.application.load()
     if (importWallet) {
       await exodus.application.import({ mnemonic, passphrase })
       await exodus.application.unlock({ passphrase })
@@ -136,28 +136,6 @@ describe('wallet-accounts', async () => {
     await newExodus.application.stop()
   })
 
-  test('addSeed should auto-create a walletAccount', async () => {
-    exodus.wallet.addSeed({ mnemonic: otherMnemonic, compatibilityMode: 'metamask' })
-    await expectEvent({ port, event: 'add-seed' })
-
-    const enabledAccounts = await exodus.walletAccounts.getEnabled()
-    expect(enabledAccounts).toEqual({
-      exodus_0: expect.objectContaining({
-        enabled: true,
-        index: 0,
-        seedId: 'c3d6347aa044325cbad76c524f1b3cacda024c3c',
-        source: 'exodus',
-      }),
-      seed_0_dd3986b4a4af4315e614e08cb9a62707b854cddb_metamask: expect.objectContaining({
-        compatibilityMode: 'metamask',
-        enabled: true,
-        index: 0,
-        seedId: 'dd3986b4a4af4315e614e08cb9a62707b854cddb',
-        source: 'seed',
-      }),
-    })
-  })
-
   test('create updates seedId on default wallet account', async () => {
     await exodus.application.stop() // stop the instance from beforeEach
     const container = createExodus({ adapters: createAdapters(), config })
@@ -187,6 +165,9 @@ describe('wallet-accounts', async () => {
   })
 
   test('should successfully export report (post-wallet-exists)', async () => {
+    await exodus.application.stop() // stop the instance from beforeEach
+    await setup({ load: true })
+
     await exodus.application.unlock({ passphrase })
     await expect(exodus.wallet.exists()).resolves.toBe(true)
     await expect(exodus.reporting.export()).resolves.toMatchObject({

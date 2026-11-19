@@ -16,6 +16,17 @@
       "properties": {
         "invite_code": {
           "type": ["number", "null"]
+        },
+        "origin": {
+          "type": "string",
+          "enum": [
+            "default-region",
+            "invite-code",
+            "xo-cash",
+            "wallet-banner",
+            "classic-wallet-menu",
+            "spend-card-promo"
+          ]
         }
       },
       "unevaluatedProperties": false

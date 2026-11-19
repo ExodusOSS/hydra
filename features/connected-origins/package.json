@@ -4,13 +4,13 @@
   "license": "MIT",
   "author": "Exodus Movement, Inc.",
   "description": "The connected origins module maintains a list of the third-party websites that the user has authorized to interact with Exodus. It stores the authorization status and connection status, along with  metadata such as the name and icon of the website.",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/connected-origins",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/connected-origins",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aconnected-origins"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aconnected-origins"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "type": "module",
   "main": "index.js",
@@ -25,17 +25,18 @@
     "CHANGELOG.md"
   ],
   "dependencies": {
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^4.2.1",
+    "@exodus/atoms": "^10.0.0",
+    "@exodus/basic-utils": "^5.0.0",
     "lodash": "^4.17.21"
   },
   "scripts": {
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest"
   },
   "devDependencies": {
     "@exodus/address-provider": "workspace:^",
+    "@exodus/bip39": "workspace:^",
     "@exodus/ethereum-plugin": "^2.7.3",
     "@exodus/key-utils": "workspace:^",
     "@exodus/keychain": "workspace:^",
@@ -44,10 +45,10 @@
     "@exodus/redux-dependency-injection": "workspace:^",
     "@exodus/solana-plugin": "^1.18.0",
     "@exodus/storage-memory": "workspace:^",
-    "bip39": "^3.1.0",
     "redux": "^4.2.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

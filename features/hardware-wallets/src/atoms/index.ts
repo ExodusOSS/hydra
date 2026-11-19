@@ -17,15 +17,14 @@ export type WalletAccountNameToConnectedAssetNamesMap = Record<WalletAccountName
  */
 export const createHardwareWalletConnectedAssetNamesAtom = ({
   hardwareWalletPublicKeysAtom,
-  assetsModule,
+  assetsAtom,
   walletAccountsAtom,
   availableAssetNamesAtom,
 }: any) => {
   const selector = memoize(
-    ({ hardwareWalletPublicKeys, walletAccounts, availableAssetNames }: any) => {
+    ({ hardwareWalletPublicKeys, walletAccounts, availableAssetNames, assets }: any) => {
       const result: WalletAccountNameToConnectedAssetNamesMap = Object.create(null)
 
-      const assets = assetsModule.getAssets()
       const availableAssets = Object.values(assets).filter((asset: any) =>
         availableAssetNames.includes(asset.name)
       )
@@ -64,8 +63,8 @@ export const createHardwareWalletConnectedAssetNamesAtom = ({
 
       return result
     },
-    ({ hardwareWalletPublicKeys, walletAccounts, availableAssetNames }: any) =>
-      `${JSON.stringify(hardwareWalletPublicKeys)}_${JSON.stringify(walletAccounts)}_${JSON.stringify(availableAssetNames.join(','))}`
+    ({ hardwareWalletPublicKeys, walletAccounts, availableAssetNames, assets }: any) =>
+      `${JSON.stringify(hardwareWalletPublicKeys)}_${JSON.stringify(walletAccounts)}_${JSON.stringify(availableAssetNames.join(','))}_${JSON.stringify(Object.keys(assets))}`
   )
 
   return compute({
@@ -73,6 +72,7 @@ export const createHardwareWalletConnectedAssetNamesAtom = ({
       hardwareWalletPublicKeys: hardwareWalletPublicKeysAtom,
       walletAccounts: walletAccountsAtom,
       availableAssetNames: availableAssetNamesAtom,
+      assets: compute({ atom: assetsAtom, selector: ({ value }: any) => value }),
     }),
     selector,
   })
@@ -84,8 +84,9 @@ export const hardwareWalletConnectedAssetNamesAtomDefinition = {
   factory: createHardwareWalletConnectedAssetNamesAtom,
   dependencies: [
     'hardwareWalletPublicKeysAtom',
-    'assetsModule',
+    'assetsAtom',
     'walletAccountsAtom',
     'availableAssetNamesAtom',
   ],
+  public: true,
 } as const satisfies Definition

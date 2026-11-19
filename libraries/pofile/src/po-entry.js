@@ -1,3 +1,4 @@
+const { escapeRawValue } = require('./escape')
 const { createEntryId } = require('./utils')
 
 class POEntry {
@@ -9,9 +10,11 @@ class POEntry {
   #flags = []
 
   constructor({ id, value, comments = [], context = '', references = [], flags = [] }) {
-    this.#msgid = id?.replace(/\\"/gu, '"')
-    this.#msgstr = value?.replace(/\\"/gu, '"')
-    this.#msgctxt = context?.replace(/\\"/gu, '"')
+    // Values are stored in raw PO-escaped form. Only `\"` is normalized to `"`
+    // so ids match the unescaped quotes of the JS source they came from.
+    this.#msgid = id?.replaceAll('\\"', '"')
+    this.#msgstr = value?.replaceAll('\\"', '"')
+    this.#msgctxt = context?.replaceAll('\\"', '"')
     this.#comments = comments
     this.#references = references
     this.#flags = flags
@@ -46,14 +49,15 @@ class POEntry {
   }
 
   static unifyPlaceholders = (source) => {
-    return source.replace(/{(?:\w+\.?)+}/g, '{}') // eslint-disable-line regexp/require-unicode-regexp
+    return source.replace(/{(?:\w+\.?)+}/g, '{}')
   }
 
   static computeId = POEntry.unifyPlaceholders
 
   setId = (id) => {
-    if (typeof id !== 'string')
-      throw new Error(`pofile: entry id must be a string. Got ${typeof id}`)
+    if (typeof id !== 'string') {
+      throw new TypeError(`pofile: entry id must be a string. Got ${typeof id}`)
+    }
 
     this.#msgid = id
 
@@ -61,8 +65,9 @@ class POEntry {
   }
 
   setValue = (value) => {
-    if (typeof value !== 'string')
-      throw new Error(`pofile: entry value must be a string. Got ${typeof value}`)
+    if (typeof value !== 'string') {
+      throw new TypeError(`pofile: entry value must be a string. Got ${typeof value}`)
+    }
 
     this.#msgstr = value
 
@@ -70,8 +75,9 @@ class POEntry {
   }
 
   addComment = (comment) => {
-    if (typeof comment !== 'string')
-      throw new Error(`pofile: comment must be string. Got ${typeof comment}`)
+    if (typeof comment !== 'string') {
+      throw new TypeError(`pofile: comment must be string. Got ${typeof comment}`)
+    }
 
     this.#comments.push(comment)
 
@@ -79,8 +85,9 @@ class POEntry {
   }
 
   addContext = (context) => {
-    if (typeof context !== 'string')
-      throw new Error(`pofile: context must be string. Got ${typeof context}`)
+    if (typeof context !== 'string') {
+      throw new TypeError(`pofile: context must be string. Got ${typeof context}`)
+    }
 
     this.#msgctxt = context
 
@@ -88,8 +95,9 @@ class POEntry {
   }
 
   addReference = (reference) => {
-    if (typeof reference !== 'string')
-      throw new Error(`pofile: reference must be string. Got ${typeof reference}`)
+    if (typeof reference !== 'string') {
+      throw new TypeError(`pofile: reference must be string. Got ${typeof reference}`)
+    }
 
     this.#references.push(reference)
 
@@ -120,17 +128,18 @@ class POEntry {
     const comments = this.#comments.map((comment) => `# ${comment}`)
     const references = this.#references.map((reference) => `#: ${reference}`)
     const flags = this.#flags.map((flag) => `#, ${flag}`)
-    const id = this.#msgid.replace(/"/gu, '\\"')
-    const message = this.#msgstr.replace(/"/gu, '\\"')
-    const context = this.#msgctxt.replace(/"/gu, '\\"')
+    const id = escapeRawValue(this.#msgid ?? '')
+    const message = escapeRawValue(this.#msgstr ?? '')
+    const context = escapeRawValue(this.#msgctxt ?? '')
 
+    // gettext requires msgctxt before msgid.
     return [
       ...comments,
       ...flags,
       ...references,
+      ...(context ? [`msgctxt "${context}"`] : []),
       `msgid "${id}"`,
       `msgstr "${message}"`,
-      ...(context && [`msgctxt "${context}"`]),
     ].join('\n')
   }
 }

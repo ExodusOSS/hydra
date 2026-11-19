@@ -35,7 +35,7 @@ const definitions = {
 }
 
 const addressCache = ({ config } = {}) => {
-  assert(FLAVORS.has(config.flavor), 'need to pass in "config.flavor"')
+  assert(FLAVORS.has(config?.flavor), 'need to pass in "config.flavor"')
 
   return {
     id: 'addressCache',

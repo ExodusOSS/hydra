@@ -1,4 +1,9 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["**/*.d.ts"]
+  "compilerOptions": {
+    "noEmit": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext"
+  },
+  "include": ["src", "__tests__"]
 }

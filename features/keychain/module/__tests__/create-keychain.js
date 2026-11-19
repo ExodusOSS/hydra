@@ -2,7 +2,7 @@ import keychainDefinition from '../index.js'
 
 const createKeychain = async ({ seed, ...rest }) => {
   const instance = keychainDefinition.factory(rest)
-  await instance.addSeed(seed)
+  await instance.unlock(seed)
 
   return instance
 }

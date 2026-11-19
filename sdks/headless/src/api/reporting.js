@@ -1,13 +1,11 @@
 import { SafeError } from '@exodus/errors'
 import { safeString } from '@exodus/safe-string'
-// eslint-disable-next-line no-restricted-imports -- TODO: Fix this the next time the file is edited.
-import lodash from 'lodash'
+// oxlint-disable-next-line no-restricted-imports -- basic-utils has no cloneDeepWith equivalent
+import cloneDeepWith from 'lodash/cloneDeepWith.js'
 
 import { rejectAfter } from '../utils/promises.js'
 import { deepAlphabetize } from '../utils/deep-alphabetize.js'
 import safeParse from './safe-parse.js'
-
-const { cloneDeepWith, zipObject } = lodash
 
 const reportCustomizer = (value) => {
   if (value instanceof Error) {
@@ -29,7 +27,20 @@ const createReporting = ({ ioc, config: { exportTimeout = 5000 } = {} }) => {
   const { wallet, lockedAtom } = ioc.getAll()
 
   const getReports = async () => {
-    const [exists, locked] = await Promise.all([wallet.exists(), lockedAtom.get()])
+    const [existsOutcome, lockedOutcome] = await Promise.allSettled([
+      wallet.exists(),
+      lockedAtom.get(),
+    ])
+    const exists = existsOutcome.status === 'fulfilled' ? existsOutcome.value : null
+    const locked = lockedOutcome.status === 'fulfilled' ? lockedOutcome.value : null
+    const errors = {}
+    if (existsOutcome.status === 'rejected') {
+      errors.walletExists = SafeError.from(existsOutcome.reason)
+    }
+
+    if (lockedOutcome.status === 'rejected') {
+      errors.isLocked = SafeError.from(lockedOutcome.reason)
+    }
 
     const reports = Object.values(nodes)
 
@@ -40,7 +51,11 @@ const createReporting = ({ ioc, config: { exportTimeout = 5000 } = {} }) => {
 
     const exportReport = async (report) => {
       const start = performance.now()
-      const unvalidatedExport = await report.export({ walletExists: exists, isLocked: locked })
+      const unvalidatedExport = await report.export({
+        walletExists: exists,
+        // Keep protected reports gated when the lock state is unknown.
+        isLocked: locked ?? true,
+      })
       const schema = report.getSchema?.()
       if (!schema) {
         throw new Error(`Validation schema is missing for ${report.namespace}.`)
@@ -58,12 +73,17 @@ const createReporting = ({ ioc, config: { exportTimeout = 5000 } = {} }) => {
 
     timeoutPromise.clear()
 
-    const namespaces = reports.map((report) => report.namespace)
-    const data = resolvedReports.map((outcome) =>
-      outcome.status === 'fulfilled' ? outcome.value : { error: SafeError.from(outcome.reason) }
+    const result = Object.fromEntries(
+      resolvedReports.map((outcome, index) => [
+        reports[index].namespace,
+        outcome.status === 'fulfilled' ? outcome.value : { error: SafeError.from(outcome.reason) },
+      ])
     )
+    if (Object.keys(errors).length > 0) {
+      result.reporting = { walletExists: exists, isLocked: locked, errors }
+    }
 
-    return deepAlphabetize(zipObject(namespaces, data))
+    return deepAlphabetize(result)
   }
 
   return { export: getReports }

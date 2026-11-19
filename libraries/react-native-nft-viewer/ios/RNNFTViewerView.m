@@ -7,10 +7,10 @@
 // runtime trick to make WKWebView keyboard adjustments
 // see: http://stackoverflow.com/questions/19033292/ios-7-uiwebview-keyboard-issue/19042279#19042279
 // see: https://stackoverflow.com/a/47949089
-@interface _SwizzleHelperWK : UIView
+@interface _RNNFTViewerSwizzleHelperWK : UIView
 @property (nonatomic, copy) WKWebView *webView;
 @end
-@implementation _SwizzleHelperWK
+@implementation _RNNFTViewerSwizzleHelperWK
 -(id)inputAccessoryView
 {
     if (_webView == nil) {
@@ -68,6 +68,9 @@ static NSString *const MessageHandlerName = @"Bridge";
   if ((self = [super initWithFrame:frame])) {
     super.backgroundColor = [UIColor clearColor];
   }
+
+  self.baseUrl = @"about:blank";
+
   return self;
 }
 
@@ -146,7 +149,7 @@ static NSString *const MessageHandlerName = @"Bridge";
 
     if (subview == nil) return;
 
-    NSString* name = [NSString stringWithFormat:@"%@_SwizzleHelperWK", subview.class];
+    NSString* name = [NSString stringWithFormat:@"%@_RNNFTViewerSwizzleHelperWK", subview.class];
     Class newClass = NSClassFromString(name);
 
     if (newClass == nil)
@@ -155,7 +158,7 @@ static NSString *const MessageHandlerName = @"Bridge";
         if (!newClass) return;
 
         if (_hideKeyboardAccessoryView == true) {
-            Method accessoryMethod = class_getInstanceMethod([_SwizzleHelperWK class], @selector(inputAccessoryView));
+            Method accessoryMethod = class_getInstanceMethod([_RNNFTViewerSwizzleHelperWK class], @selector(inputAccessoryView));
             class_addMethod(newClass, @selector(inputAccessoryView), method_getImplementation(accessoryMethod), method_getTypeEncoding(accessoryMethod));
         }
 
@@ -201,9 +204,17 @@ static NSString *const MessageHandlerName = @"Bridge";
   }
 }
 
+-(void) setBaseUrl:(NSString *)baseUrl
+{
+  if (![baseUrl isEqual:_baseUrl]) {
+    _baseUrl = baseUrl;
+    [self visitSource];
+  }
+}
+
 - (void)visitSource
 {
-  NSURL* baseURL = [NSURL URLWithString:@"about:blank"];
+  NSURL* baseURL = [NSURL URLWithString:_baseUrl];
   [_webView loadHTMLString:_html baseURL:baseURL];
 }
 

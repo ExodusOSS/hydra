@@ -14,7 +14,7 @@ export type HardwareWalletManufacturer = LedgerManufacturer | TrezorManufacturer
  * HardwareWalletDeviceModels
  */
 
-export type LedgerModels = 'blue' | 'nanoS' | 'nanoSP' | 'nanoX' | 'stax' | 'europa'
+export type LedgerModels = 'blue' | 'nanoS' | 'nanoSP' | 'nanoX' | 'stax' | 'europa' | 'apex'
 export type TrezorModels = 't' | '1' | 'Safe 3' | 'Safe 5' | 'Safe 7'
 export type HardwareWalletDeviceModels = LedgerModels | TrezorModels | 'unknown'
 
@@ -89,8 +89,9 @@ export type Signatures = {
 /**
  * HardwareWalletDevice
  */
-export interface HardwareWalletDevice<IMessage = Message>
-  extends HardwareWalletAssetHandler<IMessage> {
+export interface HardwareWalletDevice<
+  IMessage = Message,
+> extends HardwareWalletAssetHandler<IMessage> {
   // The descriptor of the device
   get descriptor(): HardwareWalletDescriptor
   // All assets supported by our implementation for this device.
@@ -186,6 +187,14 @@ export interface SignTransactionParams {
   multisigData?: MultisigData
   /** Token account info for Solana token transfers (Trezor) */
   tokenAccountsInfos?: TokenAccountInfo[]
+  /**
+   * Token-standard hint for hardware clear-signing (EVM).
+   * true = NFT (ERC-721/ERC-1155) interaction, false = fungible/ERC-20,
+   * undefined = unknown (device default). Derived upstream from an on-chain
+   * supportsInterface check; lets the device disambiguate the shared
+   * `approve`/`transferFrom` selectors instead of guessing from calldata.
+   */
+  isNft?: boolean
 }
 
 /**

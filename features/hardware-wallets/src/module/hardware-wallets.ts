@@ -1,5 +1,5 @@
 import assert from 'minimalistic-assert'
-import { WalletAccount } from '@exodus/models'
+import { WalletAccount, type WalletAccountSource } from '@exodus/models'
 import Emitter from '@exodus/wild-emitter'
 import { randomBytes } from '@exodus/crypto/randomBytes'
 import delay from 'delay'
@@ -49,12 +49,34 @@ import type {
   HardwareWalletManufacturer,
 } from '@exodus/hw-common'
 import type { Atom } from '@exodus/atoms'
-import type { IPublicKeyStore } from '@exodus/public-key-provider/lib/module/store/types'
+import type { IPublicKeyStore } from '@exodus/public-key-provider'
 import type { Logger } from '@exodus/logger'
 import pDefer from 'p-defer'
 
+type Wallet = {
+  exists(): Promise<boolean>
+}
+
+type WalletAccounts = {
+  getNextIndex(params: { source: WalletAccountSource }): number
+  create(walletAccount: WalletAccount): Promise<void>
+  setActive(walletAccountName: string): Promise<void>
+}
+
+type EnabledAssets = {
+  enable(assetNames: string[]): Promise<void>
+}
+
+type TxLogMonitors = {
+  update(params: { assetName: string; refresh?: boolean }): void
+}
+
+type RestoreProgressTracker = {
+  restoreAsset(assetName: string): void
+}
+
 export type Dependencies = {
-  assetsModule: any
+  assetsAtom: Atom<{ value: Record<string, any> }>
   ledgerDiscovery: HardwareWalletDiscovery
   trezorDiscovery: HardwareWalletDiscovery & {
     connected: boolean
@@ -64,17 +86,17 @@ export type Dependencies = {
   logger: Logger
   hardwareWalletSigningRequestsAtom: Atom<SigningRequestState>
   publicKeyStore: IPublicKeyStore
-  wallet: any
+  wallet: Wallet
   walletAccountsAtom: Atom<WalletAccount>
-  walletAccounts: any
-  txLogMonitors: any
-  restoreProgressTracker: any
-  enabledAssets: any
+  walletAccounts: WalletAccounts
+  txLogMonitors: TxLogMonitors
+  restoreProgressTracker: RestoreProgressTracker
+  enabledAssets: EnabledAssets
   availableAssetNamesAtom: Atom<string[]>
 }
 
 export class HardwareWallets implements HardwareSignerProvider {
-  readonly #assetsModule: any
+  readonly #assetsAtom: Atom<{ value: Record<string, any> }>
   readonly #ledgerDiscovery: HardwareWalletDiscovery
   readonly #trezorDiscovery: HardwareWalletDiscovery & {
     connected: boolean
@@ -85,10 +107,10 @@ export class HardwareWallets implements HardwareSignerProvider {
   readonly #logger: Logger
   readonly #publicKeyStore: any
   readonly #signingRequestAtom: Atom<SigningRequestState>
-  readonly #wallet: any
+  readonly #wallet: Wallet
   readonly #walletAccountsAtom: Atom<WalletAccount>
-  readonly #walletAccounts: any
-  readonly #enabledAssets: any
+  readonly #walletAccounts: WalletAccounts
+  readonly #enabledAssets: EnabledAssets
   readonly #availableAssetNamesAtom: Atom<string[]>
   // readonly #txLogMonitors: any
   // readonly #restoreProgressTracker: any
@@ -118,7 +140,7 @@ export class HardwareWallets implements HardwareSignerProvider {
   }
 
   constructor({
-    assetsModule,
+    assetsAtom,
     ledgerDiscovery,
     trezorDiscovery,
     logger,
@@ -132,7 +154,7 @@ export class HardwareWallets implements HardwareSignerProvider {
     // txLogMonitors,
     // restoreProgressTracker,
   }: Dependencies) {
-    this.#assetsModule = assetsModule
+    this.#assetsAtom = assetsAtom
     this.#ledgerDiscovery = ledgerDiscovery
     this.#trezorDiscovery = trezorDiscovery
     this.#logger = logger
@@ -348,7 +370,8 @@ export class HardwareWallets implements HardwareSignerProvider {
     walletAccount,
     multisigData,
   }: SignTransactionParams) => {
-    const baseAsset = this.#assetsModule.getAsset(baseAssetName)
+    const { value: assets } = await this.#assetsAtom.get()
+    const baseAsset = assets[baseAssetName]
     const accountIndex = walletAccount.index
 
     const sign: GenericSignCallback = async ({ device }) => {
@@ -374,7 +397,8 @@ export class HardwareWallets implements HardwareSignerProvider {
     message,
     walletAccount,
   }: SignMessageParams) => {
-    const baseAssetName = this.#assetsModule.getAsset(assetName).baseAsset.name
+    const { value: assets } = await this.#assetsAtom.get()
+    const baseAssetName = assets[assetName].baseAsset.name
 
     const sign: GenericSignCallback = async ({ device }) => {
       return device.signMessage({
@@ -453,7 +477,8 @@ export class HardwareWallets implements HardwareSignerProvider {
    * @returns {Promise<boolean>} accessibility status.
    */
   canAccessAsset = async ({ assetName }: CanAccessAssetParams): Promise<boolean> => {
-    const asset = this.#assetsModule.getAsset(assetName)
+    const { value: assets } = await this.#assetsAtom.get()
+    const asset = assets[assetName]
 
     const { device } = await this.#getSelectedDevice()
     const useableAssetNames = new Set(await device.listUseableAssetNames())
@@ -476,7 +501,8 @@ export class HardwareWallets implements HardwareSignerProvider {
     multisigData,
     displayOnDevice,
   }: GetAddressParams) => {
-    const asset = this.#assetsModule.getAsset(assetName)
+    const { value: assets } = await this.#assetsAtom.get()
+    const asset = assets[assetName]
     const { device } = await this.#getSelectedDevice()
 
     const supportedPurposes = asset.baseAsset.api.getSupportedPurposes?.({
@@ -585,7 +611,8 @@ export class HardwareWallets implements HardwareSignerProvider {
     n,
     offsetBy,
   }: GetFirstNAddressesParams): Promise<GetFirstNAddressesResult> => {
-    const asset = this.#assetsModule.getAsset(assetName)
+    const { value: assets } = await this.#assetsAtom.get()
+    const asset = assets[assetName]
     const startIndex = offsetBy
 
     const addresses: string[] = []
@@ -615,7 +642,7 @@ export class HardwareWallets implements HardwareSignerProvider {
    * @param {string} params.assetName - the asset name to sync
    * @param {number[]} params.accountIndexes - array of account indexes to scan
    * @param {number=} params.addressLimit - limits the amount of addresses to scan (default = 2)
-   * @param {number} params.addressOffset - the address offset at which to start
+   * @param {number=} params.addressOffset - the address offset at which to start (default = 0)
    * @returns {ScanResult} an array of objects containing the accountIndex, addresses and balance.
    */
   scan = async ({
@@ -681,8 +708,9 @@ export class HardwareWallets implements HardwareSignerProvider {
     const walletId = (await device.getWalletId?.()) ?? randomBytes(32).toString('hex')
 
     const useableAssetNames = new Set(await device.listUseableAssetNames())
+    const { value: assets } = await this.#assetsAtom.get()
     for (const assetName of useableAssetNames) {
-      const asset = this.#assetsModule.getAsset(assetName)
+      const asset = assets[assetName]
       if (!asset) {
         this.#logger.warn(`asset with ${assetName} was not found`)
         continue
@@ -749,7 +777,7 @@ export class HardwareWallets implements HardwareSignerProvider {
 
     this.events.emit('syncAssets', { assetNames })
     // for (const assetName of assetNames) {
-    //   // eslint-disable-next-line @exodus/hydra/no-asset-conditions
+    //   // oxlint-disable-next-line @exodus/oxlint-plugin-hydra/no-asset-conditions
     //   if (assetName === 'ethereum' || assetName === 'matic') {
     //     // Ethereum, matic and other EVMs may share the same address so syncing one
     //     // may also syncs the others. We do a little bit of magic here to make that happen.
@@ -848,7 +876,7 @@ const hardwareWalletsModuleDefinition = {
   type: 'module',
   factory: createHardwareWalletsModule,
   dependencies: [
-    'assetsModule',
+    'assetsAtom',
     'logger',
     'ledgerDiscovery',
     'trezorDiscovery',

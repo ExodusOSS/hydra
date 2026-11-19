@@ -29,11 +29,11 @@ class BIP322 {
    * @returns Bitcoin transaction that correspond to the to_spend transaction
    */
   public static buildToSpendTx(message: string, scriptPublicKey: Buffer) {
-    // Create PSBT object for constructing the transaction
-    const psbt = new bitcoin.Psbt()
+    // to_spend has no real UTXO, so construct it without PSBT fee validation.
+    const tx = new bitcoin.Transaction()
     // Set default value for nVersion and nLockTime
-    psbt.setVersion(0) // nVersion = 0
-    psbt.setLocktime(0) // nLockTime = 0
+    tx.version = 0 // nVersion = 0
+    tx.locktime = 0 // nLockTime = 0
     // Compute the message hash - SHA256(SHA256(tag) || SHA256(tag) || message)
     const messageHash = this.hashMessage(message)
     // Construct the scriptSig - OP_0 PUSH32[ message_hash ]
@@ -42,20 +42,16 @@ class BIP322 {
     scriptSig.set(scriptSigPartOne)
     scriptSig.set(messageHash, scriptSigPartOne.length)
     // Set the input
-    psbt.addInput({
-      hash: '0'.repeat(64), // vin[0].prevout.hash = 0000...000
-      index: 0xff_ff_ff_ff, // vin[0].prevout.n = 0xFFFFFFFF
-      sequence: 0, // vin[0].nSequence = 0
-      finalScriptSig: Buffer.from(scriptSig), // vin[0].scriptSig = OP_0 PUSH32[ message_hash ]
-      witnessScript: Buffer.from([]), // vin[0].scriptWitness = []
-    })
+    tx.addInput(
+      Buffer.alloc(32), // vin[0].prevout.hash = 0000...000
+      0xff_ff_ff_ff, // vin[0].prevout.n = 0xFFFFFFFF
+      0, // vin[0].nSequence = 0
+      Buffer.from(scriptSig) // vin[0].scriptSig = OP_0 PUSH32[ message_hash ]
+    )
     // Set the output
-    psbt.addOutput({
-      value: 0, // vout[0].nValue = 0
-      script: scriptPublicKey, // vout[0].scriptPubKey = message_challenge
-    })
+    tx.addOutput(scriptPublicKey, 0)
     // Return transaction
-    return psbt.extractTransaction()
+    return tx
   }
 
   /**

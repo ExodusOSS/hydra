@@ -9,13 +9,9 @@ declare const walletApiDefinition: {
       exists(): Promise<boolean>
       hasPassphraseSet(): Promise<boolean>
       isLocked(): Promise<boolean>
-      getMnemonic(opts?: { passphrase?: string; seedId?: SeedId }): Promise<boolean>
+      getMnemonic(opts?: { passphrase?: string }): Promise<string>
       getSeedMetadata(): Promise<SeedMetadata>
       getPrimarySeedId(): Promise<string>
-      addSeed(params: { mnemonic: string; label: string }): Promise<string>
-      updateSeed(params: { seedId: SeedId; label: string }): Promise<string>
-      removeManySeeds(seedIds: string[]): Promise<void>
-      removeSeed(seedId: string): Promise<void>
       create(opts?: { mnemonic?: string; passphrase?: string }): Promise<{ seedId: SeedId }>
       import(opts?: { mnemonic: string; passphrase?: string }): Promise<{ seedId: SeedId }>
       clear(): Promise<void>

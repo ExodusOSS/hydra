@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.6.3](https://github.com/ExodusMovement/exodus/compare/@exodus/nfts@9.6.2...@exodus/nfts@9.6.3) (2026-07-30)
+
+### Bug Fixes
+
+- **accounts:** restrict delegated account monitoring ([#42728](https://github.com/ExodusMovement/exodus/issues/42728)) ([d61617f](https://github.com/ExodusMovement/exodus/commit/d61617f04013ffa8ecfa9aaf0ea2be61d76099cd))
+
+## [9.6.2](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/nfts@9.6.1...@exodus/nfts@9.6.2) (2025-11-11)
+
+### Bug Fixes
+
+- fix: update NFT transaction sent status calculation (#14359)
+
 ## [9.6.1](https://github.com/ExodusMovement/exodus-hydra/compare/@exodus/nfts@9.6.0...@exodus/nfts@9.6.1) (2025-06-30)
 
 ### Bug Fixes

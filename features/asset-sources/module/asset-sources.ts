@@ -25,21 +25,25 @@ type Dependencies = {
   assetsAtom: AssetsAtom
   walletAccountsAtom: Atom<WalletAccounts>
   availableAssetNamesByWalletAccountAtom: Atom<AvailableAssetNamesByWalletAccount>
+  hardwareWalletConnectedAssetNamesAtom?: Atom<Record<string, string[]>>
 }
 
 class AssetSources {
   #assetsAtom: AssetsAtom
   #walletAccountsAtom
   #availableAssetNamesByWalletAccountAtom
+  #hardwareWalletConnectedAssetNamesAtom
 
   constructor({
     assetsAtom,
     walletAccountsAtom,
     availableAssetNamesByWalletAccountAtom,
+    hardwareWalletConnectedAssetNamesAtom,
   }: Dependencies) {
     this.#assetsAtom = assetsAtom
     this.#walletAccountsAtom = walletAccountsAtom
     this.#availableAssetNamesByWalletAccountAtom = availableAssetNamesByWalletAccountAtom
+    this.#hardwareWalletConnectedAssetNamesAtom = hardwareWalletConnectedAssetNamesAtom
   }
 
   #getAsset = async (assetName: string): Promise<Asset> => {
@@ -65,8 +69,19 @@ class AssetSources {
     typeforce(types.assetSource, { walletAccount, assetName }, true)
 
     const walletAccountInstance = await this.#getWalletAccount(walletAccount)
+    const asset = await this.#getAsset(assetName)
+
+    // hardware wallet assets that were never synced (no public key on record) cannot derive
+    // addresses, so they have no usable purposes
+    if (walletAccountInstance.isHardware && this.#hardwareWalletConnectedAssetNamesAtom) {
+      const connectedAssetNamesByWalletAccount =
+        await this.#hardwareWalletConnectedAssetNamesAtom.get()
+      const connectedAssetNames = connectedAssetNamesByWalletAccount[walletAccount] ?? []
+      if (!connectedAssetNames.includes(assetName)) return []
+    }
+
     return getSupportedPurposes({
-      asset: await this.#getAsset(assetName),
+      asset,
       walletAccount: walletAccountInstance,
     })
   }
@@ -97,7 +112,12 @@ const assetSourcesDefinition = {
   id: MODULE_ID,
   type: 'module',
   factory: createAssetSources,
-  dependencies: ['assetsAtom', 'walletAccountsAtom', 'availableAssetNamesByWalletAccountAtom'],
+  dependencies: [
+    'assetsAtom',
+    'walletAccountsAtom',
+    'availableAssetNamesByWalletAccountAtom',
+    'hardwareWalletConnectedAssetNamesAtom?',
+  ],
   public: true,
 } as const satisfies Definition
 

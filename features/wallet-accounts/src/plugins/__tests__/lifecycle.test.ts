@@ -1,6 +1,5 @@
 import type { Atom } from '@exodus/atoms'
 import { WalletAccount } from '@exodus/models'
-import delay from 'delay'
 import { when } from 'jest-when'
 
 import type { WalletAccounts } from '../../module/wallet-accounts.js'
@@ -45,7 +44,6 @@ describe('walletAccounts lifecycle plugin', () => {
   let hardwareWalletPublicKeysAtomObserver: AtomObserverMock
   let activeWalletAccountAtomObserver: AtomObserverMock
   let multipleWalletAccountsEnabledAtomObserver: AtomObserverMock
-  let wallet: { getExtraSeedIds: () => Promise<string[]>; getPrimarySeedId: () => Promise<string> }
 
   const createAtomObserverMock = (): AtomObserverMock => ({
     register: jest.fn(),
@@ -97,11 +95,6 @@ describe('walletAccounts lifecycle plugin', () => {
 
     errorTracking = { track: jest.fn() }
 
-    wallet = {
-      getExtraSeedIds: () => Promise.resolve(['testId']),
-      getPrimarySeedId: () => Promise.resolve('primarySeedId'),
-    }
-
     plugin = createWalletAccountsPlugin({
       port,
       config,
@@ -110,7 +103,6 @@ describe('walletAccounts lifecycle plugin', () => {
       activeWalletAccountAtom,
       multipleWalletAccountsEnabledAtom,
       walletAccountsAtom,
-      wallet,
       errorTracking,
     })
   })
@@ -263,89 +255,5 @@ describe('walletAccounts lifecycle plugin', () => {
     await plugin.onUnlock()
 
     expect(walletAccounts.update).not.toHaveBeenCalled()
-  })
-
-  test('adds the default wallet account when a new seed is added', async () => {
-    const data = { seedId: 'seedId', compatibilityMode: 'mode' }
-    await plugin.onAddSeed(data)
-
-    expect(walletAccounts.create).toHaveBeenCalledWith({
-      ...data,
-      label: 'configDefinedLabel',
-      source: WalletAccount.SEED_SRC,
-      index: 0,
-    })
-  })
-
-  test('adds wallet accounts for seed ids without them', async () => {
-    await plugin.onUnlock()
-
-    await delay(0) // wait for side-effect to run in unlock
-
-    expect(walletAccounts.createMany).toHaveBeenCalledWith([
-      { index: 0, label: 'configDefinedLabel', seedId: 'testId', source: WalletAccount.SEED_SRC },
-    ])
-  })
-
-  test("doesn't add extra wallet accounts for primary seed", async () => {
-    wallet = {
-      getExtraSeedIds: () => Promise.resolve([]),
-      getPrimarySeedId: () => Promise.resolve('primarySeedId'),
-    }
-
-    plugin = createWalletAccountsPlugin({
-      port,
-      config,
-      walletAccounts: walletAccounts as unknown as WalletAccounts,
-      hardwareWalletPublicKeysAtom,
-      activeWalletAccountAtom,
-      multipleWalletAccountsEnabledAtom,
-      walletAccountsAtom,
-      wallet,
-      errorTracking,
-    })
-
-    await plugin.onUnlock()
-
-    await delay(0) // wait for side-effect to run in unlock
-
-    expect(walletAccounts.createMany).not.toHaveBeenCalled()
-  })
-
-  test("doesn't add wallet accounts for extra seeds that have them", async () => {
-    wallet = {
-      getExtraSeedIds: () => Promise.resolve(['testId', 'testId2']),
-      getPrimarySeedId: () => Promise.resolve('primarySeedId'),
-    }
-    walletAccountsAtom = atoms.createInMemoryAtom({
-      defaultValue: {
-        exodus_0: WalletAccount.DEFAULT,
-        testId_0: new WalletAccount({
-          index: 0,
-          label: 'configDefinedLabel',
-          seedId: 'testId',
-          source: WalletAccount.SEED_SRC,
-        }),
-      },
-    })
-
-    plugin = createWalletAccountsPlugin({
-      port,
-      config,
-      walletAccounts: walletAccounts as unknown as WalletAccounts,
-      hardwareWalletPublicKeysAtom,
-      activeWalletAccountAtom,
-      multipleWalletAccountsEnabledAtom,
-      walletAccountsAtom,
-      wallet,
-      errorTracking,
-    })
-
-    await plugin.onUnlock()
-    await delay(0)
-
-    expect(walletAccounts.createMany).toHaveBeenCalledWith([
-      { index: 0, label: 'configDefinedLabel', seedId: 'testId2', source: WalletAccount.SEED_SRC },
-    ])
   })
 })

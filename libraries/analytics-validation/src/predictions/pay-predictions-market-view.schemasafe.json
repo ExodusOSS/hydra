@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "event": {
+      "const": "PayPredictionsMarketView"
+    },
+    "properties": {
+      "allOf": [
+        {
+          "$ref": "common-properties#"
+        },
+        {
+          "$ref": "common-properties#/definitions/predictionsProperties"
+        }
+      ],
+      "type": "object",
+      "required": [],
+      "properties": {
+        "market_id": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "market_category": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "market_question": {
+          "type": "string",
+          "format": "any-string"
+        },
+        "options_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "time_remaining_seconds": {
+          "type": "number"
+        },
+        "market_volume_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "surface": {
+          "enum": ["feed", "detail", "history", "search_results"]
+        },
+        "position": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["event", "properties"]
+}

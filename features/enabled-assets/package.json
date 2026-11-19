@@ -1,16 +1,16 @@
 {
   "name": "@exodus/enabled-assets",
-  "version": "10.10.4",
+  "version": "10.12.0",
   "description": "This Exodus SDK feature provides a way to enable/disable assets, as well as auto-enable them under certain conditions, e.g. when the asset is involved in a purchase/sale/exchange.",
   "author": "Exodus Movement, Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/features/enabled-assets",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/features/enabled-assets",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Aenabled-assets"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Aenabled-assets"
   },
   "type": "module",
   "main": "index.js",
@@ -27,25 +27,24 @@
     "!**/__tests__/**"
   ],
   "scripts": {
-    "lint": "run -T eslint -c ../../eslint.config.mjs",
-    "lint:fix": "yarn lint --fix",
-    "test": "run -T exodus-test --jest"
+    "lint": "pnpm exec eslint -c ../../eslint.config.mjs",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest"
   },
   "dependencies": {
     "@exodus/asset-legacy-token-name-mapping": "^1.0.0",
-    "@exodus/atoms": "^9.0.0",
-    "@exodus/basic-utils": "^3.0.1",
-    "@exodus/zod": "^3.24.2",
+    "@exodus/atoms": "workspace:^",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/safe-string": "workspace:^",
+    "@exodus/zod": "^3.24.4",
     "lodash": "^4.17.21",
     "make-concurrent": "^5.3.0",
     "reselect": "^3.0.1"
   },
   "devDependencies": {
-    "@exodus/assets": "^11.0.0",
-    "@exodus/assets-base": "^10.0.0",
     "@exodus/assets-feature": "workspace:^",
+    "@exodus/assets-test-meta": "workspace:^",
     "@exodus/available-assets": "workspace:^",
-    "@exodus/combined-assets-meta": "^3.0.0",
     "@exodus/currency": "workspace:^",
     "@exodus/dependency-injection": "workspace:^",
     "@exodus/dependency-preprocessors": "workspace:^",
@@ -57,6 +56,7 @@
     "redux": "^4.2.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

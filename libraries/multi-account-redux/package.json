@@ -1,44 +1,54 @@
 {
   "name": "@exodus/multi-account-redux",
-  "version": "2.1.1",
-  "homepage": "https://github.com/ExodusMovement/exodus-hydra/tree/master/libraries/multi-account-redux",
+  "version": "3.0.1",
+  "homepage": "https://github.com/ExodusMovement/exodus/tree/master/libs/libraries/multi-account-redux",
   "license": "MIT",
   "author": "Exodus Movement, Inc.",
   "description": "Util for redux slices that store data per-asset per-walletAccount",
   "bugs": {
-    "url": "https://github.com/ExodusMovement/exodus-hydra/issues?q=is%3Aissue+is%3Aopen+label%3Amulti-account-redux"
+    "url": "https://github.com/ExodusMovement/exodus/issues?q=is%3Aissue+is%3Aopen+label%3Amulti-account-redux"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExodusMovement/exodus-hydra.git"
+    "url": "git+https://github.com/ExodusMovement/exodus.git"
   },
   "scripts": {
-    "test": "run -T exodus-test --jest",
-    "lint": "run -T eslint .",
-    "lint:fix": "yarn lint --fix"
+    "build": "pnpm exec tsc -p tsconfig.build.json",
+    "clean": "pnpm exec tsc --build --clean",
+    "lint": "pnpm exec eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "pnpm exec exodus-test --jest --esbuild",
+    "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm -w run build --scope @exodus/multi-account-redux"
   },
   "dependencies": {
-    "@exodus/basic-utils": "^3.0.1",
-    "@exodus/models": "^12.3.0",
-    "@exodus/redux-dependency-injection": "^4.0.0",
-    "lodash": "^4.17.21",
+    "@exodus/basic-utils": "workspace:^",
+    "@exodus/models": "workspace:^",
+    "@exodus/redux-dependency-injection": "workspace:^",
     "reselect": "^3.0.1"
   },
   "type": "module",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    }
+  },
   "files": [
-    "!**/__tests__/**",
-    "src",
+    "lib/",
     "CHANGELOG.md"
   ],
   "devDependencies": {
     "@exodus/assets": "^11.0.0",
-    "@exodus/assets-base": "^10.0.0",
+    "@exodus/assets-base": "^12.0.0",
     "@exodus/assets-feature": "workspace:^",
     "@exodus/wallet-accounts": "workspace:^",
     "redux": "^4.0.0"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }
